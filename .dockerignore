@@ -1,0 +1,10 @@
+/.git
+/backend/django_static/
+/backend/uploads/
+/backend/cache/
+/backend/celerybeat-schedule
+/frontend/node_modules/
+.pytest_cache
+.mypy_cache
+.coverage
+*.log*

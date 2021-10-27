@@ -1,0 +1,86 @@
+version: '3.7'
+
+x-backend-environment: &base-backend-environment
+  - SECRET_KEY=${SECRET_KEY}
+  - DEBUG=0
+  - HOST_SITE=${HOST_SITE}
+  - POSTGRES_DB=trcustoms
+  - POSTGRES_USER=root
+  - POSTGRES_PASSWORD=root
+
+x-base-trcustoms: &base-trcustoms
+  restart: always
+
+x-base-trcustoms-backend: &base-trcustoms-backend
+  <<: *base-trcustoms
+  environment: *base-backend-environment
+  build:
+    context: .
+    dockerfile: ./services/backend/Dockerfile
+  networks:
+    - trcustoms
+  depends_on:
+    - redis
+    - db
+
+services:
+  backend:
+    <<: *base-trcustoms-backend
+    container_name: trcustoms_prd_backend
+    command: uwsgi
+    volumes:
+      - django_static:/app/django_static
+
+  celery:
+    <<: *base-trcustoms-backend
+    container_name: trcustoms_prd_celery
+    command: celery
+
+  celery-beat:
+    <<: *base-trcustoms-backend
+    container_name: trcustoms_prd_celery_beat
+    command: celery-beat
+
+  db:
+    <<: *base-trcustoms
+    container_name: trcustoms_prd_db
+    image: postgres:14.0
+    environment: *base-backend-environment
+    expose:
+      - 5432
+    volumes:
+      - pgdata_prod:/var/lib/postgresql/data
+    networks:
+      - trcustoms
+
+  redis:
+    <<: *base-trcustoms
+    container_name: trcustoms_prd_redis
+    image: redis:6
+    expose:
+      - 6379
+    networks:
+      - trcustoms
+
+  nginx:
+    <<: *base-trcustoms
+    container_name: trcustoms_prd_nginx
+    build:
+      context: .
+      dockerfile: ./services/nginx/Dockerfile_prod
+    networks:
+      - trcustoms
+    ports:
+      - '8000:8000'
+    depends_on:
+      - backend
+    volumes:
+      - django_static:/app/backend/django_static
+
+volumes:
+  pgdata_prod:
+  django_static:
+
+networks:
+  trcustoms:
+    external: false

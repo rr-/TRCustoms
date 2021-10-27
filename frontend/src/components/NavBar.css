@@ -1,0 +1,33 @@
+#TopNavBar {
+  padding: 1rem;
+  background: var(--sidebar-color);
+}
+#TopNavBar nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+#TopNavBar .TopNavBar--left {
+  display: flex;
+  justify-content: flex-start;
+}
+#TopNavBar .TopNavBar--right {
+  display: flex;
+  justify-content: flex-end;
+}
+
+#TopNavBar h1,
+#TopNavBar p {
+  margin: 0;
+  padding: 0;
+}
+#TopNavBar ul {
+  margin: 0;
+  padding: 0;
+  list-style-type: none;
+}
+#TopNavBar li {
+  display: inline;
+  margin: 0 0 0 1rem;
+  padding: 0;
+}
