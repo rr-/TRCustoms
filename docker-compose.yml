@@ -1,0 +1,103 @@
+version: '3.7'
+
+x-backend-environment: &base-backend-environment
+  - SECRET_KEY=${SECRET_KEY}
+  - DEBUG=${DEBUG}
+  - HOST_SITE=${HOST_SITE}
+  - POSTGRES_DB=trcustoms
+  - POSTGRES_USER=root
+  - POSTGRES_PASSWORD=root
+
+x-base-trcustoms: &base-trcustoms
+  restart: unless-stopped
+
+x-base-trcustoms-backend: &base-trcustoms-backend
+  <<: *base-trcustoms
+  environment: *base-backend-environment
+  build:
+    context: .
+    dockerfile: ./services/backend/Dockerfile
+  volumes:
+    - ./backend/:/app/
+    - ./services/backend/entrypoint.sh:/usr/local/bin/entrypoint.sh
+  networks:
+    - trcustoms
+  depends_on:
+    - redis
+    - db
+
+services:
+  backend:
+    <<: *base-trcustoms-backend
+    container_name: trcustoms_dev_backend
+    command: dev
+
+  celery:
+    <<: *base-trcustoms-backend
+    container_name: trcustoms_dev_celery
+    command: celery
+
+  celery-beat:
+    <<: *base-trcustoms-backend
+    container_name: trcustoms_dev_celery_beat
+    command: celery-beat
+
+  frontend:
+    <<: *base-trcustoms
+    container_name: trcustoms_dev_frontend
+    restart: unless-stopped
+    build:
+      context: .
+      dockerfile: ./services/frontend/Dockerfile
+    volumes:
+      - ./frontend/public/:/app/public/
+      - ./frontend/src/:/app/src/
+      - ./frontend/tsconfig.json:/app/tsconfig.json
+      - ./services/frontend/entrypoint.sh:/usr/local/bin/entrypoint.sh
+    networks:
+      - trcustoms
+    depends_on:
+      - backend
+    command: dev
+
+  db:
+    <<: *base-trcustoms
+    container_name: trcustoms_dev_db
+    image: postgres:14.0
+    environment: *base-backend-environment
+    expose:
+      - 5432
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    networks:
+      - trcustoms
+
+  redis:
+    <<: *base-trcustoms
+    container_name: trcustoms_dev_redis
+    image: redis:6
+    expose:
+      - 6379
+    networks:
+      - trcustoms
+
+  nginx:
+    <<: *base-trcustoms
+    container_name: trcustoms_dev_nginx
+    image: nginx
+    volumes:
+      - ./services/nginx/nginx_dev.conf:/etc/nginx/nginx.conf:ro
+    command: ['nginx', '-g', 'daemon off;']
+    networks:
+      - trcustoms
+    ports:
+      - '8000:8000'
+    depends_on:
+      - backend
+
+volumes:
+  pgdata:
+
+networks:
+  trcustoms:
+    external: false

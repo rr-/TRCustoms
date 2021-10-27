@@ -1,0 +1,20 @@
+[tool.black]
+line-length = 79
+
+[tool.isort]
+multi_line_output = 3
+include_trailing_comma = true
+
+[tool.pylint.master]
+jobs = 0
+
+[tool.pylint.format]
+max-line-length = 79
+
+[tool.pylint.messages_control]
+reports = "no"
+disable = [
+    "import-error",
+    "too-few-public-methods",
+    "no-self-use",
+]

@@ -1,0 +1,55 @@
+:root {
+  --background-color: lemonchiffon;
+  --sidebar-color: yellowgreen;
+  --text-color: #000;
+  --link-color: blue;
+}
+
+body {
+  background: var(--background-color);
+  color: var(--text-color);
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
+    sans-serif;
+  font-size: 12pt;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+#root {
+  text-align: center;
+}
+
+.MainContainer {
+  max-width: 60rem;
+  margin: 0 auto;
+  text-align: left;
+}
+
+a {
+  color: var(--link-color);
+  text-decoration: underline;
+}
+
+/* forms */
+.FormField {
+  display: block;
+  margin-bottom: 0.5rem;
+}
+.FormField label {
+  display: block;
+}
+.FormFieldError {
+  color: red;
+}
+
+input,
+button {
+  border: 2px solid var(--sidebar-color);
+  line-height: 1rem;
+  padding: 0.5rem;
+}
+button {
+  background: var(--sidebar-color);
+  color: var(--background-color);
+}
