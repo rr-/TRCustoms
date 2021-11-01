@@ -71,7 +71,7 @@ services:
     networks:
       - trcustoms
     ports:
-      - '8000:8000'
+      - '${TRCUSTOMS_PORT}:8000'
     depends_on:
       - backend
     volumes:
