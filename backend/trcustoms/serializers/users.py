@@ -1,7 +1,7 @@
 """User serializers."""
-
 from django.contrib.auth.models import User
 from django.contrib.auth.password_validation import validate_password
+from django.core.validators import MaxLengthValidator, MinLengthValidator
 from rest_framework import serializers
 from rest_framework.validators import UniqueValidator
 
@@ -19,9 +19,22 @@ class UserSerializer(serializers.ModelSerializer):
             "email",
         )
 
+    username = serializers.CharField(
+        required=True,
+        validators=[
+            MinLengthValidator(3),
+            MaxLengthValidator(26),
+            UniqueValidator(queryset=User.objects.all()),
+        ],
+    )
+
     email = serializers.EmailField(
         required=True,
-        validators=[UniqueValidator(queryset=User.objects.all())],
+        validators=[
+            MinLengthValidator(3),
+            MaxLengthValidator(64),
+            UniqueValidator(queryset=User.objects.all()),
+        ],
     )
 
     password = serializers.CharField(

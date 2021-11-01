@@ -35,21 +35,21 @@ const Register: React.FunctionComponent<IRegister> = ({ history }) => {
           let error;
 
           if ((error = validateUserName(values.username))) {
-            errors.username = error;
+            errors.username = makeSentence(error);
           }
 
           if ((error = validateEmail(values.email))) {
-            errors.email = error;
+            errors.email = makeSentence(error);
           }
 
           if ((error = validatePassword(values.password))) {
-            errors.password = error;
+            errors.password = makeSentence(error);
           }
 
           if ((error = validatePassword(values.password2))) {
-            errors.password2 = error;
+            errors.password2 = makeSentence(error);
           } else if (values.password !== values.password2) {
-            errors.password2 = "Passwords do not match";
+            errors.password2 = makeSentence("Passwords do not match");
           }
 
           return errors;
