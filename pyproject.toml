@@ -17,4 +17,6 @@ disable = [
     "import-error",
     "too-few-public-methods",
     "no-self-use",
+    "missing-docstring",
+    "invalid-name",  # migrations
 ]

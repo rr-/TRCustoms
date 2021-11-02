@@ -5,7 +5,7 @@ import { AuthService } from "src/services/auth.service";
 import { UserService } from "src/services/user.service";
 import { FetchError } from "src/shared/client";
 import PasswordFormField from "src/shared/components/PasswordFormField";
-import UsernameFormField from "src/shared/components/UsernameFormField";
+import TextFormField from "src/shared/components/TextFormField";
 import { UserContext } from "src/shared/contexts/UserContext";
 import { makeSentence } from "src/shared/utils";
 
@@ -45,7 +45,7 @@ const Login: React.FunctionComponent<ILogin> = ({ history }) => {
       >
         {({ isSubmitting, status }) => (
           <Form className="Form">
-            <UsernameFormField label="Username" name="username" />
+            <TextFormField label="Username" name="username" />
             <PasswordFormField label="Password" name="password" />
             <div className="FormField">
               {status?.error && (

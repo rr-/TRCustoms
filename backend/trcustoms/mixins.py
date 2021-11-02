@@ -1,5 +1,3 @@
-"""Django mixins."""
-
 from typing import TYPE_CHECKING, Protocol
 
 from rest_framework.permissions import BasePermission

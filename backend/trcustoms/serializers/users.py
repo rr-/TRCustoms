@@ -1,9 +1,10 @@
 """User serializers."""
-from django.contrib.auth.models import User
 from django.contrib.auth.password_validation import validate_password
 from django.core.validators import MaxLengthValidator, MinLengthValidator
 from rest_framework import serializers
 from rest_framework.validators import UniqueValidator
+
+from trcustoms.models import User
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -15,8 +16,11 @@ class UserSerializer(serializers.ModelSerializer):
         model = User
         fields = (
             "username",
-            "password",
+            "first_name",
+            "last_name",
             "email",
+            "password",
+            "bio",
         )
 
     username = serializers.CharField(
@@ -41,12 +45,25 @@ class UserSerializer(serializers.ModelSerializer):
         write_only=True, required=True, validators=[validate_password]
     )
 
+    first_name = serializers.CharField(
+        required=False, validators=[MaxLengthValidator(30)], allow_null=True
+    )
+    last_name = serializers.CharField(
+        required=False, validators=[MaxLengthValidator(150)], allow_null=True
+    )
+    bio = serializers.CharField(
+        required=False, validators=[MaxLengthValidator(5000)], allow_null=True
+    )
+
     def create(self, validated_data):
         """Create user account."""
 
         user = User.objects.create(
             username=validated_data["username"],
+            first_name=validated_data["first_name"],
+            last_name=validated_data["last_name"],
             email=validated_data["email"],
+            bio=validated_data["bio"],
         )
 
         user.set_password(validated_data["password"])

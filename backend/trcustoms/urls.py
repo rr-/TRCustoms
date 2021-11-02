@@ -8,7 +8,7 @@ from rest_framework_simplejwt.views import (
     TokenRefreshView,
 )
 
-from trcustoms.views.users import UserProfileView, UserViewSet
+from trcustoms.views import UserProfileView, UserViewSet
 
 router = DefaultRouter()
 router.register(r"users", UserViewSet)

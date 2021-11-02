@@ -6,7 +6,8 @@ import { UserService } from "src/services/user.service";
 import { FetchError } from "src/shared/client";
 import EmailFormField from "src/shared/components/EmailFormField";
 import PasswordFormField from "src/shared/components/PasswordFormField";
-import UsernameFormField from "src/shared/components/UsernameFormField";
+import TextAreaFormField from "src/shared/components/TextAreaFormField";
+import TextFormField from "src/shared/components/TextFormField";
 import { UserContext } from "src/shared/contexts/UserContext";
 import { makeSentence } from "src/shared/utils";
 import { validateUserName } from "src/shared/utils";
@@ -23,13 +24,24 @@ const Register: React.FunctionComponent<IRegister> = ({ history }) => {
     <div className="RegisterForm">
       <h1>Register</h1>
       <Formik
-        initialValues={{ username: "", email: "", password: "", password2: "" }}
+        initialValues={{
+          username: "",
+          firstName: "",
+          lastName: "",
+          email: "",
+          password: "",
+          password2: "",
+          bio: "",
+        }}
         validate={(values) => {
           const errors: {
             username?: string;
+            firstName?: string;
+            last_name?: string;
             email?: string;
             password?: string;
             password2?: string;
+            bio?: string;
           } = {};
 
           let error;
@@ -58,8 +70,11 @@ const Register: React.FunctionComponent<IRegister> = ({ history }) => {
           try {
             await UserService.register({
               username: values.username,
+              firstName: values.firstName,
+              lastName: values.lastName,
               email: values.email,
               password: values.password,
+              bio: values.bio,
             });
             await AuthService.login(values.username, values.password);
             const user = await UserService.getCurrentUser();
@@ -73,8 +88,11 @@ const Register: React.FunctionComponent<IRegister> = ({ history }) => {
               }
               setErrors({
                 username: error.data?.username,
+                firstName: error.data?.first_name,
+                lastName: error.data?.last_name,
                 email: error.data?.email,
                 password: error.data?.password,
+                bio: error.data?.bio,
               });
             } else {
               setStatus({ error: "unknown error" });
@@ -84,10 +102,13 @@ const Register: React.FunctionComponent<IRegister> = ({ history }) => {
       >
         {({ isSubmitting, status }) => (
           <Form className="Form">
-            <UsernameFormField label="Username" name="username" />
+            <TextFormField label="Username" name="username" />
+            <TextFormField label="First name" name="firstName" />
+            <TextFormField label="Last name" name="lastName" />
             <EmailFormField label="E-mail" name="email" />
             <PasswordFormField label="Password" name="password" />
             <PasswordFormField label="Password (repeat)" name="password2" />
+            <TextAreaFormField label="Bio" name="bio" />
             <div className="FormField">
               {status?.error && (
                 <div className="FormFieldError">

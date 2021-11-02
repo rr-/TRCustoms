@@ -3,15 +3,16 @@
   --sidebar-color: yellowgreen;
   --text-color: #000;
   --link-color: blue;
+  --font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto",
+    "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
+    sans-serif;
 }
 
 body {
   background: var(--background-color);
   color: var(--text-color);
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
-    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
-    sans-serif;
+  font-family: var(--font-family);
   font-size: 12pt;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -44,10 +45,14 @@ a {
 }
 
 input,
-button {
+button,
+textarea {
   border: 2px solid var(--sidebar-color);
   line-height: 1rem;
   padding: 0.5rem;
+}
+textarea {
+  font-family: var(--font-family);
 }
 button {
   background: var(--sidebar-color);
