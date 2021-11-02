@@ -60,8 +60,8 @@ class UserSerializer(serializers.ModelSerializer):
 
         user = User.objects.create(
             username=validated_data["username"],
-            first_name=validated_data["first_name"],
-            last_name=validated_data["last_name"],
+            first_name=validated_data["first_name"] or "",
+            last_name=validated_data["last_name"] or "",
             email=validated_data["email"],
             bio=validated_data["bio"],
         )
