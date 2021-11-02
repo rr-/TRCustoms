@@ -1,12 +1,12 @@
 import { Field } from "formik";
 import BaseFormField from "src/shared/components/BaseFormField";
 
-interface IUsernameFormField {
+interface ITextFormField {
   name: string;
   label: string;
 }
 
-const UsernameFormField: React.FunctionComponent<IUsernameFormField> = ({
+const TextFormField: React.FunctionComponent<ITextFormField> = ({
   name,
   label,
 }) => {
@@ -19,4 +19,4 @@ const UsernameFormField: React.FunctionComponent<IUsernameFormField> = ({
   );
 };
 
-export default UsernameFormField;
+export default TextFormField;

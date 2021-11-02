@@ -17,19 +17,28 @@ const getCurrentUser = async (): Promise<IUser | null> => {
 
 const register = async ({
   username,
+  firstName,
+  lastName,
   email,
   password,
+  bio,
 }: {
   username: string;
+  firstName: string | null;
+  lastName: string | null;
   email: string;
   password: string;
+  bio: string | null;
 }) => {
   await fetchJSON(`${API_URL}/users/`, {
     method: "POST",
     data: {
       username: username,
+      first_name: firstName || null,
+      last_name: lastName || null,
       email: email,
       password: password,
+      bio: bio || null,
     },
   });
 };

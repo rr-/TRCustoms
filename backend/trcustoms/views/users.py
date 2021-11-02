@@ -1,6 +1,5 @@
 """User views."""
 
-from django.contrib.auth.models import User
 from rest_framework import generics, viewsets
 from rest_framework.permissions import (
     AllowAny,
@@ -9,7 +8,8 @@ from rest_framework.permissions import (
 )
 
 from trcustoms.mixins import PermissionsMixin
-from trcustoms.serializers.users import UserSerializer
+from trcustoms.models import User
+from trcustoms.serializers import UserSerializer
 
 
 class UserProfileView(generics.RetrieveAPIView):

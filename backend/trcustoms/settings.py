@@ -94,6 +94,7 @@ DATABASES = {
     }
 }
 
+AUTH_USER_MODEL = "trcustoms.User"
 AUTH_PASSWORD_VALIDATORS = [
     {
         "NAME": (
