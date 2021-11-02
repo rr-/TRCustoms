@@ -106,6 +106,9 @@ AUTH_PASSWORD_VALIDATORS = [
         "NAME": (
             "django.contrib.auth.password_validation.MinimumLengthValidator"
         ),
+        "OPTIONS": {
+            "min_length": 7,
+        },
     },
     {
         "NAME": (
@@ -115,8 +118,11 @@ AUTH_PASSWORD_VALIDATORS = [
     {
         "NAME": (
             "django.contrib.auth.password_validation.NumericPasswordValidator"
-        ),
+        )
     },
+    {"NAME": "trcustoms.validators.PasswordLetterValidator"},
+    {"NAME": "trcustoms.validators.PasswordDigitValidator"},
+    {"NAME": "trcustoms.validators.PasswordSpecialCharValidator"},
 ]
 
 REST_FRAMEWORK = {
