@@ -21,7 +21,9 @@ const NavBar: React.FunctionComponent<INavBar> = () => {
           <div className="TopNavBar--right">
             {user ? (
               <>
-                <p>Logged in as {user.username}.</p>
+                <p>
+                  Logged in as <Link to={"/profile"}>{user.username}</Link>.
+                </p>
                 <ul>
                   <li>
                     <Link to={"/logout"}>Log out</Link>

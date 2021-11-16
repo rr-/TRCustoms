@@ -3,13 +3,32 @@ import { API_URL } from "src/shared/constants";
 
 interface IUser {
   username: string;
+  first_name: string;
+  last_name: string;
+  avatar_url: string;
+  bio: string;
+  date_joined: string;
+  last_login: string;
 }
 
 const getCurrentUser = async (): Promise<IUser | null> => {
   let data;
   try {
-    data = await fetchJSON<IUser>(`${API_URL}/auth/me/`, { method: "GET" });
+    data = await fetchJSON<IUser>(`${API_URL}/users/me/`, { method: "GET" });
   } catch (error) {
+    data = null;
+  }
+  return data;
+};
+
+const getUserById = async (userName: string): Promise<IUser | null> => {
+  let data;
+  try {
+    data = await fetchJSON<IUser>(`${API_URL}/users/${userName}`, {
+      method: "GET",
+    });
+  } catch (error) {
+    console.error(error);
     data = null;
   }
   return data;
@@ -46,6 +65,7 @@ const register = async ({
 const UserService = {
   register,
   getCurrentUser,
+  getUserById,
 };
 
 export type { IUser };

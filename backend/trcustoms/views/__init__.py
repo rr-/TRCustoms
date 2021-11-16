@@ -1,7 +1,6 @@
 """Django views."""
-from .users import UserProfileView, UserViewSet
+from .users import UserViewSet
 
 __all__ = [
-    "UserProfileView",
     "UserViewSet",
 ]
