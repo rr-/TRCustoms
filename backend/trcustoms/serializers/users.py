@@ -1,4 +1,6 @@
 """User serializers."""
+from typing import Optional
+
 from django.contrib.auth.password_validation import validate_password
 from django.core.validators import MaxLengthValidator, MinLengthValidator
 from rest_framework import serializers
@@ -10,17 +12,22 @@ from trcustoms.models import User
 class UserSerializer(serializers.ModelSerializer):
     """Main user serializer."""
 
+    avatar_url = serializers.SerializerMethodField(read_only=True)
+
     class Meta:
         """Serializer settings."""
 
         model = User
         fields = (
             "username",
+            "avatar_url",
             "first_name",
             "last_name",
             "email",
             "password",
             "bio",
+            "date_joined",
+            "last_login",
         )
 
     username = serializers.CharField(
@@ -70,3 +77,8 @@ class UserSerializer(serializers.ModelSerializer):
         user.save()
 
         return user
+
+    def get_avatar_url(self, instance: User) -> Optional[str]:
+        if not instance.avatar:
+            return None
+        return instance.avatar.url

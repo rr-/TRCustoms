@@ -1,26 +1,17 @@
 """User views."""
-
-from rest_framework import generics, viewsets
+from django.shortcuts import get_object_or_404
+from rest_framework import viewsets
+from rest_framework.decorators import action
 from rest_framework.permissions import (
     AllowAny,
     DjangoModelPermissionsOrAnonReadOnly,
     IsAuthenticated,
 )
+from rest_framework.response import Response
 
 from trcustoms.mixins import PermissionsMixin
 from trcustoms.models import User
 from trcustoms.serializers import UserSerializer
-
-
-class UserProfileView(generics.RetrieveAPIView):
-    """View currently authenticated user's profile."""
-
-    serializer_class = UserSerializer
-    permission_classes = [IsAuthenticated]
-
-    def get_object(self) -> User:
-        """Return currently authenticated user."""
-        return self.request.user
 
 
 class UserViewSet(PermissionsMixin, viewsets.ModelViewSet):
@@ -33,3 +24,9 @@ class UserViewSet(PermissionsMixin, viewsets.ModelViewSet):
 
     queryset = User.objects.all()
     serializer_class = UserSerializer
+
+    @action(detail=False, permission_classes=[IsAuthenticated])
+    def me(self, request, *args, **kwargs):
+        user = get_object_or_404(User, pk=request.user.id)
+        serializer = self.get_serializer(user)
+        return Response(serializer.data)

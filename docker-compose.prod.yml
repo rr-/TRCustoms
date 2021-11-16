@@ -30,6 +30,7 @@ services:
     command: uwsgi
     volumes:
       - django_static:/app/django_static
+      - django_uploads:/app/uploads
 
   celery:
     <<: *base-trcustoms-backend
@@ -76,10 +77,12 @@ services:
       - backend
     volumes:
       - django_static:/app/backend/django_static
+      - django_uploads:/app/backend/django_uploads
 
 volumes:
   pgdata_prod:
   django_static:
+  django_uploads:
 
 networks:
   trcustoms:

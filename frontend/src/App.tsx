@@ -19,6 +19,7 @@ function App() {
           <Route exact path="/logout" component={Logout} />
           <Route exact path="/register" component={Register} />
           <Route exact path="/profile" component={Profile} />
+          <Route exact path="/profile/:userId" component={Profile} />
         </Switch>
       </div>
     </UserContextProvider>
