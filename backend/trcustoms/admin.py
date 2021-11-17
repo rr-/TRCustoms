@@ -13,34 +13,55 @@ from trcustoms.models import (
 
 @admin.register(User)
 class UserAdmin(admin.ModelAdmin):
-    pass
+    ordering = ["username"]
+    search_fields = ["username", "first_name", "last_name"]
 
 
 @admin.register(LevelEngine)
 class LevelEngineAdmin(admin.ModelAdmin):
-    pass
+    ordering = ["name"]
+    search_fields = ["name"]
 
 
 @admin.register(LevelCategory)
 class LevelCategoryAdmin(admin.ModelAdmin):
-    pass
+    ordering = ["name"]
+    search_fields = ["name"]
 
 
 @admin.register(LevelTag)
 class LevelTagAdmin(admin.ModelAdmin):
-    pass
+    ordering = ["name"]
+    search_fields = ["name"]
 
 
 @admin.register(Level)
 class LevelAdmin(admin.ModelAdmin):
-    pass
+    ordering = ["-created"]
+    search_fields = [
+        "name",
+        "description",
+        "author_name",
+        "author_user__username",
+        "author_user__first_name",
+        "author_user__last_name",
+        "uploader_user__username",
+        "uploader_user__first_name",
+        "uploader_user__last_name",
+    ]
+    list_filter = ["categories", "tags"]
+    group_by = ["tags"]
 
 
 @admin.register(LevelImage)
 class LevelImageAdmin(admin.ModelAdmin):
-    pass
+    ordering = ["level__name"]
+    list_display = ["id", "level"]
+    search_fields = ["level__name"]
 
 
 @admin.register(LevelFile)
 class LevelFileAdmin(admin.ModelAdmin):
-    pass
+    ordering = ["level__name"]
+    list_display = ["id", "level", "version"]
+    search_fields = ["level__name"]
