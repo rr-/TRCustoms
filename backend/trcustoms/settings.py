@@ -159,3 +159,6 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 HOST_SITE = get_setting("HOST_SITE")
 FILE_UPLOAD_PERMISSIONS = 0o644
+
+MAX_TAGS = 10
+MAX_GENRES = 5
