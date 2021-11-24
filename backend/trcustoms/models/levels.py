@@ -1,4 +1,3 @@
-"""Level models."""
 from django.db import models
 
 from trcustoms.models.dates import DatesInfo

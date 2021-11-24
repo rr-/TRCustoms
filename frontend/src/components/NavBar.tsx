@@ -10,41 +10,54 @@ const NavBar: React.FunctionComponent<INavBar> = () => {
 
   return (
     <div id="TopNavBar">
-      <div className="MainContainer">
-        <nav>
-          <div className="TopNavBar--left">
-            <h1>
-              <Link to={"/"}>TRCustoms.org</Link>
-            </h1>
-          </div>
+      <div id="PrimaryNavBar">
+        <div className="MainContainer">
+          <nav>
+            <div className="PrimaryNavBar--left">
+              <h1>
+                <Link to={"/"}>TRCustoms.org</Link>
+              </h1>
+            </div>
 
-          <div className="TopNavBar--right">
-            {user ? (
-              <>
-                <p>
-                  Logged in as <Link to={"/profile"}>{user.username}</Link>.
-                </p>
-                <ul>
-                  <li>
-                    <Link to={"/logout"}>Log out</Link>
-                  </li>
-                </ul>
-              </>
-            ) : (
-              <>
-                <p>Not logged in.</p>
-                <ul>
-                  <li>
-                    <Link to={"/login"}>Log in</Link>
-                  </li>
-                  <li>
-                    <Link to={"/register"}>Register</Link>
-                  </li>
-                </ul>
-              </>
-            )}
-          </div>
-        </nav>
+            <div className="PrimaryNavBar--right">
+              {user ? (
+                <>
+                  <p>
+                    Logged in as <Link to={"/profile"}>{user.username}</Link>.
+                  </p>
+                  <ul>
+                    <li>
+                      <Link to={"/logout"}>Log out</Link>
+                    </li>
+                  </ul>
+                </>
+              ) : (
+                <>
+                  <p>Not logged in.</p>
+                  <ul>
+                    <li>
+                      <Link to={"/login"}>Log in</Link>
+                    </li>
+                    <li>
+                      <Link to={"/register"}>Register</Link>
+                    </li>
+                  </ul>
+                </>
+              )}
+            </div>
+          </nav>
+        </div>
+      </div>
+      <div id="SecondaryNavBar">
+        <div className="MainContainer">
+          <nav>
+            <ul>
+              <li>
+                <Link to={"/"}>Level listing</Link>
+              </li>
+            </ul>
+          </nav>
+        </div>
       </div>
     </div>
   );

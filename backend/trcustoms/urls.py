@@ -1,5 +1,3 @@
-"""Django routing table."""
-
 from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
@@ -10,10 +8,11 @@ from rest_framework_simplejwt.views import (
     TokenRefreshView,
 )
 
-from trcustoms.views import UserViewSet
+from trcustoms.views import LevelViewSet, UserViewSet
 
 router = DefaultRouter()
 router.register(r"users", UserViewSet)
+router.register(r"levels", LevelViewSet)
 
 urlpatterns = [
     path("api/auth/token/", TokenObtainPairView.as_view()),

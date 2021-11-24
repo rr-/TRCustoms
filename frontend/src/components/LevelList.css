@@ -1,0 +1,9 @@
+#LevelList table {
+  width: 100%;
+  margin: 0 -1rem;
+}
+
+#LevelList th,
+td {
+  padding: 0.25rem 1rem;
+}

@@ -1,5 +1,3 @@
-"""Django settings."""
-
 import os
 from pathlib import Path
 
@@ -132,6 +130,8 @@ REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": [
         "rest_framework_simplejwt.authentication.JWTAuthentication",
     ],
+    "DEFAULT_PAGINATION_CLASS": ("trcustoms.pagination.CustomPagination"),
+    "PAGE_SIZE": 25,
 }
 
 LANGUAGE_CODE = "en-us"

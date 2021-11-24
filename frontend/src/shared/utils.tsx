@@ -37,4 +37,15 @@ const makeSentence = (input: string): string => {
   return input[0].toUpperCase() + input.substr(1).replace(/\.$/, "") + ".";
 };
 
-export { validateEmail, validatePassword, validateUserName, makeSentence };
+const formatDateTime = (input: string): string => {
+  const date = new Date(Date.parse(input));
+  return date.toISOString().slice(0, 19).replace("T", " ");
+};
+
+export {
+  validateEmail,
+  validatePassword,
+  validateUserName,
+  makeSentence,
+  formatDateTime,
+};

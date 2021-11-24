@@ -1,6 +1,7 @@
 :root {
   --background-color: lemonchiffon;
   --sidebar-color: yellowgreen;
+  --sidebar-color-alt: #c8ec85;
   --text-color: #000;
   --link-color: blue;
   --font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto",

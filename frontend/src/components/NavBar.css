@@ -1,25 +1,7 @@
-#TopNavBar {
-  padding: 1rem;
-  background: var(--sidebar-color);
-}
 #TopNavBar nav {
   display: flex;
   align-items: center;
   justify-content: space-between;
-}
-#TopNavBar .TopNavBar--left {
-  display: flex;
-  justify-content: flex-start;
-}
-#TopNavBar .TopNavBar--right {
-  display: flex;
-  justify-content: flex-end;
-}
-
-#TopNavBar h1,
-#TopNavBar p {
-  margin: 0;
-  padding: 0;
 }
 #TopNavBar ul {
   margin: 0;
@@ -28,6 +10,32 @@
 }
 #TopNavBar li {
   display: inline;
-  margin: 0 0 0 1rem;
+  margin: 0;
   padding: 0;
+}
+#TopNavBar h1,
+#TopNavBar p {
+  margin: 0;
+  padding: 0;
+}
+
+#PrimaryNavBar {
+  padding: 1rem;
+  background: var(--sidebar-color);
+}
+#PrimaryNavBar .PrimaryNavBar--left {
+  display: flex;
+  justify-content: flex-start;
+}
+#PrimaryNavBar .PrimaryNavBar--right {
+  display: flex;
+  justify-content: flex-end;
+}
+#PrimaryNavBar li {
+  margin-left: 1rem;
+}
+
+#SecondaryNavBar {
+  padding: 0.5rem;
+  background: var(--sidebar-color-alt);
 }

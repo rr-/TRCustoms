@@ -1,4 +1,3 @@
-"""Django models."""
 from .dates import DatesInfo
 from .levels import (
     Level,
