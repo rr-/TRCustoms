@@ -2,9 +2,9 @@ from django.contrib import admin
 
 from trcustoms.models import (
     Level,
-    LevelCategory,
     LevelEngine,
     LevelFile,
+    LevelGenre,
     LevelImage,
     LevelTag,
     User,
@@ -23,8 +23,8 @@ class LevelEngineAdmin(admin.ModelAdmin):
     search_fields = ["name"]
 
 
-@admin.register(LevelCategory)
-class LevelCategoryAdmin(admin.ModelAdmin):
+@admin.register(LevelGenre)
+class LevelGenreAdmin(admin.ModelAdmin):
     ordering = ["name"]
     search_fields = ["name"]
 
@@ -49,7 +49,7 @@ class LevelAdmin(admin.ModelAdmin):
         "uploader_user__first_name",
         "uploader_user__last_name",
     ]
-    list_filter = ["categories", "tags"]
+    list_filter = ["genres", "tags"]
     group_by = ["tags"]
 
 

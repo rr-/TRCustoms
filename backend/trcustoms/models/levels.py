@@ -12,11 +12,11 @@ class LevelEngine(DatesInfo):
         return self.name
 
 
-class LevelCategory(DatesInfo):
+class LevelGenre(DatesInfo):
     name = models.CharField(max_length=100)
 
     class Meta:
-        verbose_name_plural = "Level categories"
+        verbose_name_plural = "Level genres"
 
     def __str__(self) -> str:
         return self.name
@@ -32,7 +32,7 @@ class LevelTag(DatesInfo):
 class Level(DatesInfo):
     name = models.CharField(max_length=100)
     description = models.TextField(max_length=5000)
-    categories = models.ManyToManyField(LevelCategory)
+    genres = models.ManyToManyField(LevelGenre)
     tags = models.ManyToManyField(LevelTag)
     engine = models.ForeignKey(LevelEngine, on_delete=models.PROTECT)
     author_name = models.CharField(max_length=100, blank=True, null=True)
