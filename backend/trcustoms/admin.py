@@ -1,4 +1,7 @@
+from django import forms
+from django.conf import settings
 from django.contrib import admin
+from django.core.exceptions import ValidationError
 
 from trcustoms.models import (
     Level,
@@ -9,6 +12,32 @@ from trcustoms.models import (
     LevelTag,
     User,
 )
+
+
+class LevelForm(forms.ModelForm):
+    class Meta:
+        model = Level
+        exclude: list[str] = []
+
+    def clean_genres(self):
+        genres = self.cleaned_data.get("genres")
+
+        if len(genres) > settings.MAX_GENRES:
+            raise ValidationError(
+                f"A level cannot have more than {settings.MAX_GENRES} genres."
+            )
+
+        return genres
+
+    def clean_tags(self):
+        tags = self.cleaned_data.get("tags")
+
+        if len(tags) > settings.MAX_TAGS:
+            raise ValidationError(
+                f"A level cannot have more than {settings.MAX_TAGS} tags."
+            )
+
+        return tags
 
 
 @admin.register(User)
@@ -51,6 +80,7 @@ class LevelAdmin(admin.ModelAdmin):
     ]
     list_filter = ["genres", "tags"]
     group_by = ["tags"]
+    form = LevelForm
 
 
 @admin.register(LevelImage)
