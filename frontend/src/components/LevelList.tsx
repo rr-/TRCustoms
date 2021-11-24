@@ -37,7 +37,6 @@ const LevelList: React.FunctionComponent = () => {
               <tr>
                 <th>Name</th>
                 <th>Genres</th>
-                <th>Tags</th>
                 <th>Author</th>
                 <th>Engine</th>
                 <th>Created</th>
@@ -50,9 +49,6 @@ const LevelList: React.FunctionComponent = () => {
                   <td>{level.name}</td>
                   <td>
                     {level.genres.map((tag) => tag.name).join(", ") || "N/A"}
-                  </td>
-                  <td>
-                    {level.tags.map((tag) => tag.name).join(", ") || "N/A"}
                   </td>
                   <td>
                     {level.author_user?.username || level.author_name || "N/A"}
