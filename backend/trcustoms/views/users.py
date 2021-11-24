@@ -1,4 +1,3 @@
-"""User views."""
 from django.shortcuts import get_object_or_404
 from rest_framework import viewsets
 from rest_framework.decorators import action
@@ -15,8 +14,6 @@ from trcustoms.serializers import UserSerializer
 
 
 class UserViewSet(PermissionsMixin, viewsets.ModelViewSet):
-    """Main user CRUD view set."""
-
     permission_classes_by_action = {
         "create": [AllowAny],
     }

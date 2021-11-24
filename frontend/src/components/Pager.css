@@ -1,0 +1,38 @@
+.Pager {
+  margin: 1rem 0;
+}
+.Pager ul {
+  display: flex;
+  align-items: center;
+  width: 32rem;
+  list-style-type: none;
+  padding: 0;
+  margin: 1rem auto;
+}
+.Pager li {
+  text-align: center;
+  display: inline-block;
+  margin: 0 0.5rem 0 0;
+}
+
+.Pager span,
+.Pager a {
+  padding: 0.5rem 1rem;
+  border: 1px solid var(--text-color);
+  background: var(--sidebar-color-alt);
+  display: inline-block;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.Pager li.active span,
+.Pager li.active a {
+  background: var(--sidebar-color);
+}
+.Pager li:hover span,
+.Pager li:hover a {
+  background: var(--sidebar-color);
+}
+.Pager li {
+  flex-grow: 1;
+}

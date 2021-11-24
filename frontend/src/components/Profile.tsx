@@ -4,6 +4,7 @@ import ReactMarkdown from "react-markdown";
 import { useParams } from "react-router-dom";
 import { IUser, UserService } from "src/services/user.service";
 import { UserContext } from "src/shared/contexts/UserContext";
+import { formatDateTime } from "src/shared/utils";
 
 interface IProfile {}
 
@@ -32,9 +33,9 @@ const Profile: React.FunctionComponent<IProfile> = () => {
           <aside>
             <img src={user.avatar_url || "/anonymous.png"} />
             <p>
-              Joined: {user.date_joined || "unknown"}
+              Joined: {formatDateTime(user.date_joined) || "unknown"}
               <br />
-              Last seen: {user.last_login || "never"}
+              Last seen: {formatDateTime(user.last_login) || "never"}
             </p>
           </aside>
           <section>

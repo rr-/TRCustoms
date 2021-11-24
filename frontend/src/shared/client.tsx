@@ -1,4 +1,12 @@
+import { stringify } from "qs";
 import { AuthService } from "src/services/auth.service";
+
+interface IFetchJSONOptions {
+  method: string;
+  headers?: any;
+  query?: any;
+  data?: any;
+}
 
 class FetchError<Result> extends Error {
   response: Response;
@@ -14,16 +22,15 @@ class FetchError<Result> extends Error {
 
 async function fetchJSONWithoutRetry<Result>(
   url: string,
-  options: {
-    method: string;
-    headers?: any;
-    data?: any;
-  }
+  options: IFetchJSONOptions
 ): Promise<Result> {
   const headers = { "Content-Type": "application/json", ...options.headers };
   const accessToken = AuthService.getAccessToken();
   if (accessToken) {
     headers.Authorization = `Bearer ${accessToken}`;
+  }
+  if (options.query) {
+    url += "?" + stringify(options.query);
   }
   const response = await fetch(url, {
     method: options.method,
@@ -39,11 +46,7 @@ async function fetchJSONWithoutRetry<Result>(
 
 async function fetchJSON<Result>(
   url: string,
-  options: {
-    method: string;
-    headers?: any;
-    data?: any;
-  }
+  options: IFetchJSONOptions
 ): Promise<Result> {
   try {
     return await fetchJSONWithoutRetry<Result>(url, options);

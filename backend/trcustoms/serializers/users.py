@@ -1,4 +1,3 @@
-"""User serializers."""
 from typing import Optional
 
 from django.contrib.auth.password_validation import validate_password
@@ -10,13 +9,9 @@ from trcustoms.models import User
 
 
 class UserSerializer(serializers.ModelSerializer):
-    """Main user serializer."""
-
     avatar_url = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
-        """Serializer settings."""
-
         model = User
         fields = (
             "username",
@@ -63,8 +58,6 @@ class UserSerializer(serializers.ModelSerializer):
     )
 
     def create(self, validated_data):
-        """Create user account."""
-
         user = User.objects.create(
             username=validated_data["username"],
             first_name=validated_data["first_name"] or "",
