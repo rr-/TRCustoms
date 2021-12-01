@@ -1,15 +1,18 @@
 import "./LevelList.css";
+import { Formik, Form } from "formik";
 import { useEffect, useCallback, useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useHistory, useLocation } from "react-router-dom";
 import LevelSortLink from "src/components/LevelSortLink";
 import Pager from "src/components/Pager";
 import { ILevelList, LevelService } from "src/services/level.service";
-import { formatDateTime } from "src/shared/utils";
+import TextFormField from "src/shared/components/TextFormField";
+import { filterFalsyObjectValues, formatDateTime } from "src/shared/utils";
 
 const LevelList: React.FunctionComponent = () => {
   const [levelList, setLevelList] = useState<ILevelList | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const location = useLocation();
+  const history = useHistory();
 
   const fetchLevelList = useCallback(async (queryParams) => {
     const levelList = await LevelService.getLevels({
@@ -22,11 +25,28 @@ const LevelList: React.FunctionComponent = () => {
   }, []);
 
   useEffect(() => {
-    const queryParams = Object.fromEntries(
-      new URL(window.location.href).searchParams
-    );
+    const currentURL = new URL(window.location.href);
+    const queryParams = Object.fromEntries(currentURL.searchParams);
     fetchLevelList(queryParams);
   }, [fetchLevelList, location]);
+
+  const searchClick = async (values: any) => {
+    const currentURL = new URL(window.location.href);
+    const queryParams = Object.fromEntries(currentURL.searchParams);
+    const targetURL =
+      "?" +
+      new URLSearchParams(
+        filterFalsyObjectValues({
+          sort: queryParams.sort,
+          search: values.search,
+        })
+      ).toString();
+    history.push(targetURL);
+  };
+
+  const clearClick = async (values: any) => {
+    history.push("");
+  };
 
   return (
     <>
@@ -34,6 +54,18 @@ const LevelList: React.FunctionComponent = () => {
         <p>Loading...</p>
       ) : (
         <div id="LevelList">
+          <Formik initialValues={{ search: "" }} onSubmit={searchClick}>
+            <Form className="Form">
+              <TextFormField label="Search" name="search" />
+              <div className="FormField">
+                <button type="submit">Search</button>
+                <button onClick={clearClick} type="reset">
+                  Reset
+                </button>
+              </div>
+            </Form>
+          </Formik>
+
           <table>
             <thead>
               <tr>

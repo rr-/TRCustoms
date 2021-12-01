@@ -42,10 +42,17 @@ const formatDateTime = (input: string): string => {
   return date.toISOString().slice(0, 19).replace("T", " ");
 };
 
+const filterFalsyObjectValues = <T extends Object>(source: T): T => {
+  return Object.fromEntries(
+    Object.entries(source).filter(([_key, value]) => !!value)
+  ) as T;
+};
+
 export {
   validateEmail,
   validatePassword,
   validateUserName,
   makeSentence,
   formatDateTime,
+  filterFalsyObjectValues,
 };
