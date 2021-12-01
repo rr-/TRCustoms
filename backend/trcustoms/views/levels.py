@@ -24,5 +24,6 @@ class LevelViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
     )
     serializer_class = LevelSerializer
 
-    filter_backends = [filters.OrderingFilter]
+    filter_backends = [filters.SearchFilter, filters.OrderingFilter]
     ordering_fields = ["name", "author", "engine", "created", "last_updated"]
+    search_fields = ["name", "author_name", "author_user__username"]
