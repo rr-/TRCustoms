@@ -1,11 +1,12 @@
 import "./Pager.css";
+import { LinkWithQuery } from "src/shared/components/LinkWithQuery";
 import { IPagedResponse } from "src/shared/types";
 
 const PAGES_AROUND = 1;
 
-interface IPager<T> {
-  pagedResponse: IPagedResponse<T>;
-  linkElem: (
+interface IPager<TCollection> {
+  pagedResponse: IPagedResponse<TCollection>;
+  linkElem?: (
     pageNumber: number,
     element: React.ReactElement
   ) => React.ReactElement;
@@ -37,7 +38,7 @@ function addEllipsisMarkers(pages: number[]): (number | null)[] {
   );
 }
 
-const Pager = <T extends {}>(props: IPager<T>) => {
+const Pager = <TCollection extends {}>(props: IPager<TCollection>) => {
   const firstPage = 1;
   const currentPage = props.pagedResponse.current_page;
   const lastPage = props.pagedResponse.last_page;
@@ -49,6 +50,12 @@ const Pager = <T extends {}>(props: IPager<T>) => {
   const prevPageLabel = <>&laquo;</>;
   const nextPageLabel = <>&raquo;</>;
 
+  const linkElem =
+    props.linkElem ||
+    ((page, label) => (
+      <LinkWithQuery to={`?page=${page}`}>{label}</LinkWithQuery>
+    ));
+
   return (
     <div className="Pager">
       <ul>
@@ -57,15 +64,17 @@ const Pager = <T extends {}>(props: IPager<T>) => {
             <span>{prevPageLabel}</span>
           </li>
         ) : (
-          <li>{props.linkElem(prevPage, prevPageLabel)}</li>
+          <li>{linkElem(prevPage, prevPageLabel)}</li>
         )}
 
         {pagesShown.map((page) =>
           page === null ? (
-            <li className="ellipsis">...</li>
+            <li key={page} className="ellipsis">
+              ...
+            </li>
           ) : (
-            <li className={page === currentPage ? "active" : ""}>
-              {props.linkElem(page, <>{page}</>)}
+            <li key={page} className={page === currentPage ? "active" : ""}>
+              {linkElem(page, <>{page}</>)}
             </li>
           )
         )}
@@ -75,7 +84,7 @@ const Pager = <T extends {}>(props: IPager<T>) => {
             <span>{nextPageLabel}</span>
           </li>
         ) : (
-          <li>{props.linkElem(nextPage, nextPageLabel)}</li>
+          <li>{linkElem(nextPage, nextPageLabel)}</li>
         )}
       </ul>
     </div>

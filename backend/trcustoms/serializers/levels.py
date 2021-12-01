@@ -32,6 +32,7 @@ class LevelSerializer(serializers.ModelSerializer):
     class Meta:
         model = Level
         fields = [
+            "id",
             "name",
             "description",
             "genres",

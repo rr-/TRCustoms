@@ -31,7 +31,7 @@ const Profile: React.FunctionComponent<IProfile> = () => {
       ) : user ? (
         <>
           <aside>
-            <img src={user.avatar_url || "/anonymous.png"} />
+            <img alt="User avatar" src={user.avatar_url || "/anonymous.png"} />
             <p>
               Joined: {formatDateTime(user.date_joined) || "unknown"}
               <br />

@@ -130,7 +130,8 @@ REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": [
         "rest_framework_simplejwt.authentication.JWTAuthentication",
     ],
-    "DEFAULT_PAGINATION_CLASS": ("trcustoms.pagination.CustomPagination"),
+    "DEFAULT_PAGINATION_CLASS": "trcustoms.pagination.CustomPagination",
+    "ORDERING_PARAM": "sort",
     "PAGE_SIZE": 25,
 }
 
