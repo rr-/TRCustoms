@@ -1,8 +1,7 @@
 import "./LevelList.css";
-import { parse } from "qs";
 import { useEffect, useCallback, useState } from "react";
 import { useLocation } from "react-router-dom";
-import { Link } from "react-router-dom";
+import LevelSortLink from "src/components/LevelSortLink";
 import Pager from "src/components/Pager";
 import { ILevelList, LevelService } from "src/services/level.service";
 import { formatDateTime } from "src/shared/utils";
@@ -10,19 +9,22 @@ import { formatDateTime } from "src/shared/utils";
 const LevelList: React.FunctionComponent = () => {
   const [levelList, setLevelList] = useState<ILevelList | null>(null);
   const [isLoading, setIsLoading] = useState(true);
-
-  let location = useLocation();
+  const location = useLocation();
 
   const fetchLevelList = useCallback(async (queryParams) => {
     const levelList = await LevelService.getLevels({
       page: queryParams.page || 1,
+      sort: queryParams.sort || null,
+      search: queryParams.search || null,
     });
     setLevelList(levelList);
     setIsLoading(false);
   }, []);
 
   useEffect(() => {
-    const queryParams = parse(location.search, { ignoreQueryPrefix: true });
+    const queryParams = Object.fromEntries(
+      new URL(window.location.href).searchParams
+    );
     fetchLevelList(queryParams);
   }, [fetchLevelList, location]);
 
@@ -35,17 +37,29 @@ const LevelList: React.FunctionComponent = () => {
           <table>
             <thead>
               <tr>
-                <th>Name</th>
+                <th>
+                  <LevelSortLink sort={"name"}>Name</LevelSortLink>
+                </th>
                 <th>Genres</th>
-                <th>Author</th>
-                <th>Engine</th>
-                <th>Created</th>
-                <th>Last updated</th>
+                <th>
+                  <LevelSortLink sort={"author"}>Author</LevelSortLink>
+                </th>
+                <th>
+                  <LevelSortLink sort={"engine_name"}>Engine</LevelSortLink>
+                </th>
+                <th>
+                  <LevelSortLink sort={"created"}>Created</LevelSortLink>
+                </th>
+                <th>
+                  <LevelSortLink sort={"last_updated"}>
+                    Last updated
+                  </LevelSortLink>
+                </th>
               </tr>
             </thead>
             <tbody>
               {levelList.results.map((level) => (
-                <tr>
+                <tr key={level.id}>
                   <td>{level.name}</td>
                   <td>
                     {level.genres.map((tag) => tag.name).join(", ") || "N/A"}
@@ -60,14 +74,7 @@ const LevelList: React.FunctionComponent = () => {
               ))}
             </tbody>
           </table>
-          <Pager
-            pagedResponse={levelList}
-            linkElem={(page, label) => (
-              <Link to={{ pathname: "/", search: `?page=${page}` }}>
-                {label}
-              </Link>
-            )}
-          />
+          <Pager pagedResponse={levelList} />
         </div>
       )}
     </>

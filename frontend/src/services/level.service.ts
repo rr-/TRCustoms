@@ -16,6 +16,7 @@ interface ILevelGenre {
 }
 
 interface ILevel {
+  id: number | null;
   name: string;
   description: string;
   genres: ILevelGenre[];
@@ -30,6 +31,8 @@ interface ILevel {
 
 interface ILevelQuery {
   page: number | null;
+  sort: string | null;
+  search: string | null;
 }
 
 interface ILevelList extends IPagedResponse<ILevel> {}
@@ -38,7 +41,7 @@ const getLevels = async (query: ILevelQuery): Promise<ILevelList | null> => {
   let data;
   try {
     data = await fetchJSON<ILevelList>(`${API_URL}/levels/`, {
-      query: { page: query.page },
+      query: { page: query.page, sort: query.sort, search: query.search },
       method: "GET",
     });
   } catch (error) {
