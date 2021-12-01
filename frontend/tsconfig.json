@@ -4,7 +4,7 @@
     "module": "esnext",
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
-    "strict": true,
+    "strict": false,
     "skipLibCheck": true,
     "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,

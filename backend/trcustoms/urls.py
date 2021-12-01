@@ -8,11 +8,20 @@ from rest_framework_simplejwt.views import (
     TokenRefreshView,
 )
 
-from trcustoms.views import LevelViewSet, UserViewSet
+from trcustoms.views import (
+    LevelEngineViewSet,
+    LevelGenreViewSet,
+    LevelTagViewSet,
+    LevelViewSet,
+    UserViewSet,
+)
 
 router = DefaultRouter()
 router.register(r"users", UserViewSet)
 router.register(r"levels", LevelViewSet)
+router.register(r"level_tags", LevelTagViewSet)
+router.register(r"level_genres", LevelGenreViewSet)
+router.register(r"level_engines", LevelEngineViewSet)
 
 urlpatterns = [
     path("api/auth/token/", TokenObtainPairView.as_view()),

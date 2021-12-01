@@ -11,11 +11,9 @@ const TextAreaFormField: React.FunctionComponent<ITextAreaFormField> = ({
   label,
 }) => {
   return (
-    <BaseFormField
-      name={name}
-      label={label}
-      render={() => <Field as="textarea" type="text" name={name} />}
-    />
+    <BaseFormField name={name} label={label}>
+      <Field as="textarea" type="text" name={name} />
+    </BaseFormField>
   );
 };
 

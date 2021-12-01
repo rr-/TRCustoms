@@ -1,4 +1,3 @@
-import { stringify } from "qs";
 import { AuthService } from "src/services/auth.service";
 
 interface IFetchJSONOptions {
@@ -30,7 +29,7 @@ async function fetchJSONWithoutRetry<Result>(
     headers.Authorization = `Bearer ${accessToken}`;
   }
   if (options.query) {
-    url += "?" + stringify(options.query);
+    url += "?" + new URLSearchParams(options.query).toString();
   }
   const response = await fetch(url, {
     method: options.method,

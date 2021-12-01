@@ -7,19 +7,19 @@ from trcustoms.serializers.users import UserSerializer
 class LevelGenreSerializer(serializers.ModelSerializer):
     class Meta:
         model = LevelGenre
-        fields = ["name"]
+        fields = ["id", "name"]
 
 
 class LevelTagSerializer(serializers.ModelSerializer):
     class Meta:
         model = LevelTag
-        fields = ["name"]
+        fields = ["id", "name"]
 
 
 class LevelEngineSerializer(serializers.ModelSerializer):
     class Meta:
         model = LevelEngine
-        fields = ["name"]
+        fields = ["id", "name"]
 
 
 class LevelSerializer(serializers.ModelSerializer):

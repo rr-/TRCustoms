@@ -11,11 +11,9 @@ const EmailFormField: React.FunctionComponent<IEmailFormField> = ({
   label,
 }) => {
   return (
-    <BaseFormField
-      name={name}
-      label={label}
-      render={() => <Field type="email" name={name} />}
-    />
+    <BaseFormField name={name} label={label}>
+      <Field type="email" name={name} />
+    </BaseFormField>
   );
 };
 

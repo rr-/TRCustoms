@@ -3,6 +3,7 @@ import { useEffect, useCallback, useState, useContext } from "react";
 import ReactMarkdown from "react-markdown";
 import { useParams } from "react-router-dom";
 import { IUser, UserService } from "src/services/user.service";
+import Loader from "src/shared/components/Loader";
 import { UserContext } from "src/shared/contexts/UserContext";
 import { formatDateTime } from "src/shared/utils";
 
@@ -27,7 +28,7 @@ const Profile: React.FunctionComponent<IProfile> = () => {
   return (
     <div id="Profile">
       {isLoading ? (
-        <p>Loading...</p>
+        <Loader />
       ) : user ? (
         <>
           <aside>

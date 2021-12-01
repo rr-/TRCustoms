@@ -7,3 +7,31 @@
 td {
   padding: 0.25rem 1rem;
 }
+
+#LevelList--container {
+  display: grid;
+  grid-template-areas:
+    "search search"
+    "results sidebar"
+    "pager sidebar";
+}
+#LevelList--sidebar {
+  grid-area: sidebar;
+}
+#LevelList--results {
+  width: 100%;
+  grid-area: results;
+}
+#LevelList--search {
+  grid-area: search;
+  display: flex;
+  align-items: flex-end;
+  gap: 1rem;
+}
+#LevelList--search label {
+  display: inline;
+  margin-right: 1rem;
+}
+#LevelList--pager {
+  grid-area: pager;
+}
