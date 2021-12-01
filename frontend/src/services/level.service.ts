@@ -2,16 +2,20 @@ import { IUser } from "src/services/user.service";
 import { fetchJSON } from "src/shared/client";
 import { API_URL } from "src/shared/constants";
 import { IPagedResponse } from "src/shared/types";
+import { filterFalsyObjectValues } from "src/shared/utils";
 
 interface ILevelEngine {
+  id: number;
   name: string;
 }
 
 interface ILevelTag {
+  id: number;
   name: string;
 }
 
 interface ILevelGenre {
+  id: number;
   name: string;
 }
 
@@ -32,16 +36,65 @@ interface ILevel {
 interface ILevelQuery {
   page: number | null;
   sort: string | null;
-  search: string | null;
+  search: string;
+  tags: Array<number>;
+  genres: Array<number>;
+  engines: Array<number>;
 }
 
 interface ILevelList extends IPagedResponse<ILevel> {}
+interface ILevelTagList extends Array<ILevelTag> {}
+interface ILevelGenreList extends Array<ILevelGenre> {}
+interface ILevelEngineList extends Array<ILevelEngine> {}
 
 const getLevels = async (query: ILevelQuery): Promise<ILevelList | null> => {
   let data;
   try {
     data = await fetchJSON<ILevelList>(`${API_URL}/levels/`, {
-      query: { page: query.page, sort: query.sort, search: query.search },
+      query: filterFalsyObjectValues({
+        page: query.page,
+        sort: query.sort,
+        search: query.search,
+        tags: query.tags.join(","),
+        genres: query.genres?.join(","),
+        engines: query.engines?.join(","),
+      }),
+      method: "GET",
+    });
+  } catch (error) {
+    data = null;
+  }
+  return data;
+};
+
+const getLevelTags = async (): Promise<ILevelTagList | null> => {
+  let data;
+  try {
+    data = await fetchJSON<ILevelTagList>(`${API_URL}/level_tags/`, {
+      method: "GET",
+    });
+  } catch (error) {
+    data = null;
+  }
+  return data;
+};
+
+const getLevelGenres = async (): Promise<ILevelGenreList | null> => {
+  let data;
+  try {
+    data = await fetchJSON<ILevelGenreList>(`${API_URL}/level_genres/`, {
+      method: "GET",
+    });
+  } catch (error) {
+    data = null;
+  }
+  return data;
+};
+
+const getLevelEngines = async (): Promise<ILevelEngineList | null> => {
+  let data;
+  try {
+    data = await fetchJSON<ILevelEngineList>(`${API_URL}/level_engines/`, {
       method: "GET",
     });
   } catch (error) {
@@ -52,7 +105,17 @@ const getLevels = async (query: ILevelQuery): Promise<ILevelList | null> => {
 
 const LevelService = {
   getLevels,
+  getLevelTags,
+  getLevelGenres,
+  getLevelEngines,
 };
 
-export type { ILevel, ILevelList };
+export type {
+  ILevelQuery,
+  ILevel,
+  ILevelList,
+  ILevelTagList,
+  ILevelGenreList,
+  ILevelEngineList,
+};
 export { LevelService };

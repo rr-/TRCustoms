@@ -12,7 +12,7 @@ function App() {
   return (
     <UserContextProvider>
       <NavBar />
-      <div className="MainContainer">
+      <main id="Content" className="MainContainer">
         <Switch>
           <Route exact path="/" component={LevelList} />
           <Route exact path="/login" component={Login} />
@@ -21,7 +21,7 @@ function App() {
           <Route exact path="/profile" component={Profile} />
           <Route exact path="/profile/:userId" component={Profile} />
         </Switch>
-      </div>
+      </main>
     </UserContextProvider>
   );
 }

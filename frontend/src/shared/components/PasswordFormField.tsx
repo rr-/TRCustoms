@@ -11,11 +11,9 @@ const PasswordFormField: React.FunctionComponent<IPasswordFormField> = ({
   label,
 }) => {
   return (
-    <BaseFormField
-      label={label}
-      name={name}
-      render={() => <Field type="password" name={name} />}
-    />
+    <BaseFormField label={label} name={name}>
+      <Field type="password" name={name} />
+    </BaseFormField>
   );
 };
 

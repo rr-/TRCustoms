@@ -6,25 +6,25 @@ export const LinkWithQuery = ({ children, to, ...props }: any) => {
   const location = useLocation();
 
   useEffect(() => {
-    const currentUrl = new URL(window.location.href);
+    const currentURL = new URL(window.location.href);
     if (to instanceof Object) {
       setRealTo({
         ...to,
         search:
           "?" +
           new URLSearchParams({
-            ...Object.fromEntries(currentUrl.searchParams),
+            ...Object.fromEntries(currentURL.searchParams),
             ...Object.fromEntries(new URLSearchParams(to.search)),
           }).toString(),
       });
     } else {
-      currentUrl.search =
+      currentURL.search =
         "?" +
         new URLSearchParams({
-          ...Object.fromEntries(currentUrl.searchParams),
+          ...Object.fromEntries(currentURL.searchParams),
           ...Object.fromEntries(new URLSearchParams(to)),
         }).toString();
-      setRealTo(currentUrl.pathname + currentUrl.search);
+      setRealTo(currentURL.pathname + currentURL.search);
     }
   }, [location, to]);
 
