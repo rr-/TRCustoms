@@ -37,8 +37,11 @@ const makeSentence = (input: string): string => {
   return input[0].toUpperCase() + input.substr(1).replace(/\.$/, "") + ".";
 };
 
-const formatDateTime = (input: string): string => {
-  const date = new Date(Date.parse(input));
+const formatDateTime = (input: string | null): string | null => {
+  if (!input) {
+    return null;
+  }
+  const date = new Date(input);
   return date.toISOString().slice(0, 19).replace("T", " ");
 };
 

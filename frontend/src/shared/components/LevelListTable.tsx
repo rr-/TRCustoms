@@ -43,8 +43,8 @@ const LevelListTable = ({ levels }: { levels: ILevelList | null }) => {
                   {level.author_user?.username || level.author_name || "N/A"}
                 </td>
                 <td>{level.engine.name}</td>
-                <td>{formatDateTime(level.created)}</td>
-                <td>{formatDateTime(level.last_updated)}</td>
+                <td>{formatDateTime(level.created) || "N/A"}</td>
+                <td>{formatDateTime(level.last_updated) || "N/A"}</td>
               </tr>
             ))}
           </tbody>
