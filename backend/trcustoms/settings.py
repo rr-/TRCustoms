@@ -135,6 +135,10 @@ REST_FRAMEWORK = {
     "PAGE_SIZE": 25,
 }
 
+SIMPLE_JWT = {
+    "UPDATE_LAST_LOGIN": True,
+}
+
 LANGUAGE_CODE = "en-us"
 TIME_ZONE = "UTC"
 USE_I18N = True
