@@ -37,6 +37,14 @@ const makeSentence = (input: string): string => {
   return input[0].toUpperCase() + input.substr(1).replace(/\.$/, "") + ".";
 };
 
+const formatDate = (input: string | null): string | null => {
+  if (!input) {
+    return null;
+  }
+  const date = new Date(input);
+  return date.toISOString().slice(0, 10);
+};
+
 const formatDateTime = (input: string | null): string | null => {
   if (!input) {
     return null;
@@ -56,6 +64,7 @@ export {
   validatePassword,
   validateUserName,
   makeSentence,
+  formatDate,
   formatDateTime,
   filterFalsyObjectValues,
 };
