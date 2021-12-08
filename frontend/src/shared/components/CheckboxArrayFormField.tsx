@@ -6,17 +6,19 @@ interface ICheckboxArrayFormField {
   name: string;
   label: string;
   source: Array<{ value: any; label: string }>;
+  required?: boolean;
 }
 
 const CheckboxArrayFormField: React.FunctionComponent<ICheckboxArrayFormField> = ({
   name,
   label,
   source,
+  required,
 }) => {
   const { values, setFieldValue } = useFormikContext();
 
   return (
-    <BaseFormField name={name} label={label}>
+    <BaseFormField required={required} name={name} label={label}>
       {source.map((item) => (
         <div key={item.value}>
           <label>
