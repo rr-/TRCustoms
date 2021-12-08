@@ -36,6 +36,7 @@ const ProfileEdit: React.FunctionComponent = () => {
       firstName?: string;
       last_name?: string;
       email?: string;
+      old_password?: string;
       password?: string;
       password2?: string;
       bio?: string;
@@ -45,6 +46,7 @@ const ProfileEdit: React.FunctionComponent = () => {
     const validatorMap = {
       username: [validateRequired, validateUserName],
       email: [validateRequired, validateEmail],
+      old_password: [validatePassword],
       password: [validatePassword],
       password2: [
         validatePassword,
@@ -76,6 +78,7 @@ const ProfileEdit: React.FunctionComponent = () => {
           firstName: values.firstName,
           lastName: values.lastName,
           email: values.email,
+          old_password: values.old_password,
           password: values.password,
           bio: values.bio,
         });
@@ -104,6 +107,7 @@ const ProfileEdit: React.FunctionComponent = () => {
             firstName: error.data?.first_name,
             lastName: error.data?.last_name,
             email: error.data?.email,
+            old_password: error.data?.old_password,
             password: error.data?.password,
             bio: error.data?.bio,
             picture: error.data?.picture,
@@ -130,6 +134,7 @@ const ProfileEdit: React.FunctionComponent = () => {
     firstName: user.first_name,
     lastName: user.last_name,
     email: user.email,
+    old_password: "",
     password: "",
     password2: "",
     bio: user.bio,
@@ -151,6 +156,10 @@ const ProfileEdit: React.FunctionComponent = () => {
               <legend>Basic data</legend>
               <TextFormField required={true} label="Username" name="username" />
               <EmailFormField required={true} label="E-mail" name="email" />
+              <PasswordFormField
+                label="Old password (fill only if you want to change password)"
+                name="old_password"
+              />
               <PasswordFormField
                 label="Password (leave empty to keep current)"
                 name="password"
