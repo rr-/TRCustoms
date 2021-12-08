@@ -1,6 +1,7 @@
 from django import forms
 from django.conf import settings
 from django.contrib import admin
+from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.core.exceptions import ValidationError
 
 from trcustoms.models import (
@@ -41,7 +42,7 @@ class LevelForm(forms.ModelForm):
 
 
 @admin.register(User)
-class UserAdmin(admin.ModelAdmin):
+class UserAdmin(BaseUserAdmin):
     ordering = ["username"]
     search_fields = ["username", "first_name", "last_name"]
 
