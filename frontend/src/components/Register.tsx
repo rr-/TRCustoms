@@ -1,6 +1,7 @@
 import { Formik, Form } from "formik";
 import { History } from "history";
 import { useCallback, useContext } from "react";
+import { Link } from "react-router-dom";
 import { AuthService } from "src/services/auth.service";
 import { UserService } from "src/services/user.service";
 import { FetchError } from "src/shared/client";
@@ -57,7 +58,7 @@ const Register: React.FunctionComponent<IRegister> = ({ history }) => {
   const submit = useCallback(
     async (values, { setSubmitting, setStatus, setErrors }) => {
       try {
-        await UserService.register({
+        const user = await UserService.register({
           username: values.username,
           firstName: values.firstName,
           lastName: values.lastName,
@@ -65,15 +66,28 @@ const Register: React.FunctionComponent<IRegister> = ({ history }) => {
           password: values.password,
           bio: values.bio,
         });
-        await AuthService.login(values.username, values.password);
-        const user = await UserService.getCurrentUser();
-        setUser(user);
-        history.push("/");
+        debugger;
+        if (user.is_active) {
+          await AuthService.login(values.username, values.password);
+          const user = await UserService.getCurrentUser();
+          setUser(user);
+          history.push("/");
+        } else {
+          setStatus({
+            success: (
+              <>
+                Your account was created. Now it needs to be activated by
+                someone from staff. Please have patience :) In the meantime, why
+                don't you take a look at <Link to={"/"}>some levels</Link>?
+              </>
+            ),
+          });
+        }
       } catch (error) {
         setSubmitting(false);
         if (error instanceof FetchError) {
           if (error.message) {
-            setStatus({ error: error.message });
+            setStatus({ error: <>{makeSentence(error.message)}</> });
           }
           setErrors({
             username: error.data?.username,
@@ -84,7 +98,7 @@ const Register: React.FunctionComponent<IRegister> = ({ history }) => {
             bio: error.data?.bio,
           });
         } else {
-          setStatus({ error: "unknown error" });
+          setStatus({ error: <>Unknown error.</> });
         }
       }
     },
@@ -107,35 +121,37 @@ const Register: React.FunctionComponent<IRegister> = ({ history }) => {
         validate={validate}
         onSubmit={submit}
       >
-        {({ isSubmitting, status }) => (
-          <Form className="Form">
-            <TextFormField required={true} label="Username" name="username" />
-            <TextFormField label="First name" name="firstName" />
-            <TextFormField label="Last name" name="lastName" />
-            <EmailFormField required={true} label="E-mail" name="email" />
-            <PasswordFormField
-              required={true}
-              label="Password"
-              name="password"
-            />
-            <PasswordFormField
-              required={true}
-              label="Password (repeat)"
-              name="password2"
-            />
-            <TextAreaFormField label="Bio" name="bio" />
-            <div className="FormField">
-              {status?.error && (
-                <div className="FormFieldError">
-                  {makeSentence(status.error)}
-                </div>
-              )}
-              <button type="submit" disabled={isSubmitting}>
-                Register
-              </button>
-            </div>
-          </Form>
-        )}
+        {({ isSubmitting, status }) =>
+          status?.success ? (
+            <div className="FormFieldSuccess">{status.success}</div>
+          ) : (
+            <Form className="Form">
+              <TextFormField required={true} label="Username" name="username" />
+              <TextFormField label="First name" name="firstName" />
+              <TextFormField label="Last name" name="lastName" />
+              <EmailFormField required={true} label="E-mail" name="email" />
+              <PasswordFormField
+                required={true}
+                label="Password"
+                name="password"
+              />
+              <PasswordFormField
+                required={true}
+                label="Password (repeat)"
+                name="password2"
+              />
+              <TextAreaFormField label="Bio" name="bio" />
+              <div className="FormField">
+                {status?.error && (
+                  <div className="FormFieldError">{status.error}</div>
+                )}
+                <button type="submit" disabled={isSubmitting}>
+                  Register
+                </button>
+              </div>
+            </Form>
+          )
+        }
       </Formik>
     </div>
   );
