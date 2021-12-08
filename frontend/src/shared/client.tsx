@@ -2,9 +2,16 @@ import { AuthService } from "src/services/auth.service";
 
 interface IFetchJSONOptions {
   method: string;
-  headers?: any;
-  query?: any;
+  headers?: { [key: string]: string };
+  query?: { [key: string]: string };
   data?: any;
+}
+
+interface IFetchMultipartOptions {
+  method: string;
+  headers?: { [key: string]: string };
+  query?: { [key: string]: string };
+  data?: FormData;
 }
 
 class FetchError<Result> extends Error {
@@ -26,7 +33,7 @@ async function fetchJSONWithoutRetry<Result>(
   const headers = { "Content-Type": "application/json", ...options.headers };
   const accessToken = AuthService.getAccessToken();
   if (accessToken) {
-    headers.Authorization = `Bearer ${accessToken}`;
+    headers["Authorization"] = `Bearer ${accessToken}`;
   }
   if (options.query) {
     url += "?" + new URLSearchParams(options.query).toString();
@@ -69,4 +76,28 @@ async function fetchJSON<Result>(
   }
 }
 
-export { fetchJSON, fetchJSONWithoutRetry, FetchError };
+async function fetchMultipart<Result>(
+  url: string,
+  options: IFetchMultipartOptions
+): Promise<Result> {
+  const headers = { ...options.headers };
+  const accessToken = AuthService.getAccessToken();
+  if (accessToken) {
+    headers["Authorization"] = `Bearer ${accessToken}`;
+  }
+  if (options.query) {
+    url += "?" + new URLSearchParams(options.query).toString();
+  }
+  const response = await fetch(url, {
+    method: options.method,
+    headers: headers,
+    body: options.data,
+  });
+  const data = await response.json();
+  if (!response.ok) {
+    throw new FetchError(data.detail, response, data);
+  }
+  return data;
+}
+
+export { fetchJSON, fetchJSONWithoutRetry, fetchMultipart, FetchError };

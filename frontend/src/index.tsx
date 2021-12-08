@@ -3,15 +3,22 @@ import "./index.css";
 import reportWebVitals from "./reportWebVitals";
 import React from "react";
 import ReactDOM from "react-dom";
+import { QueryClient, QueryClientProvider } from "react-query";
 import { BrowserRouter } from "react-router-dom";
 import ScrollToTop from "src/shared/ScrollToTop";
+
+const queryClient = new QueryClient({
+  defaultOptions: { queries: { retry: false } },
+});
 
 ReactDOM.render(
   <React.StrictMode>
     <BrowserRouter>
-      <ScrollToTop>
-        <App />
-      </ScrollToTop>
+      <QueryClientProvider client={queryClient} contextSharing={true}>
+        <ScrollToTop>
+          <App />
+        </ScrollToTop>
+      </QueryClientProvider>
     </BrowserRouter>
   </React.StrictMode>,
   document.getElementById("root")

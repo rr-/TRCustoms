@@ -11,8 +11,13 @@ import TextAreaFormField from "src/shared/components/TextAreaFormField";
 import TextFormField from "src/shared/components/TextFormField";
 import { UserContext } from "src/shared/contexts/UserContext";
 import { makeSentence } from "src/shared/utils";
-import { validateUserName } from "src/shared/utils";
-import { validatePassword, validateEmail } from "src/shared/utils";
+import {
+  validateUserName,
+  validateRequired,
+  validatePassword,
+  validatePassword2,
+  validateEmail,
+} from "src/shared/utils";
 
 interface IRegister {
   history: History;
@@ -32,24 +37,24 @@ const Register: React.FunctionComponent<IRegister> = ({ history }) => {
       bio?: string;
     } = {};
 
-    let error;
-
-    if ((error = validateUserName(values.username))) {
-      errors.username = makeSentence(error);
-    }
-
-    if ((error = validateEmail(values.email))) {
-      errors.email = makeSentence(error);
-    }
-
-    if ((error = validatePassword(values.password))) {
-      errors.password = makeSentence(error);
-    }
-
-    if ((error = validatePassword(values.password2))) {
-      errors.password2 = makeSentence(error);
-    } else if (values.password !== values.password2) {
-      errors.password2 = makeSentence("Passwords do not match");
+    const validatorMap = {
+      username: [validateRequired, validateUserName],
+      email: [validateRequired, validateEmail],
+      password: [validateRequired, validatePassword],
+      password2: [
+        validateRequired,
+        validatePassword,
+        (source) => validatePassword2(source, values.password2),
+      ],
+    };
+    for (const [field, validators] of Object.entries(validatorMap)) {
+      for (let validator of validators) {
+        const error = validator(values[field]);
+        if (error) {
+          errors[field] = makeSentence(error);
+        }
+        break;
+      }
     }
 
     return errors;
@@ -66,7 +71,6 @@ const Register: React.FunctionComponent<IRegister> = ({ history }) => {
           password: values.password,
           bio: values.bio,
         });
-        debugger;
         if (user.is_active) {
           await AuthService.login(values.username, values.password);
           const user = await UserService.getCurrentUser();
@@ -102,7 +106,7 @@ const Register: React.FunctionComponent<IRegister> = ({ history }) => {
         }
       }
     },
-    []
+    [history, setUser]
   );
 
   return (
@@ -126,21 +130,34 @@ const Register: React.FunctionComponent<IRegister> = ({ history }) => {
             <div className="FormFieldSuccess">{status.success}</div>
           ) : (
             <Form className="Form">
-              <TextFormField required={true} label="Username" name="username" />
-              <TextFormField label="First name" name="firstName" />
-              <TextFormField label="Last name" name="lastName" />
-              <EmailFormField required={true} label="E-mail" name="email" />
-              <PasswordFormField
-                required={true}
-                label="Password"
-                name="password"
-              />
-              <PasswordFormField
-                required={true}
-                label="Password (repeat)"
-                name="password2"
-              />
-              <TextAreaFormField label="Bio" name="bio" />
+              <fieldset>
+                <legend>Basic data</legend>
+                <TextFormField
+                  required={true}
+                  label="Username"
+                  name="username"
+                />
+                <EmailFormField required={true} label="E-mail" name="email" />
+
+                <PasswordFormField
+                  required={true}
+                  label="Password"
+                  name="password"
+                />
+                <PasswordFormField
+                  required={true}
+                  label="Password (repeat)"
+                  name="password2"
+                />
+              </fieldset>
+
+              <fieldset>
+                <legend>Extra information</legend>
+                <TextFormField label="First name" name="firstName" />
+                <TextFormField label="Last name" name="lastName" />
+                <TextAreaFormField label="Bio" name="bio" />
+              </fieldset>
+
               <div className="FormField">
                 {status?.error && (
                   <div className="FormFieldError">{status.error}</div>

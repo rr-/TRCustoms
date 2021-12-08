@@ -2,8 +2,10 @@ import "./Profile.css";
 import { useEffect, useCallback, useState, useContext } from "react";
 import ReactMarkdown from "react-markdown";
 import { useParams } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { IUser, UserService } from "src/services/user.service";
 import Loader from "src/shared/components/Loader";
+import PermissionGuard from "src/shared/components/PermissionGuard";
 import { UserContext } from "src/shared/contexts/UserContext";
 import { formatDateTime } from "src/shared/utils";
 
@@ -16,7 +18,7 @@ const Profile: React.FunctionComponent<IProfile> = () => {
   const [isLoading, setIsLoading] = useState(true);
 
   const fetchUser = useCallback(async () => {
-    const user = userId ? await UserService.getUserById(userId) : myUser;
+    const user = userId ? await UserService.getUserById(+userId) : myUser;
     setUser(user);
     setIsLoading(false);
   }, [userId, myUser]);
@@ -32,11 +34,18 @@ const Profile: React.FunctionComponent<IProfile> = () => {
       ) : user ? (
         <>
           <aside>
-            <img alt="User avatar" src={user.avatar_url || "/anonymous.png"} />
+            <img
+              alt={`Avatar for ${user.username}`}
+              src={user.picture_url || "/anonymous.png"}
+            />
             <p>
               Joined: {formatDateTime(user.date_joined) || "unknown"}
               <br />
               Last seen: {formatDateTime(user.last_login) || "never"}
+              <PermissionGuard require={"canEditUsers"} entity={user}>
+                <br />
+                <Link to={`/profile/${user.id}/edit`}>Edit</Link>
+              </PermissionGuard>
             </p>
           </aside>
           <section>

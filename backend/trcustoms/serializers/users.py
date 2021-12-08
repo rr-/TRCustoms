@@ -8,13 +8,14 @@ from trcustoms.models import User
 
 
 class UserSerializer(serializers.ModelSerializer):
-    avatar_url = serializers.SerializerMethodField(read_only=True)
+    picture_url = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
         model = User
         fields = (
+            "id",
             "username",
-            "avatar_url",
+            "picture_url",
             "first_name",
             "last_name",
             "email",
@@ -46,43 +47,50 @@ class UserSerializer(serializers.ModelSerializer):
     )
 
     first_name = serializers.CharField(
-        required=False, validators=[MaxLengthValidator(30)], allow_null=True
+        required=False, validators=[MaxLengthValidator(30)], allow_blank=True
     )
     last_name = serializers.CharField(
-        required=False, validators=[MaxLengthValidator(150)], allow_null=True
+        required=False, validators=[MaxLengthValidator(150)], allow_blank=True
     )
     bio = serializers.CharField(
-        required=False, validators=[MaxLengthValidator(5000)], allow_null=True
+        required=False, validators=[MaxLengthValidator(5000)], allow_blank=True
     )
 
     def validate_username(self, value):
-        print(value)
-        if User.objects.filter(username=value, is_active=False).exists():
-            raise serializers.ValidationError(
-                "An account with this name is currently awaiting activation."
-            )
-        if User.objects.filter(username=value).exists():
+        if (
+            user := User.objects.filter(username=value).first()
+        ) and user != self.instance:
             raise serializers.ValidationError(
                 "Another account exists with this name."
+                if user.is_active
+                else (
+                    "An account with this name "
+                    "is currently awaiting activation."
+                )
             )
+
         return value
 
     def validate_email(self, value):
-        if User.objects.filter(email=value, is_active=False).exists():
-            raise serializers.ValidationError(
-                "An account with this email is currently awaiting activation."
-            )
-        if User.objects.filter(email=value).exists():
+        if (
+            user := User.objects.filter(email=value).first()
+        ) and user != self.instance:
             raise serializers.ValidationError(
                 "Another account exists with this email."
+                if user.is_active
+                else (
+                    "An account with this email "
+                    "is currently awaiting activation."
+                )
             )
+
         return value
 
     def create(self, validated_data):
         user = User.objects.create(
             username=validated_data["username"],
-            first_name=validated_data["first_name"] or "",
-            last_name=validated_data["last_name"] or "",
+            first_name=validated_data["first_name"],
+            last_name=validated_data["last_name"],
             email=validated_data["email"],
             bio=validated_data["bio"],
             is_active=False,
@@ -93,7 +101,21 @@ class UserSerializer(serializers.ModelSerializer):
 
         return user
 
-    def get_avatar_url(self, instance: User) -> Optional[str]:
-        if not instance.avatar:
+    def get_picture_url(self, instance: User) -> Optional[str]:
+        if not instance.picture:
             return None
-        return instance.avatar.url
+        return instance.picture.url
+
+
+class UserPictureSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ["picture"]
+
+    def validate_picture(self, file):
+        max_file_size = 300 * 1024
+        if file.size > max_file_size:
+            raise serializers.ValidationError(
+                f"Maximum allowed size: {max_file_size/1024:.02f} KB"
+            )
+        return file

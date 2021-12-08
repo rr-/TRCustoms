@@ -5,6 +5,7 @@ import Login from "src/components/Login";
 import Logout from "src/components/Logout";
 import NavBar from "src/components/NavBar";
 import Profile from "src/components/Profile";
+import ProfileEdit from "src/components/ProfileEdit";
 import Register from "src/components/Register";
 import { UserContextProvider } from "src/shared/contexts/UserContext";
 
@@ -20,6 +21,7 @@ function App() {
           <Route exact path="/register" component={Register} />
           <Route exact path="/profile" component={Profile} />
           <Route exact path="/profile/:userId" component={Profile} />
+          <Route exact path="/profile/:userId/edit" component={ProfileEdit} />
         </Switch>
       </main>
     </UserContextProvider>

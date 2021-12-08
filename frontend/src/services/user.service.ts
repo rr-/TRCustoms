@@ -1,11 +1,13 @@
-import { fetchJSON } from "src/shared/client";
+import { fetchJSON, fetchMultipart } from "src/shared/client";
 import { API_URL } from "src/shared/constants";
 
 interface IUser {
+  id: number;
   username: string;
   first_name: string;
   last_name: string;
-  avatar_url: string;
+  email: string;
+  picture_url: string;
   bio: string;
   date_joined: string;
   last_login: string;
@@ -22,17 +24,55 @@ const getCurrentUser = async (): Promise<IUser | null> => {
   return data;
 };
 
-const getUserById = async (userName: string): Promise<IUser | null> => {
+const getUserById = async (userId: number): Promise<IUser | null> => {
   let data;
-  try {
-    data = await fetchJSON<IUser>(`${API_URL}/users/${userName}`, {
-      method: "GET",
-    });
-  } catch (error) {
-    console.error(error);
-    data = null;
-  }
+  data = await fetchJSON<IUser>(`${API_URL}/users/${userId}/`, {
+    method: "GET",
+  });
   return data;
+};
+
+const update = async (
+  userId: number,
+  {
+    username,
+    firstName,
+    lastName,
+    email,
+    password,
+    bio,
+  }: {
+    username: string;
+    firstName: string;
+    lastName: string;
+    email: string;
+    password: string;
+    bio: string;
+  }
+): Promise<IUser> => {
+  const data: { [key: string]: any } = {
+    username: username,
+    first_name: firstName,
+    last_name: lastName,
+    email: email,
+    bio: bio,
+  };
+  if (password) {
+    data.password = password;
+  }
+  return await fetchJSON(`${API_URL}/users/${userId}/`, {
+    method: "PATCH",
+    data: data,
+  });
+};
+
+const updatePicture = async (userId: number, file: File): Promise<null> => {
+  const formData = new FormData();
+  formData.append("picture", file);
+  return await fetchMultipart(`${API_URL}/users/${userId}/picture/`, {
+    method: "PATCH",
+    data: formData,
+  });
 };
 
 const register = async ({
@@ -44,27 +84,29 @@ const register = async ({
   bio,
 }: {
   username: string;
-  firstName: string | null;
-  lastName: string | null;
+  firstName: string;
+  lastName: string;
   email: string;
   password: string;
-  bio: string | null;
+  bio: string;
 }): Promise<IUser> => {
   return await fetchJSON(`${API_URL}/users/`, {
     method: "POST",
     data: {
       username: username,
-      first_name: firstName || null,
-      last_name: lastName || null,
+      first_name: firstName,
+      last_name: lastName,
       email: email,
       password: password,
-      bio: bio || null,
+      bio: bio,
     },
   });
 };
 
 const UserService = {
   register,
+  update,
+  updatePicture,
   getCurrentUser,
   getUserById,
 };

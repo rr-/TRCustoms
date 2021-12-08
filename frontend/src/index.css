@@ -61,9 +61,23 @@ textarea {
 button {
   background: var(--sidebar-color);
   color: var(--background-color);
+  margin-right: 1rem;
 }
 
 #Content {
   margin-top: 1rem;
   margin-bottom: 1rem;
+}
+
+fieldset {
+  border: 2px solid var(--sidebar-color);
+  margin: 2rem 0;
+}
+legend {
+  background: var(--sidebar-color);
+  padding: 0.5rem 1rem;
+}
+
+label {
+  display: inline-block;
 }
