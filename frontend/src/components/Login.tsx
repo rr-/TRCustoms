@@ -3,6 +3,7 @@ import { History } from "history";
 import { useCallback, useContext } from "react";
 import { AuthService } from "src/services/auth.service";
 import { UserService } from "src/services/user.service";
+import { IUser } from "src/services/user.service";
 import { FetchError } from "src/shared/client";
 import PasswordFormField from "src/shared/components/PasswordFormField";
 import TextFormField from "src/shared/components/TextFormField";
@@ -25,14 +26,19 @@ const Login: React.FunctionComponent<ILogin> = ({ history }) => {
         history.push("/");
       } catch (error) {
         setSubmitting(false);
-        if (error instanceof FetchError) {
-          if (error.message) {
-            setStatus({ error: error.message });
+        if (error instanceof FetchError && error.response.status === 401) {
+          let user: IUser | null = null;
+          try {
+            user = await UserService.getUserByUsername(values.username);
+          } catch (error) {}
+          if (user && !user.is_active) {
+            setStatus({
+              error:
+                "Your account was not yet activated. Please try again later :)",
+            });
+          } else {
+            setStatus({ error: "Invalid username or password." });
           }
-          setErrors({
-            username: error.data?.username,
-            password: error.data?.password,
-          });
         } else {
           setStatus({ error: "unknown error" });
         }
