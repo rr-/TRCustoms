@@ -3,7 +3,6 @@ from typing import Optional
 from django.contrib.auth.password_validation import validate_password
 from django.core.validators import MaxLengthValidator, MinLengthValidator
 from rest_framework import serializers
-from rest_framework.validators import UniqueValidator
 
 from trcustoms.models import User
 
@@ -23,6 +22,7 @@ class UserSerializer(serializers.ModelSerializer):
             "bio",
             "date_joined",
             "last_login",
+            "is_active",
         )
 
     username = serializers.CharField(
@@ -30,7 +30,6 @@ class UserSerializer(serializers.ModelSerializer):
         validators=[
             MinLengthValidator(3),
             MaxLengthValidator(26),
-            UniqueValidator(queryset=User.objects.all()),
         ],
     )
 
@@ -39,7 +38,6 @@ class UserSerializer(serializers.ModelSerializer):
         validators=[
             MinLengthValidator(3),
             MaxLengthValidator(64),
-            UniqueValidator(queryset=User.objects.all()),
         ],
     )
 
@@ -57,6 +55,29 @@ class UserSerializer(serializers.ModelSerializer):
         required=False, validators=[MaxLengthValidator(5000)], allow_null=True
     )
 
+    def validate_username(self, value):
+        print(value)
+        if User.objects.filter(username=value, is_active=False).exists():
+            raise serializers.ValidationError(
+                "An account with this name is currently awaiting activation."
+            )
+        if User.objects.filter(username=value).exists():
+            raise serializers.ValidationError(
+                "Another account exists with this name."
+            )
+        return value
+
+    def validate_email(self, value):
+        if User.objects.filter(email=value, is_active=False).exists():
+            raise serializers.ValidationError(
+                "An account with this email is currently awaiting activation."
+            )
+        if User.objects.filter(email=value).exists():
+            raise serializers.ValidationError(
+                "Another account exists with this email."
+            )
+        return value
+
     def create(self, validated_data):
         user = User.objects.create(
             username=validated_data["username"],
@@ -64,6 +85,7 @@ class UserSerializer(serializers.ModelSerializer):
             last_name=validated_data["last_name"] or "",
             email=validated_data["email"],
             bio=validated_data["bio"],
+            is_active=False,
         )
 
         user.set_password(validated_data["password"])

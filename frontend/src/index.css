@@ -41,6 +41,9 @@ a {
 .FormField label {
   display: block;
 }
+.FormFieldSuccess {
+  color: forestgreen;
+}
 .FormFieldError {
   color: red;
 }

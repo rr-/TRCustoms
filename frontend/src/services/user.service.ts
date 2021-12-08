@@ -9,6 +9,7 @@ interface IUser {
   bio: string;
   date_joined: string;
   last_login: string;
+  is_active: boolean;
 }
 
 const getCurrentUser = async (): Promise<IUser | null> => {
@@ -48,8 +49,8 @@ const register = async ({
   email: string;
   password: string;
   bio: string | null;
-}) => {
-  await fetchJSON(`${API_URL}/users/`, {
+}): Promise<IUser> => {
+  return await fetchJSON(`${API_URL}/users/`, {
     method: "POST",
     data: {
       username: username,
