@@ -1,6 +1,13 @@
+const validateRequired = (value: string): string | null => {
+  if (!value) {
+    return "Required";
+  }
+  return null;
+};
+
 const validateEmail = (email: string): string | null => {
   if (!email) {
-    return "Required";
+    return null;
   } else if (email.length < 3) {
     return "Email must be at least 3 characters long";
   } else if (email.length > 64) {
@@ -13,16 +20,26 @@ const validateEmail = (email: string): string | null => {
 
 const validatePassword = (password: string): string | null => {
   if (!password) {
-    return "Required";
+    return null;
   } else if (password.length < 7) {
     return "Password must contain at least 7 characters";
   }
   return null;
 };
 
+const validatePassword2 = (
+  password: string,
+  password2: string
+): string | null => {
+  if ((password || password2) && password !== password2) {
+    return "Passwords do not match";
+  }
+  return null;
+};
+
 const validateUserName = (username: string): string | null => {
   if (!username) {
-    return "Required";
+    return null;
   } else if (username.length < 3) {
     return "Username must be at least 3 characters long";
   } else if (username.length > 26) {
@@ -60,8 +77,10 @@ const filterFalsyObjectValues = <T extends Object>(source: T): T => {
 };
 
 export {
+  validateRequired,
   validateEmail,
   validatePassword,
+  validatePassword2,
   validateUserName,
   makeSentence,
   formatDate,

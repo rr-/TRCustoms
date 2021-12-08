@@ -3,5 +3,5 @@ from django.db import models
 
 
 class User(AbstractUser):
-    avatar = models.ImageField(blank=True, null=True, upload_to="avatars/")
+    picture = models.ImageField(blank=True, null=True, upload_to="avatars/")
     bio = models.TextField(max_length=5000, blank=True, null=True)

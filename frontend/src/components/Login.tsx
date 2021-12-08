@@ -1,6 +1,6 @@
 import { Formik, Form } from "formik";
 import { History } from "history";
-import { useContext } from "react";
+import { useCallback, useContext } from "react";
 import { AuthService } from "src/services/auth.service";
 import { UserService } from "src/services/user.service";
 import { FetchError } from "src/shared/client";
@@ -16,33 +16,35 @@ interface ILogin {
 const Login: React.FunctionComponent<ILogin> = ({ history }) => {
   const { setUser } = useContext(UserContext);
 
+  const submit = useCallback(
+    async (values, { setSubmitting, setStatus, setErrors }) => {
+      try {
+        await AuthService.login(values.username, values.password);
+        const user = await UserService.getCurrentUser();
+        setUser(user);
+        history.push("/");
+      } catch (error) {
+        setSubmitting(false);
+        if (error instanceof FetchError) {
+          if (error.message) {
+            setStatus({ error: error.message });
+          }
+          setErrors({
+            username: error.data?.username,
+            password: error.data?.password,
+          });
+        } else {
+          setStatus({ error: "unknown error" });
+        }
+      }
+    },
+    [history, setUser]
+  );
+
   return (
     <div className="LoginForm">
       <h1>Login</h1>
-      <Formik
-        initialValues={{ username: "", password: "" }}
-        onSubmit={async (values, { setSubmitting, setStatus, setErrors }) => {
-          try {
-            await AuthService.login(values.username, values.password);
-            const user = await UserService.getCurrentUser();
-            setUser(user);
-            history.push("/");
-          } catch (error) {
-            setSubmitting(false);
-            if (error instanceof FetchError) {
-              if (error.message) {
-                setStatus({ error: error.message });
-              }
-              setErrors({
-                username: error.data?.username,
-                password: error.data?.password,
-              });
-            } else {
-              setStatus({ error: "unknown error" });
-            }
-          }
-        }}
-      >
+      <Formik initialValues={{ username: "", password: "" }} onSubmit={submit}>
         {({ isSubmitting, status }) => (
           <Form className="Form">
             <TextFormField label="Username" name="username" />

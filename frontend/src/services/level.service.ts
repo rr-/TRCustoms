@@ -52,7 +52,7 @@ const getLevels = async (query: ILevelQuery): Promise<ILevelList | null> => {
   try {
     data = await fetchJSON<ILevelList>(`${API_URL}/levels/`, {
       query: filterFalsyObjectValues({
-        page: query.page,
+        page: query.page ? `${query.page}` : null,
         sort: query.sort,
         search: query.search,
         tags: query.tags.join(","),

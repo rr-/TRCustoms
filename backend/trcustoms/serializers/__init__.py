@@ -4,12 +4,13 @@ from .levels import (
     LevelSerializer,
     LevelTagSerializer,
 )
-from .users import UserSerializer
+from .users import UserPictureSerializer, UserSerializer
 
 __all__ = [
     "LevelEngineSerializer",
     "LevelGenreSerializer",
     "LevelSerializer",
     "LevelTagSerializer",
+    "UserPictureSerializer",
     "UserSerializer",
 ]

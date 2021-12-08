@@ -1,6 +1,7 @@
 import "./LevelList.css";
 import { Formik, Form } from "formik";
 import { useEffect, useCallback, useState } from "react";
+import { useQuery } from "react-query";
 import { useHistory } from "react-router-dom";
 import { useLocation } from "react-router-dom";
 import Pager from "src/components/Pager";
@@ -67,44 +68,23 @@ const LevelList: React.FunctionComponent = () => {
   const [query, setQuery] = useState<ILevelQuery>(
     deserializeQuery(window.location.href)
   );
-  const [levels, setLevels] = useState<ILevelList | null>(null);
-  const [levelTags, setLevelTags] = useState<ILevelTagList | null>(null);
-  const [levelGenres, setLevelGenres] = useState<ILevelGenreList | null>(null);
-  const [levelEngines, setLevelEngines] = useState<ILevelEngineList | null>(
-    null
-  );
   const [formikValues, setFormikValues] = useState<any>(getFormikValues(query));
 
-  const fetchLevelTags = useCallback(async () => {
-    setLevelTags(await LevelService.getLevelTags());
-  }, []);
-
-  const fetchLevelGenres = useCallback(async () => {
-    setLevelGenres(await LevelService.getLevelGenres());
-  }, []);
-
-  const fetchLevelEngines = useCallback(async () => {
-    setLevelEngines(await LevelService.getLevelEngines());
-  }, []);
-
-  const fetchLevels = useCallback(async () => {
-    const levels = await LevelService.getLevels(query);
-    setLevels(levels);
-  }, [query]);
-
-  useEffect(() => {
-    fetchLevelTags();
-  }, [fetchLevelTags]);
-  useEffect(() => {
-    fetchLevelGenres();
-  }, [fetchLevelGenres]);
-  useEffect(() => {
-    fetchLevelEngines();
-  }, [fetchLevelEngines]);
-
-  useEffect(() => {
-    fetchLevels();
-  }, [query, fetchLevels]);
+  const levelsQuery = useQuery<ILevelList, Error>(["levels", query], async () =>
+    LevelService.getLevels(query)
+  );
+  const levelTagsQuery = useQuery<ILevelTagList, Error>(
+    "levelTags",
+    LevelService.getLevelTags
+  );
+  const levelGenresQuery = useQuery<ILevelGenreList, Error>(
+    "levelGenres",
+    LevelService.getLevelGenres
+  );
+  const levelEnginesQuery = useQuery<ILevelEngineList, Error>(
+    "levelEngines",
+    LevelService.getLevelEngines
+  );
 
   useEffect(() => {
     // synchronize query changes to URL
@@ -125,7 +105,7 @@ const LevelList: React.FunctionComponent = () => {
     ) {
       setQuery(deserializeQuery(window.location.href));
     }
-  }, [location]);
+  }, [location, query]);
 
   const searchClick = useCallback(
     // push changes to query on Formik submit
@@ -150,72 +130,73 @@ const LevelList: React.FunctionComponent = () => {
     [setQuery]
   );
 
+  if (
+    !levelTagsQuery.data ||
+    !levelGenresQuery.data ||
+    !levelEnginesQuery.data
+  ) {
+    return <Loader />;
+  }
+
   return (
     <div id="LevelList">
-      {levelTags && levelGenres && levelEngines ? (
-        <Formik
-          enableReinitialize={true}
-          initialValues={formikValues}
-          onSubmit={searchClick}
-        >
-          {({ resetForm }: { resetForm: any }) => (
-            <Form id="LevelList--container">
-              <div id="LevelList--search">
-                <TextFormField label="Search" name="search" />
+      <Formik
+        enableReinitialize={true}
+        initialValues={formikValues}
+        onSubmit={searchClick}
+      >
+        {({ resetForm }: { resetForm: any }) => (
+          <Form id="LevelList--container">
+            <div id="LevelList--search">
+              <TextFormField label="Search" name="search" />
 
-                <div className="FormField">
-                  <button type="submit">Search</button>
-                </div>
-
-                <div className="FormField">
-                  <button
-                    onClick={clearClick.bind(null, resetForm)}
-                    type="reset"
-                  >
-                    Reset
-                  </button>
-                </div>
+              <div className="FormField">
+                <button type="submit">Search</button>
               </div>
 
-              <aside id="LevelList--sidebar">
-                <CheckboxArrayFormField
-                  label="Tags"
-                  name="tags"
-                  source={levelTags.map((tag) => ({
-                    value: tag.id,
-                    label: tag.name,
-                  }))}
-                />
-                <CheckboxArrayFormField
-                  label="Genres"
-                  name="genres"
-                  source={levelGenres.map((genre) => ({
-                    value: genre.id,
-                    label: genre.name,
-                  }))}
-                />
-                <CheckboxArrayFormField
-                  label="Engines"
-                  name="engines"
-                  source={levelEngines.map((engine) => ({
-                    value: engine.id,
-                    label: engine.name,
-                  }))}
-                />
-              </aside>
+              <div className="FormField">
+                <button onClick={clearClick.bind(null, resetForm)} type="reset">
+                  Reset
+                </button>
+              </div>
+            </div>
 
-              <div id="LevelList--results">
-                <LevelListTable levels={levels} />
-              </div>
-              <div id="LevelList--pager">
-                {levels && <Pager pagedResponse={levels} />}
-              </div>
-            </Form>
-          )}
-        </Formik>
-      ) : (
-        <Loader />
-      )}
+            <aside id="LevelList--sidebar">
+              <CheckboxArrayFormField
+                label="Tags"
+                name="tags"
+                source={levelTagsQuery.data.map((tag) => ({
+                  value: tag.id,
+                  label: tag.name,
+                }))}
+              />
+              <CheckboxArrayFormField
+                label="Genres"
+                name="genres"
+                source={levelGenresQuery.data.map((genre) => ({
+                  value: genre.id,
+                  label: genre.name,
+                }))}
+              />
+              <CheckboxArrayFormField
+                label="Engines"
+                name="engines"
+                source={levelEnginesQuery.data.map((engine) => ({
+                  value: engine.id,
+                  label: engine.name,
+                }))}
+              />
+            </aside>
+
+            <div id="LevelList--results">
+              <LevelListTable levels={levelsQuery.data} />
+            </div>
+            <div id="LevelList--pager">
+              {levelsQuery.data && <Pager pagedResponse={levelsQuery.data} />}
+            </div>
+          </Form>
+        )}
+      </Formik>
     </div>
   );
 };
