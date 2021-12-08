@@ -1,4 +1,5 @@
 import "./LevelListTable.css";
+import { Link } from "react-router-dom";
 import { ILevelList } from "src/services/level.service";
 import LevelSortLink from "src/shared/components/LevelSortLink";
 import Loader from "src/shared/components/Loader";
@@ -31,6 +32,7 @@ const LevelListTable = ({ levels }: { levels: ILevelList | null }) => {
                   Last updated
                 </LevelSortLink>
               </th>
+              <th className="LevelListTable--download">Download</th>
             </tr>
           </thead>
           <tbody>
@@ -49,6 +51,15 @@ const LevelListTable = ({ levels }: { levels: ILevelList | null }) => {
                 </td>
                 <td className="LevelListTable--updated">
                   {formatDate(level.last_updated) || "N/A"}
+                </td>
+                <td className="LevelListTable--download">
+                  {level.download_url ? (
+                    <Link target="_blank" to={level.download_url}>
+                      Download
+                    </Link>
+                  ) : (
+                    <>N/A</>
+                  )}
                 </td>
               </tr>
             ))}
