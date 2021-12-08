@@ -57,7 +57,11 @@ async function fetchJSON<Result>(
   try {
     return await fetchJSONWithoutRetry<Result>(url, options);
   } catch (error) {
-    if (error instanceof FetchError && error.data?.code === "user_not_found") {
+    if (
+      error instanceof FetchError &&
+      (error.data?.code === "user_not_found" ||
+        error.data?.code === "user_inactive")
+    ) {
       AuthService.logout();
       throw error;
     }
