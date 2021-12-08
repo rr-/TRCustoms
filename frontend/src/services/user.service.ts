@@ -24,9 +24,17 @@ const getCurrentUser = async (): Promise<IUser | null> => {
   return data;
 };
 
-const getUserById = async (userId: number): Promise<IUser | null> => {
+const getUserById = async (userId: number): Promise<IUser> => {
   let data;
   data = await fetchJSON<IUser>(`${API_URL}/users/${userId}/`, {
+    method: "GET",
+  });
+  return data;
+};
+
+const getUserByUsername = async (username: string): Promise<IUser> => {
+  let data;
+  data = await fetchJSON<IUser>(`${API_URL}/users/by_username/${username}/`, {
     method: "GET",
   });
   return data;
@@ -114,6 +122,7 @@ const UserService = {
   updatePicture,
   getCurrentUser,
   getUserById,
+  getUserByUsername,
 };
 
 export type { IUser };

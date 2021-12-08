@@ -1,3 +1,4 @@
+from django.shortcuts import get_object_or_404
 from rest_framework import mixins, status, viewsets
 from rest_framework.decorators import action
 from rest_framework.parsers import MultiPartParser
@@ -33,6 +34,7 @@ class UserViewSet(
     # pylint: disable=unsupported-binary-operation
     permission_classes_by_action = {
         "create": [AllowAny],
+        "by_username": [AllowAny],
         "update": [IsAuthenticated & (IsAdminUser | IsEditingOwnUser)],
     }
     permission_classes = [IsAuthenticated]
@@ -40,6 +42,11 @@ class UserViewSet(
 
     queryset = User.objects.all()
     serializer_class = UserSerializer
+
+    @action(detail=False, url_path=r"by_username/(?P<username>\w+)")
+    def by_username(self, request, username: str):
+        user = get_object_or_404(User, username=username)
+        return Response(UserSerializer(user).data, status=status.HTTP_200_OK)
 
     @action(detail=False, permission_classes=[IsAuthenticated])
     def me(self, request, *args, **kwargs):
