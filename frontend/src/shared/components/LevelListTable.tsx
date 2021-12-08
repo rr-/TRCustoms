@@ -13,20 +13,20 @@ const LevelListTable = ({ levels }: { levels: ILevelList | null }) => {
         <table className="LevelListTable">
           <thead>
             <tr>
-              <th class="LevelListTable--name">
+              <th className="LevelListTable--name">
                 <LevelSortLink sort={"name"}>Name</LevelSortLink>
               </th>
               <th>Genres</th>
-              <th class="LevelListTable--genres">
+              <th className="LevelListTable--genres">
                 <LevelSortLink sort={"author"}>Author</LevelSortLink>
               </th>
-              <th class="LevelListTable--engine">
+              <th className="LevelListTable--engine">
                 <LevelSortLink sort={"engine_name"}>Engine</LevelSortLink>
               </th>
-              <th class="LevelListTable--created">
+              <th className="LevelListTable--created">
                 <LevelSortLink sort={"created"}>Created</LevelSortLink>
               </th>
-              <th class="LevelListTable--updated">
+              <th className="LevelListTable--updated">
                 <LevelSortLink sort={"last_updated"}>
                   Last updated
                 </LevelSortLink>
@@ -36,18 +36,18 @@ const LevelListTable = ({ levels }: { levels: ILevelList | null }) => {
           <tbody>
             {levels.results.map((level) => (
               <tr key={level.id}>
-                <td class="LevelListTable--name">{level.name}</td>
-                <td class="LevelListTable--genres">
+                <td className="LevelListTable--name">{level.name}</td>
+                <td className="LevelListTable--genres">
                   {level.genres.map((tag) => tag.name).join(", ") || "N/A"}
                 </td>
-                <td class="LevelListTable--author">
+                <td className="LevelListTable--author">
                   {level.author_user?.username || level.author_name || "N/A"}
                 </td>
-                <td class="LevelListTable--engine">{level.engine.name}</td>
-                <td class="LevelListTable--created">
+                <td className="LevelListTable--engine">{level.engine.name}</td>
+                <td className="LevelListTable--created">
                   {formatDate(level.created) || "N/A"}
                 </td>
-                <td class="LevelListTable--updated">
+                <td className="LevelListTable--updated">
                   {formatDate(level.last_updated) || "N/A"}
                 </td>
               </tr>
