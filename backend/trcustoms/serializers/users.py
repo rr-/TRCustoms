@@ -9,6 +9,7 @@ from trcustoms.models import User
 
 class UserSerializer(serializers.ModelSerializer):
     picture_url = serializers.SerializerMethodField(read_only=True)
+    old_password = serializers.CharField(write_only=True, required=False)
 
     class Meta:
         model = User
@@ -19,6 +20,7 @@ class UserSerializer(serializers.ModelSerializer):
             "first_name",
             "last_name",
             "email",
+            "old_password",
             "password",
             "bio",
             "date_joined",
@@ -87,7 +89,15 @@ class UserSerializer(serializers.ModelSerializer):
         return value
 
     def update(self, instance, validated_data):
+        if validated_data["password"] and not instance.check_password(
+            validated_data["old_password"]
+        ):
+            raise serializers.ValidationError(
+                {"old_password": "Password does not match."}
+            )
+
         super().update(instance, validated_data)
+
         if validated_data["password"]:
             instance.set_password(validated_data["password"])
             instance.save()

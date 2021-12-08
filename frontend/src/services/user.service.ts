@@ -39,6 +39,7 @@ const update = async (
     firstName,
     lastName,
     email,
+    old_password,
     password,
     bio,
   }: {
@@ -46,6 +47,7 @@ const update = async (
     firstName: string;
     lastName: string;
     email: string;
+    old_password: string;
     password: string;
     bio: string;
   }
@@ -57,6 +59,9 @@ const update = async (
     email: email,
     bio: bio,
   };
+  if (old_password) {
+    data.old_password = old_password;
+  }
   if (password) {
     data.password = password;
   }
