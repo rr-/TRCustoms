@@ -95,3 +95,4 @@ class LevelFileAdmin(admin.ModelAdmin):
     ordering = ["level__name"]
     list_display = ["id", "level", "version"]
     search_fields = ["level__name"]
+    readonly_fields = ["size"]

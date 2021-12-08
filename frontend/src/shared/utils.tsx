@@ -70,6 +70,21 @@ const formatDateTime = (input: string | null): string | null => {
   return date.toISOString().slice(0, 19).replace("T", " ");
 };
 
+const formatFileSize = (input: number | null): string | null => {
+  if (!input) {
+    return null;
+  }
+  const suffixes = ["B", "KB", "MB", "GB"];
+  let suffix = suffixes.shift();
+  let value = input;
+  let base = 1024.0;
+  while (value >= base || !suffixes.length) {
+    value /= base;
+    suffix = suffixes.shift();
+  }
+  return `${Math.round(value * 100) / 100} ${suffix}`;
+};
+
 const filterFalsyObjectValues = <T extends Object>(source: T): T => {
   return Object.fromEntries(
     Object.entries(source).filter(([_key, value]) => !!value)
@@ -85,5 +100,6 @@ export {
   makeSentence,
   formatDate,
   formatDateTime,
+  formatFileSize,
   filterFalsyObjectValues,
 };

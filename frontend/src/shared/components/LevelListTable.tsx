@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { ILevelList } from "src/services/level.service";
 import LevelSortLink from "src/shared/components/LevelSortLink";
 import Loader from "src/shared/components/Loader";
-import { formatDate } from "src/shared/utils";
+import { formatDate, formatFileSize } from "src/shared/utils";
 
 const LevelListTable = ({ levels }: { levels: ILevelList | null }) => {
   return (
@@ -32,6 +32,9 @@ const LevelListTable = ({ levels }: { levels: ILevelList | null }) => {
                   Last updated
                 </LevelSortLink>
               </th>
+              <th className="LevelListTable--size">
+                <LevelSortLink sort={"last_file_size"}>Size</LevelSortLink>
+              </th>
               <th className="LevelListTable--download">Download</th>
             </tr>
           </thead>
@@ -52,9 +55,19 @@ const LevelListTable = ({ levels }: { levels: ILevelList | null }) => {
                 <td className="LevelListTable--updated">
                   {formatDate(level.last_updated) || "N/A"}
                 </td>
+                <td className="LevelListTable--size">
+                  {level.last_file_size ? (
+                    <>{formatFileSize(level.last_file_size) || "N/A"}</>
+                  ) : (
+                    <>N/A</>
+                  )}
+                </td>
                 <td className="LevelListTable--download">
-                  {level.download_url ? (
-                    <Link target="_blank" to={level.download_url}>
+                  {level.last_file_id ? (
+                    <Link
+                      target="_blank"
+                      to={`/api/level_files/${level.last_file_id}/download`}
+                    >
                       Download
                     </Link>
                   ) : (

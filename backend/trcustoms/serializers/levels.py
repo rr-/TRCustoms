@@ -30,13 +30,14 @@ class LevelSerializer(serializers.ModelSerializer):
     engine = LevelEngineSerializer(read_only=True)
     uploader = UserSerializer(read_only=True)
     author_user = UserSerializer(read_only=True)
-    download_url = serializers.SerializerMethodField(read_only=True)
+    last_file_id = serializers.SerializerMethodField(read_only=True)
+    last_file_size = serializers.SerializerMethodField(read_only=True)
 
-    def get_download_url(self, instance: Level) -> Optional[str]:
-        file = instance.files.order_by("-version").first()
-        if file:
-            return file.file.url
-        return None
+    def get_last_file_size(self, instance: Level) -> Optional[int]:
+        return instance.last_file_size
+
+    def get_last_file_id(self, instance: Level) -> Optional[str]:
+        return instance.last_file_id
 
     class Meta:
         model = Level
@@ -52,5 +53,6 @@ class LevelSerializer(serializers.ModelSerializer):
             "uploader",
             "created",
             "last_updated",
-            "download_url",
+            "last_file_size",
+            "last_file_id",
         ]
