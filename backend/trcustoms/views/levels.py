@@ -1,11 +1,22 @@
+from pathlib import Path
 from typing import Optional
 
-from django.db.models import F, Value
+from django.db.models import F, OuterRef, Subquery, Value
 from django.db.models.functions import Coalesce, Concat
+from django.http import FileResponse
+from django.shortcuts import get_object_or_404
+from django.utils.text import slugify
 from rest_framework import filters, mixins, viewsets
+from rest_framework.decorators import action
 from rest_framework.permissions import AllowAny
 
-from trcustoms.models import Level, LevelEngine, LevelGenre, LevelTag
+from trcustoms.models import (
+    Level,
+    LevelEngine,
+    LevelFile,
+    LevelGenre,
+    LevelTag,
+)
 from trcustoms.serializers import (
     LevelEngineSerializer,
     LevelGenreSerializer,
@@ -23,10 +34,24 @@ def _parse_ids(source: Optional[str]) -> list[int]:
         return []
 
 
-class LevelViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
-    permission_classes = [AllowAny]
+def get_level_queryset():
+    last_file_size = Subquery(
+        LevelFile.objects.filter(
+            level_id=OuterRef("id"),
+        )
+        .order_by("-version")
+        .values("size")[:1]
+    )
 
-    queryset = (
+    last_file_id = Subquery(
+        LevelFile.objects.filter(
+            level_id=OuterRef("id"),
+        )
+        .order_by("-version")
+        .values("id")[:1]
+    )
+
+    return (
         Level.objects.all()
         .annotate(
             author=Coalesce(
@@ -39,13 +64,26 @@ class LevelViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
                 ),
             ),
             engine_name=F("engine__name"),
+            last_file_id=last_file_id,
+            last_file_size=last_file_size,
         )
         .distinct()
     )
-    serializer_class = LevelSerializer
 
+
+class LevelViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
+    permission_classes = [AllowAny]
+    queryset = get_level_queryset()
+    serializer_class = LevelSerializer
     filter_backends = [filters.SearchFilter, filters.OrderingFilter]
-    ordering_fields = ["name", "author", "engine", "created", "last_updated"]
+    ordering_fields = [
+        "name",
+        "author",
+        "engine",
+        "created",
+        "last_updated",
+        "last_file_size",
+    ]
     search_fields = ["name", "author_name", "author_user__username"]
 
     def get_queryset(self):
@@ -80,3 +118,18 @@ class LevelEngineViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
     queryset = LevelEngine.objects.all()
     serializer_class = LevelEngineSerializer
     pagination_class = None
+
+
+class LevelFileViewSet(viewsets.GenericViewSet):
+    permission_classes = [AllowAny]
+    queryset = LevelFile.objects.all()
+    pagination_class = None
+
+    @action(detail=True)
+    def download(self, request, pk):
+        file = get_object_or_404(LevelFile, pk=pk)
+        path = Path(file.file.name)
+        filename = f"trcustoms_{pk}_{slugify(file.level.name)}{path.suffix}"
+        return FileResponse(
+            file.file.open("rb"), as_attachment=True, filename=filename
+        )

@@ -74,6 +74,7 @@ class LevelFile(DatesInfo):
         Level, on_delete=models.CASCADE, related_name="files"
     )
     file = models.FileField(upload_to="levels/")
+    size = models.IntegerField()
     version = models.CharField(max_length=20)
 
     def __str__(self) -> str:

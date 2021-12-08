@@ -31,7 +31,8 @@ interface ILevel {
   uploader: IUser | null;
   created: string;
   last_updated: string;
-  download_url: string | null;
+  last_file_id: number | null;
+  last_file_size: number | null;
 }
 
 interface ILevelQuery {
