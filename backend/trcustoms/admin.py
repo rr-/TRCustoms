@@ -51,18 +51,21 @@ class UserAdmin(BaseUserAdmin):
 class LevelEngineAdmin(admin.ModelAdmin):
     ordering = ["name"]
     search_fields = ["name"]
+    readonly_fields = ["created", "last_updated"]
 
 
 @admin.register(LevelGenre)
 class LevelGenreAdmin(admin.ModelAdmin):
     ordering = ["name"]
     search_fields = ["name"]
+    readonly_fields = ["created", "last_updated"]
 
 
 @admin.register(LevelTag)
 class LevelTagAdmin(admin.ModelAdmin):
     ordering = ["name"]
     search_fields = ["name"]
+    readonly_fields = ["created", "last_updated"]
 
 
 @admin.register(Level)
@@ -82,6 +85,7 @@ class LevelAdmin(admin.ModelAdmin):
     list_filter = ["genres", "tags"]
     group_by = ["tags"]
     form = LevelForm
+    readonly_fields = ["created", "last_updated"]
 
 
 @admin.register(LevelImage)
@@ -89,6 +93,7 @@ class LevelImageAdmin(admin.ModelAdmin):
     ordering = ["level__name"]
     list_display = ["id", "level"]
     search_fields = ["level__name"]
+    readonly_fields = ["created", "last_updated"]
 
 
 @admin.register(LevelFile)
@@ -96,4 +101,4 @@ class LevelFileAdmin(admin.ModelAdmin):
     ordering = ["level__name"]
     list_display = ["id", "level", "version"]
     search_fields = ["level__name"]
-    readonly_fields = ["size"]
+    readonly_fields = ["size", "created", "last_updated"]
