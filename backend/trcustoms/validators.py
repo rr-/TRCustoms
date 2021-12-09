@@ -11,7 +11,7 @@ class PasswordLetterValidator:
             )
 
     def get_help_text(self):
-        return _("Your password must contain at least one digit.")
+        return _("Your password must contain at least one letter.")
 
 
 class PasswordDigitValidator:

@@ -1,7 +1,9 @@
 from typing import Optional
 
 from django.contrib.auth.password_validation import validate_password
+from django.core.exceptions import ValidationError
 from django.core.validators import MaxLengthValidator, MinLengthValidator
+from django.db import transaction
 from rest_framework import serializers
 
 from trcustoms.models import User
@@ -44,9 +46,7 @@ class UserSerializer(serializers.ModelSerializer):
         ],
     )
 
-    password = serializers.CharField(
-        write_only=True, required=True, validators=[validate_password]
-    )
+    password = serializers.CharField(write_only=True, required=True)
 
     first_name = serializers.CharField(
         required=False, validators=[MaxLengthValidator(30)], allow_blank=True
@@ -88,23 +88,33 @@ class UserSerializer(serializers.ModelSerializer):
 
         return value
 
+    @transaction.atomic
     def update(self, instance, validated_data):
-        if validated_data["password"] and not instance.check_password(
-            validated_data["old_password"]
-        ):
-            raise serializers.ValidationError(
-                {"old_password": "Password does not match."}
-            )
+        password = validated_data.pop("password", None)
 
         super().update(instance, validated_data)
 
-        if validated_data["password"]:
-            instance.set_password(validated_data["password"])
+        if password:
+            try:
+                validate_password(password, user=instance)
+            except ValidationError as ex:
+                raise serializers.ValidationError(
+                    {"password": list(ex.messages)}
+                )
+
+            if not instance.check_password(validated_data["old_password"]):
+                raise serializers.ValidationError(
+                    {"old_password": "Password does not match."}
+                )
+
+        if password:
+            instance.set_password(password)
             instance.save()
         return instance
 
+    @transaction.atomic
     def create(self, validated_data):
-        user = User.objects.create(
+        user = User(
             username=validated_data["username"],
             first_name=validated_data["first_name"],
             last_name=validated_data["last_name"],
@@ -112,6 +122,11 @@ class UserSerializer(serializers.ModelSerializer):
             bio=validated_data["bio"],
             is_active=False,
         )
+
+        try:
+            validate_password(validated_data["password"], user=user)
+        except ValidationError as ex:
+            raise serializers.ValidationError({"password": list(ex.messages)})
 
         user.set_password(validated_data["password"])
         user.save()
