@@ -43,6 +43,14 @@ def get_level_queryset():
         .values("size")[:1]
     )
 
+    last_file_created = Subquery(
+        LevelFile.objects.filter(
+            level_id=OuterRef("id"),
+        )
+        .order_by("-version")
+        .values("created")[:1]
+    )
+
     last_file_id = Subquery(
         LevelFile.objects.filter(
             level_id=OuterRef("id"),
@@ -65,6 +73,7 @@ def get_level_queryset():
             ),
             engine_name=F("engine__name"),
             last_file_id=last_file_id,
+            last_file_created=last_file_created,
             last_file_size=last_file_size,
         )
         .distinct()

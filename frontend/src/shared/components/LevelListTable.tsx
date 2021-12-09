@@ -19,6 +19,10 @@ const LevelListTable = ({ query }: { query: ILevelQuery | null }) => {
     return <Loader />;
   }
 
+  if (levelsQuery.error) {
+    return <p>{levelsQuery.error.message}</p>;
+  }
+
   return (
     <>
       <table className="LevelListTable">
@@ -37,8 +41,13 @@ const LevelListTable = ({ query }: { query: ILevelQuery | null }) => {
             <th className="LevelListTable--created">
               <LevelSortLink sort={"created"}>Created</LevelSortLink>
             </th>
-            <th className="LevelListTable--updated">
-              <LevelSortLink sort={"last_updated"}>Last updated</LevelSortLink>
+            <th
+              className="LevelListTable--updated"
+              title="Date of last file upload"
+            >
+              <LevelSortLink sort={"last_file_created"}>
+                Last updated
+              </LevelSortLink>
             </th>
             <th className="LevelListTable--size">
               <LevelSortLink sort={"last_file_size"}>Size</LevelSortLink>
@@ -61,7 +70,7 @@ const LevelListTable = ({ query }: { query: ILevelQuery | null }) => {
                 {formatDate(level.created) || "N/A"}
               </td>
               <td className="LevelListTable--updated">
-                {formatDate(level.last_updated) || "N/A"}
+                {formatDate(level.last_file_created) || "N/A"}
               </td>
               <td className="LevelListTable--size">
                 {level.last_file_size ? (
