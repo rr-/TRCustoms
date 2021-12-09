@@ -32,9 +32,7 @@ const LevelListTable = ({ query }: { query: ILevelQuery | null }) => {
               <LevelSortLink sort={"name"}>Name</LevelSortLink>
             </th>
             <th>Genres</th>
-            <th className="LevelListTable--genres">
-              <LevelSortLink sort={"author"}>Author</LevelSortLink>
-            </th>
+            <th className="LevelListTable--genres">Author(s)</th>
             <th className="LevelListTable--engine">
               <LevelSortLink sort={"engine_name"}>Engine</LevelSortLink>
             </th>
@@ -63,7 +61,9 @@ const LevelListTable = ({ query }: { query: ILevelQuery | null }) => {
                 {level.genres.map((tag) => tag.name).join(", ") || "N/A"}
               </td>
               <td className="LevelListTable--author">
-                {level.author_user?.username || level.author_name || "N/A"}
+                {(level.authors.length > 1
+                  ? "Multiple authors"
+                  : level.authors[0]?.name) || "N/A"}
               </td>
               <td className="LevelListTable--engine">{level.engine.name}</td>
               <td className="LevelListTable--created">

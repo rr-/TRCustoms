@@ -19,6 +19,11 @@ interface ILevelGenre {
   name: string;
 }
 
+interface ILevelAuthor {
+  id: number;
+  name: string;
+}
+
 interface ILevel {
   id: number | null;
   name: string;
@@ -26,8 +31,7 @@ interface ILevel {
   genres: ILevelGenre[];
   tags: ILevelTag[];
   engine: ILevelEngine;
-  author_name: string | null;
-  author_user: IUser | null;
+  authors: ILevelAuthor[];
   uploader: IUser | null;
   created: string;
   last_updated: string;

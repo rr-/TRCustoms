@@ -1,6 +1,7 @@
 from .dates import DatesInfo
 from .levels import (
     Level,
+    LevelAuthor,
     LevelDownload,
     LevelEngine,
     LevelFile,
@@ -13,10 +14,11 @@ from .users import User
 __all__ = [
     "DatesInfo",
     "Level",
-    "LevelGenre",
+    "LevelAuthor",
     "LevelDownload",
     "LevelEngine",
     "LevelFile",
+    "LevelGenre",
     "LevelImage",
     "LevelTag",
     "User",

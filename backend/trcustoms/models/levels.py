@@ -28,20 +28,26 @@ class LevelTag(DatesInfo):
         return self.name
 
 
+class LevelAuthor(DatesInfo):
+    name = models.CharField(max_length=100)
+    user = models.ForeignKey(
+        User,
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name="authors",
+    )
+
+    def __str__(self) -> str:
+        return self.name
+
+
 class Level(DatesInfo):
     name = models.CharField(max_length=100)
     description = models.TextField(max_length=5000)
     genres = models.ManyToManyField(LevelGenre)
     tags = models.ManyToManyField(LevelTag)
     engine = models.ForeignKey(LevelEngine, on_delete=models.PROTECT)
-    author_name = models.CharField(max_length=100, blank=True, null=True)
-    author_user = models.ForeignKey(
-        User,
-        null=True,
-        blank=True,
-        on_delete=models.SET_NULL,
-        related_name="authored_levels",
-    )
     uploader = models.ForeignKey(
         User,
         null=True,
@@ -49,16 +55,10 @@ class Level(DatesInfo):
         on_delete=models.SET_NULL,
         related_name="uploaded_levels",
     )
-
-    def get_author_name(self) -> str:
-        return (
-            self.author_name
-            or (self.author_user.name if self.author_user else None)
-            or "unknown author"
-        )
+    authors = models.ManyToManyField(LevelAuthor, related_name="levels")
 
     def __str__(self) -> str:
-        return f"{self.name} (by {self.get_author_name()})"
+        return f"{self.name}"
 
 
 class LevelImage(DatesInfo):

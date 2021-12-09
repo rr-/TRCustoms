@@ -1,8 +1,7 @@
 from pathlib import Path
 from typing import Optional
 
-from django.db.models import F, OuterRef, Subquery, Value
-from django.db.models.functions import Coalesce, Concat
+from django.db.models import F, OuterRef, Subquery
 from django.http import FileResponse
 from django.shortcuts import get_object_or_404
 from django.utils.text import slugify
@@ -62,15 +61,6 @@ def get_level_queryset():
     return (
         Level.objects.all()
         .annotate(
-            author=Coalesce(
-                "author_name",
-                "author_user__username",
-                Concat(
-                    "author_user__first_name",
-                    Value(" "),
-                    "author_user__last_name",
-                ),
-            ),
             engine_name=F("engine__name"),
             last_file_id=last_file_id,
             last_file_created=last_file_created,
@@ -87,13 +77,12 @@ class LevelViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
     filter_backends = [filters.SearchFilter, filters.OrderingFilter]
     ordering_fields = [
         "name",
-        "author",
         "engine",
         "created",
         "last_updated",
         "last_file_size",
     ]
-    search_fields = ["name", "author_name", "author_user__username"]
+    search_fields = ["name", "authors__name", "authors__user__username"]
 
     def get_queryset(self):
         queryset = self.queryset
