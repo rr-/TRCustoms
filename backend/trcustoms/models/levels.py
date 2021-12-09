@@ -75,7 +75,7 @@ class LevelFile(DatesInfo):
     )
     file = models.FileField(upload_to="levels/")
     size = models.IntegerField()
-    version = models.CharField(max_length=20)
+    version = models.IntegerField()
 
     def __str__(self) -> str:
         return f"{self.level.name} file ID={self.pk}"
