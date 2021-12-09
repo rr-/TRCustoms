@@ -64,6 +64,7 @@ class Level(DatesInfo):
 class LevelImage(DatesInfo):
     level = models.ForeignKey(Level, on_delete=models.CASCADE)
     image = models.ImageField(blank=True, null=True, upload_to="level_images/")
+    position = models.IntegerField(default=1)
 
     def __str__(self) -> str:
         return f"{self.level.name} (image id={self.pk})"

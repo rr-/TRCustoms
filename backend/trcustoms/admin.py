@@ -124,8 +124,8 @@ class LevelAdmin(admin.ModelAdmin):
 
 @admin.register(LevelImage)
 class LevelImageAdmin(admin.ModelAdmin):
-    ordering = ["level__name"]
-    list_display = ["id", "level", "created", "last_updated"]
+    ordering = ["level__name", "position"]
+    list_display = ["id", "level", "position", "created", "last_updated"]
     search_fields = ["level__name"]
     readonly_fields = ["created", "last_updated"]
 

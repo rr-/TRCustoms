@@ -1,7 +1,7 @@
 from typing import Optional
 
 from django.db.models import F, OuterRef, Subquery
-from django.shortcuts import get_object_or_404
+from django.shortcuts import get_list_or_404, get_object_or_404
 from rest_framework import filters, mixins, viewsets
 from rest_framework.decorators import action
 from rest_framework.permissions import AllowAny
@@ -98,10 +98,10 @@ class LevelViewSet(
             queryset = queryset.filter(engines__id__in=engine_ids)
         return queryset
 
-    @action(detail=True, url_path=r"images/(?P<image_id>\d+)")
-    def screenshot(self, request, pk: int, image_id: int) -> Response:
-        image = get_object_or_404(LevelImage, level_id=pk, pk=image_id)
-        parts = [f"{pk}", image.level.name, f"screenshot{image_id}"]
+    @action(detail=True, url_path=r"images/(?P<position>\d+)")
+    def screenshot(self, request, pk: int, position: int) -> Response:
+        image = get_list_or_404(LevelImage, level_id=pk, position=position)[0]
+        parts = [f"{pk}", image.level.name, f"screenshot{position}"]
         return stream_file_field(image.image, parts, as_attachment=False)
 
 
