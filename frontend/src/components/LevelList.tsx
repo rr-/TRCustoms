@@ -4,17 +4,13 @@ import { Form } from "formik";
 import { useEffect } from "react";
 import { useCallback } from "react";
 import { useState } from "react";
-import { useQuery } from "react-query";
 import { useHistory } from "react-router-dom";
 import { useLocation } from "react-router-dom";
-import { ILevelTagList } from "src/services/level.service";
-import { ILevelGenreList } from "src/services/level.service";
-import { ILevelEngineList } from "src/services/level.service";
+import LevelEnginesCheckboxes from "src/components/LevelEnginesCheckboxes";
+import LevelGenresCheckboxes from "src/components/LevelGenresCheckboxes";
+import LevelTagsCheckboxes from "src/components/LevelTagsCheckboxes";
 import { ILevelQuery } from "src/services/level.service";
-import { LevelService } from "src/services/level.service";
-import CheckboxArrayFormField from "src/shared/components/CheckboxArrayFormField";
 import LevelListTable from "src/shared/components/LevelListTable";
-import Loader from "src/shared/components/Loader";
 import TextFormField from "src/shared/components/TextFormField";
 import { filterFalsyObjectValues } from "src/shared/utils";
 
@@ -69,19 +65,6 @@ const LevelList: React.FunctionComponent = () => {
   );
   const [formikValues, setFormikValues] = useState<any>(getFormikValues(query));
 
-  const levelTagsQuery = useQuery<ILevelTagList, Error>(
-    "levelTags",
-    LevelService.getLevelTags
-  );
-  const levelGenresQuery = useQuery<ILevelGenreList, Error>(
-    "levelGenres",
-    LevelService.getLevelGenres
-  );
-  const levelEnginesQuery = useQuery<ILevelEngineList, Error>(
-    "levelEngines",
-    LevelService.getLevelEngines
-  );
-
   useEffect(() => {
     // synchronize query changes to URL
     if (
@@ -126,14 +109,6 @@ const LevelList: React.FunctionComponent = () => {
     [setQuery]
   );
 
-  if (
-    !levelTagsQuery.data ||
-    !levelGenresQuery.data ||
-    !levelEnginesQuery.data
-  ) {
-    return <Loader />;
-  }
-
   return (
     <div id="LevelList">
       <Formik
@@ -158,30 +133,9 @@ const LevelList: React.FunctionComponent = () => {
             </div>
 
             <aside id="LevelList--sidebar">
-              <CheckboxArrayFormField
-                label="Tags"
-                name="tags"
-                source={levelTagsQuery.data.map((tag) => ({
-                  value: tag.id,
-                  label: tag.name,
-                }))}
-              />
-              <CheckboxArrayFormField
-                label="Genres"
-                name="genres"
-                source={levelGenresQuery.data.map((genre) => ({
-                  value: genre.id,
-                  label: genre.name,
-                }))}
-              />
-              <CheckboxArrayFormField
-                label="Engines"
-                name="engines"
-                source={levelEnginesQuery.data.map((engine) => ({
-                  value: engine.id,
-                  label: engine.name,
-                }))}
-              />
+              <LevelTagsCheckboxes />
+              <LevelGenresCheckboxes />
+              <LevelEnginesCheckboxes />
             </aside>
 
             <div id="LevelList--results">
