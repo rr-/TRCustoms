@@ -60,7 +60,13 @@ const LevelListTable = ({ query }: { query: ILevelQuery | null }) => {
               <td className="LevelListTable--genres">
                 {level.genres.map((tag) => tag.name).join(", ") || "N/A"}
               </td>
-              <td className="LevelListTable--author">
+              <td
+                className="LevelListTable--author"
+                title={
+                  level.authors.length > 1 &&
+                  level.authors.map((author) => author.name).join(", ")
+                }
+              >
                 {(level.authors.length > 1
                   ? "Multiple authors"
                   : level.authors[0]?.name) || "N/A"}
