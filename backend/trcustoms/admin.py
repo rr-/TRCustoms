@@ -46,6 +46,18 @@ class LevelForm(forms.ModelForm):
 class UserAdmin(BaseUserAdmin):
     ordering = ["username"]
     search_fields = ["username", "first_name", "last_name"]
+    fieldsets = None
+    fields = [
+        "username",
+        "password",
+        "first_name",
+        "last_name",
+        "email",
+        "is_active",
+        "is_staff",
+        "picture",
+    ]
+    readonly_fields = ["last_login", "date_joined"]
 
 
 @admin.register(LevelEngine)

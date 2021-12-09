@@ -1,5 +1,3 @@
-from typing import Optional
-
 from django.contrib.auth.password_validation import validate_password
 from django.core.exceptions import ValidationError
 from django.core.validators import MaxLengthValidator, MinLengthValidator
@@ -10,7 +8,7 @@ from trcustoms.models import User
 
 
 class UserSerializer(serializers.ModelSerializer):
-    picture_url = serializers.SerializerMethodField(read_only=True)
+    has_picture = serializers.SerializerMethodField(read_only=True)
     old_password = serializers.CharField(write_only=True, required=False)
 
     class Meta:
@@ -18,7 +16,7 @@ class UserSerializer(serializers.ModelSerializer):
         fields = (
             "id",
             "username",
-            "picture_url",
+            "has_picture",
             "first_name",
             "last_name",
             "email",
@@ -133,10 +131,8 @@ class UserSerializer(serializers.ModelSerializer):
 
         return user
 
-    def get_picture_url(self, instance: User) -> Optional[str]:
-        if not instance.picture:
-            return None
-        return instance.picture.url
+    def get_has_picture(self, instance: User) -> bool:
+        return instance.picture is not None
 
 
 class UserPictureSerializer(serializers.ModelSerializer):

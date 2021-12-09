@@ -7,7 +7,7 @@ interface IUser {
   first_name: string;
   last_name: string;
   email: string;
-  picture_url: string;
+  has_picture: boolean;
   bio: string;
   date_joined: string;
   last_login: string;
