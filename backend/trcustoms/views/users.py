@@ -1,6 +1,3 @@
-from pathlib import Path
-
-from django.http import FileResponse
 from django.shortcuts import get_object_or_404
 from rest_framework import mixins, status, viewsets
 from rest_framework.decorators import action
@@ -17,6 +14,7 @@ from rest_framework.response import Response
 from trcustoms.mixins import PermissionsMixin
 from trcustoms.models import User
 from trcustoms.serializers import UserPictureSerializer, UserSerializer
+from trcustoms.utils import stream_file_field
 
 
 class IsEditingOwnUser(BasePermission):
@@ -75,8 +73,6 @@ class UserViewSet(
                 return Response(serializer.data)
             return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
 
-        path = Path(user.picture.name)
-        filename = user.username + path.suffix
-        return FileResponse(
-            user.picture.open("rb"), as_attachment=False, filename=filename
+        return stream_file_field(
+            user.picture, [user.username], as_attachment=False
         )

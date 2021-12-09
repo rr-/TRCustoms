@@ -1,18 +1,18 @@
-from pathlib import Path
 from typing import Optional
 
 from django.db.models import F, OuterRef, Subquery
-from django.http import FileResponse
 from django.shortcuts import get_object_or_404
 from rest_framework import filters, mixins, viewsets
 from rest_framework.decorators import action
 from rest_framework.permissions import AllowAny
+from rest_framework.response import Response
 
 from trcustoms.models import (
     Level,
     LevelEngine,
     LevelFile,
     LevelGenre,
+    LevelImage,
     LevelTag,
 )
 from trcustoms.serializers import (
@@ -21,7 +21,7 @@ from trcustoms.serializers import (
     LevelSerializer,
     LevelTagSerializer,
 )
-from trcustoms.utils import slugify
+from trcustoms.utils import stream_file_field
 
 
 def _parse_ids(source: Optional[str]) -> list[int]:
@@ -70,7 +70,9 @@ def get_level_queryset():
     )
 
 
-class LevelViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
+class LevelViewSet(
+    mixins.RetrieveModelMixin, mixins.ListModelMixin, viewsets.GenericViewSet
+):
     permission_classes = [AllowAny]
     queryset = get_level_queryset()
     serializer_class = LevelSerializer
@@ -95,6 +97,12 @@ class LevelViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
         if engine_ids := _parse_ids(self.request.query_params.get("engines")):
             queryset = queryset.filter(engines__id__in=engine_ids)
         return queryset
+
+    @action(detail=True, url_path=r"images/(?P<image_id>\d+)")
+    def screenshot(self, request, pk: int, image_id: int) -> Response:
+        image = get_object_or_404(LevelImage, level_id=pk, pk=image_id)
+        parts = [f"{pk}", image.level.name, f"screenshot{image_id}"]
+        return stream_file_field(image.image, parts, as_attachment=False)
 
 
 class LevelTagViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
@@ -124,17 +132,10 @@ class LevelFileViewSet(viewsets.GenericViewSet):
     pagination_class = None
 
     @action(detail=True)
-    def download(self, request, pk):
+    def download(self, request, pk: int) -> Response:
         file = get_object_or_404(LevelFile, pk=pk)
-        path = Path(file.file.name)
-        parts = [
-            f"{pk}",
-            slugify(file.level.name),
-        ]
+        parts = [f"{pk}", file.level.name]
         if file.version > 1:
             parts.append(f"V{file.version}")
         parts.extend(file.level.authors.values_list("name", flat=True))
-        filename = "-".join(parts) + path.suffix
-        return FileResponse(
-            file.file.open("rb"), as_attachment=True, filename=filename
-        )
+        return stream_file_field(file.file, parts, as_attachment=True)
