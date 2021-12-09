@@ -32,6 +32,7 @@ interface ILevel {
   created: string;
   last_updated: string;
   last_file_id: number | null;
+  last_file_created: string | null;
   last_file_size: number | null;
 }
 
