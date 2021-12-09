@@ -1,18 +1,17 @@
 import "./LevelList.css";
-import { Formik, Form } from "formik";
-import { useEffect, useCallback, useState } from "react";
+import { Formik } from "formik";
+import { Form } from "formik";
+import { useEffect } from "react";
+import { useCallback } from "react";
+import { useState } from "react";
 import { useQuery } from "react-query";
 import { useHistory } from "react-router-dom";
 import { useLocation } from "react-router-dom";
-import Pager from "src/components/Pager";
-import {
-  ILevelList,
-  ILevelTagList,
-  ILevelGenreList,
-  ILevelEngineList,
-  ILevelQuery,
-  LevelService,
-} from "src/services/level.service";
+import { ILevelTagList } from "src/services/level.service";
+import { ILevelGenreList } from "src/services/level.service";
+import { ILevelEngineList } from "src/services/level.service";
+import { ILevelQuery } from "src/services/level.service";
+import { LevelService } from "src/services/level.service";
 import CheckboxArrayFormField from "src/shared/components/CheckboxArrayFormField";
 import LevelListTable from "src/shared/components/LevelListTable";
 import Loader from "src/shared/components/Loader";
@@ -70,9 +69,6 @@ const LevelList: React.FunctionComponent = () => {
   );
   const [formikValues, setFormikValues] = useState<any>(getFormikValues(query));
 
-  const levelsQuery = useQuery<ILevelList, Error>(["levels", query], async () =>
-    LevelService.getLevels(query)
-  );
   const levelTagsQuery = useQuery<ILevelTagList, Error>(
     "levelTags",
     LevelService.getLevelTags
@@ -189,10 +185,7 @@ const LevelList: React.FunctionComponent = () => {
             </aside>
 
             <div id="LevelList--results">
-              <LevelListTable levels={levelsQuery.data} />
-            </div>
-            <div id="LevelList--pager">
-              {levelsQuery.data && <Pager pagedResponse={levelsQuery.data} />}
+              <LevelListTable query={query} />
             </div>
           </Form>
         )}
