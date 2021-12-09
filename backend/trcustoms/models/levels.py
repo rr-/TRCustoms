@@ -2,6 +2,7 @@ from django.db import models
 
 from trcustoms.models.dates import DatesInfo
 from trcustoms.models.users import User
+from trcustoms.utils import RandomFileName
 
 
 class LevelEngine(DatesInfo):
@@ -63,7 +64,9 @@ class Level(DatesInfo):
 
 class LevelImage(DatesInfo):
     level = models.ForeignKey(Level, on_delete=models.CASCADE)
-    image = models.ImageField(blank=True, null=True, upload_to="level_images/")
+    image = models.ImageField(
+        blank=True, null=True, upload_to=RandomFileName("level_images")
+    )
     position = models.IntegerField(default=1)
 
     def __str__(self) -> str:
@@ -74,7 +77,9 @@ class LevelFile(DatesInfo):
     level = models.ForeignKey(
         Level, on_delete=models.CASCADE, related_name="files"
     )
-    file = models.FileField(blank=True, null=True, upload_to="levels/")
+    file = models.FileField(
+        blank=True, null=True, upload_to=RandomFileName("levels")
+    )
     size = models.IntegerField()
     version = models.IntegerField()
 
