@@ -10,7 +10,7 @@ const LevelEnginesCheckboxes: React.FunctionComponent = () => {
     LevelService.getLevelEngines
   );
 
-  if (levelEnginesQuery.isLoading) {
+  if (levelEnginesQuery.isLoading || !levelEnginesQuery.data) {
     return <Loader />;
   }
 

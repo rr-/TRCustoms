@@ -10,7 +10,7 @@ const LevelGenresCheckboxes: React.FunctionComponent = () => {
     LevelService.getLevelGenres
   );
 
-  if (levelGenresQuery.isLoading) {
+  if (levelGenresQuery.isLoading || !levelGenresQuery.data) {
     return <Loader />;
   }
 

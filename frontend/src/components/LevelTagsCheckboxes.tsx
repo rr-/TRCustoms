@@ -10,7 +10,7 @@ const LevelTagsCheckboxes: React.FunctionComponent = () => {
     LevelService.getLevelTags
   );
 
-  if (levelTagsQuery.isLoading) {
+  if (levelTagsQuery.isLoading || !levelTagsQuery.data) {
     return <Loader />;
   }
 
