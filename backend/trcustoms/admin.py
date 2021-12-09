@@ -6,6 +6,7 @@ from django.core.exceptions import ValidationError
 
 from trcustoms.models import (
     Level,
+    LevelAuthor,
     LevelEngine,
     LevelFile,
     LevelGenre,
@@ -68,16 +69,23 @@ class LevelTagAdmin(admin.ModelAdmin):
     readonly_fields = ["created", "last_updated"]
 
 
+@admin.register(LevelAuthor)
+class LevelAuthorAdmin(admin.ModelAdmin):
+    ordering = ["name"]
+    search_fields = ["name", "user__username"]
+    readonly_fields = ["created", "last_updated"]
+
+
 @admin.register(Level)
 class LevelAdmin(admin.ModelAdmin):
     ordering = ["-created"]
     search_fields = [
         "name",
         "description",
-        "author_name",
-        "author_user__username",
-        "author_user__first_name",
-        "author_user__last_name",
+        "authors__name",
+        "authors__user__username",
+        "authors__user__first_name",
+        "authors__user__last_name",
         "uploader_user__username",
         "uploader_user__first_name",
         "uploader_user__last_name",

@@ -2,7 +2,13 @@ from typing import Optional
 
 from rest_framework import serializers
 
-from trcustoms.models import Level, LevelEngine, LevelGenre, LevelTag
+from trcustoms.models import (
+    Level,
+    LevelAuthor,
+    LevelEngine,
+    LevelGenre,
+    LevelTag,
+)
 from trcustoms.serializers.users import UserSerializer
 
 
@@ -24,12 +30,18 @@ class LevelEngineSerializer(serializers.ModelSerializer):
         fields = ["id", "name"]
 
 
+class LevelAuthorSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = LevelAuthor
+        fields = ["id", "name"]
+
+
 class LevelSerializer(serializers.ModelSerializer):
     genres = LevelGenreSerializer(read_only=True, many=True)
     tags = LevelTagSerializer(read_only=True, many=True)
     engine = LevelEngineSerializer(read_only=True)
     uploader = UserSerializer(read_only=True)
-    author_user = UserSerializer(read_only=True)
+    authors = LevelAuthorSerializer(read_only=True, many=True)
     last_file_id = serializers.SerializerMethodField(read_only=True)
     last_file_created = serializers.SerializerMethodField(read_only=True)
     last_file_size = serializers.SerializerMethodField(read_only=True)
@@ -59,8 +71,7 @@ class LevelSerializer(serializers.ModelSerializer):
             "genres",
             "tags",
             "engine",
-            "author_name",
-            "author_user",
+            "authors",
             "uploader",
             "created",
             "last_updated",

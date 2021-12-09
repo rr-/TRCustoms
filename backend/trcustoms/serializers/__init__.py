@@ -1,4 +1,5 @@
 from .levels import (
+    LevelAuthorSerializer,
     LevelEngineSerializer,
     LevelGenreSerializer,
     LevelSerializer,
@@ -7,6 +8,7 @@ from .levels import (
 from .users import UserPictureSerializer, UserSerializer
 
 __all__ = [
+    "LevelAuthorSerializer",
     "LevelEngineSerializer",
     "LevelGenreSerializer",
     "LevelSerializer",
