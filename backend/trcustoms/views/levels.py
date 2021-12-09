@@ -4,7 +4,6 @@ from typing import Optional
 from django.db.models import F, OuterRef, Subquery
 from django.http import FileResponse
 from django.shortcuts import get_object_or_404
-from django.utils.text import slugify
 from rest_framework import filters, mixins, viewsets
 from rest_framework.decorators import action
 from rest_framework.permissions import AllowAny
@@ -22,6 +21,7 @@ from trcustoms.serializers import (
     LevelSerializer,
     LevelTagSerializer,
 )
+from trcustoms.utils import slugify
 
 
 def _parse_ids(source: Optional[str]) -> list[int]:
@@ -127,7 +127,14 @@ class LevelFileViewSet(viewsets.GenericViewSet):
     def download(self, request, pk):
         file = get_object_or_404(LevelFile, pk=pk)
         path = Path(file.file.name)
-        filename = f"trcustoms_{pk}_{slugify(file.level.name)}{path.suffix}"
+        parts = [
+            f"{pk}",
+            slugify(file.level.name),
+        ]
+        if file.version > 1:
+            parts.append(f"V{file.version}")
+        parts.extend(file.level.authors.values_list("name", flat=True))
+        filename = "-".join(parts) + path.suffix
         return FileResponse(
             file.file.open("rb"), as_attachment=True, filename=filename
         )
