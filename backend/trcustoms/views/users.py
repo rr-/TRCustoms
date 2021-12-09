@@ -1,3 +1,6 @@
+from pathlib import Path
+
+from django.http import FileResponse
 from django.shortcuts import get_object_or_404
 from rest_framework import mixins, status, viewsets
 from rest_framework.decorators import action
@@ -7,6 +10,7 @@ from rest_framework.permissions import (
     BasePermission,
     IsAdminUser,
     IsAuthenticated,
+    IsAuthenticatedOrReadOnly,
 )
 from rest_framework.response import Response
 
@@ -36,6 +40,7 @@ class UserViewSet(
         "create": [AllowAny],
         "by_username": [AllowAny],
         "update": [IsAuthenticated & (IsAdminUser | IsEditingOwnUser)],
+        "picture": [IsAuthenticatedOrReadOnly],
     }
     permission_classes = [IsAuthenticated]
     # pylint: enable=unsupported-binary-operation
@@ -55,16 +60,23 @@ class UserViewSet(
 
     @action(
         detail=True,
-        methods=["PATCH"],
+        methods=["PATCH", "GET"],
         serializer_class=UserPictureSerializer,
         parser_classes=[MultiPartParser],
     )
     def picture(self, request, pk) -> Response:
-        obj = self.get_object()
-        serializer = self.serializer_class(
-            obj, data=request.data, partial=True
+        user = self.get_object()
+        if request.method == "PATCH":
+            serializer = self.serializer_class(
+                user, data=request.data, partial=True
+            )
+            if serializer.is_valid():
+                serializer.save()
+                return Response(serializer.data)
+            return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
+
+        path = Path(user.picture.name)
+        filename = user.username + path.suffix
+        return FileResponse(
+            user.picture.open("rb"), as_attachment=False, filename=filename
         )
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data)
-        return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
