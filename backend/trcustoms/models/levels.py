@@ -73,7 +73,7 @@ class LevelFile(DatesInfo):
     level = models.ForeignKey(
         Level, on_delete=models.CASCADE, related_name="files"
     )
-    file = models.FileField(upload_to="levels/")
+    file = models.FileField(blank=True, null=True, upload_to="levels/")
     size = models.IntegerField()
     version = models.IntegerField()
 
