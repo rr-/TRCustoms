@@ -53,6 +53,7 @@ class LevelEngineAdmin(admin.ModelAdmin):
     ordering = ["name"]
     search_fields = ["name"]
     readonly_fields = ["created", "last_updated"]
+    list_display = ["name", "created", "last_updated"]
 
 
 @admin.register(LevelGenre)
@@ -60,6 +61,7 @@ class LevelGenreAdmin(admin.ModelAdmin):
     ordering = ["name"]
     search_fields = ["name"]
     readonly_fields = ["created", "last_updated"]
+    list_display = ["name", "created", "last_updated"]
 
 
 @admin.register(LevelTag)
@@ -67,6 +69,7 @@ class LevelTagAdmin(admin.ModelAdmin):
     ordering = ["name"]
     search_fields = ["name"]
     readonly_fields = ["created", "last_updated"]
+    list_display = ["name", "created", "last_updated"]
 
 
 @admin.register(LevelAuthor)
@@ -74,6 +77,7 @@ class LevelAuthorAdmin(admin.ModelAdmin):
     ordering = ["name"]
     search_fields = ["name", "user__username"]
     readonly_fields = ["created", "last_updated"]
+    list_display = ["name", "user", "created", "last_updated"]
 
 
 @admin.register(Level)
@@ -90,6 +94,7 @@ class LevelAdmin(admin.ModelAdmin):
         "uploader_user__first_name",
         "uploader_user__last_name",
     ]
+    list_display = ["name", "uploader", "created", "last_updated"]
     list_filter = ["genres", "tags"]
     group_by = ["tags"]
     form = LevelForm
@@ -99,7 +104,7 @@ class LevelAdmin(admin.ModelAdmin):
 @admin.register(LevelImage)
 class LevelImageAdmin(admin.ModelAdmin):
     ordering = ["level__name"]
-    list_display = ["id", "level"]
+    list_display = ["id", "level", "created", "last_updated"]
     search_fields = ["level__name"]
     readonly_fields = ["created", "last_updated"]
 
@@ -107,6 +112,6 @@ class LevelImageAdmin(admin.ModelAdmin):
 @admin.register(LevelFile)
 class LevelFileAdmin(admin.ModelAdmin):
     ordering = ["level__name"]
-    list_display = ["id", "level", "version"]
+    list_display = ["id", "level", "version", "created", "last_updated"]
     search_fields = ["level__name"]
     readonly_fields = ["size", "created", "last_updated", "version"]
