@@ -8,7 +8,7 @@ class LevelEngine(DatesInfo):
     name = models.CharField(max_length=100)
 
     def __str__(self) -> str:
-        return self.name
+        return f"{self.name} (id={self.pk})"
 
 
 class LevelGenre(DatesInfo):
@@ -18,14 +18,14 @@ class LevelGenre(DatesInfo):
         verbose_name_plural = "Level genres"
 
     def __str__(self) -> str:
-        return self.name
+        return f"{self.name} (id={self.pk})"
 
 
 class LevelTag(DatesInfo):
     name = models.CharField(max_length=100)
 
     def __str__(self) -> str:
-        return self.name
+        return f"{self.name} (id={self.pk})"
 
 
 class LevelAuthor(DatesInfo):
@@ -39,7 +39,7 @@ class LevelAuthor(DatesInfo):
     )
 
     def __str__(self) -> str:
-        return self.name
+        return f"{self.name} (id={self.pk})"
 
 
 class Level(DatesInfo):
@@ -58,7 +58,7 @@ class Level(DatesInfo):
     authors = models.ManyToManyField(LevelAuthor, related_name="levels")
 
     def __str__(self) -> str:
-        return f"{self.name}"
+        return f"{self.name} (id={self.pk})"
 
 
 class LevelImage(DatesInfo):
@@ -66,7 +66,7 @@ class LevelImage(DatesInfo):
     image = models.ImageField(blank=True, null=True, upload_to="level_images/")
 
     def __str__(self) -> str:
-        return f"{self.level.name} image ID={self.pk}"
+        return f"{self.level.name} (image id={self.pk})"
 
 
 class LevelFile(DatesInfo):
@@ -78,7 +78,7 @@ class LevelFile(DatesInfo):
     version = models.IntegerField()
 
     def __str__(self) -> str:
-        return f"{self.level.name} file ID={self.pk}"
+        return f"{self.level.name} (file id={self.pk})"
 
 
 class LevelDownload(DatesInfo):

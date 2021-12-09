@@ -58,6 +58,15 @@ class UserAdmin(BaseUserAdmin):
         "picture",
     ]
     readonly_fields = ["last_login", "date_joined"]
+    list_display = [
+        "id",
+        "username",
+        "email",
+        "first_name",
+        "last_name",
+        "is_active",
+        "is_staff",
+    ]
 
 
 @admin.register(LevelEngine)
@@ -65,7 +74,7 @@ class LevelEngineAdmin(admin.ModelAdmin):
     ordering = ["name"]
     search_fields = ["name"]
     readonly_fields = ["created", "last_updated"]
-    list_display = ["name", "created", "last_updated"]
+    list_display = ["id", "name", "created", "last_updated"]
 
 
 @admin.register(LevelGenre)
@@ -73,7 +82,7 @@ class LevelGenreAdmin(admin.ModelAdmin):
     ordering = ["name"]
     search_fields = ["name"]
     readonly_fields = ["created", "last_updated"]
-    list_display = ["name", "created", "last_updated"]
+    list_display = ["id", "name", "created", "last_updated"]
 
 
 @admin.register(LevelTag)
@@ -81,7 +90,7 @@ class LevelTagAdmin(admin.ModelAdmin):
     ordering = ["name"]
     search_fields = ["name"]
     readonly_fields = ["created", "last_updated"]
-    list_display = ["name", "created", "last_updated"]
+    list_display = ["id", "name", "created", "last_updated"]
 
 
 @admin.register(LevelAuthor)
@@ -89,7 +98,7 @@ class LevelAuthorAdmin(admin.ModelAdmin):
     ordering = ["name"]
     search_fields = ["name", "user__username"]
     readonly_fields = ["created", "last_updated"]
-    list_display = ["name", "user", "created", "last_updated"]
+    list_display = ["id", "name", "user", "created", "last_updated"]
 
 
 @admin.register(Level)
@@ -106,7 +115,7 @@ class LevelAdmin(admin.ModelAdmin):
         "uploader_user__first_name",
         "uploader_user__last_name",
     ]
-    list_display = ["name", "uploader", "created", "last_updated"]
+    list_display = ["id", "name", "uploader", "created", "last_updated"]
     list_filter = ["genres", "tags"]
     group_by = ["tags"]
     form = LevelForm
