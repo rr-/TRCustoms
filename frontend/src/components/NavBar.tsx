@@ -1,6 +1,7 @@
 import "./NavBar.css";
 import { useContext } from "react";
 import { Link } from "react-router-dom";
+import UserPicture from "src/shared/components/UserPicture";
 import { UserContext } from "src/shared/contexts/UserContext";
 
 interface INavBar {}
@@ -22,8 +23,9 @@ const NavBar: React.FunctionComponent<INavBar> = () => {
             <div className="PrimaryNavBar--right">
               {user ? (
                 <>
+                  <UserPicture className="PrimaryNavBar--userPic" user={user} />
                   <p>
-                    Logged in as <Link to={"/profile"}>{user.username}</Link>.
+                    <Link to={"/profile"}>{user.username}</Link>
                   </p>
                   <ul>
                     <li>

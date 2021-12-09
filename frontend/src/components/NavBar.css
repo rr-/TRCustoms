@@ -1,3 +1,8 @@
+#TopNavBar .PrimaryNavBar--userPic {
+  max-width: 2rem;
+  max-height: 2rem;
+  margin-right: 0.5rem;
+}
 #TopNavBar nav {
   display: flex;
   align-items: center;
@@ -20,16 +25,18 @@
 }
 
 #PrimaryNavBar {
-  padding: 1rem;
   background: var(--sidebar-color);
 }
 #PrimaryNavBar .PrimaryNavBar--left {
   display: flex;
   justify-content: flex-start;
+  align-items: center;
 }
 #PrimaryNavBar .PrimaryNavBar--right {
+  height: 3rem;
   display: flex;
   justify-content: flex-end;
+  align-items: center;
 }
 #PrimaryNavBar li {
   margin-left: 1rem;

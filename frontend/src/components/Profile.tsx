@@ -1,11 +1,16 @@
 import "./Profile.css";
-import { useEffect, useCallback, useState, useContext } from "react";
+import { useEffect } from "react";
+import { useCallback } from "react";
+import { useState } from "react";
+import { useContext } from "react";
 import ReactMarkdown from "react-markdown";
 import { useParams } from "react-router-dom";
 import { Link } from "react-router-dom";
-import { IUser, UserService } from "src/services/user.service";
+import { IUser } from "src/services/user.service";
+import { UserService } from "src/services/user.service";
 import Loader from "src/shared/components/Loader";
 import PermissionGuard from "src/shared/components/PermissionGuard";
+import UserPicture from "src/shared/components/UserPicture";
 import { UserContext } from "src/shared/contexts/UserContext";
 import { formatDateTime } from "src/shared/utils";
 
@@ -34,14 +39,7 @@ const Profile: React.FunctionComponent<IProfile> = () => {
       ) : user ? (
         <>
           <aside>
-            <img
-              alt={`Avatar for ${user.username}`}
-              src={
-                user.has_picture
-                  ? `/api/users/${user.id}/picture`
-                  : "/anonymous.png"
-              }
-            />
+            <UserPicture user={user} />
             <p>
               Joined: {formatDateTime(user.date_joined) || "unknown"}
               <br />
