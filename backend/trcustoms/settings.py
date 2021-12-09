@@ -132,7 +132,7 @@ REST_FRAMEWORK = {
     ],
     "DEFAULT_PAGINATION_CLASS": "trcustoms.pagination.CustomPagination",
     "ORDERING_PARAM": "sort",
-    "PAGE_SIZE": 25,
+    "PAGE_SIZE": 20,
 }
 
 SIMPLE_JWT = {
