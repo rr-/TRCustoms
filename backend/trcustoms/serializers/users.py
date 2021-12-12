@@ -58,8 +58,10 @@ class UserSerializer(serializers.ModelSerializer):
 
     def validate_username(self, value):
         if (
-            user := User.objects.filter(username=value).first()
-        ) and user != self.instance:
+            (user := User.objects.filter(username=value).first())
+            and user != self.instance
+            and user.source == User.Source.trcustoms
+        ):
             raise serializers.ValidationError(
                 "Another account exists with this name."
                 if user.is_active
@@ -112,14 +114,26 @@ class UserSerializer(serializers.ModelSerializer):
 
     @transaction.atomic
     def create(self, validated_data):
-        user = User(
-            username=validated_data["username"],
-            first_name=validated_data["first_name"],
-            last_name=validated_data["last_name"],
-            email=validated_data["email"],
-            bio=validated_data["bio"],
-            is_active=False,
+        user = (
+            User.objects.filter(
+                username=validated_data["username"],
+                is_active=False,
+            )
+            .exclude(source=User.Source.trcustoms)
+            .first()
         )
+
+        if not user:
+            user = User(
+                username=validated_data["username"],
+                source=User.Source.trcustoms,
+                is_active=False,
+            )
+
+        user.first_name = validated_data.get("first_name") or ""
+        user.last_name = validated_data.get("last_name") or ""
+        user.email = validated_data.get("email") or ""
+        user.bio = validated_data.get("bio") or ""
 
         try:
             validate_password(validated_data["password"], user=user)
