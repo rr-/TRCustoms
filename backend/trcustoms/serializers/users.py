@@ -146,7 +146,7 @@ class UserSerializer(serializers.ModelSerializer):
         return user
 
     def get_has_picture(self, instance: User) -> bool:
-        return instance.picture is not None
+        return bool(instance.picture)
 
 
 class UserPictureSerializer(serializers.ModelSerializer):
