@@ -1,1 +1,2 @@
-default_app_config = "trcustoms.app.TRCustomsConfig"
+# pylint: disable=unused-import
+from trcustoms.app import TRCustomsConfig
