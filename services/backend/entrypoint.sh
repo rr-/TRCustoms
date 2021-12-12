@@ -28,23 +28,25 @@ run_migrations() {
     python3 manage.py migrate $@
 }
 
-case "$1" in
+action="$1"
+shift
+case "$action" in
     dev)
         write_static_files
         run_migrations
         python3 manage.py runserver 0.0.0.0:8000
     ;;
     shell)
-        /bin/bash "${@:2}"
+        /bin/bash "$@"
     ;;
     manage)
-        python3 manage.py "${@:2}"
+        python3 manage.py "$@"
     ;;
     migrate)
-        run_migrations "${@:2}"
+        run_migrations "$@"
     ;;
     python)
-        python3 "${@:2}"
+        python3 "$@"
     ;;
     celery)
         celery -A trcustoms worker -l INFO
@@ -53,7 +55,7 @@ case "$1" in
         celery -A trcustoms beat -l INFO
     ;;
     test)
-        pytest --cov=trcustoms --cov-report=term-missing
+        pytest --cov=trcustoms --cov-report=term-missing --reuse-db "$@"
     ;;
     uwsgi)
         echo "Running App (uWSGI)..."

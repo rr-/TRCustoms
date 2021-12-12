@@ -20,6 +20,7 @@ x-base-trcustoms-backend: &base-trcustoms-backend
   volumes:
     - ./backend/:/app/
     - ./services/backend/entrypoint.sh:/usr/local/bin/entrypoint.sh
+    - ./pyproject.toml:/pyproject.toml
   networks:
     - trcustoms
   depends_on:

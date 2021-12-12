@@ -22,3 +22,6 @@ disable = [
     "duplicate-code",  # false positives in imports…
     "invalid-name",  # migrations
 ]
+
+[tool.pytest.ini_options]
+DJANGO_SETTINGS_MODULE = "trcustoms.settings"
