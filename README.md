@@ -5,7 +5,7 @@ A website dedicated to custom levels for classic Tomb Raider games.
 ## Technology stack
 
 - Docker
-- Python3.9
+- Python3.10
 - Django (no REST)
 - PostgreSQL
 - React
