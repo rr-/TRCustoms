@@ -15,4 +15,7 @@ def update_file(sender, instance, **kwargs):
             or 0
         )
         instance.version = max_version + 1
-    instance.size = instance.file.size
+    if instance.file:
+        instance.size = instance.file.size
+    else:
+        instance.size = 0
