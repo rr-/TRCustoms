@@ -25,7 +25,7 @@ const NavBar: React.FunctionComponent<INavBar> = () => {
                 <>
                   <UserPicture className="PrimaryNavBar--userPic" user={user} />
                   <p>
-                    <Link to={"/profile"}>{user.username}</Link>
+                    <Link to={`/profile/${user.id}`}>{user.username}</Link>
                   </p>
                   <ul>
                     <li>

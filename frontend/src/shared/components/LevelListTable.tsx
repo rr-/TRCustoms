@@ -15,12 +15,12 @@ const LevelListTable = ({ query }: { query: ILevelQuery | null }) => {
     LevelService.getLevels(query)
   );
 
-  if (levelsQuery.isLoading || !levelsQuery.data) {
-    return <Loader />;
-  }
-
   if (levelsQuery.error) {
     return <p>{levelsQuery.error.message}</p>;
+  }
+
+  if (levelsQuery.isLoading || !levelsQuery.data) {
+    return <Loader />;
   }
 
   return (
