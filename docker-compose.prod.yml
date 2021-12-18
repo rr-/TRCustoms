@@ -17,6 +17,10 @@ x-base-trcustoms-backend: &base-trcustoms-backend
   build:
     context: .
     dockerfile: ./services/backend/Dockerfile
+  volumes:
+    - ./backend/:/app/
+    - ./services/backend/entrypoint.sh:/usr/local/bin/entrypoint.sh
+    - ./pyproject.toml:/pyproject.toml
   networks:
     - trcustoms
   depends_on:
@@ -28,9 +32,6 @@ services:
     <<: *base-trcustoms-backend
     container_name: trcustoms_prd_backend
     command: uwsgi
-    volumes:
-      - django_static:/app/django_static
-      - django_uploads:/app/uploads
 
   celery:
     <<: *base-trcustoms-backend
@@ -50,7 +51,7 @@ services:
     expose:
       - 5432
     volumes:
-      - pgdata_prod:/var/lib/postgresql/data
+      - ./backend/pgdata:/var/lib/postgresql/data
     networks:
       - trcustoms
 
@@ -76,13 +77,8 @@ services:
     depends_on:
       - backend
     volumes:
-      - django_static:/app/backend/django_static
-      - django_uploads:/app/backend/django_uploads
-
-volumes:
-  pgdata_prod:
-  django_static:
-  django_uploads:
+      - ./backend/django_static:/app/backend/django_static
+      - ./backend/uploads:/app/backend/django_uploads
 
 networks:
   trcustoms:
