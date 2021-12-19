@@ -79,17 +79,27 @@ class LevelViewSet(
 
     def get_queryset(self):
         queryset = self.queryset
+
+        disable_paging = self.request.query_params.get("disable_paging")
+        self.paginator.paging_enabled = True
+
         if author_ids := _parse_ids(self.request.query_params.get("authors")):
             for author_id in author_ids:
                 queryset = queryset.filter(authors__id=author_id)
+            if disable_paging:
+                self.paginator.paging_enabled = False
+
         if tag_ids := _parse_ids(self.request.query_params.get("tags")):
             for tag_id in tag_ids:
                 queryset = queryset.filter(tags__id=tag_id)
+
         if genre_ids := _parse_ids(self.request.query_params.get("genres")):
             for genre_id in genre_ids:
                 queryset = queryset.filter(genres__id=genre_id)
+
         if engine_ids := _parse_ids(self.request.query_params.get("engines")):
             queryset = queryset.filter(engines__id__in=engine_ids)
+
         return queryset
 
     @action(detail=True, url_path=r"images/(?P<position>\d+)")

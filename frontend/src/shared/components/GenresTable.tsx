@@ -5,6 +5,7 @@ import { IGenreQuery } from "src/services/level.service";
 import { LevelService } from "src/services/level.service";
 import Loader from "src/shared/components/Loader";
 import SortLink from "src/shared/components/SortLink";
+import { DISABLE_PAGING } from "src/shared/types";
 import { formatDate } from "src/shared/utils";
 
 const GenresTable = ({ query }: { query: IGenreQuery | null }) => {
@@ -58,9 +59,11 @@ const GenresTable = ({ query }: { query: IGenreQuery | null }) => {
           ))}
         </tbody>
       </table>
-      <div id="GenresTable--pager">
-        <Pager pagedResponse={genresQuery.data} />
-      </div>
+      {query.page !== DISABLE_PAGING && (
+        <div id="GenresTable--pager">
+          <Pager pagedResponse={genresQuery.data} />
+        </div>
+      )}
     </>
   );
 };

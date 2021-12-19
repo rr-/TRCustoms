@@ -5,6 +5,7 @@ import { ITagQuery } from "src/services/level.service";
 import { LevelService } from "src/services/level.service";
 import Loader from "src/shared/components/Loader";
 import SortLink from "src/shared/components/SortLink";
+import { DISABLE_PAGING } from "src/shared/types";
 import { formatDate } from "src/shared/utils";
 
 const TagsTable = ({ query }: { query: ITagQuery | null }) => {
@@ -56,9 +57,11 @@ const TagsTable = ({ query }: { query: ITagQuery | null }) => {
           ))}
         </tbody>
       </table>
-      <div id="TagsTable--pager">
-        <Pager pagedResponse={tagsQuery.data} />
-      </div>
+      {query.page !== DISABLE_PAGING && (
+        <div id="TagsTable--pager">
+          <Pager pagedResponse={tagsQuery.data} />
+        </div>
+      )}
     </>
   );
 };

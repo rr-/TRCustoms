@@ -3,6 +3,7 @@ import { API_URL } from "src/shared/constants";
 import { IPagedResponse } from "src/shared/types";
 import { IGenericQuery } from "src/shared/types";
 import { filterFalsyObjectValues } from "src/shared/utils";
+import { getGenericQuery } from "src/shared/utils";
 
 interface ILevelFilterQuery {}
 
@@ -82,9 +83,7 @@ interface IEngineList extends IPagedResponse<IEngine> {}
 const getLevels = async (query: ILevelQuery): Promise<ILevelList | null> => {
   return await fetchJSON<ILevelList>(`${API_URL}/levels/`, {
     query: filterFalsyObjectValues({
-      page: query.page ? `${query.page}` : null,
-      sort: query.sort,
-      search: query.search,
+      ...getGenericQuery(query),
       tags: query.tags.join(","),
       genres: query.genres?.join(","),
       engines: query.engines?.join(","),
@@ -104,33 +103,21 @@ const getLevelFilters = async (
 
 const getTags = async (query: ITagQuery): Promise<ITagList | null> => {
   return await fetchJSON<ITagList>(`${API_URL}/level_tags/`, {
-    query: filterFalsyObjectValues({
-      page: query.page ? `${query.page}` : null,
-      sort: query.sort,
-      search: query.search,
-    }),
+    query: getGenericQuery(query),
     method: "GET",
   });
 };
 
 const getGenres = async (query: IGenreQuery): Promise<IGenreList | null> => {
   return await fetchJSON<IGenreList>(`${API_URL}/level_genres/`, {
-    query: filterFalsyObjectValues({
-      page: query.page ? `${query.page}` : null,
-      sort: query.sort,
-      search: query.search,
-    }),
+    query: getGenericQuery(query),
     method: "GET",
   });
 };
 
 const getEngines = async (query: IEngineQuery): Promise<IEngineList | null> => {
   return await fetchJSON<IEngineList>(`${API_URL}/level_engines/`, {
-    query: filterFalsyObjectValues({
-      page: query.page ? `${query.page}` : null,
-      sort: query.sort,
-      search: query.search,
-    }),
+    query: getGenericQuery(query),
     method: "GET",
   });
 };

@@ -1,5 +1,7 @@
+const DISABLE_PAGING = Symbol("DISABLE_PAGING");
+
 interface IGenericQuery {
-  page: number | null;
+  page: number | null | typeof DISABLE_PAGING;
   sort: string | null;
   search: string | null;
 }
@@ -15,3 +17,4 @@ interface IPagedResponse<T> {
 }
 
 export type { IPagedResponse, IGenericQuery };
+export { DISABLE_PAGING };

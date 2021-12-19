@@ -10,6 +10,7 @@ import LevelsTable from "src/shared/components/LevelsTable";
 import Loader from "src/shared/components/Loader";
 import { PermissionGuard } from "src/shared/components/PermissionGuard";
 import UserPicture from "src/shared/components/UserPicture";
+import { DISABLE_PAGING } from "src/shared/types";
 import { formatDateTime } from "src/shared/utils";
 
 interface IProfile {}
@@ -32,7 +33,7 @@ const Profile: React.FunctionComponent<IProfile> = () => {
   const user = userQuery.data;
 
   const levelQuery: ILevelQuery = {
-    page: null,
+    page: DISABLE_PAGING,
     sort: null,
     search: null,
     tags: [],
