@@ -81,13 +81,13 @@ class LevelViewSet(
         queryset = self.queryset
 
         disable_paging = self.request.query_params.get("disable_paging")
-        self.paginator.paging_enabled = True
+        self.paginator.disable_paging = False
 
         if author_ids := _parse_ids(self.request.query_params.get("authors")):
             for author_id in author_ids:
                 queryset = queryset.filter(authors__id=author_id)
             if disable_paging:
-                self.paginator.paging_enabled = False
+                self.paginator.disable_paging = True
 
         if tag_ids := _parse_ids(self.request.query_params.get("tags")):
             for tag_id in tag_ids:
