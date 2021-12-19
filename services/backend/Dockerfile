@@ -5,10 +5,8 @@ WORKDIR /app
 EXPOSE 8000
 
 COPY services/backend/requirements.dev.txt /conf/
-RUN pip install -r /conf/requirements.dev.txt
-
 COPY services/backend/requirements.txt /conf/
-RUN pip install -r /conf/requirements.txt
+RUN pip install -r /conf/requirements.dev.txt
 
 COPY services/uwsgi/uwsgi.ini services/uwsgi/mime.types /conf/
 COPY services/backend/entrypoint.sh /usr/local/bin/entrypoint.sh

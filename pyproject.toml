@@ -1,5 +1,6 @@
 [tool.black]
 line-length = 79
+target-version = ["py310"]
 
 [tool.isort]
 multi_line_output = 3
@@ -21,6 +22,8 @@ disable = [
     "unused-argument",  # we can't rename positional arguments in frameworks…
     "duplicate-code",  # false positives in imports…
     "invalid-name",  # migrations
+    "too-many-instance-attributes",  # models
+    "broad-except",  # this does more harm than good
 ]
 
 [tool.pytest.ini_options]

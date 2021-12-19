@@ -14,10 +14,7 @@ def get_setting(name: str) -> str:
 
 
 BASE_DIR = Path(__file__).resolve().parent.parent
-REPO_DIR = BASE_DIR.parent
-
-# persistent directory with animu data
-DATA_DIR = REPO_DIR / "data"
+CACHE_DIR = BASE_DIR / "cache"
 
 SECRET_KEY = get_setting("SECRET_KEY")
 DEBUG = get_setting("DEBUG").lower() in {"1", "true"}
@@ -72,9 +69,11 @@ LOGGING = {
             "class": "logging.StreamHandler",
         },
     },
-    "root": {
-        "handlers": ["console"],
-        "level": "WARNING",
+    "loggers": {
+        "trcustoms": {
+            "handlers": ["console"],
+            "level": "DEBUG",
+        },
     },
 }
 

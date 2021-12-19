@@ -9,6 +9,9 @@ class User(AbstractUser):
         trle = "trle", "trle.net"
         trcustoms = "trcustoms", "trcustoms"
 
+    trle_reviewer_id = models.CharField(max_length=32, blank=True, null=True)
+    trle_author_id = models.CharField(max_length=32, blank=True, null=True)
+
     picture = models.ImageField(
         blank=True, null=True, upload_to=RandomFileName("avatars")
     )

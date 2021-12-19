@@ -1,5 +1,3 @@
-from typing import Optional
-
 from django.db.models import F, OuterRef, Subquery
 from django.shortcuts import get_list_or_404, get_object_or_404
 from rest_framework import filters, mixins, viewsets
@@ -24,7 +22,7 @@ from trcustoms.serializers import (
 from trcustoms.utils import stream_file_field
 
 
-def _parse_ids(source: Optional[str]) -> list[int]:
+def _parse_ids(source: str | None) -> list[int]:
     if not source:
         return []
     try:
@@ -84,7 +82,12 @@ class LevelViewSet(
         "last_updated",
         "last_file_size",
     ]
-    search_fields = ["name", "authors__name", "authors__user__username"]
+    search_fields = [
+        "name",
+        "authors__username",
+        "authors__first_name",
+        "authors__last_name",
+    ]
 
     def get_queryset(self):
         queryset = self.queryset

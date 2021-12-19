@@ -1,11 +1,9 @@
-from typing import Optional
-
 from rest_framework import exceptions
 
 from trcustoms.models import User
 
 
-def user_authentication_rule(user: Optional[User]) -> None:
+def user_authentication_rule(user: User | None) -> None:
     if not user:
         raise exceptions.AuthenticationFailed(
             "Invalid username or password.",
