@@ -9,6 +9,7 @@ import Profile from "src/components/Profile";
 import ProfileEdit from "src/components/ProfileEdit";
 import Register from "src/components/Register";
 import TagList from "src/components/TagList";
+import UserList from "src/components/UserList";
 import { UserContextProvider } from "src/shared/contexts/UserContext";
 
 function App() {
@@ -20,6 +21,7 @@ function App() {
           <Route exact path="/" component={LevelList} />
           <Route exact path="/tags" component={TagList} />
           <Route exact path="/genres" component={GenreList} />
+          <Route exact path="/users" component={UserList} />
           <Route exact path="/login" component={Login} />
           <Route exact path="/logout" component={Logout} />
           <Route exact path="/register" component={Register} />

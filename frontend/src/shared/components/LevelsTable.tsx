@@ -9,6 +9,7 @@ import Loader from "src/shared/components/Loader";
 import SortLink from "src/shared/components/SortLink";
 import { formatDate } from "src/shared/utils";
 import { formatFileSize } from "src/shared/utils";
+import { EMPTY_INPUT_PLACEHOLDER } from "src/shared/utils";
 
 const LevelsTable = ({ query }: { query: ILevelQuery | null }) => {
   const levelsQuery = useQuery<ILevelList, Error>(["levels", query], async () =>
@@ -68,7 +69,7 @@ const LevelsTable = ({ query }: { query: ILevelQuery | null }) => {
               >
                 {(level.authors.length > 1
                   ? "Multiple authors"
-                  : level.authors[0]?.username) || "N/A"}
+                  : level.authors[0]?.username) || EMPTY_INPUT_PLACEHOLDER}
               </td>
               <td className="LevelsTable--engine">{level.engine.name}</td>
               <td className="LevelsTable--created">
@@ -89,7 +90,7 @@ const LevelsTable = ({ query }: { query: ILevelQuery | null }) => {
                     Download
                   </Link>
                 ) : (
-                  <>N/A</>
+                  <>{EMPTY_INPUT_PLACEHOLDER}</>
                 )}
               </td>
             </tr>

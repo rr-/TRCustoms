@@ -1,5 +1,10 @@
 import { fetchJSON, fetchMultipart } from "src/shared/client";
 import { API_URL } from "src/shared/constants";
+import { IGenericQuery } from "src/shared/types";
+import { IPagedResponse } from "src/shared/types";
+import { filterFalsyObjectValues } from "src/shared/utils";
+
+interface IUserQuery extends IGenericQuery {}
 
 interface IUser {
   id: number;
@@ -13,6 +18,8 @@ interface IUser {
   last_login: string;
   is_active: boolean;
 }
+
+interface IUserList extends IPagedResponse<IUser> {}
 
 const getCurrentUser = async (): Promise<IUser | null> => {
   let data;
@@ -116,6 +123,17 @@ const register = async ({
   });
 };
 
+const getUsers = async (query: IUserQuery): Promise<IUserList | null> => {
+  return await fetchJSON<IUserList>(`${API_URL}/users/`, {
+    query: filterFalsyObjectValues({
+      page: query.page ? `${query.page}` : null,
+      sort: query.sort,
+      search: query.search,
+    }),
+    method: "GET",
+  });
+};
+
 const UserService = {
   register,
   update,
@@ -123,7 +141,8 @@ const UserService = {
   getCurrentUser,
   getUserById,
   getUserByUsername,
+  getUsers,
 };
 
-export type { IUser };
+export type { IUser, IUserList, IUserQuery };
 export { UserService };

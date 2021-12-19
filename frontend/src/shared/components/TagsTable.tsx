@@ -32,7 +32,7 @@ const TagsTable = ({ query }: { query: ITagQuery | null }) => {
             <th className="TagsTable--name">
               <SortLink sort={"name"}>Name</SortLink>
             </th>
-            <th className="TagsTable--name">
+            <th className="TagsTable--level-count">
               <SortLink sort={"level_count"}>Usages</SortLink>
             </th>
             <th className="TagsTable--created">
@@ -47,7 +47,7 @@ const TagsTable = ({ query }: { query: ITagQuery | null }) => {
           {tagsQuery.data.results.map((tag) => (
             <tr key={tag.id}>
               <td className="TagsTable--name">{tag.name}</td>
-              <td className="TagsTable--genres">{tag.level_count}</td>
+              <td className="TagsTable--level-count">{tag.level_count}</td>
               <td className="TagsTable--created">{formatDate(tag.created)}</td>
               <td className="TagsTable--updated">
                 {formatDate(tag.last_updated)}

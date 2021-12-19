@@ -2,6 +2,7 @@ import { IUser } from "src/services/user.service";
 import { fetchJSON } from "src/shared/client";
 import { API_URL } from "src/shared/constants";
 import { IPagedResponse } from "src/shared/types";
+import { IGenericQuery } from "src/shared/types";
 import { filterFalsyObjectValues } from "src/shared/utils";
 
 interface ILevelFilterQuery {}
@@ -57,12 +58,6 @@ interface ILevel {
   last_file_id: number | null;
   last_file_created: string | null;
   last_file_size: number | null;
-}
-
-interface IGenericQuery {
-  page: number | null;
-  sort: string | null;
-  search: string | null;
 }
 
 interface ILevelQuery extends IGenericQuery {
@@ -160,7 +155,6 @@ export type {
   ITag,
   ITagList,
   ITagQuery,
-  IGenericQuery,
 };
 
 export { LevelService };

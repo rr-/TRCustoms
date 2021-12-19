@@ -2,6 +2,7 @@ import "./NavBar.css";
 import { useContext } from "react";
 import { Link } from "react-router-dom";
 import { NavLink } from "react-router-dom";
+import { PermissionGuard } from "src/shared/components/PermissionGuard";
 import UserPicture from "src/shared/components/UserPicture";
 import { UserContext } from "src/shared/contexts/UserContext";
 
@@ -70,6 +71,13 @@ const NavBar: React.FunctionComponent<INavBar> = () => {
                   Genres
                 </NavLink>
               </li>
+              <PermissionGuard require="canListUsers">
+                <li>
+                  <NavLink exact to={"/users"}>
+                    Users
+                  </NavLink>
+                </li>
+              </PermissionGuard>
             </ul>
           </nav>
         </div>

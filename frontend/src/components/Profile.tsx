@@ -6,7 +6,7 @@ import { Link } from "react-router-dom";
 import { IUser } from "src/services/user.service";
 import { UserService } from "src/services/user.service";
 import Loader from "src/shared/components/Loader";
-import PermissionGuard from "src/shared/components/PermissionGuard";
+import { PermissionGuard } from "src/shared/components/PermissionGuard";
 import UserPicture from "src/shared/components/UserPicture";
 import { formatDateTime } from "src/shared/utils";
 
