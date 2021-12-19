@@ -1,14 +1,6 @@
-from typing import Optional
-
 from rest_framework import serializers
 
-from trcustoms.models import (
-    Level,
-    LevelAuthor,
-    LevelEngine,
-    LevelGenre,
-    LevelTag,
-)
+from trcustoms.models import Level, LevelEngine, LevelGenre, LevelTag, User
 from trcustoms.serializers.users import UserSerializer
 
 
@@ -32,8 +24,8 @@ class LevelEngineSerializer(serializers.ModelSerializer):
 
 class LevelAuthorSerializer(serializers.ModelSerializer):
     class Meta:
-        model = LevelAuthor
-        fields = ["id", "name"]
+        model = User
+        fields = ["id", "username", "first_name", "last_name"]
 
 
 class LevelSerializer(serializers.ModelSerializer):
@@ -46,17 +38,17 @@ class LevelSerializer(serializers.ModelSerializer):
     last_file_created = serializers.SerializerMethodField(read_only=True)
     last_file_size = serializers.SerializerMethodField(read_only=True)
 
-    def get_last_file_id(self, instance: Level) -> Optional[str]:
+    def get_last_file_id(self, instance: Level) -> str | None:
         """Get last file ID from the LevelViewSet's annotated queryset."""
         return instance.last_file_id
 
-    def get_last_file_created(self, instance: Level) -> Optional[int]:
+    def get_last_file_created(self, instance: Level) -> int | None:
         """Get last file creation date from the LevelViewSet's annotated
         queryset.
         """
         return instance.last_file_created
 
-    def get_last_file_size(self, instance: Level) -> Optional[int]:
+    def get_last_file_size(self, instance: Level) -> int | None:
         """Get last file size date from the LevelViewSet's annotated
         queryset.
         """
