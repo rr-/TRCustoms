@@ -1,3 +1,4 @@
+import "./UsersTable.css";
 import { useQuery } from "react-query";
 import { Link } from "react-router-dom";
 import { IUser } from "src/services/user.service";
@@ -57,7 +58,14 @@ const UsersTable = ({ query }: { query: IUserQuery | null }) => {
 
   const itemKey = (user) => `${user.id}`;
 
-  return <DataTable query={usersQuery} columns={columns} itemKey={itemKey} />;
+  return (
+    <DataTable
+      className="UsersTable"
+      query={usersQuery}
+      columns={columns}
+      itemKey={itemKey}
+    />
+  );
 };
 
 export default UsersTable;

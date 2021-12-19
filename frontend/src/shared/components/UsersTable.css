@@ -1,0 +1,12 @@
+.UsersTable--username {
+  width: 30%;
+}
+.UsersTable--first-name,
+.UsersTable--last-name {
+  width: 20%;
+}
+.UsersTable--created,
+.UsersTable--updated,
+.UsersTable--authored-level-count {
+  width: 10%;
+}

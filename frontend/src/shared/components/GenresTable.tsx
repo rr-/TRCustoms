@@ -1,3 +1,4 @@
+import "./GenresTable.css";
 import { useQuery } from "react-query";
 import { Link } from "react-router-dom";
 import { IGenre } from "src/services/level.service";
@@ -44,7 +45,14 @@ const GenresTable = ({ query }: { query: IGenreQuery | null }) => {
 
   const itemKey = (genre) => `${genre.id}`;
 
-  return <DataTable query={genresQuery} columns={columns} itemKey={itemKey} />;
+  return (
+    <DataTable
+      className="GenresTable"
+      query={genresQuery}
+      columns={columns}
+      itemKey={itemKey}
+    />
+  );
 };
 
 export default GenresTable;

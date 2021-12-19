@@ -2,13 +2,14 @@
   display: grid;
   grid-template-areas:
     "search search"
-    "results sidebar"
-    "pager sidebar";
-  grid-template-columns: 4fr 1fr;
-  gap: 0 1rem;
+    "results sidebar ";
+  grid-template-columns: 6fr min-content;
+  grid-template-rows: min-content 1fr;
+  gap: 0 2rem;
 }
 #LevelList--sidebar {
   grid-area: sidebar;
+  white-space: nowrap;
 }
 #LevelList--results {
   width: 100%;
@@ -16,7 +17,4 @@
 }
 #LevelList--search {
   grid-area: search;
-}
-#LevelList--pager {
-  grid-area: pager;
 }

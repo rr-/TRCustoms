@@ -94,7 +94,14 @@ const LevelsTable = ({ query }: { query: ILevelQuery | null }) => {
 
   const itemKey = (level) => `${level.id}`;
 
-  return <DataTable query={levelsQuery} columns={columns} itemKey={itemKey} />;
+  return (
+    <DataTable
+      className="LevelsTable"
+      query={levelsQuery}
+      columns={columns}
+      itemKey={itemKey}
+    />
+  );
 };
 
 export default LevelsTable;

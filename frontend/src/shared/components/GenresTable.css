@@ -1,0 +1,8 @@
+.GenresTable--name {
+  width: 40%;
+}
+.GenresTable--level-count,
+.GenresTable--created,
+.GenresTable--updated {
+  width: 20%;
+}

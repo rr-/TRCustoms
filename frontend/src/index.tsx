@@ -6,6 +6,7 @@ import ReactDOM from "react-dom";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { BrowserRouter } from "react-router-dom";
 import ScrollToTop from "src/shared/ScrollToTop";
+import { ThemeManager } from "src/shared/components/ThemeManager";
 
 const queryClient = new QueryClient({
   defaultOptions: { queries: { retry: false } },
@@ -13,6 +14,7 @@ const queryClient = new QueryClient({
 
 ReactDOM.render(
   <React.StrictMode>
+    <ThemeManager />
     <BrowserRouter>
       <QueryClientProvider client={queryClient} contextSharing={true}>
         <ScrollToTop>
