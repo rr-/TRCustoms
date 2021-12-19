@@ -52,7 +52,7 @@ const Profile: React.FunctionComponent<IProfile> = () => {
           Last seen: {formatDateTime(user.last_login) || "never"}
           <PermissionGuard require={"canEditUsers"} entity={user}>
             <br />
-            <Link to={`/profile/${user.id}/edit`}>Edit</Link>
+            <Link to={`/users/${user.id}/edit`}>Edit</Link>
           </PermissionGuard>
         </p>
       </aside>

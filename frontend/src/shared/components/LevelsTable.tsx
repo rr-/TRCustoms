@@ -47,7 +47,7 @@ const LevelsTable = ({ query }: { query: ILevelQuery | null }) => {
         if (!user?.username) {
           return EMPTY_INPUT_PLACEHOLDER;
         }
-        return <Link to={`/profile/${user.id}`}>{user.username}</Link>;
+        return <Link to={`/users/${user.id}`}>{user.username}</Link>;
       },
     },
     {

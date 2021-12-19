@@ -20,7 +20,7 @@ const UsersTable = ({ query }: { query: IUserQuery | null }) => {
       sortKey: "username",
       label: "User name",
       itemElement: (user) => (
-        <Link to={`/profile/${user.id}`}>{user.username}</Link>
+        <Link to={`/users/${user.id}`}>{user.username}</Link>
       ),
     },
     {

@@ -27,7 +27,7 @@ const NavBar: React.FunctionComponent<INavBar> = () => {
                 <>
                   <UserPicture className="PrimaryNavBar--userPic" user={user} />
                   <p>
-                    <Link to={`/profile/${user.id}`}>{user.username}</Link>
+                    <Link to={`/users/${user.id}`}>{user.username}</Link>
                   </p>
                   <ul>
                     <li>
@@ -62,20 +62,14 @@ const NavBar: React.FunctionComponent<INavBar> = () => {
                 </NavLink>
               </li>
               <li>
-                <NavLink exact to={"/tags"}>
-                  Tags
-                </NavLink>
+                <NavLink to={"/tags"}>Tags</NavLink>
               </li>
               <li>
-                <NavLink exact to={"/genres"}>
-                  Genres
-                </NavLink>
+                <NavLink to={"/genres"}>Genres</NavLink>
               </li>
               <PermissionGuard require="canListUsers">
                 <li>
-                  <NavLink exact to={"/users"}>
-                    Users
-                  </NavLink>
+                  <NavLink to={"/users"}>Users</NavLink>
                 </li>
               </PermissionGuard>
             </ul>
