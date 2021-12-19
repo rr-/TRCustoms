@@ -7,6 +7,7 @@ import { ILevelQuery } from "src/services/level.service";
 import { LevelService } from "src/services/level.service";
 import Loader from "src/shared/components/Loader";
 import SortLink from "src/shared/components/SortLink";
+import { DISABLE_PAGING } from "src/shared/types";
 import { formatDate } from "src/shared/utils";
 import { formatFileSize } from "src/shared/utils";
 import { EMPTY_INPUT_PLACEHOLDER } from "src/shared/utils";
@@ -113,9 +114,11 @@ const LevelsTable = ({ query }: { query: ILevelQuery | null }) => {
           ))}
         </tbody>
       </table>
-      <div id="LevelList--pager">
-        <Pager pagedResponse={levelsQuery.data} />
-      </div>
+      {query.page !== DISABLE_PAGING && (
+        <div id="LevelList--pager">
+          <Pager pagedResponse={levelsQuery.data} />
+        </div>
+      )}
     </>
   );
 };

@@ -6,6 +6,7 @@ import { IUserQuery } from "src/services/user.service";
 import { UserService } from "src/services/user.service";
 import Loader from "src/shared/components/Loader";
 import SortLink from "src/shared/components/SortLink";
+import { DISABLE_PAGING } from "src/shared/types";
 import { formatDate } from "src/shared/utils";
 import { EMPTY_INPUT_PLACEHOLDER } from "src/shared/utils";
 
@@ -76,9 +77,11 @@ const UsersTable = ({ query }: { query: IUserQuery | null }) => {
           ))}
         </tbody>
       </table>
-      <div id="UsersTable--pager">
-        <Pager pagedResponse={usersQuery.data} />
-      </div>
+      {query.page !== DISABLE_PAGING && (
+        <div id="UsersTable--pager">
+          <Pager pagedResponse={usersQuery.data} />
+        </div>
+      )}
     </>
   );
 };

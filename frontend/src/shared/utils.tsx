@@ -1,4 +1,16 @@
+import { IGenericQuery } from "src/shared/types";
+import { DISABLE_PAGING } from "src/shared/types";
+
 const EMPTY_INPUT_PLACEHOLDER = "-";
+
+function getGenericQuery(query: IGenericQuery): { [key: string]: string } {
+  return filterFalsyObjectValues({
+    page: query.page && query.page !== DISABLE_PAGING ? `${query.page}` : null,
+    sort: query.sort,
+    search: query.search,
+    disable_paging: query.page === DISABLE_PAGING ? "1" : null,
+  });
+}
 
 const validateRequired = (value: string): string | null => {
   if (!value) {
@@ -104,5 +116,6 @@ export {
   formatDateTime,
   formatFileSize,
   filterFalsyObjectValues,
+  getGenericQuery,
   EMPTY_INPUT_PLACEHOLDER,
 };

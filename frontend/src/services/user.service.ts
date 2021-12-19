@@ -2,7 +2,7 @@ import { fetchJSON, fetchMultipart } from "src/shared/client";
 import { API_URL } from "src/shared/constants";
 import { IGenericQuery } from "src/shared/types";
 import { IPagedResponse } from "src/shared/types";
-import { filterFalsyObjectValues } from "src/shared/utils";
+import { getGenericQuery } from "src/shared/utils";
 
 interface IUserQuery extends IGenericQuery {}
 
@@ -126,11 +126,7 @@ const register = async ({
 
 const getUsers = async (query: IUserQuery): Promise<IUserList | null> => {
   return await fetchJSON<IUserList>(`${API_URL}/users/`, {
-    query: filterFalsyObjectValues({
-      page: query.page ? `${query.page}` : null,
-      sort: query.sort,
-      search: query.search,
-    }),
+    query: getGenericQuery(query),
     method: "GET",
   });
 };

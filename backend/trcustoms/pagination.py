@@ -3,6 +3,8 @@ from rest_framework.response import Response
 
 
 class CustomPagination(pagination.PageNumberPagination):
+    paging_enabled = True
+
     def get_paginated_response(self, data):
         return Response(
             {
@@ -18,3 +20,9 @@ class CustomPagination(pagination.PageNumberPagination):
                 "results": data,
             }
         )
+
+    def get_page_size(self, request):
+        if not self.paging_enabled:
+            return 10000
+
+        return self.page_size
