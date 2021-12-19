@@ -21,7 +21,9 @@ interface ILevelGenre {
 
 interface ILevelAuthor {
   id: number;
-  name: string;
+  username: string;
+  first_name: string;
+  last_name: string;
 }
 
 interface ILevel {

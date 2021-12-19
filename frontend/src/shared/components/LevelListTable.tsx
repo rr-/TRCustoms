@@ -25,7 +25,7 @@ const LevelListTable = ({ query }: { query: ILevelQuery | null }) => {
 
   return (
     <>
-      <table className="LevelListTable">
+      <table className="LevelListTable borderless">
         <thead>
           <tr>
             <th className="LevelListTable--name">
@@ -63,13 +63,14 @@ const LevelListTable = ({ query }: { query: ILevelQuery | null }) => {
               <td
                 className="LevelListTable--author"
                 title={
-                  level.authors.length > 1 &&
-                  level.authors.map((author) => author.name).join(", ")
+                  level.authors.length > 1
+                    ? level.authors.map((author) => author.username).join(", ")
+                    : null
                 }
               >
                 {(level.authors.length > 1
                   ? "Multiple authors"
-                  : level.authors[0]?.name) || "N/A"}
+                  : level.authors[0]?.username) || "N/A"}
               </td>
               <td className="LevelListTable--engine">{level.engine.name}</td>
               <td className="LevelListTable--created">
