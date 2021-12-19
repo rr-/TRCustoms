@@ -14,6 +14,7 @@ interface IPagedResponse<T> {
   next: string | null;
   previous: string | null;
   results: T[];
+  paging_enabled: boolean;
 }
 
 export type { IPagedResponse, IGenericQuery };

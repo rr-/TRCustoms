@@ -18,6 +18,7 @@ class CustomPagination(pagination.PageNumberPagination):
                 "next": self.get_next_link(),
                 "previous": self.get_previous_link(),
                 "results": data,
+                "paging_enabled": self.paging_enabled,
             }
         )
 
