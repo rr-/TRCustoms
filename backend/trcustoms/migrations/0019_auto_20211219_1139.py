@@ -14,6 +14,17 @@ class Migration(migrations.Migration):
             name="levelengine",
             options={"ordering": ["name"]},
         ),
+        migrations.AlterModelOptions(
+            name="leveltag",
+            options={"ordering": ["name"]},
+        ),
+        migrations.AlterModelOptions(
+            name="levelgenre",
+            options={
+                "ordering": ["name"],
+                "verbose_name_plural": "Level genres",
+            },
+        ),
         migrations.RemoveField(
             model_name="user",
             name="trle_id",

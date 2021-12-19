@@ -1,0 +1,12 @@
+.SearchBar {
+  display: flex;
+  align-items: flex-end;
+  gap: 1rem;
+}
+.SearchBar .FormField label {
+  display: inline;
+  margin-right: 1rem;
+}
+.SearchBar .FormField button {
+  margin: 0;
+}

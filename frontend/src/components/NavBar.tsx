@@ -1,6 +1,7 @@
 import "./NavBar.css";
 import { useContext } from "react";
 import { Link } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import UserPicture from "src/shared/components/UserPicture";
 import { UserContext } from "src/shared/contexts/UserContext";
 
@@ -55,7 +56,19 @@ const NavBar: React.FunctionComponent<INavBar> = () => {
           <nav>
             <ul>
               <li>
-                <Link to={"/"}>Level listing</Link>
+                <NavLink exact to={"/"}>
+                  Levels
+                </NavLink>
+              </li>
+              <li>
+                <NavLink exact to={"/tags"}>
+                  Tags
+                </NavLink>
+              </li>
+              <li>
+                <NavLink exact to={"/genres"}>
+                  Genres
+                </NavLink>
               </li>
             </ul>
           </nav>

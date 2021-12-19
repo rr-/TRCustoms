@@ -11,6 +11,7 @@ from rest_framework_simplejwt.views import (
 from trcustoms.views import (
     LevelEngineViewSet,
     LevelFileViewSet,
+    LevelFilterViewSet,
     LevelGenreViewSet,
     LevelTagViewSet,
     LevelViewSet,
@@ -20,6 +21,7 @@ from trcustoms.views import (
 router = DefaultRouter()
 router.register(r"users", UserViewSet)
 router.register(r"levels", LevelViewSet)
+router.register(r"level_filters", LevelFilterViewSet, basename="level_filters")
 router.register(r"level_tags", LevelTagViewSet)
 router.register(r"level_genres", LevelGenreViewSet)
 router.register(r"level_engines", LevelEngineViewSet)

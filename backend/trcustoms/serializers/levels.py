@@ -1,25 +1,10 @@
 from rest_framework import serializers
 
-from trcustoms.models import Level, LevelEngine, LevelGenre, LevelTag, User
+from trcustoms.models import Level, User
+from trcustoms.serializers.level_engines import LevelEngineLiteSerializer
+from trcustoms.serializers.level_genres import LevelGenreLiteSerializer
+from trcustoms.serializers.level_tags import LevelTagLiteSerializer
 from trcustoms.serializers.users import UserSerializer
-
-
-class LevelGenreSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = LevelGenre
-        fields = ["id", "name"]
-
-
-class LevelTagSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = LevelTag
-        fields = ["id", "name"]
-
-
-class LevelEngineSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = LevelEngine
-        fields = ["id", "name"]
 
 
 class LevelAuthorSerializer(serializers.ModelSerializer):
@@ -29,9 +14,9 @@ class LevelAuthorSerializer(serializers.ModelSerializer):
 
 
 class LevelSerializer(serializers.ModelSerializer):
-    genres = LevelGenreSerializer(read_only=True, many=True)
-    tags = LevelTagSerializer(read_only=True, many=True)
-    engine = LevelEngineSerializer(read_only=True)
+    genres = LevelGenreLiteSerializer(read_only=True, many=True)
+    tags = LevelTagLiteSerializer(read_only=True, many=True)
+    engine = LevelEngineLiteSerializer(read_only=True)
     uploader = UserSerializer(read_only=True)
     authors = LevelAuthorSerializer(read_only=True, many=True)
     last_file_id = serializers.SerializerMethodField(read_only=True)

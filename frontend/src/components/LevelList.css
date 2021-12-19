@@ -16,13 +16,6 @@
 }
 #LevelList--search {
   grid-area: search;
-  display: flex;
-  align-items: flex-end;
-  gap: 1rem;
-}
-#LevelList--search label {
-  display: inline;
-  margin-right: 1rem;
 }
 #LevelList--pager {
   grid-area: pager;
