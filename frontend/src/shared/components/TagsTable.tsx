@@ -1,4 +1,5 @@
 import { useQuery } from "react-query";
+import { Link } from "react-router-dom";
 import { ITag } from "src/services/level.service";
 import { ITagList } from "src/services/level.service";
 import { ITagQuery } from "src/services/level.service";
@@ -17,7 +18,7 @@ const TagsTable = ({ query }: { query: ITagQuery | null }) => {
       name: "name",
       sortKey: "name",
       label: "Name",
-      itemElement: (tag) => tag.name,
+      itemElement: (tag) => <Link to={`/?tags=${tag.id}`}>{tag.name}</Link>,
     },
     {
       name: "level-count",

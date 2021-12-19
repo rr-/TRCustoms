@@ -1,4 +1,5 @@
 import { useQuery } from "react-query";
+import { Link } from "react-router-dom";
 import { IGenre } from "src/services/level.service";
 import { IGenreList } from "src/services/level.service";
 import { IGenreQuery } from "src/services/level.service";
@@ -17,7 +18,9 @@ const GenresTable = ({ query }: { query: IGenreQuery | null }) => {
       name: "name",
       sortKey: "name",
       label: "Name",
-      itemElement: (genre) => genre.name,
+      itemElement: (genre) => (
+        <Link to={`/?genres=${genre.id}`}>{genre.name}</Link>
+      ),
     },
     {
       name: "level-count",
