@@ -1,4 +1,3 @@
-import { IUser } from "src/services/user.service";
 import { fetchJSON } from "src/shared/client";
 import { API_URL } from "src/shared/constants";
 import { IPagedResponse } from "src/shared/types";
@@ -37,12 +36,14 @@ interface IEngine {
   last_updated: string;
 }
 
-interface ILevelAuthor {
+interface ILevelUser {
   id: number;
   username: string;
   first_name: string;
   last_name: string;
 }
+interface ILevelAuthor extends ILevelUser {}
+interface ILevelUploader extends ILevelUser {}
 
 interface ILevel {
   id: number | null;
@@ -52,7 +53,7 @@ interface ILevel {
   tags: ITag[];
   engine: IEngine;
   authors: ILevelAuthor[];
-  uploader: IUser | null;
+  uploader: ILevelUploader | null;
   created: string;
   last_updated: string;
   last_file_id: number | null;
@@ -155,6 +156,8 @@ export type {
   ITag,
   ITagList,
   ITagQuery,
+  ILevelAuthor,
+  ILevelUploader,
 };
 
 export { LevelService };

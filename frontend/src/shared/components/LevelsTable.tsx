@@ -2,7 +2,7 @@ import "./LevelsTable.css";
 import { useQuery } from "react-query";
 import { Link } from "react-router-dom";
 import Pager from "src/components/Pager";
-import { ILevelList } from "src/services/level.service";
+import { ILevelList, ILevelAuthor } from "src/services/level.service";
 import { ILevelQuery } from "src/services/level.service";
 import { LevelService } from "src/services/level.service";
 import Loader from "src/shared/components/Loader";
@@ -10,6 +10,24 @@ import SortLink from "src/shared/components/SortLink";
 import { formatDate } from "src/shared/utils";
 import { formatFileSize } from "src/shared/utils";
 import { EMPTY_INPUT_PLACEHOLDER } from "src/shared/utils";
+
+function getAuthorsTooltip(authors: ILevelAuthor[]): string | null {
+  if (authors.length > 1) {
+    return authors.map((author) => author.username).join(", ");
+  }
+  return null;
+}
+
+function renderAuthors(authors: ILevelAuthor[]): React.ReactElement {
+  if (authors.length > 1) {
+    return <>Multiple authors</>;
+  }
+  let user = authors[0];
+  if (!user?.username) {
+    return <>{EMPTY_INPUT_PLACEHOLDER}</>;
+  }
+  return <Link to={`/profile/${user.id}`}>{user.username}</Link>;
+}
 
 const LevelsTable = ({ query }: { query: ILevelQuery | null }) => {
   const levelsQuery = useQuery<ILevelList, Error>(["levels", query], async () =>
@@ -61,15 +79,9 @@ const LevelsTable = ({ query }: { query: ILevelQuery | null }) => {
               </td>
               <td
                 className="LevelsTable--author"
-                title={
-                  level.authors.length > 1
-                    ? level.authors.map((author) => author.username).join(", ")
-                    : null
-                }
+                title={getAuthorsTooltip(level.authors)}
               >
-                {(level.authors.length > 1
-                  ? "Multiple authors"
-                  : level.authors[0]?.username) || EMPTY_INPUT_PLACEHOLDER}
+                {renderAuthors(level.authors)}
               </td>
               <td className="LevelsTable--engine">{level.engine.name}</td>
               <td className="LevelsTable--created">
