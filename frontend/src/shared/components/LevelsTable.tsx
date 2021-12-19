@@ -42,6 +42,10 @@ const LevelsTable = ({ query }: { query: ILevelQuery | null }) => {
     return <Loader />;
   }
 
+  if (!levelsQuery.data.results.length) {
+    return <p>There are no levels to show.</p>;
+  }
+
   return (
     <>
       <table className="LevelsTable borderless">

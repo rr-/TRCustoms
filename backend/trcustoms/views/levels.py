@@ -79,6 +79,9 @@ class LevelViewSet(
 
     def get_queryset(self):
         queryset = self.queryset
+        if author_ids := _parse_ids(self.request.query_params.get("authors")):
+            for author_id in author_ids:
+                queryset = queryset.filter(authors__id=author_id)
         if tag_ids := _parse_ids(self.request.query_params.get("tags")):
             for tag_id in tag_ids:
                 queryset = queryset.filter(tags__id=tag_id)
