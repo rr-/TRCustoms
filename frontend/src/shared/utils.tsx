@@ -1,3 +1,5 @@
+const EMPTY_INPUT_PLACEHOLDER = "N/A";
+
 const validateRequired = (value: string): string | null => {
   if (!value) {
     return "Required";
@@ -54,25 +56,25 @@ const makeSentence = (input: string): string => {
   return input[0].toUpperCase() + input.substr(1).replace(/\.$/, "") + ".";
 };
 
-const formatDate = (input: string | null): string | null => {
+const formatDate = (input: string | null): string => {
   if (!input) {
-    return null;
+    return EMPTY_INPUT_PLACEHOLDER;
   }
   const date = new Date(input);
   return date.toISOString().slice(0, 10);
 };
 
-const formatDateTime = (input: string | null): string | null => {
+const formatDateTime = (input: string | null): string => {
   if (!input) {
-    return null;
+    return EMPTY_INPUT_PLACEHOLDER;
   }
   const date = new Date(input);
   return date.toISOString().slice(0, 19).replace("T", " ");
 };
 
-const formatFileSize = (input: number | null): string | null => {
+const formatFileSize = (input: number | null): string => {
   if (!input) {
-    return null;
+    return EMPTY_INPUT_PLACEHOLDER;
   }
   const suffixes = ["B", "KB", "MB", "GB"];
   let suffix = suffixes.shift();

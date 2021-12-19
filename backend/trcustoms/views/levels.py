@@ -1,24 +1,12 @@
 from django.db.models import F, OuterRef, Subquery
-from django.shortcuts import get_list_or_404, get_object_or_404
+from django.shortcuts import get_list_or_404
 from rest_framework import filters, mixins, viewsets
 from rest_framework.decorators import action
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 
-from trcustoms.models import (
-    Level,
-    LevelEngine,
-    LevelFile,
-    LevelGenre,
-    LevelImage,
-    LevelTag,
-)
-from trcustoms.serializers import (
-    LevelEngineSerializer,
-    LevelGenreSerializer,
-    LevelSerializer,
-    LevelTagSerializer,
-)
+from trcustoms.models import Level, LevelFile, LevelImage
+from trcustoms.serializers import LevelSerializer
 from trcustoms.utils import stream_file_field
 
 
@@ -106,39 +94,3 @@ class LevelViewSet(
         image = get_list_or_404(LevelImage, level_id=pk, position=position)[0]
         parts = [f"{pk}", image.level.name, f"screenshot{position}"]
         return stream_file_field(image.image, parts, as_attachment=False)
-
-
-class LevelTagViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
-    permission_classes = [AllowAny]
-    queryset = LevelTag.objects.all()
-    serializer_class = LevelTagSerializer
-    pagination_class = None
-
-
-class LevelGenreViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
-    permission_classes = [AllowAny]
-    queryset = LevelGenre.objects.all()
-    serializer_class = LevelGenreSerializer
-    pagination_class = None
-
-
-class LevelEngineViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
-    permission_classes = [AllowAny]
-    queryset = LevelEngine.objects.all()
-    serializer_class = LevelEngineSerializer
-    pagination_class = None
-
-
-class LevelFileViewSet(viewsets.GenericViewSet):
-    permission_classes = [AllowAny]
-    queryset = LevelFile.objects.all()
-    pagination_class = None
-
-    @action(detail=True)
-    def download(self, request, pk: int) -> Response:
-        file = get_object_or_404(LevelFile, pk=pk)
-        parts = [f"{pk}", file.level.name]
-        if file.version > 1:
-            parts.append(f"V{file.version}")
-        parts.extend(file.level.authors.values_list("name", flat=True))
-        return stream_file_field(file.file, parts, as_attachment=True)

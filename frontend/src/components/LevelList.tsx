@@ -4,13 +4,13 @@ import { Form } from "formik";
 import { useEffect } from "react";
 import { useCallback } from "react";
 import { useState } from "react";
-import { useHistory } from "react-router-dom";
-import { useLocation } from "react-router-dom";
-import LevelEnginesCheckboxes from "src/components/LevelEnginesCheckboxes";
-import LevelGenresCheckboxes from "src/components/LevelGenresCheckboxes";
-import LevelTagsCheckboxes from "src/components/LevelTagsCheckboxes";
+import EnginesCheckboxes from "src/components/EnginesCheckboxes";
+import GenresCheckboxes from "src/components/GenresCheckboxes";
+import TagsCheckboxes from "src/components/TagsCheckboxes";
 import { ILevelQuery } from "src/services/level.service";
-import LevelListTable from "src/shared/components/LevelListTable";
+import LevelsTable from "src/shared/components/LevelsTable";
+import { QueryPersister } from "src/shared/components/QueryPersister";
+import { SearchBar } from "src/shared/components/SearchBar";
 import TextFormField from "src/shared/components/TextFormField";
 import { filterFalsyObjectValues } from "src/shared/utils";
 
@@ -48,7 +48,7 @@ const serializeQuery = (query: ILevelQuery) => {
   return "?" + new URLSearchParams(qp).toString();
 };
 
-const getFormikValues = (query: ILevelQuery) => {
+const convertQueryToFormikValues = (query: ILevelQuery) => {
   return {
     search: query.search,
     tags: query.tags,
@@ -58,40 +58,21 @@ const getFormikValues = (query: ILevelQuery) => {
 };
 
 const LevelList: React.FunctionComponent = () => {
-  const location = useLocation();
-  const history = useHistory();
   const [query, setQuery] = useState<ILevelQuery>(
     deserializeQuery(window.location.href)
   );
-  const [formikValues, setFormikValues] = useState<any>(getFormikValues(query));
+  const [formikValues, setFormikValues] = useState<any>(
+    convertQueryToFormikValues(query)
+  );
 
-  useEffect(() => {
-    // synchronize query changes to URL
-    if (
-      JSON.stringify(deserializeQuery(window.location.href)) !==
-      JSON.stringify(query)
-    ) {
-      history.push(serializeQuery(query));
-    }
-    setFormikValues(query);
-  }, [query, history]);
-
-  useEffect(() => {
-    // synchronize URL changes to query
-    if (
-      JSON.stringify(deserializeQuery(window.location.href)) !==
-      JSON.stringify(query)
-    ) {
-      setQuery(deserializeQuery(window.location.href));
-    }
-  }, [location, query]);
+  useEffect(() => setFormikValues(convertQueryToFormikValues(query)), [query]);
 
   const searchClick = useCallback(
     // push changes to query on Formik submit
     async (values: any) => {
       setQuery({
         ...query,
-        page: 1,
+        page: null,
         search: values.search,
         tags: values.tags,
         genres: values.genres,
@@ -111,6 +92,12 @@ const LevelList: React.FunctionComponent = () => {
 
   return (
     <div id="LevelList">
+      <QueryPersister
+        serializeQuery={serializeQuery}
+        deserializeQuery={deserializeQuery}
+        query={query}
+        setQuery={setQuery}
+      />
       <Formik
         enableReinitialize={true}
         initialValues={formikValues}
@@ -118,7 +105,7 @@ const LevelList: React.FunctionComponent = () => {
       >
         {({ resetForm }: { resetForm: any }) => (
           <Form id="LevelList--container">
-            <div id="LevelList--search">
+            <SearchBar id="LevelList--search">
               <TextFormField label="Search" name="search" />
 
               <div className="FormField">
@@ -130,16 +117,16 @@ const LevelList: React.FunctionComponent = () => {
                   Reset
                 </button>
               </div>
-            </div>
+            </SearchBar>
 
             <aside id="LevelList--sidebar">
-              <LevelTagsCheckboxes />
-              <LevelGenresCheckboxes />
-              <LevelEnginesCheckboxes />
+              <TagsCheckboxes />
+              <GenresCheckboxes />
+              <EnginesCheckboxes />
             </aside>
 
             <div id="LevelList--results">
-              <LevelListTable query={query} />
+              <LevelsTable query={query} />
             </div>
           </Form>
         )}

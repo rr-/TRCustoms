@@ -1,5 +1,4 @@
 import "./Profile.css";
-import { useState } from "react";
 import ReactMarkdown from "react-markdown";
 import { useQuery } from "react-query";
 import { useParams } from "react-router-dom";
@@ -15,7 +14,6 @@ interface IProfile {}
 
 const Profile: React.FunctionComponent<IProfile> = () => {
   const { userId }: { userId: string } = useParams();
-  const [isLoading, setIsLoading] = useState(true);
 
   const userQuery = useQuery<IUser, Error>(["users", userId], async () =>
     UserService.getUserById(+userId)

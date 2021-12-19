@@ -1,16 +1,16 @@
-import "./LevelListTable.css";
+import "./LevelsTable.css";
 import { useQuery } from "react-query";
 import { Link } from "react-router-dom";
 import Pager from "src/components/Pager";
 import { ILevelList } from "src/services/level.service";
 import { ILevelQuery } from "src/services/level.service";
 import { LevelService } from "src/services/level.service";
-import LevelSortLink from "src/shared/components/LevelSortLink";
 import Loader from "src/shared/components/Loader";
+import SortLink from "src/shared/components/SortLink";
 import { formatDate } from "src/shared/utils";
 import { formatFileSize } from "src/shared/utils";
 
-const LevelListTable = ({ query }: { query: ILevelQuery | null }) => {
+const LevelsTable = ({ query }: { query: ILevelQuery | null }) => {
   const levelsQuery = useQuery<ILevelList, Error>(["levels", query], async () =>
     LevelService.getLevels(query)
   );
@@ -25,43 +25,41 @@ const LevelListTable = ({ query }: { query: ILevelQuery | null }) => {
 
   return (
     <>
-      <table className="LevelListTable borderless">
+      <table className="LevelsTable borderless">
         <thead>
           <tr>
-            <th className="LevelListTable--name">
-              <LevelSortLink sort={"name"}>Name</LevelSortLink>
+            <th className="LevelsTable--name">
+              <SortLink sort={"name"}>Name</SortLink>
             </th>
             <th>Genres</th>
-            <th className="LevelListTable--genres">Author(s)</th>
-            <th className="LevelListTable--engine">
-              <LevelSortLink sort={"engine_name"}>Engine</LevelSortLink>
+            <th className="LevelsTable--genres">Author(s)</th>
+            <th className="LevelsTable--engine">
+              <SortLink sort={"engine_name"}>Engine</SortLink>
             </th>
-            <th className="LevelListTable--created">
-              <LevelSortLink sort={"created"}>Created</LevelSortLink>
+            <th className="LevelsTable--created">
+              <SortLink sort={"created"}>Created</SortLink>
             </th>
             <th
-              className="LevelListTable--updated"
+              className="LevelsTable--updated"
               title="Date of last file upload"
             >
-              <LevelSortLink sort={"last_file_created"}>
-                Last updated
-              </LevelSortLink>
+              <SortLink sort={"last_file_created"}>Last updated</SortLink>
             </th>
-            <th className="LevelListTable--size">
-              <LevelSortLink sort={"last_file_size"}>Size</LevelSortLink>
+            <th className="LevelsTable--size">
+              <SortLink sort={"last_file_size"}>Size</SortLink>
             </th>
-            <th className="LevelListTable--download">Download</th>
+            <th className="LevelsTable--download">Download</th>
           </tr>
         </thead>
         <tbody>
           {levelsQuery.data.results.map((level) => (
             <tr key={level.id}>
-              <td className="LevelListTable--name">{level.name}</td>
-              <td className="LevelListTable--genres">
+              <td className="LevelsTable--name">{level.name}</td>
+              <td className="LevelsTable--genres">
                 {level.genres.map((tag) => tag.name).join(", ") || "N/A"}
               </td>
               <td
-                className="LevelListTable--author"
+                className="LevelsTable--author"
                 title={
                   level.authors.length > 1
                     ? level.authors.map((author) => author.username).join(", ")
@@ -72,21 +70,17 @@ const LevelListTable = ({ query }: { query: ILevelQuery | null }) => {
                   ? "Multiple authors"
                   : level.authors[0]?.username) || "N/A"}
               </td>
-              <td className="LevelListTable--engine">{level.engine.name}</td>
-              <td className="LevelListTable--created">
-                {formatDate(level.created) || "N/A"}
+              <td className="LevelsTable--engine">{level.engine.name}</td>
+              <td className="LevelsTable--created">
+                {formatDate(level.created)}
               </td>
-              <td className="LevelListTable--updated">
-                {formatDate(level.last_file_created) || "N/A"}
+              <td className="LevelsTable--updated">
+                {formatDate(level.last_file_created)}
               </td>
-              <td className="LevelListTable--size">
-                {level.last_file_size ? (
-                  <>{formatFileSize(level.last_file_size) || "N/A"}</>
-                ) : (
-                  <>N/A</>
-                )}
+              <td className="LevelsTable--size">
+                {formatFileSize(level.last_file_size)}
               </td>
-              <td className="LevelListTable--download">
+              <td className="LevelsTable--download">
                 {level.last_file_id ? (
                   <Link
                     target="_blank"
@@ -109,4 +103,4 @@ const LevelListTable = ({ query }: { query: ILevelQuery | null }) => {
   );
 };
 
-export default LevelListTable;
+export default LevelsTable;

@@ -1,0 +1,10 @@
+.SortLink {
+  white-space: nowrap;
+}
+.SortLink--indicator {
+  margin-left: 0.5rem;
+  visibility: hidden;
+}
+.SortLink--active .SortLink--indicator {
+  visibility: visible;
+}

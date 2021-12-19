@@ -97,7 +97,7 @@ class TRLEScraper:
 
         level_ids = [
             int(match.group(0))
-            for node in doc.cssselect(".medGText a[href*='levelfeatures']")
+            for node in doc.cssselect(".medGText a[href*='reviews']")
             if (match := re.search(r"\d+", node.get("href")))
         ]
         image_url = urljoin(

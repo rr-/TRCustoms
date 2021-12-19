@@ -43,6 +43,12 @@
 }
 
 #SecondaryNavBar {
-  padding: 0.5rem;
   background: var(--sidebar-color-alt);
+}
+#SecondaryNavBar li a {
+  padding: 0.5rem 1rem;
+  display: inline-block;
+}
+#SecondaryNavBar li a.active {
+  background: var(--background-color);
 }

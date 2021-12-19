@@ -1,14 +1,13 @@
-from .dates import DatesInfo
-from .levels import (
-    Level,
-    LevelDownload,
-    LevelEngine,
-    LevelFile,
-    LevelGenre,
-    LevelImage,
-    LevelTag,
-)
-from .users import User
+from .level import Level
+from .level_download import LevelDownload
+from .level_engine import LevelEngine
+from .level_file import LevelFile
+from .level_genre import LevelGenre
+from .level_image import LevelImage
+from .level_legacy_review import LevelLegacyReview
+from .level_tag import LevelTag
+from .user import User
+from .util import DatesInfo
 
 __all__ = [
     "DatesInfo",
@@ -18,6 +17,7 @@ __all__ = [
     "LevelFile",
     "LevelGenre",
     "LevelImage",
+    "LevelLegacyReview",
     "LevelTag",
     "User",
 ]
