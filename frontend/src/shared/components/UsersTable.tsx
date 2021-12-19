@@ -46,6 +46,9 @@ const UsersTable = ({ query }: { query: IUserQuery | null }) => {
             <th className="UsersTable--last-login">
               <SortLink sort={"last_login"}>Last login</SortLink>
             </th>
+            <th className="UsersTable--authored-level-count">
+              <SortLink sort={"authored_level_count"}>Authored levels</SortLink>
+            </th>
           </tr>
         </thead>
         <tbody>
@@ -65,6 +68,9 @@ const UsersTable = ({ query }: { query: IUserQuery | null }) => {
               </td>
               <td className="UsersTable--last-login">
                 {formatDate(user.last_login)}
+              </td>
+              <td className="UsersTable--authored-level-count">
+                {user.authored_level_count}
               </td>
             </tr>
           ))}

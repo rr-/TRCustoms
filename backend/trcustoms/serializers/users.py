@@ -10,6 +10,7 @@ from trcustoms.models import User
 class UserSerializer(serializers.ModelSerializer):
     has_picture = serializers.SerializerMethodField(read_only=True)
     old_password = serializers.CharField(write_only=True, required=False)
+    authored_level_count = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
         model = User
@@ -26,6 +27,7 @@ class UserSerializer(serializers.ModelSerializer):
             "date_joined",
             "last_login",
             "is_active",
+            "authored_level_count",
         )
 
     username = serializers.CharField(
@@ -147,6 +149,9 @@ class UserSerializer(serializers.ModelSerializer):
 
     def get_has_picture(self, instance: User) -> bool:
         return bool(instance.picture)
+
+    def get_authored_level_count(self, instance: User) -> int:
+        return instance.authored_level_count
 
 
 class UserPictureSerializer(serializers.ModelSerializer):

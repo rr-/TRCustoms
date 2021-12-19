@@ -1,7 +1,11 @@
 from .level_engines import LevelEngineFullSerializer, LevelEngineLiteSerializer
 from .level_genres import LevelGenreFullSerializer, LevelGenreLiteSerializer
 from .level_tags import LevelTagFullSerializer, LevelTagLiteSerializer
-from .levels import LevelAuthorSerializer, LevelSerializer
+from .levels import (
+    LevelAuthorSerializer,
+    LevelSerializer,
+    LevelUploaderSerializer,
+)
 from .users import UserPictureSerializer, UserSerializer
 
 __all__ = [
@@ -13,6 +17,7 @@ __all__ = [
     "LevelSerializer",
     "LevelTagFullSerializer",
     "LevelTagLiteSerializer",
+    "LevelUploaderSerializer",
     "UserPictureSerializer",
     "UserSerializer",
 ]

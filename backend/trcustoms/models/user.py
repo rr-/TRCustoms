@@ -1,10 +1,19 @@
 from django.contrib.auth.models import AbstractUser
+from django.contrib.auth.models import UserManager as BaseUserManager
 from django.db import models
+from django.db.models import Count
 
 from trcustoms.utils import RandomFileName
 
 
+class UserManager(BaseUserManager):
+    def with_counts(self):
+        return self.annotate(authored_level_count=Count("authored_levels"))
+
+
 class User(AbstractUser):
+    objects = UserManager()
+
     class Source(models.TextChoices):
         trle = "trle", "trle.net"
         trcustoms = "trcustoms", "trcustoms"

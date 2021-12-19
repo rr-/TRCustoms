@@ -32,7 +32,7 @@ class Level(DatesInfo):
         on_delete=models.SET_NULL,
         related_name="uploaded_levels",
     )
-    authors = models.ManyToManyField(User, related_name="levels")
+    authors = models.ManyToManyField(User, related_name="authored_levels")
     difficulty = models.CharField(
         max_length=10, choices=Difficulty.choices, blank=True, null=True
     )
