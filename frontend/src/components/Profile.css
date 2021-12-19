@@ -1,7 +1,10 @@
 #Profile img {
   max-width: 250px;
 }
-#Profile aside {
-  float: left;
-  margin-right: 1rem;
+#Profile {
+  display: flex;
+  gap: 1rem;
+}
+#Profile h1 {
+  margin-top: 0;
 }

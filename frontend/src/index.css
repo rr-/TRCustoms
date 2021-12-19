@@ -105,3 +105,13 @@ svg.icon {
   height: 1.25em;
   vertical-align: middle;
 }
+
+h1 {
+  font-size: 1.6em;
+}
+h2 {
+  font-size: 1.35em;
+}
+h3 {
+  font-size: 1.2em;
+}

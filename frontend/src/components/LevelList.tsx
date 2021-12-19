@@ -21,6 +21,7 @@ const defaultQuery: ILevelQuery = {
   tags: [],
   genres: [],
   engines: [],
+  authors: [],
 };
 
 const deserializeQuery = (search: string): ILevelQuery => {
@@ -33,6 +34,7 @@ const deserializeQuery = (search: string): ILevelQuery => {
     tags: (qp.tags?.split(/,/g) || []).map((item) => +item),
     genres: (qp.genres?.split(/,/g) || []).map((item) => +item),
     engines: (qp.engines?.split(/,/g) || []).map((item) => +item),
+    authors: [],
   };
 };
 

@@ -65,6 +65,7 @@ interface ILevelQuery extends IGenericQuery {
   tags: Array<number>;
   genres: Array<number>;
   engines: Array<number>;
+  authors: Array<number>;
 }
 
 interface ITagQuery extends IGenericQuery {}
@@ -87,6 +88,7 @@ const getLevels = async (query: ILevelQuery): Promise<ILevelList | null> => {
       tags: query.tags.join(","),
       genres: query.genres?.join(","),
       engines: query.engines?.join(","),
+      authors: query.authors?.join(","),
     }),
     method: "GET",
   });
