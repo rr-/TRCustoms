@@ -1,5 +1,5 @@
 .Pager {
-  margin: 1rem 0;
+  margin: 2rem 0;
 }
 .Pager ul {
   display: flex;
@@ -7,32 +7,24 @@
   align-items: center;
   list-style-type: none;
   padding: 0;
-  margin: 1rem auto;
 }
 .Pager li {
   text-align: center;
-  display: inline-block;
   margin: 0 0.5rem 0 0;
+}
+
+.Pager--ellipsis {
+  opacity: 0.25;
 }
 
 .Pager span,
 .Pager a {
-  padding: 0.5rem 0;
-  border: 1px solid var(--text-color);
-  background: var(--sidebar-color-alt);
   display: inline-block;
-  width: 100%;
+  width: 3.5rem;
+  padding: 0.5rem 0;
   box-sizing: border-box;
 }
 
-.Pager li.active span,
-.Pager li.active a {
-  background: var(--sidebar-color);
-}
-.Pager li:hover span,
-.Pager li:hover a {
-  background: var(--sidebar-color);
-}
-.Pager li {
-  width: 3rem;
+.Pager li.active {
+  background: var(--link-highlight-color);
 }

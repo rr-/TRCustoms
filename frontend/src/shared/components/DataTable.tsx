@@ -14,6 +14,7 @@ interface IDataTableColumn<TDataTableItem> {
 }
 
 interface IDataTable<TDataTableItem> {
+  className?: string | null;
   query: UseQueryResult<IPagedResponse<TDataTableItem>, Error> | null;
   itemKey: (TDataTableItem) => string;
   columns: IDataTableColumn<TDataTableItem>[];
@@ -22,6 +23,7 @@ interface IDataTable<TDataTableItem> {
 interface TDataTableItem extends Object {}
 
 const DataTable: React.FunctionComponent<IDataTable<TDataTableItem>> = ({
+  className,
   query,
   itemKey,
   columns,
@@ -38,15 +40,20 @@ const DataTable: React.FunctionComponent<IDataTable<TDataTableItem>> = ({
     return <p>There are no results to show.</p>;
   }
 
+  if (!className) {
+    className = "DataTable";
+  }
+
   return (
     <>
-      <table className="DataTable borderless">
+      <table className={`DataTable ${className} borderless`}>
         <thead>
           <tr>
             {columns.map((column) => (
               <th
-                className={`DataTable--${column.name}`}
+                className={`${className}--${column.name}`}
                 title={column.tooltip}
+                key={column.name}
               >
                 {column.sortKey ? (
                   <SortLink sort={column.sortKey}>{column.label}</SortLink>
@@ -62,8 +69,9 @@ const DataTable: React.FunctionComponent<IDataTable<TDataTableItem>> = ({
             <tr key={itemKey(item)}>
               {columns.map((column) => (
                 <td
-                  className={`DataTable--${column.name}`}
+                  className={`${className}--${column.name}`}
                   title={column.itemTooltip?.(item)}
+                  key={`${itemKey(item)}-${column.name}`}
                 >
                   {column.itemElement(item)}
                 </td>
@@ -73,9 +81,7 @@ const DataTable: React.FunctionComponent<IDataTable<TDataTableItem>> = ({
         </tbody>
       </table>
       {!query.data.disable_paging && (
-        <div id="LevelList--pager">
-          <Pager pagedResponse={query.data} />
-        </div>
+        <Pager className={`${className}--pager`} pagedResponse={query.data} />
       )}
     </>
   );

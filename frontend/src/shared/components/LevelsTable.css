@@ -1,4 +1,19 @@
 .LevelsTable--created,
-.LevelsTable--updated {
+.LevelsTable--updated,
+.LevelsTable--size {
   white-space: nowrap;
+}
+.LevelsTable--name {
+  width: 50%;
+}
+.LevelsTable--genres,
+.LevelsTable--authors {
+  width: 25%;
+}
+.LevelsTable--engine,
+.LevelsTable--created,
+.LevelsTable--updated,
+.LevelsTable--size,
+.LevelsTable--download {
+  width: 5%;
 }

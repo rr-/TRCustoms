@@ -1,4 +1,5 @@
 import "./NavBar.css";
+import { CogIcon } from "@heroicons/react/outline";
 import { useContext } from "react";
 import { Link } from "react-router-dom";
 import { NavLink } from "react-router-dom";
@@ -18,17 +19,25 @@ const NavBar: React.FunctionComponent<INavBar> = () => {
           <nav>
             <div className="PrimaryNavBar--left">
               <h1>
-                <Link to={"/"}>TRCustoms.org</Link>
+                <Link to={"/"}>
+                  <CogIcon className="icon" /> TRCustoms
+                </Link>
               </h1>
             </div>
 
             <div className="PrimaryNavBar--right">
               {user ? (
                 <>
-                  <UserPicture className="PrimaryNavBar--userPic" user={user} />
-                  <p>
-                    <Link to={`/users/${user.id}`}>{user.username}</Link>
-                  </p>
+                  <Link
+                    className="PrimaryNavBar--userPicLink"
+                    to={`/users/${user.id}`}
+                  >
+                    <UserPicture
+                      className="PrimaryNavBar--userPic"
+                      user={user}
+                    />
+                    {user.username}
+                  </Link>
                   <ul>
                     <li>
                       <Link to={"/logout"}>Log out</Link>

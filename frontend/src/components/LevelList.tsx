@@ -121,15 +121,15 @@ const LevelList: React.FunctionComponent = () => {
               </div>
             </SearchBar>
 
+            <div id="LevelList--results">
+              <LevelsTable query={query} />
+            </div>
+
             <aside id="LevelList--sidebar">
               <TagsCheckboxes />
               <GenresCheckboxes />
               <EnginesCheckboxes />
             </aside>
-
-            <div id="LevelList--results">
-              <LevelsTable query={query} />
-            </div>
           </Form>
         )}
       </Formik>

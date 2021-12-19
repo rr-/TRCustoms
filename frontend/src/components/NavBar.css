@@ -1,4 +1,8 @@
-#TopNavBar .PrimaryNavBar--userPic {
+.PrimaryNavBar--userPicLink {
+  display: inline-flex;
+  align-items: center;
+}
+.PrimaryNavBar--userPic {
   max-width: 2rem;
   max-height: 2rem;
   margin-right: 0.5rem;
@@ -23,9 +27,22 @@
   margin: 0;
   padding: 0;
 }
+#TopNavBar h1 {
+  font-size: 2rem;
+}
+#TopNavBar h1 a {
+  text-decoration: none;
+  display: flex;
+  gap: 0.25rem;
+  align-items: center;
+}
 
 #PrimaryNavBar {
-  background: var(--sidebar-color);
+  background: var(--navbar-primary-background-color);
+  margin: var(--navbar-primary-margin);
+}
+#PrimaryNavBar .MainContainer {
+  background: var(--navbar-primary-background-color-inside);
 }
 #PrimaryNavBar .PrimaryNavBar--left {
   display: flex;
@@ -43,12 +60,17 @@
 }
 
 #SecondaryNavBar {
-  background: var(--sidebar-color-alt);
+  background: var(--navbar-secondary-background-color);
+  margin: var(--navbar-secondary-margin);
+}
+#SecondaryNavBar .MainContainer {
+  background: var(--navbar-secondary-background-color-inside);
 }
 #SecondaryNavBar li a {
   padding: 0.5rem 1rem;
   display: inline-block;
 }
 #SecondaryNavBar li a.active {
-  background: var(--background-color);
+  background: var(--navbar-secondary-active-tab-background-color);
+  color: var(--navbar-secondary-active-tab-text-color);
 }

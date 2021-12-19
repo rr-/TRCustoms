@@ -1,3 +1,4 @@
+import "./TagsTable.css";
 import { useQuery } from "react-query";
 import { Link } from "react-router-dom";
 import { ITag } from "src/services/level.service";
@@ -42,7 +43,14 @@ const TagsTable = ({ query }: { query: ITagQuery | null }) => {
 
   const itemKey = (tag) => `${tag.id}`;
 
-  return <DataTable query={tagsQuery} columns={columns} itemKey={itemKey} />;
+  return (
+    <DataTable
+      className="TagsTable"
+      query={tagsQuery}
+      columns={columns}
+      itemKey={itemKey}
+    />
+  );
 };
 
 export default TagsTable;
