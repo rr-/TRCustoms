@@ -88,7 +88,9 @@ def process_author(obj_id: int, trle_author: TRLEAuthor | None) -> None:
         ),
     )
 
-    user.levels.set(Level.objects.filter(trle_id__in=trle_author.level_ids))
+    user.authored_levels.set(
+        Level.objects.filter(trle_id__in=trle_author.level_ids)
+    )
 
 
 def process_level(obj_id: int, trle_level: TRLELevel | None) -> None:

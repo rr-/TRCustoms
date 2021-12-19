@@ -17,6 +17,7 @@ interface IUser {
   date_joined: string;
   last_login: string;
   is_active: boolean;
+  authored_level_count: number;
 }
 
 interface IUserList extends IPagedResponse<IUser> {}

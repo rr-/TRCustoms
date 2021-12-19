@@ -1,4 +1,4 @@
-from django.shortcuts import get_object_or_404
+from django.http import Http404
 from rest_framework import filters, mixins, status, viewsets
 from rest_framework.decorators import action
 from rest_framework.parsers import MultiPartParser
@@ -49,6 +49,7 @@ class UserViewSet(
         "last_name",
         "date_joined",
         "last_login",
+        "authored_level_count",
     ]
     search_fields = [
         "username",
@@ -56,17 +57,21 @@ class UserViewSet(
         "last_name",
     ]
 
-    queryset = User.objects.all()
+    queryset = User.objects.with_counts()
     serializer_class = UserSerializer
 
     @action(detail=False, url_path=r"by_username/(?P<username>\w+)")
     def by_username(self, request, username: str):
-        user = get_object_or_404(User, username=username)
-        return Response(UserSerializer(user).data, status=status.HTTP_200_OK)
+        user = self.queryset.filter(username=username).first()
+        if not user:
+            raise Http404("No user found with this username.")
+        serializer = UserSerializer(user)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
     @action(detail=False, permission_classes=[IsAuthenticated])
     def me(self, request, *args, **kwargs):
-        serializer = self.get_serializer(self.request.user)
+        user = self.queryset.filter(id=self.request.user.id).first()
+        serializer = self.get_serializer(user)
         return Response(serializer.data)
 
     @action(
