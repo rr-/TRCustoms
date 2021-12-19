@@ -1,4 +1,4 @@
-const EMPTY_INPUT_PLACEHOLDER = "N/A";
+const EMPTY_INPUT_PLACEHOLDER = "-";
 
 const validateRequired = (value: string): string | null => {
   if (!value) {
@@ -104,4 +104,5 @@ export {
   formatDateTime,
   formatFileSize,
   filterFalsyObjectValues,
+  EMPTY_INPUT_PLACEHOLDER,
 };

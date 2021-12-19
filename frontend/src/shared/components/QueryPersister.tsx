@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import { useHistory } from "react-router-dom";
-import { IGenericQuery } from "src/services/level.service";
+import { IGenericQuery } from "src/shared/types";
 import { filterFalsyObjectValues } from "src/shared/utils";
 
 const deserializeGenericQuery = (search: string): IGenericQuery => {

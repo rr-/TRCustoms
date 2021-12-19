@@ -16,10 +16,9 @@ const PermissionGuard: React.FunctionComponent<IPermissionGuard> = ({
   const [isShown, setIsShown] = useState<boolean>(false);
 
   useEffect(() => {
-    let newIsShown = false;
-
-    newIsShown =
-      newIsShown || (require === "canEditUsers" && user?.id === entity?.id);
+    let newIsShown =
+      (require === "canEditUsers" && user?.id === entity?.id) ||
+      (require === "canListUsers" && !!user);
 
     setIsShown(newIsShown);
   }, [user, entity, require]);
@@ -30,4 +29,4 @@ const PermissionGuard: React.FunctionComponent<IPermissionGuard> = ({
   return <></>;
 };
 
-export default PermissionGuard;
+export { PermissionGuard };

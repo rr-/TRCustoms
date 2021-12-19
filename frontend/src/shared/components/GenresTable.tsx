@@ -32,7 +32,7 @@ const GenresTable = ({ query }: { query: IGenreQuery | null }) => {
             <th className="GenresTable--name">
               <SortLink sort={"name"}>Name</SortLink>
             </th>
-            <th className="GenresTable--name">
+            <th className="GenresTable--level-count">
               <SortLink sort={"level_count"}>Usages</SortLink>
             </th>
             <th className="GenresTable--created">
@@ -47,7 +47,7 @@ const GenresTable = ({ query }: { query: IGenreQuery | null }) => {
           {genresQuery.data.results.map((tag) => (
             <tr key={tag.id}>
               <td className="GenresTable--name">{tag.name}</td>
-              <td className="GenresTable--genres">{tag.level_count}</td>
+              <td className="GenresTable--level-count">{tag.level_count}</td>
               <td className="GenresTable--created">
                 {formatDate(tag.created)}
               </td>
