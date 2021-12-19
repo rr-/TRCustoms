@@ -67,7 +67,7 @@ const ProfileEdit: React.FunctionComponent = () => {
   };
 
   const goBack = useCallback(() => {
-    history.push(`/profile/${userId}`);
+    history.push(`/users/${userId}`);
   }, [history, userId]);
 
   const submit = useCallback(
@@ -91,7 +91,7 @@ const ProfileEdit: React.FunctionComponent = () => {
           success: (
             <>
               Profile information updated.{" "}
-              <Link to={`/profile/${userId}`}>Click here</Link> to see the
+              <Link to={`/users/${userId}`}>Click here</Link> to see the
               changes.
             </>
           ),

@@ -25,9 +25,8 @@ function App() {
           <Route exact path="/login" component={Login} />
           <Route exact path="/logout" component={Logout} />
           <Route exact path="/register" component={Register} />
-          <Route exact path="/profile" component={Profile} />
-          <Route exact path="/profile/:userId" component={Profile} />
-          <Route exact path="/profile/:userId/edit" component={ProfileEdit} />
+          <Route exact path="/users/:userId" component={Profile} />
+          <Route exact path="/users/:userId/edit" component={ProfileEdit} />
         </Switch>
       </main>
     </UserContextProvider>
