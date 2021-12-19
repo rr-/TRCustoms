@@ -72,7 +72,7 @@ const DataTable: React.FunctionComponent<IDataTable<TDataTableItem>> = ({
           ))}
         </tbody>
       </table>
-      {query.data.paging_enabled && (
+      {!query.data.disable_paging && (
         <div id="LevelList--pager">
           <Pager pagedResponse={query.data} />
         </div>
