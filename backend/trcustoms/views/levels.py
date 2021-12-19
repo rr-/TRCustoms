@@ -98,7 +98,7 @@ class LevelViewSet(
                 queryset = queryset.filter(genres__id=genre_id)
 
         if engine_ids := _parse_ids(self.request.query_params.get("engines")):
-            queryset = queryset.filter(engines__id__in=engine_ids)
+            queryset = queryset.filter(engine__id__in=engine_ids)
 
         return queryset
 
