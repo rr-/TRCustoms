@@ -47,8 +47,10 @@ const Pager = <TCollection extends {}>(props: IPager<TCollection>) => {
   const pagesShown = addEllipsisMarkers(
     getPagesShown(firstPage, currentPage, lastPage)
   );
-  const prevPageLabel = <>&laquo;</>;
-  const nextPageLabel = <>&raquo;</>;
+  const prevPageLabel = <>&lsaquo;</>;
+  const firstPageLabel = <>&laquo;</>;
+  const lastPageLabel = <>&raquo;</>;
+  const nextPageLabel = <>&rsaquo;</>;
 
   const linkElem =
     props.linkElem ||
@@ -59,6 +61,14 @@ const Pager = <TCollection extends {}>(props: IPager<TCollection>) => {
   return (
     <div className="Pager">
       <ul>
+        {firstPage < currentPage ? (
+          <li>{linkElem(firstPage, firstPageLabel)}</li>
+        ) : (
+          <li>
+            <span>{firstPageLabel}</span>
+          </li>
+        )}
+
         {prevPage < firstPage ? (
           <li>
             <span>{prevPageLabel}</span>
@@ -67,13 +77,13 @@ const Pager = <TCollection extends {}>(props: IPager<TCollection>) => {
           <li>{linkElem(prevPage, prevPageLabel)}</li>
         )}
 
-        {pagesShown.map((page) =>
+        {pagesShown.map((page, idx) =>
           page === null ? (
-            <li key={page} className="ellipsis">
+            <li key={idx} className="ellipsis">
               ...
             </li>
           ) : (
-            <li key={page} className={page === currentPage ? "active" : ""}>
+            <li key={idx} className={page === currentPage ? "active" : ""}>
               {linkElem(page, <>{page}</>)}
             </li>
           )
@@ -85,6 +95,14 @@ const Pager = <TCollection extends {}>(props: IPager<TCollection>) => {
           </li>
         ) : (
           <li>{linkElem(nextPage, nextPageLabel)}</li>
+        )}
+
+        {lastPage > currentPage ? (
+          <li>{linkElem(lastPage, lastPageLabel)}</li>
+        ) : (
+          <li>
+            <span>{lastPageLabel}</span>
+          </li>
         )}
       </ul>
     </div>

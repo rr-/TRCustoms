@@ -1,19 +1,11 @@
-#LevelList table {
-  width: 100%;
-  margin: 0 -1rem;
-}
-
-#LevelList th,
-td {
-  padding: 0.25rem 1rem;
-}
-
 #LevelList--container {
   display: grid;
   grid-template-areas:
     "search search"
     "results sidebar"
     "pager sidebar";
+  grid-template-columns: 4fr 1fr;
+  gap: 0 1rem;
 }
 #LevelList--sidebar {
   grid-area: sidebar;

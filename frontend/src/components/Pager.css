@@ -3,8 +3,8 @@
 }
 .Pager ul {
   display: flex;
+  justify-content: center;
   align-items: center;
-  width: 32rem;
   list-style-type: none;
   padding: 0;
   margin: 1rem auto;
@@ -17,7 +17,7 @@
 
 .Pager span,
 .Pager a {
-  padding: 0.5rem 1rem;
+  padding: 0.5rem 0;
   border: 1px solid var(--text-color);
   background: var(--sidebar-color-alt);
   display: inline-block;
@@ -34,5 +34,5 @@
   background: var(--sidebar-color);
 }
 .Pager li {
-  flex-grow: 1;
+  width: 3rem;
 }
