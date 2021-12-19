@@ -41,5 +41,8 @@ class Level(DatesInfo):
     )
     trle_id = models.IntegerField(blank=True, null=True)
 
+    class Meta:
+        ordering = ["-created"]
+
     def __str__(self) -> str:
         return f"{self.name} (id={self.pk})"
