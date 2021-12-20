@@ -1,3 +1,4 @@
+import html
 import logging
 import re
 from collections.abc import Iterable
@@ -11,18 +12,49 @@ import dateutil.parser
 import lxml.html
 import requests
 import urllib3
+from markdownify import MarkdownConverter
 
 from trcustoms.cache import get_cache, put_cache
 
 logger = logging.getLogger(__name__)
 
 
+class CustomMarkdownConverter(MarkdownConverter):
+    def convert_iframe(self, el, text, convert_as_inline):
+        if source := el.attrs.get("src"):
+            return f"{source}"
+        return ""
+
+
+def markdownify(html_text, **options):
+    return CustomMarkdownConverter(**options).convert(html_text)
+
+
 def strip_tags(value: str) -> str:
     return re.sub(r"<[^>]*?>", "", value)
 
 
+def get_html(node) -> str:
+    parts = [node.text]
+    for c in node.getchildren():
+        parts.extend([c.text, lxml.html.tostring(c).decode(), c.tail])
+    parts.append(node.tail)
+    return "".join(filter(None, parts))
+    # return lxml.html.tostring(node, encoding=str).strip()
+
+
 def get_text(node) -> str:
-    return strip_tags(lxml.html.tostring(node).decode()).strip()
+    return strip_tags(get_html(node)).strip()
+
+
+def unescape(text: str | None) -> str:
+    return html.unescape(text or "")
+
+
+def get_document_from_response(
+    response: requests.Response,
+) -> lxml.html.HtmlElement:
+    return lxml.html.fromstring(response.content.decode("iso-8859-1"))
 
 
 @dataclass
@@ -93,7 +125,7 @@ class TRLEScraper:
         response = self.get(
             f"https://www.trle.net/sc/reviewerfeatures.php?rid={reviewer_id}",
         )
-        doc = lxml.html.fromstring(response.text)
+        doc = get_document_from_response(response)
 
         level_ids = [
             int(match.group(0))
@@ -104,7 +136,7 @@ class TRLEScraper:
             "https://trle.net/",
             doc.cssselect(".navText img")[0].get("src").replace(" ", "%20"),
         )
-        nickname = doc.cssselect(".subHeader a")[0].text
+        nickname = unescape(doc.cssselect(".subHeader a")[0].text)
         if not nickname:
             return None
 
@@ -113,7 +145,7 @@ class TRLEScraper:
             for node in doc.cssselect(".bodyText:not([colspan])")
         ]
         attrs = {
-            texts[i].rstrip(":"): texts[i + 1] or ""
+            texts[i].rstrip(":"): unescape(texts[i + 1])
             for i in range(0, len(texts), 2)
         }
 
@@ -142,7 +174,7 @@ class TRLEScraper:
         response = self.get(
             f"https://trle.net/sc/authorfeatures.php?aid={author_id}",
         )
-        doc = lxml.html.fromstring(response.text)
+        doc = get_document_from_response(response)
 
         level_ids = [
             int(match.group(0))
@@ -153,7 +185,7 @@ class TRLEScraper:
             "https://trle.net/",
             doc.cssselect(".navText img")[0].get("src").replace(" ", "%20"),
         )
-        nickname = doc.cssselect(".subHeader a")[0].text
+        nickname = unescape(doc.cssselect(".subHeader a")[0].text)
         if not nickname:
             return None
 
@@ -162,7 +194,7 @@ class TRLEScraper:
             for node in doc.cssselect(".bodyText:not([colspan])")
         ]
         attrs = {
-            texts[i].rstrip(":"): texts[i + 1] or ""
+            texts[i].rstrip(":"): unescape(texts[i + 1])
             for i in range(0, len(texts), 2)
         }
 
@@ -191,7 +223,7 @@ class TRLEScraper:
         response = self.get(
             f"https://trle.net/sc/levelfeatures.php?lid={level_id}"
         )
-        doc = lxml.html.fromstring(response.text)
+        doc = get_document_from_response(response)
 
         author_ids = [
             int(match.group(0))
@@ -205,7 +237,9 @@ class TRLEScraper:
             return None
 
         title = get_text(doc.cssselect(".subHeader.Stil2")[0]).split("\n")[0]
-        synopsis = get_text(doc.cssselect("tr:nth-child(5) .medGText")[0])
+        synopsis = markdownify(
+            get_html(doc.cssselect("tr:nth-child(5) .medGText")[0])
+        )
 
         main_image_url = urljoin(
             "https://trle.net/", doc.cssselect(".navText img")[0].get("src")
@@ -222,7 +256,7 @@ class TRLEScraper:
             )
         ]
         attrs = {
-            texts[i].rstrip(":"): texts[i + 1] or ""
+            texts[i].rstrip(":"): unescape(texts[i + 1])
             for i in range(0, len(texts), 2)
         }
 
@@ -253,7 +287,7 @@ class TRLEScraper:
 
     def fetch_level_reviews(self, level_id: int) -> Iterable[TRLELevelReview]:
         response = self.get(f"https://trle.net/sc/reviews.php?lid={level_id}")
-        doc = lxml.html.fromstring(response.text)
+        doc = get_document_from_response(response)
 
         for row_node in doc.cssselect(
             ".FindTable tr:not(:first-child):not(:last-child)"
@@ -287,6 +321,7 @@ class TRLEScraper:
             if text.endswith("-"):
                 text = text[:-1].strip()
             text = text.strip('"')
+            text = unescape(text)
 
             publication_date: date | None = None
             if text_node is not None and len(
@@ -309,7 +344,7 @@ class TRLEScraper:
 
     def fetch_highest_level_id(self) -> int:
         response = self.get("https://www.trle.net/rPost.php")
-        doc = lxml.html.fromstring(response.text)
+        doc = get_document_from_response(response)
         return max(
             [
                 int(value)
@@ -320,7 +355,7 @@ class TRLEScraper:
 
     def fetch_highest_reviewer_id(self) -> int:
         response = self.get("https://www.trle.net/rPost.php")
-        doc = lxml.html.fromstring(response.text)
+        doc = get_document_from_response(response)
         return max(
             [
                 int(value)

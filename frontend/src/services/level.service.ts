@@ -46,6 +46,11 @@ interface ILevelUser {
 interface ILevelAuthor extends ILevelUser {}
 interface ILevelUploader extends ILevelUser {}
 
+interface IMedium {
+  id: number;
+  url: string;
+}
+
 interface ILevel {
   id: number | null;
   name: string;
@@ -60,6 +65,13 @@ interface ILevel {
   last_file_id: number | null;
   last_file_created: string | null;
   last_file_size: number | null;
+  difficulty: string;
+  duration: string;
+}
+
+interface ILevelFull extends ILevel {
+  banner: IMedium;
+  media: IMedium[];
 }
 
 interface ILevelQuery extends IGenericQuery {
@@ -79,6 +91,7 @@ interface ILevelList extends IPagedResponse<ILevel> {}
 interface ITagList extends IPagedResponse<ITag> {}
 interface IGenreList extends IPagedResponse<IGenre> {}
 interface IEngineList extends IPagedResponse<IEngine> {}
+interface IMediumList extends Array<IMedium> {}
 
 const getLevels = async (query: ILevelQuery): Promise<ILevelList | null> => {
   return await fetchJSON<ILevelList>(`${API_URL}/levels/`, {
@@ -89,6 +102,12 @@ const getLevels = async (query: ILevelQuery): Promise<ILevelList | null> => {
       engines: query.engines?.join(","),
       authors: query.authors?.join(","),
     }),
+    method: "GET",
+  });
+};
+
+const getLevelById = async (levelId: number): Promise<ILevelFull> => {
+  return await fetchJSON<ILevelFull>(`${API_URL}/levels/${levelId}/`, {
     method: "GET",
   });
 };
@@ -124,6 +143,7 @@ const getEngines = async (query: IEngineQuery): Promise<IEngineList | null> => {
 
 const LevelService = {
   getLevels,
+  getLevelById,
   getLevelFilters,
   getTags,
   getGenres,
@@ -138,6 +158,9 @@ export type {
   IGenreList,
   IGenreQuery,
   ILevel,
+  ILevelFull,
+  IMedium,
+  IMediumList,
   ILevelFilterQuery,
   ILevelFilters,
   ILevelList,

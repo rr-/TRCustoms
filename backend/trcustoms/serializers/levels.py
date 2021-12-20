@@ -3,6 +3,7 @@ from rest_framework import serializers
 from trcustoms.models import Level, User
 from trcustoms.serializers.level_engines import LevelEngineLiteSerializer
 from trcustoms.serializers.level_genres import LevelGenreLiteSerializer
+from trcustoms.serializers.level_media import LevelMediumSerializer
 from trcustoms.serializers.level_tags import LevelTagLiteSerializer
 
 
@@ -18,7 +19,7 @@ class LevelAuthorSerializer(serializers.ModelSerializer):
         fields = ["id", "username", "first_name", "last_name"]
 
 
-class LevelSerializer(serializers.ModelSerializer):
+class LevelLiteSerializer(serializers.ModelSerializer):
     genres = LevelGenreLiteSerializer(read_only=True, many=True)
     tags = LevelTagLiteSerializer(read_only=True, many=True)
     engine = LevelEngineLiteSerializer(read_only=True)
@@ -60,4 +61,28 @@ class LevelSerializer(serializers.ModelSerializer):
             "last_file_id",
             "last_file_created",
             "last_file_size",
+            "difficulty",
+            "duration",
         ]
+
+
+class LevelFullSerializer(LevelLiteSerializer):
+    banner = serializers.SerializerMethodField(read_only=True)
+    media = serializers.SerializerMethodField(read_only=True)
+
+    class Meta:
+        model = Level
+        fields = LevelLiteSerializer.Meta.fields + [
+            "banner",
+            "media",
+        ]
+
+    def get_banner(self, instance: Level):
+        return LevelMediumSerializer(
+            instance=instance.media.filter(position=0).first()
+        ).data
+
+    def get_media(self, instance: Level):
+        return LevelMediumSerializer(
+            instance=instance.media.exclude(position=0), many=True
+        ).data

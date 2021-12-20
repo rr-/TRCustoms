@@ -2,6 +2,7 @@ import "./App.css";
 import { Switch, Route } from "react-router-dom";
 import GenreList from "src/components/GenreList";
 import LevelList from "src/components/LevelList";
+import LevelPage from "src/components/LevelPage";
 import Login from "src/components/Login";
 import Logout from "src/components/Logout";
 import NavBar from "src/components/NavBar";
@@ -19,6 +20,8 @@ function App() {
       <main id="Content" className="MainContainer">
         <Switch>
           <Route exact path="/" component={LevelList} />
+          <Route exact path="/levels" component={LevelList} />
+          <Route exact path="/levels/:levelId" component={LevelPage} />
           <Route exact path="/tags" component={TagList} />
           <Route exact path="/genres" component={GenreList} />
           <Route exact path="/users" component={UserList} />

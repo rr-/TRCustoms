@@ -1,5 +1,4 @@
 import "./Profile.css";
-import ReactMarkdown from "react-markdown";
 import { useQuery } from "react-query";
 import { useParams } from "react-router-dom";
 import { Link } from "react-router-dom";
@@ -8,6 +7,7 @@ import { IUser } from "src/services/user.service";
 import { UserService } from "src/services/user.service";
 import LevelsTable from "src/shared/components/LevelsTable";
 import Loader from "src/shared/components/Loader";
+import { Markdown } from "src/shared/components/Markdown";
 import { PermissionGuard } from "src/shared/components/PermissionGuard";
 import UserPicture from "src/shared/components/UserPicture";
 import { DISABLE_PAGING } from "src/shared/types";
@@ -46,15 +46,17 @@ const Profile: React.FunctionComponent<IProfile> = () => {
     <div id="Profile">
       <aside>
         <UserPicture user={user} />
-        <p>
-          Joined: {formatDateTime(user.date_joined) || "unknown"}
-          <br />
-          Last seen: {formatDateTime(user.last_login) || "never"}
-          <PermissionGuard require={"canEditUsers"} entity={user}>
-            <br />
-            <Link to={`/users/${user.id}/edit`}>Edit</Link>
-          </PermissionGuard>
-        </p>
+        <dl>
+          <dt>Joined</dt>
+          <dd>{formatDateTime(user.date_joined) || "unknown"}</dd>
+
+          <dt>Last seen</dt>
+          <dd>{formatDateTime(user.last_login) || "never"}</dd>
+        </dl>
+
+        <PermissionGuard require={"canEditUsers"} entity={user}>
+          <Link to={`/users/${user.id}/edit`}>Edit</Link>
+        </PermissionGuard>
       </aside>
       <div>
         <section className="Profile--basic-info">
@@ -65,7 +67,7 @@ const Profile: React.FunctionComponent<IProfile> = () => {
             </h2>
           )}
           {user.bio ? (
-            <ReactMarkdown children={user.bio} />
+            <Markdown children={user.bio} />
           ) : (
             <p>This user prefers to keep an air of mystery around them.</p>
           )}

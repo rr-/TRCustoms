@@ -73,7 +73,11 @@ const formatDate = (input: string | null): string => {
     return EMPTY_INPUT_PLACEHOLDER;
   }
   const date = new Date(input);
-  return date.toISOString().slice(0, 10);
+  return date.toLocaleString("en-GB", {
+    day: "numeric",
+    year: "numeric",
+    month: "short",
+  });
 };
 
 const formatDateTime = (input: string | null): string => {
@@ -81,7 +85,14 @@ const formatDateTime = (input: string | null): string => {
     return EMPTY_INPUT_PLACEHOLDER;
   }
   const date = new Date(input);
-  return date.toISOString().slice(0, 19).replace("T", " ");
+  return date.toLocaleString("en-GB", {
+    day: "numeric",
+    year: "numeric",
+    month: "short",
+    hour: "numeric",
+    minute: "numeric",
+    second: "numeric",
+  });
 };
 
 const formatFileSize = (input: number | null): string => {

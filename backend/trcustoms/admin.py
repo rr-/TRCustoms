@@ -9,7 +9,7 @@ from trcustoms.models import (
     LevelEngine,
     LevelFile,
     LevelGenre,
-    LevelImage,
+    LevelMedium,
     LevelTag,
     User,
 )
@@ -113,8 +113,8 @@ class LevelAdmin(admin.ModelAdmin):
     readonly_fields = ["created", "last_updated"]
 
 
-@admin.register(LevelImage)
-class LevelImageAdmin(admin.ModelAdmin):
+@admin.register(LevelMedium)
+class LevelMediumAdmin(admin.ModelAdmin):
     ordering = ["level__name", "position"]
     list_display = ["id", "level", "position", "created", "last_updated"]
     search_fields = ["level__name"]
