@@ -10,3 +10,4 @@ requests
 cssselect
 lxml
 pyyaml
+markdownify

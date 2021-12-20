@@ -44,3 +44,15 @@ class PermissionsMixin(PermissionsMixinProtocol):
                 ]
             ]
         return [permission() for permission in self.permission_classes]
+
+
+class MultiSerializerMixin:
+    def get_serializer_class(self):
+        """Return serializer class depending on `action` by looking at a
+        `serializer_class_by_action` map.
+
+        If the action is not mapped, falls back to `serializer_class`.
+        """
+        if self.action in self.serializer_class_by_action:
+            return self.serializer_class_by_action[self.action]
+        return super().get_serializer_class()

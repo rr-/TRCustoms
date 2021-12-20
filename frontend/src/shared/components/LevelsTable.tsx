@@ -21,7 +21,9 @@ const LevelsTable = ({ query }: { query: ILevelQuery | null }) => {
       name: "name",
       label: "Name",
       sortKey: "name",
-      itemElement: (level) => level.name,
+      itemElement: (level) => (
+        <Link to={`/levels/${level.id}`}>{level.name}</Link>
+      ),
     },
     {
       name: "genres",

@@ -1,9 +1,11 @@
 from .level_engines import LevelEngineFullSerializer, LevelEngineLiteSerializer
 from .level_genres import LevelGenreFullSerializer, LevelGenreLiteSerializer
+from .level_media import LevelMediumSerializer
 from .level_tags import LevelTagFullSerializer, LevelTagLiteSerializer
 from .levels import (
     LevelAuthorSerializer,
-    LevelSerializer,
+    LevelFullSerializer,
+    LevelLiteSerializer,
     LevelUploaderSerializer,
 )
 from .users import UserPictureSerializer, UserSerializer
@@ -12,9 +14,11 @@ __all__ = [
     "LevelAuthorSerializer",
     "LevelEngineFullSerializer",
     "LevelEngineLiteSerializer",
+    "LevelFullSerializer",
     "LevelGenreFullSerializer",
     "LevelGenreLiteSerializer",
-    "LevelSerializer",
+    "LevelLiteSerializer",
+    "LevelMediumSerializer",
     "LevelTagFullSerializer",
     "LevelTagLiteSerializer",
     "LevelUploaderSerializer",

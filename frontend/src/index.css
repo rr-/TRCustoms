@@ -13,6 +13,7 @@ body {
   font-size: var(--font-size);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  line-height: calc(var(--font-size) * 1.5);
 }
 #root {
   text-align: center;
@@ -98,7 +99,7 @@ fieldset {
 legend {
   background: var(--button-background-color);
   color: var(--button-text-color);
-  padding: 0.5rem 1rem;
+  padding: 0.3rem 1rem;
 }
 
 label {
@@ -118,7 +119,7 @@ table.borderless td + td {
   border-left: 1rem solid transparent;
 }
 table.borderless tr > td {
-  border-top: 0.5rem solid transparent;
+  border-top: 0.3rem solid transparent;
 }
 
 svg.icon {
@@ -128,11 +129,30 @@ svg.icon {
 }
 
 h1 {
-  font-size: 2rem;
+  font-size: 1.6em;
 }
 h2 {
   font-size: 1.35em;
 }
 h3 {
   font-size: 1.2em;
+}
+
+dl {
+  display: grid;
+  grid-template-columns: 1fr 3fr;
+}
+dl hr {
+  grid-column: 1 / span 2;
+  width: 100%;
+  background: transparent;
+}
+dl dt:after {
+  content: ":";
+}
+
+hr {
+  border: 0;
+  height: 2px;
+  background: var(--input-border-color);
 }

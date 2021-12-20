@@ -1,0 +1,30 @@
+#LevelPage {
+  display: grid;
+  grid-template-areas:
+    "header header"
+    "sidebar main";
+  grid-template-columns: min-content 6fr;
+  gap: 1rem 3rem;
+}
+#LevelPage--header {
+  grid-area: header;
+}
+#LevelPage--sidebar {
+  grid-area: sidebar;
+  white-space: nowrap;
+}
+#LevelPage--main {
+  width: 100%;
+  grid-area: main;
+}
+#LevelPage h1 {
+  margin: 1rem 0;
+  font-size: 3rem;
+}
+#LevelPage h2 {
+  margin: 1rem 0 0.75rem 0;
+  border-bottom: 2px solid var(--button-background-color);
+}
+#LevelPage h2 + p {
+  margin-top: 0.75rem;
+}

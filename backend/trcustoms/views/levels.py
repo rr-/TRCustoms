@@ -5,8 +5,9 @@ from rest_framework.decorators import action
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 
-from trcustoms.models import Level, LevelFile, LevelImage
-from trcustoms.serializers import LevelSerializer
+from trcustoms.mixins import MultiSerializerMixin
+from trcustoms.models import Level, LevelFile, LevelMedium
+from trcustoms.serializers import LevelFullSerializer, LevelLiteSerializer
 from trcustoms.utils import stream_file_field
 
 
@@ -57,11 +58,17 @@ def get_level_queryset():
 
 
 class LevelViewSet(
-    mixins.RetrieveModelMixin, mixins.ListModelMixin, viewsets.GenericViewSet
+    MultiSerializerMixin,
+    mixins.RetrieveModelMixin,
+    mixins.ListModelMixin,
+    viewsets.GenericViewSet,
 ):
     permission_classes = [AllowAny]
     queryset = get_level_queryset()
-    serializer_class = LevelSerializer
+    serializer_class = LevelLiteSerializer
+    serializer_class_by_action = {
+        "retrieve": LevelFullSerializer,
+    }
     filter_backends = [filters.SearchFilter, filters.OrderingFilter]
     ordering_fields = [
         "name",
@@ -104,6 +111,6 @@ class LevelViewSet(
 
     @action(detail=True, url_path=r"images/(?P<position>\d+)")
     def screenshot(self, request, pk: int, position: int) -> Response:
-        image = get_list_or_404(LevelImage, level_id=pk, position=position)[0]
+        image = get_list_or_404(LevelMedium, level_id=pk, position=position)[0]
         parts = [f"{pk}", image.level.name, f"screenshot{position}"]
         return stream_file_field(image.image, parts, as_attachment=False)

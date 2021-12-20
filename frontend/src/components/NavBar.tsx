@@ -17,7 +17,7 @@ const NavBar: React.FunctionComponent<INavBar> = () => {
       <div id="PrimaryNavBar">
         <div className="MainContainer">
           <nav>
-            <div className="PrimaryNavBar--left">
+            <div className="NavBar--left">
               <h1>
                 <Link to={"/"}>
                   <CogIcon className="icon" /> TRCustoms
@@ -66,9 +66,7 @@ const NavBar: React.FunctionComponent<INavBar> = () => {
           <nav>
             <ul>
               <li>
-                <NavLink exact to={"/"}>
-                  Levels
-                </NavLink>
+                <NavLink to={"/levels"}>Levels</NavLink>
               </li>
               <li>
                 <NavLink to={"/tags"}>Tags</NavLink>

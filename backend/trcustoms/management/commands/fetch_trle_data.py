@@ -10,7 +10,7 @@ import yaml
 from django.core.files.base import ContentFile
 from django.core.management.base import BaseCommand
 
-from trcustoms.models import Level, LevelEngine, LevelImage, LevelTag, User
+from trcustoms.models import Level, LevelEngine, LevelMedium, LevelTag, User
 from trcustoms.trle_scraper import (
     TRLEAuthor,
     TRLELevel,
@@ -132,7 +132,7 @@ def process_level(obj_id: int, trle_level: TRLELevel | None) -> None:
     image_urls = [trle_level.main_image_url] + trle_level.screenshot_urls
     for pos, image_url in enumerate(image_urls):
         image_content = TRLEScraper().get_bytes(image_url)
-        LevelImage.objects.get_or_create(
+        LevelMedium.objects.get_or_create(
             level=level,
             position=pos,
             defaults=dict(
