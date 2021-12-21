@@ -87,6 +87,7 @@ def test_user_creation(
         "has_picture": False,
         "date_joined": any_datetime(allow_strings=True),
         "last_login": None,
+        "authored_level_count": 0,
     }
 
 
@@ -210,6 +211,7 @@ def test_user_creation_acquiring_trle_account(
         "has_picture": False,
         "date_joined": any_datetime(allow_strings=True),
         "last_login": None,
+        "authored_level_count": 0,
     }
 
 

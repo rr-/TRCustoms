@@ -145,7 +145,7 @@ class UserSerializer(serializers.ModelSerializer):
         user.set_password(validated_data["password"])
         user.save()
 
-        return user
+        return User.objects.with_counts().get(pk=user.pk)
 
     def get_has_picture(self, instance: User) -> bool:
         return bool(instance.picture)
