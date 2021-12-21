@@ -21,6 +21,22 @@ from trcustoms.cache import file_cache
 logger = logging.getLogger(__name__)
 
 
+@file_cache("trle_scraper", "get")
+def get(url: str, headers: dict[str, str] | None = None) -> requests.Response:
+    return requests.get(
+        url,
+        timeout=30,
+        verify=False,
+        allow_redirects=True,
+        headers=headers,
+    )
+
+
+@file_cache("trle_scraper", "head")
+def head(url: str) -> requests.Response:
+    return requests.head(url, timeout=30, verify=False, allow_redirects=True)
+
+
 class CustomMarkdownConverter(MarkdownConverter):
     def convert_iframe(self, el, text, convert_as_inline):
         if source := el.attrs.get("src"):
@@ -127,7 +143,7 @@ class TRLEScraper:
         urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
     def fetch_reviewer(self, reviewer_id: int) -> TRLEReviewer | None:
-        response = self.get(
+        response = self.safe_get(
             f"https://www.trle.net/sc/reviewerfeatures.php?rid={reviewer_id}",
         )
         doc = get_document_from_response(response)
@@ -176,7 +192,7 @@ class TRLEScraper:
         )
 
     def fetch_author(self, author_id: int) -> TRLEAuthor | None:
-        response = self.get(
+        response = self.safe_get(
             f"https://trle.net/sc/authorfeatures.php?aid={author_id}",
         )
         doc = get_document_from_response(response)
@@ -225,7 +241,7 @@ class TRLEScraper:
         )
 
     def fetch_level(self, level_id: int) -> TRLELevel | None:
-        response = self.get(
+        response = self.safe_get(
             f"https://trle.net/sc/levelfeatures.php?lid={level_id}"
         )
         doc = get_document_from_response(response)
@@ -289,7 +305,9 @@ class TRLEScraper:
         )
 
     def fetch_level_reviews(self, level_id: int) -> Iterable[TRLELevelReview]:
-        response = self.get(f"https://trle.net/sc/reviews.php?lid={level_id}")
+        response = self.safe_get(
+            f"https://trle.net/sc/reviews.php?lid={level_id}"
+        )
         doc = get_document_from_response(response)
 
         for row_node in doc.cssselect(
@@ -346,7 +364,7 @@ class TRLEScraper:
             )
 
     def fetch_highest_level_id(self) -> int:
-        response = self.get("https://www.trle.net/rPost.php")
+        response = self.safe_get("https://www.trle.net/rPost.php")
         doc = get_document_from_response(response)
         return max(
             [
@@ -357,7 +375,7 @@ class TRLEScraper:
         )
 
     def fetch_highest_reviewer_id(self) -> int:
-        response = self.get("https://www.trle.net/rPost.php")
+        response = self.safe_get("https://www.trle.net/rPost.php")
         doc = get_document_from_response(response)
         return max(
             [
@@ -367,31 +385,33 @@ class TRLEScraper:
             ]
         )
 
-    @file_cache
-    def get(
+    def safe_get(
         self, url: str, headers: dict[str, str] | None = None
     ) -> requests.Response:
         if headers:
-            logger.debug("Fetching %s (headers=%s)", url, headers)
+            logger.debug("GET %s (headers=%s)", url, headers)
         else:
-            logger.debug("Fetching %s", url)
-        return requests.get(
-            url,
-            timeout=30,
-            verify=False,
-            allow_redirects=True,
-            headers=headers,
-        )
+            logger.debug("GET %s", url)
+        response = get(url, headers=headers)
+        try:
+            response.raise_for_status()
+        except Exception:
+            get.delete_cache(url)
+            raise
+        return response
 
-    @file_cache
-    def head(self, url: str) -> requests.Response:
-        logger.debug("Fetching %s", url)
-        return requests.head(
-            url, timeout=30, verify=False, allow_redirects=True
-        )
+    def safe_head(self, url: str) -> requests.Response:
+        logger.debug("HEAD %s", url)
+        response = head(url)
+        try:
+            response.raise_for_status()
+        except Exception:
+            head.delete_cache(url)
+            raise
+        return response
 
     def get_size(self, url) -> int | None:
-        response = self.head(url)
+        response = self.safe_head(url)
         match header := response.headers["Content-Length"]:
             case str(size):
                 return int(size)
@@ -401,17 +421,17 @@ class TRLEScraper:
                 raise ValueError(f"unknown value: {header}")
 
     def is_url_download(self, url) -> bool:
-        response = self.head(url)
+        response = self.safe_head(url)
         return response.headers["Content-Type"].startswith("application/")
 
     def get_bytes(self, url: str) -> bytes:
-        return self.get(url).content
+        return self.safe_get(url).content
 
     def get_bytes_parallel(self, url: str) -> bytes | None:
         if not self.is_url_download(url):
             return None
 
-        chunk_size = 128 * 1024
+        chunk_size = 256 * 1024
         file_size = self.get_size(url)
         chunks = list(range(0, file_size, chunk_size))
 
@@ -422,7 +442,7 @@ class TRLEScraper:
                 start = chunk
                 end = chunk + chunk_size - 1
                 headers = {"Range": f"bytes={start}-{end}"}
-                response = self.get(url, headers=headers)
+                response = self.safe_get(url, headers=headers)
                 path = tmpdir / f"{chunk}.dat"
                 with path.open("wb") as handle:
                     for part in response.iter_content(1024):
@@ -447,4 +467,5 @@ class TRLEScraper:
             ):
                 result += path.read_bytes()
 
+        assert len(result) == file_size
         return result
