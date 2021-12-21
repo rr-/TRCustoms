@@ -10,13 +10,15 @@ import yaml
 from django.core.files.base import ContentFile
 from django.core.management.base import BaseCommand
 
-from trcustoms.models import Level, LevelEngine, LevelMedium, LevelTag, User
-from trcustoms.trle_scraper import (
-    TRLEAuthor,
-    TRLELevel,
-    TRLEReviewer,
-    TRLEScraper,
+from trcustoms.models import (
+    Level,
+    LevelEngine,
+    LevelFile,
+    LevelMedium,
+    LevelTag,
+    User,
 )
+from trcustoms.trle_scraper import TRLEScraper
 
 logger = logging.getLogger(__name__)
 P = TypeVar("P")
@@ -51,7 +53,8 @@ def repr_obj(obj: Any) -> str:
     )
 
 
-def process_reviewer(obj_id: int, trle_reviewer: TRLEReviewer | None) -> None:
+def process_reviewer(scraper: TRLEScraper, obj_id: int) -> None:
+    trle_reviewer = scraper.fetch_reviewer(obj_id)
     print(f"Reviewer #{obj_id}")
     print(repr_obj(trle_reviewer))
     print(flush=True)
@@ -70,7 +73,8 @@ def process_reviewer(obj_id: int, trle_reviewer: TRLEReviewer | None) -> None:
     )
 
 
-def process_author(obj_id: int, trle_author: TRLEAuthor | None) -> None:
+def process_author(scraper: TRLEScraper, obj_id: int) -> None:
+    trle_author = scraper.fetch_author(obj_id)
     print(f"Author #{obj_id}")
     print(repr_obj(trle_author))
     print(flush=True)
@@ -93,7 +97,10 @@ def process_author(obj_id: int, trle_author: TRLEAuthor | None) -> None:
     )
 
 
-def process_level(obj_id: int, trle_level: TRLELevel | None) -> None:
+def process_level(
+    scraper: TRLEScraper, obj_id: int, no_images: bool, no_files: bool
+) -> None:
+    trle_level = scraper.fetch_level(obj_id)
     print(f"Level #{obj_id}")
     print(repr_obj(trle_level))
     print(flush=True)
@@ -129,16 +136,17 @@ def process_level(obj_id: int, trle_level: TRLELevel | None) -> None:
     level.created = trle_level.release_date
     level.save()
 
-    image_urls = [trle_level.main_image_url] + trle_level.screenshot_urls
-    for pos, image_url in enumerate(image_urls):
-        image_content = TRLEScraper().get_bytes(image_url)
-        LevelMedium.objects.get_or_create(
-            level=level,
-            position=pos,
-            defaults=dict(
-                image=ContentFile(image_content, name=Path(image_url).name)
-            ),
-        )
+    if not no_images:
+        image_urls = [trle_level.main_image_url] + trle_level.screenshot_urls
+        for pos, image_url in enumerate(image_urls):
+            image_content = TRLEScraper().get_bytes(image_url)
+            LevelMedium.objects.update_or_create(
+                level=level,
+                position=pos,
+                defaults=dict(
+                    image=ContentFile(image_content, name=Path(image_url).name)
+                ),
+            )
 
     if trle_level.category:
         tag, _created = LevelTag.objects.get_or_create(
@@ -148,6 +156,18 @@ def process_level(obj_id: int, trle_level: TRLELevel | None) -> None:
 
     for user in User.objects.filter(trle_author_id__in=trle_level.author_ids):
         level.authors.add(user)
+
+    if not no_files:
+        level_content = TRLEScraper().get_bytes_parallel(
+            trle_level.download_url
+        )
+        if level_content:
+            LevelFile.objects.update_or_create(
+                level=level,
+                defaults=dict(
+                    file=ContentFile(level_content, name="dummy.zip")
+                ),
+            )
 
 
 class Command(BaseCommand):
@@ -175,11 +195,18 @@ class Command(BaseCommand):
         )
 
         parser.add_argument(
-            "--no-cache", dest="use_cache", action="store_false"
+            "--no-images",
+            action="store_true",
+            help="Disable downloading level images",
+        )
+        parser.add_argument(
+            "--no-files",
+            action="store_true",
+            help="Disable downloading level files",
         )
 
     def handle(self, *args, **options):
-        scraper = TRLEScraper(use_cache=options["use_cache"])
+        scraper = TRLEScraper()
 
         if options["reviewers"]:
             self.handle_reviewers(
@@ -193,47 +220,62 @@ class Command(BaseCommand):
 
         if options["levels"]:
             self.handle_levels(
-                scraper, range(1, scraper.fetch_highest_level_id() + 1)
+                scraper,
+                range(1, scraper.fetch_highest_level_id() + 1),
+                no_images=options["no_images"],
+                no_files=options["no_files"],
             )
         if options["level"]:
-            self.handle_levels(scraper, list(options["level"]))
+            self.handle_levels(
+                scraper,
+                list(options["level"]),
+                no_images=options["no_images"],
+                no_files=options["no_files"],
+            )
 
     def handle_reviewers(
         self, scraper: TRLEScraper, reviewer_ids: list[int]
     ) -> None:
-        self.run_in_parallel(
-            reviewer_ids, scraper.fetch_reviewer, process_reviewer
-        )
+        self.run_in_parallel(reviewer_ids, process_reviewer, scraper=scraper)
 
     def handle_authors(
         self, scraper: TRLEScraper, author_ids: list[int]
     ) -> None:
-        self.run_in_parallel(author_ids, scraper.fetch_author, process_author)
+        self.run_in_parallel(author_ids, process_author, scraper=scraper)
 
     def handle_levels(
-        self, scraper: TRLEScraper, level_ids: list[int]
+        self,
+        scraper: TRLEScraper,
+        level_ids: list[int],
+        no_images: bool,
+        no_files: bool,
     ) -> None:
-        self.run_in_parallel(level_ids, scraper.fetch_level, process_level)
+        self.run_in_parallel(
+            level_ids,
+            process_level,
+            scraper=scraper,
+            no_images=no_images,
+            no_files=no_files,
+        )
 
     def run_in_parallel(
         self,
         obj_ids: list[int],
-        fetch_worker: Callable[[int], P],
-        result_processor: Callable[[int, P], None],
+        worker: Callable[[TRLEScraper, int], None],
+        **kwargs: Any,
     ) -> None:
         with ThreadPoolExecutor(max_workers=4) as executor:
             future_to_obj_id = {
-                executor.submit(fetch_worker, obj_id): obj_id
+                executor.submit(worker, obj_id=obj_id, **kwargs): obj_id
                 for obj_id in obj_ids
             }
             for future in as_completed(future_to_obj_id):
                 obj_id = future_to_obj_id[future]
                 try:
-                    obj = future.result()
-                    result_processor(obj_id, obj)
+                    future.result()
                 except Exception:
                     self.stderr.write(
-                        f"Error while calling {fetch_worker} "
+                        f"Error while calling {worker} "
                         f"for object #{obj_id}:"
                     )
                     self.stderr.write(traceback.format_exc())

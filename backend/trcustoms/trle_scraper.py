@@ -1,12 +1,14 @@
 import html
 import logging
 import re
+import tempfile
 from collections.abc import Iterable
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from dataclasses import dataclass
 from datetime import date
 from decimal import Decimal
 from pathlib import Path
-from urllib.parse import urljoin, urlparse
+from urllib.parse import urljoin
 
 import dateutil.parser
 import lxml.html
@@ -14,7 +16,7 @@ import requests
 import urllib3
 from markdownify import MarkdownConverter
 
-from trcustoms.cache import get_cache, put_cache
+from trcustoms.cache import file_cache
 
 logger = logging.getLogger(__name__)
 
@@ -27,24 +29,27 @@ class CustomMarkdownConverter(MarkdownConverter):
 
 
 def markdownify(html_text, **options):
-    return CustomMarkdownConverter(**options).convert(html_text)
+    return CustomMarkdownConverter(**options).convert(html_text).strip()
 
 
 def strip_tags(value: str) -> str:
     return re.sub(r"<[^>]*?>", "", value)
 
 
-def get_html(node) -> str:
+def get_inner_html(node) -> str:
     parts = [node.text]
     for c in node.getchildren():
         parts.extend([c.text, lxml.html.tostring(c).decode(), c.tail])
     parts.append(node.tail)
     return "".join(filter(None, parts))
-    # return lxml.html.tostring(node, encoding=str).strip()
+
+
+def get_outer_html(node) -> str:
+    return lxml.html.tostring(node, encoding=str).strip()
 
 
 def get_text(node) -> str:
-    return strip_tags(get_html(node)).strip()
+    return strip_tags(get_outer_html(node)).strip()
 
 
 def unescape(text: str | None) -> str:
@@ -111,15 +116,15 @@ class TRLELevel:
     reviews: list[TRLELevelReview]
     file_type: str
     category: str | None
+    download_url: str
     main_image_url: str
     screenshot_urls: list[str]
     author_ids: list[int]
 
 
 class TRLEScraper:
-    def __init__(self, use_cache: bool = True) -> None:
+    def __init__(self) -> None:
         urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
-        self.use_cache = use_cache
 
     def fetch_reviewer(self, reviewer_id: int) -> TRLEReviewer | None:
         response = self.get(
@@ -238,7 +243,7 @@ class TRLEScraper:
 
         title = get_text(doc.cssselect(".subHeader.Stil2")[0]).split("\n")[0]
         synopsis = markdownify(
-            get_html(doc.cssselect("tr:nth-child(5) .medGText")[0])
+            get_inner_html(doc.cssselect("tr:nth-child(5) .medGText")[0])
         )
 
         main_image_url = urljoin(
@@ -260,10 +265,7 @@ class TRLEScraper:
             for i in range(0, len(texts), 2)
         }
 
-        # prefetch images to cache
-        if self.use_cache:
-            for image_url in [main_image_url] + screenshot_urls:
-                TRLEScraper().get_bytes(image_url)
+        download_url = f"https://www.trle.net/scadm/trle_dl.php?lid={level_id}"
 
         return TRLELevel(
             title=title,
@@ -280,6 +282,7 @@ class TRLEScraper:
             reviews=list(self.fetch_level_reviews(level_id)),
             file_type=attrs["file type"],
             category=attrs["class"] if attrs["class"] != "nc" else None,
+            download_url=download_url,
             main_image_url=main_image_url,
             screenshot_urls=screenshot_urls,
             author_ids=author_ids,
@@ -364,15 +367,84 @@ class TRLEScraper:
             ]
         )
 
-    def get(self, url: str) -> requests.Response:
+    @file_cache
+    def get(
+        self, url: str, headers: dict[str, str] | None = None
+    ) -> requests.Response:
+        if headers:
+            logger.debug("Fetching %s (headers=%s)", url, headers)
+        else:
+            logger.debug("Fetching %s", url)
+        return requests.get(
+            url,
+            timeout=30,
+            verify=False,
+            allow_redirects=True,
+            headers=headers,
+        )
+
+    @file_cache
+    def head(self, url: str) -> requests.Response:
         logger.debug("Fetching %s", url)
-        suffix = Path(urlparse(url).path).suffix
-        if not self.use_cache or not (
-            response := get_cache(url, suffix=suffix)
-        ):
-            response = requests.get(url, timeout=30, verify=False)
-            put_cache(url, response, suffix=suffix)
-        return response
+        return requests.head(
+            url, timeout=30, verify=False, allow_redirects=True
+        )
+
+    def get_size(self, url) -> int | None:
+        response = self.head(url)
+        match header := response.headers["Content-Length"]:
+            case str(size):
+                return int(size)
+            case None:
+                return None
+            case _:
+                raise ValueError(f"unknown value: {header}")
+
+    def is_url_download(self, url) -> bool:
+        response = self.head(url)
+        return response.headers["Content-Type"].startswith("application/")
 
     def get_bytes(self, url: str) -> bytes:
         return self.get(url).content
+
+    def get_bytes_parallel(self, url: str) -> bytes | None:
+        if not self.is_url_download(url):
+            return None
+
+        chunk_size = 128 * 1024
+        file_size = self.get_size(url)
+        chunks = list(range(0, file_size, chunk_size))
+
+        with tempfile.TemporaryDirectory() as tmpdir:
+            tmpdir = Path(tmpdir)
+
+            def download_worker(chunk: int) -> Path:
+                start = chunk
+                end = chunk + chunk_size - 1
+                headers = {"Range": f"bytes={start}-{end}"}
+                response = self.get(url, headers=headers)
+                path = tmpdir / f"{chunk}.dat"
+                with path.open("wb") as handle:
+                    for part in response.iter_content(1024):
+                        handle.write(part)
+                return path
+
+            with ThreadPoolExecutor(max_workers=8) as executor:
+                future_to_chunk = {
+                    executor.submit(download_worker, chunk): chunk
+                    for chunk in chunks
+                }
+
+                chunk_to_path = {}
+                for future in as_completed(future_to_chunk):
+                    chunk = future_to_chunk[future]
+                    path = future.result()
+                    chunk_to_path[chunk] = path
+
+            result = b""
+            for chunk, path in sorted(
+                chunk_to_path.items(), key=lambda kv: kv[0]
+            ):
+                result += path.read_bytes()
+
+        return result
