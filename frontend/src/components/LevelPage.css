@@ -13,6 +13,9 @@
   grid-area: sidebar;
   white-space: nowrap;
 }
+#LevelPage--sidebar .MediumThumbnail--thumb {
+  width: 100%;
+}
 #LevelPage--main {
   width: 100%;
   grid-area: main;
