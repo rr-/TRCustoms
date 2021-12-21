@@ -78,8 +78,8 @@ button + button {
   margin-left: 1rem;
 }
 button:hover {
-  background: var(--button-focused-background-color);
-  color: var(--button-focused-text-color);
+  background: var(--button-hovered-background-color);
+  color: var(--button-hovered-text-color);
 }
 input:focus,
 button:focus {
