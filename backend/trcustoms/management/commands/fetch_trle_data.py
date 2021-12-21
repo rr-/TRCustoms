@@ -235,6 +235,9 @@ class Command(BaseCommand):
         parser.add_argument(
             "--author", type=id_range, help="Fetch specific authors"
         )
+        parser.add_argument(
+            "--authors", action="store_true", help="Fetch all authors"
+        )
 
         parser.add_argument(
             "--levels", action="store_true", help="Fetch all levels"
@@ -277,18 +280,16 @@ class Command(BaseCommand):
         )
 
         if options["reviewers"]:
-            handle_reviewers(
-                ctx, range(1, ctx.scraper.fetch_highest_reviewer_id() + 1)
-            )
+            handle_reviewers(ctx, sorted(ctx.scraper.fetch_all_reviewer_ids()))
         if options["reviewer"]:
             handle_reviewers(ctx, list(options["reviewer"]))
 
+        if options["authors"]:
+            handle_authors(ctx, sorted(ctx.scraper.fetch_all_author_ids()))
         if options["author"]:
             handle_authors(ctx, list(options["author"]))
 
         if options["levels"]:
-            handle_levels(
-                ctx, range(1, ctx.scraper.fetch_highest_level_id() + 1)
-            )
+            handle_levels(ctx, sorted(ctx.scraper.fetch_all_level_ids()))
         if options["level"]:
             handle_levels(ctx, list(options["level"]))

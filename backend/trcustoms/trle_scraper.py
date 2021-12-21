@@ -363,27 +363,38 @@ class TRLEScraper:
                 text=text or None,
             )
 
-    def fetch_highest_level_id(self) -> int:
-        response = self.safe_get("https://www.trle.net/rPost.php")
+    def fetch_all_author_ids(self) -> Iterable[int]:
+        response = self.safe_get("https://www.trle.net/sc/bGalleryWorld.php")
         doc = get_document_from_response(response)
-        return max(
-            [
-                int(value)
-                for node in doc.cssselect("[name='lid'] option")
-                if (value := node.get("value"))
-            ]
-        )
 
-    def fetch_highest_reviewer_id(self) -> int:
+        country_urls: set[str] = set()
+        for node in doc.cssselect("a[href*='bGalleryCountry.php']"):
+            country_url = urljoin("https://trle.net/", node.get("href"))
+            country_urls.add(country_url)
+
+        for country_url in country_urls:
+            response = self.safe_get(country_url)
+            doc = get_document_from_response(response)
+            for node in doc.cssselect("a[href*='authorfeatures']"):
+                if match := re.search(r"\d+", node.get("href")):
+                    author_id = int(match.group(0))
+                    yield author_id
+
+    def fetch_all_level_ids(self) -> Iterable[int]:
         response = self.safe_get("https://www.trle.net/rPost.php")
         doc = get_document_from_response(response)
-        return max(
-            [
-                int(value)
-                for node in doc.cssselect("[name='rid'] option")
-                if (value := node.get("value"))
-            ]
-        )
+        for node in doc.cssselect("[name='lid'] option"):
+            if value := node.get("value"):
+                level_id = int(value)
+                yield level_id
+
+    def fetch_all_reviewer_ids(self) -> Iterable[int]:
+        response = self.safe_get("https://www.trle.net/rPost.php")
+        doc = get_document_from_response(response)
+        for node in doc.cssselect("[name='rid'] option"):
+            if value := node.get("value"):
+                reviewer_id = int(value)
+                yield reviewer_id
 
     def safe_get(
         self, url: str, headers: dict[str, str] | None = None
