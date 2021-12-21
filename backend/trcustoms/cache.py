@@ -24,3 +24,14 @@ def put_cache(key: Any, value: Any, suffix=DEFAULT_SUFFIX) -> None:
     path = get_cache_path(key, suffix=suffix)
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_bytes(pickle.dumps(value))
+
+
+def file_cache(func):
+    def wrapper(*args, **kwargs):
+        cache_key = (func.__qualname__, list(args), dict(kwargs))
+        if not (result := get_cache(cache_key)):
+            result = func(*args, **kwargs)
+            put_cache(cache_key, result)
+        return result
+
+    return wrapper
