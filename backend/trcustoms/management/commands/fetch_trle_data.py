@@ -1,8 +1,10 @@
 import logging
 import re
+import sys
 import traceback
 from collections.abc import Callable, Iterable
 from concurrent.futures import ThreadPoolExecutor, as_completed
+from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, TypeVar
 
@@ -53,8 +55,16 @@ def repr_obj(obj: Any) -> str:
     )
 
 
-def process_reviewer(scraper: TRLEScraper, obj_id: int) -> None:
-    trle_reviewer = scraper.fetch_reviewer(obj_id)
+@dataclass
+class ScrapeContext:
+    scraper: TRLEScraper
+    no_images: bool
+    no_files: bool
+    num_workers: int
+
+
+def process_reviewer(ctx: ScrapeContext, obj_id: int) -> None:
+    trle_reviewer = ctx.scraper.fetch_reviewer(obj_id)
     print(f"Reviewer #{obj_id}")
     print(repr_obj(trle_reviewer))
     print(flush=True)
@@ -73,8 +83,8 @@ def process_reviewer(scraper: TRLEScraper, obj_id: int) -> None:
     )
 
 
-def process_author(scraper: TRLEScraper, obj_id: int) -> None:
-    trle_author = scraper.fetch_author(obj_id)
+def process_author(ctx: ScrapeContext, obj_id: int) -> None:
+    trle_author = ctx.scraper.fetch_author(obj_id)
     print(f"Author #{obj_id}")
     print(repr_obj(trle_author))
     print(flush=True)
@@ -97,10 +107,8 @@ def process_author(scraper: TRLEScraper, obj_id: int) -> None:
     )
 
 
-def process_level(
-    scraper: TRLEScraper, obj_id: int, no_images: bool, no_files: bool
-) -> None:
-    trle_level = scraper.fetch_level(obj_id)
+def process_level(ctx: ScrapeContext, obj_id: int) -> None:
+    trle_level = ctx.scraper.fetch_level(obj_id)
     print(f"Level #{obj_id}")
     print(repr_obj(trle_level))
     print(flush=True)
@@ -136,7 +144,7 @@ def process_level(
     level.created = trle_level.release_date
     level.save()
 
-    if not no_images:
+    if not ctx.no_images:
         image_urls = [trle_level.main_image_url] + trle_level.screenshot_urls
         for pos, image_url in enumerate(image_urls):
             image_content = TRLEScraper().get_bytes(image_url)
@@ -157,7 +165,7 @@ def process_level(
     for user in User.objects.filter(trle_author_id__in=trle_level.author_ids):
         level.authors.add(user)
 
-    if not no_files:
+    if not ctx.no_files:
         level_content = TRLEScraper().get_bytes_parallel(
             trle_level.download_url
         )
@@ -168,6 +176,42 @@ def process_level(
                     file=ContentFile(level_content, name="dummy.zip")
                 ),
             )
+
+
+def run_in_parallel(
+    ctx: ScrapeContext,
+    obj_ids: list[int],
+    worker: Callable[[ScrapeContext, int], None],
+) -> None:
+    with ThreadPoolExecutor(max_workers=ctx.num_workers) as executor:
+        future_to_obj_id = {
+            executor.submit(worker, ctx, obj_id): obj_id for obj_id in obj_ids
+        }
+        for future in as_completed(future_to_obj_id):
+            obj_id = future_to_obj_id[future]
+            try:
+                future.result()
+            except Exception:
+                print(
+                    f"Error while calling {worker} " f"for object #{obj_id}:",
+                    file=sys.stderr,
+                )
+                print(traceback.format_exc(), file=sys.stderr)
+
+
+def handle_reviewers(ctx: ScrapeContext, reviewer_ids: list[int]) -> None:
+    run_in_parallel(ctx, reviewer_ids, process_reviewer)
+
+
+def handle_authors(ctx: ScrapeContext, author_ids: list[int]) -> None:
+    run_in_parallel(ctx, author_ids, process_author)
+
+
+def handle_levels(
+    ctx: ScrapeContext,
+    level_ids: list[int],
+) -> None:
+    run_in_parallel(ctx, level_ids, process_level)
 
 
 class Command(BaseCommand):
@@ -205,77 +249,34 @@ class Command(BaseCommand):
             help="Disable downloading level files",
         )
 
-    def handle(self, *args, **options):
-        scraper = TRLEScraper()
-
-        if options["reviewers"]:
-            self.handle_reviewers(
-                scraper, range(1, scraper.fetch_highest_reviewer_id() + 1)
-            )
-        if options["reviewer"]:
-            self.handle_reviewers(scraper, list(options["reviewer"]))
-
-        if options["author"]:
-            self.handle_authors(scraper, list(options["author"]))
-
-        if options["levels"]:
-            self.handle_levels(
-                scraper,
-                range(1, scraper.fetch_highest_level_id() + 1),
-                no_images=options["no_images"],
-                no_files=options["no_files"],
-            )
-        if options["level"]:
-            self.handle_levels(
-                scraper,
-                list(options["level"]),
-                no_images=options["no_images"],
-                no_files=options["no_files"],
-            )
-
-    def handle_reviewers(
-        self, scraper: TRLEScraper, reviewer_ids: list[int]
-    ) -> None:
-        self.run_in_parallel(reviewer_ids, process_reviewer, scraper=scraper)
-
-    def handle_authors(
-        self, scraper: TRLEScraper, author_ids: list[int]
-    ) -> None:
-        self.run_in_parallel(author_ids, process_author, scraper=scraper)
-
-    def handle_levels(
-        self,
-        scraper: TRLEScraper,
-        level_ids: list[int],
-        no_images: bool,
-        no_files: bool,
-    ) -> None:
-        self.run_in_parallel(
-            level_ids,
-            process_level,
-            scraper=scraper,
-            no_images=no_images,
-            no_files=no_files,
+        parser.add_argument(
+            "--num-workers",
+            type=int,
+            default=10,
+            help="How many parallel threads to run",
         )
 
-    def run_in_parallel(
-        self,
-        obj_ids: list[int],
-        worker: Callable[[TRLEScraper, int], None],
-        **kwargs: Any,
-    ) -> None:
-        with ThreadPoolExecutor(max_workers=4) as executor:
-            future_to_obj_id = {
-                executor.submit(worker, obj_id=obj_id, **kwargs): obj_id
-                for obj_id in obj_ids
-            }
-            for future in as_completed(future_to_obj_id):
-                obj_id = future_to_obj_id[future]
-                try:
-                    future.result()
-                except Exception:
-                    self.stderr.write(
-                        f"Error while calling {worker} "
-                        f"for object #{obj_id}:"
-                    )
-                    self.stderr.write(traceback.format_exc())
+    def handle(self, *args, **options):
+        ctx = ScrapeContext(
+            scraper=TRLEScraper(),
+            no_images=options["no_images"],
+            no_files=options["no_files"],
+            num_workers=options["num_workers"],
+        )
+
+        if options["reviewers"]:
+            handle_reviewers(
+                ctx, range(1, ctx.scraper.fetch_highest_reviewer_id() + 1)
+            )
+        if options["reviewer"]:
+            handle_reviewers(ctx, list(options["reviewer"]))
+
+        if options["author"]:
+            handle_authors(ctx, list(options["author"]))
+
+        if options["levels"]:
+            handle_levels(
+                ctx, range(1, ctx.scraper.fetch_highest_level_id() + 1)
+            )
+        if options["level"]:
+            handle_levels(ctx, list(options["level"]))
