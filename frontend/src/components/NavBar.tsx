@@ -4,6 +4,7 @@ import { useContext } from "react";
 import { Link } from "react-router-dom";
 import { NavLink } from "react-router-dom";
 import { PermissionGuard } from "src/shared/components/PermissionGuard";
+import { ThemeManager } from "src/shared/components/ThemeManager";
 import UserPicture from "src/shared/components/UserPicture";
 import { UserContext } from "src/shared/contexts/UserContext";
 
@@ -13,10 +14,10 @@ const NavBar: React.FunctionComponent<INavBar> = () => {
   const { user } = useContext(UserContext);
 
   return (
-    <div id="TopNavBar">
-      <div id="PrimaryNavBar">
+    <div className="TopNavBar">
+      <div className="TopNavBar--primary">
         <div className="MainContainer">
-          <nav>
+          <div className="NavBar">
             <div className="NavBar--left">
               <h1>
                 <Link to={"/"}>
@@ -25,21 +26,21 @@ const NavBar: React.FunctionComponent<INavBar> = () => {
               </h1>
             </div>
 
-            <div className="PrimaryNavBar--right">
+            <nav className="NavBar--right">
               {user ? (
                 <>
                   <Link
-                    className="PrimaryNavBar--userPicLink"
+                    className="TopNavBar--primary--userPicLink"
                     to={`/users/${user.id}`}
                   >
                     <UserPicture
-                      className="PrimaryNavBar--userPic"
+                      className="TopNavBar--primary--userPic"
                       user={user}
                     />
                     {user.username}
                   </Link>
-                  <ul>
-                    <li>
+                  <ul className="TopNavBar--list">
+                    <li className="TopNavBar--listItem">
                       <Link to={"/logout"}>Log out</Link>
                     </li>
                   </ul>
@@ -47,40 +48,45 @@ const NavBar: React.FunctionComponent<INavBar> = () => {
               ) : (
                 <>
                   <p>Not logged in.</p>
-                  <ul>
-                    <li>
+                  <ul className="TopNavBar--list">
+                    <li className="TopNavBar--listItem">
                       <Link to={"/login"}>Log in</Link>
                     </li>
-                    <li>
+                    <li className="TopNavBar--listItem">
                       <Link to={"/register"}>Register</Link>
                     </li>
                   </ul>
                 </>
               )}
-            </div>
-          </nav>
+            </nav>
+          </div>
         </div>
       </div>
-      <div id="SecondaryNavBar">
+      <div className="TopNavBar--secondary">
         <div className="MainContainer">
-          <nav>
-            <ul>
-              <li>
-                <NavLink to={"/levels"}>Levels</NavLink>
-              </li>
-              <li>
-                <NavLink to={"/tags"}>Tags</NavLink>
-              </li>
-              <li>
-                <NavLink to={"/genres"}>Genres</NavLink>
-              </li>
-              <PermissionGuard require="canListUsers">
-                <li>
-                  <NavLink to={"/users"}>Users</NavLink>
+          <div className="NavBar">
+            <nav className="NavBar NavBar--left">
+              <ul className="TopNavBar--list">
+                <li className="TopNavBar--listItem">
+                  <NavLink to={"/levels"}>Levels</NavLink>
                 </li>
-              </PermissionGuard>
-            </ul>
-          </nav>
+                <li className="TopNavBar--listItem">
+                  <NavLink to={"/tags"}>Tags</NavLink>
+                </li>
+                <li className="TopNavBar--listItem">
+                  <NavLink to={"/genres"}>Genres</NavLink>
+                </li>
+                <PermissionGuard require="canListUsers">
+                  <li className="TopNavBar--listItem">
+                    <NavLink to={"/users"}>Users</NavLink>
+                  </li>
+                </PermissionGuard>
+              </ul>
+            </nav>
+            <div className="NavBar NavBar--right">
+              <ThemeManager />
+            </div>
+          </div>
         </div>
       </div>
     </div>

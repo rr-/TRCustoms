@@ -1,76 +1,79 @@
-.PrimaryNavBar--userPicLink {
+.TopNavBar--primary--userPicLink {
   display: inline-flex;
   align-items: center;
 }
-.PrimaryNavBar--userPic {
+.TopNavBar--primary--userPic {
   max-width: 2rem;
   max-height: 2rem;
   margin-right: 0.5rem;
 }
-#TopNavBar nav {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-#TopNavBar ul {
+.TopNavBar--list {
   margin: 0;
   padding: 0;
   list-style-type: none;
 }
-#TopNavBar li {
+.TopNavBar--listItem {
   display: inline;
   margin: 0;
   padding: 0;
 }
-#TopNavBar h1,
-#TopNavBar p {
+.TopNavBar h1,
+.TopNavBar p {
   margin: 0;
   padding: 0;
 }
-#TopNavBar h1 {
+.TopNavBar h1 {
   font-size: 2rem;
 }
-#TopNavBar h1 a {
+.TopNavBar h1 a {
   text-decoration: none;
   display: flex;
   gap: 0.25rem;
   align-items: center;
 }
 
-#PrimaryNavBar {
+.TopNavBar--primary {
   background: var(--navbar-primary-background-color);
   margin: var(--navbar-primary-margin);
 }
-#PrimaryNavBar .MainContainer {
+.TopNavBar--primary .NavBar {
+  height: 3rem;
+}
+.TopNavBar--primary .MainContainer {
   background: var(--navbar-primary-background-color-inside);
 }
-#PrimaryNavBar .PrimaryNavBar--left {
+.TopNavBar--primary .TopNavBar--listItem {
+  margin-left: 1rem;
+}
+
+.TopNavBar--secondary {
+  background: var(--navbar-secondary-background-color);
+  margin: var(--navbar-secondary-margin);
+}
+.TopNavBar--secondary .MainContainer {
+  background: var(--navbar-secondary-background-color-inside);
+}
+.TopNavBar--secondary .TopNavBar--listItem a {
+  padding: 0.3rem 1rem;
+  display: inline-block;
+}
+.TopNavBar--secondary .TopNavBar--listItem a.active {
+  background: var(--navbar-secondary-active-tab-background-color);
+  color: var(--navbar-secondary-active-tab-text-color);
+}
+
+.NavBar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.NavBar--left {
   display: flex;
   justify-content: flex-start;
   align-items: center;
 }
-#PrimaryNavBar .PrimaryNavBar--right {
-  height: 3rem;
+.NavBar--right {
   display: flex;
   justify-content: flex-end;
   align-items: center;
-}
-#PrimaryNavBar li {
-  margin-left: 1rem;
-}
-
-#SecondaryNavBar {
-  background: var(--navbar-secondary-background-color);
-  margin: var(--navbar-secondary-margin);
-}
-#SecondaryNavBar .MainContainer {
-  background: var(--navbar-secondary-background-color-inside);
-}
-#SecondaryNavBar li a {
-  padding: 0.3rem 1rem;
-  display: inline-block;
-}
-#SecondaryNavBar li a.active {
-  background: var(--navbar-secondary-active-tab-background-color);
-  color: var(--navbar-secondary-active-tab-text-color);
 }
