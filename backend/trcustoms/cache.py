@@ -5,33 +5,41 @@ from typing import Any
 
 from django.conf import settings
 
-DEFAULT_SUFFIX = ".dat"
 
-
-def get_cache_path(key: Any, suffix=DEFAULT_SUFFIX) -> Path:
+def get_cache_path(key: Any) -> Path:
     checksum = hashlib.md5(pickle.dumps(key)).hexdigest()
-    return (settings.CACHE_DIR / checksum[0:2] / checksum).with_suffix(suffix)
+    return settings.CACHE_DIR / checksum[0:2] / checksum
 
 
-def get_cache(key: Any, suffix=DEFAULT_SUFFIX) -> Any | None:
-    path = get_cache_path(key, suffix=suffix)
+def get_cache(key: Any) -> Any | None:
+    path = get_cache_path(key)
     if path.exists():
         return pickle.loads(path.read_bytes())
     return None
 
 
-def put_cache(key: Any, value: Any, suffix=DEFAULT_SUFFIX) -> None:
-    path = get_cache_path(key, suffix=suffix)
+def put_cache(key: Any, value: Any) -> None:
+    path = get_cache_path(key)
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_bytes(pickle.dumps(value))
 
 
-def file_cache(func):
-    def wrapper(*args, **kwargs):
-        cache_key = (func.__qualname__, list(args), dict(kwargs))
-        if not (result := get_cache(cache_key)):
-            result = func(*args, **kwargs)
-            put_cache(cache_key, result)
-        return result
+def delete_cache(key: Any) -> None:
+    path = get_cache_path(key)
+    if path.exists():
+        path.unlink()
 
-    return wrapper
+
+def file_cache(*key: str):
+    def outer(func):
+        def inner(*args, **kwargs):
+            cache_key = (list(key), list(args), dict(kwargs))
+            if not (result := get_cache(cache_key)):
+                result = func(*args, **kwargs)
+                put_cache(cache_key, result)
+            return result
+
+        inner.delete_cache = delete_cache
+        return inner
+
+    return outer
