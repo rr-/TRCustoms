@@ -61,13 +61,15 @@ class ScrapeContext:
     no_images: bool
     no_files: bool
     num_workers: int
+    quiet: bool
 
 
 def process_reviewer(ctx: ScrapeContext, obj_id: int) -> None:
     trle_reviewer = ctx.scraper.fetch_reviewer(obj_id)
-    print(f"Reviewer #{obj_id}")
-    print(repr_obj(trle_reviewer))
-    print(flush=True)
+    if not ctx.quiet:
+        print(f"Reviewer #{obj_id}")
+        print(repr_obj(trle_reviewer))
+        print(flush=True)
 
     if not trle_reviewer:
         return
@@ -85,9 +87,10 @@ def process_reviewer(ctx: ScrapeContext, obj_id: int) -> None:
 
 def process_author(ctx: ScrapeContext, obj_id: int) -> None:
     trle_author = ctx.scraper.fetch_author(obj_id)
-    print(f"Author #{obj_id}")
-    print(repr_obj(trle_author))
-    print(flush=True)
+    if not ctx.quiet:
+        print(f"Author #{obj_id}")
+        print(repr_obj(trle_author))
+        print(flush=True)
 
     if not trle_author:
         return
@@ -109,9 +112,10 @@ def process_author(ctx: ScrapeContext, obj_id: int) -> None:
 
 def process_level(ctx: ScrapeContext, obj_id: int) -> None:
     trle_level = ctx.scraper.fetch_level(obj_id)
-    print(f"Level #{obj_id}")
-    print(repr_obj(trle_level))
-    print(flush=True)
+    if not ctx.quiet:
+        print(f"Level #{obj_id}")
+        print(repr_obj(trle_level))
+        print(flush=True)
 
     if not trle_level:
         return
@@ -141,8 +145,9 @@ def process_level(ctx: ScrapeContext, obj_id: int) -> None:
             engine=engine,
         ),
     )
-    level.created = trle_level.release_date
-    level.save()
+    if level.created.date() != trle_level.release_date:
+        level.created = trle_level.release_date
+        level.save()
 
     if not ctx.no_images:
         image_urls = [trle_level.main_image_url] + trle_level.screenshot_urls
@@ -239,6 +244,12 @@ class Command(BaseCommand):
         )
 
         parser.add_argument(
+            "-q",
+            "--quiet",
+            action="store_true",
+            help="Reduce output verbosity",
+        )
+        parser.add_argument(
             "--no-images",
             action="store_true",
             help="Disable downloading level images",
@@ -262,6 +273,7 @@ class Command(BaseCommand):
             no_images=options["no_images"],
             no_files=options["no_files"],
             num_workers=options["num_workers"],
+            quiet=options["quiet"],
         )
 
         if options["reviewers"]:
