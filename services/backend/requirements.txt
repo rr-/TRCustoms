@@ -11,3 +11,5 @@ cssselect
 lxml
 pyyaml
 markdownify
+django-unused-media==0.2.2
+django-cleanup==5.2.0
