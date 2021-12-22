@@ -18,7 +18,7 @@
 }
 
 .Pager span,
-.Pager a {
+.Pager .Pager--button {
   display: inline-block;
   width: 3.5rem;
   padding: 0.5rem 0;
@@ -28,6 +28,6 @@
 .Pager li.active {
   background: var(--link-highlight-background-color);
 }
-.Pager li.active a {
+.Pager li.active .Pager--button {
   color: var(--link-highlight-text-color);
 }

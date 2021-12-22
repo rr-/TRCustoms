@@ -23,6 +23,7 @@ interface DataTableProps<TDataTableItem> {
 
   sort?: string | null;
   onSortChange?: (sort: string) => any | null;
+  onPageChange?: (page: number) => any | null;
 }
 
 const DataTable = <TDataTableItem extends {}>({
@@ -32,6 +33,7 @@ const DataTable = <TDataTableItem extends {}>({
   columns,
   sort,
   onSortChange,
+  onPageChange,
 }: DataTableProps<TDataTableItem>) => {
   if (result.error) {
     return <p>{result.error.message}</p>;
@@ -105,8 +107,12 @@ const DataTable = <TDataTableItem extends {}>({
           </tfoot>
         )}
       </table>
-      {!result.data.disable_paging && (
-        <Pager className={`${className}--pager`} pagedResponse={result.data} />
+      {onPageChange && !result.data.disable_paging && (
+        <Pager
+          onPageChange={onPageChange}
+          className={`${className}--pager`}
+          pagedResponse={result.data}
+        />
       )}
     </>
   );

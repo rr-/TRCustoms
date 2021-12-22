@@ -56,6 +56,7 @@ const TagsTable = ({ query, onQueryChange }: TagsTableProps) => {
       itemKey={itemKey}
       sort={query.sort}
       onSortChange={(sort) => onQueryChange?.({ ...query, sort: sort })}
+      onPageChange={(page) => onQueryChange?.({ ...query, page: page })}
     />
   );
 };

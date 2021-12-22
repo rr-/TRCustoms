@@ -119,6 +119,7 @@ const ReviewsTable = ({ query, onQueryChange }: ReviewsTableProps) => {
         itemKey={itemKey}
         sort={query.sort}
         onSortChange={(sort) => onQueryChange?.({ ...query, sort: sort })}
+        onPageChange={(page) => onQueryChange?.({ ...query, page: page })}
       />
 
       <h2>Reviewer comments</h2>
