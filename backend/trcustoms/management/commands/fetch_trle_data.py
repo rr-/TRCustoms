@@ -1,5 +1,5 @@
+import argparse
 import logging
-import re
 import sys
 import traceback
 from collections.abc import Callable, Iterable
@@ -23,6 +23,7 @@ from trcustoms.models import (
     User,
 )
 from trcustoms.trle_scraper import TRLELevel, TRLEScraper, TRLEUser
+from trcustoms.utils import id_range, unbound_range
 
 logger = logging.getLogger(__name__)
 P = TypeVar("P")
@@ -38,17 +39,6 @@ def split_full_name(full_name: str | None) -> tuple[str, str]:
             first_name = ""
             last_name = ""
     return first_name, last_name
-
-
-def id_range(source: str) -> Iterable[int]:
-    items = re.sub(r"\s+", "", source).split(",")
-    for item in items:
-        if match := re.fullmatch(r"(\d+)", item):
-            yield int(match.group(1))
-        elif match := re.fullmatch(r"(\d+)\.\.\.?(\d+)", item):
-            yield from range(int(match.group(1)), int(match.group(2)) + 1)
-        else:
-            raise ValueError(f"Bad range: {item}")
 
 
 def repr_obj(obj: Any) -> str:
@@ -270,25 +260,24 @@ class Command(BaseCommand):
     def add_arguments(self, parser):
         parser.add_argument(
             "--reviewers",
-            action="store_true",
-            help="Fetch all reviewers",
+            type=id_range,
+            help="Fetch reviewers",
+            nargs="?",
+            default=argparse.SUPPRESS,
         )
         parser.add_argument(
-            "--reviewer", type=id_range, help="Fetch specific reviewers"
-        )
-
-        parser.add_argument(
-            "--author", type=id_range, help="Fetch specific authors"
-        )
-        parser.add_argument(
-            "--authors", action="store_true", help="Fetch all authors"
-        )
-
-        parser.add_argument(
-            "--levels", action="store_true", help="Fetch all levels"
+            "--authors",
+            type=id_range,
+            help="Fetch authors",
+            nargs="?",
+            default=argparse.SUPPRESS,
         )
         parser.add_argument(
-            "--level", type=id_range, help="Fetch specific levels"
+            "--levels",
+            type=id_range,
+            help="Fetch all levels",
+            nargs="?",
+            default=argparse.SUPPRESS,
         )
 
         parser.add_argument(
@@ -324,17 +313,30 @@ class Command(BaseCommand):
             quiet=options["quiet"],
         )
 
-        if options["reviewers"]:
-            handle_reviewers(ctx, sorted(ctx.scraper.fetch_all_reviewer_ids()))
-        if options["reviewer"]:
-            handle_reviewers(ctx, list(options["reviewer"]))
+        def get_common_obj_ids(
+            opt_name: str, all_obj_ids_cb: Callable[[], Iterable[int]]
+        ) -> Iterable[int]:
+            if opt_name not in options:
+                return
+            if options[opt_name]:
+                ranges = list(options[opt_name])
+            else:
+                ranges = [unbound_range(start=1)]
+            for num in all_obj_ids_cb():
+                if any(num in r for r in ranges):
+                    yield num
 
-        if options["authors"]:
-            handle_authors(ctx, sorted(ctx.scraper.fetch_all_author_ids()))
-        if options["author"]:
-            handle_authors(ctx, list(options["author"]))
+        if obj_ids := get_common_obj_ids(
+            "reviewers", ctx.scraper.fetch_all_reviewer_ids
+        ):
+            handle_reviewers(ctx, sorted(obj_ids))
 
-        if options["levels"]:
-            handle_levels(ctx, sorted(ctx.scraper.fetch_all_level_ids()))
-        if options["level"]:
-            handle_levels(ctx, list(options["level"]))
+        if obj_ids := get_common_obj_ids(
+            "authors", ctx.scraper.fetch_all_author_ids
+        ):
+            handle_authors(ctx, sorted(obj_ids))
+
+        if obj_ids := get_common_obj_ids(
+            "levels", ctx.scraper.fetch_all_level_ids
+        ):
+            handle_levels(ctx, sorted(obj_ids))
