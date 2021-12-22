@@ -125,7 +125,7 @@ const ReviewsTable = ({ query, onQueryChange }: ReviewsTableProps) => {
             <Fragment key={review.id}>
               <Markdown children={review.text} />—{" "}
               <em>
-                {review.author.username}, {formatDate(review.created)}
+                <UserLink user={review.author} />, {formatDate(review.created)}
               </em>
               <hr />
             </Fragment>
