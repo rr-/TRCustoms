@@ -9,6 +9,7 @@ from trcustoms.models import (
     LevelEngine,
     LevelFile,
     LevelGenre,
+    LevelLegacyReview,
     LevelMedium,
     LevelTag,
     User,
@@ -127,3 +128,26 @@ class LevelFileAdmin(admin.ModelAdmin):
     list_display = ["id", "level", "version", "created", "last_updated"]
     search_fields = ["level__name"]
     readonly_fields = ["size", "created", "last_updated", "version"]
+
+
+@admin.register(LevelLegacyReview)
+class LevelLegacyReviewAdmin(admin.ModelAdmin):
+    ordering = ["level__name"]
+    list_display = [
+        "id",
+        "author",
+        "level",
+        "rating_gameplay",
+        "rating_enemies",
+        "rating_atmosphere",
+        "rating_lighting",
+        "created",
+        "last_updated",
+    ]
+    search_fields = [
+        "level__name",
+        "author__username",
+        "author__first_name",
+        "author__last_name",
+    ]
+    readonly_fields = ["created", "last_updated"]

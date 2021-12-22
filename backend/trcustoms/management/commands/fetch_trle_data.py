@@ -17,11 +17,12 @@ from trcustoms.models import (
     Level,
     LevelEngine,
     LevelFile,
+    LevelLegacyReview,
     LevelMedium,
     LevelTag,
     User,
 )
-from trcustoms.trle_scraper import TRLEScraper, TRLEUser
+from trcustoms.trle_scraper import TRLELevel, TRLEScraper, TRLEUser
 
 logger = logging.getLogger(__name__)
 P = TypeVar("P")
@@ -117,6 +118,61 @@ def process_author(ctx: ScrapeContext, obj_id: int) -> None:
     )
 
 
+def process_level_reviews(level: Level, trle_level: TRLELevel) -> None:
+    for trle_review in trle_level.reviews:
+        reviewer = User.objects.filter(
+            trle_reviewer_id=trle_review.reviewer_id
+        ).first()
+        if not reviewer:
+            logging.warning(
+                "Reviewer #%d not found. Fetch reviewers first",
+                trle_review.reviewer_id,
+            )
+        elif not trle_review.publication_date:
+            logging.warning(
+                "Review from user #%d of level #%d has no publication date",
+                trle_review.reviewer_id,
+                trle_level.level_id,
+            )
+        else:
+            review, _created = LevelLegacyReview.objects.update_or_create(
+                level=level,
+                author=reviewer,
+                defaults=dict(
+                    rating_gameplay=trle_review.rating_gameplay,
+                    rating_enemies=trle_review.rating_enemies,
+                    rating_atmosphere=trle_review.rating_atmosphere,
+                    rating_lighting=trle_review.rating_lighting,
+                    text=trle_review.text,
+                ),
+            )
+            if review.created.date() != trle_review.publication_date:
+                review.created = trle_review.publication_date
+                review.save()
+
+
+def process_level_images(level: Level, trle_level: TRLELevel) -> None:
+    image_urls = [trle_level.main_image_url] + trle_level.screenshot_urls
+    for pos, image_url in enumerate(image_urls):
+        image_content = TRLEScraper().get_bytes(image_url)
+        LevelMedium.objects.update_or_create(
+            level=level,
+            position=pos,
+            defaults=dict(
+                image=ContentFile(image_content, name=Path(image_url).name)
+            ),
+        )
+
+
+def process_level_files(level: Level, trle_level: TRLELevel) -> None:
+    level_content = TRLEScraper().get_bytes_parallel(trle_level.download_url)
+    if level_content:
+        LevelFile.objects.update_or_create(
+            level=level,
+            defaults=dict(file=ContentFile(level_content, name="dummy.zip")),
+        )
+
+
 def process_level(ctx: ScrapeContext, obj_id: int) -> None:
     trle_level = ctx.scraper.fetch_level(obj_id)
     if not ctx.quiet:
@@ -156,18 +212,6 @@ def process_level(ctx: ScrapeContext, obj_id: int) -> None:
         level.created = trle_level.release_date
         level.save()
 
-    if not ctx.no_images:
-        image_urls = [trle_level.main_image_url] + trle_level.screenshot_urls
-        for pos, image_url in enumerate(image_urls):
-            image_content = TRLEScraper().get_bytes(image_url)
-            LevelMedium.objects.update_or_create(
-                level=level,
-                position=pos,
-                defaults=dict(
-                    image=ContentFile(image_content, name=Path(image_url).name)
-                ),
-            )
-
     if trle_level.category:
         tag, _created = LevelTag.objects.get_or_create(
             name=trle_level.category
@@ -177,17 +221,11 @@ def process_level(ctx: ScrapeContext, obj_id: int) -> None:
     for user in User.objects.filter(trle_author_id__in=trle_level.author_ids):
         level.authors.add(user)
 
+    process_level_reviews(level, trle_level)
+    if not ctx.no_images:
+        process_level_images(level, trle_level)
     if not ctx.no_files:
-        level_content = TRLEScraper().get_bytes_parallel(
-            trle_level.download_url
-        )
-        if level_content:
-            LevelFile.objects.update_or_create(
-                level=level,
-                defaults=dict(
-                    file=ContentFile(level_content, name="dummy.zip")
-                ),
-            )
+        process_level_files(level, trle_level)
 
 
 def run_in_parallel(
