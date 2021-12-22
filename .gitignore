@@ -1,8 +1,5 @@
-/backend/django_static
 /backend/static
-/backend/uploads
-/backend/cache
-/backend/pgdata
+/backend/volumes
 /backend/celerybeat-schedule
 /frontend/node_modules
 /.env

@@ -19,9 +19,9 @@ x-base-trcustoms-backend: &base-trcustoms-backend
     dockerfile: ./services/backend/Dockerfile
   volumes:
     - ./backend/trcustoms/:/app/trcustoms/
-    - ./backend/cache/:/app/cache/
-    - ./backend/uploads/:/app/uploads/
-    - ./backend/django_static/:/app/django_static/
+    - ./backend/volumes/cache/:/app/cache/
+    - ./backend/volumes/uploads/:/app/uploads/
+    - ./backend/volumes/django_static/:/app/django_static/
     - ./services/backend/entrypoint.sh:/usr/local/bin/entrypoint.sh
     - ./pyproject.toml:/pyproject.toml
     - /tmp:/tmp
@@ -55,7 +55,7 @@ services:
     expose:
       - 5432
     volumes:
-      - ./backend/pgdata:/var/lib/postgresql/data
+      - ./backend/volumes/pgdata:/var/lib/postgresql/data
     networks:
       - trcustoms
 
@@ -81,8 +81,8 @@ services:
     depends_on:
       - backend
     volumes:
-      - ./backend/django_static:/app/backend/django_static
-      - ./backend/uploads:/app/backend/django_uploads
+      - ./backend/volumes/django_static:/app/backend/django_static
+      - ./backend/volumes/uploads:/app/backend/django_uploads
 
 networks:
   trcustoms:
