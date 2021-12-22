@@ -11,6 +11,7 @@ from typing import Any, TypeVar
 import yaml
 from django.core.files.base import ContentFile
 from django.core.management.base import BaseCommand
+from unidecode import unidecode
 
 from trcustoms.models import (
     Level,
@@ -20,7 +21,7 @@ from trcustoms.models import (
     LevelTag,
     User,
 )
-from trcustoms.trle_scraper import TRLEScraper
+from trcustoms.trle_scraper import TRLEScraper, TRLEUser
 
 logger = logging.getLogger(__name__)
 P = TypeVar("P")
@@ -64,6 +65,12 @@ class ScrapeContext:
     quiet: bool
 
 
+def get_trle_user_username(trle_user: TRLEUser) -> str:
+    return unidecode(trle_user.nickname or trle_user.full_name).replace(
+        " ", "_"
+    )
+
+
 def process_reviewer(ctx: ScrapeContext, obj_id: int) -> None:
     trle_reviewer = ctx.scraper.fetch_reviewer(obj_id)
     if not ctx.quiet:
@@ -76,7 +83,7 @@ def process_reviewer(ctx: ScrapeContext, obj_id: int) -> None:
 
     first_name, last_name = split_full_name(trle_reviewer.full_name)
     User.objects.update_or_create(
-        username=trle_reviewer.nickname or trle_reviewer.full_name,
+        username=get_trle_user_username(trle_reviewer),
         defaults=dict(
             trle_reviewer_id=obj_id,
             first_name=first_name,
@@ -97,7 +104,7 @@ def process_author(ctx: ScrapeContext, obj_id: int) -> None:
 
     first_name, last_name = split_full_name(trle_author.full_name)
     user, _created = User.objects.update_or_create(
-        username=trle_author.nickname or trle_author.full_name,
+        username=get_trle_user_username(trle_author),
         defaults=dict(
             trle_author_id=obj_id,
             first_name=first_name,
