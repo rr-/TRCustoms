@@ -85,7 +85,7 @@ class TRLELevelWalkthrough:
 
 
 @dataclass
-class TRLEReviewer:
+class TRLEUser:
     full_name: str
     image_url: str
     nickname: str | None
@@ -96,21 +96,15 @@ class TRLEReviewer:
     hobbies: str | None
     homepage: str | None
     email: str | None
+
+
+@dataclass
+class TRLEReviewer(TRLEUser):
     level_ids: list[int]
 
 
 @dataclass
-class TRLEAuthor:
-    full_name: str
-    image_url: str
-    nickname: str | None
-    country: str | None
-    city: str | None
-    birthday: date | None
-    occupation: str | None
-    hobbies: str | None
-    homepage: str | None
-    email: str | None
+class TRLEAuthor(TRLEUser):
     level_ids: list[int]
 
 
