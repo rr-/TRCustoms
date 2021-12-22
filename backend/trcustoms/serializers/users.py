@@ -60,7 +60,7 @@ class UserSerializer(serializers.ModelSerializer):
 
     def validate_username(self, value):
         if (
-            (user := User.objects.filter(username=value).first())
+            (user := User.objects.filter(username__iexact=value).first())
             and user != self.instance
             and user.source == User.Source.trcustoms
         ):
@@ -77,7 +77,7 @@ class UserSerializer(serializers.ModelSerializer):
 
     def validate_email(self, value):
         if (
-            user := User.objects.filter(email=value).first()
+            user := User.objects.filter(email__iexact=value).first()
         ) and user != self.instance:
             raise serializers.ValidationError(
                 "Another account exists with this email."
@@ -118,7 +118,7 @@ class UserSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         user = (
             User.objects.filter(
-                username=validated_data["username"],
+                username__iexact=validated_data["username"],
                 is_active=False,
             )
             .exclude(source=User.Source.trcustoms)

@@ -62,7 +62,7 @@ class UserViewSet(
 
     @action(detail=False, url_path=r"by_username/(?P<username>\w+)")
     def by_username(self, request, username: str):
-        user = self.queryset.filter(username=username).first()
+        user = self.queryset.filter(username__iexact=username).first()
         if not user:
             raise Http404("No user found with this username.")
         serializer = UserSerializer(user)
