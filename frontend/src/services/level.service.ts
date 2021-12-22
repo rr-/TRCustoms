@@ -13,6 +13,31 @@ interface LevelFilters {
   engines: { id: number; name: string }[];
 }
 
+interface LevelUser {
+  id: number;
+  username: string;
+  first_name: string;
+  last_name: string;
+}
+
+interface ReviewAuthor extends LevelUser {}
+
+interface ReviewQuery extends GenericQuery {
+  levels: Array<number>;
+}
+
+interface Review {
+  id: number;
+  author: ReviewAuthor;
+  rating_gameplay: number;
+  rating_enemies: number;
+  rating_lighting: number;
+  rating_atmosphere: number;
+  text: string | null;
+  created: string;
+  last_updated: string;
+}
+
 interface Tag {
   id: number;
   name: string;
@@ -37,12 +62,6 @@ interface Engine {
   last_updated: string;
 }
 
-interface LevelUser {
-  id: number;
-  username: string;
-  first_name: string;
-  last_name: string;
-}
 interface LevelAuthor extends LevelUser {}
 interface LevelUploader extends LevelUser {}
 
@@ -92,6 +111,7 @@ interface TagList extends PagedResponse<Tag> {}
 interface GenreList extends PagedResponse<Genre> {}
 interface EngineList extends PagedResponse<Engine> {}
 interface MediumList extends Array<Medium> {}
+interface ReviewList extends PagedResponse<Review> {}
 
 const getLevels = async (query: LevelQuery): Promise<LevelList | null> => {
   return await fetchJSON<LevelList>(`${API_URL}/levels/`, {
@@ -141,6 +161,16 @@ const getEngines = async (query: EngineQuery): Promise<EngineList | null> => {
   });
 };
 
+const getReviews = async (query: ReviewQuery): Promise<ReviewList | null> => {
+  return await fetchJSON<ReviewList>(`${API_URL}/level_reviews/`, {
+    query: filterFalsyObjectValues({
+      ...getGenericQuery(query),
+      levels: query.levels.join(","),
+    }),
+    method: "GET",
+  });
+};
+
 const LevelService = {
   getLevels,
   getLevelById,
@@ -148,6 +178,7 @@ const LevelService = {
   getTags,
   getGenres,
   getEngines,
+  getReviews,
 };
 
 export type {
@@ -167,6 +198,9 @@ export type {
   LevelUploader,
   Medium,
   MediumList,
+  Review,
+  ReviewList,
+  ReviewQuery,
   Tag,
   TagList,
   TagQuery,
