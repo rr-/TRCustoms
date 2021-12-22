@@ -1,8 +1,5 @@
 /.git
-/backend/django_static/
-/backend/uploads/
-/backend/pgdata/
-/backend/cache/
+/backend/volumes/
 /backend/celerybeat-schedule
 /frontend/node_modules/
 .pytest_cache
