@@ -28,3 +28,8 @@ disable = [
 
 [tool.pytest.ini_options]
 DJANGO_SETTINGS_MODULE = "trcustoms.settings"
+norecursedirs = [
+    "cache",
+    "pgdata",
+    "uploads",
+]
