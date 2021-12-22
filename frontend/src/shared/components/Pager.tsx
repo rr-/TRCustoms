@@ -1,10 +1,10 @@
 import "./Pager.css";
-import { LinkWithQuery } from "src/shared/components/LinkWithQuery";
 import type { PagedResponse } from "src/shared/types";
 
 const PAGES_AROUND = 1;
 
 interface PagerProps<TCollection> {
+  onPageChange: (page: number) => any;
   pagedResponse: PagedResponse<TCollection>;
   className?: string | null;
 }
@@ -36,6 +36,7 @@ const addEllipsisMarkers = (pages: number[]): (number | null)[] => {
 };
 
 const Pager = <TCollection extends {}>({
+  onPageChange,
   pagedResponse,
   className,
 }: PagerProps<TCollection>) => {
@@ -49,7 +50,9 @@ const Pager = <TCollection extends {}>({
   );
 
   const activeLinkElem = (page, label) => (
-    <LinkWithQuery to={`?page=${page}`}>{label}</LinkWithQuery>
+    <button className="Pager--button link" onClick={() => onPageChange(page)}>
+      {label}
+    </button>
   );
   const inactiveLinkElem = (page, label) => <span>{label}</span>;
   const linkElem = (page, label) =>

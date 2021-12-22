@@ -58,6 +58,7 @@ const GenresTable = ({ query, onQueryChange }: GenresTableProps) => {
       itemKey={itemKey}
       sort={query.sort}
       onSortChange={(sort) => onQueryChange?.({ ...query, sort: sort })}
+      onPageChange={(page) => onQueryChange?.({ ...query, page: page })}
     />
   );
 };
