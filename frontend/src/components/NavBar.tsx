@@ -13,6 +13,15 @@ interface INavBar {}
 const NavBar: React.FunctionComponent<INavBar> = () => {
   const { user } = useContext(UserContext);
 
+  const checkRootLinkActive = (match, location) => {
+    if (!location) {
+      return false;
+    }
+    const { pathname } = location;
+    const { url } = match;
+    return pathname === url || pathname.match(/^\/?levels(\/|$)/);
+  };
+
   return (
     <div className="TopNavBar">
       <div className="TopNavBar--primary">
@@ -68,7 +77,9 @@ const NavBar: React.FunctionComponent<INavBar> = () => {
             <nav className="NavBar NavBar--left">
               <ul className="TopNavBar--list">
                 <li className="TopNavBar--listItem">
-                  <NavLink to={"/levels"}>Levels</NavLink>
+                  <NavLink isActive={checkRootLinkActive} to={"/"}>
+                    Levels
+                  </NavLink>
                 </li>
                 <li className="TopNavBar--listItem">
                   <NavLink to={"/tags"}>Tags</NavLink>
