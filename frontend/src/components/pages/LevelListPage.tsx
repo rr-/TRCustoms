@@ -1,4 +1,4 @@
-import "./LevelList.css";
+import "./LevelListPage.css";
 import { Formik } from "formik";
 import { Form } from "formik";
 import { useEffect } from "react";
@@ -7,14 +7,14 @@ import { useState } from "react";
 import EnginesCheckboxes from "src/components/EnginesCheckboxes";
 import GenresCheckboxes from "src/components/GenresCheckboxes";
 import TagsCheckboxes from "src/components/TagsCheckboxes";
-import { ILevelQuery } from "src/services/level.service";
+import type { LevelQuery } from "src/services/level.service";
 import LevelsTable from "src/shared/components/LevelsTable";
 import { QueryPersister } from "src/shared/components/QueryPersister";
 import { SearchBar } from "src/shared/components/SearchBar";
 import TextFormField from "src/shared/components/TextFormField";
 import { filterFalsyObjectValues } from "src/shared/utils";
 
-const defaultQuery: ILevelQuery = {
+const defaultQuery: LevelQuery = {
   page: null,
   sort: null,
   search: "",
@@ -24,7 +24,7 @@ const defaultQuery: ILevelQuery = {
   authors: [],
 };
 
-const deserializeQuery = (search: string): ILevelQuery => {
+const deserializeQuery = (search: string): LevelQuery => {
   const currentURL = new URL(search);
   const qp = Object.fromEntries(currentURL.searchParams);
   return {
@@ -38,7 +38,7 @@ const deserializeQuery = (search: string): ILevelQuery => {
   };
 };
 
-const serializeQuery = (query: ILevelQuery) => {
+const serializeQuery = (query: LevelQuery) => {
   const qp = filterFalsyObjectValues({
     page: query.page,
     sort: query.sort,
@@ -50,7 +50,7 @@ const serializeQuery = (query: ILevelQuery) => {
   return "?" + new URLSearchParams(qp).toString();
 };
 
-const convertQueryToFormikValues = (query: ILevelQuery) => {
+const convertQueryToFormikValues = (query: LevelQuery) => {
   return {
     search: query.search,
     tags: query.tags,
@@ -59,8 +59,8 @@ const convertQueryToFormikValues = (query: ILevelQuery) => {
   };
 };
 
-const LevelList: React.FunctionComponent = () => {
-  const [query, setQuery] = useState<ILevelQuery>(
+const LevelListPage = () => {
+  const [query, setQuery] = useState<LevelQuery>(
     deserializeQuery(window.location.href)
   );
   const [formikValues, setFormikValues] = useState<any>(
@@ -93,7 +93,7 @@ const LevelList: React.FunctionComponent = () => {
   );
 
   return (
-    <div id="LevelList">
+    <div id="LevelListPage">
       <QueryPersister
         serializeQuery={serializeQuery}
         deserializeQuery={deserializeQuery}
@@ -106,8 +106,8 @@ const LevelList: React.FunctionComponent = () => {
         onSubmit={searchClick}
       >
         {({ resetForm }: { resetForm: any }) => (
-          <Form id="LevelList--container">
-            <SearchBar id="LevelList--search">
+          <Form id="LevelListPage--container">
+            <SearchBar id="LevelListPage--search">
               <TextFormField label="Search" name="search" />
 
               <div className="FormField">
@@ -121,11 +121,11 @@ const LevelList: React.FunctionComponent = () => {
               </div>
             </SearchBar>
 
-            <div id="LevelList--results">
+            <div id="LevelListPage--results">
               <LevelsTable query={query} />
             </div>
 
-            <aside id="LevelList--sidebar">
+            <aside id="LevelListPage--sidebar">
               <TagsCheckboxes />
               <GenresCheckboxes />
               <EnginesCheckboxes />
@@ -137,4 +137,4 @@ const LevelList: React.FunctionComponent = () => {
   );
 };
 
-export default LevelList;
+export default LevelListPage;

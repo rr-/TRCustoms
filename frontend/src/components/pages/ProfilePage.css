@@ -1,10 +1,10 @@
-#Profile img {
+#ProfilePage img {
   max-width: 250px;
 }
-#Profile {
+#ProfilePage {
   display: flex;
   gap: 1rem;
 }
-#Profile h1 {
+#ProfilePage h1 {
   margin-top: 0;
 }

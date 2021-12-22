@@ -1,17 +1,19 @@
-import { useEffect, useContext, useState } from "react";
+import { useEffect } from "react";
+import { useContext } from "react";
+import { useState } from "react";
 import { UserContext } from "src/shared/contexts/UserContext";
 
-interface IPermissionGuard {
+interface PermissionGuardProps {
   require: string;
   entity?: any;
-  children: any;
+  children: React.ReactElement;
 }
 
-const PermissionGuard: React.FunctionComponent<IPermissionGuard> = ({
+const PermissionGuard = ({
   require,
   entity,
   children,
-}) => {
+}: PermissionGuardProps) => {
   const { user } = useContext(UserContext);
   const [isShown, setIsShown] = useState<boolean>(false);
 

@@ -1,36 +1,39 @@
 import "./App.css";
-import { Switch, Route } from "react-router-dom";
-import GenreList from "src/components/GenreList";
-import LevelList from "src/components/LevelList";
-import LevelPage from "src/components/LevelPage";
-import Login from "src/components/Login";
-import Logout from "src/components/Logout";
+import { Routes } from "react-router-dom";
+import { Route } from "react-router-dom";
 import NavBar from "src/components/NavBar";
-import Profile from "src/components/Profile";
-import ProfileEdit from "src/components/ProfileEdit";
-import Register from "src/components/Register";
-import TagList from "src/components/TagList";
-import UserList from "src/components/UserList";
+import GenreListPage from "src/components/pages/GenreListPage";
+import LevelListPage from "src/components/pages/LevelListPage";
+import LevelPage from "src/components/pages/LevelPage";
+import LoginPage from "src/components/pages/LoginPage";
+import LogoutPage from "src/components/pages/LogoutPage";
+import ProfileEditPage from "src/components/pages/ProfileEditPage";
+import ProfilePage from "src/components/pages/ProfilePage";
+import RegisterPage from "src/components/pages/RegisterPage";
+import TagListPage from "src/components/pages/TagListPage";
+import UserListPage from "src/components/pages/UserListPage";
+import ScrollToTop from "src/shared/components/ScrollToTop";
 import { UserContextProvider } from "src/shared/contexts/UserContext";
 
 function App() {
   return (
     <UserContextProvider>
+      <ScrollToTop />
       <NavBar />
       <main id="Content" className="MainContainer">
-        <Switch>
-          <Route exact path="/" component={LevelList} />
-          <Route exact path="/levels" component={LevelList} />
-          <Route exact path="/levels/:levelId" component={LevelPage} />
-          <Route exact path="/tags" component={TagList} />
-          <Route exact path="/genres" component={GenreList} />
-          <Route exact path="/users" component={UserList} />
-          <Route exact path="/login" component={Login} />
-          <Route exact path="/logout" component={Logout} />
-          <Route exact path="/register" component={Register} />
-          <Route exact path="/users/:userId" component={Profile} />
-          <Route exact path="/users/:userId/edit" component={ProfileEdit} />
-        </Switch>
+        <Routes>
+          <Route path="/" element={<LevelListPage />} />
+          <Route path="/levels" element={<LevelListPage />} />
+          <Route path="/levels/:levelId" element={<LevelPage />} />
+          <Route path="/tags" element={<TagListPage />} />
+          <Route path="/genres" element={<GenreListPage />} />
+          <Route path="/users" element={<UserListPage />} />
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/logout" element={<LogoutPage />} />
+          <Route path="/register" element={<RegisterPage />} />
+          <Route path="/users/:userId" element={<ProfilePage />} />
+          <Route path="/users/:userId/edit" element={<ProfileEditPage />} />
+        </Routes>
       </main>
     </UserContextProvider>
   );

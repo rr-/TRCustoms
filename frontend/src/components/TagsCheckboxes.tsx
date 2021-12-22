@@ -1,12 +1,12 @@
 import { useQuery } from "react-query";
-import { ILevelFilters } from "src/services/level.service";
+import type { LevelFilters } from "src/services/level.service";
 import { LevelService } from "src/services/level.service";
 import CheckboxArrayFormField from "src/shared/components/CheckboxArrayFormField";
 import Loader from "src/shared/components/Loader";
 
-const TagsCheckboxes: React.FunctionComponent = () => {
+const TagsCheckboxes = () => {
   const query = {};
-  const levelFiltersQuery = useQuery<ILevelFilters, Error>(
+  const levelFiltersQuery = useQuery<LevelFilters, Error>(
     ["levelFilters", query],
     async () => LevelService.getLevelFilters(query)
   );

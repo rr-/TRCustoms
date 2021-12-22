@@ -1,8 +1,8 @@
 import "./Markdown.css";
 import ReactMarkdown from "react-markdown";
 
-interface IMarkdownProps {
-  children: any;
+interface MarkdownProps {
+  children: string;
 }
 
 function getYoutubeVideoID(url: string): string | null {
@@ -17,7 +17,7 @@ const transformLink = (link) => {
     return (
       <iframe
         title="YouTube video"
-        className="Embed--YouTube"
+        className="Markdown--Embed--YouTube"
         src={`https://www.youtube.com/embed/${embedID}?autoplay=0&iv_load_policy=3&showinfo=0&rel=0&start=0&end=0`}
       ></iframe>
     );
@@ -25,7 +25,7 @@ const transformLink = (link) => {
   return <a href={link.href}>{link.children}</a>;
 };
 
-const Markdown: React.FunctionComponent<IMarkdownProps> = ({ children }) => {
+const Markdown = ({ children }: MarkdownProps) => {
   return (
     <ReactMarkdown components={{ a: transformLink }}>{children}</ReactMarkdown>
   );

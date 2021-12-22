@@ -1,13 +1,13 @@
 import { AuthService } from "src/services/auth.service";
 
-interface IFetchJSONOptions {
+interface FetchJSONOptions {
   method: string;
   headers?: { [key: string]: string };
   query?: { [key: string]: string };
   data?: any;
 }
 
-interface IFetchMultipartOptions {
+interface FetchMultipartOptions {
   method: string;
   headers?: { [key: string]: string };
   query?: { [key: string]: string };
@@ -28,7 +28,7 @@ class FetchError<Result> extends Error {
 
 async function fetchJSONWithoutRetry<Result>(
   url: string,
-  options: IFetchJSONOptions
+  options: FetchJSONOptions
 ): Promise<Result> {
   const headers = { "Content-Type": "application/json", ...options.headers };
   const accessToken = AuthService.getAccessToken();
@@ -52,7 +52,7 @@ async function fetchJSONWithoutRetry<Result>(
 
 async function fetchJSON<Result>(
   url: string,
-  options: IFetchJSONOptions
+  options: FetchJSONOptions
 ): Promise<Result> {
   try {
     return await fetchJSONWithoutRetry<Result>(url, options);
@@ -82,7 +82,7 @@ async function fetchJSON<Result>(
 
 async function fetchMultipart<Result>(
   url: string,
-  options: IFetchMultipartOptions
+  options: FetchMultipartOptions
 ): Promise<Result> {
   const headers = { ...options.headers };
   const accessToken = AuthService.getAccessToken();

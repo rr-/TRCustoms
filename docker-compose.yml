@@ -64,6 +64,8 @@ services:
     depends_on:
       - backend
     command: dev
+    ports:
+      - '3000:3000'
 
   db:
     <<: *base-trcustoms

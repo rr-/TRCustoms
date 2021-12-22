@@ -1,9 +1,9 @@
-import { IGenericQuery } from "src/shared/types";
+import type { GenericQuery } from "src/shared/types";
 import { DISABLE_PAGING } from "src/shared/types";
 
 const EMPTY_INPUT_PLACEHOLDER = "-";
 
-function getGenericQuery(query: IGenericQuery): { [key: string]: string } {
+function getGenericQuery(query: GenericQuery): { [key: string]: string } {
   return filterFalsyObjectValues({
     page: query.page && query.page !== DISABLE_PAGING ? `${query.page}` : null,
     sort: query.sort,

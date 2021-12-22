@@ -1,19 +1,19 @@
 import "./Pager.css";
 import { LinkWithQuery } from "src/shared/components/LinkWithQuery";
-import { IPagedResponse } from "src/shared/types";
+import type { PagedResponse } from "src/shared/types";
 
 const PAGES_AROUND = 1;
 
-interface IPager<TCollection> {
-  pagedResponse: IPagedResponse<TCollection>;
+interface PagerProps<TCollection> {
+  pagedResponse: PagedResponse<TCollection>;
   className?: string | null;
 }
 
-function getPagesShown(
+const getPagesShown = (
   firstPage: number,
   currentPage: number,
   lastPage: number
-): number[] {
+): number[] => {
   let pages: Set<number> = new Set();
   for (let i = -PAGES_AROUND; i <= PAGES_AROUND; i++) {
     pages.add(firstPage + i);
@@ -24,21 +24,24 @@ function getPagesShown(
   return Array.from(pages)
     .sort((a, b) => a - b)
     .filter((page) => page >= 1 && page <= lastPage);
-}
+};
 
-function addEllipsisMarkers(pages: number[]): (number | null)[] {
+const addEllipsisMarkers = (pages: number[]): (number | null)[] => {
   // insert nulls between non-consecutive pages to render the ellipsis
   return pages.reduce(
     (acc: any, item: number) =>
       acc.at(-1) + 1 < item ? [...acc, null, item] : [...acc, item],
     []
   );
-}
+};
 
-const Pager = <TCollection extends {}>(props: IPager<TCollection>) => {
+const Pager = <TCollection extends {}>({
+  pagedResponse,
+  className,
+}: PagerProps<TCollection>) => {
   const firstPage = 1;
-  const currentPage = props.pagedResponse.current_page;
-  const lastPage = props.pagedResponse.last_page;
+  const currentPage = pagedResponse.current_page;
+  const lastPage = pagedResponse.last_page;
   const prevPage = currentPage - 1;
   const nextPage = currentPage + 1;
   const pagesShown = addEllipsisMarkers(
@@ -56,7 +59,7 @@ const Pager = <TCollection extends {}>(props: IPager<TCollection>) => {
     );
 
   return (
-    <div className={`Pager ${props.className}`}>
+    <div className={`Pager ${className}`}>
       <ul>
         <li>{linkElem(firstPage, <>&laquo;</>)}</li>
         <li>{linkElem(prevPage, <>&lsaquo;</>)}</li>

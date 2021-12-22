@@ -1,9 +1,9 @@
-import "./Profile.css";
+import "./ProfilePage.css";
 import { useQuery } from "react-query";
 import { useParams } from "react-router-dom";
 import { Link } from "react-router-dom";
-import { ILevelQuery } from "src/services/level.service";
-import { IUser } from "src/services/user.service";
+import type { LevelQuery } from "src/services/level.service";
+import type { User } from "src/services/user.service";
 import { UserService } from "src/services/user.service";
 import LevelsTable from "src/shared/components/LevelsTable";
 import Loader from "src/shared/components/Loader";
@@ -13,12 +13,10 @@ import UserPicture from "src/shared/components/UserPicture";
 import { DISABLE_PAGING } from "src/shared/types";
 import { formatDateTime } from "src/shared/utils";
 
-interface IProfile {}
+const ProfilePage = () => {
+  const { userId } = useParams();
 
-const Profile: React.FunctionComponent<IProfile> = () => {
-  const { userId }: { userId: string } = useParams();
-
-  const userQuery = useQuery<IUser, Error>(["users", userId], async () =>
+  const userQuery = useQuery<User, Error>(["users", userId], async () =>
     UserService.getUserById(+userId)
   );
 
@@ -32,7 +30,7 @@ const Profile: React.FunctionComponent<IProfile> = () => {
 
   const user = userQuery.data;
 
-  const levelQuery: ILevelQuery = {
+  const levelQuery: LevelQuery = {
     page: DISABLE_PAGING,
     sort: null,
     search: null,
@@ -43,7 +41,7 @@ const Profile: React.FunctionComponent<IProfile> = () => {
   };
 
   return (
-    <div id="Profile">
+    <div id="ProfilePage">
       <aside>
         <UserPicture user={user} />
         <dl>
@@ -59,7 +57,7 @@ const Profile: React.FunctionComponent<IProfile> = () => {
         </PermissionGuard>
       </aside>
       <div>
-        <section className="Profile--basic-info">
+        <section className="ProfilePage--basic-info">
           <h1>{user.username}</h1>
           {`${user.first_name} ${user.last_name}` !== user.username && (
             <h2>
@@ -73,7 +71,7 @@ const Profile: React.FunctionComponent<IProfile> = () => {
           )}
         </section>
 
-        <section className="Profile--authored-levels">
+        <section className="ProfilePage--authored-levels">
           <h3>Authored levels</h3>
           <LevelsTable query={levelQuery} />
         </section>
@@ -82,4 +80,4 @@ const Profile: React.FunctionComponent<IProfile> = () => {
   );
 };
 
-export default Profile;
+export default ProfilePage;

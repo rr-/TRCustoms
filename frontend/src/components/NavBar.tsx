@@ -1,26 +1,41 @@
 import "./NavBar.css";
 import { CogIcon } from "@heroicons/react/outline";
 import { useContext } from "react";
+import type { LinkProps } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { NavLink } from "react-router-dom";
+import { useLocation } from "react-router-dom";
+import { useResolvedPath } from "react-router-dom";
 import { PermissionGuard } from "src/shared/components/PermissionGuard";
 import { ThemeManager } from "src/shared/components/ThemeManager";
 import UserPicture from "src/shared/components/UserPicture";
 import { UserContext } from "src/shared/contexts/UserContext";
 
-interface INavBar {}
+const LevelsNavLink = ({ children, to, ...rest }: LinkProps) => {
+  let location = useLocation();
+  let path = useResolvedPath(to);
 
-const NavBar: React.FunctionComponent<INavBar> = () => {
+  let locationPathname = location.pathname;
+  let toPathname = path.pathname;
+  locationPathname = locationPathname.toLowerCase();
+  toPathname = toPathname.toLowerCase();
+
+  let isActive =
+    locationPathname === toPathname ||
+    locationPathname.match(/^\/?levels(\/|$)/);
+
+  let ariaCurrent: "page" | undefined = isActive ? "page" : undefined;
+  let className = [isActive ? "active" : null].filter(Boolean).join(" ");
+
+  return (
+    <Link to={to} aria-current={ariaCurrent} className={className} {...rest}>
+      {children}
+    </Link>
+  );
+};
+
+const NavBar = () => {
   const { user } = useContext(UserContext);
-
-  const checkRootLinkActive = (match, location) => {
-    if (!location) {
-      return false;
-    }
-    const { pathname } = location;
-    const { url } = match;
-    return pathname === url || pathname.match(/^\/?levels(\/|$)/);
-  };
 
   return (
     <div className="TopNavBar">
@@ -77,9 +92,7 @@ const NavBar: React.FunctionComponent<INavBar> = () => {
             <nav className="NavBar NavBar--left">
               <ul className="TopNavBar--list">
                 <li className="TopNavBar--listItem">
-                  <NavLink isActive={checkRootLinkActive} to={"/"}>
-                    Levels
-                  </NavLink>
+                  <LevelsNavLink to={"/"}>Levels</LevelsNavLink>
                 </li>
                 <li className="TopNavBar--listItem">
                   <NavLink to={"/tags"}>Tags</NavLink>

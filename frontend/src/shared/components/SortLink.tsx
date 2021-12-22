@@ -1,6 +1,8 @@
 import "./SortLink.css";
-import { SortDescendingIcon, SortAscendingIcon } from "@heroicons/react/solid";
-import { useState, useEffect } from "react";
+import { SortDescendingIcon } from "@heroicons/react/solid";
+import { SortAscendingIcon } from "@heroicons/react/solid";
+import { useState } from "react";
+import { useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useLocation } from "react-router-dom";
 
@@ -10,7 +12,12 @@ enum SortLinkStatus {
   ActiveFlipped = 3,
 }
 
-const SortLink = ({ sort, children }: { sort: string; children: any }) => {
+interface SortLinkProps {
+  sort: string;
+  children: React.ReactNode;
+}
+
+const SortLink = ({ sort, children }: SortLinkProps) => {
   const [status, setStatus] = useState<SortLinkStatus>(SortLinkStatus.Inactive);
   const location = useLocation();
   useEffect(() => {

@@ -1,10 +1,10 @@
 import { UseQueryResult } from "react-query";
-import Pager from "src/components/Pager";
 import Loader from "src/shared/components/Loader";
+import Pager from "src/shared/components/Pager";
 import SortLink from "src/shared/components/SortLink";
-import { IPagedResponse } from "src/shared/types";
+import type { PagedResponse } from "src/shared/types";
 
-interface IDataTableColumn<TDataTableItem> {
+interface DataTableColumn<TDataTableItem> {
   name: string;
   tooltip?: string | null;
   sortKey?: string | null;
@@ -13,21 +13,19 @@ interface IDataTableColumn<TDataTableItem> {
   itemElement: (item: TDataTableItem) => React.ReactElement | string;
 }
 
-interface IDataTable<TDataTableItem> {
+interface DataTableProps<TDataTableItem> {
   className?: string | null;
-  query: UseQueryResult<IPagedResponse<TDataTableItem>, Error> | null;
+  query: UseQueryResult<PagedResponse<TDataTableItem>, Error> | null;
   itemKey: (TDataTableItem) => string;
-  columns: IDataTableColumn<TDataTableItem>[];
+  columns: DataTableColumn<TDataTableItem>[];
 }
 
-interface TDataTableItem extends Object {}
-
-const DataTable: React.FunctionComponent<IDataTable<TDataTableItem>> = ({
+const DataTable = <TDataTableItem extends {}>({
   className,
   query,
   itemKey,
   columns,
-}) => {
+}: DataTableProps<TDataTableItem>) => {
   if (query.error) {
     return <p>{query.error.message}</p>;
   }
@@ -87,5 +85,5 @@ const DataTable: React.FunctionComponent<IDataTable<TDataTableItem>> = ({
   );
 };
 
-export type { IDataTableColumn };
+export type { DataTableColumn };
 export { DataTable };

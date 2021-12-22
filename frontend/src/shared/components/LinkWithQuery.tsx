@@ -1,7 +1,16 @@
-import { useEffect, useState } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { useEffect } from "react";
+import { useState } from "react";
+import type { To } from "react-router";
+import { Link } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 
-export const LinkWithQuery = ({ children, to, ...props }: any) => {
+interface LinkWithQueryProps {
+  children: React.ReactNode;
+  to: To;
+  props?: any;
+}
+
+const LinkWithQuery = ({ children, to, ...props }: LinkWithQueryProps) => {
   const [realTo, setRealTo] = useState<any>(null);
   const location = useLocation();
 
@@ -40,3 +49,5 @@ export const LinkWithQuery = ({ children, to, ...props }: any) => {
     </>
   );
 };
+
+export { LinkWithQuery };
