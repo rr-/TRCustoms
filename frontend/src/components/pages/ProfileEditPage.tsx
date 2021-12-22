@@ -27,7 +27,7 @@ const ProfileEditPage = () => {
   const navigate = useNavigate();
   const { userId } = useParams();
 
-  const userQuery = useQuery<User, Error>(
+  const result = useQuery<User, Error>(
     ["user", userId],
     async () => await UserService.getUserById(+userId)
   );
@@ -122,15 +122,15 @@ const ProfileEditPage = () => {
     [userId]
   );
 
-  if (userQuery.isLoading) {
+  if (result.isLoading) {
     return <Loader />;
   }
 
-  if (userQuery.error) {
-    return <p>{userQuery.error.message}</p>;
+  if (result.error) {
+    return <p>{result.error.message}</p>;
   }
 
-  const user = userQuery.data;
+  const user = result.data;
   const initialValues = {
     username: user.username,
     firstName: user.first_name,

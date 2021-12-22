@@ -22,9 +22,10 @@ const convertQueryToFormikValues = (query: GenreQuery) => {
 };
 
 const UserListPage = () => {
-  const [query, setQuery] = useState<GenreQuery>(
-    deserializeGenericQuery(window.location.href)
-  );
+  const [query, setQuery] = useState<GenreQuery>({
+    sort: "-date_joined",
+    ...deserializeGenericQuery(window.location.href),
+  });
   const [formikValues, setFormikValues] = useState<any>(
     convertQueryToFormikValues(query)
   );
@@ -81,7 +82,7 @@ const UserListPage = () => {
             </SearchBar>
 
             <div id="UserListPage--results">
-              <UsersTable query={query} />
+              <UsersTable query={query} onQueryChange={setQuery} />
             </div>
           </Form>
         )}

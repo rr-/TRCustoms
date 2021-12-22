@@ -22,9 +22,10 @@ const convertQueryToFormikValues = (query: TagQuery) => {
 };
 
 const TagListPage = () => {
-  const [query, setQuery] = useState<TagQuery>(
-    deserializeGenericQuery(window.location.href)
-  );
+  const [query, setQuery] = useState<TagQuery>({
+    sort: "name",
+    ...deserializeGenericQuery(window.location.href),
+  });
   const [formikValues, setFormikValues] = useState<any>(
     convertQueryToFormikValues(query)
   );
@@ -81,7 +82,7 @@ const TagListPage = () => {
             </SearchBar>
 
             <div id="TagListPage--results">
-              <TagsTable query={query} />
+              <TagsTable query={query} onQueryChange={setQuery} />
             </div>
           </Form>
         )}

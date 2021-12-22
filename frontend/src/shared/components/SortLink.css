@@ -3,8 +3,8 @@
 }
 .SortLink--indicator {
   margin-left: 0.25rem;
-  visibility: hidden;
+  display: none;
 }
 .SortLink--active .SortLink--indicator {
-  visibility: visible;
+  display: inline-block;
 }

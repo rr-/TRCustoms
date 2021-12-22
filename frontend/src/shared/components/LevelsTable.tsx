@@ -13,10 +13,11 @@ import { EMPTY_INPUT_PLACEHOLDER } from "src/shared/utils";
 
 interface LevelsTableProps {
   query: LevelQuery | null;
+  onQueryChange?: (query: LevelQuery) => any | null;
 }
 
-const LevelsTable = ({ query }: LevelsTableProps) => {
-  const levelsQuery = useQuery<LevelList, Error>(["levels", query], async () =>
+const LevelsTable = ({ query, onQueryChange }: LevelsTableProps) => {
+  const result = useQuery<LevelList, Error>(["levels", query], async () =>
     LevelService.getLevels(query)
   );
 
@@ -103,9 +104,11 @@ const LevelsTable = ({ query }: LevelsTableProps) => {
   return (
     <DataTable
       className="LevelsTable"
-      query={levelsQuery}
+      result={result}
       columns={columns}
       itemKey={itemKey}
+      sort={query.sort}
+      onSortChange={(sort) => onQueryChange?.({ ...query, sort: sort })}
     />
   );
 };

@@ -60,9 +60,10 @@ const convertQueryToFormikValues = (query: LevelQuery) => {
 };
 
 const LevelListPage = () => {
-  const [query, setQuery] = useState<LevelQuery>(
-    deserializeQuery(window.location.href)
-  );
+  const [query, setQuery] = useState<LevelQuery>({
+    sort: "-created",
+    ...deserializeQuery(window.location.href),
+  });
   const [formikValues, setFormikValues] = useState<any>(
     convertQueryToFormikValues(query)
   );
@@ -122,7 +123,7 @@ const LevelListPage = () => {
             </SearchBar>
 
             <div id="LevelListPage--results">
-              <LevelsTable query={query} />
+              <LevelsTable query={query} onQueryChange={setQuery} />
             </div>
 
             <aside id="LevelListPage--sidebar">

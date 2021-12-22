@@ -16,25 +16,26 @@ import { formatDate } from "src/shared/utils";
 
 interface ReviewsTableProps {
   query: ReviewQuery;
+  onQueryChange?: (query: ReviewQuery) => any | null;
 }
 
-const ReviewsTable = ({ query }: ReviewsTableProps) => {
-  const reviewsQuery = useQuery<ReviewList, Error>(
-    ["reviews", query],
-    async () => LevelService.getReviews(query)
+const ReviewsTable = ({ query, onQueryChange }: ReviewsTableProps) => {
+  const result = useQuery<ReviewList, Error>(["reviews", query], async () =>
+    LevelService.getReviews(query)
   );
 
-  if (reviewsQuery.error) {
-    return <p>{reviewsQuery.error.message}</p>;
+  if (result.error) {
+    return <p>{result.error.message}</p>;
   }
 
-  if (reviewsQuery.isLoading || !reviewsQuery.data) {
+  if (result.isLoading || !result.data) {
     return <Loader />;
   }
 
   const columns: DataTableColumn<Review>[] = [
     {
       name: "author",
+      sortKey: "author__username",
       label: "Author",
       itemElement: (review) => (
         <Link to={`/profile/${review.author.id}`}>
@@ -44,14 +45,13 @@ const ReviewsTable = ({ query }: ReviewsTableProps) => {
     },
     {
       name: "ratingGameplay",
+      sortKey: "rating_gameplay",
       label: "Gameplay & puzzles",
       itemElement: (review) => `${review.rating_gameplay}`,
       footer: () => (
         <>
           {round(
-            avg(
-              reviewsQuery.data.results.map((result) => result.rating_gameplay)
-            ),
+            avg(result.data.results.map((result) => result.rating_gameplay)),
             2
           )}
         </>
@@ -59,14 +59,13 @@ const ReviewsTable = ({ query }: ReviewsTableProps) => {
     },
     {
       name: "ratingEnemies",
+      sortKey: "rating_enemies",
       label: "Enemies, objects & secrets",
       itemElement: (review) => `${review.rating_enemies}`,
       footer: () => (
         <>
           {round(
-            avg(
-              reviewsQuery.data.results.map((result) => result.rating_enemies)
-            ),
+            avg(result.data.results.map((result) => result.rating_enemies)),
             2
           )}
         </>
@@ -74,16 +73,13 @@ const ReviewsTable = ({ query }: ReviewsTableProps) => {
     },
     {
       name: "ratingAtmosphere",
+      sortKey: "rating_atmosphere",
       label: "Atmosphere, sound & cameras",
       itemElement: (review) => `${review.rating_atmosphere}`,
       footer: () => (
         <>
           {round(
-            avg(
-              reviewsQuery.data.results.map(
-                (result) => result.rating_atmosphere
-              )
-            ),
+            avg(result.data.results.map((result) => result.rating_atmosphere)),
             2
           )}
         </>
@@ -91,14 +87,13 @@ const ReviewsTable = ({ query }: ReviewsTableProps) => {
     },
     {
       name: "ratingLighting",
+      sortKey: "rating_lighting",
       label: "Lighting & textures",
       itemElement: (review) => `${review.rating_lighting}`,
       footer: () => (
         <>
           {round(
-            avg(
-              reviewsQuery.data.results.map((result) => result.rating_lighting)
-            ),
+            avg(result.data.results.map((result) => result.rating_lighting)),
             2
           )}
         </>
@@ -106,6 +101,7 @@ const ReviewsTable = ({ query }: ReviewsTableProps) => {
     },
     {
       name: "created",
+      sortKey: "created",
       label: "Published",
       itemElement: (review) => formatDate(review.created),
     },
@@ -118,13 +114,15 @@ const ReviewsTable = ({ query }: ReviewsTableProps) => {
       <h2>Reviews</h2>
       <DataTable
         className="ReviewsTable"
-        query={reviewsQuery}
+        result={result}
         columns={columns}
         itemKey={itemKey}
+        sort={query.sort}
+        onSortChange={(sort) => onQueryChange?.({ ...query, sort: sort })}
       />
 
       <h2>Reviewer comments</h2>
-      {reviewsQuery.data.results.map((review) => (
+      {result.data.results.map((review) => (
         <Fragment key={review.id}>
           <Markdown children={review.text} />—{" "}
           <em>

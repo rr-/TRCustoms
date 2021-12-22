@@ -16,19 +16,19 @@ import { formatDateTime } from "src/shared/utils";
 const ProfilePage = () => {
   const { userId } = useParams();
 
-  const userQuery = useQuery<User, Error>(["users", userId], async () =>
+  const result = useQuery<User, Error>(["users", userId], async () =>
     UserService.getUserById(+userId)
   );
 
-  if (userQuery.error) {
-    return <p>{userQuery.error.message}</p>;
+  if (result.error) {
+    return <p>{result.error.message}</p>;
   }
 
-  if (userQuery.isLoading || !userQuery.data) {
+  if (result.isLoading || !result.data) {
     return <Loader />;
   }
 
-  const user = userQuery.data;
+  const user = result.data;
 
   const levelQuery: LevelQuery = {
     page: DISABLE_PAGING,
