@@ -1,20 +1,19 @@
-import { Formik, Form } from "formik";
-import { History } from "history";
-import { useCallback, useContext } from "react";
+import { Formik } from "formik";
+import { Form } from "formik";
+import { useCallback } from "react";
+import { useContext } from "react";
+import { useNavigate } from "react-router-dom";
 import { AuthService } from "src/services/auth.service";
 import { UserService } from "src/services/user.service";
-import { IUser } from "src/services/user.service";
+import type { User } from "src/services/user.service";
 import { FetchError } from "src/shared/client";
 import PasswordFormField from "src/shared/components/PasswordFormField";
 import TextFormField from "src/shared/components/TextFormField";
 import { UserContext } from "src/shared/contexts/UserContext";
 import { makeSentence } from "src/shared/utils";
 
-interface ILogin {
-  history: History;
-}
-
-const Login: React.FunctionComponent<ILogin> = ({ history }) => {
+const LoginPage = () => {
+  const navigate = useNavigate();
   const { setUser } = useContext(UserContext);
 
   const submit = useCallback(
@@ -23,11 +22,11 @@ const Login: React.FunctionComponent<ILogin> = ({ history }) => {
         await AuthService.login(values.username, values.password);
         const user = await UserService.getCurrentUser();
         setUser(user);
-        history.push("/");
+        navigate("/");
       } catch (error) {
         setSubmitting(false);
         if (error instanceof FetchError && error.response.status === 401) {
-          let user: IUser | null = null;
+          let user: User | null = null;
           try {
             user = await UserService.getUserByUsername(values.username);
           } catch (error) {}
@@ -44,7 +43,7 @@ const Login: React.FunctionComponent<ILogin> = ({ history }) => {
         }
       }
     },
-    [history, setUser]
+    [navigate, setUser]
   );
 
   return (
@@ -72,4 +71,4 @@ const Login: React.FunctionComponent<ILogin> = ({ history }) => {
   );
 };
 
-export default Login;
+export default LoginPage;

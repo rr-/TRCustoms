@@ -3,26 +3,26 @@ import { Form } from "formik";
 import { useEffect } from "react";
 import { useCallback } from "react";
 import { useState } from "react";
-import { ITagQuery } from "src/services/level.service";
+import type { GenreQuery } from "src/services/level.service";
+import { GenresTable } from "src/shared/components/GenresTable";
 import { QueryPersister } from "src/shared/components/QueryPersister";
 import { deserializeGenericQuery } from "src/shared/components/QueryPersister";
 import { serializeGenericQuery } from "src/shared/components/QueryPersister";
 import { SearchBar } from "src/shared/components/SearchBar";
-import TagsTable from "src/shared/components/TagsTable";
 import TextFormField from "src/shared/components/TextFormField";
 
-const defaultQuery: ITagQuery = {
+const defaultQuery: GenreQuery = {
   page: null,
   sort: null,
   search: null,
 };
 
-const convertQueryToFormikValues = (query: ITagQuery) => {
+const convertQueryToFormikValues = (query: GenreQuery) => {
   return { search: query.search || "" };
 };
 
-const TagList: React.FunctionComponent = () => {
-  const [query, setQuery] = useState<ITagQuery>(
+const GenreListPage = () => {
+  const [query, setQuery] = useState<GenreQuery>(
     deserializeGenericQuery(window.location.href)
   );
   const [formikValues, setFormikValues] = useState<any>(
@@ -52,7 +52,7 @@ const TagList: React.FunctionComponent = () => {
   );
 
   return (
-    <div id="TagList">
+    <div id="GenreListPage">
       <QueryPersister
         serializeQuery={serializeGenericQuery}
         deserializeQuery={deserializeGenericQuery}
@@ -65,8 +65,8 @@ const TagList: React.FunctionComponent = () => {
         onSubmit={searchClick}
       >
         {({ resetForm }: { resetForm: any }) => (
-          <Form id="TagList--container">
-            <SearchBar id="TagList--search">
+          <Form id="GenreListPage--container">
+            <SearchBar id="GenreListPage--search">
               <TextFormField label="Search" name="search" />
 
               <div className="FormField">
@@ -80,8 +80,8 @@ const TagList: React.FunctionComponent = () => {
               </div>
             </SearchBar>
 
-            <div id="TagList--results">
-              <TagsTable query={query} />
+            <div id="GenreListPage--results">
+              <GenresTable query={query} />
             </div>
           </Form>
         )}
@@ -90,4 +90,4 @@ const TagList: React.FunctionComponent = () => {
   );
 };
 
-export default TagList;
+export default GenreListPage;

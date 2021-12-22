@@ -1,4 +1,4 @@
-#LevelList--container {
+#LevelListPage--container {
   display: grid;
   grid-template-areas:
     "search search"
@@ -7,14 +7,14 @@
   grid-template-rows: min-content 1fr;
   gap: 0 2rem;
 }
-#LevelList--sidebar {
+#LevelListPage--sidebar {
   grid-area: sidebar;
   white-space: nowrap;
 }
-#LevelList--results {
+#LevelListPage--results {
   width: 100%;
   grid-area: results;
 }
-#LevelList--search {
+#LevelListPage--search {
   grid-area: search;
 }

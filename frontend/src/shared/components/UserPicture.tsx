@@ -1,14 +1,11 @@
-import { IUser } from "src/services/user.service";
+import type { User } from "src/services/user.service";
 
-interface IUserPicture {
-  user: IUser;
+interface UserPictureProps {
+  user: User;
   className?: string;
 }
 
-const UserPicture: React.FunctionComponent<IUserPicture> = ({
-  user,
-  className,
-}: IUserPicture) => {
+const UserPicture = ({ user, className }: UserPictureProps) => {
   return (
     <img
       className={className}

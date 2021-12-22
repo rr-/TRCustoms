@@ -1,17 +1,17 @@
 import { Field } from "formik";
 import BaseFormField from "src/shared/components/BaseFormField";
 
-interface IPasswordFormField {
+interface PasswordFormFieldProps {
   name: string;
   label: string;
   required?: boolean;
 }
 
-const PasswordFormField: React.FunctionComponent<IPasswordFormField> = ({
+const PasswordFormField = ({
   name,
   label,
   required,
-}) => {
+}: PasswordFormFieldProps) => {
   return (
     <BaseFormField required={required} label={label} name={name}>
       <Field type="password" name={name} />

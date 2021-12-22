@@ -1,18 +1,18 @@
 import FormFieldError from "src/shared/components/FormFieldError";
 
-interface IBaseFormField {
+interface BaseFormFieldProps {
   required: boolean;
   name: string;
   label: string;
-  children: any;
+  children: React.ReactNode;
 }
 
-const BaseFormField: React.FunctionComponent<IBaseFormField> = ({
+const BaseFormField = ({
   required,
   name,
   label,
   children,
-}) => {
+}: BaseFormFieldProps) => {
   return (
     <div className="FormField">
       <label htmlFor={name}>

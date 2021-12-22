@@ -1,10 +1,10 @@
 import { ErrorMessage } from "formik";
 
-interface IFormFieldError {
+interface FormFieldErrorProps {
   name: string;
 }
 
-const FormFieldError: React.FunctionComponent<IFormFieldError> = ({ name }) => (
+const FormFieldError = ({ name }: FormFieldErrorProps) => (
   <ErrorMessage name={name}>
     {(msg) => <div className="FormFieldError">{msg}</div>}
   </ErrorMessage>

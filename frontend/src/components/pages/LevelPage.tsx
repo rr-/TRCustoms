@@ -2,22 +2,19 @@ import "./LevelPage.css";
 import { useQuery } from "react-query";
 import { useParams } from "react-router-dom";
 import { Link } from "react-router-dom";
-import { ILevelFull } from "src/services/level.service";
+import type { LevelFull } from "src/services/level.service";
 import { LevelService } from "src/services/level.service";
 import Loader from "src/shared/components/Loader";
 import { Markdown } from "src/shared/components/Markdown";
 import { MediumThumbnail } from "src/shared/components/MediumThumbnail";
-import { MediumThumbnails } from "src/shared/components/MediumThumbnail";
+import { MediumThumbnails } from "src/shared/components/MediumThumbnails";
 import { formatDate } from "src/shared/utils";
 import { EMPTY_INPUT_PLACEHOLDER } from "src/shared/utils";
 
-interface ILevelPageState {}
-
-const LevelPage: React.FunctionComponent<ILevelPageState> = () => {
-  const { levelId }: { levelId: string } = useParams();
-  const levelQuery = useQuery<ILevelFull, Error>(
-    ["levels", levelId],
-    async () => LevelService.getLevelById(+levelId)
+const LevelPage = () => {
+  const { levelId } = useParams();
+  const levelQuery = useQuery<LevelFull, Error>(["levels", levelId], async () =>
+    LevelService.getLevelById(+levelId)
   );
 
   if (levelQuery.error) {

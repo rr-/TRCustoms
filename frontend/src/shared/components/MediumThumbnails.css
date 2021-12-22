@@ -1,0 +1,12 @@
+.MediumThumbnails {
+  display: grid;
+  grid-auto-flow: row;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+  gap: 0.5rem;
+}
+.MediumThumbnails img {
+  display: inline-block;
+  max-width: 100%;
+  height: auto;
+}

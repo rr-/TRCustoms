@@ -1,12 +1,12 @@
 const DISABLE_PAGING = Symbol("DISABLE_PAGING");
 
-interface IGenericQuery {
+interface GenericQuery {
   page: number | null | typeof DISABLE_PAGING;
   sort: string | null;
   search: string | null;
 }
 
-interface IPagedResponse<T> {
+interface PagedResponse<T> {
   current_page: number;
   last_page: number;
   total_count: number;
@@ -17,5 +17,5 @@ interface IPagedResponse<T> {
   disable_paging: boolean;
 }
 
-export type { IPagedResponse, IGenericQuery };
+export type { PagedResponse, GenericQuery };
 export { DISABLE_PAGING };

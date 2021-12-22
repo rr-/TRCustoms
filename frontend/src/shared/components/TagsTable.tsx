@@ -1,20 +1,24 @@
 import "./TagsTable.css";
 import { useQuery } from "react-query";
 import { Link } from "react-router-dom";
-import { ITag } from "src/services/level.service";
-import { ITagList } from "src/services/level.service";
-import { ITagQuery } from "src/services/level.service";
+import type { Tag } from "src/services/level.service";
+import type { TagList } from "src/services/level.service";
+import type { TagQuery } from "src/services/level.service";
 import { LevelService } from "src/services/level.service";
-import { IDataTableColumn } from "src/shared/components/DataTable";
+import type { DataTableColumn } from "src/shared/components/DataTable";
 import { DataTable } from "src/shared/components/DataTable";
 import { formatDate } from "src/shared/utils";
 
-const TagsTable = ({ query }: { query: ITagQuery | null }) => {
-  const tagsQuery = useQuery<ITagList, Error>(["tags", query], async () =>
+interface TagsTableProps {
+  query: TagQuery | null;
+}
+
+const TagsTable = ({ query }: TagsTableProps) => {
+  const tagsQuery = useQuery<TagList, Error>(["tags", query], async () =>
     LevelService.getTags(query)
   );
 
-  const columns: IDataTableColumn<ITag>[] = [
+  const columns: DataTableColumn<Tag>[] = [
     {
       name: "name",
       sortKey: "name",

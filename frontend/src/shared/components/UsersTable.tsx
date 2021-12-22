@@ -1,21 +1,25 @@
 import "./UsersTable.css";
 import { useQuery } from "react-query";
 import { Link } from "react-router-dom";
-import { IUser } from "src/services/user.service";
-import { IUserList } from "src/services/user.service";
-import { IUserQuery } from "src/services/user.service";
+import type { User } from "src/services/user.service";
+import type { UserList } from "src/services/user.service";
+import type { UserQuery } from "src/services/user.service";
 import { UserService } from "src/services/user.service";
-import { IDataTableColumn } from "src/shared/components/DataTable";
+import type { DataTableColumn } from "src/shared/components/DataTable";
 import { DataTable } from "src/shared/components/DataTable";
 import { formatDate } from "src/shared/utils";
 import { EMPTY_INPUT_PLACEHOLDER } from "src/shared/utils";
 
-const UsersTable = ({ query }: { query: IUserQuery | null }) => {
-  const usersQuery = useQuery<IUserList, Error>(["users", query], async () =>
+interface UsersTableProps {
+  query: UserQuery | null;
+}
+
+const UsersTable = ({ query }: UsersTableProps) => {
+  const usersQuery = useQuery<UserList, Error>(["users", query], async () =>
     UserService.getUsers(query)
   );
 
-  const columns: IDataTableColumn<IUser>[] = [
+  const columns: DataTableColumn<User>[] = [
     {
       name: "username",
       sortKey: "username",

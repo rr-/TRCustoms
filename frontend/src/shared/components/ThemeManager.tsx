@@ -127,7 +127,7 @@ const themes: Array<Theme> = [
   },
 ];
 
-const ThemeManager: React.FunctionComponent = () => {
+const ThemeManager = () => {
   const [activeTheme, setActiveTheme] = useState<Theme>(
     themes.find((theme) => theme.name === localStorage.getItem("theme")) ||
       themes[0]

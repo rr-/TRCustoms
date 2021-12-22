@@ -1,17 +1,13 @@
 import { useFormikContext } from "formik";
 import BaseFormField from "src/shared/components/BaseFormField";
 
-interface IPictureFormField {
+interface PictureFormFieldProps {
   name: string;
   label: string;
   required?: boolean;
 }
 
-const PictureFormField: React.FunctionComponent<IPictureFormField> = ({
-  name,
-  label,
-  required,
-}) => {
+const PictureFormField = ({ name, label, required }: PictureFormFieldProps) => {
   const { setFieldValue } = useFormikContext();
 
   return (

@@ -1,10 +1,12 @@
-import { Formik, Form } from "formik";
+import { Formik } from "formik";
+import { Form } from "formik";
 import { useCallback } from "react";
 import { useQuery } from "react-query";
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import { Link } from "react-router-dom";
-import { IUser, UserService } from "src/services/user.service";
+import type { User } from "src/services/user.service";
+import { UserService } from "src/services/user.service";
 import { FetchError } from "src/shared/client";
 import EmailFormField from "src/shared/components/EmailFormField";
 import Loader from "src/shared/components/Loader";
@@ -21,11 +23,11 @@ import {
   validateEmail,
 } from "src/shared/utils";
 
-const ProfileEdit: React.FunctionComponent = () => {
-  const history = useHistory();
-  const { userId }: { userId: string } = useParams();
+const ProfileEditPage = () => {
+  const navigate = useNavigate();
+  const { userId } = useParams();
 
-  const userQuery = useQuery<IUser, Error>(
+  const userQuery = useQuery<User, Error>(
     ["user", userId],
     async () => await UserService.getUserById(+userId)
   );
@@ -67,8 +69,8 @@ const ProfileEdit: React.FunctionComponent = () => {
   };
 
   const goBack = useCallback(() => {
-    history.push(`/users/${userId}`);
-  }, [history, userId]);
+    navigate(`/users/${userId}`);
+  }, [navigate, userId]);
 
   const submit = useCallback(
     async (values, { setSubmitting, setStatus, setErrors }) => {
@@ -142,7 +144,7 @@ const ProfileEdit: React.FunctionComponent = () => {
   };
 
   return (
-    <div id="ProfileEdit">
+    <div id="ProfileEditPage">
       <h1>Editing {user.username}'s profile</h1>
 
       <Formik
@@ -199,4 +201,4 @@ const ProfileEdit: React.FunctionComponent = () => {
   );
 };
 
-export default ProfileEdit;
+export default ProfileEditPage;

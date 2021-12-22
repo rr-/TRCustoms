@@ -1,10 +1,10 @@
 import { useEffect } from "react";
 import { useLocation } from "react-router-dom";
-import { useHistory } from "react-router-dom";
-import { IGenericQuery } from "src/shared/types";
+import { useNavigate } from "react-router-dom";
+import type { GenericQuery } from "src/shared/types";
 import { filterFalsyObjectValues } from "src/shared/utils";
 
-const deserializeGenericQuery = (search: string): IGenericQuery => {
+const deserializeGenericQuery = (search: string): GenericQuery => {
   const currentURL = new URL(search);
   const qp = Object.fromEntries(currentURL.searchParams);
   return {
@@ -14,7 +14,7 @@ const deserializeGenericQuery = (search: string): IGenericQuery => {
   };
 };
 
-const serializeGenericQuery = (query: IGenericQuery) => {
+const serializeGenericQuery = (query: GenericQuery) => {
   const qp = filterFalsyObjectValues({
     page: query.page,
     sort: query.sort,
@@ -23,21 +23,21 @@ const serializeGenericQuery = (query: IGenericQuery) => {
   return "?" + new URLSearchParams(qp).toString();
 };
 
-interface IQueryPersister {
+interface QueryPersisterProps {
   serializeQuery;
   deserializeQuery;
   query;
   setQuery;
 }
 
-const QueryPersister: React.FunctionComponent<IQueryPersister> = ({
+const QueryPersister = ({
   serializeQuery,
   deserializeQuery,
   query,
   setQuery,
-}) => {
+}: QueryPersisterProps) => {
   const location = useLocation();
-  const history = useHistory();
+  const navigate = useNavigate();
 
   useEffect(() => {
     // synchronize query changes to URL
@@ -45,9 +45,9 @@ const QueryPersister: React.FunctionComponent<IQueryPersister> = ({
       JSON.stringify(deserializeQuery(window.location.href)) !==
       JSON.stringify(query)
     ) {
-      history.push(serializeQuery(query));
+      navigate(serializeQuery(query));
     }
-  }, [query, history, serializeQuery, deserializeQuery]);
+  }, [query, navigate, serializeQuery, deserializeQuery]);
 
   useEffect(() => {
     // synchronize URL changes to query

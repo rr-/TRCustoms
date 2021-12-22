@@ -1,6 +1,11 @@
 import "./SearchBar.css";
 
-const SearchBar = ({ id, children }: { id?: string; children: any }) => {
+interface SearchBarProps {
+  id?: string;
+  children: React.ReactNode;
+}
+
+const SearchBar = ({ id, children }: SearchBarProps) => {
   return (
     <div id={id} className="SearchBar">
       {children}

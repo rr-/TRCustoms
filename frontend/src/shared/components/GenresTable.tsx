@@ -1,20 +1,24 @@
 import "./GenresTable.css";
 import { useQuery } from "react-query";
 import { Link } from "react-router-dom";
-import { IGenre } from "src/services/level.service";
-import { IGenreList } from "src/services/level.service";
-import { IGenreQuery } from "src/services/level.service";
+import type { Genre } from "src/services/level.service";
+import type { GenreList } from "src/services/level.service";
+import type { GenreQuery } from "src/services/level.service";
 import { LevelService } from "src/services/level.service";
-import { IDataTableColumn } from "src/shared/components/DataTable";
+import type { DataTableColumn } from "src/shared/components/DataTable";
 import { DataTable } from "src/shared/components/DataTable";
 import { formatDate } from "src/shared/utils";
 
-const GenresTable = ({ query }: { query: IGenreQuery | null }) => {
-  const genresQuery = useQuery<IGenreList, Error>(["genres", query], async () =>
+interface GenresTableProps {
+  query: GenreQuery | null;
+}
+
+const GenresTable = ({ query }: GenresTableProps) => {
+  const genresQuery = useQuery<GenreList, Error>(["genres", query], async () =>
     LevelService.getGenres(query)
   );
 
-  const columns: IDataTableColumn<IGenre>[] = [
+  const columns: DataTableColumn<Genre>[] = [
     {
       name: "name",
       sortKey: "name",
@@ -55,4 +59,4 @@ const GenresTable = ({ query }: { query: IGenreQuery | null }) => {
   );
 };
 
-export default GenresTable;
+export { GenresTable };

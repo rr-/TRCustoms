@@ -1,11 +1,13 @@
 import { useEffect } from "react";
-import { createContext, useState } from "react";
-import { IUser, UserService } from "src/services/user.service";
+import { createContext } from "react";
+import { useState } from "react";
+import type { User } from "src/services/user.service";
+import { UserService } from "src/services/user.service";
 
 const UserContext = createContext<any>(null);
 
 const UserContextProvider = ({ children }: { children: any }) => {
-  const [user, setUser] = useState<IUser | null>(null);
+  const [user, setUser] = useState<User | null>(null);
 
   useEffect(() => {
     // try to log in when the application starts.

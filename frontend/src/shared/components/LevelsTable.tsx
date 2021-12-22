@@ -1,22 +1,26 @@
 import "./LevelsTable.css";
 import { useQuery } from "react-query";
 import { Link } from "react-router-dom";
-import { ILevel } from "src/services/level.service";
-import { ILevelList } from "src/services/level.service";
-import { ILevelQuery } from "src/services/level.service";
+import type { Level } from "src/services/level.service";
+import type { LevelList } from "src/services/level.service";
+import type { LevelQuery } from "src/services/level.service";
 import { LevelService } from "src/services/level.service";
-import { IDataTableColumn } from "src/shared/components/DataTable";
+import type { DataTableColumn } from "src/shared/components/DataTable";
 import { DataTable } from "src/shared/components/DataTable";
 import { formatDate } from "src/shared/utils";
 import { formatFileSize } from "src/shared/utils";
 import { EMPTY_INPUT_PLACEHOLDER } from "src/shared/utils";
 
-const LevelsTable = ({ query }: { query: ILevelQuery | null }) => {
-  const levelsQuery = useQuery<ILevelList, Error>(["levels", query], async () =>
+interface LevelsTableProps {
+  query: LevelQuery | null;
+}
+
+const LevelsTable = ({ query }: LevelsTableProps) => {
+  const levelsQuery = useQuery<LevelList, Error>(["levels", query], async () =>
     LevelService.getLevels(query)
   );
 
-  const columns: IDataTableColumn<ILevel>[] = [
+  const columns: DataTableColumn<Level>[] = [
     {
       name: "name",
       label: "Name",

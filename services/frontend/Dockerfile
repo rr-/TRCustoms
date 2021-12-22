@@ -11,4 +11,5 @@ ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
 
 COPY ./frontend/ ./
 
+EXPOSE 3000
 CMD ["dev"]

@@ -1,13 +1,13 @@
 import "./MediumThumbnail.css";
-import { useCallback, useState } from "react";
-import { IMedium } from "src/services/level.service";
-import { IMediumList } from "src/services/level.service";
+import { useCallback } from "react";
+import { useState } from "react";
+import type { Medium } from "src/services/level.service";
 
-interface IMediumProps {
-  medium: IMedium;
+interface MediumProps {
+  medium: Medium;
 }
 
-const MediumThumbnail: React.FunctionComponent<IMediumProps> = ({ medium }) => {
+const MediumThumbnail = ({ medium }: MediumProps) => {
   const [isActive, setIsActive] = useState<boolean>(false);
 
   const imageClick = useCallback(() => {
@@ -33,20 +33,4 @@ const MediumThumbnail: React.FunctionComponent<IMediumProps> = ({ medium }) => {
   );
 };
 
-interface IMediumThumbnailsProps {
-  media: IMediumList;
-}
-
-const MediumThumbnails: React.FunctionComponent<IMediumThumbnailsProps> = ({
-  media,
-}) => {
-  return (
-    <div className="MediumThumbnails">
-      {media.map((medium) => (
-        <MediumThumbnail key={medium.id} medium={medium} />
-      ))}
-    </div>
-  );
-};
-
-export { MediumThumbnail, MediumThumbnails };
+export { MediumThumbnail };

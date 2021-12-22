@@ -1,17 +1,17 @@
 import { Field } from "formik";
 import BaseFormField from "src/shared/components/BaseFormField";
 
-interface ITextAreaFormField {
+interface TextAreaFormFieldProps {
   name: string;
   label: string;
   required?: boolean;
 }
 
-const TextAreaFormField: React.FunctionComponent<ITextAreaFormField> = ({
+const TextAreaFormField = ({
   name,
   label,
   required,
-}) => {
+}: TextAreaFormFieldProps) => {
   return (
     <BaseFormField required={required} name={name} label={label}>
       <Field as="textarea" type="text" name={name} />

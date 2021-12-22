@@ -1,6 +1,8 @@
-import { Formik, Form } from "formik";
-import { History } from "history";
-import { useCallback, useContext } from "react";
+import { Formik } from "formik";
+import { Form } from "formik";
+import { useCallback } from "react";
+import { useContext } from "react";
+import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { AuthService } from "src/services/auth.service";
 import { UserService } from "src/services/user.service";
@@ -19,11 +21,8 @@ import {
   validateEmail,
 } from "src/shared/utils";
 
-interface IRegister {
-  history: History;
-}
-
-const Register: React.FunctionComponent<IRegister> = ({ history }) => {
+const RegisterPage = () => {
+  const navigate = useNavigate();
   const { setUser } = useContext(UserContext);
 
   const validate = (values) => {
@@ -75,7 +74,7 @@ const Register: React.FunctionComponent<IRegister> = ({ history }) => {
           await AuthService.login(values.username, values.password);
           const user = await UserService.getCurrentUser();
           setUser(user);
-          history.push("/");
+          navigate("/");
         } else {
           setStatus({
             success: (
@@ -106,7 +105,7 @@ const Register: React.FunctionComponent<IRegister> = ({ history }) => {
         }
       }
     },
-    [history, setUser]
+    [navigate, setUser]
   );
 
   return (
@@ -174,4 +173,4 @@ const Register: React.FunctionComponent<IRegister> = ({ history }) => {
   );
 };
 
-export default Register;
+export default RegisterPage;

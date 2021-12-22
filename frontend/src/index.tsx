@@ -3,9 +3,9 @@ import "./index.css";
 import reportWebVitals from "./reportWebVitals";
 import React from "react";
 import ReactDOM from "react-dom";
-import { QueryClient, QueryClientProvider } from "react-query";
+import { QueryClient } from "react-query";
+import { QueryClientProvider } from "react-query";
 import { BrowserRouter } from "react-router-dom";
-import ScrollToTop from "src/shared/ScrollToTop";
 
 const queryClient = new QueryClient({
   defaultOptions: { queries: { retry: false } },
@@ -15,9 +15,7 @@ ReactDOM.render(
   <React.StrictMode>
     <BrowserRouter>
       <QueryClientProvider client={queryClient} contextSharing={true}>
-        <ScrollToTop>
-          <App />
-        </ScrollToTop>
+        <App />
       </QueryClientProvider>
     </BrowserRouter>
   </React.StrictMode>,

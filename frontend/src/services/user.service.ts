@@ -1,12 +1,13 @@
-import { fetchJSON, fetchMultipart } from "src/shared/client";
+import { fetchJSON } from "src/shared/client";
+import { fetchMultipart } from "src/shared/client";
 import { API_URL } from "src/shared/constants";
-import { IGenericQuery } from "src/shared/types";
-import { IPagedResponse } from "src/shared/types";
+import type { GenericQuery } from "src/shared/types";
+import type { PagedResponse } from "src/shared/types";
 import { getGenericQuery } from "src/shared/utils";
 
-interface IUserQuery extends IGenericQuery {}
+interface UserQuery extends GenericQuery {}
 
-interface IUser {
+interface User {
   id: number;
   username: string;
   first_name: string;
@@ -20,29 +21,29 @@ interface IUser {
   authored_level_count: number;
 }
 
-interface IUserList extends IPagedResponse<IUser> {}
+interface UserList extends PagedResponse<User> {}
 
-const getCurrentUser = async (): Promise<IUser | null> => {
+const getCurrentUser = async (): Promise<User | null> => {
   let data;
   try {
-    data = await fetchJSON<IUser>(`${API_URL}/users/me/`, { method: "GET" });
+    data = await fetchJSON<User>(`${API_URL}/users/me/`, { method: "GET" });
   } catch (error) {
     data = null;
   }
   return data;
 };
 
-const getUserById = async (userId: number): Promise<IUser> => {
+const getUserById = async (userId: number): Promise<User> => {
   let data;
-  data = await fetchJSON<IUser>(`${API_URL}/users/${userId}/`, {
+  data = await fetchJSON<User>(`${API_URL}/users/${userId}/`, {
     method: "GET",
   });
   return data;
 };
 
-const getUserByUsername = async (username: string): Promise<IUser> => {
+const getUserByUsername = async (username: string): Promise<User> => {
   let data;
-  data = await fetchJSON<IUser>(`${API_URL}/users/by_username/${username}/`, {
+  data = await fetchJSON<User>(`${API_URL}/users/by_username/${username}/`, {
     method: "GET",
   });
   return data;
@@ -67,7 +68,7 @@ const update = async (
     password: string;
     bio: string;
   }
-): Promise<IUser> => {
+): Promise<User> => {
   const data: { [key: string]: any } = {
     username: username,
     first_name: firstName,
@@ -110,7 +111,7 @@ const register = async ({
   email: string;
   password: string;
   bio: string;
-}): Promise<IUser> => {
+}): Promise<User> => {
   return await fetchJSON(`${API_URL}/users/`, {
     method: "POST",
     data: {
@@ -124,8 +125,8 @@ const register = async ({
   });
 };
 
-const getUsers = async (query: IUserQuery): Promise<IUserList | null> => {
-  return await fetchJSON<IUserList>(`${API_URL}/users/`, {
+const getUsers = async (query: UserQuery): Promise<UserList | null> => {
+  return await fetchJSON<UserList>(`${API_URL}/users/`, {
     query: getGenericQuery(query),
     method: "GET",
   });
@@ -141,5 +142,5 @@ const UserService = {
   getUsers,
 };
 
-export type { IUser, IUserList, IUserQuery };
+export type { User, UserList, UserQuery };
 export { UserService };

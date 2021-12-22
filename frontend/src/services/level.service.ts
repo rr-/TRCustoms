@@ -1,19 +1,19 @@
 import { fetchJSON } from "src/shared/client";
 import { API_URL } from "src/shared/constants";
-import { IPagedResponse } from "src/shared/types";
-import { IGenericQuery } from "src/shared/types";
+import type { PagedResponse } from "src/shared/types";
+import type { GenericQuery } from "src/shared/types";
 import { filterFalsyObjectValues } from "src/shared/utils";
 import { getGenericQuery } from "src/shared/utils";
 
-interface ILevelFilterQuery {}
+interface LevelFilterQuery {}
 
-interface ILevelFilters {
+interface LevelFilters {
   tags: { id: number; name: string }[];
   genres: { id: number; name: string }[];
   engines: { id: number; name: string }[];
 }
 
-interface ITag {
+interface Tag {
   id: number;
   name: string;
   level_count: number;
@@ -21,7 +21,7 @@ interface ITag {
   last_updated: string;
 }
 
-interface IGenre {
+interface Genre {
   id: number;
   name: string;
   level_count: number;
@@ -29,7 +29,7 @@ interface IGenre {
   last_updated: string;
 }
 
-interface IEngine {
+interface Engine {
   id: number;
   name: string;
   level_count: number;
@@ -37,29 +37,29 @@ interface IEngine {
   last_updated: string;
 }
 
-interface ILevelUser {
+interface LevelUser {
   id: number;
   username: string;
   first_name: string;
   last_name: string;
 }
-interface ILevelAuthor extends ILevelUser {}
-interface ILevelUploader extends ILevelUser {}
+interface LevelAuthor extends LevelUser {}
+interface LevelUploader extends LevelUser {}
 
-interface IMedium {
+interface Medium {
   id: number;
   url: string;
 }
 
-interface ILevel {
+interface Level {
   id: number | null;
   name: string;
   description: string;
-  genres: IGenre[];
-  tags: ITag[];
-  engine: IEngine;
-  authors: ILevelAuthor[];
-  uploader: ILevelUploader | null;
+  genres: Genre[];
+  tags: Tag[];
+  engine: Engine;
+  authors: LevelAuthor[];
+  uploader: LevelUploader | null;
   created: string;
   last_updated: string;
   last_file_id: number | null;
@@ -69,32 +69,32 @@ interface ILevel {
   duration: string;
 }
 
-interface ILevelFull extends ILevel {
-  banner: IMedium;
-  media: IMedium[];
+interface LevelFull extends Level {
+  banner: Medium;
+  media: Medium[];
 }
 
-interface ILevelQuery extends IGenericQuery {
+interface LevelQuery extends GenericQuery {
   tags: Array<number>;
   genres: Array<number>;
   engines: Array<number>;
   authors: Array<number>;
 }
 
-interface ITagQuery extends IGenericQuery {}
+interface TagQuery extends GenericQuery {}
 
-interface IGenreQuery extends IGenericQuery {}
+interface GenreQuery extends GenericQuery {}
 
-interface IEngineQuery extends IGenericQuery {}
+interface EngineQuery extends GenericQuery {}
 
-interface ILevelList extends IPagedResponse<ILevel> {}
-interface ITagList extends IPagedResponse<ITag> {}
-interface IGenreList extends IPagedResponse<IGenre> {}
-interface IEngineList extends IPagedResponse<IEngine> {}
-interface IMediumList extends Array<IMedium> {}
+interface LevelList extends PagedResponse<Level> {}
+interface TagList extends PagedResponse<Tag> {}
+interface GenreList extends PagedResponse<Genre> {}
+interface EngineList extends PagedResponse<Engine> {}
+interface MediumList extends Array<Medium> {}
 
-const getLevels = async (query: ILevelQuery): Promise<ILevelList | null> => {
-  return await fetchJSON<ILevelList>(`${API_URL}/levels/`, {
+const getLevels = async (query: LevelQuery): Promise<LevelList | null> => {
+  return await fetchJSON<LevelList>(`${API_URL}/levels/`, {
     query: filterFalsyObjectValues({
       ...getGenericQuery(query),
       tags: query.tags.join(","),
@@ -106,36 +106,36 @@ const getLevels = async (query: ILevelQuery): Promise<ILevelList | null> => {
   });
 };
 
-const getLevelById = async (levelId: number): Promise<ILevelFull> => {
-  return await fetchJSON<ILevelFull>(`${API_URL}/levels/${levelId}/`, {
+const getLevelById = async (levelId: number): Promise<LevelFull> => {
+  return await fetchJSON<LevelFull>(`${API_URL}/levels/${levelId}/`, {
     method: "GET",
   });
 };
 
 const getLevelFilters = async (
-  query: ILevelFilterQuery
-): Promise<ILevelFilters | null> => {
-  return await fetchJSON<ILevelFilters>(`${API_URL}/level_filters/`, {
+  query: LevelFilterQuery
+): Promise<LevelFilters | null> => {
+  return await fetchJSON<LevelFilters>(`${API_URL}/level_filters/`, {
     method: "GET",
   });
 };
 
-const getTags = async (query: ITagQuery): Promise<ITagList | null> => {
-  return await fetchJSON<ITagList>(`${API_URL}/level_tags/`, {
+const getTags = async (query: TagQuery): Promise<TagList | null> => {
+  return await fetchJSON<TagList>(`${API_URL}/level_tags/`, {
     query: getGenericQuery(query),
     method: "GET",
   });
 };
 
-const getGenres = async (query: IGenreQuery): Promise<IGenreList | null> => {
-  return await fetchJSON<IGenreList>(`${API_URL}/level_genres/`, {
+const getGenres = async (query: GenreQuery): Promise<GenreList | null> => {
+  return await fetchJSON<GenreList>(`${API_URL}/level_genres/`, {
     query: getGenericQuery(query),
     method: "GET",
   });
 };
 
-const getEngines = async (query: IEngineQuery): Promise<IEngineList | null> => {
-  return await fetchJSON<IEngineList>(`${API_URL}/level_engines/`, {
+const getEngines = async (query: EngineQuery): Promise<EngineList | null> => {
+  return await fetchJSON<EngineList>(`${API_URL}/level_engines/`, {
     query: getGenericQuery(query),
     method: "GET",
   });
@@ -151,25 +151,25 @@ const LevelService = {
 };
 
 export type {
-  IEngine,
-  IEngineList,
-  IEngineQuery,
-  IGenre,
-  IGenreList,
-  IGenreQuery,
-  ILevel,
-  ILevelFull,
-  IMedium,
-  IMediumList,
-  ILevelFilterQuery,
-  ILevelFilters,
-  ILevelList,
-  ILevelQuery,
-  ITag,
-  ITagList,
-  ITagQuery,
-  ILevelAuthor,
-  ILevelUploader,
+  Engine,
+  EngineList,
+  EngineQuery,
+  Genre,
+  GenreList,
+  GenreQuery,
+  Level,
+  LevelAuthor,
+  LevelFilterQuery,
+  LevelFilters,
+  LevelFull,
+  LevelList,
+  LevelQuery,
+  LevelUploader,
+  Medium,
+  MediumList,
+  Tag,
+  TagList,
+  TagQuery,
 };
 
 export { LevelService };

@@ -3,19 +3,19 @@ import { useFormikContext } from "formik";
 import BaseFormField from "src/shared/components/BaseFormField";
 import { EMPTY_INPUT_PLACEHOLDER } from "src/shared/utils";
 
-interface ICheckboxArrayFormField {
+interface CheckboxArrayFormFieldProps {
   name: string;
   label: string;
   source: Array<{ value: any; label: string }>;
   required?: boolean;
 }
 
-const CheckboxArrayFormField: React.FunctionComponent<ICheckboxArrayFormField> = ({
+const CheckboxArrayFormField = ({
   name,
   label,
   source,
   required,
-}) => {
+}: CheckboxArrayFormFieldProps) => {
   const { values, setFieldValue } = useFormikContext();
 
   return (
