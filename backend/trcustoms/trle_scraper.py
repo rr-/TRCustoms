@@ -79,6 +79,12 @@ def get_document_from_response(
 
 
 @dataclass
+class TRLELevelWalkthrough:
+    level_id: int
+    content: str
+
+
+@dataclass
 class TRLEReviewer:
     full_name: str
     image_url: str
@@ -129,6 +135,7 @@ class TRLELevel:
     difficulty: str | None
     duration: str | None
     average_rating: Decimal
+    walkthrough: TRLELevelWalkthrough | None
     reviews: list[TRLELevelReview]
     file_type: str
     category: str | None
@@ -295,6 +302,7 @@ class TRLEScraper:
             difficulty=attrs.get("difficulty") or None,
             duration=attrs.get("duration") or None,
             average_rating=Decimal(attrs["average rating"]),
+            walkthrough=self.fetch_level_walktrhough(level_id),
             reviews=list(self.fetch_level_reviews(level_id)),
             file_type=attrs["file type"],
             category=attrs["class"] if attrs["class"] != "nc" else None,
@@ -303,6 +311,17 @@ class TRLEScraper:
             screenshot_urls=screenshot_urls,
             author_ids=author_ids,
         )
+
+    def fetch_level_walktrhough(
+        self, level_id: int
+    ) -> TRLELevelWalkthrough | None:
+        try:
+            response = self.safe_get(
+                f"https://www.trle.net/walk/{level_id}.htm"
+            )
+        except requests.exceptions.RequestException:
+            return None
+        return TRLELevelWalkthrough(level_id=level_id, content=response.text)
 
     def fetch_level_reviews(self, level_id: int) -> Iterable[TRLELevelReview]:
         response = self.safe_get(
