@@ -1,12 +1,12 @@
 import "./UsersTable.css";
 import { useQuery } from "react-query";
-import { Link } from "react-router-dom";
 import type { User } from "src/services/user.service";
 import type { UserList } from "src/services/user.service";
 import type { UserQuery } from "src/services/user.service";
 import { UserService } from "src/services/user.service";
 import type { DataTableColumn } from "src/shared/components/DataTable";
 import { DataTable } from "src/shared/components/DataTable";
+import UserLink from "src/shared/components/UserLink";
 import { formatDate } from "src/shared/utils";
 import { EMPTY_INPUT_PLACEHOLDER } from "src/shared/utils";
 
@@ -25,9 +25,7 @@ const UsersTable = ({ query, onQueryChange }: UsersTableProps) => {
       name: "username",
       sortKey: "username",
       label: "User name",
-      itemElement: (user) => (
-        <Link to={`/users/${user.id}`}>{user.username}</Link>
-      ),
+      itemElement: (user) => <UserLink user={user} />,
     },
     {
       name: "first-name",

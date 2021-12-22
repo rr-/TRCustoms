@@ -1,14 +1,13 @@
 import "./ProfilePage.css";
 import { useQuery } from "react-query";
 import { useParams } from "react-router-dom";
-import { Link } from "react-router-dom";
 import type { LevelQuery } from "src/services/level.service";
 import type { User } from "src/services/user.service";
 import { UserService } from "src/services/user.service";
 import LevelsTable from "src/shared/components/LevelsTable";
 import Loader from "src/shared/components/Loader";
 import { Markdown } from "src/shared/components/Markdown";
-import { PermissionGuard } from "src/shared/components/PermissionGuard";
+import UserLink from "src/shared/components/UserLink";
 import UserPicture from "src/shared/components/UserPicture";
 import { DISABLE_PAGING } from "src/shared/types";
 import { formatDateTime } from "src/shared/utils";
@@ -52,9 +51,7 @@ const ProfilePage = () => {
           <dd>{formatDateTime(user.last_login) || "never"}</dd>
         </dl>
 
-        <PermissionGuard require={"canEditUsers"} entity={user}>
-          <Link to={`/users/${user.id}/edit`}>Edit</Link>
-        </PermissionGuard>
+        <UserLink variant="edit" user={user} />
       </aside>
       <div>
         <section className="ProfilePage--basic-info">

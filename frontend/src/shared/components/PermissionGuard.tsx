@@ -7,12 +7,14 @@ interface PermissionGuardProps {
   require: string;
   entity?: any;
   children: React.ReactElement;
+  alternative?: React.ReactElement | string | null;
 }
 
 const PermissionGuard = ({
   require,
   entity,
   children,
+  alternative,
 }: PermissionGuardProps) => {
   const { user } = useContext(UserContext);
   const [isShown, setIsShown] = useState<boolean>(false);
@@ -28,7 +30,7 @@ const PermissionGuard = ({
   if (isShown) {
     return children;
   }
-  return <></>;
+  return <>{alternative}</>;
 };
 
 export { PermissionGuard };
