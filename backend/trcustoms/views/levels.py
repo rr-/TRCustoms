@@ -8,16 +8,7 @@ from rest_framework.response import Response
 from trcustoms.mixins import MultiSerializerMixin
 from trcustoms.models import Level, LevelFile, LevelMedium
 from trcustoms.serializers import LevelFullSerializer, LevelLiteSerializer
-from trcustoms.utils import stream_file_field
-
-
-def _parse_ids(source: str | None) -> list[int]:
-    if not source:
-        return []
-    try:
-        return [int(item) for item in source.split(",")]
-    except ValueError:
-        return []
+from trcustoms.utils import parse_ids, stream_file_field
 
 
 def get_level_queryset():
@@ -90,21 +81,21 @@ class LevelViewSet(
         disable_paging = self.request.query_params.get("disable_paging")
         self.paginator.disable_paging = False
 
-        if author_ids := _parse_ids(self.request.query_params.get("authors")):
+        if author_ids := parse_ids(self.request.query_params.get("authors")):
             for author_id in author_ids:
                 queryset = queryset.filter(authors__id=author_id)
             if disable_paging:
                 self.paginator.disable_paging = True
 
-        if tag_ids := _parse_ids(self.request.query_params.get("tags")):
+        if tag_ids := parse_ids(self.request.query_params.get("tags")):
             for tag_id in tag_ids:
                 queryset = queryset.filter(tags__id=tag_id)
 
-        if genre_ids := _parse_ids(self.request.query_params.get("genres")):
+        if genre_ids := parse_ids(self.request.query_params.get("genres")):
             for genre_id in genre_ids:
                 queryset = queryset.filter(genres__id=genre_id)
 
-        if engine_ids := _parse_ids(self.request.query_params.get("engines")):
+        if engine_ids := parse_ids(self.request.query_params.get("engines")):
             queryset = queryset.filter(engine__id__in=engine_ids)
 
         return queryset

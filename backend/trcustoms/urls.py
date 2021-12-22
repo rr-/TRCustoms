@@ -13,6 +13,7 @@ from trcustoms.views import (
     LevelFileViewSet,
     LevelFilterViewSet,
     LevelGenreViewSet,
+    LevelReviewViewSet,
     LevelTagViewSet,
     LevelViewSet,
     UserViewSet,
@@ -23,6 +24,7 @@ router.register(r"users", UserViewSet)
 router.register(r"levels", LevelViewSet)
 router.register(r"level_filters", LevelFilterViewSet, basename="level_filters")
 router.register(r"level_tags", LevelTagViewSet)
+router.register(r"level_reviews", LevelReviewViewSet)
 router.register(r"level_genres", LevelGenreViewSet)
 router.register(r"level_engines", LevelEngineViewSet)
 router.register(r"level_files", LevelFileViewSet)

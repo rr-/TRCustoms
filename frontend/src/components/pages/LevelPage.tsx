@@ -8,6 +8,8 @@ import Loader from "src/shared/components/Loader";
 import { Markdown } from "src/shared/components/Markdown";
 import { MediumThumbnail } from "src/shared/components/MediumThumbnail";
 import { MediumThumbnails } from "src/shared/components/MediumThumbnails";
+import { ReviewsTable } from "src/shared/components/ReviewsTable";
+import { DISABLE_PAGING } from "src/shared/types";
 import { formatDate } from "src/shared/utils";
 import { EMPTY_INPUT_PLACEHOLDER } from "src/shared/utils";
 
@@ -111,6 +113,17 @@ const LevelPage = () => {
           ) : (
             <p>This level has no description yet.</p>
           )}
+        </section>
+
+        <section id="LevelPage--reviews">
+          <ReviewsTable
+            query={{
+              levels: [level.id],
+              page: DISABLE_PAGING,
+              sort: "",
+              search: "",
+            }}
+          />
         </section>
       </div>
     </div>

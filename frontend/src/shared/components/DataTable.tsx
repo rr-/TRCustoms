@@ -11,6 +11,7 @@ interface DataTableColumn<TDataTableItem> {
   label: string;
   itemTooltip?: (item: TDataTableItem) => string | null;
   itemElement: (item: TDataTableItem) => React.ReactElement | string;
+  footer?: () => React.ReactElement | string;
 }
 
 interface DataTableProps<TDataTableItem> {
@@ -51,7 +52,7 @@ const DataTable = <TDataTableItem extends {}>({
               <th
                 className={`${className}--${column.name}`}
                 title={column.tooltip}
-                key={column.name}
+                key={`head-{column.name}`}
               >
                 {column.sortKey ? (
                   <SortLink sort={column.sortKey}>{column.label}</SortLink>
@@ -77,6 +78,20 @@ const DataTable = <TDataTableItem extends {}>({
             </tr>
           ))}
         </tbody>
+        {columns.some((column) => !!column.footer) && (
+          <tfoot>
+            <tr>
+              {columns.map((column) => (
+                <th
+                  className={`${className}--${column.name}`}
+                  key={`foot-{column.name}`}
+                >
+                  {column.footer?.()}
+                </th>
+              ))}
+            </tr>
+          </tfoot>
+        )}
       </table>
       {!query.data.disable_paging && (
         <Pager className={`${className}--pager`} pagedResponse={query.data} />

@@ -70,3 +70,12 @@ class RandomFileName:
     def __call__(self, _, filename):
         extension = Path(filename).suffix
         return str(self.path / f"{uuid.uuid4()}{extension}")
+
+
+def parse_ids(source: str | None) -> list[int]:
+    if not source:
+        return []
+    try:
+        return [int(item) for item in source.split(",")]
+    except ValueError:
+        return []

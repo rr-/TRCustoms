@@ -1,0 +1,13 @@
+.ReviewsTable--author {
+  width: 30%;
+}
+.ReviewsTable--ratingGameplay,
+.ReviewsTable--ratingEnemies,
+.ReviewsTable--ratingAtmosphere,
+.ReviewsTable--ratingLighting {
+  width: 15%;
+}
+.ReviewsTable--created {
+  width: 10%;
+  white-space: nowrap;
+}
