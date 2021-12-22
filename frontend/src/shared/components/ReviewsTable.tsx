@@ -1,7 +1,6 @@
 import "./ReviewsTable.css";
 import { Fragment } from "react";
 import { useQuery } from "react-query";
-import { Link } from "react-router-dom";
 import { LevelService } from "src/services/level.service";
 import type { Review } from "src/services/level.service";
 import type { ReviewList } from "src/services/level.service";
@@ -10,6 +9,7 @@ import type { DataTableColumn } from "src/shared/components/DataTable";
 import { DataTable } from "src/shared/components/DataTable";
 import Loader from "src/shared/components/Loader";
 import { Markdown } from "src/shared/components/Markdown";
+import UserLink from "src/shared/components/UserLink";
 import { avg } from "src/shared/math";
 import { round } from "src/shared/math";
 import { formatDate } from "src/shared/utils";
@@ -37,11 +37,7 @@ const ReviewsTable = ({ query, onQueryChange }: ReviewsTableProps) => {
       name: "author",
       sortKey: "author__username",
       label: "Author",
-      itemElement: (review) => (
-        <Link to={`/profile/${review.author.id}`}>
-          {review.author.username}
-        </Link>
-      ),
+      itemElement: (review) => <UserLink user={review.author} />,
     },
     {
       name: "ratingGameplay",

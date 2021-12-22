@@ -2,15 +2,18 @@ import "./LevelPage.css";
 import { useState } from "react";
 import { useQuery } from "react-query";
 import { useParams } from "react-router-dom";
-import { Link } from "react-router-dom";
 import type { ReviewQuery } from "src/services/level.service";
 import type { LevelFull } from "src/services/level.service";
 import { LevelService } from "src/services/level.service";
+import EngineLink from "src/shared/components/EngineLink";
+import GenreLink from "src/shared/components/GenreLink";
 import Loader from "src/shared/components/Loader";
 import { Markdown } from "src/shared/components/Markdown";
 import { MediumThumbnail } from "src/shared/components/MediumThumbnail";
 import { MediumThumbnails } from "src/shared/components/MediumThumbnails";
 import { ReviewsTable } from "src/shared/components/ReviewsTable";
+import TagLink from "src/shared/components/TagLink";
+import UserLink from "src/shared/components/UserLink";
 import { DISABLE_PAGING } from "src/shared/types";
 import { formatDate } from "src/shared/utils";
 import { EMPTY_INPUT_PLACEHOLDER } from "src/shared/utils";
@@ -51,9 +54,7 @@ const LevelPage = () => {
           <dt>Author(s)</dt>
           <dd>
             {level.authors.map((author) => (
-              <Link key={author.id} to={`/users/${author.id}`}>
-                {author.username}
-              </Link>
+              <UserLink key={author.id} user={author} />
             ))}
           </dd>
 
@@ -68,9 +69,7 @@ const LevelPage = () => {
           <dt>Engine</dt>
           <dd>
             {level.engine ? (
-              <Link to={`/levels/?engines=${level.engine.id}`}>
-                {level.engine.name}
-              </Link>
+              <EngineLink engine={level.engine} />
             ) : (
               EMPTY_INPUT_PLACEHOLDER
             )}
@@ -90,9 +89,7 @@ const LevelPage = () => {
           <dd>
             {level.genres.length
               ? level.genres.map((genre) => (
-                  <Link key={genre.id} to={`/?genres=${genre.id}`}>
-                    {genre.name}
-                  </Link>
+                  <GenreLink key={genre.id} genre={genre} />
                 ))
               : EMPTY_INPUT_PLACEHOLDER}
           </dd>
@@ -100,11 +97,7 @@ const LevelPage = () => {
           <dt>Tags</dt>
           <dd>
             {level.tags.length
-              ? level.tags.map((tag) => (
-                  <Link key={tag.id} to={`/?tags=${tag.id}`}>
-                    {tag.name}
-                  </Link>
-                ))
+              ? level.tags.map((tag) => <TagLink key={tag.id} tag={tag} />)
               : EMPTY_INPUT_PLACEHOLDER}
           </dd>
         </dl>

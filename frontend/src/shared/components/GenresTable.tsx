@@ -1,12 +1,12 @@
 import "./GenresTable.css";
 import { useQuery } from "react-query";
-import { Link } from "react-router-dom";
 import type { Genre } from "src/services/level.service";
 import type { GenreList } from "src/services/level.service";
 import type { GenreQuery } from "src/services/level.service";
 import { LevelService } from "src/services/level.service";
 import type { DataTableColumn } from "src/shared/components/DataTable";
 import { DataTable } from "src/shared/components/DataTable";
+import GenreLink from "src/shared/components/GenreLink";
 import { formatDate } from "src/shared/utils";
 
 interface GenresTableProps {
@@ -24,9 +24,7 @@ const GenresTable = ({ query, onQueryChange }: GenresTableProps) => {
       name: "name",
       sortKey: "name",
       label: "Name",
-      itemElement: (genre) => (
-        <Link to={`/?genres=${genre.id}`}>{genre.name}</Link>
-      ),
+      itemElement: (genre) => <GenreLink genre={genre} />,
     },
     {
       name: "level-count",

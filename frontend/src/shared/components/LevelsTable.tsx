@@ -7,6 +7,8 @@ import type { LevelQuery } from "src/services/level.service";
 import { LevelService } from "src/services/level.service";
 import type { DataTableColumn } from "src/shared/components/DataTable";
 import { DataTable } from "src/shared/components/DataTable";
+import LevelLink from "src/shared/components/LevelLink";
+import UserLink from "src/shared/components/UserLink";
 import { formatDate } from "src/shared/utils";
 import { formatFileSize } from "src/shared/utils";
 import { EMPTY_INPUT_PLACEHOLDER } from "src/shared/utils";
@@ -26,9 +28,7 @@ const LevelsTable = ({ query, onQueryChange }: LevelsTableProps) => {
       name: "name",
       label: "Name",
       sortKey: "name",
-      itemElement: (level) => (
-        <Link to={`/levels/${level.id}`}>{level.name}</Link>
-      ),
+      itemElement: (level) => <LevelLink level={level} />,
     },
     {
       name: "genres",
@@ -54,7 +54,7 @@ const LevelsTable = ({ query, onQueryChange }: LevelsTableProps) => {
         if (!user?.username) {
           return EMPTY_INPUT_PLACEHOLDER;
         }
-        return <Link to={`/users/${user.id}`}>{user.username}</Link>;
+        return <UserLink user={user} />;
       },
     },
     {

@@ -1,12 +1,12 @@
 import "./TagsTable.css";
 import { useQuery } from "react-query";
-import { Link } from "react-router-dom";
 import type { Tag } from "src/services/level.service";
 import type { TagList } from "src/services/level.service";
 import type { TagQuery } from "src/services/level.service";
 import { LevelService } from "src/services/level.service";
 import type { DataTableColumn } from "src/shared/components/DataTable";
 import { DataTable } from "src/shared/components/DataTable";
+import TagLink from "src/shared/components/TagLink";
 import { formatDate } from "src/shared/utils";
 
 interface TagsTableProps {
@@ -24,7 +24,7 @@ const TagsTable = ({ query, onQueryChange }: TagsTableProps) => {
       name: "name",
       sortKey: "name",
       label: "Name",
-      itemElement: (tag) => <Link to={`/?tags=${tag.id}`}>{tag.name}</Link>,
+      itemElement: (tag) => <TagLink tag={tag} />,
     },
     {
       name: "level-count",
