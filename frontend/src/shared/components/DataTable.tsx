@@ -1,3 +1,4 @@
+import "./DataTable.css";
 import { UseQueryResult } from "react-query";
 import Loader from "src/shared/components/Loader";
 import Pager from "src/shared/components/Pager";
@@ -16,27 +17,32 @@ interface DataTableColumn<TDataTableItem> {
 
 interface DataTableProps<TDataTableItem> {
   className?: string | null;
-  query: UseQueryResult<PagedResponse<TDataTableItem>, Error> | null;
+  result: UseQueryResult<PagedResponse<TDataTableItem>, Error> | null;
   itemKey: (TDataTableItem) => string;
   columns: DataTableColumn<TDataTableItem>[];
+
+  sort?: string | null;
+  onSortChange?: (sort: string) => any | null;
 }
 
 const DataTable = <TDataTableItem extends {}>({
   className,
-  query,
+  result,
   itemKey,
   columns,
+  sort,
+  onSortChange,
 }: DataTableProps<TDataTableItem>) => {
-  if (query.error) {
-    return <p>{query.error.message}</p>;
+  if (result.error) {
+    return <p>{result.error.message}</p>;
   }
 
-  if (query.isLoading || !query.data) {
+  if (result.isLoading || !result.data) {
     return <Loader />;
   }
 
-  if (!query.data.results.length) {
-    return <p>There are no results to show.</p>;
+  if (!result.data.results.length) {
+    return <p>There are no result to show.</p>;
   }
 
   if (!className) {
@@ -52,10 +58,16 @@ const DataTable = <TDataTableItem extends {}>({
               <th
                 className={`${className}--${column.name}`}
                 title={column.tooltip}
-                key={`head-{column.name}`}
+                key={`head-${column.name}`}
               >
-                {column.sortKey ? (
-                  <SortLink sort={column.sortKey}>{column.label}</SortLink>
+                {onSortChange && column.sortKey ? (
+                  <SortLink
+                    currentSort={sort}
+                    onSortChange={onSortChange}
+                    targetSort={column.sortKey}
+                  >
+                    {column.label}
+                  </SortLink>
                 ) : (
                   column.label
                 )}
@@ -64,7 +76,7 @@ const DataTable = <TDataTableItem extends {}>({
           </tr>
         </thead>
         <tbody>
-          {query.data.results.map((item) => (
+          {result.data.results.map((item) => (
             <tr key={itemKey(item)}>
               {columns.map((column) => (
                 <td
@@ -84,7 +96,7 @@ const DataTable = <TDataTableItem extends {}>({
               {columns.map((column) => (
                 <th
                   className={`${className}--${column.name}`}
-                  key={`foot-{column.name}`}
+                  key={`foot-${column.name}`}
                 >
                   {column.footer?.()}
                 </th>
@@ -93,8 +105,8 @@ const DataTable = <TDataTableItem extends {}>({
           </tfoot>
         )}
       </table>
-      {!query.data.disable_paging && (
-        <Pager className={`${className}--pager`} pagedResponse={query.data} />
+      {!result.data.disable_paging && (
+        <Pager className={`${className}--pager`} pagedResponse={result.data} />
       )}
     </>
   );

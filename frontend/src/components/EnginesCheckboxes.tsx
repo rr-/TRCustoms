@@ -6,16 +6,16 @@ import Loader from "src/shared/components/Loader";
 
 const EnginesCheckboxes = () => {
   const query = {};
-  const levelFiltersQuery = useQuery<LevelFilters, Error>(
+  const result = useQuery<LevelFilters, Error>(
     ["levelFilters", query],
     async () => LevelService.getLevelFilters(query)
   );
 
-  if (levelFiltersQuery.error) {
-    return <p>{levelFiltersQuery.error.message}</p>;
+  if (result.error) {
+    return <p>{result.error.message}</p>;
   }
 
-  if (levelFiltersQuery.isLoading || !levelFiltersQuery.data) {
+  if (result.isLoading || !result.data) {
     return <Loader />;
   }
 
@@ -23,7 +23,7 @@ const EnginesCheckboxes = () => {
     <CheckboxArrayFormField
       label="Engines"
       name="engines"
-      source={levelFiltersQuery.data.engines.map((engine) => ({
+      source={result.data.engines.map((engine) => ({
         value: engine.id,
         label: engine.name,
       }))}

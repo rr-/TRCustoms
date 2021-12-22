@@ -11,10 +11,11 @@ import { formatDate } from "src/shared/utils";
 
 interface TagsTableProps {
   query: TagQuery | null;
+  onQueryChange?: (query: TagQuery) => any | null;
 }
 
-const TagsTable = ({ query }: TagsTableProps) => {
-  const tagsQuery = useQuery<TagList, Error>(["tags", query], async () =>
+const TagsTable = ({ query, onQueryChange }: TagsTableProps) => {
+  const result = useQuery<TagList, Error>(["tags", query], async () =>
     LevelService.getTags(query)
   );
 
@@ -50,9 +51,11 @@ const TagsTable = ({ query }: TagsTableProps) => {
   return (
     <DataTable
       className="TagsTable"
-      query={tagsQuery}
+      result={result}
       columns={columns}
       itemKey={itemKey}
+      sort={query.sort}
+      onSortChange={(sort) => onQueryChange?.({ ...query, sort: sort })}
     />
   );
 };

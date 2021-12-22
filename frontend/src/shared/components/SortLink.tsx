@@ -1,10 +1,6 @@
 import "./SortLink.css";
 import { SortDescendingIcon } from "@heroicons/react/solid";
 import { SortAscendingIcon } from "@heroicons/react/solid";
-import { useState } from "react";
-import { useEffect } from "react";
-import { Link } from "react-router-dom";
-import { useLocation } from "react-router-dom";
 
 enum SortLinkStatus {
   Inactive = 1,
@@ -13,32 +9,35 @@ enum SortLinkStatus {
 }
 
 interface SortLinkProps {
-  sort: string;
+  currentSort: string;
+  targetSort: string;
+  onSortChange: (sort: string) => any;
   children: React.ReactNode;
 }
 
-const SortLink = ({ sort, children }: SortLinkProps) => {
-  const [status, setStatus] = useState<SortLinkStatus>(SortLinkStatus.Inactive);
-  const location = useLocation();
-  useEffect(() => {
-    const queryParams = Object.fromEntries(
-      new URL(window.location.href).searchParams
-    );
-    if (queryParams.sort === sort) {
-      setStatus(SortLinkStatus.Active);
-    } else if (queryParams.sort === `-${sort}`) {
-      setStatus(SortLinkStatus.ActiveFlipped);
-    } else {
-      setStatus(SortLinkStatus.Inactive);
-    }
-  }, [sort, location]);
+const SortLink = ({
+  currentSort,
+  targetSort,
+  onSortChange,
+  children,
+}: SortLinkProps) => {
+  let status: SortLinkStatus;
+  if (currentSort === targetSort) {
+    status = SortLinkStatus.Active;
+  } else if (currentSort === `-${targetSort}`) {
+    status = SortLinkStatus.ActiveFlipped;
+  } else {
+    status = SortLinkStatus.Inactive;
+  }
 
   const descending = status === SortLinkStatus.Active;
   const isActive = status !== SortLinkStatus.Inactive;
+  const buttonClick = () => onSortChange((descending ? "-" : "") + targetSort);
+
   return (
-    <Link
-      to={`?sort=${descending ? "-" : ""}${sort}`}
-      className={isActive ? "SortLink SortLink--active" : "SortLink"}
+    <button
+      onClick={buttonClick}
+      className={`link ${isActive ? "SortLink SortLink--active" : "SortLink"}`}
     >
       {children}
       <span className="SortLink--indicator">
@@ -48,7 +47,7 @@ const SortLink = ({ sort, children }: SortLinkProps) => {
           <SortAscendingIcon className="icon" />
         )}
       </span>
-    </Link>
+    </button>
   );
 };
 

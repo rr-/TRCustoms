@@ -87,6 +87,18 @@ button:focus {
   border-color: var(--outline-color);
 }
 
+button.link {
+  background: unset;
+  border: unset;
+  padding: unset;
+  color: var(--link-color);
+  line-height: calc(var(--font-size) * 1.5);
+}
+button.link:focus {
+  outline: 2px solid var(--outline-color);
+  isolation: isolate;
+}
+
 #Content {
   margin-top: 1rem;
   margin-bottom: 1rem;

@@ -1,7 +1,9 @@
 import "./LevelPage.css";
+import { useState } from "react";
 import { useQuery } from "react-query";
 import { useParams } from "react-router-dom";
 import { Link } from "react-router-dom";
+import type { ReviewQuery } from "src/services/level.service";
 import type { LevelFull } from "src/services/level.service";
 import { LevelService } from "src/services/level.service";
 import Loader from "src/shared/components/Loader";
@@ -15,19 +17,26 @@ import { EMPTY_INPUT_PLACEHOLDER } from "src/shared/utils";
 
 const LevelPage = () => {
   const { levelId } = useParams();
-  const levelQuery = useQuery<LevelFull, Error>(["levels", levelId], async () =>
+  const [reviewQuery, setReviewQuery] = useState<ReviewQuery>({
+    levels: [+levelId],
+    page: DISABLE_PAGING,
+    sort: "-created",
+    search: "",
+  });
+
+  const result = useQuery<LevelFull, Error>(["levels", levelId], async () =>
     LevelService.getLevelById(+levelId)
   );
 
-  if (levelQuery.error) {
-    return <p>{levelQuery.error.message}</p>;
+  if (result.error) {
+    return <p>{result.error.message}</p>;
   }
 
-  if (levelQuery.isLoading || !levelQuery.data) {
+  if (result.isLoading || !result.data) {
     return <Loader />;
   }
 
-  const level = levelQuery.data;
+  const level = result.data;
 
   return (
     <div id="LevelPage">
@@ -116,14 +125,7 @@ const LevelPage = () => {
         </section>
 
         <section id="LevelPage--reviews">
-          <ReviewsTable
-            query={{
-              levels: [level.id],
-              page: DISABLE_PAGING,
-              sort: "",
-              search: "",
-            }}
-          />
+          <ReviewsTable query={reviewQuery} onQueryChange={setReviewQuery} />
         </section>
       </div>
     </div>

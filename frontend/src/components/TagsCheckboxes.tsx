@@ -6,16 +6,16 @@ import Loader from "src/shared/components/Loader";
 
 const TagsCheckboxes = () => {
   const query = {};
-  const levelFiltersQuery = useQuery<LevelFilters, Error>(
+  const result = useQuery<LevelFilters, Error>(
     ["levelFilters", query],
     async () => LevelService.getLevelFilters(query)
   );
 
-  if (levelFiltersQuery.error) {
-    return <p>{levelFiltersQuery.error.message}</p>;
+  if (result.error) {
+    return <p>{result.error.message}</p>;
   }
 
-  if (levelFiltersQuery.isLoading || !levelFiltersQuery.data) {
+  if (result.isLoading || !result.data) {
     return <Loader />;
   }
 
@@ -23,7 +23,7 @@ const TagsCheckboxes = () => {
     <CheckboxArrayFormField
       label="Tags"
       name="tags"
-      source={levelFiltersQuery.data.tags.map((tag) => ({
+      source={result.data.tags.map((tag) => ({
         value: tag.id,
         label: tag.name,
       }))}

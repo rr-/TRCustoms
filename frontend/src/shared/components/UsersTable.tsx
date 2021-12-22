@@ -12,10 +12,11 @@ import { EMPTY_INPUT_PLACEHOLDER } from "src/shared/utils";
 
 interface UsersTableProps {
   query: UserQuery | null;
+  onQueryChange?: (query: UserQuery) => any | null;
 }
 
-const UsersTable = ({ query }: UsersTableProps) => {
-  const usersQuery = useQuery<UserList, Error>(["users", query], async () =>
+const UsersTable = ({ query, onQueryChange }: UsersTableProps) => {
+  const result = useQuery<UserList, Error>(["users", query], async () =>
     UserService.getUsers(query)
   );
 
@@ -65,9 +66,11 @@ const UsersTable = ({ query }: UsersTableProps) => {
   return (
     <DataTable
       className="UsersTable"
-      query={usersQuery}
+      result={result}
       columns={columns}
       itemKey={itemKey}
+      sort={query.sort}
+      onSortChange={(sort) => onQueryChange?.({ ...query, sort: sort })}
     />
   );
 };

@@ -6,16 +6,16 @@ import Loader from "src/shared/components/Loader";
 
 const GenresCheckboxes = () => {
   const query = {};
-  const levelFiltersQuery = useQuery<LevelFilters, Error>(
+  const result = useQuery<LevelFilters, Error>(
     ["levelFilters", query],
     async () => LevelService.getLevelFilters(query)
   );
 
-  if (levelFiltersQuery.error) {
-    return <p>{levelFiltersQuery.error.message}</p>;
+  if (result.error) {
+    return <p>{result.error.message}</p>;
   }
 
-  if (levelFiltersQuery.isLoading || !levelFiltersQuery.data) {
+  if (result.isLoading || !result.data) {
     return <Loader />;
   }
 
@@ -23,7 +23,7 @@ const GenresCheckboxes = () => {
     <CheckboxArrayFormField
       label="Genres"
       name="genres"
-      source={levelFiltersQuery.data.genres.map((genre) => ({
+      source={result.data.genres.map((genre) => ({
         value: genre.id,
         label: genre.name,
       }))}

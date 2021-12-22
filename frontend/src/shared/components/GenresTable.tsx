@@ -11,10 +11,11 @@ import { formatDate } from "src/shared/utils";
 
 interface GenresTableProps {
   query: GenreQuery | null;
+  onQueryChange?: (query: GenreQuery) => any | null;
 }
 
-const GenresTable = ({ query }: GenresTableProps) => {
-  const genresQuery = useQuery<GenreList, Error>(["genres", query], async () =>
+const GenresTable = ({ query, onQueryChange }: GenresTableProps) => {
+  const result = useQuery<GenreList, Error>(["genres", query], async () =>
     LevelService.getGenres(query)
   );
 
@@ -52,9 +53,11 @@ const GenresTable = ({ query }: GenresTableProps) => {
   return (
     <DataTable
       className="GenresTable"
-      query={genresQuery}
+      result={result}
       columns={columns}
       itemKey={itemKey}
+      sort={query.sort}
+      onSortChange={(sort) => onQueryChange?.({ ...query, sort: sort })}
     />
   );
 };
