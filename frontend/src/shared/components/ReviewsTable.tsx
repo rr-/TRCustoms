@@ -119,15 +119,18 @@ const ReviewsTable = ({ query, onQueryChange }: ReviewsTableProps) => {
       />
 
       <h2>Reviewer comments</h2>
-      {result.data.results.map((review) => (
-        <Fragment key={review.id}>
-          <Markdown children={review.text} />—{" "}
-          <em>
-            {review.author.username}, {formatDate(review.created)}
-          </em>
-          <hr />
-        </Fragment>
-      ))}
+      {result.data.results.map(
+        (review) =>
+          review.text && (
+            <Fragment key={review.id}>
+              <Markdown children={review.text} />—{" "}
+              <em>
+                {review.author.username}, {formatDate(review.created)}
+              </em>
+              <hr />
+            </Fragment>
+          )
+      )}
     </>
   );
 };
