@@ -77,7 +77,7 @@ def process_reviewer(ctx: ScrapeContext, obj_id: int) -> None:
 
     if not ctx.no_basic_data:
         first_name, last_name = split_full_name(trle_reviewer.full_name)
-        User.objects.update_or_create(
+        user, created = User.objects.update_or_create(
             username=get_trle_user_username(trle_reviewer),
             defaults=dict(
                 trle_reviewer_id=obj_id,
@@ -85,6 +85,9 @@ def process_reviewer(ctx: ScrapeContext, obj_id: int) -> None:
                 last_name=last_name,
             ),
         )
+        if created:
+            user.is_active = False
+            user.save()
 
 
 def process_author(ctx: ScrapeContext, obj_id: int) -> None:
@@ -99,7 +102,7 @@ def process_author(ctx: ScrapeContext, obj_id: int) -> None:
 
     if not ctx.no_basic_data:
         first_name, last_name = split_full_name(trle_author.full_name)
-        user, _created = User.objects.update_or_create(
+        user, created = User.objects.update_or_create(
             username=get_trle_user_username(trle_author),
             defaults=dict(
                 trle_author_id=obj_id,
@@ -107,6 +110,9 @@ def process_author(ctx: ScrapeContext, obj_id: int) -> None:
                 last_name=last_name,
             ),
         )
+        if created:
+            user.is_active = False
+            user.save()
 
         user.authored_levels.set(
             Level.objects.filter(trle_id__in=trle_author.level_ids)
