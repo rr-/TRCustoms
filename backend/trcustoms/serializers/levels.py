@@ -75,6 +75,7 @@ class LevelFullSerializer(LevelLiteSerializer):
         fields = LevelLiteSerializer.Meta.fields + [
             "banner",
             "media",
+            "trle_id",
         ]
 
     def get_banner(self, instance: Level):

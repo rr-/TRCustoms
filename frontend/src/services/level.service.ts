@@ -91,6 +91,7 @@ interface Level {
 interface LevelFull extends Level {
   banner: Medium;
   media: Medium[];
+  trle_id: number | null;
 }
 
 interface LevelQuery extends GenericQuery {

@@ -100,6 +100,19 @@ const LevelPage = () => {
               ? level.tags.map((tag) => <TagLink key={tag.id} tag={tag} />)
               : EMPTY_INPUT_PLACEHOLDER}
           </dd>
+
+          {level.trle_id && (
+            <>
+              <dt>Links</dt>
+              <dd>
+                <a
+                  href={`https://www.trle.net/sc/levelfeatures.php?lid=${level.trle_id}`}
+                >
+                  TRLE.net
+                </a>
+              </dd>
+            </>
+          )}
         </dl>
       </aside>
 
