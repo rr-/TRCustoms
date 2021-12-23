@@ -40,8 +40,8 @@ class LevelLiteSerializer(serializers.ModelSerializer):
     genres = LevelGenreLiteSerializer(read_only=True, many=True)
     tags = LevelTagLiteSerializer(read_only=True, many=True)
     engine = LevelEngineLiteSerializer(read_only=True)
-    new_difficulty = LevelDifficultyLiteSerializer(read_only=True)
-    new_duration = LevelDurationLiteSerializer(read_only=True)
+    difficulty = LevelDifficultyLiteSerializer(read_only=True)
+    duration = LevelDurationLiteSerializer(read_only=True)
     uploader = LevelUploaderSerializer(read_only=True)
     authors = LevelAuthorSerializer(read_only=True, many=True)
     last_file = serializers.SerializerMethodField(read_only=True)
@@ -74,8 +74,8 @@ class LevelLiteSerializer(serializers.ModelSerializer):
             "last_updated",
             "last_file",
             "download_count",
-            "new_difficulty",
-            "new_duration",
+            "difficulty",
+            "duration",
         ]
 
 
