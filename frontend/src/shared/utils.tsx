@@ -103,7 +103,7 @@ const formatFileSize = (input: number | null): string => {
   let suffix = suffixes.shift();
   let value = input;
   let base = 1024.0;
-  while (value >= base || !suffixes.length) {
+  while (value >= base && suffixes.length) {
     value /= base;
     suffix = suffixes.shift();
   }
