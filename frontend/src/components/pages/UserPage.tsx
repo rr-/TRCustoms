@@ -12,6 +12,7 @@ import { Markdown } from "src/shared/components/Markdown";
 import { PermissionGuard } from "src/shared/components/PermissionGuard";
 import PushButton from "src/shared/components/PushButton";
 import { ReviewsTable } from "src/shared/components/ReviewsTable";
+import SectionHeader from "src/shared/components/SectionHeader";
 import SidebarBox from "src/shared/components/SidebarBox";
 import UserPicture from "src/shared/components/UserPicture";
 import { DISABLE_PAGING } from "src/shared/constants";
@@ -93,7 +94,7 @@ const UserPage = () => {
         </section>
 
         <section id="UserPage--authoredLevels">
-          <h3>Authored levels</h3>
+          <SectionHeader>Authored levels</SectionHeader>
           <LevelsTable query={levelsQuery} onQueryChange={setLevelsQuery} />
         </section>
 
