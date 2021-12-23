@@ -14,6 +14,7 @@ import { MediumThumbnail } from "src/shared/components/MediumThumbnail";
 import { MediumThumbnails } from "src/shared/components/MediumThumbnails";
 import PushButton from "src/shared/components/PushButton";
 import { ReviewsTable } from "src/shared/components/ReviewsTable";
+import SidebarBox from "src/shared/components/SidebarBox";
 import TagLink from "src/shared/components/TagLink";
 import UserLink from "src/shared/components/UserLink";
 import { DISABLE_PAGING } from "src/shared/constants";
@@ -52,13 +53,15 @@ const LevelPage = () => {
       <aside id="LevelPage--sidebar">
         <MediumThumbnail medium={level.banner} />
 
-        <div id="LevelPage--sidebarWrapper">
-          <div id="LevelPage--actions">
-            <PushButton target="_blank" to={level.files[0].url}>
-              Download
-            </PushButton>
-          </div>
-
+        <SidebarBox
+          actions={
+            <>
+              <PushButton target="_blank" to={level.files[0].url}>
+                Download
+              </PushButton>
+            </>
+          }
+        >
           <dl id="LevelPage--basicInfo">
             <dt>Author(s)</dt>
             <dd>
@@ -142,7 +145,7 @@ const LevelPage = () => {
               ))}
             </tbody>
           </table>
-        </div>
+        </SidebarBox>
       </aside>
 
       <div id="LevelPage--main">
@@ -150,7 +153,7 @@ const LevelPage = () => {
           <MediumThumbnails media={level.media} />
         </section>
 
-        <section id="LevelPage--basic-info">
+        <section id="LevelPage--basicInfo">
           <h2>About the game</h2>
           {level.description ? (
             <Markdown children={level.description} />

@@ -1,10 +1,36 @@
-#ProfilePage img {
-  max-width: 250px;
-}
 #ProfilePage {
-  display: flex;
-  gap: 1rem;
+  display: grid;
+  grid-template-areas:
+    "sidebar header"
+    "sidebar main";
+  grid-template-columns: min-content 6fr;
+  grid-template-rows: min-content 1fr;
+  gap: 1rem 3rem;
 }
-#ProfilePage h1 {
+
+#ProfilePage--header {
+  grid-area: header;
+}
+#ProfilePage--sidebar {
+  grid-area: sidebar;
+  white-space: nowrap;
+}
+#ProfilePage--main {
+  width: 100%;
+  grid-area: main;
+}
+
+#ProfilePage--sidebar img {
+  max-width: 100%;
+}
+
+#ProfilePage--header h1 {
+  margin-top: 0;
+}
+#ProfilePage--header h2 {
+  margin-bottom: 0;
+}
+
+#ProfilePage--basicInfo > p:first-child {
   margin-top: 0;
 }

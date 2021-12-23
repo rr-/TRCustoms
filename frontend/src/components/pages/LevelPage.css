@@ -12,27 +12,16 @@
 }
 #LevelPage--sidebar {
   grid-area: sidebar;
+  white-space: nowrap;
 }
 #LevelPage--main {
   width: 100%;
   grid-area: main;
 }
 
-#LevelPage--sidebarWrapper {
-  margin: 0.5rem 0;
-  white-space: nowrap;
-}
-
 #LevelPage--sidebar .MediumThumbnail--thumb {
   width: 100%;
   margin: 0;
-}
-
-#LevelPage--actions {
-  display: flex;
-}
-#LevelPage--actions > .PushButton {
-  flex-grow: 1;
 }
 
 #LevelPage h1 {
