@@ -10,18 +10,6 @@ from trcustoms.models.util import DatesInfo
 
 
 class Level(DatesInfo):
-    class Duration(models.TextChoices):
-        short = "short", "short"
-        medium = "medium", "medium"
-        long = "long", "long"
-        very_long = "very_long", "very long"
-
-    class Difficulty(models.TextChoices):
-        easy = "easy", "easy"
-        medium = "medium", "medium"
-        hard = "hard", "hard"
-        very_hard = "very_hard", "very hard"
-
     name = models.CharField(max_length=100)
     description = models.TextField(max_length=5000, null=True, blank=True)
     genres = models.ManyToManyField(LevelGenre)
@@ -35,12 +23,6 @@ class Level(DatesInfo):
         related_name="uploaded_levels",
     )
     authors = models.ManyToManyField(User, related_name="authored_levels")
-    difficulty = models.CharField(
-        max_length=10, choices=Difficulty.choices, blank=True, null=True
-    )
-    duration = models.CharField(
-        max_length=10, choices=Duration.choices, blank=True, null=True
-    )
     trle_id = models.IntegerField(blank=True, null=True)
 
     new_difficulty = models.ForeignKey(
