@@ -14,7 +14,7 @@ import { MediumThumbnails } from "src/shared/components/MediumThumbnails";
 import { ReviewsTable } from "src/shared/components/ReviewsTable";
 import TagLink from "src/shared/components/TagLink";
 import UserLink from "src/shared/components/UserLink";
-import { DISABLE_PAGING } from "src/shared/types";
+import { DISABLE_PAGING } from "src/shared/constants";
 import { formatDate } from "src/shared/utils";
 import { EMPTY_INPUT_PLACEHOLDER } from "src/shared/utils";
 

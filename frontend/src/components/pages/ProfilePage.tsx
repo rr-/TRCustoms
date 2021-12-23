@@ -9,7 +9,7 @@ import Loader from "src/shared/components/Loader";
 import { Markdown } from "src/shared/components/Markdown";
 import UserLink from "src/shared/components/UserLink";
 import UserPicture from "src/shared/components/UserPicture";
-import { DISABLE_PAGING } from "src/shared/types";
+import { DISABLE_PAGING } from "src/shared/constants";
 import { formatDateTime } from "src/shared/utils";
 
 const ProfilePage = () => {
