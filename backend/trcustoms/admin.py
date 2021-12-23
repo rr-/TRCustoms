@@ -6,6 +6,8 @@ from django.core.exceptions import ValidationError
 
 from trcustoms.models import (
     Level,
+    LevelDifficulty,
+    LevelDuration,
     LevelEngine,
     LevelFile,
     LevelGenre,
@@ -75,6 +77,22 @@ class LevelEngineAdmin(admin.ModelAdmin):
     search_fields = ["name"]
     readonly_fields = ["created", "last_updated"]
     list_display = ["id", "name", "created", "last_updated"]
+
+
+@admin.register(LevelDifficulty)
+class LevelDifficultyAdmin(admin.ModelAdmin):
+    ordering = ["position"]
+    search_fields = ["name"]
+    readonly_fields = ["created", "last_updated"]
+    list_display = ["id", "name", "position", "created", "last_updated"]
+
+
+@admin.register(LevelDuration)
+class LevelDurationAdmin(admin.ModelAdmin):
+    ordering = ["position"]
+    search_fields = ["name"]
+    readonly_fields = ["created", "last_updated"]
+    list_display = ["id", "name", "position", "created", "last_updated"]
 
 
 @admin.register(LevelGenre)

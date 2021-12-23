@@ -1,3 +1,5 @@
+from .level_difficulties import LevelDifficultyLiteSerializer
+from .level_durations import LevelDurationLiteSerializer
 from .level_engines import LevelEngineFullSerializer, LevelEngineLiteSerializer
 from .level_genres import LevelGenreFullSerializer, LevelGenreLiteSerializer
 from .level_media import LevelMediumSerializer
@@ -13,6 +15,8 @@ from .users import UserPictureSerializer, UserSerializer
 
 __all__ = [
     "LevelAuthorSerializer",
+    "LevelDifficultyLiteSerializer",
+    "LevelDurationLiteSerializer",
     "LevelEngineFullSerializer",
     "LevelEngineLiteSerializer",
     "LevelFullSerializer",

@@ -16,6 +16,8 @@ from unidecode import unidecode
 
 from trcustoms.models import (
     Level,
+    LevelDifficulty,
+    LevelDuration,
     LevelEngine,
     LevelFile,
     LevelLegacyReview,
@@ -110,20 +112,24 @@ def process_level_basic_data(obj_id: int, trle_level: TRLELevel) -> Level:
         defaults=dict(
             name=trle_level.title,
             description=trle_level.synopsis,
-            difficulty={
-                "easy": Level.Difficulty.easy,
-                "medium": Level.Difficulty.medium,
-                "challenging": Level.Difficulty.hard,
-                "very challenging": Level.Difficulty.very_hard,
-                None: None,
-            }[trle_level.difficulty],
-            duration={
-                "short": Level.Duration.short,
-                "medium": Level.Duration.medium,
-                "long": Level.Duration.long,
-                "very long": Level.Duration.very_long,
-                None: None,
-            }[trle_level.duration],
+            new_difficulty=LevelDifficulty.objects.filter(
+                name={
+                    "easy": "Easy",
+                    "medium": "Medium",
+                    "challenging": "Hard",
+                    "very challenging": "Very hard",
+                    None: None,
+                }[trle_level.difficulty]
+            ).first(),
+            new_duration=LevelDuration.objects.filter(
+                name={
+                    "short": "Short",
+                    "medium": "Medium",
+                    "long": "Long",
+                    "very long": "Very long",
+                    None: None,
+                }[trle_level.duration]
+            ).first(),
             engine=engine,
         ),
     )
