@@ -29,7 +29,7 @@ const deserializeQuery = (search: string): LevelQuery => {
   const qp = Object.fromEntries(currentURL.searchParams);
   return {
     page: +qp.page || null,
-    sort: qp.sort || null,
+    sort: qp.sort || "-created",
     search: qp.search || "",
     tags: (qp.tags?.split(/,/g) || []).map((item) => +item),
     genres: (qp.genres?.split(/,/g) || []).map((item) => +item),
@@ -60,10 +60,9 @@ const convertQueryToFormikValues = (query: LevelQuery) => {
 };
 
 const LevelListPage = () => {
-  const [query, setQuery] = useState<LevelQuery>({
-    sort: "-created",
-    ...deserializeQuery(window.location.href),
-  });
+  const [query, setQuery] = useState<LevelQuery>(
+    deserializeQuery(window.location.href)
+  );
   const [formikValues, setFormikValues] = useState<any>(
     convertQueryToFormikValues(query)
   );
