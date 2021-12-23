@@ -5,13 +5,16 @@ import { useNavigate } from "react-router-dom";
 import type { GenericQuery } from "src/shared/types";
 import { filterFalsyObjectValues } from "src/shared/utils";
 
-const deserializeGenericQuery = (search: string): GenericQuery => {
+const deserializeGenericQuery = (
+  search: string,
+  defaults: GenericQuery | null
+): GenericQuery => {
   const currentURL = new URL(search);
   const qp = Object.fromEntries(currentURL.searchParams);
   return {
-    page: +qp.page || null,
-    sort: qp.sort || null,
-    search: qp.search || null,
+    page: +qp.page || defaults?.page || null,
+    sort: qp.sort || defaults?.sort || null,
+    search: qp.search || defaults?.search || null,
   };
 };
 

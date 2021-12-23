@@ -22,10 +22,9 @@ const convertQueryToFormikValues = (query: GenreQuery) => {
 };
 
 const GenreListPage = () => {
-  const [query, setQuery] = useState<GenreQuery>({
-    sort: "name",
-    ...deserializeGenericQuery(window.location.href),
-  });
+  const [query, setQuery] = useState<GenreQuery>(
+    deserializeGenericQuery(window.location.href, { sort: "name" })
+  );
   const [formikValues, setFormikValues] = useState<any>(
     convertQueryToFormikValues(query)
   );

@@ -1,9 +1,9 @@
 const DISABLE_PAGING = Symbol("DISABLE_PAGING");
 
 interface GenericQuery {
-  page: number | null | typeof DISABLE_PAGING;
-  sort: string | null;
-  search: string | null;
+  page?: number | null | typeof DISABLE_PAGING;
+  sort?: string | null;
+  search?: string | null;
 }
 
 interface PagedResponse<T> {
