@@ -2,6 +2,7 @@ import re
 import uuid
 from collections.abc import Iterable
 from pathlib import Path
+from typing import Any
 
 from django.db import models
 from django.http import FileResponse
@@ -13,11 +14,21 @@ def slugify(text: str) -> str:
     return re.sub(r"[^\w\d]", "", text)
 
 
-def unbound_range(start: int) -> Iterable[int]:
-    num = start
-    while True:
-        yield num
-        num += 1
+class UnboundedRange:
+    def __init__(self, start: int) -> None:
+        self.start = start
+        self.current = start
+
+    def __next__(self) -> int:
+        yield self.current
+        self.current += 1
+
+    def __contains__(self, other: Any) -> int:
+        return isinstance(other, int) and other >= self.start
+
+
+def unbounded_range(start: int) -> Iterable[int]:
+    return UnboundedRange(start)
 
 
 def id_range(source: str) -> Iterable[Iterable[int]]:
@@ -39,7 +50,7 @@ def id_range(source: str) -> Iterable[Iterable[int]]:
         elif match := re.fullmatch(r"\.\.\.?(\d+)", item):
             yield range(1, int(match.group(1)) + 1)
         elif match := re.fullmatch(r"(\d+)\.\.\.?", item):
-            yield unbound_range(int(match.group(1)))
+            yield unbounded_range(int(match.group(1)))
         else:
             raise ValueError(f"Bad range: {item}")
 

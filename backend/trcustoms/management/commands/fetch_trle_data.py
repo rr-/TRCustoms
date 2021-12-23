@@ -23,7 +23,7 @@ from trcustoms.models import (
     User,
 )
 from trcustoms.trle_scraper import TRLELevel, TRLEScraper, TRLEUser
-from trcustoms.utils import id_range, unbound_range
+from trcustoms.utils import id_range, unbounded_range
 
 logger = logging.getLogger(__name__)
 P = TypeVar("P")
@@ -321,7 +321,7 @@ class Command(BaseCommand):
             if options[opt_name]:
                 ranges = list(options[opt_name])
             else:
-                ranges = [unbound_range(start=1)]
+                ranges = [unbounded_range(start=1)]
             for num in all_obj_ids_cb():
                 if any(num in r for r in ranges):
                     yield num
