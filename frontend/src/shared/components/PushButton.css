@@ -1,0 +1,23 @@
+.PushButton {
+  text-align: center;
+  display: inline-block;
+  background: var(--button-background-color);
+  border: 2px solid var(--input-border-color);
+  color: var(--button-text-color);
+  font-size: var(--font-size);
+  line-height: 1rem;
+  text-decoration: var(--button-text-decoration);
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+}
+.PushButton + .PushButton {
+  margin-left: 1rem;
+}
+.PushButton:hover {
+  background: var(--button-hovered-background-color);
+  color: var(--button-hovered-text-color);
+}
+.PushButton:focus {
+  outline: 0;
+  border-color: var(--outline-color);
+}

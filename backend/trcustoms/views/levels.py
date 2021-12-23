@@ -36,6 +36,14 @@ def get_level_queryset():
         .values("id")[:1]
     )
 
+    last_file_version = Subquery(
+        LevelFile.objects.filter(
+            level_id=OuterRef("id"),
+        )
+        .order_by("-version")
+        .values("version")[:1]
+    )
+
     return (
         Level.objects.all()
         .annotate(
@@ -43,6 +51,7 @@ def get_level_queryset():
             last_file_id=last_file_id,
             last_file_created=last_file_created,
             last_file_size=last_file_size,
+            last_file_version=last_file_version,
         )
         .distinct()
     )

@@ -70,6 +70,14 @@ interface Medium {
   url: string;
 }
 
+interface LevelFile {
+  id: number;
+  version: number;
+  size: number;
+  created: string;
+  url: string;
+}
+
 interface Level {
   id: number | null;
   name: string;
@@ -81,9 +89,7 @@ interface Level {
   uploader: LevelUploader | null;
   created: string;
   last_updated: string;
-  last_file_id: number | null;
-  last_file_created: string | null;
-  last_file_size: number | null;
+  last_file: LevelFile | null;
   difficulty: string;
   duration: string;
   download_count: number;
@@ -93,6 +99,7 @@ interface LevelFull extends Level {
   banner: Medium;
   media: Medium[];
   trle_id: number | null;
+  files: LevelFile[];
 }
 
 interface LevelQuery extends GenericQuery {

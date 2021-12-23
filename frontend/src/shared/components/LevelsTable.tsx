@@ -74,7 +74,7 @@ const LevelsTable = ({ query, onQueryChange }: LevelsTableProps) => {
       sortKey: "last_file_created",
       tooltip: "Date of last file upload",
       label: "Last updated",
-      itemElement: (level) => formatDate(level.last_file_created),
+      itemElement: (level) => formatDate(level.last_file?.created),
     },
     {
       name: "download_count",
@@ -86,17 +86,14 @@ const LevelsTable = ({ query, onQueryChange }: LevelsTableProps) => {
       name: "size",
       sortKey: "last_file_size",
       label: "Size",
-      itemElement: (level) => formatFileSize(level.last_file_size),
+      itemElement: (level) => formatFileSize(level.last_file?.size),
     },
     {
       name: "download",
       label: "Download",
       itemElement: (level) =>
-        level.last_file_id ? (
-          <Link
-            target="_blank"
-            to={`/api/level_files/${level.last_file_id}/download`}
-          >
+        level.last_file ? (
+          <Link target="_blank" to={level.last_file.url}>
             Download
           </Link>
         ) : (

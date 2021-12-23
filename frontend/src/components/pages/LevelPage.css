@@ -6,20 +6,35 @@
   grid-template-columns: min-content 6fr;
   gap: 1rem 3rem;
 }
+
 #LevelPage--header {
   grid-area: header;
 }
 #LevelPage--sidebar {
   grid-area: sidebar;
-  white-space: nowrap;
-}
-#LevelPage--sidebar .MediumThumbnail--thumb {
-  width: 100%;
 }
 #LevelPage--main {
   width: 100%;
   grid-area: main;
 }
+
+#LevelPage--sidebarWrapper {
+  margin: 0.5rem 0;
+  white-space: nowrap;
+}
+
+#LevelPage--sidebar .MediumThumbnail--thumb {
+  width: 100%;
+  margin: 0;
+}
+
+#LevelPage--actions {
+  display: flex;
+}
+#LevelPage--actions > .PushButton {
+  flex-grow: 1;
+}
+
 #LevelPage h1 {
   margin: 1rem 0;
   font-size: 3rem;
@@ -30,4 +45,14 @@
 }
 #LevelPage h2 + p {
   margin-top: 0.75rem;
+}
+
+#LevelPage--basicInfo {
+  margin-bottom: 2rem;
+}
+#LevelPage--fileTable {
+  width: 100%;
+}
+#LevelPage--fileTable td {
+  width: 50%;
 }

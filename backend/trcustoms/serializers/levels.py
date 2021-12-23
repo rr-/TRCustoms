@@ -1,6 +1,8 @@
+from typing import Any
+
 from rest_framework import serializers
 
-from trcustoms.models import Level, User
+from trcustoms.models import Level, LevelFile, User
 from trcustoms.serializers.level_engines import LevelEngineLiteSerializer
 from trcustoms.serializers.level_genres import LevelGenreLiteSerializer
 from trcustoms.serializers.level_media import LevelMediumSerializer
@@ -19,31 +21,37 @@ class LevelAuthorSerializer(serializers.ModelSerializer):
         fields = ["id", "username", "first_name", "last_name"]
 
 
+class LevelFileSerializer(serializers.ModelSerializer):
+    url = serializers.SerializerMethodField(read_only=True)
+
+    class Meta:
+        model = LevelFile
+        fields = ["id", "version", "size", "created", "url"]
+
+    def get_url(self, instance) -> str:
+        return f"/api/level_files/{instance.id}/download"
+
+
 class LevelLiteSerializer(serializers.ModelSerializer):
     genres = LevelGenreLiteSerializer(read_only=True, many=True)
     tags = LevelTagLiteSerializer(read_only=True, many=True)
     engine = LevelEngineLiteSerializer(read_only=True)
     uploader = LevelUploaderSerializer(read_only=True)
     authors = LevelAuthorSerializer(read_only=True, many=True)
-    last_file_id = serializers.SerializerMethodField(read_only=True)
-    last_file_created = serializers.SerializerMethodField(read_only=True)
-    last_file_size = serializers.SerializerMethodField(read_only=True)
+    last_file = serializers.SerializerMethodField(read_only=True)
 
-    def get_last_file_id(self, instance: Level) -> str | None:
+    def get_last_file(self, instance: Level) -> dict[str, Any] | None:
         """Get last file ID from the LevelViewSet's annotated queryset."""
-        return instance.last_file_id
-
-    def get_last_file_created(self, instance: Level) -> int | None:
-        """Get last file creation date from the LevelViewSet's annotated
-        queryset.
-        """
-        return instance.last_file_created
-
-    def get_last_file_size(self, instance: Level) -> int | None:
-        """Get last file size date from the LevelViewSet's annotated
-        queryset.
-        """
-        return instance.last_file_size
+        if instance.last_file_id:
+            return LevelFileSerializer(
+                instance=LevelFile(
+                    id=instance.last_file_id,
+                    version=instance.last_file_version,
+                    created=instance.last_file_created,
+                    size=instance.last_file_size,
+                )
+            ).data
+        return None
 
     class Meta:
         model = Level
@@ -58,9 +66,7 @@ class LevelLiteSerializer(serializers.ModelSerializer):
             "uploader",
             "created",
             "last_updated",
-            "last_file_id",
-            "last_file_created",
-            "last_file_size",
+            "last_file",
             "download_count",
             "difficulty",
             "duration",
@@ -70,6 +76,7 @@ class LevelLiteSerializer(serializers.ModelSerializer):
 class LevelFullSerializer(LevelLiteSerializer):
     banner = serializers.SerializerMethodField(read_only=True)
     media = serializers.SerializerMethodField(read_only=True)
+    files = LevelFileSerializer(read_only=True, many=True)
 
     class Meta:
         model = Level
@@ -77,6 +84,7 @@ class LevelFullSerializer(LevelLiteSerializer):
             "banner",
             "media",
             "trle_id",
+            "files",
         ]
 
     def get_banner(self, instance: Level):
