@@ -53,16 +53,16 @@ def strip_tags(value: str) -> str:
     return re.sub(r"<[^>]*?>", "", value)
 
 
-def get_inner_html(node) -> str:
-    parts = [node.text]
-    for c in node.getchildren():
-        parts.extend([c.text, lxml.html.tostring(c).decode(), c.tail])
-    parts.append(node.tail)
-    return "".join(filter(None, parts))
-
-
 def get_outer_html(node) -> str:
     return lxml.html.tostring(node, encoding=str).strip()
+
+
+def get_inner_html(node) -> str:
+    ret = get_outer_html(node)
+    ret = ret.strip()
+    ret = re.sub(r"^<[^>]+>|<\/[^>]+>$", "", ret)
+    ret = ret.strip()
+    return ret
 
 
 def get_text(node) -> str:
