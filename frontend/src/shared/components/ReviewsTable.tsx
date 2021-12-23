@@ -107,7 +107,7 @@ const ReviewsTable = ({ query, onQueryChange }: ReviewsTableProps) => {
 
   return (
     <>
-      <h2>Reviews</h2>
+      <h2>Legacy reviews</h2>
       <DataTable
         className="ReviewsTable"
         result={result}
@@ -118,18 +118,23 @@ const ReviewsTable = ({ query, onQueryChange }: ReviewsTableProps) => {
         onPageChange={(page) => onQueryChange?.({ ...query, page: page })}
       />
 
-      <h2>Reviewer comments</h2>
-      {result.data.results.map(
-        (review) =>
-          review.text && (
-            <Fragment key={review.id}>
-              <Markdown children={review.text} />—{" "}
-              <em>
-                <UserLink user={review.author} />, {formatDate(review.created)}
-              </em>
-              <hr />
-            </Fragment>
-          )
+      <h2>Reviews</h2>
+      {result.data.results.length ? (
+        result.data.results.map(
+          (review) =>
+            review.text && (
+              <Fragment key={review.id}>
+                <Markdown children={review.text} />—{" "}
+                <em>
+                  <UserLink user={review.author} />,{" "}
+                  {formatDate(review.created)}
+                </em>
+                <hr />
+              </Fragment>
+            )
+        )
+      ) : (
+        <p>There are no result to show.</p>
       )}
     </>
   );
