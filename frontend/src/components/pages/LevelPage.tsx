@@ -59,9 +59,11 @@ const LevelPage = () => {
         <SidebarBox
           actions={
             <>
-              <PushButton target="_blank" to={level.files[0].url}>
-                Download
-              </PushButton>
+              {!!level.files.length && (
+                <PushButton target="_blank" to={level.files[0].url}>
+                  Download
+                </PushButton>
+              )}
             </>
           }
         >
