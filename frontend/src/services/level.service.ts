@@ -23,10 +23,12 @@ interface LevelUser {
 interface ReviewAuthor extends LevelUser {}
 
 interface ReviewQuery extends GenericQuery {
-  levels: Array<number>;
+  levels?: Array<number> | null;
+  authors?: Array<number> | null;
 }
 
 interface Review {
+  level: { id: number; name: string };
   id: number;
   author: ReviewAuthor;
   rating_gameplay: number;
@@ -174,7 +176,8 @@ const getReviews = async (query: ReviewQuery): Promise<ReviewList | null> => {
   return await fetchJSON<ReviewList>(`${API_URL}/level_reviews/`, {
     query: filterFalsyObjectValues({
       ...getGenericQuery(query),
-      levels: query.levels.join(","),
+      levels: query.levels?.join(","),
+      authors: query.authors?.join(","),
     }),
     method: "GET",
   });

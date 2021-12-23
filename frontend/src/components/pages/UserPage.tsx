@@ -2,6 +2,7 @@ import "./UserPage.css";
 import { useState } from "react";
 import { useQuery } from "react-query";
 import { useParams } from "react-router-dom";
+import type { ReviewQuery } from "src/services/level.service";
 import type { LevelQuery } from "src/services/level.service";
 import type { User } from "src/services/user.service";
 import { UserService } from "src/services/user.service";
@@ -10,6 +11,7 @@ import Loader from "src/shared/components/Loader";
 import { Markdown } from "src/shared/components/Markdown";
 import { PermissionGuard } from "src/shared/components/PermissionGuard";
 import PushButton from "src/shared/components/PushButton";
+import { ReviewsTable } from "src/shared/components/ReviewsTable";
 import SidebarBox from "src/shared/components/SidebarBox";
 import UserPicture from "src/shared/components/UserPicture";
 import { DISABLE_PAGING } from "src/shared/constants";
@@ -25,6 +27,12 @@ const UserPage = () => {
     genres: [],
     engines: [],
     authors: [+userId],
+  });
+  const [reviewsQuery, setReviewsQuery] = useState<ReviewQuery>({
+    authors: [+userId],
+    page: DISABLE_PAGING,
+    sort: "-created",
+    search: "",
   });
 
   const result = useQuery<User, Error>(["users", userId], async () =>
@@ -87,6 +95,16 @@ const UserPage = () => {
         <section id="UserPage--authoredLevels">
           <h3>Authored levels</h3>
           <LevelsTable query={levelsQuery} onQueryChange={setLevelsQuery} />
+        </section>
+
+        <section id="UserPage--reviewedLevels">
+          <ReviewsTable
+            showLevels={true}
+            showDetails={false}
+            showAuthors={false}
+            query={reviewsQuery}
+            onQueryChange={setReviewsQuery}
+          />
         </section>
       </div>
     </div>

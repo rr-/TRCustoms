@@ -7,6 +7,7 @@ import type { ReviewList } from "src/services/level.service";
 import type { ReviewQuery } from "src/services/level.service";
 import type { DataTableColumn } from "src/shared/components/DataTable";
 import { DataTable } from "src/shared/components/DataTable";
+import LevelLink from "src/shared/components/LevelLink";
 import Loader from "src/shared/components/Loader";
 import { Markdown } from "src/shared/components/Markdown";
 import UserLink from "src/shared/components/UserLink";
@@ -15,11 +16,20 @@ import { round } from "src/shared/math";
 import { formatDate } from "src/shared/utils";
 
 interface ReviewsTableProps {
+  showLevels: boolean;
+  showAuthors: boolean;
+  showDetails: boolean;
   query: ReviewQuery;
   onQueryChange?: (query: ReviewQuery) => any | null;
 }
 
-const ReviewsTable = ({ query, onQueryChange }: ReviewsTableProps) => {
+const ReviewsTable = ({
+  showAuthors,
+  showLevels,
+  showDetails,
+  query,
+  onQueryChange,
+}: ReviewsTableProps) => {
   const result = useQuery<ReviewList, Error>(["reviews", query], async () =>
     LevelService.getReviews(query)
   );
@@ -33,12 +43,26 @@ const ReviewsTable = ({ query, onQueryChange }: ReviewsTableProps) => {
   }
 
   const columns: DataTableColumn<Review>[] = [
-    {
-      name: "author",
-      sortKey: "author__username",
-      label: "Author",
-      itemElement: (review) => <UserLink user={review.author} />,
-    },
+    ...(showLevels
+      ? [
+          {
+            name: "level",
+            sortKey: "level__name",
+            label: "Level",
+            itemElement: (review) => <LevelLink level={review.level} />,
+          },
+        ]
+      : []),
+    ...(showAuthors
+      ? [
+          {
+            name: "author",
+            sortKey: "author__username",
+            label: "Author",
+            itemElement: (review) => <UserLink user={review.author} />,
+          },
+        ]
+      : []),
     {
       name: "ratingGameplay",
       sortKey: "rating_gameplay",
@@ -118,23 +142,27 @@ const ReviewsTable = ({ query, onQueryChange }: ReviewsTableProps) => {
         onPageChange={(page) => onQueryChange?.({ ...query, page: page })}
       />
 
-      <h2>Reviews</h2>
-      {result.data.results.length ? (
-        result.data.results.map(
-          (review) =>
-            review.text && (
-              <Fragment key={review.id}>
-                <Markdown children={review.text} />—{" "}
-                <em>
-                  <UserLink user={review.author} />,{" "}
-                  {formatDate(review.created)}
-                </em>
-                <hr />
-              </Fragment>
+      {showDetails && (
+        <>
+          <h2>Reviews</h2>
+          {result.data.results.length ? (
+            result.data.results.map(
+              (review) =>
+                review.text && (
+                  <Fragment key={review.id}>
+                    <Markdown children={review.text} />—{" "}
+                    <em>
+                      <UserLink user={review.author} />,{" "}
+                      {formatDate(review.created)}
+                    </em>
+                    <hr />
+                  </Fragment>
+                )
             )
-        )
-      ) : (
-        <p>There are no result to show.</p>
+          ) : (
+            <p>There are no result to show.</p>
+          )}
+        </>
       )}
     </>
   );
