@@ -148,6 +148,7 @@ const ThemeManager = () => {
         {themes.map((theme) => (
           <li key={theme.name} className="ThemeManager--listItem">
             <button
+              type="button"
               className="ThemeManager--switch"
               title={theme.name}
               onClick={() => setActiveTheme(theme)}

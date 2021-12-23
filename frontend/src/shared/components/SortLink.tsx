@@ -36,6 +36,7 @@ const SortLink = ({
 
   return (
     <button
+      type="button"
       onClick={buttonClick}
       className={`link ${isActive ? "SortLink SortLink--active" : "SortLink"}`}
     >
