@@ -11,6 +11,7 @@ class UserSerializer(serializers.ModelSerializer):
     has_picture = serializers.SerializerMethodField(read_only=True)
     old_password = serializers.CharField(write_only=True, required=False)
     authored_level_count = serializers.SerializerMethodField(read_only=True)
+    reviewed_level_count = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
         model = User
@@ -28,6 +29,7 @@ class UserSerializer(serializers.ModelSerializer):
             "last_login",
             "is_active",
             "authored_level_count",
+            "reviewed_level_count",
         )
 
     username = serializers.CharField(
@@ -152,6 +154,9 @@ class UserSerializer(serializers.ModelSerializer):
 
     def get_authored_level_count(self, instance: User) -> int:
         return instance.authored_level_count
+
+    def get_reviewed_level_count(self, instance: User) -> int:
+        return instance.reviewed_level_count
 
 
 class UserPictureSerializer(serializers.ModelSerializer):

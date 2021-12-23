@@ -8,7 +8,10 @@ from trcustoms.utils import RandomFileName
 
 class UserManager(BaseUserManager):
     def with_counts(self):
-        return self.annotate(authored_level_count=Count("authored_levels"))
+        return self.annotate(
+            authored_level_count=Count("authored_levels", distinct=True),
+            reviewed_level_count=Count("reviewed_levels", distinct=True),
+        )
 
     def get_by_natural_key(self, username: str) -> AbstractUser:
         case_insensitive_username_field = (
