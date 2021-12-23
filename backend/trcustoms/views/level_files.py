@@ -19,5 +19,5 @@ class LevelFileViewSet(viewsets.GenericViewSet):
         parts = [f"{pk}", file.level.name]
         if file.version > 1:
             parts.append(f"V{file.version}")
-        parts.extend(file.level.authors.values_list("name", flat=True))
+        parts.extend(file.level.authors.values_list("username", flat=True))
         return stream_file_field(file.file, parts, as_attachment=True)
