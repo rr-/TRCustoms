@@ -7,11 +7,11 @@ import LevelListPage from "src/components/pages/LevelListPage";
 import LevelPage from "src/components/pages/LevelPage";
 import LoginPage from "src/components/pages/LoginPage";
 import LogoutPage from "src/components/pages/LogoutPage";
-import ProfileEditPage from "src/components/pages/ProfileEditPage";
-import ProfilePage from "src/components/pages/ProfilePage";
 import RegisterPage from "src/components/pages/RegisterPage";
 import TagListPage from "src/components/pages/TagListPage";
+import UserEditPage from "src/components/pages/UserEditPage";
 import UserListPage from "src/components/pages/UserListPage";
+import UserPage from "src/components/pages/UserPage";
 import ScrollToTop from "src/shared/components/ScrollToTop";
 import { UserContextProvider } from "src/shared/contexts/UserContext";
 
@@ -31,8 +31,8 @@ function App() {
           <Route path="/login" element={<LoginPage />} />
           <Route path="/logout" element={<LogoutPage />} />
           <Route path="/register" element={<RegisterPage />} />
-          <Route path="/users/:userId" element={<ProfilePage />} />
-          <Route path="/users/:userId/edit" element={<ProfileEditPage />} />
+          <Route path="/users/:userId" element={<UserPage />} />
+          <Route path="/users/:userId/edit" element={<UserEditPage />} />
         </Routes>
       </main>
     </UserContextProvider>

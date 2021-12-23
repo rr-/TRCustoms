@@ -7,7 +7,7 @@ import type { User } from "src/services/user.service";
 import Loader from "src/shared/components/Loader";
 import UserForm from "src/shared/components/UserForm";
 
-const ProfileEditPage = () => {
+const UserEditPage = () => {
   const navigate = useNavigate();
   const { userId } = useParams();
 
@@ -31,7 +31,7 @@ const ProfileEditPage = () => {
   const user = result.data;
 
   return (
-    <div id="ProfileEditPage">
+    <div id="UserEditPage">
       <h1>Editing {user.username}'s profile</h1>
 
       <UserForm onGoBack={goBack} user={user} />
@@ -39,4 +39,4 @@ const ProfileEditPage = () => {
   );
 };
 
-export default ProfileEditPage;
+export default UserEditPage;

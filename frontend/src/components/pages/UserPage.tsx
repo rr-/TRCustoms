@@ -1,4 +1,4 @@
-import "./ProfilePage.css";
+import "./UserPage.css";
 import { useQuery } from "react-query";
 import { useParams } from "react-router-dom";
 import type { LevelQuery } from "src/services/level.service";
@@ -10,12 +10,11 @@ import { Markdown } from "src/shared/components/Markdown";
 import { PermissionGuard } from "src/shared/components/PermissionGuard";
 import PushButton from "src/shared/components/PushButton";
 import SidebarBox from "src/shared/components/SidebarBox";
-import UserLink from "src/shared/components/UserLink";
 import UserPicture from "src/shared/components/UserPicture";
 import { DISABLE_PAGING } from "src/shared/constants";
 import { formatDateTime } from "src/shared/utils";
 
-const ProfilePage = () => {
+const UserPage = () => {
   const { userId } = useParams();
 
   const result = useQuery<User, Error>(["users", userId], async () =>
@@ -43,8 +42,8 @@ const ProfilePage = () => {
   };
 
   return (
-    <div id="ProfilePage">
-      <header id="ProfilePage--header">
+    <div id="UserPage">
+      <header id="UserPage--header">
         <h1>{user.username}</h1>
         {user.is_active &&
           `${user.first_name} ${user.last_name}` !== user.username && (
@@ -54,11 +53,11 @@ const ProfilePage = () => {
           )}
       </header>
 
-      <div id="ProfilePage--picture">
+      <div id="UserPage--picture">
         <UserPicture user={user} />
       </div>
 
-      <aside id="ProfilePage--sidebar">
+      <aside id="UserPage--sidebar">
         <SidebarBox
           actions={
             <PermissionGuard require={"canEditUsers"} entity={user}>
@@ -76,8 +75,8 @@ const ProfilePage = () => {
         </SidebarBox>
       </aside>
 
-      <div id="ProfilePage--main">
-        <section id="ProfilePage--basicInfo">
+      <div id="UserPage--main">
+        <section id="UserPage--basicInfo">
           {user.is_active && user.bio ? (
             <Markdown children={user.bio} />
           ) : (
@@ -85,7 +84,7 @@ const ProfilePage = () => {
           )}
         </section>
 
-        <section id="ProfilePage--authoredLevels">
+        <section id="UserPage--authoredLevels">
           <h3>Authored levels</h3>
           <LevelsTable query={levelQuery} />
         </section>
@@ -94,4 +93,4 @@ const ProfilePage = () => {
   );
 };
 
-export default ProfilePage;
+export default UserPage;
