@@ -1,7 +1,7 @@
 import "./Pager.css";
 import type { PagedResponse } from "src/shared/types";
 
-const PAGES_AROUND = 1;
+const PAGES_AROUND = 2;
 
 interface PagerProps<TCollection> {
   onPageChange: (page: number) => any;
