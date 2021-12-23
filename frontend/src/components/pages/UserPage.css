@@ -1,4 +1,4 @@
-#ProfilePage {
+#UserPage {
   display: grid;
   grid-template-areas:
     "picture header"
@@ -9,33 +9,33 @@
   gap: 1.5rem;
 }
 
-#ProfilePage--header {
+#UserPage--header {
   grid-area: header;
 }
-#ProfilePage--picture {
+#UserPage--picture {
   grid-area: picture;
 }
-#ProfilePage--sidebar {
+#UserPage--sidebar {
   grid-area: sidebar;
   white-space: nowrap;
 }
-#ProfilePage--main {
+#UserPage--main {
   width: 100%;
   grid-area: main;
 }
 
-#ProfilePage--picture img {
+#UserPage--picture img {
   max-width: 100%;
   display: block;
 }
 
-#ProfilePage--header h1 {
+#UserPage--header h1 {
   margin-top: 0;
 }
-#ProfilePage--header h2 {
+#UserPage--header h2 {
   margin-bottom: 0;
 }
 
-#ProfilePage--basicInfo > p:first-child {
+#UserPage--basicInfo > p:first-child {
   margin-top: 0;
 }
