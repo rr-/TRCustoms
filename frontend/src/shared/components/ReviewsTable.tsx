@@ -132,7 +132,7 @@ const ReviewsTable = ({
 
   return (
     <>
-      <SectionHeader>Legacy reviews</SectionHeader>
+      <SectionHeader>Legacy ratings</SectionHeader>
       <DataTable
         className="ReviewsTable"
         result={result}
