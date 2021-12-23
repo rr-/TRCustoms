@@ -107,16 +107,23 @@ class LevelAdmin(admin.ModelAdmin):
         "uploader_user__first_name",
         "uploader_user__last_name",
     ]
-    list_display = ["id", "name", "uploader", "created", "last_updated"]
+    list_display = [
+        "id",
+        "name",
+        "uploader",
+        "download_count",
+        "created",
+        "last_updated",
+    ]
     list_filter = ["genres", "tags"]
     group_by = ["tags"]
     form = LevelForm
-    readonly_fields = ["created", "last_updated"]
+    readonly_fields = ["download_count", "created", "last_updated"]
 
 
 @admin.register(LevelMedium)
 class LevelMediumAdmin(admin.ModelAdmin):
-    ordering = ["level__name", "position"]
+    ordering = ["level", "position"]
     list_display = ["id", "level", "position", "created", "last_updated"]
     search_fields = ["level__name"]
     readonly_fields = ["created", "last_updated"]
@@ -124,8 +131,15 @@ class LevelMediumAdmin(admin.ModelAdmin):
 
 @admin.register(LevelFile)
 class LevelFileAdmin(admin.ModelAdmin):
-    ordering = ["level__name"]
-    list_display = ["id", "level", "version", "created", "last_updated"]
+    ordering = ["level", "version"]
+    list_display = [
+        "id",
+        "level",
+        "version",
+        "download_count",
+        "created",
+        "last_updated",
+    ]
     search_fields = ["level__name"]
     readonly_fields = ["size", "created", "last_updated", "version"]
 
