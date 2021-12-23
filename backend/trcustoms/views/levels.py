@@ -65,6 +65,7 @@ class LevelViewSet(
         "name",
         "engine",
         "created",
+        "download_count",
         "last_updated",
         "last_file_size",
     ]

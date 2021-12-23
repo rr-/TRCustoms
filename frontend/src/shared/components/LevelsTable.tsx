@@ -77,6 +77,12 @@ const LevelsTable = ({ query, onQueryChange }: LevelsTableProps) => {
       itemElement: (level) => formatDate(level.last_file_created),
     },
     {
+      name: "download_count",
+      sortKey: "download_count",
+      label: "Downloads",
+      itemElement: (level) => `${level.download_count}`,
+    },
+    {
       name: "size",
       sortKey: "last_file_size",
       label: "Size",

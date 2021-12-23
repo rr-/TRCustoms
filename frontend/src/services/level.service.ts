@@ -86,6 +86,7 @@ interface Level {
   last_file_size: number | null;
   difficulty: string;
   duration: string;
+  download_count: number;
 }
 
 interface LevelFull extends Level {

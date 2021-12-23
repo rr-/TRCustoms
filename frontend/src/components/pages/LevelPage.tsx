@@ -66,6 +66,9 @@ const LevelPage = () => {
           <dt>Last updated</dt>
           <dd>{formatDate(level.last_updated) || "never"}</dd>
 
+          <dt>Downloads</dt>
+          <dd>{level.download_count}</dd>
+
           <dt>Engine</dt>
           <dd>
             {level.engine ? (

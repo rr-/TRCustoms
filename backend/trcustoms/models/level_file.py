@@ -14,6 +14,10 @@ class LevelFile(DatesInfo):
     )
     size = models.IntegerField()
     version = models.IntegerField()
+    download_count = models.IntegerField(default=0)
+
+    class Meta:
+        ordering = ["version"]
 
     def __str__(self) -> str:
         return f"{self.level.name} (file id={self.pk})"

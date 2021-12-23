@@ -41,6 +41,8 @@ class Level(DatesInfo):
     )
     trle_id = models.IntegerField(blank=True, null=True)
 
+    download_count = models.IntegerField(default=0)
+
     class Meta:
         ordering = ["-created"]
 

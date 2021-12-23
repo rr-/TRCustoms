@@ -61,6 +61,7 @@ class LevelLiteSerializer(serializers.ModelSerializer):
             "last_file_id",
             "last_file_created",
             "last_file_size",
+            "download_count",
             "difficulty",
             "duration",
         ]

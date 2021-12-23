@@ -14,5 +14,9 @@ class LevelMedium(DatesInfo):
     )
     position = models.IntegerField(default=1)
 
+    class Meta:
+        ordering = ["position"]
+        verbose_name_plural = "Level media"
+
     def __str__(self) -> str:
         return f"{self.level.name} (medium id={self.pk})"
