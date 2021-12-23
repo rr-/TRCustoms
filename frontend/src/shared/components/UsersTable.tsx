@@ -31,13 +31,15 @@ const UsersTable = ({ query, onQueryChange }: UsersTableProps) => {
       name: "first-name",
       sortKey: "first_name",
       label: "First name",
-      itemElement: (user) => user.first_name || EMPTY_INPUT_PLACEHOLDER,
+      itemElement: (user) =>
+        (user.is_active && user.first_name) || EMPTY_INPUT_PLACEHOLDER,
     },
     {
       name: "last-name",
       sortKey: "last_name",
       label: "Last name",
-      itemElement: (user) => user.last_name || EMPTY_INPUT_PLACEHOLDER,
+      itemElement: (user) =>
+        (user.is_active && user.last_name) || EMPTY_INPUT_PLACEHOLDER,
     },
     {
       name: "created",
