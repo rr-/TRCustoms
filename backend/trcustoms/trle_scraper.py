@@ -131,7 +131,8 @@ class TRLELevel:
 
 
 class TRLEScraper:
-    def __init__(self) -> None:
+    def __init__(self, disable_cache: bool = False) -> None:
+        self.disable_cache = disable_cache
         urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
     def fetch_reviewer(self, reviewer_id: int) -> TRLEReviewer | None:
@@ -407,7 +408,7 @@ class TRLEScraper:
             logger.debug("GET %s (headers=%s)", url, headers)
         else:
             logger.debug("GET %s", url)
-        response = get(url, headers=headers)
+        response = get(url, disable_cache=self.disable_cache, headers=headers)
         try:
             response.raise_for_status()
         except Exception:
@@ -417,7 +418,7 @@ class TRLEScraper:
 
     def safe_head(self, url: str) -> requests.Response:
         logger.debug("HEAD %s", url)
-        response = head(url)
+        response = head(url, disable_cache=self.disable_cache)
         try:
             response.raise_for_status()
         except Exception:

@@ -32,9 +32,9 @@ def delete_cache(key: Any) -> None:
 
 def file_cache(*key: str):
     def outer(func):
-        def inner(*args, **kwargs):
+        def inner(*args, disable_cache: bool = False, **kwargs):
             cache_key = (list(key), list(args), dict(kwargs))
-            if not (result := get_cache(cache_key)):
+            if disable_cache or not (result := get_cache(cache_key)):
                 result = func(*args, **kwargs)
                 put_cache(cache_key, result)
             return result

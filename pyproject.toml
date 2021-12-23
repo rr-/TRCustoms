@@ -24,6 +24,7 @@ disable = [
     "invalid-name",  # migrations
     "too-many-instance-attributes",  # models
     "broad-except",  # this does more harm than good
+    "unexpected-keyword-arg",  # badly implemented in decorators…
 ]
 
 [tool.pytest.ini_options]

@@ -315,6 +315,11 @@ class Command(BaseCommand):
             action="store_true",
             help="Disable downloading level files",
         )
+        parser.add_argument(
+            "--no-cache",
+            action="store_true",
+            help="Disable cache",
+        )
 
         parser.add_argument(
             "--num-workers",
@@ -325,7 +330,7 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         ctx = ScrapeContext(
-            scraper=TRLEScraper(),
+            scraper=TRLEScraper(disable_cache=options["no_cache"]),
             no_basic_data=options["no_basic_data"],
             no_reviews=options["no_reviews"],
             no_images=options["no_images"],
