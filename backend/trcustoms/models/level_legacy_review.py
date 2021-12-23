@@ -11,10 +11,8 @@ class LevelLegacyReview(DatesInfo):
     )
     author = models.ForeignKey(
         User,
-        on_delete=models.SET_NULL,
+        on_delete=models.CASCADE,
         related_name="reviewed_levels",
-        null=True,
-        blank=True,
     )
     rating_gameplay = models.IntegerField()
     rating_enemies = models.IntegerField()
