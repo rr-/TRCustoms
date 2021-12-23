@@ -56,12 +56,13 @@ const ProfilePage = () => {
       <div>
         <section className="ProfilePage--basic-info">
           <h1>{user.username}</h1>
-          {`${user.first_name} ${user.last_name}` !== user.username && (
-            <h2>
-              {user.first_name} {user.last_name}
-            </h2>
-          )}
-          {user.bio ? (
+          {user.is_active &&
+            `${user.first_name} ${user.last_name}` !== user.username && (
+              <h2>
+                {user.first_name} {user.last_name}
+              </h2>
+            )}
+          {user.is_active && user.bio ? (
             <Markdown children={user.bio} />
           ) : (
             <p>This user prefers to keep an air of mystery around them.</p>
