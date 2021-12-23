@@ -15,9 +15,9 @@ import dateutil.parser
 import lxml.html
 import requests
 import urllib3
-from markdownify import MarkdownConverter
 
 from trcustoms.cache import file_cache
+from trcustoms.markdown import html_to_markdown
 
 logger = logging.getLogger(__name__)
 
@@ -36,17 +36,6 @@ def get(url: str, headers: dict[str, str] | None = None) -> requests.Response:
 @file_cache("trle_scraper", "head")
 def head(url: str) -> requests.Response:
     return requests.head(url, timeout=30, verify=False, allow_redirects=True)
-
-
-class CustomMarkdownConverter(MarkdownConverter):
-    def convert_iframe(self, el, text, convert_as_inline):
-        if source := el.attrs.get("src"):
-            return f"{source}"
-        return ""
-
-
-def markdownify(html_text, **options):
-    return CustomMarkdownConverter(**options).convert(html_text).strip()
 
 
 def strip_tags(value: str) -> str:
@@ -261,7 +250,7 @@ class TRLEScraper:
             return None
 
         title = get_text(doc.cssselect(".subHeader.Stil2")[0]).split("\n")[0]
-        synopsis = markdownify(
+        synopsis = html_to_markdown(
             get_inner_html(doc.cssselect("tr:nth-child(5) .medGText")[0])
         )
 
@@ -299,7 +288,7 @@ class TRLEScraper:
             difficulty=attrs.get("difficulty") or None,
             duration=attrs.get("duration") or None,
             average_rating=Decimal(attrs["average rating"]),
-            walkthrough=self.fetch_level_walktrhough(level_id),
+            walkthrough=self.fetch_level_walkthrough(level_id),
             reviews=list(self.fetch_level_reviews(level_id)),
             file_type=attrs["file type"],
             category=attrs["class"] if attrs["class"] != "nc" else None,
@@ -309,7 +298,7 @@ class TRLEScraper:
             author_ids=author_ids,
         )
 
-    def fetch_level_walktrhough(
+    def fetch_level_walkthrough(
         self, level_id: int
     ) -> TRLELevelWalkthrough | None:
         try:
@@ -348,17 +337,16 @@ class TRLEScraper:
             except IndexError:
                 text_node = None
 
-            text = (
-                text_node.xpath("node()")[1].strip()
-                if text_node is not None
-                else ""
+            text = get_inner_html(text_node) if text_node else ""
+            text = re.sub(
+                re.escape(f'" - <b>{reviewer_name}</b> <small>') + ".*",
+                "",
+                text,
             )
-            if text.endswith(reviewer_name):
-                text = text[: -len(reviewer_name)].strip()
-            if text.endswith("-"):
-                text = text[:-1].strip()
-            text = text.strip('"')
-            text = unescape(text)
+            text = re.sub(r"<a name[^>]*><\/a>", "", text)
+            text = re.sub('^"', "", text)
+            # text = " ".join(text.splitlines())
+            text = html_to_markdown(text)
 
             publication_date: date | None = None
             if text_node is not None and len(
