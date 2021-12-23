@@ -76,7 +76,7 @@ def unescape(text: str | None) -> str:
 def get_document_from_response(
     response: requests.Response,
 ) -> lxml.html.HtmlElement:
-    return lxml.html.fromstring(response.content.decode("iso-8859-1"))
+    return lxml.html.fromstring(response.text.encode())
 
 
 @dataclass
