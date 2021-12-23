@@ -51,7 +51,7 @@ const ProfilePage = () => {
           <dd>{formatDateTime(user.last_login) || "never"}</dd>
         </dl>
 
-        <UserLink variant="edit" user={user} />
+        <UserLink variant="edit" user={user} label="Edit profile" />
       </aside>
       <div>
         <section className="ProfilePage--basic-info">
