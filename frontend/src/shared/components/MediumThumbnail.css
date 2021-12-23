@@ -1,21 +1,9 @@
-.MediumThumbnail--full,
-.MediumThumbnail--full img {
+.MediumThumbnail--full {
   position: fixed;
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-}
-.MediumThumbnail--full img {
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-}
-.MediumThumbnail--thumb,
-.MediumThumbnail--full {
-  cursor: pointer;
-}
-.MediumThumbnail--full {
+  display: flex;
+  justify-content: center;
   visibility: hidden;
+  padding: 2rem;
   top: 0;
   left: 0;
   right: 0;
@@ -27,4 +15,18 @@
 .MediumThumbnail--full.active {
   opacity: 1;
   visibility: visible;
+}
+
+.MediumThumbnail--full img {
+  flex-grow: 0;
+  object-fit: contain;
+}
+
+.MediumThumbnail--thumb {
+  display: block;
+}
+
+.MediumThumbnail--thumb,
+.MediumThumbnail--full {
+  cursor: pointer;
 }

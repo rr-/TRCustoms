@@ -54,9 +54,11 @@ const ProfilePage = () => {
           )}
       </header>
 
-      <aside id="ProfilePage--sidebar">
+      <div id="ProfilePage--picture">
         <UserPicture user={user} />
+      </div>
 
+      <aside id="ProfilePage--sidebar">
         <SidebarBox
           actions={
             <PermissionGuard require={"canEditUsers"} entity={user}>
