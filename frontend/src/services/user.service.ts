@@ -49,6 +49,19 @@ const getUserByUsername = async (username: string): Promise<User> => {
   return data;
 };
 
+interface UserCreatePayload {
+  username: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  password: string;
+  bio: string;
+}
+
+interface UserUpdatePayload extends UserCreatePayload {
+  oldPassword: string;
+}
+
 const update = async (
   userId: number,
   {
@@ -56,18 +69,10 @@ const update = async (
     firstName,
     lastName,
     email,
-    old_password,
+    oldPassword,
     password,
     bio,
-  }: {
-    username: string;
-    firstName: string;
-    lastName: string;
-    email: string;
-    old_password: string;
-    password: string;
-    bio: string;
-  }
+  }: UserUpdatePayload
 ): Promise<User> => {
   const data: { [key: string]: any } = {
     username: username,
@@ -76,8 +81,8 @@ const update = async (
     email: email,
     bio: bio,
   };
-  if (old_password) {
-    data.old_password = old_password;
+  if (oldPassword) {
+    data.old_password = oldPassword;
   }
   if (password) {
     data.password = password;
@@ -104,14 +109,7 @@ const register = async ({
   email,
   password,
   bio,
-}: {
-  username: string;
-  firstName: string;
-  lastName: string;
-  email: string;
-  password: string;
-  bio: string;
-}): Promise<User> => {
+}: UserCreatePayload): Promise<User> => {
   return await fetchJSON(`${API_URL}/users/`, {
     method: "POST",
     data: {

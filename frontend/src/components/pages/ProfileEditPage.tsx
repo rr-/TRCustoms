@@ -34,7 +34,7 @@ const ProfileEditPage = () => {
     <div id="ProfileEditPage">
       <h1>Editing {user.username}'s profile</h1>
 
-      <UserForm goBack={goBack} user={user} />
+      <UserForm onGoBack={goBack} user={user} />
     </div>
   );
 };
