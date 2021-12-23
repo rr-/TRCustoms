@@ -16,7 +16,7 @@ import SectionHeader from "src/shared/components/SectionHeader";
 import SidebarBox from "src/shared/components/SidebarBox";
 import UserPicture from "src/shared/components/UserPicture";
 import { DISABLE_PAGING } from "src/shared/constants";
-import { formatDateTime } from "src/shared/utils";
+import { formatDate } from "src/shared/utils";
 
 const UserPage = () => {
   const { userId } = useParams();
@@ -76,10 +76,10 @@ const UserPage = () => {
         >
           <dl>
             <dt>Joined</dt>
-            <dd>{formatDateTime(user.date_joined) || "unknown"}</dd>
+            <dd>{formatDate(user.date_joined) || "unknown"}</dd>
 
             <dt>Last seen</dt>
-            <dd>{formatDateTime(user.last_login) || "never"}</dd>
+            <dd>{formatDate(user.last_login) || "never"}</dd>
           </dl>
         </SidebarBox>
       </aside>
