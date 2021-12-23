@@ -1,15 +1,19 @@
 #ProfilePage {
   display: grid;
   grid-template-areas:
-    "sidebar header"
+    "picture header"
+    "picture main"
     "sidebar main";
   grid-template-columns: min-content 6fr;
-  grid-template-rows: min-content 1fr;
-  gap: 1rem 3rem;
+  grid-template-rows: min-content min-content 1fr;
+  gap: 1.5rem;
 }
 
 #ProfilePage--header {
   grid-area: header;
+}
+#ProfilePage--picture {
+  grid-area: picture;
 }
 #ProfilePage--sidebar {
   grid-area: sidebar;
@@ -20,8 +24,9 @@
   grid-area: main;
 }
 
-#ProfilePage--sidebar img {
+#ProfilePage--picture img {
   max-width: 100%;
+  display: block;
 }
 
 #ProfilePage--header h1 {

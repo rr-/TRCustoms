@@ -1,7 +1,6 @@
 .SidebarBox {
   padding: var(--sidebar-padding);
   background: var(--sidebar-background-color);
-  margin: 0.5rem 0;
 }
 .SidebarBox--actions {
   display: flex;

@@ -50,9 +50,11 @@ const LevelPage = () => {
         <h1>{level.name}</h1>
       </header>
 
-      <aside id="LevelPage--sidebar">
+      <div id="LevelPage--banner">
         <MediumThumbnail medium={level.banner} />
+      </div>
 
+      <aside id="LevelPage--sidebar">
         <SidebarBox
           actions={
             <>

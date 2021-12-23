@@ -2,34 +2,38 @@
   display: grid;
   grid-template-areas:
     "header header"
+    "banner main"
     "sidebar main";
   grid-template-columns: min-content 6fr;
-  gap: 1rem 3rem;
+  grid-template-rows: min-content min-content 1fr;
+  gap: 1.5rem;
 }
 
 #LevelPage--header {
   grid-area: header;
+}
+#LevelPage--banner {
+  grid-area: banner;
 }
 #LevelPage--sidebar {
   grid-area: sidebar;
   white-space: nowrap;
 }
 #LevelPage--main {
-  width: 100%;
   grid-area: main;
 }
 
-#LevelPage--sidebar .MediumThumbnail--thumb {
+#LevelPage .MediumThumbnail--thumb {
   width: 100%;
-  margin: 0;
 }
 
 #LevelPage h1 {
-  margin: 1rem 0;
+  margin: 0;
   font-size: 3rem;
+  line-height: 3rem;
 }
 #LevelPage h2 {
-  margin: 1rem 0 0.75rem 0;
+  margin: 2rem 0 0.75rem 0;
   border-bottom: 2px solid var(--button-background-color);
 }
 #LevelPage h2 + p {
