@@ -25,10 +25,10 @@ class Level(DatesInfo):
     authors = models.ManyToManyField(User, related_name="authored_levels")
     trle_id = models.IntegerField(blank=True, null=True)
 
-    new_difficulty = models.ForeignKey(
+    difficulty = models.ForeignKey(
         LevelDifficulty, blank=True, null=True, on_delete=models.SET_NULL
     )
-    new_duration = models.ForeignKey(
+    duration = models.ForeignKey(
         LevelDuration, blank=True, null=True, on_delete=models.SET_NULL
     )
 

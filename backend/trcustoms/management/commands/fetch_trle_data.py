@@ -112,7 +112,7 @@ def process_level_basic_data(obj_id: int, trle_level: TRLELevel) -> Level:
         defaults=dict(
             name=trle_level.title,
             description=trle_level.synopsis,
-            new_difficulty=LevelDifficulty.objects.filter(
+            difficulty=LevelDifficulty.objects.filter(
                 name={
                     "easy": "Easy",
                     "medium": "Medium",
@@ -121,7 +121,7 @@ def process_level_basic_data(obj_id: int, trle_level: TRLELevel) -> Level:
                     None: None,
                 }[trle_level.difficulty]
             ).first(),
-            new_duration=LevelDuration.objects.filter(
+            duration=LevelDuration.objects.filter(
                 name={
                     "short": "Short",
                     "medium": "Medium",

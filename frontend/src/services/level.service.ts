@@ -102,8 +102,8 @@ interface Level {
   created: string;
   last_updated: string;
   last_file: LevelFile | null;
-  new_difficulty: LevelDifficulty;
-  new_duration: LevelDuration;
+  difficulty: LevelDifficulty;
+  duration: LevelDuration;
   download_count: number;
 }
 

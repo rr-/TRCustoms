@@ -96,10 +96,10 @@ const LevelPage = () => {
             </dd>
 
             <dt>Difficulty</dt>
-            <dd>{level.new_difficulty?.name || EMPTY_INPUT_PLACEHOLDER}</dd>
+            <dd>{level.difficulty?.name || EMPTY_INPUT_PLACEHOLDER}</dd>
 
             <dt>Duration</dt>
-            <dd>{level.new_duration?.name || EMPTY_INPUT_PLACEHOLDER}</dd>
+            <dd>{level.duration?.name || EMPTY_INPUT_PLACEHOLDER}</dd>
 
             <hr />
 
