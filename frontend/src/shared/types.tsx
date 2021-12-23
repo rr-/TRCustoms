@@ -1,4 +1,4 @@
-const DISABLE_PAGING = Symbol("DISABLE_PAGING");
+import { DISABLE_PAGING } from "src/shared/constants";
 
 interface GenericQuery {
   page?: number | null | typeof DISABLE_PAGING;
@@ -18,4 +18,3 @@ interface PagedResponse<T> {
 }
 
 export type { PagedResponse, GenericQuery };
-export { DISABLE_PAGING };

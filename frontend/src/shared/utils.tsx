@@ -1,5 +1,5 @@
+import { DISABLE_PAGING } from "src/shared/constants";
 import type { GenericQuery } from "src/shared/types";
-import { DISABLE_PAGING } from "src/shared/types";
 
 const EMPTY_INPUT_PLACEHOLDER = "-";
 
