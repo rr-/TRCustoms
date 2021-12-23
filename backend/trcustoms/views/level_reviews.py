@@ -12,20 +12,21 @@ class LevelReviewViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
     serializer_class = LevelLegacyReviewSerializer
     filter_backends = [filters.SearchFilter, filters.OrderingFilter]
     search_fields = [
-        "name",
+        "level__name",
         "author__username",
         "author__first_name",
         "author__last_name",
         "level__name",
     ]
     ordering_fields = [
-        "name",
+        "level__name",
         "author__username",
         "level_id",
         "rating_gameplay",
         "rating_enemies",
         "rating_atmosphere",
         "rating_lighting",
+        "created",
     ]
 
     def get_queryset(self):
