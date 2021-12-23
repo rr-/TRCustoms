@@ -50,7 +50,11 @@ const Pager = <TCollection extends {}>({
   );
 
   const activeLinkElem = (page, label) => (
-    <button className="Pager--button link" onClick={() => onPageChange(page)}>
+    <button
+      type="button"
+      className="Pager--button link"
+      onClick={() => onPageChange(page)}
+    >
       {label}
     </button>
   );
