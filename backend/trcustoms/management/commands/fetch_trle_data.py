@@ -30,18 +30,6 @@ logger = logging.getLogger(__name__)
 P = TypeVar("P")
 
 
-def split_full_name(full_name: str | None) -> tuple[str, str]:
-    match (full_name or "").split(maxsplit=1):
-        case (first_name,):
-            last_name = ""
-        case (first_name, last_name):
-            pass
-        case _:
-            first_name = ""
-            last_name = ""
-    return first_name, last_name
-
-
 def repr_obj(obj: Any) -> str:
     return "\n".join(
         f"  {line}" for line in yaml.dump(obj, sort_keys=False).splitlines()
@@ -76,13 +64,10 @@ def process_reviewer(ctx: ScrapeContext, obj_id: int) -> None:
         return
 
     if not ctx.no_basic_data:
-        first_name, last_name = split_full_name(trle_reviewer.full_name)
         user, created = User.objects.update_or_create(
             username=get_trle_user_username(trle_reviewer),
             defaults=dict(
                 trle_reviewer_id=obj_id,
-                first_name=first_name,
-                last_name=last_name,
             ),
         )
         if created:
@@ -101,13 +86,10 @@ def process_author(ctx: ScrapeContext, obj_id: int) -> None:
         return
 
     if not ctx.no_basic_data:
-        first_name, last_name = split_full_name(trle_author.full_name)
         user, created = User.objects.update_or_create(
             username=get_trle_user_username(trle_author),
             defaults=dict(
                 trle_author_id=obj_id,
-                first_name=first_name,
-                last_name=last_name,
             ),
         )
         if created:
