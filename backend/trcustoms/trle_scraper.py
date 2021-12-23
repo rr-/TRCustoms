@@ -8,6 +8,7 @@ from dataclasses import dataclass
 from datetime import date
 from decimal import Decimal
 from pathlib import Path
+from typing import IO
 from urllib.parse import urljoin
 
 import dateutil.parser
@@ -453,7 +454,7 @@ class TRLEScraper:
     def get_bytes(self, url: str) -> bytes:
         return self.safe_get(url).content
 
-    def get_bytes_parallel(self, url: str) -> bytes | None:
+    def get_bytes_parallel(self, url: str, file: IO[bytes]) -> bytes | None:
         if not self.is_url_download(url):
             return None
 
@@ -491,7 +492,7 @@ class TRLEScraper:
             for chunk, path in sorted(
                 chunk_to_path.items(), key=lambda kv: kv[0]
             ):
-                result += path.read_bytes()
+                file.write(path.read_bytes())
 
-        assert len(result) == file_size
+        assert file.tell() == file_size
         return result

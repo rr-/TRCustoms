@@ -1,6 +1,7 @@
 import argparse
 import logging
 import sys
+import tempfile
 import traceback
 from collections.abc import Callable, Iterable
 from concurrent.futures import ThreadPoolExecutor, as_completed
@@ -9,7 +10,7 @@ from pathlib import Path
 from typing import Any, TypeVar
 
 import yaml
-from django.core.files.base import ContentFile
+from django.core.files.base import ContentFile, File
 from django.core.management.base import BaseCommand
 from unidecode import unidecode
 
@@ -201,12 +202,18 @@ def process_level_images(level: Level, trle_level: TRLELevel) -> None:
 
 
 def process_level_files(level: Level, trle_level: TRLELevel) -> None:
-    level_content = TRLEScraper().get_bytes_parallel(trle_level.download_url)
-    if level_content:
-        LevelFile.objects.update_or_create(
-            level=level,
-            defaults=dict(file=ContentFile(level_content, name="dummy.zip")),
-        )
+    with tempfile.TemporaryDirectory() as tmpdir:
+        path = Path(tmpdir) / "dummy.zip"
+        with path.open("wb") as handle:
+            TRLEScraper().get_bytes_parallel(
+                trle_level.download_url, file=handle
+            )
+        if path.stat().st_size:
+            with path.open("rb") as handle:
+                LevelFile.objects.update_or_create(
+                    level=level,
+                    defaults=dict(file=File(handle, name=path.name)),
+                )
 
 
 def process_level(ctx: ScrapeContext, obj_id: int) -> None:
