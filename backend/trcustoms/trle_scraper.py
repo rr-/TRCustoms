@@ -122,6 +122,7 @@ class TRLELevelReview:
 
 @dataclass
 class TRLELevel:
+    level_id: int
     title: str
     synopsis: str | None
     release_date: date | None
@@ -285,6 +286,7 @@ class TRLEScraper:
         download_url = f"https://www.trle.net/scadm/trle_dl.php?lid={level_id}"
 
         return TRLELevel(
+            level_id=level_id,
             title=title,
             synopsis=synopsis or None,
             release_date=(
