@@ -23,7 +23,7 @@ import { EMPTY_INPUT_PLACEHOLDER } from "src/shared/utils";
 
 const LevelPage = () => {
   const { levelId } = useParams();
-  const [reviewQuery, setReviewQuery] = useState<ReviewQuery>({
+  const [reviewsQuery, setReviewsQuery] = useState<ReviewQuery>({
     levels: [+levelId],
     page: DISABLE_PAGING,
     sort: "-created",
@@ -165,7 +165,13 @@ const LevelPage = () => {
         </section>
 
         <section id="LevelPage--reviews">
-          <ReviewsTable query={reviewQuery} onQueryChange={setReviewQuery} />
+          <ReviewsTable
+            showLevels={false}
+            showDetails={true}
+            showAuthors={true}
+            query={reviewsQuery}
+            onQueryChange={setReviewsQuery}
+          />
         </section>
       </div>
     </div>
