@@ -1,3 +1,4 @@
+import { isEqual } from "lodash";
 import { useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
@@ -41,20 +42,14 @@ const QueryPersister = ({
 
   useEffect(() => {
     // synchronize query changes to URL
-    if (
-      JSON.stringify(deserializeQuery(window.location.href)) !==
-      JSON.stringify(query)
-    ) {
+    if (!isEqual(deserializeQuery(window.location.href), query)) {
       navigate(serializeQuery(query));
     }
   }, [query, navigate, serializeQuery, deserializeQuery]);
 
   useEffect(() => {
     // synchronize URL changes to query
-    if (
-      JSON.stringify(deserializeQuery(window.location.href)) !==
-      JSON.stringify(query)
-    ) {
+    if (!isEqual(deserializeQuery(window.location.href), query)) {
       setQuery(deserializeQuery(window.location.href));
     }
   }, [location, query, deserializeQuery, setQuery]);
