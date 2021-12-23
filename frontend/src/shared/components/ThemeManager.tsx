@@ -23,6 +23,8 @@ interface Theme {
     "navbar-secondary-active-tab-text-color": string;
     "navbar-primary-margin": string;
     "navbar-secondary-margin": string;
+    "sidebar-background-color": string;
+    "sidebar-padding": string;
     "text-color": string;
     "link-color": string;
     "link-highlight-background-color": string;
@@ -55,6 +57,8 @@ const themes: Array<Theme> = [
       "navbar-secondary-active-tab-text-color": "var(--text-color)",
       "navbar-primary-margin": "0",
       "navbar-secondary-margin": "0",
+      "sidebar-background-color": "var(--navbar-secondary-background-color)",
+      "sidebar-padding": "1rem",
       "text-color": "black",
       "link-color": "#1b5e60",
       "link-highlight-background-color":
@@ -86,6 +90,8 @@ const themes: Array<Theme> = [
       "navbar-secondary-margin": "0.5rem 0",
       "navbar-secondary-active-tab-background-color": "#DDD",
       "navbar-secondary-active-tab-text-color": "var(--text-color)",
+      "sidebar-background-color": "transparent",
+      "sidebar-padding": "0",
       "text-color": "black",
       "link-color": "red",
       "link-highlight-background-color":
@@ -117,6 +123,9 @@ const themes: Array<Theme> = [
       "navbar-secondary-margin": "0.5rem 0",
       "navbar-secondary-active-tab-background-color": "#1c3160",
       "navbar-secondary-active-tab-text-color": "#d0e6ed",
+      "sidebar-background-color":
+        "var(--navbar-secondary-background-color-inside)",
+      "sidebar-padding": "1rem",
       "text-color": "#ededed",
       "link-color": "#2196f3",
       "link-highlight-background-color": "#1c3160",
