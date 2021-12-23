@@ -1,5 +1,7 @@
 from .level import Level
+from .level_difficulty import LevelDifficulty
 from .level_download import LevelDownload
+from .level_duration import LevelDuration
 from .level_engine import LevelEngine
 from .level_file import LevelFile
 from .level_genre import LevelGenre
@@ -12,7 +14,9 @@ from .util import DatesInfo
 __all__ = [
     "DatesInfo",
     "Level",
+    "LevelDifficulty",
     "LevelDownload",
+    "LevelDuration",
     "LevelEngine",
     "LevelFile",
     "LevelGenre",

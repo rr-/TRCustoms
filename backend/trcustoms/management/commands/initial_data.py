@@ -1,6 +1,11 @@
 from django.core.management.base import BaseCommand
 
-from trcustoms.models import LevelEngine, LevelGenre
+from trcustoms.models import (
+    LevelDifficulty,
+    LevelDuration,
+    LevelEngine,
+    LevelGenre,
+)
 
 GENRES = [
     "Action",
@@ -28,6 +33,8 @@ GENRES = [
 ]
 
 ENGINES = ["TR1", "TR2", "TR3", "TR4", "TR5", "TEN"]
+DURATIONS = ["Short", "Medium", "Long", "Very long"]
+DIFFICULTIES = ["Easy", "Medium", "Hard", "Very hard"]
 
 
 class Command(BaseCommand):
@@ -39,3 +46,13 @@ class Command(BaseCommand):
 
         for name in ENGINES:
             LevelEngine.objects.get_or_create(name=name)
+
+        for i, name in enumerate(DURATIONS, 1):
+            LevelDuration.objects.get_or_create(
+                name=name, defaults=dict(position=i)
+            )
+
+        for i, name in enumerate(DIFFICULTIES, 1):
+            LevelDifficulty.objects.get_or_create(
+                name=name, defaults=dict(position=i)
+            )

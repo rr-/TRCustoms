@@ -3,6 +3,10 @@ from typing import Any
 from rest_framework import serializers
 
 from trcustoms.models import Level, LevelFile, User
+from trcustoms.serializers.level_difficulties import (
+    LevelDifficultyLiteSerializer,
+)
+from trcustoms.serializers.level_durations import LevelDurationLiteSerializer
 from trcustoms.serializers.level_engines import LevelEngineLiteSerializer
 from trcustoms.serializers.level_genres import LevelGenreLiteSerializer
 from trcustoms.serializers.level_media import LevelMediumSerializer
@@ -36,6 +40,8 @@ class LevelLiteSerializer(serializers.ModelSerializer):
     genres = LevelGenreLiteSerializer(read_only=True, many=True)
     tags = LevelTagLiteSerializer(read_only=True, many=True)
     engine = LevelEngineLiteSerializer(read_only=True)
+    new_difficulty = LevelDifficultyLiteSerializer(read_only=True)
+    new_duration = LevelDurationLiteSerializer(read_only=True)
     uploader = LevelUploaderSerializer(read_only=True)
     authors = LevelAuthorSerializer(read_only=True, many=True)
     last_file = serializers.SerializerMethodField(read_only=True)
@@ -68,8 +74,8 @@ class LevelLiteSerializer(serializers.ModelSerializer):
             "last_updated",
             "last_file",
             "download_count",
-            "difficulty",
-            "duration",
+            "new_difficulty",
+            "new_duration",
         ]
 
 

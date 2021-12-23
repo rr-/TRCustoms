@@ -1,5 +1,7 @@
 from django.db import models
 
+from trcustoms.models.level_difficulty import LevelDifficulty
+from trcustoms.models.level_duration import LevelDuration
 from trcustoms.models.level_engine import LevelEngine
 from trcustoms.models.level_genre import LevelGenre
 from trcustoms.models.level_tag import LevelTag
@@ -40,6 +42,13 @@ class Level(DatesInfo):
         max_length=10, choices=Duration.choices, blank=True, null=True
     )
     trle_id = models.IntegerField(blank=True, null=True)
+
+    new_difficulty = models.ForeignKey(
+        LevelDifficulty, blank=True, null=True, on_delete=models.SET_NULL
+    )
+    new_duration = models.ForeignKey(
+        LevelDuration, blank=True, null=True, on_delete=models.SET_NULL
+    )
 
     download_count = models.IntegerField(default=0)
 

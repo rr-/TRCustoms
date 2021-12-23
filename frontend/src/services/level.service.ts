@@ -80,6 +80,16 @@ interface LevelFile {
   url: string;
 }
 
+interface LevelDifficulty {
+  id: number;
+  name: string;
+}
+
+interface LevelDuration {
+  id: number;
+  name: string;
+}
+
 interface Level {
   id: number | null;
   name: string;
@@ -92,8 +102,8 @@ interface Level {
   created: string;
   last_updated: string;
   last_file: LevelFile | null;
-  difficulty: string;
-  duration: string;
+  new_difficulty: LevelDifficulty;
+  new_duration: LevelDuration;
   download_count: number;
 }
 
