@@ -80,6 +80,14 @@ const UserPage = () => {
 
             <dt>Last seen</dt>
             <dd>{formatDate(user.last_login) || "never"}</dd>
+
+            <hr />
+
+            <dt>Authored levels</dt>
+            <dd>{user.authored_level_count}</dd>
+
+            <dt>Reviewed levels</dt>
+            <dd>{user.reviewed_level_count}</dd>
           </dl>
         </SidebarBox>
       </aside>

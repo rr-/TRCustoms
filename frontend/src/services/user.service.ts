@@ -19,6 +19,7 @@ interface User {
   last_login: string;
   is_active: boolean;
   authored_level_count: number;
+  reviewed_level_count: number;
 }
 
 interface UserList extends PagedResponse<User> {}
