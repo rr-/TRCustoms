@@ -1,5 +1,6 @@
 import "./Markdown.css";
 import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 
 interface MarkdownProps {
   children: string;
@@ -27,7 +28,12 @@ const transformLink = (link) => {
 
 const Markdown = ({ children }: MarkdownProps) => {
   return (
-    <ReactMarkdown components={{ a: transformLink }}>{children}</ReactMarkdown>
+    <ReactMarkdown
+      remarkPlugins={[remarkGfm]}
+      components={{ a: transformLink }}
+    >
+      {children}
+    </ReactMarkdown>
   );
 };
 
