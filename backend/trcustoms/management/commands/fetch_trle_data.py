@@ -50,6 +50,8 @@ def repr_obj(obj: Any) -> str:
 @dataclass
 class ScrapeContext:
     scraper: TRLEScraper
+    no_basic_data: bool
+    no_reviews: bool
     no_images: bool
     no_files: bool
     num_workers: int
@@ -72,15 +74,16 @@ def process_reviewer(ctx: ScrapeContext, obj_id: int) -> None:
     if not trle_reviewer:
         return
 
-    first_name, last_name = split_full_name(trle_reviewer.full_name)
-    User.objects.update_or_create(
-        username=get_trle_user_username(trle_reviewer),
-        defaults=dict(
-            trle_reviewer_id=obj_id,
-            first_name=first_name,
-            last_name=last_name,
-        ),
-    )
+    if not ctx.no_basic_data:
+        first_name, last_name = split_full_name(trle_reviewer.full_name)
+        User.objects.update_or_create(
+            username=get_trle_user_username(trle_reviewer),
+            defaults=dict(
+                trle_reviewer_id=obj_id,
+                first_name=first_name,
+                last_name=last_name,
+            ),
+        )
 
 
 def process_author(ctx: ScrapeContext, obj_id: int) -> None:
@@ -93,19 +96,62 @@ def process_author(ctx: ScrapeContext, obj_id: int) -> None:
     if not trle_author:
         return
 
-    first_name, last_name = split_full_name(trle_author.full_name)
-    user, _created = User.objects.update_or_create(
-        username=get_trle_user_username(trle_author),
+    if not ctx.no_basic_data:
+        first_name, last_name = split_full_name(trle_author.full_name)
+        user, _created = User.objects.update_or_create(
+            username=get_trle_user_username(trle_author),
+            defaults=dict(
+                trle_author_id=obj_id,
+                first_name=first_name,
+                last_name=last_name,
+            ),
+        )
+
+        user.authored_levels.set(
+            Level.objects.filter(trle_id__in=trle_author.level_ids)
+        )
+
+
+def process_level_basic_data(obj_id: int, trle_level: TRLELevel) -> Level:
+    engine, _created = LevelEngine.objects.get_or_create(
+        name=trle_level.file_type
+    )
+    level, _created = Level.objects.update_or_create(
+        trle_id=obj_id,
         defaults=dict(
-            trle_author_id=obj_id,
-            first_name=first_name,
-            last_name=last_name,
+            name=trle_level.title,
+            description=trle_level.synopsis,
+            difficulty={
+                "easy": Level.Difficulty.easy,
+                "medium": Level.Difficulty.medium,
+                "challenging": Level.Difficulty.hard,
+                "very challenging": Level.Difficulty.very_hard,
+                None: None,
+            }[trle_level.difficulty],
+            duration={
+                "short": Level.Duration.short,
+                "medium": Level.Duration.medium,
+                "long": Level.Duration.long,
+                "very long": Level.Duration.very_long,
+                None: None,
+            }[trle_level.duration],
+            engine=engine,
         ),
     )
+    if level.created.date() != trle_level.release_date:
+        level.created = trle_level.release_date
+        level.save()
 
-    user.authored_levels.set(
-        Level.objects.filter(trle_id__in=trle_author.level_ids)
-    )
+    if trle_level.category:
+        tag, _created = LevelTag.objects.get_or_create(
+            name=trle_level.category
+        )
+        level.tags.add(tag)
+
+    for user in User.objects.filter(trle_author_id__in=trle_level.author_ids):
+        level.authors.add(user)
+
+    return level
 
 
 def process_level_reviews(level: Level, trle_level: TRLELevel) -> None:
@@ -173,45 +219,13 @@ def process_level(ctx: ScrapeContext, obj_id: int) -> None:
     if not trle_level:
         return
 
-    engine, _created = LevelEngine.objects.get_or_create(
-        name=trle_level.file_type
-    )
-    level, _created = Level.objects.update_or_create(
-        trle_id=obj_id,
-        defaults=dict(
-            name=trle_level.title,
-            description=trle_level.synopsis,
-            difficulty={
-                "easy": Level.Difficulty.easy,
-                "medium": Level.Difficulty.medium,
-                "challenging": Level.Difficulty.hard,
-                "very challenging": Level.Difficulty.very_hard,
-                None: None,
-            }[trle_level.difficulty],
-            duration={
-                "short": Level.Duration.short,
-                "medium": Level.Duration.medium,
-                "long": Level.Duration.long,
-                "very long": Level.Duration.very_long,
-                None: None,
-            }[trle_level.duration],
-            engine=engine,
-        ),
-    )
-    if level.created.date() != trle_level.release_date:
-        level.created = trle_level.release_date
-        level.save()
+    if not ctx.no_basic_data:
+        level = process_level_basic_data(obj_id, trle_level)
+    else:
+        level = Level.objects.get(trle_id=obj_id)
 
-    if trle_level.category:
-        tag, _created = LevelTag.objects.get_or_create(
-            name=trle_level.category
-        )
-        level.tags.add(tag)
-
-    for user in User.objects.filter(trle_author_id__in=trle_level.author_ids):
-        level.authors.add(user)
-
-    process_level_reviews(level, trle_level)
+    if not ctx.no_reviews:
+        process_level_reviews(level, trle_level)
     if not ctx.no_images:
         process_level_images(level, trle_level)
     if not ctx.no_files:
@@ -287,6 +301,16 @@ class Command(BaseCommand):
             help="Reduce output verbosity",
         )
         parser.add_argument(
+            "--no-basic-data",
+            action="store_true",
+            help="Disable fetching basic information",
+        )
+        parser.add_argument(
+            "--no-reviews",
+            action="store_true",
+            help="Disable fetching level reviews",
+        )
+        parser.add_argument(
             "--no-images",
             action="store_true",
             help="Disable downloading level images",
@@ -307,6 +331,8 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         ctx = ScrapeContext(
             scraper=TRLEScraper(),
+            no_basic_data=options["no_basic_data"],
+            no_reviews=options["no_reviews"],
             no_images=options["no_images"],
             no_files=options["no_files"],
             num_workers=options["num_workers"],
