@@ -10,6 +10,7 @@ import { DataTable } from "src/shared/components/DataTable";
 import LevelLink from "src/shared/components/LevelLink";
 import Loader from "src/shared/components/Loader";
 import { Markdown } from "src/shared/components/Markdown";
+import SectionHeader from "src/shared/components/SectionHeader";
 import UserLink from "src/shared/components/UserLink";
 import { avg } from "src/shared/math";
 import { round } from "src/shared/math";
@@ -131,7 +132,7 @@ const ReviewsTable = ({
 
   return (
     <>
-      <h2>Legacy reviews</h2>
+      <SectionHeader>Legacy reviews</SectionHeader>
       <DataTable
         className="ReviewsTable"
         result={result}
@@ -144,7 +145,7 @@ const ReviewsTable = ({
 
       {showDetails && (
         <>
-          <h2>Reviews</h2>
+          <SectionHeader>Reviews</SectionHeader>
           {result.data.results.length ? (
             result.data.results.map(
               (review) =>

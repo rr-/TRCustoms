@@ -14,6 +14,7 @@ import { MediumThumbnail } from "src/shared/components/MediumThumbnail";
 import { MediumThumbnails } from "src/shared/components/MediumThumbnails";
 import PushButton from "src/shared/components/PushButton";
 import { ReviewsTable } from "src/shared/components/ReviewsTable";
+import SectionHeader from "src/shared/components/SectionHeader";
 import SidebarBox from "src/shared/components/SidebarBox";
 import TagLink from "src/shared/components/TagLink";
 import UserLink from "src/shared/components/UserLink";
@@ -132,7 +133,7 @@ const LevelPage = () => {
             )}
           </dl>
 
-          <h2>Version history</h2>
+          <SectionHeader>Version history</SectionHeader>
           <table id="LevelPage--fileTable">
             <tbody>
               {level.files.map((file) => (
@@ -156,7 +157,7 @@ const LevelPage = () => {
         </section>
 
         <section id="LevelPage--basicInfo">
-          <h2>About the game</h2>
+          <SectionHeader>About the game</SectionHeader>
           {level.description ? (
             <Markdown children={level.description} />
           ) : (

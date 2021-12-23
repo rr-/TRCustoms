@@ -29,13 +29,10 @@
   display: block;
 }
 
-#UserPage--header h1 {
+#UserPage--header :first-child,
+#UserPage--basicInfo :first-child {
   margin-top: 0;
 }
-#UserPage--header h2 {
+#UserPage--header :last-child {
   margin-bottom: 0;
-}
-
-#UserPage--basicInfo > p:first-child {
-  margin-top: 0;
 }

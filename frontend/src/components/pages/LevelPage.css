@@ -32,13 +32,6 @@
   font-size: 3rem;
   line-height: 3rem;
 }
-#LevelPage h2 {
-  margin: 2rem 0 0.75rem 0;
-  border-bottom: 2px solid var(--button-background-color);
-}
-#LevelPage h2 + p {
-  margin-top: 0.75rem;
-}
 
 #LevelPage--basicInfo {
   margin-bottom: 2rem;
