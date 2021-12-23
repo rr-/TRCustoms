@@ -1,4 +1,5 @@
 import "./UserPage.css";
+import { useState } from "react";
 import { useQuery } from "react-query";
 import { useParams } from "react-router-dom";
 import type { LevelQuery } from "src/services/level.service";
@@ -16,6 +17,15 @@ import { formatDateTime } from "src/shared/utils";
 
 const UserPage = () => {
   const { userId } = useParams();
+  const [levelsQuery, setLevelsQuery] = useState<LevelQuery>({
+    page: DISABLE_PAGING,
+    sort: "-created",
+    search: null,
+    tags: [],
+    genres: [],
+    engines: [],
+    authors: [+userId],
+  });
 
   const result = useQuery<User, Error>(["users", userId], async () =>
     UserService.getUserById(+userId)
@@ -30,16 +40,6 @@ const UserPage = () => {
   }
 
   const user = result.data;
-
-  const levelQuery: LevelQuery = {
-    page: DISABLE_PAGING,
-    sort: null,
-    search: null,
-    tags: [],
-    genres: [],
-    engines: [],
-    authors: [user.id],
-  };
 
   return (
     <div id="UserPage">
@@ -86,7 +86,7 @@ const UserPage = () => {
 
         <section id="UserPage--authoredLevels">
           <h3>Authored levels</h3>
-          <LevelsTable query={levelQuery} />
+          <LevelsTable query={levelsQuery} onQueryChange={setLevelsQuery} />
         </section>
       </div>
     </div>
