@@ -23,6 +23,11 @@
   grid-area: main;
 }
 
+/* fix for empty media */
+#LevelPage--main > :first-child > :first-child {
+  margin-top: 0;
+}
+
 #LevelPage .MediumThumbnail--thumb {
   width: 100%;
 }
