@@ -1,15 +1,24 @@
 .ReviewsTable--author {
-  width: 30%;
+  width: 26%;
 }
-.ReviewsTable--ratingGameplay,
-.ReviewsTable--ratingEnemies,
-.ReviewsTable--ratingAtmosphere,
+.ReviewsTable--ratingGameplay {
+  width: 12%;
+  text-align: center;
+}
+.ReviewsTable--ratingEnemies {
+  width: 17%;
+  text-align: center;
+}
+.ReviewsTable--ratingAtmosphere {
+  width: 18%;
+  text-align: center;
+}
 .ReviewsTable--ratingLighting {
-  width: 15%;
+  width: 12%;
   text-align: center;
 }
 .ReviewsTable--created {
-  width: 10%;
+  width: 15%;
   white-space: nowrap;
 }
 .ReviewsTable .SortLink {
