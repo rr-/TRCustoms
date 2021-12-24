@@ -152,15 +152,26 @@ h3 {
 
 dl {
   display: grid;
-  grid-template-columns: 1fr 3fr;
+  grid-template-columns: minmax(30%, min-content) auto;
+  gap: 0 1rem;
 }
-dl hr {
+dl > div {
+  margin: 0;
   grid-column: 1 / span 2;
+}
+dl > div > hr {
+  margin: 0.5rem 0;
   width: 100%;
   background: transparent;
 }
+dl dt {
+  white-space: nowrap;
+}
 dl dt:after {
   content: ":";
+}
+dl dd {
+  margin: 0;
 }
 
 hr {

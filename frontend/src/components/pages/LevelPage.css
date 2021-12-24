@@ -4,7 +4,7 @@
     "header header"
     "banner main"
     "sidebar main";
-  grid-template-columns: min-content 6fr;
+  grid-template-columns: 25% auto;
   grid-template-rows: min-content min-content 1fr;
   gap: 1.5rem;
 }
@@ -17,7 +17,6 @@
 }
 #LevelPage--sidebar {
   grid-area: sidebar;
-  white-space: nowrap;
 }
 #LevelPage--main {
   grid-area: main;
@@ -38,12 +37,20 @@
   line-height: 3rem;
 }
 
-#LevelPage--basicInfo {
-  margin-bottom: 2rem;
+.LevelPage--fileTableTerm:after {
+  content: unset;
 }
-#LevelPage--fileTable {
-  width: 100%;
+
+.LevelPage--basicInfoList {
+  display: inline;
+  margin: 0;
+  padding: 0;
 }
-#LevelPage--fileTable td {
-  width: 50%;
+.LevelPage--basicInfoListItem {
+  display: inline;
+  padding: 0;
+  margin: 0;
+}
+.LevelPage--basicInfoListItem:not(:last-child):after {
+  content: ", ";
 }
