@@ -81,7 +81,9 @@ const UserPage = () => {
             <dt>Last seen</dt>
             <dd>{formatDate(user.last_login) || "never"}</dd>
 
-            <hr />
+            <div>
+              <hr />
+            </div>
 
             <dt>Authored levels</dt>
             <dd>{user.authored_level_count}</dd>

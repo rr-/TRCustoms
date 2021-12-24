@@ -9,9 +9,9 @@
   flex-grow: 1;
 }
 .SidebarBox--actions:empty + *,
-.SidebarBox :first-child {
+.SidebarBox > :first-child {
   margin-top: 0;
 }
-.SidebarBox :last-child {
+.SidebarBox > :last-child {
   margin-bottom: 0;
 }

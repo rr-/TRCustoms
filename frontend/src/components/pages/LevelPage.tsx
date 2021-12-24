@@ -1,4 +1,5 @@
 import "./LevelPage.css";
+import { Fragment } from "react";
 import { useState } from "react";
 import { useQuery } from "react-query";
 import { Link } from "react-router-dom";
@@ -70,12 +71,25 @@ const LevelPage = () => {
           <dl id="LevelPage--basicInfo">
             <dt>Author(s)</dt>
             <dd>
-              {level.authors.map((author) => (
-                <UserLink key={author.id} user={author} />
-              ))}
+              {level.tags.length ? (
+                <ul className="LevelPage--basicInfoList">
+                  {level.authors.map((author) => (
+                    <li
+                      key={author.id}
+                      className="LevelPage--basicInfoListItem"
+                    >
+                      <UserLink user={author} />
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                EMPTY_INPUT_PLACEHOLDER
+              )}
             </dd>
 
-            <hr />
+            <div>
+              <hr />
+            </div>
 
             <dt>Release date</dt>
             <dd>{formatDate(level.created) || "unknown"}</dd>
@@ -85,6 +99,23 @@ const LevelPage = () => {
 
             <dt>Downloads</dt>
             <dd>{level.download_count}</dd>
+
+            {level.trle_id && (
+              <>
+                <dt>Links</dt>
+                <dd>
+                  <a
+                    href={`https://www.trle.net/sc/levelfeatures.php?lid=${level.trle_id}`}
+                  >
+                    TRLE.net
+                  </a>
+                </dd>
+              </>
+            )}
+
+            <div>
+              <hr />
+            </div>
 
             <dt>Engine</dt>
             <dd>
@@ -101,53 +132,51 @@ const LevelPage = () => {
             <dt>Duration</dt>
             <dd>{level.duration?.name || EMPTY_INPUT_PLACEHOLDER}</dd>
 
-            <hr />
-
             <dt>Genres</dt>
             <dd>
-              {level.genres.length
-                ? level.genres.map((genre) => (
-                    <GenreLink key={genre.id} genre={genre} />
-                  ))
-                : EMPTY_INPUT_PLACEHOLDER}
+              {level.genres.length ? (
+                <ul className="LevelPage--basicInfoList">
+                  {level.genres.map((genre) => (
+                    <li key={genre.id} className="LevelPage--basicInfoListItem">
+                      <GenreLink genre={genre} />
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                EMPTY_INPUT_PLACEHOLDER
+              )}
             </dd>
 
             <dt>Tags</dt>
             <dd>
-              {level.tags.length
-                ? level.tags.map((tag) => <TagLink key={tag.id} tag={tag} />)
-                : EMPTY_INPUT_PLACEHOLDER}
+              {level.tags.length ? (
+                <ul className="LevelPage--basicInfoList">
+                  {level.tags.map((tag) => (
+                    <li key={tag.id} className="LevelPage--basicInfoListItem">
+                      <TagLink tag={tag} />
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                EMPTY_INPUT_PLACEHOLDER
+              )}
             </dd>
 
-            {level.trle_id && (
-              <>
-                <dt>Links</dt>
-                <dd>
-                  <a
-                    href={`https://www.trle.net/sc/levelfeatures.php?lid=${level.trle_id}`}
-                  >
-                    TRLE.net
-                  </a>
-                </dd>
-              </>
-            )}
-          </dl>
+            <div>
+              <SectionHeader>Version history</SectionHeader>
+            </div>
 
-          <SectionHeader>Version history</SectionHeader>
-          <table id="LevelPage--fileTable">
-            <tbody>
-              {level.files.map((file) => (
-                <tr key={file.id}>
-                  <td>
-                    <Link target="_blank" to={file.url}>
-                      Version {file.version}
-                    </Link>
-                  </td>
-                  <td>{formatDate(file.created)}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+            {level.files.map((file) => (
+              <Fragment key={file.id}>
+                <dt className="LevelPage--fileTableTerm">
+                  <Link target="_blank" to={file.url}>
+                    Version {file.version}
+                  </Link>
+                </dt>
+                <dd>{formatDate(file.created)}</dd>
+              </Fragment>
+            ))}
+          </dl>
         </SidebarBox>
       </aside>
 

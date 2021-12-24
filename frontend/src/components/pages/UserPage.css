@@ -4,7 +4,7 @@
     "picture header"
     "picture main"
     "sidebar main";
-  grid-template-columns: min-content 6fr;
+  grid-template-columns: 25% auto;
   grid-template-rows: min-content min-content 1fr;
   gap: 1.5rem;
 }
@@ -25,7 +25,7 @@
 }
 
 #UserPage--picture img {
-  max-width: 100%;
+  width: 100%;
   display: block;
 }
 
