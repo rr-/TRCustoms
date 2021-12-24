@@ -152,9 +152,11 @@ const LevelPage = () => {
       </aside>
 
       <div id="LevelPage--main">
-        <section id="LevelPage--media">
-          <MediumThumbnails media={level.media} />
-        </section>
+        {!!level.media.length && (
+          <section id="LevelPage--media">
+            <MediumThumbnails media={level.media} />
+          </section>
+        )}
 
         <section id="LevelPage--basicInfo">
           <SectionHeader>About the game</SectionHeader>
