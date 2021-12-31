@@ -3,7 +3,8 @@ import { UseQueryResult } from "react-query";
 import Loader from "src/shared/components/Loader";
 import Pager from "src/shared/components/Pager";
 import SortLink from "src/shared/components/SortLink";
-import type { PagedResponse } from "src/shared/types";
+import type { GenericSearchResult } from "src/shared/types";
+import type { GenericSearchQuery } from "src/shared/types";
 
 interface DataTableColumn<TItem> {
   name: string;
@@ -15,9 +16,9 @@ interface DataTableColumn<TItem> {
   footer?: () => React.ReactElement | string;
 }
 
-interface DataTableProps<TItem> {
+interface DataTableProps<TItem, TQuery> {
   className?: string | null;
-  result: UseQueryResult<PagedResponse<TItem>, Error> | null;
+  result: UseQueryResult<GenericSearchResult<TQuery, TItem>, Error> | null;
   itemKey: (TItem) => string;
   columns: DataTableColumn<TItem>[];
 
@@ -26,12 +27,12 @@ interface DataTableProps<TItem> {
   onPageChange?: (page: number) => any | null;
 }
 
-const DataTableHeader = <TItem extends {}>({
+const DataTableHeader = <TItem extends {}, TQuery extends GenericSearchQuery>({
   className,
   columns,
   onSortChange,
   sort,
-}: DataTableProps<TItem>) => {
+}: DataTableProps<TItem, TQuery>) => {
   return (
     <thead>
       <tr>
@@ -59,12 +60,44 @@ const DataTableHeader = <TItem extends {}>({
   );
 };
 
-const DataTableBody = <TItem extends {}>({
+const DataTableBody = <TItem extends {}, TQuery extends GenericSearchQuery>({
   className,
   result,
   itemKey,
   columns,
-}: DataTableProps<TItem>) => {
+}: DataTableProps<TItem, TQuery>) => {
+  if (result.error) {
+    return (
+      <tbody>
+        <tr>
+          <td colSpan={100}>{result.error.message}</td>
+        </tr>
+      </tbody>
+    );
+  }
+
+  if (result.isLoading || !result.data) {
+    return (
+      <tbody>
+        <tr>
+          <td colSpan={100}>
+            <Loader />
+          </td>
+        </tr>
+      </tbody>
+    );
+  }
+
+  if (!result.data.results.length) {
+    return (
+      <tbody>
+        <tr>
+          <td colSpan={100}>There are no results to show.</td>
+        </tr>
+      </tbody>
+    );
+  }
+
   return (
     <tbody>
       {result.data.results.map((item) => (
@@ -84,10 +117,10 @@ const DataTableBody = <TItem extends {}>({
   );
 };
 
-const DataTableFooter = <TItem extends {}>({
+const DataTableFooter = <TItem extends {}, TQuery extends GenericSearchQuery>({
   className,
   columns,
-}: DataTableProps<TItem>) => {
+}: DataTableProps<TItem, TQuery>) => {
   return (
     columns.some((column) => !!column.footer) && (
       <tfoot>
@@ -106,20 +139,10 @@ const DataTableFooter = <TItem extends {}>({
   );
 };
 
-const DataTable = <TItem extends {}>(props: DataTableProps<TItem>) => {
+const DataTable = <TItem extends {}, TQuery extends GenericSearchQuery>(
+  props: DataTableProps<TItem, TQuery>
+) => {
   const { className, result, onPageChange } = props;
-
-  if (result.error) {
-    return <p>{result.error.message}</p>;
-  }
-
-  if (result.isLoading || !result.data) {
-    return <Loader />;
-  }
-
-  if (!result.data.results.length) {
-    return <p>There are no result to show.</p>;
-  }
 
   return (
     <>
@@ -128,13 +151,16 @@ const DataTable = <TItem extends {}>(props: DataTableProps<TItem>) => {
         <DataTableBody {...props} />
         <DataTableFooter {...props} />
       </table>
-      {onPageChange && !result.data.disable_paging && (
+
+      {onPageChange &&
+      result.data?.results?.length &&
+      !result.data.disable_paging ? (
         <Pager
           onPageChange={onPageChange}
           className={className && `${className}--pager`}
           pagedResponse={result.data}
         />
-      )}
+      ) : null}
     </>
   );
 };
