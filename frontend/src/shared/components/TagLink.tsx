@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import type { Tag } from "src/services/level.service";
+import type { Tag } from "src/services/tag.service";
 
 interface TagLinkProps {
   tag: Tag;

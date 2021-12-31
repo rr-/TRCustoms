@@ -1,10 +1,10 @@
 import "./ReviewsTable.css";
 import { Fragment } from "react";
 import { useQuery } from "react-query";
-import { LevelService } from "src/services/level.service";
-import type { Review } from "src/services/level.service";
-import type { ReviewList } from "src/services/level.service";
-import type { ReviewQuery } from "src/services/level.service";
+import { ReviewService } from "src/services/review.service";
+import type { Review } from "src/services/review.service";
+import type { ReviewSearchResult } from "src/services/review.service";
+import type { ReviewSearchQuery } from "src/services/review.service";
 import type { DataTableColumn } from "src/shared/components/DataTable";
 import { DataTable } from "src/shared/components/DataTable";
 import LevelLink from "src/shared/components/LevelLink";
@@ -20,19 +20,20 @@ interface ReviewsTableProps {
   showLevels: boolean;
   showAuthors: boolean;
   showDetails: boolean;
-  query: ReviewQuery;
-  onQueryChange?: (query: ReviewQuery) => any | null;
+  searchQuery: ReviewSearchQuery;
+  onSearchQueryChange?: (searchQuery: ReviewSearchQuery) => any | null;
 }
 
 const ReviewsTable = ({
   showAuthors,
   showLevels,
   showDetails,
-  query,
-  onQueryChange,
+  searchQuery,
+  onSearchQueryChange,
 }: ReviewsTableProps) => {
-  const result = useQuery<ReviewList, Error>(["reviews", query], async () =>
-    LevelService.getReviews(query)
+  const result = useQuery<ReviewSearchResult, Error>(
+    ["reviews", searchQuery],
+    async () => ReviewService.searchReviews(searchQuery)
   );
 
   if (result.error) {
@@ -138,9 +139,13 @@ const ReviewsTable = ({
         result={result}
         columns={columns}
         itemKey={itemKey}
-        sort={query.sort}
-        onSortChange={(sort) => onQueryChange?.({ ...query, sort: sort })}
-        onPageChange={(page) => onQueryChange?.({ ...query, page: page })}
+        sort={searchQuery.sort}
+        onSortChange={(sort) =>
+          onSearchQueryChange?.({ ...searchQuery, sort: sort })
+        }
+        onPageChange={(page) =>
+          onSearchQueryChange?.({ ...searchQuery, page: page })
+        }
       />
 
       {showDetails && (

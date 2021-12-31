@@ -2,8 +2,8 @@ import "./LevelsTable.css";
 import { useQuery } from "react-query";
 import { Link } from "react-router-dom";
 import type { Level } from "src/services/level.service";
-import type { LevelList } from "src/services/level.service";
-import type { LevelQuery } from "src/services/level.service";
+import type { LevelSearchResult } from "src/services/level.service";
+import type { LevelSearchQuery } from "src/services/level.service";
 import { LevelService } from "src/services/level.service";
 import type { DataTableColumn } from "src/shared/components/DataTable";
 import { DataTable } from "src/shared/components/DataTable";
@@ -14,13 +14,17 @@ import { formatFileSize } from "src/shared/utils";
 import { EMPTY_INPUT_PLACEHOLDER } from "src/shared/utils";
 
 interface LevelsTableProps {
-  query: LevelQuery | null;
-  onQueryChange?: (query: LevelQuery) => any | null;
+  searchQuery: LevelSearchQuery | null;
+  onSearchQueryChange?: (searchQuery: LevelSearchQuery) => any | null;
 }
 
-const LevelsTable = ({ query, onQueryChange }: LevelsTableProps) => {
-  const result = useQuery<LevelList, Error>(["levels", query], async () =>
-    LevelService.getLevels(query)
+const LevelsTable = ({
+  searchQuery,
+  onSearchQueryChange,
+}: LevelsTableProps) => {
+  const result = useQuery<LevelSearchResult, Error>(
+    ["levels", searchQuery],
+    async () => LevelService.getLevels(searchQuery)
   );
 
   const columns: DataTableColumn<Level>[] = [
@@ -110,9 +114,13 @@ const LevelsTable = ({ query, onQueryChange }: LevelsTableProps) => {
       result={result}
       columns={columns}
       itemKey={itemKey}
-      sort={query.sort}
-      onSortChange={(sort) => onQueryChange?.({ ...query, sort: sort })}
-      onPageChange={(page) => onQueryChange?.({ ...query, page: page })}
+      sort={searchQuery.sort}
+      onSortChange={(sort) =>
+        onSearchQueryChange?.({ ...searchQuery, sort: sort })
+      }
+      onPageChange={(page) =>
+        onSearchQueryChange?.({ ...searchQuery, page: page })
+      }
     />
   );
 };

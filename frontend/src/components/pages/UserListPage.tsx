@@ -3,61 +3,66 @@ import { Form } from "formik";
 import { useEffect } from "react";
 import { useCallback } from "react";
 import { useState } from "react";
-import type { GenreQuery } from "src/services/level.service";
+import type { GenreSearchQuery } from "src/services/genre.service";
 import { QueryPersister } from "src/shared/components/QueryPersister";
-import { deserializeGenericQuery } from "src/shared/components/QueryPersister";
-import { serializeGenericQuery } from "src/shared/components/QueryPersister";
+import { deserializeGenericSearchQuery } from "src/shared/components/QueryPersister";
+import { serializeGenericSearchQuery } from "src/shared/components/QueryPersister";
 import { SearchBar } from "src/shared/components/SearchBar";
 import TextFormField from "src/shared/components/TextFormField";
 import UsersTable from "src/shared/components/UsersTable";
 
-const defaultQuery: GenreQuery = {
+const defaultSearchQuery: GenreSearchQuery = {
   page: null,
   sort: null,
   search: null,
 };
 
-const convertQueryToFormikValues = (query: GenreQuery) => {
-  return { search: query.search || "" };
+const convertSearchQueryToFormikValues = (searchQuery: GenreSearchQuery) => {
+  return { search: searchQuery.search || "" };
 };
 
 const UserListPage = () => {
-  const [query, setQuery] = useState<GenreQuery>(
-    deserializeGenericQuery(window.location.href, { sort: "-date_joined" })
+  const [searchQuery, setSearchQuery] = useState<GenreSearchQuery>(
+    deserializeGenericSearchQuery(window.location.href, {
+      sort: "-date_joined",
+    })
   );
   const [formikValues, setFormikValues] = useState<any>(
-    convertQueryToFormikValues(query)
+    convertSearchQueryToFormikValues(searchQuery)
   );
 
-  useEffect(() => setFormikValues(convertQueryToFormikValues(query)), [query]);
+  useEffect(
+    () => setFormikValues(convertSearchQueryToFormikValues(searchQuery)),
+    [searchQuery]
+  );
 
   const searchClick = useCallback(
     // push changes to query on Formik submit
     async (values: any) => {
-      setQuery({
-        ...query,
+      setSearchQuery({
+        ...searchQuery,
         page: null,
         search: values.search || null,
       });
     },
-    [query, setQuery]
+    [searchQuery, setSearchQuery]
   );
 
   const clearClick = useCallback(
     async (resetForm) => {
-      setQuery(defaultQuery);
+      setSearchQuery(defaultSearchQuery);
       resetForm();
     },
-    [setQuery]
+    [setSearchQuery]
   );
 
   return (
     <div id="UserListPage">
       <QueryPersister
-        serializeQuery={serializeGenericQuery}
-        deserializeQuery={deserializeGenericQuery}
-        query={query}
-        setQuery={setQuery}
+        serializeSearchQuery={serializeGenericSearchQuery}
+        deserializeSearchQuery={deserializeGenericSearchQuery}
+        searchQuery={searchQuery}
+        setSearchQuery={setSearchQuery}
       />
       <Formik
         enableReinitialize={true}
@@ -81,7 +86,10 @@ const UserListPage = () => {
             </SearchBar>
 
             <div id="UserListPage--results">
-              <UsersTable query={query} onQueryChange={setQuery} />
+              <UsersTable
+                searchQuery={searchQuery}
+                onSearchQueryChange={setSearchQuery}
+              />
             </div>
           </Form>
         )}

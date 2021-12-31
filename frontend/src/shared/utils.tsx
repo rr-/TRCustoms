@@ -1,14 +1,19 @@
 import { DISABLE_PAGING } from "src/shared/constants";
-import type { GenericQuery } from "src/shared/types";
+import type { GenericSearchQuery } from "src/shared/types";
 
 const EMPTY_INPUT_PLACEHOLDER = "-";
 
-function getGenericQuery(query: GenericQuery): { [key: string]: string } {
+function getGenericSearchQuery(
+  searchQuery: GenericSearchQuery
+): { [key: string]: string } {
   return filterFalsyObjectValues({
-    page: query.page && query.page !== DISABLE_PAGING ? `${query.page}` : null,
-    sort: query.sort,
-    search: query.search,
-    disable_paging: query.page === DISABLE_PAGING ? "1" : null,
+    page:
+      searchQuery.page && searchQuery.page !== DISABLE_PAGING
+        ? `${searchQuery.page}`
+        : null,
+    sort: searchQuery.sort,
+    search: searchQuery.search,
+    disable_paging: searchQuery.page === DISABLE_PAGING ? "1" : null,
   });
 }
 
@@ -127,6 +132,6 @@ export {
   formatDateTime,
   formatFileSize,
   filterFalsyObjectValues,
-  getGenericQuery,
+  getGenericSearchQuery,
   EMPTY_INPUT_PLACEHOLDER,
 };

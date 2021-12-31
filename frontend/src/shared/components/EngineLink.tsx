@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import type { Engine } from "src/services/level.service";
+import type { Engine } from "src/services/engine.service";
 
 interface EngineLinkProps {
   engine: Engine;

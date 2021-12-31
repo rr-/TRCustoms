@@ -2,8 +2,8 @@ import "./UserPage.css";
 import { useState } from "react";
 import { useQuery } from "react-query";
 import { useParams } from "react-router-dom";
-import type { ReviewQuery } from "src/services/level.service";
-import type { LevelQuery } from "src/services/level.service";
+import type { LevelSearchQuery } from "src/services/level.service";
+import type { ReviewSearchQuery } from "src/services/review.service";
 import type { User } from "src/services/user.service";
 import { UserService } from "src/services/user.service";
 import LevelsTable from "src/shared/components/LevelsTable";
@@ -20,7 +20,7 @@ import { formatDate } from "src/shared/utils";
 
 const UserPage = () => {
   const { userId } = useParams();
-  const [levelsQuery, setLevelsQuery] = useState<LevelQuery>({
+  const [levelSearchQuery, setLevelSearchQuery] = useState<LevelSearchQuery>({
     page: DISABLE_PAGING,
     sort: "-created",
     search: null,
@@ -29,12 +29,14 @@ const UserPage = () => {
     engines: [],
     authors: [+userId],
   });
-  const [reviewsQuery, setReviewsQuery] = useState<ReviewQuery>({
-    authors: [+userId],
-    page: DISABLE_PAGING,
-    sort: "-created",
-    search: "",
-  });
+  const [reviewSearchQuery, setReviewSearchQuery] = useState<ReviewSearchQuery>(
+    {
+      authors: [+userId],
+      page: DISABLE_PAGING,
+      sort: "-created",
+      search: "",
+    }
+  );
 
   const result = useQuery<User, Error>(["users", userId], async () =>
     UserService.getUserById(+userId)
@@ -105,7 +107,10 @@ const UserPage = () => {
 
         <section id="UserPage--authoredLevels">
           <SectionHeader>Authored levels</SectionHeader>
-          <LevelsTable query={levelsQuery} onQueryChange={setLevelsQuery} />
+          <LevelsTable
+            searchQuery={levelSearchQuery}
+            onSearchQueryChange={setLevelSearchQuery}
+          />
         </section>
 
         <section id="UserPage--reviewedLevels">
@@ -113,8 +118,8 @@ const UserPage = () => {
             showLevels={true}
             showDetails={false}
             showAuthors={false}
-            query={reviewsQuery}
-            onQueryChange={setReviewsQuery}
+            searchQuery={reviewSearchQuery}
+            onSearchQueryChange={setReviewSearchQuery}
           />
         </section>
       </div>
