@@ -1,7 +1,5 @@
 import "./GenresTable.css";
-import { useQuery } from "react-query";
 import type { Genre } from "src/services/genre.service";
-import type { GenreSearchResult } from "src/services/genre.service";
 import type { GenreSearchQuery } from "src/services/genre.service";
 import { GenreService } from "src/services/genre.service";
 import type { DataTableColumn } from "src/shared/components/DataTable";
@@ -18,11 +16,6 @@ const GenresTable = ({
   searchQuery,
   onSearchQueryChange,
 }: GenresTableProps) => {
-  const result = useQuery<GenreSearchResult, Error>(
-    ["genres", searchQuery],
-    async () => GenreService.searchGenres(searchQuery)
-  );
-
   const columns: DataTableColumn<Genre>[] = [
     {
       name: "name",
@@ -55,16 +48,11 @@ const GenresTable = ({
   return (
     <DataTable
       className="GenresTable"
-      result={result}
       columns={columns}
       itemKey={itemKey}
-      sort={searchQuery.sort}
-      onSortChange={(sort) =>
-        onSearchQueryChange?.({ ...searchQuery, sort: sort })
-      }
-      onPageChange={(page) =>
-        onSearchQueryChange?.({ ...searchQuery, page: page })
-      }
+      searchQuery={searchQuery}
+      searchFunc={GenreService.searchGenres}
+      onSearchQueryChange={onSearchQueryChange}
     />
   );
 };

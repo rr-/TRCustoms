@@ -34,8 +34,9 @@ const LevelPage = () => {
     search: "",
   });
 
-  const result = useQuery<LevelFull, Error>(["levels", levelId], async () =>
-    LevelService.getLevelById(+levelId)
+  const result = useQuery<LevelFull, Error>(
+    [LevelService.getLevelById, levelId],
+    async () => LevelService.getLevelById(+levelId)
   );
 
   if (result.error) {

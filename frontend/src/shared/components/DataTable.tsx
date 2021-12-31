@@ -1,5 +1,6 @@
 import "./DataTable.css";
 import { UseQueryResult } from "react-query";
+import { useQuery } from "react-query";
 import Loader from "src/shared/components/Loader";
 import Pager from "src/shared/components/Pager";
 import SortLink from "src/shared/components/SortLink";
@@ -18,20 +19,22 @@ interface DataTableColumn<TItem> {
 
 interface DataTableProps<TItem, TQuery> {
   className?: string | null;
-  result: UseQueryResult<GenericSearchResult<TQuery, TItem>, Error> | null;
   itemKey: (TItem) => string;
   columns: DataTableColumn<TItem>[];
 
-  sort?: string | null;
-  onSortChange?: (sort: string) => any | null;
-  onPageChange?: (page: number) => any | null;
+  searchQuery: TQuery;
+  searchFunc: (
+    searchQuery: TQuery
+  ) => Promise<GenericSearchResult<TQuery, TItem> | null>;
+
+  onSearchQueryChange?: (searchQuery: TQuery) => any | null;
 }
 
 const DataTableHeader = <TItem extends {}, TQuery extends GenericSearchQuery>({
   className,
   columns,
-  onSortChange,
-  sort,
+  searchQuery,
+  onSearchQueryChange,
 }: DataTableProps<TItem, TQuery>) => {
   return (
     <thead>
@@ -42,10 +45,12 @@ const DataTableHeader = <TItem extends {}, TQuery extends GenericSearchQuery>({
             title={column.tooltip}
             key={`head-${column.name}`}
           >
-            {onSortChange && column.sortKey ? (
+            {onSearchQueryChange && column.sortKey ? (
               <SortLink
-                currentSort={sort}
-                onSortChange={onSortChange}
+                currentSort={searchQuery.sort}
+                onSortChange={(sort) =>
+                  onSearchQueryChange({ ...searchQuery, sort: sort })
+                }
                 targetSort={column.sortKey}
               >
                 {column.label}
@@ -65,7 +70,9 @@ const DataTableBody = <TItem extends {}, TQuery extends GenericSearchQuery>({
   result,
   itemKey,
   columns,
-}: DataTableProps<TItem, TQuery>) => {
+}: {
+  result: UseQueryResult<GenericSearchResult<TQuery, TItem>, Error>;
+} & DataTableProps<TItem, TQuery>) => {
   if (result.error) {
     return (
       <tbody>
@@ -142,21 +149,28 @@ const DataTableFooter = <TItem extends {}, TQuery extends GenericSearchQuery>({
 const DataTable = <TItem extends {}, TQuery extends GenericSearchQuery>(
   props: DataTableProps<TItem, TQuery>
 ) => {
-  const { className, result, onPageChange } = props;
+  const { className, searchQuery, onSearchQueryChange, searchFunc } = props;
+
+  const result = useQuery<GenericSearchResult<TQuery, TItem> | null, Error>(
+    [searchFunc, searchQuery],
+    async () => searchFunc(searchQuery)
+  );
 
   return (
     <>
       <table className={`DataTable ${className} borderless`}>
         <DataTableHeader {...props} />
-        <DataTableBody {...props} />
+        <DataTableBody result={result} {...props} />
         <DataTableFooter {...props} />
       </table>
 
-      {onPageChange &&
+      {onSearchQueryChange &&
       result.data?.results?.length &&
       !result.data.disable_paging ? (
         <Pager
-          onPageChange={onPageChange}
+          onPageChange={(page) =>
+            onSearchQueryChange({ ...searchQuery, page: page })
+          }
           className={className && `${className}--pager`}
           pagedResponse={result.data}
         />

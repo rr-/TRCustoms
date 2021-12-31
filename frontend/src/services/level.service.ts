@@ -88,7 +88,7 @@ interface LevelSearchResult
 
 interface MediumList extends Array<Medium> {}
 
-const getLevels = async (
+const searchLevels = async (
   searchQuery: LevelSearchQuery
 ): Promise<LevelSearchResult | null> => {
   const result = await fetchJSON<LevelList>(`${API_URL}/levels/`, {
@@ -119,7 +119,7 @@ const getLevelFilters = async (
 };
 
 const LevelService = {
-  getLevels,
+  searchLevels,
   getLevelById,
   getLevelFilters,
 };

@@ -1,8 +1,6 @@
 import "./LevelsTable.css";
-import { useQuery } from "react-query";
 import { Link } from "react-router-dom";
 import type { Level } from "src/services/level.service";
-import type { LevelSearchResult } from "src/services/level.service";
 import type { LevelSearchQuery } from "src/services/level.service";
 import { LevelService } from "src/services/level.service";
 import type { DataTableColumn } from "src/shared/components/DataTable";
@@ -22,11 +20,6 @@ const LevelsTable = ({
   searchQuery,
   onSearchQueryChange,
 }: LevelsTableProps) => {
-  const result = useQuery<LevelSearchResult, Error>(
-    ["levels", searchQuery],
-    async () => LevelService.getLevels(searchQuery)
-  );
-
   const columns: DataTableColumn<Level>[] = [
     {
       name: "name",
@@ -111,16 +104,11 @@ const LevelsTable = ({
   return (
     <DataTable
       className="LevelsTable"
-      result={result}
       columns={columns}
       itemKey={itemKey}
-      sort={searchQuery.sort}
-      onSortChange={(sort) =>
-        onSearchQueryChange?.({ ...searchQuery, sort: sort })
-      }
-      onPageChange={(page) =>
-        onSearchQueryChange?.({ ...searchQuery, page: page })
-      }
+      searchQuery={searchQuery}
+      searchFunc={LevelService.searchLevels}
+      onSearchQueryChange={onSearchQueryChange}
     />
   );
 };

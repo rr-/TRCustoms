@@ -7,7 +7,7 @@ import Loader from "src/shared/components/Loader";
 const GenresCheckboxes = () => {
   const query = {};
   const result = useQuery<LevelFilters, Error>(
-    ["levelFilters", query],
+    [LevelService.getLevelFilters, query],
     async () => LevelService.getLevelFilters(query)
   );
 
