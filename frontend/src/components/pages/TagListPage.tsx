@@ -3,61 +3,64 @@ import { Form } from "formik";
 import { useEffect } from "react";
 import { useCallback } from "react";
 import { useState } from "react";
-import type { TagQuery } from "src/services/level.service";
+import type { TagSearchQuery } from "src/services/tag.service";
 import { QueryPersister } from "src/shared/components/QueryPersister";
-import { deserializeGenericQuery } from "src/shared/components/QueryPersister";
-import { serializeGenericQuery } from "src/shared/components/QueryPersister";
+import { deserializeGenericSearchQuery } from "src/shared/components/QueryPersister";
+import { serializeGenericSearchQuery } from "src/shared/components/QueryPersister";
 import { SearchBar } from "src/shared/components/SearchBar";
 import TagsTable from "src/shared/components/TagsTable";
 import TextFormField from "src/shared/components/TextFormField";
 
-const defaultQuery: TagQuery = {
+const defaultSearchQuery: TagSearchQuery = {
   page: null,
   sort: null,
   search: null,
 };
 
-const convertQueryToFormikValues = (query: TagQuery) => {
-  return { search: query.search || "" };
+const convertSearchQueryToFormikValues = (searchQuery: TagSearchQuery) => {
+  return { search: searchQuery.search || "" };
 };
 
 const TagListPage = () => {
-  const [query, setQuery] = useState<TagQuery>(
-    deserializeGenericQuery(window.location.href, { sort: "name" })
+  const [searchQuery, setSearchQuery] = useState<TagSearchQuery>(
+    deserializeGenericSearchQuery(window.location.href, { sort: "name" })
   );
   const [formikValues, setFormikValues] = useState<any>(
-    convertQueryToFormikValues(query)
+    convertSearchQueryToFormikValues(searchQuery)
   );
 
-  useEffect(() => setFormikValues(convertQueryToFormikValues(query)), [query]);
+  useEffect(
+    () => setFormikValues(convertSearchQueryToFormikValues(searchQuery)),
+    [searchQuery]
+  );
 
   const searchClick = useCallback(
     // push changes to query on Formik submit
     async (values: any) => {
-      setQuery({
-        ...query,
+      setSearchQuery({
+        ...searchQuery,
         page: null,
         search: values.search || null,
       });
     },
-    [query, setQuery]
+    [searchQuery, setSearchQuery]
   );
 
   const clearClick = useCallback(
     async (resetForm) => {
-      setQuery(defaultQuery);
+      setSearchQuery(defaultSearchQuery);
       resetForm();
     },
-    [setQuery]
+    [setSearchQuery]
   );
 
   return (
     <div id="TagListPage">
       <QueryPersister
-        serializeQuery={serializeGenericQuery}
-        deserializeQuery={deserializeGenericQuery}
-        query={query}
-        setQuery={setQuery}
+        serializeSearchQuery={serializeGenericSearchQuery}
+        deserializeSearchQuery={deserializeGenericSearchQuery}
+        searchQuery={searchQuery}
+        setSearchQuery={setSearchQuery}
       />
       <Formik
         enableReinitialize={true}
@@ -81,7 +84,10 @@ const TagListPage = () => {
             </SearchBar>
 
             <div id="TagListPage--results">
-              <TagsTable query={query} onQueryChange={setQuery} />
+              <TagsTable
+                searchQuery={searchQuery}
+                onSearchQueryChange={setSearchQuery}
+              />
             </div>
           </Form>
         )}

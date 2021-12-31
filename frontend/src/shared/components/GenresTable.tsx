@@ -1,22 +1,26 @@
 import "./GenresTable.css";
 import { useQuery } from "react-query";
-import type { Genre } from "src/services/level.service";
-import type { GenreList } from "src/services/level.service";
-import type { GenreQuery } from "src/services/level.service";
-import { LevelService } from "src/services/level.service";
+import type { Genre } from "src/services/genre.service";
+import type { GenreSearchResult } from "src/services/genre.service";
+import type { GenreSearchQuery } from "src/services/genre.service";
+import { GenreService } from "src/services/genre.service";
 import type { DataTableColumn } from "src/shared/components/DataTable";
 import { DataTable } from "src/shared/components/DataTable";
 import GenreLink from "src/shared/components/GenreLink";
 import { formatDate } from "src/shared/utils";
 
 interface GenresTableProps {
-  query: GenreQuery | null;
-  onQueryChange?: (query: GenreQuery) => any | null;
+  searchQuery: GenreSearchQuery | null;
+  onSearchQueryChange?: (searchQuery: GenreSearchQuery) => any | null;
 }
 
-const GenresTable = ({ query, onQueryChange }: GenresTableProps) => {
-  const result = useQuery<GenreList, Error>(["genres", query], async () =>
-    LevelService.getGenres(query)
+const GenresTable = ({
+  searchQuery,
+  onSearchQueryChange,
+}: GenresTableProps) => {
+  const result = useQuery<GenreSearchResult, Error>(
+    ["genres", searchQuery],
+    async () => GenreService.searchGenres(searchQuery)
   );
 
   const columns: DataTableColumn<Genre>[] = [
@@ -54,9 +58,13 @@ const GenresTable = ({ query, onQueryChange }: GenresTableProps) => {
       result={result}
       columns={columns}
       itemKey={itemKey}
-      sort={query.sort}
-      onSortChange={(sort) => onQueryChange?.({ ...query, sort: sort })}
-      onPageChange={(page) => onQueryChange?.({ ...query, page: page })}
+      sort={searchQuery.sort}
+      onSortChange={(sort) =>
+        onSearchQueryChange?.({ ...searchQuery, sort: sort })
+      }
+      onPageChange={(page) =>
+        onSearchQueryChange?.({ ...searchQuery, page: page })
+      }
     />
   );
 };

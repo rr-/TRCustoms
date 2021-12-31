@@ -4,9 +4,9 @@ import { useState } from "react";
 import { useQuery } from "react-query";
 import { Link } from "react-router-dom";
 import { useParams } from "react-router-dom";
-import type { ReviewQuery } from "src/services/level.service";
 import type { LevelFull } from "src/services/level.service";
 import { LevelService } from "src/services/level.service";
+import type { ReviewSearchQuery } from "src/services/review.service";
 import EngineLink from "src/shared/components/EngineLink";
 import GenreLink from "src/shared/components/GenreLink";
 import Loader from "src/shared/components/Loader";
@@ -25,7 +25,9 @@ import { EMPTY_INPUT_PLACEHOLDER } from "src/shared/utils";
 
 const LevelPage = () => {
   const { levelId } = useParams();
-  const [reviewsQuery, setReviewsQuery] = useState<ReviewQuery>({
+  const [reviewsSearchQuery, setReviewsSearchQuery] = useState<
+    ReviewSearchQuery
+  >({
     levels: [+levelId],
     page: DISABLE_PAGING,
     sort: "-created",
@@ -201,8 +203,8 @@ const LevelPage = () => {
             showLevels={false}
             showDetails={true}
             showAuthors={true}
-            query={reviewsQuery}
-            onQueryChange={setReviewsQuery}
+            searchQuery={reviewsSearchQuery}
+            onSearchQueryChange={setReviewsSearchQuery}
           />
         </section>
       </div>

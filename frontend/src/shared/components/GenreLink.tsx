@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import type { Genre } from "src/services/level.service";
+import type { Genre } from "src/services/genre.service";
 
 interface GenreLinkProps {
   genre: Genre;

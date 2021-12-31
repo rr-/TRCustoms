@@ -1,22 +1,23 @@
 import "./TagsTable.css";
 import { useQuery } from "react-query";
-import type { Tag } from "src/services/level.service";
-import type { TagList } from "src/services/level.service";
-import type { TagQuery } from "src/services/level.service";
-import { LevelService } from "src/services/level.service";
+import type { Tag } from "src/services/tag.service";
+import type { TagSearchResult } from "src/services/tag.service";
+import type { TagSearchQuery } from "src/services/tag.service";
+import { TagService } from "src/services/tag.service";
 import type { DataTableColumn } from "src/shared/components/DataTable";
 import { DataTable } from "src/shared/components/DataTable";
 import TagLink from "src/shared/components/TagLink";
 import { formatDate } from "src/shared/utils";
 
 interface TagsTableProps {
-  query: TagQuery | null;
-  onQueryChange?: (query: TagQuery) => any | null;
+  searchQuery: TagSearchQuery | null;
+  onSearchQueryChange?: (searchQuery: TagSearchQuery) => any | null;
 }
 
-const TagsTable = ({ query, onQueryChange }: TagsTableProps) => {
-  const result = useQuery<TagList, Error>(["tags", query], async () =>
-    LevelService.getTags(query)
+const TagsTable = ({ searchQuery, onSearchQueryChange }: TagsTableProps) => {
+  const result = useQuery<TagSearchResult, Error>(
+    ["tags", searchQuery],
+    async () => TagService.searchTags(searchQuery)
   );
 
   const columns: DataTableColumn<Tag>[] = [
@@ -54,9 +55,13 @@ const TagsTable = ({ query, onQueryChange }: TagsTableProps) => {
       result={result}
       columns={columns}
       itemKey={itemKey}
-      sort={query.sort}
-      onSortChange={(sort) => onQueryChange?.({ ...query, sort: sort })}
-      onPageChange={(page) => onQueryChange?.({ ...query, page: page })}
+      sort={searchQuery.sort}
+      onSortChange={(sort) =>
+        onSearchQueryChange?.({ ...searchQuery, sort: sort })
+      }
+      onPageChange={(page) =>
+        onSearchQueryChange?.({ ...searchQuery, page: page })
+      }
     />
   );
 };

@@ -1,11 +1,10 @@
 import { fetchJSON } from "src/shared/client";
 import { fetchMultipart } from "src/shared/client";
 import { API_URL } from "src/shared/constants";
-import type { GenericQuery } from "src/shared/types";
+import type { GenericSearchQuery } from "src/shared/types";
 import type { PagedResponse } from "src/shared/types";
-import { getGenericQuery } from "src/shared/utils";
-
-interface UserQuery extends GenericQuery {}
+import { GenericSearchResult } from "src/shared/types";
+import { getGenericSearchQuery } from "src/shared/utils";
 
 interface User {
   id: number;
@@ -23,6 +22,8 @@ interface User {
 }
 
 interface UserList extends PagedResponse<User> {}
+interface UserSearchQuery extends GenericSearchQuery {}
+interface UserSearchResult extends GenericSearchResult<UserSearchQuery, User> {}
 
 const getCurrentUser = async (): Promise<User | null> => {
   let data;
@@ -124,11 +125,14 @@ const register = async ({
   });
 };
 
-const getUsers = async (query: UserQuery): Promise<UserList | null> => {
-  return await fetchJSON<UserList>(`${API_URL}/users/`, {
-    query: getGenericQuery(query),
+const searchUsers = async (
+  searchQuery: UserSearchQuery
+): Promise<UserSearchResult | null> => {
+  const result = await fetchJSON<UserList>(`${API_URL}/users/`, {
+    query: getGenericSearchQuery(searchQuery),
     method: "GET",
   });
+  return { searchQuery: searchQuery, ...result };
 };
 
 const UserService = {
@@ -138,8 +142,8 @@ const UserService = {
   getCurrentUser,
   getUserById,
   getUserByUsername,
-  getUsers,
+  searchUsers,
 };
 
-export type { User, UserList, UserQuery };
+export type { User, UserList, UserSearchQuery, UserSearchResult };
 export { UserService };
