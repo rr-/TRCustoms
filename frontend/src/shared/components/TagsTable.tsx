@@ -1,7 +1,5 @@
 import "./TagsTable.css";
-import { useQuery } from "react-query";
 import type { Tag } from "src/services/tag.service";
-import type { TagSearchResult } from "src/services/tag.service";
 import type { TagSearchQuery } from "src/services/tag.service";
 import { TagService } from "src/services/tag.service";
 import type { DataTableColumn } from "src/shared/components/DataTable";
@@ -15,11 +13,6 @@ interface TagsTableProps {
 }
 
 const TagsTable = ({ searchQuery, onSearchQueryChange }: TagsTableProps) => {
-  const result = useQuery<TagSearchResult, Error>(
-    ["tags", searchQuery],
-    async () => TagService.searchTags(searchQuery)
-  );
-
   const columns: DataTableColumn<Tag>[] = [
     {
       name: "name",
@@ -52,16 +45,11 @@ const TagsTable = ({ searchQuery, onSearchQueryChange }: TagsTableProps) => {
   return (
     <DataTable
       className="TagsTable"
-      result={result}
       columns={columns}
       itemKey={itemKey}
-      sort={searchQuery.sort}
-      onSortChange={(sort) =>
-        onSearchQueryChange?.({ ...searchQuery, sort: sort })
-      }
-      onPageChange={(page) =>
-        onSearchQueryChange?.({ ...searchQuery, page: page })
-      }
+      searchQuery={searchQuery}
+      searchFunc={TagService.searchTags}
+      onSearchQueryChange={onSearchQueryChange}
     />
   );
 };

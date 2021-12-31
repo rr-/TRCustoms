@@ -38,8 +38,9 @@ const UserPage = () => {
     }
   );
 
-  const result = useQuery<User, Error>(["users", userId], async () =>
-    UserService.getUserById(+userId)
+  const result = useQuery<User, Error>(
+    [UserService.getUserById, userId],
+    async () => UserService.getUserById(+userId)
   );
 
   if (result.error) {

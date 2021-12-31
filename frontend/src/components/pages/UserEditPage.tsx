@@ -12,7 +12,7 @@ const UserEditPage = () => {
   const { userId } = useParams();
 
   const result = useQuery<User, Error>(
-    ["user", userId],
+    [UserService.getUserById, userId],
     async () => await UserService.getUserById(+userId)
   );
 

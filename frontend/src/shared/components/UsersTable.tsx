@@ -1,7 +1,5 @@
 import "./UsersTable.css";
-import { useQuery } from "react-query";
 import type { User } from "src/services/user.service";
-import type { UserSearchResult } from "src/services/user.service";
 import type { UserSearchQuery } from "src/services/user.service";
 import { UserService } from "src/services/user.service";
 import type { DataTableColumn } from "src/shared/components/DataTable";
@@ -16,11 +14,6 @@ interface UsersTableProps {
 }
 
 const UsersTable = ({ searchQuery, onSearchQueryChange }: UsersTableProps) => {
-  const result = useQuery<UserSearchResult, Error>(
-    ["users", searchQuery],
-    async () => UserService.searchUsers(searchQuery)
-  );
-
   const columns: DataTableColumn<User>[] = [
     {
       name: "username",
@@ -67,16 +60,11 @@ const UsersTable = ({ searchQuery, onSearchQueryChange }: UsersTableProps) => {
   return (
     <DataTable
       className="UsersTable"
-      result={result}
       columns={columns}
       itemKey={itemKey}
-      sort={searchQuery.sort}
-      onSortChange={(sort) =>
-        onSearchQueryChange?.({ ...searchQuery, sort: sort })
-      }
-      onPageChange={(page) =>
-        onSearchQueryChange?.({ ...searchQuery, page: page })
-      }
+      searchQuery={searchQuery}
+      searchFunc={UserService.searchUsers}
+      onSearchQueryChange={onSearchQueryChange}
     />
   );
 };

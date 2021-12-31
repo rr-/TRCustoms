@@ -15,6 +15,7 @@ import UserLink from "src/shared/components/UserLink";
 import { avg } from "src/shared/math";
 import { round } from "src/shared/math";
 import { formatDate } from "src/shared/utils";
+import { EMPTY_INPUT_PLACEHOLDER } from "src/shared/utils";
 
 interface ReviewsTableProps {
   showLevels: boolean;
@@ -32,7 +33,7 @@ const ReviewsTable = ({
   onSearchQueryChange,
 }: ReviewsTableProps) => {
   const result = useQuery<ReviewSearchResult, Error>(
-    ["reviews", searchQuery],
+    [ReviewService.searchReviews, searchQuery],
     async () => ReviewService.searchReviews(searchQuery)
   );
 
@@ -43,6 +44,12 @@ const ReviewsTable = ({
   if (result.isLoading || !result.data) {
     return <Loader />;
   }
+
+  const getAverage = (source, mapper) => {
+    return source?.length
+      ? round(avg(source.map(mapper)), 2)
+      : EMPTY_INPUT_PLACEHOLDER;
+  };
 
   const columns: DataTableColumn<Review>[] = [
     ...(showLevels
@@ -72,9 +79,9 @@ const ReviewsTable = ({
       itemElement: (review) => `${review.rating_gameplay}`,
       footer: () => (
         <>
-          {round(
-            avg(result.data.results.map((result) => result.rating_gameplay)),
-            2
+          {getAverage(
+            result?.data?.results,
+            (result) => result.rating_gameplay
           )}
         </>
       ),
@@ -86,10 +93,7 @@ const ReviewsTable = ({
       itemElement: (review) => `${review.rating_enemies}`,
       footer: () => (
         <>
-          {round(
-            avg(result.data.results.map((result) => result.rating_enemies)),
-            2
-          )}
+          {getAverage(result?.data?.results, (result) => result.rating_enemies)}
         </>
       ),
     },
@@ -100,9 +104,9 @@ const ReviewsTable = ({
       itemElement: (review) => `${review.rating_atmosphere}`,
       footer: () => (
         <>
-          {round(
-            avg(result.data.results.map((result) => result.rating_atmosphere)),
-            2
+          {getAverage(
+            result?.data?.results,
+            (result) => result.rating_atmosphere
           )}
         </>
       ),
@@ -114,9 +118,9 @@ const ReviewsTable = ({
       itemElement: (review) => `${review.rating_lighting}`,
       footer: () => (
         <>
-          {round(
-            avg(result.data.results.map((result) => result.rating_lighting)),
-            2
+          {getAverage(
+            result?.data?.results,
+            (result) => result.rating_lighting
           )}
         </>
       ),
@@ -136,16 +140,11 @@ const ReviewsTable = ({
       <SectionHeader>Legacy ratings</SectionHeader>
       <DataTable
         className="ReviewsTable"
-        result={result}
         columns={columns}
         itemKey={itemKey}
-        sort={searchQuery.sort}
-        onSortChange={(sort) =>
-          onSearchQueryChange?.({ ...searchQuery, sort: sort })
-        }
-        onPageChange={(page) =>
-          onSearchQueryChange?.({ ...searchQuery, page: page })
-        }
+        searchQuery={searchQuery}
+        searchFunc={ReviewService.searchReviews}
+        onSearchQueryChange={onSearchQueryChange}
       />
 
       {showDetails && (
