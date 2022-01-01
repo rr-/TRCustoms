@@ -1,11 +1,8 @@
-.TopNavBar--primary--userPicLink {
-  display: inline-flex;
-  align-items: center;
-}
 .TopNavBar--primary--userPic {
   max-width: 2rem;
   max-height: 2rem;
   margin-right: 0.5rem;
+  vertical-align: middle;
 }
 .TopNavBar--list {
   margin: 0;
