@@ -23,6 +23,8 @@ body {
   max-width: 80rem;
   margin: 0 auto;
   text-align: left;
+  /* disable scrollbar jumping */
+  padding-left: calc(100vw - 100%);
 }
 
 a {
