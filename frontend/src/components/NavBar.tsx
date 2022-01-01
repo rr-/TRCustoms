@@ -80,9 +80,6 @@ const NavBar = () => {
                     </li>
                   </>
                 )}
-                <li className="TopNavBar--listItem">
-                  <Link to={"/settings"}>Settings</Link>
-                </li>
               </ul>
             </nav>
           </div>
@@ -109,7 +106,13 @@ const NavBar = () => {
                 </PermissionGuard>
               </ul>
             </nav>
-            <div className="NavBar NavBar--right"></div>
+            <div className="NavBar NavBar--right">
+              <ul className="TopNavBar--list">
+                <li className="TopNavBar--listItem">
+                  <NavLink to={"/settings"}>Settings</NavLink>
+                </li>
+              </ul>
+            </div>
           </div>
         </div>
       </div>
