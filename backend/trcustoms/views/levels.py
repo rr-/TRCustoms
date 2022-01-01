@@ -22,6 +22,7 @@ def get_level_queryset():
             "difficulty",
             "last_file",
         )
+        .filter(is_approved=True)
         .distinct()
     )
 

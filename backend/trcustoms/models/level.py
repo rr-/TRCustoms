@@ -32,6 +32,8 @@ class Level(DatesInfo):
         LevelDuration, blank=True, null=True, on_delete=models.SET_NULL
     )
 
+    is_approved = models.BooleanField(default=False)
+
     # denormalized fields for faster db lookups
     download_count = models.IntegerField(default=0)
     last_file = models.OneToOneField(
