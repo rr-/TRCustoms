@@ -132,6 +132,7 @@ def process_level_basic_data(obj_id: int, trle_level: TRLELevel) -> Level:
             ).first(),
             engine=engine,
         ),
+        is_approved=True,
     )
     if level.created.date() != trle_level.release_date:
         level.created = trle_level.release_date

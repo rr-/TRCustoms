@@ -130,6 +130,7 @@ class LevelAdmin(admin.ModelAdmin):
         "name",
         "uploader",
         "download_count",
+        "is_approved",
         "created",
         "last_updated",
     ]
