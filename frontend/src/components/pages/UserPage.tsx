@@ -73,7 +73,9 @@ const UserPage = () => {
         <SidebarBox
           actions={
             <PermissionGuard require={"canEditUsers"} entity={user}>
-              <PushButton to={`/users/{user.id}/edit`}>Edit profile</PushButton>
+              <PushButton to={`/users/${user.id}/edit`}>
+                Edit profile
+              </PushButton>
             </PermissionGuard>
           }
         >
