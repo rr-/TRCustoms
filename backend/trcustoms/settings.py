@@ -66,19 +66,32 @@ TEMPLATES = [
 LOGGING = {
     "version": 1,
     "disable_existing_loggers": False,
+    "filters": {
+        "require_debug_true": {
+            "()": "django.utils.log.RequireDebugTrue",
+        }
+    },
     "handlers": {
         "console": {
             "class": "logging.StreamHandler",
         },
-    },
-    "loggers": {
-        "trcustoms": {
-            "handlers": ["console"],
+        "sql_console": {
+            "class": "logging.StreamHandler",
+            "filters": ["require_debug_true"],
             "level": "DEBUG",
         },
     },
+    "loggers": {
+        "trcustoms": {
+            "level": "DEBUG",
+            "handlers": ["console"],
+        },
+        "django.db.backends": {
+            "level": "DEBUG",
+            "handlers": ["sql_console"],
+        },
+    },
 }
-
 
 WSGI_APPLICATION = "trcustoms.wsgi.application"
 
