@@ -48,15 +48,8 @@ class LevelLiteSerializer(serializers.ModelSerializer):
 
     def get_last_file(self, instance: Level) -> dict[str, Any] | None:
         """Get last file ID from the LevelViewSet's annotated queryset."""
-        if instance.last_file_id:
-            return LevelFileSerializer(
-                instance=LevelFile(
-                    id=instance.last_file_id,
-                    version=instance.last_file_version,
-                    created=instance.last_file_created,
-                    size=instance.last_file_size,
-                )
-            ).data
+        if instance.last_file:
+            return LevelFileSerializer(instance=instance.last_file).data
         return None
 
     class Meta:

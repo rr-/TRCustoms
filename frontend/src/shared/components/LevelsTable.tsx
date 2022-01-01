@@ -81,7 +81,7 @@ const LevelsTable = ({
     },
     {
       name: "size",
-      sortKey: "last_file_size",
+      sortKey: "last_file__size",
       label: "Size",
       itemElement: (level) => formatFileSize(level.last_file?.size),
     },
