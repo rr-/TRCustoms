@@ -32,7 +32,15 @@ class Level(DatesInfo):
         LevelDuration, blank=True, null=True, on_delete=models.SET_NULL
     )
 
+    # denormalized fields for faster db lookups
     download_count = models.IntegerField(default=0)
+    last_file = models.OneToOneField(
+        "LevelFile",
+        on_delete=models.SET_NULL,
+        blank=True,
+        null=True,
+        related_name="+",
+    )
 
     class Meta:
         ordering = ["-created"]

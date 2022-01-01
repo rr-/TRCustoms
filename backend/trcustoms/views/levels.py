@@ -1,4 +1,3 @@
-from django.db.models import F, OuterRef, Subquery
 from django.shortcuts import get_list_or_404
 from rest_framework import filters, mixins, viewsets
 from rest_framework.decorators import action
@@ -6,52 +5,22 @@ from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 
 from trcustoms.mixins import MultiSerializerMixin
-from trcustoms.models import Level, LevelFile, LevelMedium
+from trcustoms.models import Level, LevelMedium
 from trcustoms.serializers import LevelFullSerializer, LevelLiteSerializer
 from trcustoms.utils import parse_ids, stream_file_field
 
 
 def get_level_queryset():
-    last_file_size = Subquery(
-        LevelFile.objects.filter(
-            level_id=OuterRef("id"),
-        )
-        .order_by("-version")
-        .values("size")[:1]
-    )
-
-    last_file_created = Subquery(
-        LevelFile.objects.filter(
-            level_id=OuterRef("id"),
-        )
-        .order_by("-version")
-        .values("created")[:1]
-    )
-
-    last_file_id = Subquery(
-        LevelFile.objects.filter(
-            level_id=OuterRef("id"),
-        )
-        .order_by("-version")
-        .values("id")[:1]
-    )
-
-    last_file_version = Subquery(
-        LevelFile.objects.filter(
-            level_id=OuterRef("id"),
-        )
-        .order_by("-version")
-        .values("version")[:1]
-    )
-
     return (
         Level.objects.all()
-        .annotate(
-            engine_name=F("engine__name"),
-            last_file_id=last_file_id,
-            last_file_created=last_file_created,
-            last_file_size=last_file_size,
-            last_file_version=last_file_version,
+        .prefetch_related(
+            "engine",
+            "authors",
+            "genres",
+            "tags",
+            "duration",
+            "difficulty",
+            "last_file",
         )
         .distinct()
     )
@@ -76,7 +45,7 @@ class LevelViewSet(
         "created",
         "download_count",
         "last_updated",
-        "last_file_size",
+        "last_file__size",
     ]
     search_fields = [
         "name",
