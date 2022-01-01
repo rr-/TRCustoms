@@ -32,8 +32,10 @@ class LevelFileSerializer(serializers.ModelSerializer):
         model = LevelFile
         fields = ["id", "version", "size", "created", "url"]
 
-    def get_url(self, instance) -> str:
-        return f"/api/level_files/{instance.id}/download"
+    def get_url(self, instance) -> str | None:
+        if instance.file:
+            return f"/api/level_files/{instance.id}/download"
+        return None
 
 
 class LevelLiteSerializer(serializers.ModelSerializer):

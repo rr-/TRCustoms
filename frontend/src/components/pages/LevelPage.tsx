@@ -48,6 +48,10 @@ const LevelPage = () => {
   }
 
   const level = result.data;
+  const downloadableFiles = level.files.filter((file) => !!file.url);
+
+  const showFileGoneAlert = () =>
+    alert("This file is no longer available on our website.");
 
   return (
     <div id="LevelPage">
@@ -63,11 +67,15 @@ const LevelPage = () => {
         <SidebarBox
           actions={
             <>
-              {!!level.files.length && (
-                <PushButton target="_blank" to={level.files[0].url}>
+              {downloadableFiles.length ? (
+                <PushButton target="_blank" to={downloadableFiles[0].url}>
                   Download
                 </PushButton>
-              )}
+              ) : level.files.length ? (
+                <PushButton onClick={() => showFileGoneAlert()}>
+                  Download
+                </PushButton>
+              ) : null}
             </>
           }
         >
@@ -172,9 +180,18 @@ const LevelPage = () => {
             {level.files.map((file) => (
               <Fragment key={file.id}>
                 <dt className="LevelPage--fileTableTerm">
-                  <Link target="_blank" to={file.url}>
-                    Version {file.version}
-                  </Link>
+                  {file.url ? (
+                    <Link target="_blank" to={file.url}>
+                      Version {file.version}
+                    </Link>
+                  ) : (
+                    <button
+                      className="link"
+                      onClick={() => showFileGoneAlert()}
+                    >
+                      Version {file.version}
+                    </button>
+                  )}
                 </dt>
                 <dd>{formatDate(file.created)}</dd>
               </Fragment>
