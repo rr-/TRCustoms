@@ -89,7 +89,7 @@ const LevelsTable = ({
       name: "download",
       label: "Download",
       itemElement: (level) =>
-        level.last_file ? (
+        level.last_file?.url ? (
           <Link target="_blank" to={level.last_file.url}>
             Download
           </Link>

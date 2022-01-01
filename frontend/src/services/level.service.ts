@@ -37,7 +37,7 @@ interface LevelFile {
   version: number;
   size: number;
   created: string;
-  url: string;
+  url: string | null;
 }
 
 interface LevelDifficulty {
