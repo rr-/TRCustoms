@@ -23,6 +23,14 @@ const getPagesShown = (
 
   return Array.from(pages)
     .sort((a, b) => a - b)
+    .reduce(
+      (acc: number[], page: number) => [
+        ...acc,
+        ...(acc.at(-1) + 2 === page ? [page - 1] : []),
+        page,
+      ],
+      []
+    )
     .filter((page) => page >= 1 && page <= lastPage);
 };
 
