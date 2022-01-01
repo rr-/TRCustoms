@@ -7,7 +7,6 @@ import { NavLink } from "react-router-dom";
 import { useLocation } from "react-router-dom";
 import { useResolvedPath } from "react-router-dom";
 import { PermissionGuard } from "src/shared/components/PermissionGuard";
-import { ThemeManager } from "src/shared/components/ThemeManager";
 import UserPicture from "src/shared/components/UserPicture";
 import { UserContext } from "src/shared/contexts/UserContext";
 
@@ -51,37 +50,40 @@ const NavBar = () => {
             </div>
 
             <nav className="NavBar--right">
-              {user ? (
-                <>
-                  <Link
-                    className="TopNavBar--primary--userPicLink"
-                    to={`/users/${user.id}`}
-                  >
-                    <UserPicture
-                      className="TopNavBar--primary--userPic"
-                      user={user}
-                    />
-                    {user.username}
-                  </Link>
-                  <ul className="TopNavBar--list">
+              <ul className="TopNavBar--list">
+                {user ? (
+                  <>
+                    <li className="TopNavBar--listItem">
+                      <Link
+                        className="TopNavBar--primary--userPicLink"
+                        to={`/users/${user.id}`}
+                      >
+                        <UserPicture
+                          className="TopNavBar--primary--userPic"
+                          user={user}
+                        />
+                        {user.username}
+                      </Link>
+                    </li>
                     <li className="TopNavBar--listItem">
                       <Link to={"/logout"}>Log out</Link>
                     </li>
-                  </ul>
-                </>
-              ) : (
-                <>
-                  <p>Not logged in.</p>
-                  <ul className="TopNavBar--list">
+                  </>
+                ) : (
+                  <>
+                    <li className="TopNavBar--listItem">Not logged in.</li>
                     <li className="TopNavBar--listItem">
                       <Link to={"/login"}>Log in</Link>
                     </li>
                     <li className="TopNavBar--listItem">
                       <Link to={"/register"}>Register</Link>
                     </li>
-                  </ul>
-                </>
-              )}
+                  </>
+                )}
+                <li className="TopNavBar--listItem">
+                  <Link to={"/settings"}>Settings</Link>
+                </li>
+              </ul>
             </nav>
           </div>
         </div>
@@ -107,9 +109,7 @@ const NavBar = () => {
                 </PermissionGuard>
               </ul>
             </nav>
-            <div className="NavBar NavBar--right">
-              <ThemeManager />
-            </div>
+            <div className="NavBar NavBar--right"></div>
           </div>
         </div>
       </div>

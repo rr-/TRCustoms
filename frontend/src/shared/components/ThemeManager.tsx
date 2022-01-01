@@ -1,6 +1,6 @@
-import "./ThemeManager.css";
+import { useCallback } from "react";
 import { useEffect } from "react";
-import { useState } from "react";
+import { createLocalStorageStateHook } from "use-local-storage-state";
 
 interface Theme {
   name: string;
@@ -136,43 +136,40 @@ const themes: Array<Theme> = [
   },
 ];
 
+const useTheme = createLocalStorageStateHook("theme", themes[0].name);
+
+const getAllThemes = () => {
+  return themes;
+};
+
 const ThemeManager = () => {
-  const [activeTheme, setActiveTheme] = useState<Theme>(
-    themes.find((theme) => theme.name === localStorage.getItem("theme")) ||
-      themes[0]
+  const [activeThemeName, setActiveThemeName] = useTheme();
+
+  const getActiveTheme = useCallback((): Theme => {
+    return themes.find((theme) => theme.name === activeThemeName) || themes[0];
+  }, [activeThemeName]);
+
+  const applyTheme = useCallback(
+    (theme: Theme) => {
+      for (const [key, value] of Object.entries(theme.cssVariables)) {
+        const cssKey = `--${key}`;
+        const cssValue = value;
+        document.body.style.setProperty(cssKey, cssValue);
+      }
+      if (theme.name !== getActiveTheme().name) {
+        setActiveThemeName(theme.name);
+      }
+    },
+    [getActiveTheme, setActiveThemeName]
   );
 
   useEffect(() => {
-    for (const [key, value] of Object.entries(activeTheme.cssVariables)) {
-      const cssKey = `--${key}`;
-      const cssValue = value;
-      document.body.style.setProperty(cssKey, cssValue);
-    }
-    localStorage.setItem("theme", activeTheme.name);
-  }, [activeTheme]);
+    const theme = getActiveTheme();
+    applyTheme(theme);
+  }, [getActiveTheme, applyTheme]);
 
-  return (
-    <div className="ThemeManager">
-      <ul className="ThemeManager--list">
-        {themes.map((theme) => (
-          <li key={theme.name} className="ThemeManager--listItem">
-            <button
-              type="button"
-              className="ThemeManager--switch"
-              title={theme.name}
-              onClick={() => setActiveTheme(theme)}
-              style={{
-                borderTopColor: theme.primaryColor,
-                borderLeftColor: theme.primaryColor,
-                borderRightColor: theme.secondaryColor,
-                borderBottomColor: theme.secondaryColor,
-              }}
-            />
-          </li>
-        ))}
-      </ul>
-    </div>
-  );
+  return <></>;
 };
 
-export { ThemeManager };
+export { useTheme, getAllThemes };
+export default ThemeManager;

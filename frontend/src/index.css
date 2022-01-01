@@ -98,6 +98,9 @@ button.link:focus {
   outline: 2px solid var(--outline-color);
   isolation: isolate;
 }
+button.link:hover {
+  color: var(--text-color);
+}
 
 #Content {
   margin-top: 1rem;

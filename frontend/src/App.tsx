@@ -8,16 +8,19 @@ import LevelPage from "src/components/pages/LevelPage";
 import LoginPage from "src/components/pages/LoginPage";
 import LogoutPage from "src/components/pages/LogoutPage";
 import RegisterPage from "src/components/pages/RegisterPage";
+import SettingsPage from "src/components/pages/SettingsPage";
 import TagListPage from "src/components/pages/TagListPage";
 import UserEditPage from "src/components/pages/UserEditPage";
 import UserListPage from "src/components/pages/UserListPage";
 import UserPage from "src/components/pages/UserPage";
 import ScrollToTop from "src/shared/components/ScrollToTop";
+import ThemeManager from "src/shared/components/ThemeManager";
 import { UserContextProvider } from "src/shared/contexts/UserContext";
 
 function App() {
   return (
     <UserContextProvider>
+      <ThemeManager />
       <ScrollToTop />
       <NavBar />
       <main id="Content" className="MainContainer">
@@ -31,6 +34,7 @@ function App() {
           <Route path="/login" element={<LoginPage />} />
           <Route path="/logout" element={<LogoutPage />} />
           <Route path="/register" element={<RegisterPage />} />
+          <Route path="/settings" element={<SettingsPage />} />
           <Route path="/users/:userId" element={<UserPage />} />
           <Route path="/users/:userId/edit" element={<UserEditPage />} />
         </Routes>
