@@ -20,6 +20,7 @@ import SidebarBox from "src/shared/components/SidebarBox";
 import TagLink from "src/shared/components/TagLink";
 import UserLink from "src/shared/components/UserLink";
 import { DISABLE_PAGING } from "src/shared/constants";
+import { formatFileSize } from "src/shared/utils";
 import { formatDate } from "src/shared/utils";
 import { EMPTY_INPUT_PLACEHOLDER } from "src/shared/utils";
 
@@ -69,7 +70,7 @@ const LevelPage = () => {
             <>
               {downloadableFiles.length ? (
                 <PushButton target="_blank" to={downloadableFiles[0].url}>
-                  Download
+                  Download ({formatFileSize(downloadableFiles[0].size)})
                 </PushButton>
               ) : level.files.length ? (
                 <PushButton onClick={() => showFileGoneAlert()}>
