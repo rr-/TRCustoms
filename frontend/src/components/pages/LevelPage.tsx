@@ -2,7 +2,6 @@ import "./LevelPage.css";
 import { Fragment } from "react";
 import { useState } from "react";
 import { useQuery } from "react-query";
-import { Link } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import type { LevelFull } from "src/services/level.service";
 import { LevelService } from "src/services/level.service";
@@ -182,16 +181,16 @@ const LevelPage = () => {
               <Fragment key={file.id}>
                 <dt className="LevelPage--fileTableTerm">
                   {file.url ? (
-                    <Link target="_blank" to={file.url}>
+                    <PushButton isPlain={true} target="_blank" to={file.url}>
                       Version {file.version}
-                    </Link>
+                    </PushButton>
                   ) : (
-                    <button
-                      className="link"
+                    <PushButton
+                      isPlain={true}
                       onClick={() => showFileGoneAlert()}
                     >
                       Version {file.version}
-                    </button>
+                    </PushButton>
                   )}
                 </dt>
                 <dd>{formatDate(file.created)}</dd>
