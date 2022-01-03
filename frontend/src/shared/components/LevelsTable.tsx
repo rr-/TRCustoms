@@ -1,11 +1,11 @@
 import "./LevelsTable.css";
-import { Link } from "react-router-dom";
 import type { Level } from "src/services/level.service";
 import type { LevelSearchQuery } from "src/services/level.service";
 import { LevelService } from "src/services/level.service";
 import type { DataTableColumn } from "src/shared/components/DataTable";
 import { DataTable } from "src/shared/components/DataTable";
 import LevelLink from "src/shared/components/LevelLink";
+import PushButton from "src/shared/components/PushButton";
 import UserLink from "src/shared/components/UserLink";
 import { formatDate } from "src/shared/utils";
 import { formatFileSize } from "src/shared/utils";
@@ -90,9 +90,9 @@ const LevelsTable = ({
       label: "Download",
       itemElement: (level) =>
         level.last_file?.url ? (
-          <Link target="_blank" to={level.last_file.url}>
+          <PushButton isPlain={true} target="_blank" to={level.last_file.url}>
             Download
-          </Link>
+          </PushButton>
         ) : (
           EMPTY_INPUT_PLACEHOLDER
         ),
