@@ -1,12 +1,10 @@
 import re
-import uuid
 from collections.abc import Iterable
 from pathlib import Path
 from typing import Any
 
 from django.db import models
 from django.http import FileResponse
-from django.utils.deconstruct import deconstructible
 from rest_framework import status
 
 
@@ -71,16 +69,6 @@ def stream_file_field(
     return FileResponse(
         field.open("rb"), as_attachment=as_attachment, filename=filename
     )
-
-
-@deconstructible
-class RandomFileName:
-    def __init__(self, path: str) -> None:
-        self.path = Path(path)
-
-    def __call__(self, _, filename):
-        extension = Path(filename).suffix
-        return str(self.path / f"{uuid.uuid4()}{extension}")
 
 
 def parse_ids(source: str | None) -> list[int]:

@@ -2,8 +2,6 @@
 
 from django.db import migrations, models
 
-import trcustoms.utils
-
 
 class Migration(migrations.Migration):
 
@@ -18,7 +16,6 @@ class Migration(migrations.Migration):
             field=models.FileField(
                 blank=True,
                 null=True,
-                upload_to=trcustoms.utils.RandomFileName("levels"),
             ),
         ),
         migrations.AlterField(
@@ -27,7 +24,6 @@ class Migration(migrations.Migration):
             field=models.ImageField(
                 blank=True,
                 null=True,
-                upload_to=trcustoms.utils.RandomFileName("level_images"),
             ),
         ),
         migrations.AlterField(
@@ -36,7 +32,6 @@ class Migration(migrations.Migration):
             field=models.ImageField(
                 blank=True,
                 null=True,
-                upload_to=trcustoms.utils.RandomFileName("avatars"),
             ),
         ),
     ]

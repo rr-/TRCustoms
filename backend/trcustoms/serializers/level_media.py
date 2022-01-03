@@ -11,4 +11,4 @@ class LevelMediumSerializer(serializers.ModelSerializer):
         fields = ["id", "url"]
 
     def get_url(self, instance) -> str:
-        return instance.image.url
+        return instance.file.content.url

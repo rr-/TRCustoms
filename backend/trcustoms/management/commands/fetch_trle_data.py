@@ -1,4 +1,5 @@
 import argparse
+import hashlib
 import logging
 import sys
 import tempfile
@@ -23,6 +24,7 @@ from trcustoms.models import (
     LevelLegacyReview,
     LevelMedium,
     LevelTag,
+    UploadedFile,
     User,
 )
 from trcustoms.trle_scraper import TRLELevel, TRLEScraper, TRLEUser
@@ -30,6 +32,15 @@ from trcustoms.utils import id_range, unbounded_range
 
 logger = logging.getLogger(__name__)
 P = TypeVar("P")
+
+
+def get_md5sum(path: Path) -> str:
+    md5 = hashlib.md5()
+    with path.open("rb") as handle:
+        chunk = handle.read(8192)
+        if chunk:
+            md5.update(chunk)
+    return md5.hexdigest()
 
 
 def repr_obj(obj: Any) -> str:
@@ -187,11 +198,19 @@ def process_level_images(level: Level, trle_level: TRLELevel) -> None:
     image_urls = [trle_level.main_image_url] + trle_level.screenshot_urls
     for pos, image_url in enumerate(image_urls):
         image_content = TRLEScraper().get_bytes(image_url)
+        md5sum = hashlib.md5(image_content).hexdigest()
+        uploaded_file, _created = UploadedFile.objects.get_or_create(
+            md5sum=md5sum,
+            defaults=dict(
+                upload_type=UploadedFile.UploadType.LEVEL_SCREENSHOT,
+                content=ContentFile(image_content, name=Path(image_url).name),
+            ),
+        )
         LevelMedium.objects.update_or_create(
             level=level,
             position=pos,
             defaults=dict(
-                image=ContentFile(image_content, name=Path(image_url).name)
+                file=uploaded_file,
             ),
         )
 
@@ -204,10 +223,17 @@ def process_level_files(level: Level, trle_level: TRLELevel) -> None:
                 trle_level.download_url, file=handle
             )
         if path.stat().st_size:
+            md5sum = get_md5sum(path)
             with path.open("rb") as handle:
+                uploaded_file, _created = UploadedFile.objects.get_or_create(
+                    md5sum=md5sum,
+                    defaults=dict(
+                        upload_type=UploadedFile.UploadType.LEVEL_FILE,
+                        content=File(handle, name=path.name),
+                    ),
+                )
                 LevelFile.objects.update_or_create(
-                    level=level,
-                    defaults=dict(file=File(handle, name=path.name)),
+                    level=level, defaults=dict(file=uploaded_file)
                 )
 
 

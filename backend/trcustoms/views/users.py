@@ -1,7 +1,6 @@
 from django.http import Http404
 from rest_framework import filters, mixins, status, viewsets
 from rest_framework.decorators import action
-from rest_framework.parsers import MultiPartParser
 from rest_framework.permissions import (
     AllowAny,
     BasePermission,
@@ -13,7 +12,7 @@ from rest_framework.response import Response
 
 from trcustoms.mixins import PermissionsMixin
 from trcustoms.models import User
-from trcustoms.serializers import UserPictureSerializer, UserSerializer
+from trcustoms.serializers import UserSerializer
 from trcustoms.utils import stream_file_field
 
 
@@ -74,23 +73,9 @@ class UserViewSet(
         serializer = self.get_serializer(user)
         return Response(serializer.data)
 
-    @action(
-        detail=True,
-        methods=["PATCH", "GET"],
-        serializer_class=UserPictureSerializer,
-        parser_classes=[MultiPartParser],
-    )
+    @action(detail=True)
     def picture(self, request, pk) -> Response:
         user = self.get_object()
-        if request.method == "PATCH":
-            serializer = self.serializer_class(
-                user, data=request.data, partial=True
-            )
-            if serializer.is_valid():
-                serializer.save()
-                return Response(serializer.data)
-            return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
-
         return stream_file_field(
-            user.picture, [user.username], as_attachment=False
+            user.new_picture.content, [user.username], as_attachment=False
         )
