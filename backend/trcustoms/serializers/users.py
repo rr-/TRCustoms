@@ -30,6 +30,7 @@ class UserSerializer(serializers.ModelSerializer):
             "is_active",
             "authored_level_count",
             "reviewed_level_count",
+            "new_picture",
         )
 
     username = serializers.CharField(
@@ -150,7 +151,7 @@ class UserSerializer(serializers.ModelSerializer):
         return User.objects.with_counts().get(pk=user.pk)
 
     def get_has_picture(self, instance: User) -> bool:
-        return bool(instance.picture)
+        return bool(instance.new_picture)
 
     def get_authored_level_count(self, instance: User) -> int:
         return instance.authored_level_count
@@ -158,16 +159,4 @@ class UserSerializer(serializers.ModelSerializer):
     def get_reviewed_level_count(self, instance: User) -> int:
         return instance.reviewed_level_count
 
-
-class UserPictureSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = User
-        fields = ["picture"]
-
-    def validate_picture(self, file):
-        max_file_size = 300 * 1024
-        if file.size > max_file_size:
-            raise serializers.ValidationError(
-                f"Maximum allowed size: {max_file_size/1024:.02f} KB"
-            )
-        return file
+    # TODO: validate picture

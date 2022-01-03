@@ -26,4 +26,6 @@ class LevelFileViewSet(viewsets.GenericViewSet):
         file.download_count += 1
         file.save()
 
-        return stream_file_field(file.file, parts, as_attachment=True)
+        return stream_file_field(
+            file.new_file.content, parts, as_attachment=True
+        )

@@ -16,11 +16,13 @@ from trcustoms.views import (
     LevelReviewViewSet,
     LevelTagViewSet,
     LevelViewSet,
+    UploadViewSet,
     UserViewSet,
 )
 
 router = DefaultRouter()
 router.register(r"users", UserViewSet)
+router.register(r"uploads", UploadViewSet, basename="uploads")
 router.register(r"levels", LevelViewSet)
 router.register(r"level_filters", LevelFilterViewSet, basename="level_filters")
 router.register(r"level_tags", LevelTagViewSet)

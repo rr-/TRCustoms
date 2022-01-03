@@ -1,11 +1,26 @@
+import hashlib
+
 from django.db.models.signals import post_save, pre_save
 from django.dispatch import receiver
 
-from trcustoms.models import LevelFile
+from trcustoms.models import LevelFile, UploadedFile
+
+
+@receiver(pre_save, sender=UploadedFile)
+def update_uploaded_file_checksum_and_size(sender, instance, **kwargs):
+    if instance.content:
+        md5 = hashlib.md5()
+        for chunk in instance.content.chunks():
+            md5.update(chunk)
+        instance.md5sum = md5.hexdigest()
+        instance.size = instance.content.size
+    else:
+        instance.md5sum = None
+        instance.size = 0
 
 
 @receiver(pre_save, sender=LevelFile)
-def update_file_size_and_version(sender, instance, **kwargs):
+def update_level_version(sender, instance, **kwargs):
     if instance.version is None:
         max_version = (
             instance.level.files.exclude(pk=instance.pk)
@@ -15,10 +30,6 @@ def update_file_size_and_version(sender, instance, **kwargs):
             or 0
         )
         instance.version = max_version + 1
-    if instance.file:
-        instance.size = instance.file.size
-    else:
-        instance.size = 0
 
 
 @receiver(post_save, sender=LevelFile)

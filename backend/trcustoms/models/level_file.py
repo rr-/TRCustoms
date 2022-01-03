@@ -1,18 +1,20 @@
 from django.db import models
 
 from trcustoms.models.level import Level
+from trcustoms.models.uploaded_file import UploadedFile
 from trcustoms.models.util import DatesInfo
-from trcustoms.utils import RandomFileName
 
 
 class LevelFile(DatesInfo):
     level = models.ForeignKey(
         Level, on_delete=models.CASCADE, related_name="files"
     )
-    file = models.FileField(
-        blank=True, null=True, upload_to=RandomFileName("levels")
+
+    # TODO: rename me
+    new_file = models.ForeignKey(
+        UploadedFile, blank=True, null=True, on_delete=models.SET_NULL
     )
-    size = models.IntegerField()
+
     version = models.IntegerField()
     download_count = models.IntegerField(default=0)
 

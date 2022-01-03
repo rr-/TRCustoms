@@ -1,6 +1,8 @@
 import { Formik } from "formik";
 import { Form } from "formik";
 import { useCallback } from "react";
+import { FileService } from "src/services/file.service";
+import { UploadType } from "src/services/file.service";
 import type { User } from "src/services/user.service";
 import { UserService } from "src/services/user.service";
 import { FetchError } from "src/shared/client";
@@ -49,13 +51,19 @@ const UserForm = ({ user, onGoBack, onSubmit }: UserFormProps) => {
           oldPassword: values.oldPassword || values.password,
           password: values.password,
           bio: values.bio,
+          picture: null,
         };
 
         if (user) {
-          let outUser = await UserService.update(user.id, payload);
           if (values.picture) {
-            await UserService.updatePicture(user.id, values.picture);
+            const uploadedFile = await FileService.uploadFile(
+              values.picture,
+              UploadType.UserPicture
+            );
+            payload.picture = uploadedFile.id;
           }
+
+          let outUser = await UserService.update(user.id, payload);
 
           onSubmit?.(outUser, values.password);
 
@@ -86,7 +94,7 @@ const UserForm = ({ user, onGoBack, onSubmit }: UserFormProps) => {
             oldPassword: error.data?.old_password,
             password: error.data?.password,
             bio: error.data?.bio,
-            picture: error.data?.picture,
+            picture: error.data?.new_picture,
           });
         } else {
           console.error(error);

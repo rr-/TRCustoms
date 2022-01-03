@@ -14,6 +14,7 @@ from trcustoms.models import (
     LevelLegacyReview,
     LevelMedium,
     LevelTag,
+    UploadedFile,
     User,
 )
 
@@ -57,7 +58,7 @@ class UserAdmin(BaseUserAdmin):
         "email",
         "is_active",
         "is_staff",
-        "picture",
+        "new_picture",
     ]
     readonly_fields = ["last_login", "date_joined"]
     list_display = [
@@ -135,7 +136,6 @@ class LevelAdmin(admin.ModelAdmin):
         "last_updated",
     ]
     list_filter = ["genres", "tags"]
-    group_by = ["tags"]
     form = LevelForm
     readonly_fields = ["download_count", "created", "last_updated"]
 
@@ -160,7 +160,7 @@ class LevelFileAdmin(admin.ModelAdmin):
         "last_updated",
     ]
     search_fields = ["level__name"]
-    readonly_fields = ["size", "created", "last_updated", "version"]
+    readonly_fields = ["created", "last_updated", "version"]
 
 
 @admin.register(LevelLegacyReview)
@@ -184,3 +184,24 @@ class LevelLegacyReviewAdmin(admin.ModelAdmin):
         "author__last_name",
     ]
     readonly_fields = ["created", "last_updated"]
+
+
+@admin.register(UploadedFile)
+class UploadedFileAdmin(admin.ModelAdmin):
+    list_filter = ["upload_type"]
+    list_display = [
+        "id",
+        "uploader",
+        "upload_type",
+        "content",
+        "md5sum",
+        "size",
+    ]
+    search_fields = [
+        "upload_type",
+        "md5sum",
+        "uploader__username",
+        "uploader__first_name",
+        "uploader__last_name",
+    ]
+    readonly_fields = ["md5sum", "size", "created", "last_updated"]

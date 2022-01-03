@@ -46,7 +46,7 @@ class LevelViewSet(
         "created",
         "download_count",
         "last_updated",
-        "last_file__size",
+        "last_file__new_file__size",
     ]
     search_fields = [
         "name",
@@ -84,4 +84,6 @@ class LevelViewSet(
     def screenshot(self, request, pk: int, position: int) -> Response:
         image = get_list_or_404(LevelMedium, level_id=pk, position=position)[0]
         parts = [f"{pk}", image.level.name, f"screenshot{position}"]
-        return stream_file_field(image.image, parts, as_attachment=False)
+        return stream_file_field(
+            image.file.content, parts, as_attachment=False
+        )

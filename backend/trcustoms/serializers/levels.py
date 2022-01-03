@@ -27,13 +27,19 @@ class LevelAuthorSerializer(serializers.ModelSerializer):
 
 class LevelFileSerializer(serializers.ModelSerializer):
     url = serializers.SerializerMethodField(read_only=True)
+    size = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
         model = LevelFile
         fields = ["id", "version", "size", "created", "url"]
 
+    def get_size(self, instance) -> int | None:
+        if instance.new_file:
+            return instance.new_file.size
+        return None
+
     def get_url(self, instance) -> str | None:
-        if instance.file:
+        if instance.new_file and instance.new_file.content:
             return f"/api/level_files/{instance.id}/download"
         return None
 

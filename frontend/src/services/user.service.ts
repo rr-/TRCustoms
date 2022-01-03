@@ -1,5 +1,4 @@
 import { fetchJSON } from "src/shared/client";
-import { fetchMultipart } from "src/shared/client";
 import { API_URL } from "src/shared/constants";
 import type { GenericSearchQuery } from "src/shared/types";
 import type { PagedResponse } from "src/shared/types";
@@ -58,6 +57,7 @@ interface UserCreatePayload {
   email: string;
   password: string;
   bio: string;
+  picture: number;
 }
 
 interface UserUpdatePayload extends UserCreatePayload {
@@ -74,6 +74,7 @@ const update = async (
     oldPassword,
     password,
     bio,
+    picture,
   }: UserUpdatePayload
 ): Promise<User> => {
   const data: { [key: string]: any } = {
@@ -89,18 +90,12 @@ const update = async (
   if (password) {
     data.password = password;
   }
+  if (picture) {
+    data.new_picture = picture;
+  }
   return await fetchJSON(`${API_URL}/users/${userId}/`, {
     method: "PATCH",
     data: data,
-  });
-};
-
-const updatePicture = async (userId: number, file: File): Promise<null> => {
-  const formData = new FormData();
-  formData.append("picture", file);
-  return await fetchMultipart(`${API_URL}/users/${userId}/picture/`, {
-    method: "PATCH",
-    data: formData,
   });
 };
 
@@ -111,17 +106,22 @@ const register = async ({
   email,
   password,
   bio,
+  picture,
 }: UserCreatePayload): Promise<User> => {
+  const data: { [key: string]: any } = {
+    username: username,
+    first_name: firstName,
+    last_name: lastName,
+    email: email,
+    password: password,
+    bio: bio,
+  };
+  if (picture) {
+    data.new_picture = picture;
+  }
   return await fetchJSON(`${API_URL}/users/`, {
     method: "POST",
-    data: {
-      username: username,
-      first_name: firstName,
-      last_name: lastName,
-      email: email,
-      password: password,
-      bio: bio,
-    },
+    data: data,
   });
 };
 
@@ -138,7 +138,6 @@ const searchUsers = async (
 const UserService = {
   register,
   update,
-  updatePicture,
   getCurrentUser,
   getUserById,
   getUserByUsername,

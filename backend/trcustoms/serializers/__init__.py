@@ -11,7 +11,8 @@ from .levels import (
     LevelLiteSerializer,
     LevelUploaderSerializer,
 )
-from .users import UserPictureSerializer, UserSerializer
+from .uploaded_files import UploadedFileSerializer
+from .users import UserSerializer
 
 __all__ = [
     "LevelAuthorSerializer",
@@ -28,6 +29,6 @@ __all__ = [
     "LevelTagFullSerializer",
     "LevelTagLiteSerializer",
     "LevelUploaderSerializer",
-    "UserPictureSerializer",
+    "UploadedFileSerializer",
     "UserSerializer",
 ]
