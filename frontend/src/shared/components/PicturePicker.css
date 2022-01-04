@@ -1,0 +1,31 @@
+.PicturePicker--dropArea {
+  display: block;
+  background: var(--background-color);
+  border: 3px dashed var(--button-background-color);
+  padding: 0.3em 0.5em;
+  line-height: 140%;
+  text-align: center;
+  cursor: pointer;
+  overflow: hidden;
+  word-wrap: break-word;
+}
+
+.PicturePicker--fileInput {
+  display: none;
+}
+
+.PicturePicker--fileInput:disabled + .PicturePicker--dropArea {
+  cursor: default;
+  opacity: 0.5;
+}
+
+.PicturePicker--fileInput:active + .PicturePicker--dropArea,
+.PicturePicker--fileInput:focus + .PicturePicker--dropArea,
+.PicturePicker--dropArea.active {
+  border-color: var(--text-color);
+}
+
+.PicturePicker--image {
+  max-height: 10rem;
+  max-width: 15rem;
+}

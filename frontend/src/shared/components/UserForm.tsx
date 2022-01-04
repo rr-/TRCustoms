@@ -1,14 +1,14 @@
 import { Formik } from "formik";
 import { Form } from "formik";
 import { useCallback } from "react";
-import { FileService } from "src/services/file.service";
 import { UploadType } from "src/services/file.service";
 import type { User } from "src/services/user.service";
 import { UserService } from "src/services/user.service";
 import { FetchError } from "src/shared/client";
+import BaseFormField from "src/shared/components/BaseFormField";
 import EmailFormField from "src/shared/components/EmailFormField";
 import PasswordFormField from "src/shared/components/PasswordFormField";
-import PictureFormField from "src/shared/components/PictureFormField";
+import PicturePicker from "src/shared/components/PicturePicker";
 import TextAreaFormField from "src/shared/components/TextAreaFormField";
 import TextFormField from "src/shared/components/TextFormField";
 import UserLink from "src/shared/components/UserLink";
@@ -37,8 +37,33 @@ const UserForm = ({ user, onGoBack, onSubmit }: UserFormProps) => {
     password: "",
     password2: "",
     bio: user?.bio || "",
-    picture: null,
+    picture: user?.picture || null,
   };
+
+  const handleError = useCallback(
+    (error, { setSubmitting, setStatus, setErrors }) => {
+      setSubmitting(false);
+      if (error instanceof FetchError) {
+        if (error.message) {
+          setStatus({ error: <>{makeSentence(error.message)}</> });
+        }
+        setErrors({
+          username: error.data?.username,
+          firstName: error.data?.first_name,
+          lastName: error.data?.last_name,
+          email: error.data?.email,
+          oldPassword: error.data?.old_password,
+          password: error.data?.password,
+          bio: error.data?.bio,
+          picture: error.data?.picture || error.data?.content,
+        });
+      } else {
+        console.error(error);
+        setStatus({ error: <>Unknown error.</> });
+      }
+    },
+    []
+  );
 
   const submit = useCallback(
     async (values, { setSubmitting, setStatus, setErrors }) => {
@@ -51,18 +76,10 @@ const UserForm = ({ user, onGoBack, onSubmit }: UserFormProps) => {
           oldPassword: values.oldPassword || values.password,
           password: values.password,
           bio: values.bio,
-          picture: null,
+          picture: values.picture,
         };
 
         if (user) {
-          if (values.picture) {
-            const uploadedFile = await FileService.uploadFile(
-              values.picture,
-              UploadType.UserPicture
-            );
-            payload.picture = uploadedFile.id;
-          }
-
           let outUser = await UserService.update(user.id, payload);
 
           onSubmit?.(outUser, values.password);
@@ -81,28 +98,10 @@ const UserForm = ({ user, onGoBack, onSubmit }: UserFormProps) => {
           onSubmit?.(outUser, values.password);
         }
       } catch (error) {
-        setSubmitting(false);
-        if (error instanceof FetchError) {
-          if (error.message) {
-            setStatus({ error: <>{makeSentence(error.message)}</> });
-          }
-          setErrors({
-            username: error.data?.username,
-            firstName: error.data?.first_name,
-            lastName: error.data?.last_name,
-            email: error.data?.email,
-            oldPassword: error.data?.old_password,
-            password: error.data?.password,
-            bio: error.data?.bio,
-            picture: error.data?.picture || error.data?.content,
-          });
-        } else {
-          console.error(error);
-          setStatus({ error: <>Unknown error.</> });
-        }
+        handleError(error, { setSubmitting, setStatus, setErrors });
       }
     },
-    [user, onSubmit]
+    [user, onSubmit, handleError]
   );
 
   const validate = (values) => {
@@ -151,7 +150,14 @@ const UserForm = ({ user, onGoBack, onSubmit }: UserFormProps) => {
 
   return (
     <Formik initialValues={initialValues} validate={validate} onSubmit={submit}>
-      {({ isSubmitting, status }) =>
+      {({
+        setErrors,
+        setSubmitting,
+        setStatus,
+        isSubmitting,
+        setFieldValue,
+        status,
+      }) =>
         !user && status?.success ? (
           <div className="FormFieldSuccess">{status.success}</div>
         ) : (
@@ -186,10 +192,22 @@ const UserForm = ({ user, onGoBack, onSubmit }: UserFormProps) => {
               <TextFormField label="Last name" name="lastName" />
               <TextAreaFormField label="Bio" name="bio" />
               {user && (
-                <PictureFormField
-                  label="Picture (leave empty to keep current)"
-                  name="picture"
-                />
+                <BaseFormField required={false} label="Picture" name="picture">
+                  <PicturePicker
+                    uploadType={UploadType.UserPicture}
+                    fileId={initialValues.picture}
+                    onUploadError={(error) =>
+                      handleError(error, {
+                        setSubmitting,
+                        setStatus,
+                        setErrors,
+                      })
+                    }
+                    onUploadComplete={(fileId) =>
+                      setFieldValue("picture", fileId)
+                    }
+                  />
+                </BaseFormField>
               )}
             </fieldset>
 

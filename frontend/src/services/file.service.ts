@@ -1,3 +1,4 @@
+import { fetchJSON } from "src/shared/client";
 import { fetchMultipart } from "src/shared/client";
 import { API_URL } from "src/shared/constants";
 
@@ -14,6 +15,12 @@ interface UploadedFile {
   upload_type: UploadType;
 }
 
+const getFileById = async (fileId: number): Promise<UploadedFile | null> => {
+  return await fetchJSON<UploadedFile>(`${API_URL}/uploads/${fileId}/`, {
+    method: "GET",
+  });
+};
+
 const uploadFile = async (
   file: File,
   type: UploadType
@@ -28,6 +35,7 @@ const uploadFile = async (
 };
 
 const FileService = {
+  getFileById,
   uploadFile,
 };
 
