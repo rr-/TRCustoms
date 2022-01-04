@@ -40,7 +40,7 @@ const UserForm = ({ user, onGoBack, onSubmit }: UserFormProps) => {
     picture: user?.picture || null,
   };
 
-  const handleError = useCallback(
+  const handleSubmitError = useCallback(
     (error, { setSubmitting, setStatus, setErrors }) => {
       setSubmitting(false);
       if (error instanceof FetchError) {
@@ -55,7 +55,7 @@ const UserForm = ({ user, onGoBack, onSubmit }: UserFormProps) => {
           oldPassword: error.data?.old_password,
           password: error.data?.password,
           bio: error.data?.bio,
-          picture: error.data?.picture || error.data?.content,
+          picture: error.data?.picture,
         });
       } else {
         console.error(error);
@@ -98,10 +98,10 @@ const UserForm = ({ user, onGoBack, onSubmit }: UserFormProps) => {
           onSubmit?.(outUser, values.password);
         }
       } catch (error) {
-        handleError(error, { setSubmitting, setStatus, setErrors });
+        handleSubmitError(error, { setSubmitting, setStatus, setErrors });
       }
     },
-    [user, onSubmit, handleError]
+    [user, onSubmit, handleSubmitError]
   );
 
   const validate = (values) => {
@@ -156,6 +156,7 @@ const UserForm = ({ user, onGoBack, onSubmit }: UserFormProps) => {
         setStatus,
         isSubmitting,
         setFieldValue,
+        setFieldError,
         status,
       }) =>
         !user && status?.success ? (
@@ -194,18 +195,12 @@ const UserForm = ({ user, onGoBack, onSubmit }: UserFormProps) => {
               {user && (
                 <BaseFormField required={false} label="Picture" name="picture">
                   <PicturePicker
+                    allowMultiple={false}
                     allowClear={true}
                     uploadType={UploadType.UserPicture}
-                    fileId={initialValues.picture}
-                    onUploadError={(error) =>
-                      handleError(error, {
-                        setSubmitting,
-                        setStatus,
-                        setErrors,
-                      })
-                    }
-                    onUploadComplete={(fileId) =>
-                      setFieldValue("picture", fileId)
+                    fileIds={user?.picture ? [user?.picture] : []}
+                    onChange={([fileId]) =>
+                      setFieldValue("picture", fileId || null)
                     }
                   />
                 </BaseFormField>

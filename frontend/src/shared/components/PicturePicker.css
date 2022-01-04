@@ -29,3 +29,9 @@
   max-height: 10rem;
   max-width: 15rem;
 }
+.PicturePicker--previews {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+}

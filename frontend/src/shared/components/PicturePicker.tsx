@@ -3,68 +3,127 @@ import _uniqueId from "lodash/uniqueId";
 import { useCallback } from "react";
 import { useEffect } from "react";
 import { useState } from "react";
+import type { UploadedFile } from "src/services/file.service";
 import { FileService } from "src/services/file.service";
 import { UploadType } from "src/services/file.service";
+import { FetchError } from "src/shared/client";
+import Loader from "src/shared/components/Loader";
 import PushButton from "src/shared/components/PushButton";
 
 interface PicturePickerProps {
   uploadType: UploadType;
-  fileId?: number | null;
-  onUploadError?: (error: any) => any;
-  onUploadComplete?: (fileId: number | null) => any;
-  allowClear: boolean;
+  fileIds?: number[] | null;
+  onError?: (error: any) => any;
+  onChange?: (fileIds: number[]) => any;
+  allowMultiple?: boolean;
+  allowClear?: boolean;
 }
 
-const PicturePicker = ({
+interface PicturePickerPreviewProps {
+  allowClear: boolean;
+  fileId: number;
+  clearFile: (fileId: number) => any;
+}
+
+const PicturePickerPreview = ({
   allowClear,
   fileId,
-  uploadType,
-  onUploadError,
-  onUploadComplete,
-}: PicturePickerProps) => {
-  const [currentFileId, setCurrentFileId] = useState<number | null>(fileId);
-  const [imageUrl, setImageUrl] = useState<string | null>(null);
-  const [dragCounter, setDragCounter] = useState(0);
-  const [elementId] = useState(_uniqueId("pictureDropper-"));
+  clearFile,
+}: PicturePickerPreviewProps) => {
+  const [uploadedFile, setUploadedFile] = useState<UploadedFile>(null);
 
   useEffect(() => {
     const run = async () => {
-      if (
-        currentFileId &&
-        [
-          UploadType.UserPicture,
-          UploadType.LevelScreenshot,
-          UploadType.LevelBanner,
-        ].includes(uploadType)
-      ) {
-        const uploadedFile = await FileService.getFileById(currentFileId);
-        setImageUrl(uploadedFile.url);
-      } else {
-        setImageUrl(null);
-      }
+      setUploadedFile(await FileService.getFileById(fileId));
     };
     run();
-  }, [currentFileId, uploadType, setImageUrl]);
+  }, [fileId]);
 
-  const clearFile = useCallback(() => {
-    onUploadComplete(null);
-    setCurrentFileId(null);
-  }, [onUploadComplete]);
+  return (
+    <div className="PicturePickerPreview">
+      {uploadedFile ? (
+        <img
+          className="PicturePicker--image"
+          src={uploadedFile.url}
+          alt="Upload preview"
+        />
+      ) : (
+        <Loader />
+      )}
+      {allowClear && (
+        <>
+          <br />
+          <PushButton isPlain={true} onClick={() => clearFile(fileId)}>
+            Delete
+          </PushButton>
+        </>
+      )}
+    </div>
+  );
+};
 
-  const submitFile = useCallback(
+const PicturePicker = ({
+  allowClear,
+  allowMultiple,
+  fileIds,
+  uploadType,
+  onError,
+  onChange,
+}: PicturePickerProps) => {
+  const [currentFileIds, setCurrentFileIds] = useState<number[]>(fileIds || []);
+  const [errorMessage, setErrorMessage] = useState<string>(null);
+  const [dragCounter, setDragCounter] = useState(0);
+  const [elementId] = useState(_uniqueId("pictureDropper-"));
+
+  const handleError = useCallback(
+    (error) => {
+      if (error instanceof FetchError) {
+        setErrorMessage(error.data?.content);
+      } else {
+        setErrorMessage("Unknown error.");
+      }
+      onError?.(error);
+    },
+    [onError]
+  );
+
+  const clearFile = useCallback(
+    (fileId) => {
+      setErrorMessage(null);
+      const newFileIds = [...currentFileIds.filter((id) => id !== fileId)];
+      setCurrentFileIds(newFileIds);
+      onChange(newFileIds);
+    },
+    [setErrorMessage, setCurrentFileIds, onChange, currentFileIds]
+  );
+
+  const addFile = useCallback(
     (file) => {
+      setErrorMessage(null);
       const run = async () => {
         try {
           const uploadedFile = await FileService.uploadFile(file, uploadType);
-          onUploadComplete(uploadedFile.id);
-          setCurrentFileId(uploadedFile.id);
+          const newFileIds = [
+            ...(allowMultiple ? currentFileIds : []),
+            uploadedFile.id,
+          ];
+          setCurrentFileIds(newFileIds);
+          onChange(newFileIds);
         } catch (error) {
-          onUploadError(error);
+          handleError(error);
         }
       };
       run();
     },
-    [onUploadError, onUploadComplete, uploadType]
+    [
+      setErrorMessage,
+      handleError,
+      uploadType,
+      setCurrentFileIds,
+      onChange,
+      currentFileIds,
+      allowMultiple,
+    ]
   );
 
   const onDragEnter = useCallback(
@@ -92,24 +151,25 @@ const PicturePicker = ({
       if (!e.dataTransfer.files.length) {
         window.alert("Only files are supported.");
       }
-      if (e.dataTransfer.files.length > 1) {
+      if (!allowMultiple && e.dataTransfer.files.length > 1) {
         window.alert("Cannot select multiple files.");
       }
-      submitFile(e.dataTransfer.files[0]);
+      addFile(e.dataTransfer.files[0]);
     },
-    [setDragCounter, submitFile]
+    [allowMultiple, setDragCounter, addFile]
   );
 
   const onFileChange = useCallback(
     (e) => {
-      submitFile(e.currentTarget.files[0]);
+      addFile(e.currentTarget.files[0]);
     },
-    [submitFile]
+    [addFile]
   );
 
   return (
     <div className="PicturePicker">
       <input
+        multiple={allowMultiple}
         className="PicturePicker--fileInput"
         id={elementId}
         type="file"
@@ -123,26 +183,24 @@ const PicturePicker = ({
         onDragOver={(e) => onDragOver(e)}
         onDrop={(e) => onDrop(e)}
       >
-        Drop an image here, or click on this box.
-        <br />
-        {imageUrl && (
-          <>
-            <img
-              className="PicturePicker--image"
-              src={imageUrl}
-              alt="Upload preview"
-            />
-            {allowClear && (
-              <>
-                <br />
-                <PushButton isPlain={true} onClick={() => clearFile()}>
-                  Delete current image
-                </PushButton>
-              </>
-            )}
-          </>
+        {allowMultiple ? (
+          <>Drop images here, or click on this box.</>
+        ) : (
+          <>Drop an image here, or click on this box.</>
         )}
+        <br />
+        <div className="PicturePicker--previews">
+          {currentFileIds.map((fileId) => (
+            <PicturePickerPreview
+              allowClear={allowClear}
+              clearFile={clearFile}
+              key={fileId}
+              fileId={fileId}
+            />
+          ))}
+        </div>
       </label>
+      {errorMessage && <div className="FormFieldError">{errorMessage}</div>}
     </div>
   );
 };
