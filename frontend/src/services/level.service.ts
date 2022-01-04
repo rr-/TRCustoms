@@ -77,10 +77,10 @@ interface LevelFull extends Level {
 interface LevelList extends PagedResponse<Level> {}
 
 interface LevelSearchQuery extends GenericSearchQuery {
-  tags: Array<number>;
-  genres: Array<number>;
-  engines: Array<number>;
-  authors: Array<number>;
+  tags?: number[];
+  genres?: number[];
+  engines?: number[];
+  authors?: number[];
 }
 
 interface LevelSearchResult

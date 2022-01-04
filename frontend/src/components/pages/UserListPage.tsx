@@ -3,29 +3,37 @@ import { Form } from "formik";
 import { useEffect } from "react";
 import { useCallback } from "react";
 import { useState } from "react";
-import type { GenreSearchQuery } from "src/services/genre.service";
+import type { UserSearchQuery } from "src/services/user.service";
 import { QueryPersister } from "src/shared/components/QueryPersister";
 import { deserializeGenericSearchQuery } from "src/shared/components/QueryPersister";
 import { serializeGenericSearchQuery } from "src/shared/components/QueryPersister";
 import { SearchBar } from "src/shared/components/SearchBar";
 import TextFormField from "src/shared/components/TextFormField";
 import UsersTable from "src/shared/components/UsersTable";
+import { getCurrentSearchParams } from "src/shared/utils";
 
-const defaultSearchQuery: GenreSearchQuery = {
+const defaultSearchQuery: UserSearchQuery = {
   page: null,
-  sort: null,
+  sort: "-date_joined",
   search: null,
 };
 
-const convertSearchQueryToFormikValues = (searchQuery: GenreSearchQuery) => {
+const convertSearchQueryToFormikValues = (searchQuery: UserSearchQuery) => {
   return { search: searchQuery.search || "" };
 };
 
+const deserializeSearchQuery = (qp: {
+  [key: string]: string;
+}): UserSearchQuery => deserializeGenericSearchQuery(qp, defaultSearchQuery);
+
+const serializeSearchQuery = (
+  searchQuery: UserSearchQuery
+): { [key: string]: any } =>
+  serializeGenericSearchQuery(searchQuery, defaultSearchQuery);
+
 const UserListPage = () => {
-  const [searchQuery, setSearchQuery] = useState<GenreSearchQuery>(
-    deserializeGenericSearchQuery(window.location.href, {
-      sort: "-date_joined",
-    })
+  const [searchQuery, setSearchQuery] = useState<UserSearchQuery>(
+    deserializeSearchQuery(getCurrentSearchParams())
   );
   const [formikValues, setFormikValues] = useState<any>(
     convertSearchQueryToFormikValues(searchQuery)
@@ -59,8 +67,8 @@ const UserListPage = () => {
   return (
     <div id="UserListPage">
       <QueryPersister
-        serializeSearchQuery={serializeGenericSearchQuery}
-        deserializeSearchQuery={deserializeGenericSearchQuery}
+        serializeSearchQuery={serializeSearchQuery}
+        deserializeSearchQuery={deserializeSearchQuery}
         searchQuery={searchQuery}
         setSearchQuery={setSearchQuery}
       />

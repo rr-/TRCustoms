@@ -10,10 +10,11 @@ import { serializeGenericSearchQuery } from "src/shared/components/QueryPersiste
 import { SearchBar } from "src/shared/components/SearchBar";
 import TagsTable from "src/shared/components/TagsTable";
 import TextFormField from "src/shared/components/TextFormField";
+import { getCurrentSearchParams } from "src/shared/utils";
 
 const defaultSearchQuery: TagSearchQuery = {
   page: null,
-  sort: null,
+  sort: "name",
   search: null,
 };
 
@@ -21,9 +22,18 @@ const convertSearchQueryToFormikValues = (searchQuery: TagSearchQuery) => {
   return { search: searchQuery.search || "" };
 };
 
+const deserializeSearchQuery = (qp: {
+  [key: string]: string;
+}): TagSearchQuery => deserializeGenericSearchQuery(qp, defaultSearchQuery);
+
+const serializeSearchQuery = (
+  searchQuery: TagSearchQuery
+): { [key: string]: any } =>
+  serializeGenericSearchQuery(searchQuery, defaultSearchQuery);
+
 const TagListPage = () => {
   const [searchQuery, setSearchQuery] = useState<TagSearchQuery>(
-    deserializeGenericSearchQuery(window.location.href, { sort: "name" })
+    deserializeSearchQuery(getCurrentSearchParams())
   );
   const [formikValues, setFormikValues] = useState<any>(
     convertSearchQueryToFormikValues(searchQuery)
@@ -57,8 +67,8 @@ const TagListPage = () => {
   return (
     <div id="TagListPage">
       <QueryPersister
-        serializeSearchQuery={serializeGenericSearchQuery}
-        deserializeSearchQuery={deserializeGenericSearchQuery}
+        serializeSearchQuery={serializeSearchQuery}
+        deserializeSearchQuery={deserializeSearchQuery}
         searchQuery={searchQuery}
         setSearchQuery={setSearchQuery}
       />

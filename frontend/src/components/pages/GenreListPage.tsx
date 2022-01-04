@@ -10,10 +10,11 @@ import { deserializeGenericSearchQuery } from "src/shared/components/QueryPersis
 import { serializeGenericSearchQuery } from "src/shared/components/QueryPersister";
 import { SearchBar } from "src/shared/components/SearchBar";
 import TextFormField from "src/shared/components/TextFormField";
+import { getCurrentSearchParams } from "src/shared/utils";
 
 const defaultSearchQuery: GenreSearchQuery = {
   page: null,
-  sort: null,
+  sort: "name",
   search: null,
 };
 
@@ -21,9 +22,18 @@ const convertSearchQueryToFormikValues = (searchQuery: GenreSearchQuery) => {
   return { search: searchQuery.search || "" };
 };
 
+const deserializeSearchQuery = (qp: {
+  [key: string]: string;
+}): GenreSearchQuery => deserializeGenericSearchQuery(qp, defaultSearchQuery);
+
+const serializeSearchQuery = (
+  searchQuery: GenreSearchQuery
+): { [key: string]: any } =>
+  serializeGenericSearchQuery(searchQuery, defaultSearchQuery);
+
 const GenreListPage = () => {
   const [searchQuery, setSearchQuery] = useState<GenreSearchQuery>(
-    deserializeGenericSearchQuery(window.location.href, { sort: "name" })
+    deserializeSearchQuery(getCurrentSearchParams())
   );
   const [formikValues, setFormikValues] = useState<any>(
     convertSearchQueryToFormikValues(searchQuery)
@@ -57,8 +67,8 @@ const GenreListPage = () => {
   return (
     <div id="GenreListPage">
       <QueryPersister
-        serializeSearchQuery={serializeGenericSearchQuery}
-        deserializeSearchQuery={deserializeGenericSearchQuery}
+        serializeSearchQuery={serializeSearchQuery}
+        deserializeSearchQuery={deserializeSearchQuery}
         searchQuery={searchQuery}
         setSearchQuery={setSearchQuery}
       />
