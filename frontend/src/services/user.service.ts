@@ -18,6 +18,7 @@ interface User {
   is_active: boolean;
   authored_level_count: number;
   reviewed_level_count: number;
+  picture: number;
 }
 
 interface UserList extends PagedResponse<User> {}
