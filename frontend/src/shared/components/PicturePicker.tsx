@@ -5,15 +5,18 @@ import { useEffect } from "react";
 import { useState } from "react";
 import { FileService } from "src/services/file.service";
 import { UploadType } from "src/services/file.service";
+import PushButton from "src/shared/components/PushButton";
 
 interface PicturePickerProps {
   uploadType: UploadType;
   fileId?: number | null;
   onUploadError?: (error: any) => any;
   onUploadComplete?: (fileId: number | null) => any;
+  allowClear: boolean;
 }
 
 const PicturePicker = ({
+  allowClear,
   fileId,
   uploadType,
   onUploadError,
@@ -36,10 +39,17 @@ const PicturePicker = ({
       ) {
         const uploadedFile = await FileService.getFileById(currentFileId);
         setImageUrl(uploadedFile.content);
+      } else {
+        setImageUrl(null);
       }
     };
     run();
   }, [currentFileId, uploadType, setImageUrl]);
+
+  const clearFile = useCallback(() => {
+    onUploadComplete(null);
+    setCurrentFileId(null);
+  }, [onUploadComplete]);
 
   const submitFile = useCallback(
     (file) => {
@@ -116,11 +126,21 @@ const PicturePicker = ({
         Drop an image here, or click on this box.
         <br />
         {imageUrl && (
-          <img
-            className="PicturePicker--image"
-            src={imageUrl}
-            alt="Upload preview"
-          />
+          <>
+            <img
+              className="PicturePicker--image"
+              src={imageUrl}
+              alt="Upload preview"
+            />
+            {allowClear && (
+              <>
+                <br />
+                <PushButton isPlain={true} onClick={() => clearFile()}>
+                  Delete current image
+                </PushButton>
+              </>
+            )}
+          </>
         )}
       </label>
     </div>

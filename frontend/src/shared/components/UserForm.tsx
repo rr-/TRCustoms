@@ -194,6 +194,7 @@ const UserForm = ({ user, onGoBack, onSubmit }: UserFormProps) => {
               {user && (
                 <BaseFormField required={false} label="Picture" name="picture">
                   <PicturePicker
+                    allowClear={true}
                     uploadType={UploadType.UserPicture}
                     fileId={initialValues.picture}
                     onUploadError={(error) =>
