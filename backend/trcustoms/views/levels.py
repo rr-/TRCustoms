@@ -21,6 +21,7 @@ def get_level_queryset():
             "duration",
             "difficulty",
             "last_file",
+            "last_file__file",
         )
         .filter(is_approved=True)
         .distinct()
