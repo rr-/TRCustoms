@@ -17,6 +17,10 @@ function getGenericSearchQuery(
   });
 }
 
+const getCurrentSearchParams = (): { [key: string]: string } => {
+  return Object.fromEntries(new URL(window.location.href).searchParams);
+};
+
 const validateRequired = (value: string): string | null => {
   if (!value) {
     return "Required";
@@ -133,5 +137,6 @@ export {
   formatFileSize,
   filterFalsyObjectValues,
   getGenericSearchQuery,
+  getCurrentSearchParams,
   EMPTY_INPUT_PLACEHOLDER,
 };

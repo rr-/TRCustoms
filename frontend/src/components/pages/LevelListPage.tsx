@@ -10,49 +10,46 @@ import TagsCheckboxes from "src/components/TagsCheckboxes";
 import type { LevelSearchQuery } from "src/services/level.service";
 import LevelsTable from "src/shared/components/LevelsTable";
 import { QueryPersister } from "src/shared/components/QueryPersister";
+import { deserializeGenericSearchQuery } from "src/shared/components/QueryPersister";
+import { serializeGenericSearchQuery } from "src/shared/components/QueryPersister";
 import { SearchBar } from "src/shared/components/SearchBar";
 import TextFormField from "src/shared/components/TextFormField";
 import { filterFalsyObjectValues } from "src/shared/utils";
+import { getCurrentSearchParams } from "src/shared/utils";
 
 const defaultSearchQuery: LevelSearchQuery = {
   page: null,
-  sort: null,
-  search: "",
+  sort: "-created",
+  search: null,
   tags: [],
   genres: [],
   engines: [],
   authors: [],
 };
 
-const deserializeSearchQuery = (search: string): LevelSearchQuery => {
-  const currentURL = new URL(search);
-  const qp = Object.fromEntries(currentURL.searchParams);
-  return {
-    page: +qp.page || null,
-    sort: qp.sort || "-created",
-    search: qp.search || "",
-    tags: (qp.tags?.split(/,/g) || []).map((item) => +item),
-    genres: (qp.genres?.split(/,/g) || []).map((item) => +item),
-    engines: (qp.engines?.split(/,/g) || []).map((item) => +item),
-    authors: [],
-  };
-};
+const deserializeSearchQuery = (qp: {
+  [key: string]: string;
+}): LevelSearchQuery => ({
+  ...deserializeGenericSearchQuery(qp, defaultSearchQuery),
+  tags: (qp.tags?.split(/,/g) || []).map((item) => +item),
+  genres: (qp.genres?.split(/,/g) || []).map((item) => +item),
+  engines: (qp.engines?.split(/,/g) || []).map((item) => +item),
+  authors: [],
+});
 
-const serializeSearchQuery = (searchQuery: LevelSearchQuery) => {
-  const qp = filterFalsyObjectValues({
-    page: searchQuery.page,
-    sort: searchQuery.sort,
-    search: searchQuery.search,
+const serializeSearchQuery = (
+  searchQuery: LevelSearchQuery
+): { [key: string]: any } =>
+  filterFalsyObjectValues({
+    ...serializeGenericSearchQuery(searchQuery, defaultSearchQuery),
     tags: searchQuery.tags.join(","),
     genres: searchQuery.genres.join(","),
     engines: searchQuery.engines.join(","),
-  }) as any;
-  return "?" + new URLSearchParams(qp).toString();
-};
+  });
 
 const convertSearchQueryToFormikValues = (searchQuery: LevelSearchQuery) => {
   return {
-    search: searchQuery.search,
+    search: searchQuery.search || "",
     tags: searchQuery.tags,
     genres: searchQuery.genres,
     engines: searchQuery.engines,
@@ -61,7 +58,7 @@ const convertSearchQueryToFormikValues = (searchQuery: LevelSearchQuery) => {
 
 const LevelListPage = () => {
   const [searchQuery, setSearchQuery] = useState<LevelSearchQuery>(
-    deserializeSearchQuery(window.location.href)
+    deserializeSearchQuery(getCurrentSearchParams())
   );
   const [formikValues, setFormikValues] = useState<any>(
     convertSearchQueryToFormikValues(searchQuery)
