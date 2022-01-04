@@ -10,8 +10,7 @@ class LevelFile(DatesInfo):
         Level, on_delete=models.CASCADE, related_name="files"
     )
 
-    # TODO: rename me
-    new_file = models.ForeignKey(
+    file = models.ForeignKey(
         UploadedFile, blank=True, null=True, on_delete=models.SET_NULL
     )
 

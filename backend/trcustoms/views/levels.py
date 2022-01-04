@@ -46,7 +46,7 @@ class LevelViewSet(
         "created",
         "download_count",
         "last_updated",
-        "last_file__new_file__size",
+        "last_file__file__size",
     ]
     search_fields = [
         "name",

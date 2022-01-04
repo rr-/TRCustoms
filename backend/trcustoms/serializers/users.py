@@ -30,7 +30,7 @@ class UserSerializer(serializers.ModelSerializer):
             "is_active",
             "authored_level_count",
             "reviewed_level_count",
-            "new_picture",
+            "picture",
         )
 
     username = serializers.CharField(
@@ -151,7 +151,7 @@ class UserSerializer(serializers.ModelSerializer):
         return User.objects.with_counts().get(pk=user.pk)
 
     def get_has_picture(self, instance: User) -> bool:
-        return bool(instance.new_picture)
+        return bool(instance.picture)
 
     def get_authored_level_count(self, instance: User) -> int:
         return instance.authored_level_count

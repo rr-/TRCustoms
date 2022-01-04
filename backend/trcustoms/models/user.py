@@ -30,8 +30,7 @@ class User(AbstractUser):
     trle_reviewer_id = models.CharField(max_length=32, blank=True, null=True)
     trle_author_id = models.CharField(max_length=32, blank=True, null=True)
 
-    # TODO: rename me
-    new_picture = models.ForeignKey(
+    picture = models.ForeignKey(
         UploadedFile, blank=True, null=True, on_delete=models.SET_NULL
     )
 
