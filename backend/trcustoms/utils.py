@@ -78,3 +78,26 @@ def parse_ids(source: str | None) -> list[int]:
         return [int(item) for item in source.split(",")]
     except ValueError:
         return []
+
+
+def check_model_references(obj: models.Model):
+    """Check whether a Django model is referenced by any other model."""
+    # pylint: disable=protected-access
+    # skip for new objects (i.e. those not yet saved to database)
+    if not obj.pk:
+        return False
+    # reverse relation "fields" on the Reporter model are auto-created and
+    # not concrete
+    for reverse in [
+        f for f in obj._meta.get_fields() if f.auto_created and not f.concrete
+    ]:
+        # in case the related name has been customized
+        name = reverse.get_accessor_name()
+        # one-to-one requires a special approach
+        has_reverse_one_to_one = reverse.one_to_one and hasattr(obj, name)
+        has_reverse_other = (
+            not reverse.one_to_one and getattr(obj, name).count()
+        )
+        if has_reverse_one_to_one or has_reverse_other:
+            return True
+    return False
