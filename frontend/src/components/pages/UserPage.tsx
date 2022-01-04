@@ -73,7 +73,10 @@ const UserPage = () => {
       <aside id="UserPage--sidebar">
         <SidebarBox
           actions={
-            <PermissionGuard require={UserPermission.editUsers} entity={user}>
+            <PermissionGuard
+              require={UserPermission.editUsers}
+              owningUser={user}
+            >
               <PushButton to={`/users/${user.id}/edit`}>
                 Edit profile
               </PushButton>
