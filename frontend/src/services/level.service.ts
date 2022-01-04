@@ -1,4 +1,5 @@
 import type { Engine } from "src/services/engine.service";
+import type { UploadedFile } from "src/services/file.service";
 import type { Genre } from "src/services/genre.service";
 import type { Tag } from "src/services/tag.service";
 import { fetchJSON } from "src/shared/client";
@@ -29,7 +30,7 @@ interface LevelUploader extends LevelUser {}
 
 interface Medium {
   id: number;
-  url: string;
+  file: UploadedFile;
 }
 
 interface LevelFile {
@@ -68,7 +69,7 @@ interface Level {
 }
 
 interface LevelFull extends Level {
-  banner: Medium;
+  banner: UploadedFile;
   media: Medium[];
   trle_id: number | null;
   files: LevelFile[];

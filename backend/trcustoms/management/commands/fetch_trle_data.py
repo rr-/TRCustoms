@@ -206,13 +206,19 @@ def process_level_images(level: Level, trle_level: TRLELevel) -> None:
                 content=ContentFile(image_content, name=Path(image_url).name),
             ),
         )
-        LevelMedium.objects.update_or_create(
-            level=level,
-            position=pos,
-            defaults=dict(
-                file=uploaded_file,
-            ),
-        )
+
+        if pos == 0:
+            if level.banner != uploaded_file:
+                level.banner = uploaded_file
+                level.save(update_fields=["banner"])
+        else:
+            LevelMedium.objects.update_or_create(
+                level=level,
+                position=pos,
+                defaults=dict(
+                    file=uploaded_file,
+                ),
+            )
 
 
 def process_level_files(level: Level, trle_level: TRLELevel) -> None:

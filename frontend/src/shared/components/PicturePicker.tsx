@@ -38,7 +38,7 @@ const PicturePicker = ({
         ].includes(uploadType)
       ) {
         const uploadedFile = await FileService.getFileById(currentFileId);
-        setImageUrl(uploadedFile.content);
+        setImageUrl(uploadedFile.url);
       } else {
         setImageUrl(null);
       }
