@@ -4,7 +4,7 @@ from django.core.validators import MaxLengthValidator, MinLengthValidator
 from django.db import transaction
 from rest_framework import serializers
 
-from trcustoms.models import User
+from trcustoms.models import UploadedFile, User
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -99,6 +99,15 @@ class UserSerializer(serializers.ModelSerializer):
 
         super().update(instance, validated_data)
 
+        if (
+            instance.picture
+            and instance.picture.upload_type
+            != UploadedFile.UploadType.USER_PICTURE
+        ):
+            raise serializers.ValidationError(
+                {"picture": "Invalid upload type."}
+            )
+
         if password:
             try:
                 validate_password(password, user=instance)
@@ -158,5 +167,3 @@ class UserSerializer(serializers.ModelSerializer):
 
     def get_reviewed_level_count(self, instance: User) -> int:
         return instance.reviewed_level_count
-
-    # TODO: validate picture
