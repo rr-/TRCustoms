@@ -59,6 +59,7 @@ const UserPage = () => {
       <header id="UserPage--header">
         <h1>{user.username}</h1>
         {user.is_active &&
+          (user.first_name || user.last_name) &&
           `${user.first_name} ${user.last_name}` !== user.username && (
             <h2>
               {user.first_name} {user.last_name}
