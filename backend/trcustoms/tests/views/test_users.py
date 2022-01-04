@@ -91,6 +91,9 @@ def test_user_creation(
         "date_joined": any_datetime(allow_strings=True),
         "last_login": None,
         "authored_level_count": 0,
+        "reviewed_level_count": 0,
+        "picture": None,
+        "permissions": ["list_users"],
     }
 
 
@@ -255,6 +258,9 @@ def test_user_creation_acquiring_trle_account(
         "date_joined": any_datetime(allow_strings=True),
         "last_login": None,
         "authored_level_count": 0,
+        "reviewed_level_count": 0,
+        "picture": None,
+        "permissions": ["list_users"],
     }
 
 
