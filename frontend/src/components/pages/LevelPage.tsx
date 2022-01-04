@@ -56,7 +56,13 @@ const LevelPage = () => {
   return (
     <div id="LevelPage">
       <header id="LevelPage--header">
-        <h1>{level.name}</h1>
+        <h1 className="LevelPage--headerWrapper">
+          {level.name.split(/(\s*[:-]\s*)/).map((word, i) => (
+            <span key={i} className="LevelPage--headerPart">
+              {word}
+            </span>
+          ))}
+        </h1>
       </header>
 
       <div id="LevelPage--banner">
