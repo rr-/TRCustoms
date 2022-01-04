@@ -54,3 +54,11 @@
 .LevelPage--basicInfoListItem:not(:last-child):after {
   content: ", ";
 }
+
+.LevelPage--headerWrapper {
+  display: flex;
+  flex-wrap: wrap;
+}
+.LevelPage--headerPart {
+  white-space: pre;
+}
