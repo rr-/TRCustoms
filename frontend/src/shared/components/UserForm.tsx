@@ -94,7 +94,7 @@ const UserForm = ({ user, onGoBack, onSubmit }: UserFormProps) => {
             oldPassword: error.data?.old_password,
             password: error.data?.password,
             bio: error.data?.bio,
-            picture: error.data?.new_picture,
+            picture: error.data?.picture,
           });
         } else {
           console.error(error);

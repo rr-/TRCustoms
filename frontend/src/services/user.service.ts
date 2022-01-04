@@ -91,7 +91,7 @@ const update = async (
     data.password = password;
   }
   if (picture) {
-    data.new_picture = picture;
+    data.picture = picture;
   }
   return await fetchJSON(`${API_URL}/users/${userId}/`, {
     method: "PATCH",
@@ -117,7 +117,7 @@ const register = async ({
     bio: bio,
   };
   if (picture) {
-    data.new_picture = picture;
+    data.picture = picture;
   }
   return await fetchJSON(`${API_URL}/users/`, {
     method: "POST",

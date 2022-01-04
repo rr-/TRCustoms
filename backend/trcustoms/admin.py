@@ -58,7 +58,7 @@ class UserAdmin(BaseUserAdmin):
         "email",
         "is_active",
         "is_staff",
-        "new_picture",
+        "picture",
     ]
     readonly_fields = ["last_login", "date_joined"]
     list_display = [

@@ -77,5 +77,5 @@ class UserViewSet(
     def picture(self, request, pk) -> Response:
         user = self.get_object()
         return stream_file_field(
-            user.new_picture.content, [user.username], as_attachment=False
+            user.picture.content, [user.username], as_attachment=False
         )
