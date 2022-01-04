@@ -11,7 +11,7 @@ enum UploadType {
 
 interface UploadedFile {
   id: number;
-  content: string; // URL
+  url: string;
   upload_type: UploadType;
 }
 
@@ -39,4 +39,5 @@ const FileService = {
   uploadFile,
 };
 
+export type { UploadedFile };
 export { UploadType, FileService };

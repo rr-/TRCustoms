@@ -11,9 +11,11 @@ MAX_SIZE_MAP = {
 
 
 class UploadedFileSerializer(serializers.ModelSerializer):
+    url = serializers.SerializerMethodField(read_only=True)
+
     class Meta:
         model = UploadedFile
-        fields = ["id", "content", "upload_type"]
+        fields = ["id", "content", "upload_type", "url"]
 
     def validate(self, data):
         try:
@@ -41,3 +43,6 @@ class UploadedFileSerializer(serializers.ModelSerializer):
             )
 
         return data
+
+    def get_url(self, instance) -> str:
+        return instance.content.url

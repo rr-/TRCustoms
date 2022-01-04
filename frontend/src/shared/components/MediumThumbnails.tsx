@@ -10,7 +10,7 @@ const MediumThumbnails = ({ media }: MediumThumbnailsProps) => {
   return (
     <div className="MediumThumbnails">
       {media.map((medium) => (
-        <MediumThumbnail key={medium.id} medium={medium} />
+        <MediumThumbnail key={medium.id} file={medium.file} />
       ))}
     </div>
   );

@@ -1,13 +1,13 @@
 import "./MediumThumbnail.css";
 import { useCallback } from "react";
 import { useState } from "react";
-import type { Medium } from "src/services/level.service";
+import type { UploadedFile } from "src/services/file.service";
 
 interface MediumProps {
-  medium: Medium;
+  file: UploadedFile;
 }
 
-const MediumThumbnail = ({ medium }: MediumProps) => {
+const MediumThumbnail = ({ file }: MediumProps) => {
   const [isActive, setIsActive] = useState<boolean>(false);
 
   const imageClick = useCallback(() => {
@@ -20,14 +20,14 @@ const MediumThumbnail = ({ medium }: MediumProps) => {
         alt="Thumbnail"
         className="MediumThumbnail--thumb"
         tabIndex={1}
-        src={medium.url}
+        src={file.url}
         onClick={imageClick}
       />
       <span
         className={`MediumThumbnail--full ${isActive ? "active" : null}`}
         onClick={imageClick}
       >
-        <img alt="Full resolution" src={medium.url} />
+        <img alt="Full resolution" src={file.url} />
       </span>
     </>
   );

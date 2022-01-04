@@ -11,6 +11,7 @@ from trcustoms.serializers.level_engines import LevelEngineLiteSerializer
 from trcustoms.serializers.level_genres import LevelGenreLiteSerializer
 from trcustoms.serializers.level_media import LevelMediumSerializer
 from trcustoms.serializers.level_tags import LevelTagLiteSerializer
+from trcustoms.serializers.uploaded_files import UploadedFileSerializer
 
 
 class LevelUploaderSerializer(serializers.ModelSerializer):
@@ -81,8 +82,8 @@ class LevelLiteSerializer(serializers.ModelSerializer):
 
 
 class LevelFullSerializer(LevelLiteSerializer):
-    banner = serializers.SerializerMethodField(read_only=True)
-    media = serializers.SerializerMethodField(read_only=True)
+    banner = UploadedFileSerializer(read_only=True)
+    media = LevelMediumSerializer(read_only=True, many=True)
     files = LevelFileSerializer(read_only=True, many=True)
 
     class Meta:
@@ -93,13 +94,3 @@ class LevelFullSerializer(LevelLiteSerializer):
             "trle_id",
             "files",
         ]
-
-    def get_banner(self, instance: Level):
-        return LevelMediumSerializer(
-            instance=instance.media.filter(position=0).first()
-        ).data
-
-    def get_media(self, instance: Level):
-        return LevelMediumSerializer(
-            instance=instance.media.exclude(position=0), many=True
-        ).data

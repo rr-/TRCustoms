@@ -5,6 +5,7 @@ from trcustoms.models.level_duration import LevelDuration
 from trcustoms.models.level_engine import LevelEngine
 from trcustoms.models.level_genre import LevelGenre
 from trcustoms.models.level_tag import LevelTag
+from trcustoms.models.uploaded_file import UploadedFile
 from trcustoms.models.user import User
 from trcustoms.models.util import DatesInfo
 
@@ -32,6 +33,9 @@ class Level(DatesInfo):
         LevelDuration, blank=True, null=True, on_delete=models.SET_NULL
     )
 
+    banner = models.ForeignKey(
+        UploadedFile, blank=True, null=True, on_delete=models.SET_NULL
+    )
     is_approved = models.BooleanField(default=False)
 
     # denormalized fields for faster db lookups
