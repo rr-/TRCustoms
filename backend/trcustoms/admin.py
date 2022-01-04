@@ -70,6 +70,7 @@ class UserAdmin(BaseUserAdmin):
         "is_active",
         "is_staff",
     ]
+    raw_id_fields = ["picture"]
 
 
 @admin.register(LevelEngine)
@@ -137,7 +138,13 @@ class LevelAdmin(admin.ModelAdmin):
     ]
     list_filter = ["genres", "tags"]
     form = LevelForm
-    readonly_fields = ["download_count", "created", "last_updated"]
+    readonly_fields = [
+        "download_count",
+        "created",
+        "last_updated",
+        "last_file",
+    ]
+    raw_id_fields = ["uploader", "authors"]
 
 
 @admin.register(LevelMedium)
@@ -146,6 +153,7 @@ class LevelMediumAdmin(admin.ModelAdmin):
     list_display = ["id", "level", "position", "created", "last_updated"]
     search_fields = ["level__name"]
     readonly_fields = ["created", "last_updated"]
+    raw_id_fields = ["level", "file"]
 
 
 @admin.register(LevelFile)
@@ -161,6 +169,7 @@ class LevelFileAdmin(admin.ModelAdmin):
     ]
     search_fields = ["level__name"]
     readonly_fields = ["created", "last_updated", "version"]
+    raw_id_fields = ["level", "file"]
 
 
 @admin.register(LevelLegacyReview)
@@ -184,6 +193,7 @@ class LevelLegacyReviewAdmin(admin.ModelAdmin):
         "author__last_name",
     ]
     readonly_fields = ["created", "last_updated"]
+    raw_id_fields = ["level", "author"]
 
 
 @admin.register(UploadedFile)
