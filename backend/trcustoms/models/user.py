@@ -6,6 +6,11 @@ from django.db.models import Count
 from trcustoms.models.uploaded_file import UploadedFile
 
 
+class UserPermission:
+    EDIT_USERS = "edit_users"
+    LIST_USERS = "list_users"
+
+
 class UserManager(BaseUserManager):
     def with_counts(self):
         return self.annotate(
@@ -36,3 +41,10 @@ class User(AbstractUser):
 
     bio = models.TextField(max_length=5000, blank=True)
     source = models.CharField(max_length=10, choices=Source.choices)
+
+    @property
+    def permissions(self) -> set[UserPermission]:
+        permissions = {UserPermission.LIST_USERS}
+        if self.is_staff:
+            permissions.add(UserPermission.EDIT_USERS)
+        return list(permissions)

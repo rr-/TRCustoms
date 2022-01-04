@@ -5,6 +5,7 @@ import { useParams } from "react-router-dom";
 import type { LevelSearchQuery } from "src/services/level.service";
 import type { ReviewSearchQuery } from "src/services/review.service";
 import type { User } from "src/services/user.service";
+import { UserPermission } from "src/services/user.service";
 import { UserService } from "src/services/user.service";
 import LevelsTable from "src/shared/components/LevelsTable";
 import Loader from "src/shared/components/Loader";
@@ -72,7 +73,7 @@ const UserPage = () => {
       <aside id="UserPage--sidebar">
         <SidebarBox
           actions={
-            <PermissionGuard require={"canEditUsers"} entity={user}>
+            <PermissionGuard require={UserPermission.editUsers} entity={user}>
               <PushButton to={`/users/${user.id}/edit`}>
                 Edit profile
               </PushButton>

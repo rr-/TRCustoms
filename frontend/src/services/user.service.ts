@@ -5,6 +5,11 @@ import type { PagedResponse } from "src/shared/types";
 import { GenericSearchResult } from "src/shared/types";
 import { getGenericSearchQuery } from "src/shared/utils";
 
+enum UserPermission {
+  editUsers = "edit_users",
+  listUsers = "list_users",
+}
+
 interface User {
   id: number;
   username: string;
@@ -19,6 +24,7 @@ interface User {
   authored_level_count: number;
   reviewed_level_count: number;
   picture: number;
+  permissions: UserPermission[];
 }
 
 interface UserList extends PagedResponse<User> {}
@@ -142,4 +148,4 @@ const UserService = {
 };
 
 export type { User, UserList, UserSearchQuery, UserSearchResult };
-export { UserService };
+export { UserPermission, UserService };
