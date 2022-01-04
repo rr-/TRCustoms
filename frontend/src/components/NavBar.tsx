@@ -6,6 +6,7 @@ import { Link } from "react-router-dom";
 import { NavLink } from "react-router-dom";
 import { useLocation } from "react-router-dom";
 import { useResolvedPath } from "react-router-dom";
+import { UserPermission } from "src/services/user.service";
 import { PermissionGuard } from "src/shared/components/PermissionGuard";
 import UserPicture from "src/shared/components/UserPicture";
 import { UserContext } from "src/shared/contexts/UserContext";
@@ -99,7 +100,7 @@ const NavBar = () => {
                 <li className="TopNavBar--listItem">
                   <NavLink to={"/genres"}>Genres</NavLink>
                 </li>
-                <PermissionGuard require="canListUsers">
+                <PermissionGuard require={UserPermission.listUsers}>
                   <li className="TopNavBar--listItem">
                     <NavLink to={"/users"}>Users</NavLink>
                   </li>

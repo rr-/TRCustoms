@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { UserPermission } from "src/services/user.service";
 import { PermissionGuard } from "src/shared/components/PermissionGuard";
 
 interface User {
@@ -14,7 +15,7 @@ interface UserLinkProps {
 const UserLink = ({ user, label }: UserLinkProps) => {
   const { id, username } = user;
   return (
-    <PermissionGuard require={"canListUsers"} alternative={username}>
+    <PermissionGuard require={UserPermission.listUsers} alternative={username}>
       <Link to={`/users/${id}`}>{label || username}</Link>
     </PermissionGuard>
   );

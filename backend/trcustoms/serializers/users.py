@@ -31,6 +31,7 @@ class UserSerializer(serializers.ModelSerializer):
             "authored_level_count",
             "reviewed_level_count",
             "picture",
+            "permissions",
         )
 
     username = serializers.CharField(

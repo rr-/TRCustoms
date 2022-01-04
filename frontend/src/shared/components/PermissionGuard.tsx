@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { useContext } from "react";
 import { useState } from "react";
+import { UserPermission } from "src/services/user.service";
 import { UserContext } from "src/shared/contexts/UserContext";
 
 interface PermissionGuardProps {
@@ -21,8 +22,11 @@ const PermissionGuard = ({
 
   useEffect(() => {
     let newIsShown =
-      (require === "canEditUsers" && user?.id === entity?.id) ||
-      (require === "canListUsers" && !!user);
+      (require === UserPermission.editUsers &&
+        (user?.permissions?.includes(UserPermission.editUsers) ||
+          user?.id === entity?.id)) ||
+      (require === UserPermission.listUsers &&
+        user?.permissions?.includes(UserPermission.listUsers));
 
     setIsShown(newIsShown);
   }, [user, entity, require]);
