@@ -5,8 +5,8 @@
   grid-template-rows: repeat(2, 1fr);
   gap: 0.25rem;
 }
-.MediumThumbnails img {
-  display: inline-block;
+.MediumThumbnail {
   max-width: 100%;
   height: auto;
+  font-size: 4rem;
 }

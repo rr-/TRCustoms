@@ -6,6 +6,7 @@ import type { To } from "react-router-dom";
 
 interface PushButtonProps {
   to?: To;
+  disableTimeout?: boolean;
   isPlain?: boolean;
   onClick?: () => any;
   target?: string;
@@ -14,6 +15,7 @@ interface PushButtonProps {
 
 const PushButton = ({
   to,
+  disableTimeout,
   onClick,
   isPlain,
   target,
@@ -25,16 +27,20 @@ const PushButton = ({
     (e) => {
       if (isDisabled) {
         e.preventDefault();
+        e.stopPropagation();
         return;
       }
-      setIsDisabled(true);
-      window.setTimeout(() => setIsDisabled(false), 5000);
+      if (!disableTimeout) {
+        setIsDisabled(true);
+        window.setTimeout(() => setIsDisabled(false), 5000);
+      }
       if (onClick) {
         onClick();
         e.preventDefault();
+        e.stopPropagation();
       }
     },
-    [isDisabled, setIsDisabled, onClick]
+    [isDisabled, setIsDisabled, disableTimeout, onClick]
   );
 
   return (
