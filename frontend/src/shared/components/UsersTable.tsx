@@ -53,6 +53,12 @@ const UsersTable = ({ searchQuery, onSearchQueryChange }: UsersTableProps) => {
       label: "Authored levels",
       itemElement: (user) => `${user.authored_level_count}`,
     },
+    {
+      name: "reviewed-level-count",
+      sortKey: "reviewed_level_count",
+      label: "Reviewed levels",
+      itemElement: (user) => `${user.reviewed_level_count}`,
+    },
   ];
 
   const itemKey = (user) => `${user.id}`;
