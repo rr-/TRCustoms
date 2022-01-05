@@ -1,4 +1,5 @@
 import os
+from datetime import timedelta
 from pathlib import Path
 
 
@@ -151,6 +152,8 @@ REST_FRAMEWORK = {
 
 SIMPLE_JWT = {
     "UPDATE_LAST_LOGIN": True,
+    "ACCESS_TOKEN_LIFETIME": timedelta(hours=1),
+    "REFRESH_TOKEN_LIFETIME": timedelta(days=365),
 }
 
 LANGUAGE_CODE = "en-us"
