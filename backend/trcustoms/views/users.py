@@ -49,6 +49,7 @@ class UserViewSet(
         "date_joined",
         "last_login",
         "authored_level_count",
+        "reviewed_level_count",
     ]
     search_fields = [
         "username",
