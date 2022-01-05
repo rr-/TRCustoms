@@ -25,6 +25,8 @@ interface User {
   reviewed_level_count: number;
   picture: number;
   permissions: UserPermission[];
+  trle_author_id?: number;
+  trle_reviewer_id?: number;
 }
 
 interface UserList extends PagedResponse<User> {}
