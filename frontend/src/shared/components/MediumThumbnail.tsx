@@ -7,6 +7,7 @@ import { useCallback } from "react";
 import { useState } from "react";
 import type { UploadedFile } from "src/services/file.service";
 import PushButton from "src/shared/components/PushButton";
+import { KEY_ESCAPE } from "src/shared/constants";
 import { KEY_LEFT } from "src/shared/constants";
 import { KEY_RIGHT } from "src/shared/constants";
 
@@ -45,7 +46,9 @@ const MediumThumbnail = ({ file }: MediumProps) => {
   useEffect(() => {
     const handleKeypress = (event) => {
       if (isActive) {
-        if (event.keyCode === KEY_LEFT) {
+        if (event.keyCode === KEY_ESCAPE) {
+          setIsActive(false);
+        } else if (event.keyCode === KEY_LEFT) {
           navigate(-1);
         } else if (event.keyCode === KEY_RIGHT) {
           navigate(+1);
@@ -55,7 +58,7 @@ const MediumThumbnail = ({ file }: MediumProps) => {
 
     window.addEventListener("keydown", handleKeypress);
     return () => window.removeEventListener("keydown", handleKeypress);
-  }, [isActive, navigate]);
+  }, [setIsActive, isActive, navigate]);
 
   return (
     <div className="MediumThumbnail">
