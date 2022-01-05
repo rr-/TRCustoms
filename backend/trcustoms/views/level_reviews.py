@@ -8,7 +8,10 @@ from trcustoms.utils import parse_ids
 
 class LevelReviewViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
     permission_classes = [AllowAny]
-    queryset = LevelLegacyReview.objects
+    queryset = LevelLegacyReview.objects.all().prefetch_related(
+        "author",
+        "level",
+    )
     serializer_class = LevelLegacyReviewSerializer
     filter_backends = [filters.SearchFilter, filters.OrderingFilter]
     search_fields = [
