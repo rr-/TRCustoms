@@ -1,5 +1,5 @@
 import "./PicturePicker.css";
-import _uniqueId from "lodash/uniqueId";
+import uniqueId from "lodash/uniqueId";
 import { useCallback } from "react";
 import { useEffect } from "react";
 import { useState } from "react";
@@ -73,7 +73,7 @@ const PicturePicker = ({
   const [currentFileIds, setCurrentFileIds] = useState<number[]>(fileIds || []);
   const [errorMessage, setErrorMessage] = useState<string>(null);
   const [dragCounter, setDragCounter] = useState(0);
-  const [elementId] = useState(_uniqueId("pictureDropper-"));
+  const [elementId] = useState(uniqueId("pictureDropper-"));
 
   const handleError = useCallback(
     (error) => {

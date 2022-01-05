@@ -17,6 +17,9 @@
   visibility: visible;
 }
 
+.MediumThumbnail img {
+  display: block;
+}
 .MediumThumbnail--full img {
   flex-grow: 0;
   object-fit: contain;
@@ -29,4 +32,13 @@
 .MediumThumbnail--thumb,
 .MediumThumbnail--full {
   cursor: pointer;
+}
+
+.MediumThumbnail .PushButton--link {
+  display: flex;
+  align-items: center;
+  color: silver;
+}
+.MediumThumbnail .PushButton--link:hover {
+  color: white;
 }
