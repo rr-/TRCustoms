@@ -16,13 +16,12 @@ import { ReviewsTable } from "src/shared/components/ReviewsTable";
 import SectionHeader from "src/shared/components/SectionHeader";
 import SidebarBox from "src/shared/components/SidebarBox";
 import UserPicture from "src/shared/components/UserPicture";
-import { DISABLE_PAGING } from "src/shared/constants";
 import { formatDate } from "src/shared/utils";
 
 const UserPage = () => {
   const { userId } = useParams();
   const [levelSearchQuery, setLevelSearchQuery] = useState<LevelSearchQuery>({
-    page: DISABLE_PAGING,
+    page: null,
     sort: "-created",
     search: null,
     tags: [],
@@ -33,7 +32,7 @@ const UserPage = () => {
   const [reviewSearchQuery, setReviewSearchQuery] = useState<ReviewSearchQuery>(
     {
       authors: [+userId],
-      page: DISABLE_PAGING,
+      page: null,
       sort: "-created",
       search: "",
     }
