@@ -99,6 +99,29 @@ const UserPage = () => {
 
             <dt>Reviewed levels</dt>
             <dd>{user.reviewed_level_count}</dd>
+
+            {user.trle_reviewer_id || user.trle_author_id ? (
+              <>
+                <dt>Links</dt>
+                <dd>
+                  {user.trle_reviewer_id && (
+                    <a
+                      href={`https://www.trle.net/sc/reviewerfeatures.php?rid=${user.trle_reviewer_id}`}
+                    >
+                      TRLE.net (reviewer)
+                    </a>
+                  )}
+                  <br />
+                  {user.trle_author_id && (
+                    <a
+                      href={`https://www.trle.net/sc/authorfeatures.php?aid=${user.trle_author_id}`}
+                    >
+                      TRLE.net (author)
+                    </a>
+                  )}
+                </dd>
+              </>
+            ) : null}
           </dl>
         </SidebarBox>
       </aside>

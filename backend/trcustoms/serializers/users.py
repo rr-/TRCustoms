@@ -32,6 +32,8 @@ class UserSerializer(serializers.ModelSerializer):
             "reviewed_level_count",
             "picture",
             "permissions",
+            "trle_reviewer_id",
+            "trle_author_id",
         )
 
     username = serializers.CharField(
