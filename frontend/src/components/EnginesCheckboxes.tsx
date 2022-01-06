@@ -1,32 +1,21 @@
-import { useQuery } from "react-query";
-import type { LevelFilters } from "src/services/level.service";
-import { LevelService } from "src/services/level.service";
+import { useContext } from "react";
 import CheckboxArrayFormField from "src/shared/components/CheckboxArrayFormField";
-import Loader from "src/shared/components/Loader";
+import { LevelFiltersContext } from "src/shared/contexts/LevelFiltersContext";
 
 const EnginesCheckboxes = () => {
-  const query = {};
-  const result = useQuery<LevelFilters, Error>(
-    [LevelService.getLevelFilters, query],
-    async () => LevelService.getLevelFilters(query)
-  );
-
-  if (result.error) {
-    return <p>{result.error.message}</p>;
-  }
-
-  if (result.isLoading || !result.data) {
-    return <Loader />;
-  }
-
+  const { levelFilters } = useContext(LevelFiltersContext);
   return (
     <CheckboxArrayFormField
       label="Engines"
       name="engines"
-      source={result.data.engines.map((engine) => ({
-        value: engine.id,
-        label: engine.name,
-      }))}
+      source={
+        levelFilters
+          ? levelFilters.engines.map((engine) => ({
+              value: engine.id,
+              label: engine.name,
+            }))
+          : []
+      }
     />
   );
 };

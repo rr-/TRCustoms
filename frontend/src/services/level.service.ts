@@ -10,12 +10,12 @@ import { GenericSearchResult } from "src/shared/types";
 import { filterFalsyObjectValues } from "src/shared/utils";
 import { getGenericSearchQuery } from "src/shared/utils";
 
-interface LevelFilterQuery {}
-
 interface LevelFilters {
   tags: { id: number; name: string }[];
   genres: { id: number; name: string }[];
   engines: { id: number; name: string }[];
+  durations: { id: number; name: string }[];
+  difficulties: { id: number; name: string }[];
 }
 
 interface LevelUser {
@@ -111,9 +111,7 @@ const getLevelById = async (levelId: number): Promise<LevelFull> => {
   });
 };
 
-const getLevelFilters = async (
-  query: LevelFilterQuery
-): Promise<LevelFilters | null> => {
+const getLevelFilters = async (): Promise<LevelFilters | null> => {
   return await fetchJSON<LevelFilters>(`${API_URL}/level_filters/`, {
     method: "GET",
   });
@@ -128,7 +126,6 @@ const LevelService = {
 export type {
   Level,
   LevelAuthor,
-  LevelFilterQuery,
   LevelFilters,
   LevelFull,
   LevelList,
