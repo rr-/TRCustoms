@@ -69,7 +69,7 @@ interface Level {
 }
 
 interface LevelFull extends Level {
-  banner: UploadedFile;
+  cover: UploadedFile;
   media: Medium[];
   trle_id: number | null;
   files: LevelFile[];

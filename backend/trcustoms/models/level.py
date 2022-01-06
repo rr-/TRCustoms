@@ -33,7 +33,7 @@ class Level(DatesInfo):
         LevelDuration, blank=True, null=True, on_delete=models.SET_NULL
     )
 
-    banner = models.ForeignKey(
+    cover = models.ForeignKey(
         UploadedFile, blank=True, null=True, on_delete=models.SET_NULL
     )
     is_approved = models.BooleanField(default=False)

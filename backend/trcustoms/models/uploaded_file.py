@@ -9,7 +9,7 @@ from trcustoms.models.util import DatesInfo
 class UploadedFile(DatesInfo):
     class UploadType(models.TextChoices):
         USER_PICTURE = ("up", "User picture")
-        LEVEL_BANNER = ("lb", "Level banner")
+        LEVEL_COVER = ("lb", "Level cover image")
         LEVEL_SCREENSHOT = ("ls", "Level screenshot")
         LEVEL_FILE = ("lf", "Level file")
 
@@ -17,7 +17,7 @@ class UploadedFile(DatesInfo):
         match self.upload_type:
             case UploadedFile.UploadType.USER_PICTURE:
                 return "avatars"
-            case UploadedFile.UploadType.LEVEL_BANNER:
+            case UploadedFile.UploadType.LEVEL_COVER:
                 return "level_images"
             case UploadedFile.UploadType.LEVEL_SCREENSHOT:
                 return "level_images"
