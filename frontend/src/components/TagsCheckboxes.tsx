@@ -1,32 +1,21 @@
-import { useQuery } from "react-query";
-import type { LevelFilters } from "src/services/level.service";
-import { LevelService } from "src/services/level.service";
+import { useContext } from "react";
 import CheckboxArrayFormField from "src/shared/components/CheckboxArrayFormField";
-import Loader from "src/shared/components/Loader";
+import { LevelFiltersContext } from "src/shared/contexts/LevelFiltersContext";
 
 const TagsCheckboxes = () => {
-  const query = {};
-  const result = useQuery<LevelFilters, Error>(
-    [LevelService.getLevelFilters, query],
-    async () => LevelService.getLevelFilters(query)
-  );
-
-  if (result.error) {
-    return <p>{result.error.message}</p>;
-  }
-
-  if (result.isLoading || !result.data) {
-    return <Loader />;
-  }
-
+  const { levelFilters } = useContext(LevelFiltersContext);
   return (
     <CheckboxArrayFormField
       label="Tags"
       name="tags"
-      source={result.data.tags.map((tag) => ({
-        value: tag.id,
-        label: tag.name,
-      }))}
+      source={
+        levelFilters
+          ? levelFilters.tags.map((tag) => ({
+              value: tag.id,
+              label: tag.name,
+            }))
+          : []
+      }
     />
   );
 };
