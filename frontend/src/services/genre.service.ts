@@ -5,9 +5,13 @@ import type { PagedResponse } from "src/shared/types";
 import { GenericSearchResult } from "src/shared/types";
 import { getGenericSearchQuery } from "src/shared/utils";
 
-interface Genre {
+interface GenreLite {
   id: number;
   name: string;
+  description: string;
+}
+
+interface Genre extends GenreLite {
   level_count: number;
   created: string;
   last_updated: string;
@@ -20,7 +24,7 @@ interface GenreSearchResult
 
 const searchGenres = async (
   searchQuery: GenreSearchQuery
-): Promise<GenreSearchResult | null> => {
+): Promise<GenreSearchResult> => {
   const result = await fetchJSON<GenreList>(`${API_URL}/level_genres/`, {
     query: getGenericSearchQuery(searchQuery),
     method: "GET",
@@ -32,6 +36,12 @@ const GenreService = {
   searchGenres,
 };
 
-export type { Genre, GenreList, GenreSearchQuery, GenreSearchResult };
+export type {
+  Genre,
+  GenreLite,
+  GenreList,
+  GenreSearchQuery,
+  GenreSearchResult,
+};
 
 export { GenreService };

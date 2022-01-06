@@ -4,11 +4,11 @@ import type { TagSearchQuery } from "src/services/tag.service";
 import { TagService } from "src/services/tag.service";
 import type { DataTableColumn } from "src/shared/components/DataTable";
 import { DataTable } from "src/shared/components/DataTable";
-import TagLink from "src/shared/components/TagLink";
+import { TagLink } from "src/shared/components/TagLink";
 import { formatDate } from "src/shared/utils";
 
 interface TagsTableProps {
-  searchQuery: TagSearchQuery | null;
+  searchQuery: TagSearchQuery;
   onSearchQueryChange?: (searchQuery: TagSearchQuery) => any | null;
 }
 
@@ -40,7 +40,7 @@ const TagsTable = ({ searchQuery, onSearchQueryChange }: TagsTableProps) => {
     },
   ];
 
-  const itemKey = (tag) => `${tag.id}`;
+  const itemKey = (tag: Tag) => `${tag.id}`;
 
   return (
     <DataTable
@@ -54,4 +54,4 @@ const TagsTable = ({ searchQuery, onSearchQueryChange }: TagsTableProps) => {
   );
 };
 
-export default TagsTable;
+export { TagsTable };

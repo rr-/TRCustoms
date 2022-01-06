@@ -17,4 +17,4 @@ const UserPicture = ({ user, className }: UserPictureProps) => {
   );
 };
 
-export default UserPicture;
+export { UserPicture };

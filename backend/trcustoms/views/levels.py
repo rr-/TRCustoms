@@ -1,17 +1,45 @@
 from django.shortcuts import get_list_or_404
 from rest_framework import filters, mixins, viewsets
 from rest_framework.decorators import action
+from rest_framework.generics import get_object_or_404
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 
-from trcustoms.mixins import MultiSerializerMixin
+from trcustoms.mixins import MultiSerializerMixin, PermissionsMixin
 from trcustoms.models import Level, LevelMedium
+from trcustoms.models.user import UserPermission
+from trcustoms.permissions import (
+    AllowNone,
+    HasPermission,
+    IsAccessingOwnResource,
+)
 from trcustoms.serializers import LevelFullSerializer, LevelLiteSerializer
 from trcustoms.utils import parse_ids, stream_file_field
 
 
-def get_level_queryset():
-    return (
+class LevelViewSet(
+    PermissionsMixin,
+    MultiSerializerMixin,
+    mixins.RetrieveModelMixin,
+    mixins.UpdateModelMixin,
+    mixins.CreateModelMixin,
+    mixins.ListModelMixin,
+    viewsets.GenericViewSet,
+):
+    permission_classes = [AllowNone]
+    permission_classes_by_action = {
+        "retrieve": [AllowAny],
+        "list": [AllowAny],
+        "create": [HasPermission(UserPermission.UPLOAD_LEVELS)],
+        "update": [
+            HasPermission(UserPermission.EDIT_LEVELS) | IsAccessingOwnResource
+        ],
+        "partial_update": [
+            HasPermission(UserPermission.EDIT_LEVELS) | IsAccessingOwnResource
+        ],
+    }
+
+    queryset = (
         Level.objects.all()
         .prefetch_related(
             "engine",
@@ -23,23 +51,17 @@ def get_level_queryset():
             "last_file",
             "last_file__file",
         )
-        .filter(is_approved=True)
         .distinct()
     )
 
-
-class LevelViewSet(
-    MultiSerializerMixin,
-    mixins.RetrieveModelMixin,
-    mixins.ListModelMixin,
-    viewsets.GenericViewSet,
-):
-    permission_classes = [AllowAny]
-    queryset = get_level_queryset()
     serializer_class = LevelLiteSerializer
     serializer_class_by_action = {
         "retrieve": LevelFullSerializer,
+        "update": LevelFullSerializer,
+        "partial_update": LevelFullSerializer,
+        "create": LevelFullSerializer,
     }
+
     filter_backends = [filters.SearchFilter, filters.OrderingFilter]
     ordering_fields = [
         "name",
@@ -55,6 +77,11 @@ class LevelViewSet(
         "authors__first_name",
         "authors__last_name",
     ]
+
+    def get_object(self):
+        obj = get_object_or_404(self.get_queryset(), pk=self.kwargs["pk"])
+        self.check_object_permissions(self.request, obj)
+        return obj
 
     def get_queryset(self):
         queryset = self.queryset

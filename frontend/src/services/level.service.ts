@@ -1,7 +1,8 @@
-import type { Engine } from "src/services/engine.service";
+import type { EngineLite } from "src/services/engine.service";
 import type { UploadedFile } from "src/services/file.service";
-import type { Genre } from "src/services/genre.service";
-import type { Tag } from "src/services/tag.service";
+import type { GenreLite } from "src/services/genre.service";
+import type { TagLite } from "src/services/tag.service";
+import type { UserLite } from "src/services/user.service";
 import { fetchJSON } from "src/shared/client";
 import { API_URL } from "src/shared/constants";
 import type { GenericSearchQuery } from "src/shared/types";
@@ -9,24 +10,6 @@ import type { PagedResponse } from "src/shared/types";
 import { GenericSearchResult } from "src/shared/types";
 import { filterFalsyObjectValues } from "src/shared/utils";
 import { getGenericSearchQuery } from "src/shared/utils";
-
-interface LevelFilters {
-  tags: { id: number; name: string }[];
-  genres: { id: number; name: string }[];
-  engines: { id: number; name: string }[];
-  durations: { id: number; name: string }[];
-  difficulties: { id: number; name: string }[];
-}
-
-interface LevelUser {
-  id: number;
-  username: string;
-  first_name: string;
-  last_name: string;
-}
-
-interface LevelAuthor extends LevelUser {}
-interface LevelUploader extends LevelUser {}
 
 interface Medium {
   id: number;
@@ -55,11 +38,11 @@ interface Level {
   id: number | null;
   name: string;
   description: string;
-  genres: Genre[];
-  tags: Tag[];
-  engine: Engine;
-  authors: LevelAuthor[];
-  uploader: LevelUploader | null;
+  genres: GenreLite[];
+  tags: TagLite[];
+  engine: EngineLite;
+  authors: UserLite[];
+  uploader: UserLite | null;
   created: string;
   last_updated: string;
   last_file: LevelFile | null;
@@ -78,10 +61,10 @@ interface LevelFull extends Level {
 interface LevelList extends PagedResponse<Level> {}
 
 interface LevelSearchQuery extends GenericSearchQuery {
-  tags?: number[];
-  genres?: number[];
-  engines?: number[];
-  authors?: number[];
+  tags: number[];
+  genres: number[];
+  engines: number[];
+  authors: number[];
 }
 
 interface LevelSearchResult
@@ -91,7 +74,7 @@ interface MediumList extends Array<Medium> {}
 
 const searchLevels = async (
   searchQuery: LevelSearchQuery
-): Promise<LevelSearchResult | null> => {
+): Promise<LevelSearchResult> => {
   const result = await fetchJSON<LevelList>(`${API_URL}/levels/`, {
     query: filterFalsyObjectValues({
       ...getGenericSearchQuery(searchQuery),
@@ -111,27 +94,55 @@ const getLevelById = async (levelId: number): Promise<LevelFull> => {
   });
 };
 
-const getLevelFilters = async (): Promise<LevelFilters | null> => {
-  return await fetchJSON<LevelFilters>(`${API_URL}/level_filters/`, {
-    method: "GET",
+interface LevelBaseChangePayload {
+  name?: string;
+  description?: string;
+  engine_id?: number;
+  duration_id: number;
+  difficulty_id: number;
+  genres?: number[];
+  tag_ids?: number[];
+  author_ids?: number[];
+  cover_id?: number;
+  screenshot_ids?: number[];
+  file_id?: number;
+}
+
+interface LevelUpdatePayload extends LevelBaseChangePayload {}
+interface LevelCreatePayload extends LevelBaseChangePayload {}
+
+const update = async (
+  levelId: number,
+  payload: LevelUpdatePayload
+): Promise<LevelFull> => {
+  const data: { [key: string]: any } = filterFalsyObjectValues(payload);
+  return await fetchJSON(`${API_URL}/levels/${levelId}/`, {
+    method: "PATCH",
+    data: data,
+  });
+};
+
+const create = async (payload: LevelCreatePayload): Promise<LevelFull> => {
+  const data: { [key: string]: any } = filterFalsyObjectValues(payload);
+  return await fetchJSON(`${API_URL}/levels/`, {
+    method: "POST",
+    data: data,
   });
 };
 
 const LevelService = {
   searchLevels,
   getLevelById,
-  getLevelFilters,
+  update,
+  create,
 };
 
 export type {
   Level,
-  LevelAuthor,
-  LevelFilters,
   LevelFull,
   LevelList,
   LevelSearchQuery,
   LevelSearchResult,
-  LevelUploader,
   Medium,
   MediumList,
 };

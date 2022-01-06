@@ -6,7 +6,7 @@ import { Link } from "react-router-dom";
 import { AuthService } from "src/services/auth.service";
 import type { User } from "src/services/user.service";
 import { UserService } from "src/services/user.service";
-import UserForm from "src/shared/components/UserForm";
+import { UserForm } from "src/shared/components/UserForm";
 import { UserContext } from "src/shared/contexts/UserContext";
 
 const RegisterPage = () => {
@@ -16,7 +16,7 @@ const RegisterPage = () => {
 
   const onSubmit = useCallback(
     async (user: User, password: string | null) => {
-      if (user.is_active) {
+      if (user.is_active && password) {
         await AuthService.login(user.username, password);
         setUser(await UserService.getCurrentUser());
         navigate("/");
@@ -44,4 +44,4 @@ const RegisterPage = () => {
   );
 };
 
-export default RegisterPage;
+export { RegisterPage };

@@ -12,7 +12,7 @@ function getYoutubeVideoID(url: string): string | null {
   return match && match[7].length === 11 ? match[7] : null;
 }
 
-const transformLink = (link) => {
+const transformLink = (link: any): any => {
   let embedID = getYoutubeVideoID(link.href);
   if (embedID) {
     return (

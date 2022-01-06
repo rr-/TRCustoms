@@ -1,0 +1,50 @@
+.AutoComplete--input {
+  border: 2px solid var(--input-border-color);
+  background: var(--input-background-color);
+  line-height: 1.5rem;
+  padding: 0.25rem 0.5rem;
+  font-family: var(--font-family);
+  font-size: var(--font-size);
+  min-width: 15rem;
+  box-sizing: border-box;
+}
+.AutoComplete--input:focus {
+  outline: 0;
+  border-color: var(--outline-color);
+}
+
+.AutoCompleteSuggestions {
+  position: absolute;
+  max-height: 20rem;
+  min-width: 15rem;
+  overflow-y: auto;
+  border: 2px solid var(--outline-color);
+  background: var(--input-background-color);
+  box-sizing: border-box;
+  margin-top: -2px;
+}
+
+.AutoCompleteSuggestions--empty {
+  padding: 0 0.5rem;
+}
+
+.AutoCompleteSuggestions--list {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+.AutoCompleteSuggestions--listItem {
+  padding: 0 0.5rem;
+}
+
+.AutoCompleteSuggestions--listItem.active,
+.AutoCompleteSuggestions--listItem:hover {
+  background: var(--button-background-color);
+  color: var(--button-text-color);
+  cursor: pointer;
+}
+
+.AutoCompleteSuggestions--listItem:not(:last-of-type) {
+  border-bottom: 1px solid var(--input-border-color);
+}

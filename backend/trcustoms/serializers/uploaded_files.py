@@ -66,5 +66,7 @@ class UploadedFileSerializer(serializers.ModelSerializer):
 
         return data
 
-    def get_url(self, instance) -> str:
+    def get_url(self, instance) -> str | None:
+        if not instance.content:
+            return None
         return instance.content.url

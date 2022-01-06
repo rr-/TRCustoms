@@ -3,9 +3,9 @@ import type { GenericSearchQuery } from "src/shared/types";
 
 const EMPTY_INPUT_PLACEHOLDER = "-";
 
-function getGenericSearchQuery(
+const getGenericSearchQuery = (
   searchQuery: GenericSearchQuery
-): { [key: string]: string } {
+): { [key: string]: any } => {
   return filterFalsyObjectValues({
     page:
       searchQuery.page && searchQuery.page !== DISABLE_PAGING
@@ -15,15 +15,20 @@ function getGenericSearchQuery(
     search: searchQuery.search,
     disable_paging: searchQuery.page === DISABLE_PAGING ? "1" : null,
   });
-}
+};
 
 const getCurrentSearchParams = (): { [key: string]: string } => {
   return Object.fromEntries(new URL(window.location.href).searchParams);
 };
 
-const validateRequired = (value: string): string | null => {
-  if (!value) {
-    return "Required";
+const validateRequired = (value: any): string | null => {
+  if (
+    value === "" ||
+    value === undefined ||
+    value === null ||
+    value?.length === 0
+  ) {
+    return "This field is required";
   }
   return null;
 };
@@ -119,13 +124,20 @@ const formatFileSize = (input: number | null): string => {
   return `${Math.round(value * 100) / 100} ${suffix}`;
 };
 
-const filterFalsyObjectValues = <T extends Object>(source: T): T => {
+const filterFalsyObjectValues = <T extends any>(source: {
+  [key: string]: T | null;
+}): { [key: string]: T } => {
   return Object.fromEntries(
     Object.entries(source).filter(([_key, value]) => !!value)
-  ) as T;
+  ) as { [key: string]: T };
+};
+
+const pluralize = (noun: string, count: number) => {
+  return count === 1 ? noun : `${noun}s`;
 };
 
 export {
+  pluralize,
   validateRequired,
   validateEmail,
   validatePassword,

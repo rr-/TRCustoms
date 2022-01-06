@@ -8,13 +8,18 @@ import { getGenericSearchQuery } from "src/shared/utils";
 enum UserPermission {
   editUsers = "edit_users",
   listUsers = "list_users",
+  uploadLevels = "upload_levels",
+  editLevels = "edit_levels",
 }
 
-interface User {
-  id: number;
+interface UserLite {
+  id: number | null;
   username: string;
   first_name: string;
   last_name: string;
+}
+
+interface User extends UserLite {
   email: string;
   has_picture: boolean;
   bio: string;
@@ -132,7 +137,7 @@ const register = async ({
 
 const searchUsers = async (
   searchQuery: UserSearchQuery
-): Promise<UserSearchResult | null> => {
+): Promise<UserSearchResult> => {
   const result = await fetchJSON<UserList>(`${API_URL}/users/`, {
     query: getGenericSearchQuery(searchQuery),
     method: "GET",
@@ -149,5 +154,5 @@ const UserService = {
   searchUsers,
 };
 
-export type { User, UserList, UserSearchQuery, UserSearchResult };
+export type { User, UserLite, UserList, UserSearchQuery, UserSearchResult };
 export { UserPermission, UserService };

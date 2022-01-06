@@ -1,20 +1,23 @@
 import { Field } from "formik";
 import { useFormikContext } from "formik";
-import BaseFormField from "src/shared/components/BaseFormField";
+import { BaseFormField } from "src/shared/components/BaseFormField";
 import type { GenericFormFieldProps } from "src/shared/components/BaseFormField";
 import { EMPTY_INPUT_PLACEHOLDER } from "src/shared/utils";
 
-interface CheckboxArrayFormFieldProps extends GenericFormFieldProps {
-  source: Array<{ value: any; label: string }>;
+interface CheckboxArrayFormFieldProps<TValue> extends GenericFormFieldProps {
+  source: Array<{ value: TValue; label: string }>;
 }
 
-const CheckboxArrayFormField = ({
+const CheckboxArrayFormField = <TValue extends React.Key>({
   name,
   source,
   readonly,
   ...props
-}: CheckboxArrayFormFieldProps) => {
-  const { values, setFieldValue } = useFormikContext();
+}: CheckboxArrayFormFieldProps<TValue>) => {
+  const { values, setFieldValue } = useFormikContext() as {
+    values: { [key: string]: any };
+    setFieldValue: (name: string, value: any) => void;
+  };
 
   return (
     <BaseFormField name={name} readonly={readonly} {...props}>
@@ -25,14 +28,14 @@ const CheckboxArrayFormField = ({
                 <Field
                   disabled={readonly}
                   type="checkbox"
-                  onChange={(event) =>
+                  onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
                     setFieldValue(
                       name,
                       event.target.checked
                         ? [...values[name], item.value]
                         : [
                             ...values[name].filter(
-                              (elem) => elem !== item.value
+                              (value: TValue) => value !== item.value
                             ),
                           ]
                     )
@@ -48,4 +51,4 @@ const CheckboxArrayFormField = ({
   );
 };
 
-export default CheckboxArrayFormField;
+export { CheckboxArrayFormField };

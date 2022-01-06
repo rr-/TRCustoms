@@ -1,19 +1,19 @@
 import { useEffect } from "react";
 import { useContext } from "react";
 import { useState } from "react";
-import type { User } from "src/services/user.service";
+import type { UserLite } from "src/services/user.service";
 import { UserContext } from "src/shared/contexts/UserContext";
 
 interface PermissionGuardProps {
   require: string;
-  owningUser?: User;
+  owningUsers?: UserLite[];
   children: React.ReactElement;
   alternative?: React.ReactElement | string | null;
 }
 
 const PermissionGuard = ({
   require,
-  owningUser,
+  owningUsers,
   children,
   alternative,
 }: PermissionGuardProps) => {
@@ -23,10 +23,10 @@ const PermissionGuard = ({
   useEffect(() => {
     let newIsShown =
       user?.permissions?.includes(require) ||
-      (owningUser && user?.id === owningUser?.id);
+      (owningUsers && owningUsers.map((u) => u.id).includes(user.id));
 
     setIsShown(newIsShown);
-  }, [user, owningUser, require]);
+  }, [user, owningUsers, require]);
 
   if (isShown) {
     return children;

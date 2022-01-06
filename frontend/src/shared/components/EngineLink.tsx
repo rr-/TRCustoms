@@ -1,8 +1,8 @@
 import { Link } from "react-router-dom";
-import type { Engine } from "src/services/engine.service";
+import type { EngineLite } from "src/services/engine.service";
 
 interface EngineLinkProps {
-  engine: Engine;
+  engine: EngineLite;
 }
 
 const EngineLink = ({ engine }: EngineLinkProps) => {
@@ -10,4 +10,4 @@ const EngineLink = ({ engine }: EngineLinkProps) => {
   return <Link to={`/?engines=${id}`}>{name}</Link>;
 };
 
-export default EngineLink;
+export { EngineLink };

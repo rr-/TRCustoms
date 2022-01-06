@@ -3,7 +3,7 @@ import { UserPermission } from "src/services/user.service";
 import { PermissionGuard } from "src/shared/components/PermissionGuard";
 
 interface User {
-  id: number;
+  id: number | null;
   username: string;
 }
 
@@ -14,11 +14,12 @@ interface UserLinkProps {
 
 const UserLink = ({ user, label }: UserLinkProps) => {
   const { id, username } = user;
+  const text = label || username;
   return (
     <PermissionGuard require={UserPermission.listUsers} alternative={username}>
-      <Link to={`/users/${id}`}>{label || username}</Link>
+      {id ? <Link to={`/users/${id}`}>{text}</Link> : <>text</>}
     </PermissionGuard>
   );
 };
 
-export default UserLink;
+export { UserLink };

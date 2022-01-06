@@ -6,25 +6,31 @@ import { useParams } from "react-router-dom";
 import type { LevelFull } from "src/services/level.service";
 import { LevelService } from "src/services/level.service";
 import type { ReviewSearchQuery } from "src/services/review.service";
-import EngineLink from "src/shared/components/EngineLink";
-import GenreLink from "src/shared/components/GenreLink";
-import Loader from "src/shared/components/Loader";
+import { UserPermission } from "src/services/user.service";
+import { EngineLink } from "src/shared/components/EngineLink";
+import { GenreLink } from "src/shared/components/GenreLink";
+import { Loader } from "src/shared/components/Loader";
 import { Markdown } from "src/shared/components/Markdown";
 import { MediumThumbnail } from "src/shared/components/MediumThumbnail";
 import { MediumThumbnails } from "src/shared/components/MediumThumbnails";
-import PushButton from "src/shared/components/PushButton";
+import { PermissionGuard } from "src/shared/components/PermissionGuard";
+import { PushButton } from "src/shared/components/PushButton";
 import { ReviewsTable } from "src/shared/components/ReviewsTable";
-import SectionHeader from "src/shared/components/SectionHeader";
-import SidebarBox from "src/shared/components/SidebarBox";
-import TagLink from "src/shared/components/TagLink";
-import UserLink from "src/shared/components/UserLink";
+import { SectionHeader } from "src/shared/components/SectionHeader";
+import { SidebarBox } from "src/shared/components/SidebarBox";
+import { TagLink } from "src/shared/components/TagLink";
+import { UserLink } from "src/shared/components/UserLink";
 import { DISABLE_PAGING } from "src/shared/constants";
 import { formatFileSize } from "src/shared/utils";
 import { formatDate } from "src/shared/utils";
 import { EMPTY_INPUT_PLACEHOLDER } from "src/shared/utils";
 
+interface LevelPageParams {
+  levelId: string;
+}
+
 const LevelPage = () => {
-  const { levelId } = useParams();
+  const { levelId } = (useParams() as unknown) as LevelPageParams;
   const [reviewsSearchQuery, setReviewsSearchQuery] = useState<
     ReviewSearchQuery
   >({
@@ -82,13 +88,22 @@ const LevelPage = () => {
                   Download
                 </PushButton>
               ) : null}
+              <PermissionGuard
+                require={UserPermission.editLevels}
+                owningUsers={[
+                  ...level.authors,
+                  ...(level.uploader ? [level.uploader] : []),
+                ]}
+              >
+                <PushButton to={`/levels/${levelId}/edit`}>Edit</PushButton>
+              </PermissionGuard>
             </>
           }
         >
           <dl id="LevelPage--basicInfo">
             <dt>Author(s)</dt>
             <dd>
-              {level.tags.length ? (
+              {level.authors.length ? (
                 <ul className="LevelPage--basicInfoList">
                   {level.authors.map((author) => (
                     <li
@@ -183,25 +198,27 @@ const LevelPage = () => {
               <SectionHeader>Version history</SectionHeader>
             </div>
 
-            {level.files.map((file) => (
-              <Fragment key={file.id}>
-                <dt className="LevelPage--fileTableTerm">
-                  {file.url ? (
-                    <PushButton isPlain={true} target="_blank" to={file.url}>
-                      Version {file.version}
-                    </PushButton>
-                  ) : (
-                    <PushButton
-                      isPlain={true}
-                      onClick={() => showFileGoneAlert()}
-                    >
-                      Version {file.version}
-                    </PushButton>
-                  )}
-                </dt>
-                <dd>{formatDate(file.created)}</dd>
-              </Fragment>
-            ))}
+            {level.files
+              .sort((a, b) => b.version - a.version)
+              .map((file) => (
+                <Fragment key={file.id}>
+                  <dt className="LevelPage--fileTableTerm">
+                    {file.url ? (
+                      <PushButton isPlain={true} target="_blank" to={file.url}>
+                        Version {file.version}
+                      </PushButton>
+                    ) : (
+                      <PushButton
+                        isPlain={true}
+                        onClick={() => showFileGoneAlert()}
+                      >
+                        Version {file.version}
+                      </PushButton>
+                    )}
+                  </dt>
+                  <dd>{formatDate(file.created)}</dd>
+                </Fragment>
+              ))}
           </dl>
         </SidebarBox>
       </aside>
@@ -236,4 +253,4 @@ const LevelPage = () => {
   );
 };
 
-export default LevelPage;
+export { LevelPage };

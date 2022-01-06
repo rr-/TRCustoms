@@ -8,11 +8,11 @@ interface SidebarBoxProps {
 
 const SidebarBox = ({ id, actions, children }: SidebarBoxProps) => {
   return (
-    <div id={id} className="SidebarBox">
+    <div id={id || undefined} className="SidebarBox">
       {actions && <div className="SidebarBox--actions">{actions}</div>}
       {children}
     </div>
   );
 };
 
-export default SidebarBox;
+export { SidebarBox };

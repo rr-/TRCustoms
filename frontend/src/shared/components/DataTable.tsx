@@ -5,9 +5,9 @@ import { useState } from "react";
 import { useEffect } from "react";
 import { useQuery } from "react-query";
 import { useInfiniteQuery } from "react-query";
-import Loader from "src/shared/components/Loader";
-import Pager from "src/shared/components/Pager";
-import SortLink from "src/shared/components/SortLink";
+import { Loader } from "src/shared/components/Loader";
+import { Pager } from "src/shared/components/Pager";
+import { SortLink } from "src/shared/components/SortLink";
 import { DISABLE_PAGING } from "src/shared/constants";
 import type { GenericSearchResult } from "src/shared/types";
 import type { GenericSearchQuery } from "src/shared/types";
@@ -27,13 +27,13 @@ interface DataTableColumn<TItem> {
 
 interface DataTableProps<TItem, TQuery> {
   className?: string | null;
-  itemKey: (TItem) => string;
+  itemKey: (item: TItem) => string;
   columns: DataTableColumn<TItem>[];
 
   searchQuery: TQuery;
   searchFunc: (
     searchQuery: TQuery
-  ) => Promise<GenericSearchResult<TQuery, TItem> | null>;
+  ) => Promise<GenericSearchResult<TQuery, TItem>>;
 
   onSearchQueryChange?: (searchQuery: TQuery) => any | null;
 }
@@ -49,13 +49,13 @@ const DataTableHeader = <TItem extends {}, TQuery extends GenericSearchQuery>({
       <tr>
         {columns.map((column) => (
           <th
-            className={className && `${className}--${column.name}`}
-            title={column.tooltip}
+            className={className ? `${className}--${column.name}` : undefined}
+            title={column.tooltip || undefined}
             key={`head-${column.name}`}
           >
             {onSearchQueryChange && column.sortKey ? (
               <SortLink
-                currentSort={searchQuery.sort}
+                currentSort={searchQuery.sort || null}
                 onSortChange={(sort) =>
                   onSearchQueryChange({ ...searchQuery, sort: sort })
                 }
@@ -82,8 +82,8 @@ const DataTableBody = <TItem extends {}, TQuery extends GenericSearchQuery>({
 }: {
   result: {
     isLoading?: boolean;
-    data?: GenericSearchResult<TQuery, TItem>;
-    error?: Error;
+    data?: GenericSearchResult<TQuery, TItem> | null;
+    error?: Error | null;
   };
   lastRowRef?: any;
 } & DataTableProps<TItem, TQuery>) => {
@@ -125,8 +125,8 @@ const DataTableBody = <TItem extends {}, TQuery extends GenericSearchQuery>({
         <tr key={itemKey(item)} ref={lastRowRef}>
           {columns.map((column) => (
             <td
-              className={className && `${className}--${column.name}`}
-              title={column.itemTooltip?.(item)}
+              className={className ? `${className}--${column.name}` : undefined}
+              title={column.itemTooltip?.(item) || undefined}
               key={`${itemKey(item)}-${column.name}`}
             >
               {column.itemElement(item)}
@@ -143,20 +143,24 @@ const DataTableFooter = <TItem extends {}, TQuery extends GenericSearchQuery>({
   columns,
 }: DataTableProps<TItem, TQuery>) => {
   return (
-    columns.some((column) => !!column.footer) && (
-      <tfoot>
-        <tr>
-          {columns.map((column) => (
-            <th
-              className={className && `${className}--${column.name}`}
-              key={`foot-${column.name}`}
-            >
-              {column.footer?.()}
-            </th>
-          ))}
-        </tr>
-      </tfoot>
-    )
+    <>
+      {columns.some((column) => !!column.footer) && (
+        <tfoot>
+          <tr>
+            {columns.map((column) => (
+              <th
+                className={
+                  className ? `${className}--${column.name}` : undefined
+                }
+                key={`foot-${column.name}`}
+              >
+                {column.footer?.()}
+              </th>
+            ))}
+          </tr>
+        </tfoot>
+      )}
+    </>
   );
 };
 
@@ -185,7 +189,7 @@ const PagedDataTable = <TItem extends {}, TQuery extends GenericSearchQuery>(
           onPageChange={(page) =>
             onSearchQueryChange({ ...searchQuery, page: page })
           }
-          className={className && `${className}--pager`}
+          className={className ? `${className}--pager` : undefined}
           pagedResponse={result.data}
         />
       ) : null}
@@ -217,6 +221,9 @@ const InfiniteDataTable = <TItem extends {}, TQuery extends GenericSearchQuery>(
     },
     {
       getNextPageParam: (lastPage, pages) => {
+        if (!lastPage) {
+          return undefined;
+        }
         return lastPage.current_page < lastPage.last_page
           ? lastPage.current_page + 1
           : undefined;
@@ -258,7 +265,7 @@ const InfiniteDataTable = <TItem extends {}, TQuery extends GenericSearchQuery>(
           <Fragment key={`body${i}`}>
             <DataTableBody
               lastRowRef={setLoadingElement}
-              result={{ isLoading: false, data: result, error: null }}
+              result={{ isLoading: false, data: result, error: undefined }}
               {...props}
             />
           </Fragment>

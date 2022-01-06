@@ -4,12 +4,12 @@ import type { UserSearchQuery } from "src/services/user.service";
 import { UserService } from "src/services/user.service";
 import type { DataTableColumn } from "src/shared/components/DataTable";
 import { DataTable } from "src/shared/components/DataTable";
-import UserLink from "src/shared/components/UserLink";
+import { UserLink } from "src/shared/components/UserLink";
 import { formatDate } from "src/shared/utils";
 import { EMPTY_INPUT_PLACEHOLDER } from "src/shared/utils";
 
 interface UsersTableProps {
-  searchQuery: UserSearchQuery | null;
+  searchQuery: UserSearchQuery;
   onSearchQueryChange?: (searchQuery: UserSearchQuery) => any | null;
 }
 
@@ -61,7 +61,7 @@ const UsersTable = ({ searchQuery, onSearchQueryChange }: UsersTableProps) => {
     },
   ];
 
-  const itemKey = (user) => `${user.id}`;
+  const itemKey = (user: User) => `${user.id}`;
 
   return (
     <DataTable
@@ -75,4 +75,4 @@ const UsersTable = ({ searchQuery, onSearchQueryChange }: UsersTableProps) => {
   );
 };
 
-export default UsersTable;
+export { UsersTable };

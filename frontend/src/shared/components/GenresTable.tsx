@@ -4,11 +4,11 @@ import type { GenreSearchQuery } from "src/services/genre.service";
 import { GenreService } from "src/services/genre.service";
 import type { DataTableColumn } from "src/shared/components/DataTable";
 import { DataTable } from "src/shared/components/DataTable";
-import GenreLink from "src/shared/components/GenreLink";
+import { GenreLink } from "src/shared/components/GenreLink";
 import { formatDate } from "src/shared/utils";
 
 interface GenresTableProps {
-  searchQuery: GenreSearchQuery | null;
+  searchQuery: GenreSearchQuery;
   onSearchQueryChange?: (searchQuery: GenreSearchQuery) => any | null;
 }
 
@@ -43,7 +43,7 @@ const GenresTable = ({
     },
   ];
 
-  const itemKey = (genre) => `${genre.id}`;
+  const itemKey = (genre: Genre) => `${genre.id}`;
 
   return (
     <DataTable

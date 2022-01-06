@@ -15,7 +15,7 @@ interface UploadedFile {
   upload_type: UploadType;
 }
 
-const getFileById = async (fileId: number): Promise<UploadedFile | null> => {
+const getFileById = async (fileId: number): Promise<UploadedFile> => {
   return await fetchJSON<UploadedFile>(`${API_URL}/uploads/${fileId}/`, {
     method: "GET",
   });

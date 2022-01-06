@@ -1,0 +1,18 @@
+.GenresFormField {
+  columns: 2;
+  display: inline-block;
+  padding: 0.5rem;
+  background: var(--label-background-color);
+  border: 2px solid var(--input-border-color);
+}
+.GenresFormField .icon {
+  color: var(--input-border-color);
+  margin-left: 1rem;
+  float: right;
+}
+.GenresFormField--label {
+  width: 100%;
+}
+.GenresFormField--labelText {
+  flex-grow: 1;
+}
