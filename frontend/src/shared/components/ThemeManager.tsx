@@ -15,6 +15,7 @@ interface Theme {
     "button-hovered-background-color": string;
     "button-hovered-text-color": string;
     "button-text-decoration": string;
+    "label-background-color": string;
     "navbar-primary-background-color": string;
     "navbar-primary-background-color-inside": string;
     "navbar-secondary-background-color": string;
@@ -49,6 +50,7 @@ const themes: Array<Theme> = [
         "var(--navbar-secondary-background-color)",
       "button-hovered-text-color": "var(--text-color)",
       "button-text-decoration": "underline",
+      "label-background-color": "var(--navbar-secondary-background-color)",
       "navbar-primary-background-color": "yellowgreen",
       "navbar-primary-background-color-inside": "transparent",
       "navbar-secondary-background-color": "#c8ec85",
@@ -82,6 +84,7 @@ const themes: Array<Theme> = [
       "button-hovered-background-color": "silver",
       "button-hovered-text-color": "var(--text-color)",
       "button-text-decoration": "none",
+      "label-background-color": "var(--navbar-secondary-background-color)",
       "navbar-primary-background-color": "transparent",
       "navbar-primary-background-color-inside": "transparent",
       "navbar-secondary-background-color": "transparent",
@@ -115,6 +118,7 @@ const themes: Array<Theme> = [
       "button-hovered-background-color": "var(--button-background-color)",
       "button-hovered-text-color": "var(--button-text-color)",
       "button-text-decoration": "none",
+      "label-background-color": "var(--navbar-secondary-background-color)",
       "navbar-primary-background-color": "transparent",
       "navbar-primary-background-color-inside": "transparent",
       "navbar-secondary-background-color": "transparent",

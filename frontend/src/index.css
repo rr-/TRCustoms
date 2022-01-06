@@ -41,13 +41,6 @@ a:hover {
 }
 
 /* forms */
-.FormField {
-  display: block;
-  margin-bottom: 0.5rem;
-}
-.FormField label {
-  display: block;
-}
 .FormFieldSuccess {
   color: forestgreen;
 }
@@ -146,16 +139,6 @@ input[type="checkbox"]:checked:after {
 #Content {
   margin-top: 1rem;
   margin-bottom: 1rem;
-}
-
-fieldset {
-  border: 2px solid var(--input-border-color);
-  margin: 2rem 0;
-}
-legend {
-  background: var(--button-background-color);
-  color: var(--button-text-color);
-  padding: 0.3rem 1rem;
 }
 
 label {

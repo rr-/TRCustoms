@@ -32,12 +32,12 @@ const UserEditPage = () => {
     navigate(`/users/${userId}`);
   }, [navigate, userId]);
 
-  if (result.isLoading) {
-    return <Loader />;
-  }
-
   if (result.error) {
     return <p>{result.error.message}</p>;
+  }
+
+  if (result.isLoading) {
+    return <Loader />;
   }
 
   const user = result.data;

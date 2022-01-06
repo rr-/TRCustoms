@@ -1,0 +1,10 @@
+.FormField {
+  margin-bottom: 0.5rem;
+}
+.FormField--label {
+  white-space: nowrap;
+  display: inline-block;
+}
+.FormField--field {
+  flex-grow: 1;
+}

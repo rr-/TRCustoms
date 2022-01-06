@@ -7,10 +7,12 @@ import { AuthService } from "src/services/auth.service";
 import { UserService } from "src/services/user.service";
 import type { User } from "src/services/user.service";
 import { FetchError } from "src/shared/client";
+import { FormGrid } from "src/shared/components/FormGrid";
+import { FormGridButtons } from "src/shared/components/FormGrid";
+import { FormGridFieldSet } from "src/shared/components/FormGrid";
 import PasswordFormField from "src/shared/components/PasswordFormField";
 import TextFormField from "src/shared/components/TextFormField";
 import { UserContext } from "src/shared/contexts/UserContext";
-import { makeSentence } from "src/shared/utils";
 
 const LoginPage = () => {
   const navigate = useNavigate();
@@ -36,10 +38,10 @@ const LoginPage = () => {
                 "Your account was not yet activated. Please try again later :)",
             });
           } else {
-            setStatus({ error: "Invalid username or password." });
+            setStatus({ error: <>Invalid username or password.</> });
           }
         } else {
-          setStatus({ error: "unknown error" });
+          setStatus({ error: <>Unknown error.</> });
         }
       }
     },
@@ -51,19 +53,18 @@ const LoginPage = () => {
       <h1>Login</h1>
       <Formik initialValues={{ username: "", password: "" }} onSubmit={submit}>
         {({ isSubmitting, status }) => (
-          <Form className="Form">
-            <TextFormField label="Username" name="username" />
-            <PasswordFormField label="Password" name="password" />
-            <div className="FormField">
-              {status?.error && (
-                <div className="FormFieldError">
-                  {makeSentence(status.error)}
-                </div>
-              )}
-              <button type="submit" disabled={isSubmitting}>
-                Log in
-              </button>
-            </div>
+          <Form>
+            <FormGrid>
+              <FormGridFieldSet>
+                <TextFormField label="Username" name="username" />
+                <PasswordFormField label="Password" name="password" />
+              </FormGridFieldSet>
+              <FormGridButtons status={status}>
+                <button type="submit" disabled={isSubmitting}>
+                  Log in
+                </button>
+              </FormGridButtons>
+            </FormGrid>
           </Form>
         )}
       </Formik>
