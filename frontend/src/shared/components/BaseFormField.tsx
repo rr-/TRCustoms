@@ -1,9 +1,13 @@
 import FormFieldError from "src/shared/components/FormFieldError";
 
-interface BaseFormFieldProps {
-  required: boolean;
+interface GenericFormFieldProps {
   name: string;
   label: string;
+  required?: boolean;
+  readonly?: boolean;
+}
+
+interface BaseFormFieldProps extends GenericFormFieldProps {
   children: React.ReactNode;
 }
 
@@ -25,4 +29,5 @@ const BaseFormField = ({
   );
 };
 
+export type { GenericFormFieldProps };
 export default BaseFormField;

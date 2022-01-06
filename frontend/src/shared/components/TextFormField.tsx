@@ -1,16 +1,26 @@
+import "./TextFormField.css";
 import { Field } from "formik";
 import BaseFormField from "src/shared/components/BaseFormField";
+import type { GenericFormFieldProps } from "src/shared/components/BaseFormField";
 
-interface TextFormFieldProps {
-  name: string;
-  label: string;
-  required?: boolean;
+interface TextFormFieldProps extends GenericFormFieldProps {
+  type?: string;
 }
 
-const TextFormField = ({ name, label, required }: TextFormFieldProps) => {
+const TextFormField = ({
+  name,
+  readonly,
+  type,
+  ...props
+}: TextFormFieldProps) => {
   return (
-    <BaseFormField required={required} name={name} label={label}>
-      <Field type="text" name={name} />
+    <BaseFormField name={name} readonly={readonly} {...props}>
+      <Field
+        disabled={readonly}
+        className="TextFormField--input"
+        type={type || "text"}
+        name={name}
+      />
     </BaseFormField>
   );
 };

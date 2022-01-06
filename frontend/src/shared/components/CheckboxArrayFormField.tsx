@@ -1,30 +1,29 @@
 import { Field } from "formik";
 import { useFormikContext } from "formik";
 import BaseFormField from "src/shared/components/BaseFormField";
+import type { GenericFormFieldProps } from "src/shared/components/BaseFormField";
 import { EMPTY_INPUT_PLACEHOLDER } from "src/shared/utils";
 
-interface CheckboxArrayFormFieldProps {
-  name: string;
-  label: string;
+interface CheckboxArrayFormFieldProps extends GenericFormFieldProps {
   source: Array<{ value: any; label: string }>;
-  required?: boolean;
 }
 
 const CheckboxArrayFormField = ({
   name,
-  label,
   source,
-  required,
+  readonly,
+  ...props
 }: CheckboxArrayFormFieldProps) => {
   const { values, setFieldValue } = useFormikContext();
 
   return (
-    <BaseFormField required={required} name={name} label={label}>
+    <BaseFormField name={name} readonly={readonly} {...props}>
       {source.length
         ? source.map((item) => (
             <div key={item.value}>
               <label>
                 <Field
+                  disabled={readonly}
                   type="checkbox"
                   onChange={(event) =>
                     setFieldValue(
