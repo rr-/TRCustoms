@@ -208,9 +208,9 @@ def process_level_images(level: Level, trle_level: TRLELevel) -> None:
         )
 
         if pos == 0:
-            if level.banner != uploaded_file:
-                level.banner = uploaded_file
-                level.save(update_fields=["banner"])
+            if level.cover != uploaded_file:
+                level.cover = uploaded_file
+                level.save(update_fields=["cover"])
         else:
             LevelMedium.objects.update_or_create(
                 level=level,

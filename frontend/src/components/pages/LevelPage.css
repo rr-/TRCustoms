@@ -2,7 +2,7 @@
   display: grid;
   grid-template-areas:
     "header header"
-    "banner main"
+    "cover main"
     "sidebar main";
   grid-template-columns: 25% auto;
   grid-template-rows: min-content min-content 1fr;
@@ -12,8 +12,8 @@
 #LevelPage--header {
   grid-area: header;
 }
-#LevelPage--banner {
-  grid-area: banner;
+#LevelPage--cover {
+  grid-area: cover;
 }
 #LevelPage--sidebar {
   grid-area: sidebar;

@@ -65,8 +65,8 @@ const LevelPage = () => {
         </h1>
       </header>
 
-      <div id="LevelPage--banner">
-        <MediumThumbnail file={level.banner} />
+      <div id="LevelPage--cover">
+        <MediumThumbnail file={level.cover} />
       </div>
 
       <aside id="LevelPage--sidebar">

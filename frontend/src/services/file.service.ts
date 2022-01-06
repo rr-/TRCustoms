@@ -4,7 +4,7 @@ import { API_URL } from "src/shared/constants";
 
 enum UploadType {
   UserPicture = "up",
-  LevelBanner = "lb",
+  LevelCover = "lb",
   LevelScreenshot = "ls",
   LevelFile = "lf",
 }

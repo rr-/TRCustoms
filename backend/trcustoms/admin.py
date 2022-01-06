@@ -144,7 +144,7 @@ class LevelAdmin(admin.ModelAdmin):
         "last_updated",
         "last_file",
     ]
-    raw_id_fields = ["uploader", "authors", "banner"]
+    raw_id_fields = ["uploader", "authors", "cover"]
 
 
 @admin.register(LevelMedium)

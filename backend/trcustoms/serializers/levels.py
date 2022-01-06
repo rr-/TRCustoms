@@ -82,14 +82,14 @@ class LevelLiteSerializer(serializers.ModelSerializer):
 
 
 class LevelFullSerializer(LevelLiteSerializer):
-    banner = UploadedFileSerializer(read_only=True)
+    cover = UploadedFileSerializer(read_only=True)
     media = LevelMediumSerializer(read_only=True, many=True)
     files = LevelFileSerializer(read_only=True, many=True)
 
     class Meta:
         model = Level
         fields = LevelLiteSerializer.Meta.fields + [
-            "banner",
+            "cover",
             "media",
             "trle_id",
             "files",

@@ -4,14 +4,14 @@ from trcustoms.models import UploadedFile
 
 MAX_SIZE_MAP = {
     UploadedFile.UploadType.USER_PICTURE: 300 * 1024,  # 300 KB
-    UploadedFile.UploadType.LEVEL_BANNER: 1024 * 1024,  # 1 MB
+    UploadedFile.UploadType.LEVEL_COVER: 1024 * 1024,  # 1 MB
     UploadedFile.UploadType.LEVEL_SCREENSHOT: 1024 * 1024,  # 1 MB
     UploadedFile.UploadType.LEVEL_FILE: 1024 * 1024 * 1024,  # 1 GB
 }
 
 CONTENT_TYPE_MAP = {
     UploadedFile.UploadType.USER_PICTURE: ["image/jpeg", "image/png"],
-    UploadedFile.UploadType.LEVEL_BANNER: ["image/jpeg"],
+    UploadedFile.UploadType.LEVEL_COVER: ["image/jpeg"],
     UploadedFile.UploadType.LEVEL_SCREENSHOT: ["image/jpeg"],
     UploadedFile.UploadType.LEVEL_FILE: ["application/zip"],
 }
