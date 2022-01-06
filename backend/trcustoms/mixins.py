@@ -37,13 +37,15 @@ class PermissionsMixin(PermissionsMixinProtocol):
         If the action is not mapped, falls back to `permission_classes`.
         """
         if self.action in self.permission_classes_by_action:
-            return [
+            ret = [
                 permission()
                 for permission in self.permission_classes_by_action[
                     self.action
                 ]
             ]
-        return [permission() for permission in self.permission_classes]
+        else:
+            ret = [permission() for permission in self.permission_classes]
+        return ret
 
 
 class MultiSerializerMixin:

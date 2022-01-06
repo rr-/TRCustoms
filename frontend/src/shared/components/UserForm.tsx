@@ -5,24 +5,22 @@ import { UploadType } from "src/services/file.service";
 import type { User } from "src/services/user.service";
 import { UserService } from "src/services/user.service";
 import { FetchError } from "src/shared/client";
-import BaseFormField from "src/shared/components/BaseFormField";
-import EmailFormField from "src/shared/components/EmailFormField";
+import { BaseFormField } from "src/shared/components/BaseFormField";
+import { EmailFormField } from "src/shared/components/EmailFormField";
 import { FormGrid } from "src/shared/components/FormGrid";
 import { FormGridButtons } from "src/shared/components/FormGrid";
 import { FormGridFieldSet } from "src/shared/components/FormGrid";
-import PasswordFormField from "src/shared/components/PasswordFormField";
-import PicturePicker from "src/shared/components/PicturePicker";
-import TextAreaFormField from "src/shared/components/TextAreaFormField";
-import TextFormField from "src/shared/components/TextFormField";
-import UserLink from "src/shared/components/UserLink";
+import { PasswordFormField } from "src/shared/components/PasswordFormField";
+import { PicturePicker } from "src/shared/components/PicturePicker";
+import { TextAreaFormField } from "src/shared/components/TextAreaFormField";
+import { TextFormField } from "src/shared/components/TextFormField";
+import { UserLink } from "src/shared/components/UserLink";
 import { makeSentence } from "src/shared/utils";
-import {
-  validateUserName,
-  validateRequired,
-  validatePassword,
-  validatePassword2,
-  validateEmail,
-} from "src/shared/utils";
+import { validateUserName } from "src/shared/utils";
+import { validateRequired } from "src/shared/utils";
+import { validatePassword } from "src/shared/utils";
+import { validatePassword2 } from "src/shared/utils";
+import { validateEmail } from "src/shared/utils";
 
 interface UserFormProps {
   user?: User | null;
@@ -82,7 +80,7 @@ const UserForm = ({ user, onGoBack, onSubmit }: UserFormProps) => {
           picture: values.picture,
         };
 
-        if (user) {
+        if (user?.id) {
           let outUser = await UserService.update(user.id, payload);
 
           onSubmit?.(outUser, values.password);
@@ -107,20 +105,14 @@ const UserForm = ({ user, onGoBack, onSubmit }: UserFormProps) => {
     [user, onSubmit, handleSubmitError]
   );
 
-  const validate = (values) => {
+  const validate = (values: { [key: string]: any }) => {
     const errors: {
-      username?: string;
-      firstName?: string;
-      lastName?: string;
-      email?: string;
-      oldPassword?: string;
-      password?: string;
-      password2?: string;
-      bio?: string;
-      picture?: string;
+      [key: string]: string | null;
     } = {};
 
-    const validatorMap = {
+    const validatorMap: {
+      [field: string]: Array<(value: any) => string | null>;
+    } = {
       username: [validateRequired, validateUserName],
       email: [validateRequired, validateEmail],
       oldPassword: [],
@@ -229,4 +221,4 @@ const UserForm = ({ user, onGoBack, onSubmit }: UserFormProps) => {
   );
 };
 
-export default UserForm;
+export { UserForm };

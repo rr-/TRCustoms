@@ -4,7 +4,7 @@ import type { PagedResponse } from "src/shared/types";
 const PAGES_AROUND = 2;
 
 interface PagerProps<TCollection> {
-  onPageChange: (page: number) => any;
+  onPageChange: (page: number) => void;
   pagedResponse: PagedResponse<TCollection>;
   className?: string | null;
 }
@@ -26,7 +26,7 @@ const getPagesShown = (
     .reduce(
       (acc: number[], page: number) => [
         ...acc,
-        ...(acc.at(-1) + 2 === page ? [page - 1] : []),
+        ...((acc.at(-1) || 0) + 2 === page ? [page - 1] : []),
         page,
       ],
       []
@@ -43,6 +43,59 @@ const addEllipsisMarkers = (pages: number[]): (number | null)[] => {
   );
 };
 
+const PagerActiveLink = ({
+  onPageChange,
+  page,
+  children,
+}: {
+  onPageChange: (page: number) => void;
+  page: number;
+  children: React.ReactNode;
+}) => {
+  return (
+    <button
+      type="button"
+      className="Pager--button link"
+      onClick={() => onPageChange(page)}
+    >
+      {children}
+    </button>
+  );
+};
+
+const PagerInactiveLink = ({
+  page,
+  children,
+}: {
+  page: number;
+  children: React.ReactNode;
+}) => {
+  return <span>{children}</span>;
+};
+
+const PagerLink = ({
+  onPageChange,
+  firstPage,
+  lastPage,
+  page,
+  children,
+}: {
+  onPageChange: (page: number) => void;
+  firstPage: number;
+  lastPage: number;
+  page: number;
+  children: React.ReactNode;
+}) => {
+  if (page >= firstPage && page <= lastPage) {
+    return (
+      <PagerActiveLink onPageChange={onPageChange} page={page}>
+        {children}
+      </PagerActiveLink>
+    );
+  }
+  return <PagerInactiveLink page={page}>{children}</PagerInactiveLink>;
+};
+
 const Pager = <TCollection extends {}>({
   onPageChange,
   pagedResponse,
@@ -57,27 +110,21 @@ const Pager = <TCollection extends {}>({
     getPagesShown(firstPage, currentPage, lastPage)
   );
 
-  const activeLinkElem = (page, label) => (
-    <button
-      type="button"
-      className="Pager--button link"
-      onClick={() => onPageChange(page)}
-    >
-      {label}
-    </button>
-  );
-  const inactiveLinkElem = (page, label) => <span>{label}</span>;
-  const linkElem = (page, label) =>
-    (page >= firstPage && page <= lastPage ? activeLinkElem : inactiveLinkElem)(
-      page,
-      label
-    );
+  const pagerLinkProps = { onPageChange, firstPage, lastPage };
 
   return (
     <div className={`Pager ${className}`}>
       <ul>
-        <li>{linkElem(firstPage, <>&laquo;</>)}</li>
-        <li>{linkElem(prevPage, <>&lsaquo;</>)}</li>
+        <li>
+          <PagerLink {...pagerLinkProps} page={firstPage}>
+            &laquo;
+          </PagerLink>
+        </li>
+        <li>
+          <PagerLink {...pagerLinkProps} page={prevPage}>
+            &lsaquo;
+          </PagerLink>
+        </li>
 
         {pagesShown.map((page, idx) =>
           page === null ? (
@@ -86,16 +133,26 @@ const Pager = <TCollection extends {}>({
             </li>
           ) : (
             <li key={idx} className={page === currentPage ? "active" : ""}>
-              {linkElem(page, <>{page}</>)}
+              <PagerLink {...pagerLinkProps} page={page}>
+                {page}
+              </PagerLink>
             </li>
           )
         )}
 
-        <li>{linkElem(nextPage, <>&rsaquo;</>)}</li>
-        <li>{linkElem(lastPage, <>&raquo;</>)}</li>
+        <li>
+          <PagerLink {...pagerLinkProps} page={nextPage}>
+            &rsaquo;
+          </PagerLink>
+        </li>
+        <li>
+          <PagerLink {...pagerLinkProps} page={lastPage}>
+            &raquo;
+          </PagerLink>
+        </li>
       </ul>
     </div>
   );
 };
 
-export default Pager;
+export { Pager };

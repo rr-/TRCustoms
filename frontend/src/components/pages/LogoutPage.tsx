@@ -17,4 +17,4 @@ const LogoutPage = () => {
   return null;
 };
 
-export default LogoutPage;
+export { LogoutPage };

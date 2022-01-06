@@ -1,5 +1,5 @@
 import "./BaseFormField.css";
-import FormFieldError from "src/shared/components/FormFieldError";
+import { FormFieldError } from "src/shared/components/FormFieldError";
 
 interface GenericFormFieldProps {
   name: string;
@@ -36,4 +36,4 @@ const BaseFormField = ({
 };
 
 export type { GenericFormFieldProps };
-export default BaseFormField;
+export { BaseFormField };

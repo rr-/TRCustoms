@@ -9,9 +9,9 @@ enum SortLinkStatus {
 }
 
 interface SortLinkProps {
-  currentSort: string;
+  currentSort: string | null;
   targetSort: string;
-  onSortChange: (sort: string) => any;
+  onSortChange: (sort: string) => void;
   children: React.ReactNode;
 }
 
@@ -52,4 +52,4 @@ const SortLink = ({
   );
 };
 
-export default SortLink;
+export { SortLink };

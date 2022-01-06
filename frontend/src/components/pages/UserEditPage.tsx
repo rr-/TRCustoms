@@ -5,14 +5,18 @@ import { useNavigate } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import { UserService } from "src/services/user.service";
 import type { User } from "src/services/user.service";
-import Loader from "src/shared/components/Loader";
-import UserForm from "src/shared/components/UserForm";
+import { Loader } from "src/shared/components/Loader";
+import { UserForm } from "src/shared/components/UserForm";
 import { UserContext } from "src/shared/contexts/UserContext";
+
+interface UserEditPageParams {
+  userId: string;
+}
 
 const UserEditPage = () => {
   const userContext = useContext(UserContext);
   const navigate = useNavigate();
-  const { userId } = useParams();
+  const { userId } = (useParams() as unknown) as UserEditPageParams;
 
   const result = useQuery<User, Error>(
     [UserService.getUserById, userId],
@@ -36,7 +40,7 @@ const UserEditPage = () => {
     return <p>{result.error.message}</p>;
   }
 
-  if (result.isLoading) {
+  if (result.isLoading || !result.data) {
     return <Loader />;
   }
 
@@ -51,4 +55,4 @@ const UserEditPage = () => {
   );
 };
 
-export default UserEditPage;
+export { UserEditPage };

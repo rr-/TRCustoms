@@ -4,15 +4,15 @@ import type { LevelSearchQuery } from "src/services/level.service";
 import { LevelService } from "src/services/level.service";
 import type { DataTableColumn } from "src/shared/components/DataTable";
 import { DataTable } from "src/shared/components/DataTable";
-import LevelLink from "src/shared/components/LevelLink";
-import PushButton from "src/shared/components/PushButton";
-import UserLink from "src/shared/components/UserLink";
+import { LevelLink } from "src/shared/components/LevelLink";
+import { PushButton } from "src/shared/components/PushButton";
+import { UserLink } from "src/shared/components/UserLink";
 import { formatDate } from "src/shared/utils";
 import { formatFileSize } from "src/shared/utils";
 import { EMPTY_INPUT_PLACEHOLDER } from "src/shared/utils";
 
 interface LevelsTableProps {
-  searchQuery: LevelSearchQuery | null;
+  searchQuery: LevelSearchQuery;
   onSearchQueryChange?: (searchQuery: LevelSearchQuery) => any | null;
 }
 
@@ -71,7 +71,7 @@ const LevelsTable = ({
       sortKey: "last_file_created",
       tooltip: "Date of last file upload",
       label: "Last updated",
-      itemElement: (level) => formatDate(level.last_file?.created),
+      itemElement: (level) => formatDate(level.last_file?.created || null),
     },
     {
       name: "download_count",
@@ -83,7 +83,7 @@ const LevelsTable = ({
       name: "size",
       sortKey: "last_file__file__size",
       label: "Size",
-      itemElement: (level) => formatFileSize(level.last_file?.size),
+      itemElement: (level) => formatFileSize(level.last_file?.size || null),
     },
     {
       name: "download",
@@ -99,7 +99,7 @@ const LevelsTable = ({
     },
   ];
 
-  const itemKey = (level) => `${level.id}`;
+  const itemKey = (level: Level) => `${level.id}`;
 
   return (
     <DataTable
@@ -113,4 +113,4 @@ const LevelsTable = ({
   );
 };
 
-export default LevelsTable;
+export { LevelsTable };

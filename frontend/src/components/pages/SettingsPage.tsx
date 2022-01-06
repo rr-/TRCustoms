@@ -1,6 +1,7 @@
 import "./SettingsPage.css";
 import { useInfiniteScroll } from "src/shared/components/DataTable";
-import { useTheme, getAllThemes } from "src/shared/components/ThemeManager";
+import { getAllThemes } from "src/shared/components/ThemeManager";
+import { useTheme } from "src/shared/components/ThemeManager";
 
 const SettingsPage = () => {
   const [, setTheme] = useTheme();
@@ -47,4 +48,4 @@ const SettingsPage = () => {
   );
 };
 
-export default SettingsPage;
+export { SettingsPage };

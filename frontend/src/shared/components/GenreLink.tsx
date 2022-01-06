@@ -1,8 +1,8 @@
 import { Link } from "react-router-dom";
-import type { Genre } from "src/services/genre.service";
+import type { GenreLite } from "src/services/genre.service";
 
 interface GenreLinkProps {
-  genre: Genre;
+  genre: GenreLite;
 }
 
 const GenreLink = ({ genre }: GenreLinkProps) => {
@@ -10,4 +10,4 @@ const GenreLink = ({ genre }: GenreLinkProps) => {
   return <Link to={`/?genres=${id}`}>{name}</Link>;
 };
 
-export default GenreLink;
+export { GenreLink };

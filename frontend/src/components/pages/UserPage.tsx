@@ -7,19 +7,23 @@ import type { ReviewSearchQuery } from "src/services/review.service";
 import type { User } from "src/services/user.service";
 import { UserPermission } from "src/services/user.service";
 import { UserService } from "src/services/user.service";
-import LevelsTable from "src/shared/components/LevelsTable";
-import Loader from "src/shared/components/Loader";
+import { LevelsTable } from "src/shared/components/LevelsTable";
+import { Loader } from "src/shared/components/Loader";
 import { Markdown } from "src/shared/components/Markdown";
 import { PermissionGuard } from "src/shared/components/PermissionGuard";
-import PushButton from "src/shared/components/PushButton";
+import { PushButton } from "src/shared/components/PushButton";
 import { ReviewsTable } from "src/shared/components/ReviewsTable";
-import SectionHeader from "src/shared/components/SectionHeader";
-import SidebarBox from "src/shared/components/SidebarBox";
-import UserPicture from "src/shared/components/UserPicture";
+import { SectionHeader } from "src/shared/components/SectionHeader";
+import { SidebarBox } from "src/shared/components/SidebarBox";
+import { UserPicture } from "src/shared/components/UserPicture";
 import { formatDate } from "src/shared/utils";
 
+interface UserPageParams {
+  userId: string;
+}
+
 const UserPage = () => {
-  const { userId } = useParams();
+  const { userId } = (useParams() as unknown) as UserPageParams;
   const [levelSearchQuery, setLevelSearchQuery] = useState<LevelSearchQuery>({
     page: null,
     sort: "-created",
@@ -75,7 +79,7 @@ const UserPage = () => {
           actions={
             <PermissionGuard
               require={UserPermission.editUsers}
-              owningUser={user}
+              owningUsers={[user]}
             >
               <PushButton to={`/users/${user.id}/edit`}>
                 Edit profile
@@ -157,4 +161,4 @@ const UserPage = () => {
   );
 };
 
-export default UserPage;
+export { UserPage };

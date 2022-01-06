@@ -9,18 +9,89 @@ from pytest_factoryboy import register
 from rest_framework.test import APIClient
 from rest_framework_simplejwt.tokens import RefreshToken
 
-from trcustoms.models import User
+from trcustoms.models import (
+    Level,
+    LevelDifficulty,
+    LevelDuration,
+    LevelEngine,
+    LevelGenre,
+    LevelTag,
+    UploadedFile,
+    User,
+)
 
 
 @register
 class UserFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = User
+        django_get_or_create = ("username",)
 
     username = "john_doe"
+
     email = "jdoe@example.com"
     password = factory.PostGenerationMethodCall("set_password", "1234")
     source = "trcustoms"
+
+
+@register
+class EngineFactory(factory.django.DjangoModelFactory):
+    class Meta:
+        model = LevelEngine
+
+    name = factory.Sequence(lambda n: f"Engine {n}")
+
+
+@register
+class DurationFactory(factory.django.DjangoModelFactory):
+    class Meta:
+        model = LevelDuration
+
+    position = factory.Sequence(lambda n: n)
+    name = factory.Sequence(lambda n: f"Duration {n}")
+
+
+@register
+class DifficultyFactory(factory.django.DjangoModelFactory):
+    class Meta:
+        model = LevelDifficulty
+
+    position = factory.Sequence(lambda n: n)
+    name = factory.Sequence(lambda n: f"Difficulty {n}")
+
+
+@register
+class GenreFactory(factory.django.DjangoModelFactory):
+    class Meta:
+        model = LevelGenre
+
+    name = factory.Sequence(lambda n: f"Genre {n}")
+
+
+@register
+class TagFactory(factory.django.DjangoModelFactory):
+    class Meta:
+        model = LevelTag
+
+    name = factory.Sequence(lambda n: f"Tag {n}")
+
+
+@register
+class UploadedFileFactory(factory.django.DjangoModelFactory):
+    class Meta:
+        model = UploadedFile
+
+
+@register
+class LevelFactory(factory.django.DjangoModelFactory):
+    class Meta:
+        model = Level
+
+    name = factory.Faker("sentence")
+    description = factory.Faker("text")
+    engine = factory.SubFactory(EngineFactory)
+    duration = factory.SubFactory(DurationFactory)
+    difficulty = factory.SubFactory(DifficultyFactory)
 
 
 @pytest.fixture(name="fake", scope="session")

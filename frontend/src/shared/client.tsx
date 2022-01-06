@@ -30,7 +30,10 @@ async function fetchJSONWithoutRetry<Result>(
   url: string,
   options: FetchJSONOptions
 ): Promise<Result> {
-  const headers = { "Content-Type": "application/json", ...options.headers };
+  const headers: { [key: string]: string } = {
+    "Content-Type": "application/json",
+    ...options.headers,
+  };
   const accessToken = AuthService.getAccessToken();
   if (accessToken) {
     headers["Authorization"] = `Bearer ${accessToken}`;

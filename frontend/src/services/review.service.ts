@@ -38,12 +38,12 @@ interface ReviewSearchResult
 
 const searchReviews = async (
   searchQuery: ReviewSearchQuery
-): Promise<ReviewSearchResult | null> => {
+): Promise<ReviewSearchResult> => {
   const result = await fetchJSON<ReviewList>(`${API_URL}/level_reviews/`, {
     query: filterFalsyObjectValues({
       ...getGenericSearchQuery(searchQuery),
-      levels: searchQuery.levels?.join(","),
-      authors: searchQuery.authors?.join(","),
+      levels: searchQuery.levels?.join(",") || null,
+      authors: searchQuery.authors?.join(",") || null,
     }),
     method: "GET",
   });

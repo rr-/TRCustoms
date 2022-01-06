@@ -9,6 +9,8 @@ from trcustoms.models.uploaded_file import UploadedFile
 class UserPermission:
     EDIT_USERS = "edit_users"
     LIST_USERS = "list_users"
+    UPLOAD_LEVELS = "upload_levels"
+    EDIT_LEVELS = "edit_levels"
 
 
 class UserManager(BaseUserManager):
@@ -43,8 +45,14 @@ class User(AbstractUser):
     source = models.CharField(max_length=10, choices=Source.choices)
 
     @property
-    def permissions(self) -> set[UserPermission]:
-        permissions = {UserPermission.LIST_USERS}
+    def permissions(self) -> list[UserPermission]:
+        permissions = {
+            UserPermission.LIST_USERS,
+            UserPermission.UPLOAD_LEVELS,
+        }
         if self.is_staff:
-            permissions.add(UserPermission.EDIT_USERS)
-        return list(permissions)
+            permissions |= {
+                UserPermission.EDIT_USERS,
+                UserPermission.EDIT_LEVELS,
+            }
+        return sorted(permissions)

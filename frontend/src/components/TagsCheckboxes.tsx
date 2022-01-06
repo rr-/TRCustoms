@@ -1,23 +1,14 @@
 import { useContext } from "react";
-import CheckboxArrayFormField from "src/shared/components/CheckboxArrayFormField";
-import { LevelFiltersContext } from "src/shared/contexts/LevelFiltersContext";
+import { CheckboxArrayFormField } from "src/shared/components/CheckboxArrayFormField";
+import { ConfigContext } from "src/shared/contexts/ConfigContext";
 
 const TagsCheckboxes = () => {
-  const { levelFilters } = useContext(LevelFiltersContext);
-  return (
-    <CheckboxArrayFormField
-      label="Tags"
-      name="tags"
-      source={
-        levelFilters
-          ? levelFilters.tags.map((tag) => ({
-              value: tag.id,
-              label: tag.name,
-            }))
-          : []
-      }
-    />
-  );
+  const config = useContext(ConfigContext);
+  const source: { value: number; label: string }[] = config.tags.map((tag) => ({
+    value: tag.id,
+    label: tag.name,
+  }));
+  return <CheckboxArrayFormField label="Tags" name="tags" source={source} />;
 };
 
-export default TagsCheckboxes;
+export { TagsCheckboxes };

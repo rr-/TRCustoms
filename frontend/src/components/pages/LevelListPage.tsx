@@ -4,16 +4,16 @@ import { Form } from "formik";
 import { useEffect } from "react";
 import { useCallback } from "react";
 import { useState } from "react";
-import EnginesCheckboxes from "src/components/EnginesCheckboxes";
-import GenresCheckboxes from "src/components/GenresCheckboxes";
-import TagsCheckboxes from "src/components/TagsCheckboxes";
+import { EnginesCheckboxes } from "src/components/EnginesCheckboxes";
+import { GenresCheckboxes } from "src/components/GenresCheckboxes";
+import { TagsCheckboxes } from "src/components/TagsCheckboxes";
 import type { LevelSearchQuery } from "src/services/level.service";
-import LevelsTable from "src/shared/components/LevelsTable";
+import { LevelsTable } from "src/shared/components/LevelsTable";
 import { QueryPersister } from "src/shared/components/QueryPersister";
 import { deserializeGenericSearchQuery } from "src/shared/components/QueryPersister";
 import { serializeGenericSearchQuery } from "src/shared/components/QueryPersister";
 import { SearchBar } from "src/shared/components/SearchBar";
-import TextFormField from "src/shared/components/TextFormField";
+import { TextFormField } from "src/shared/components/TextFormField";
 import { filterFalsyObjectValues } from "src/shared/utils";
 import { getCurrentSearchParams } from "src/shared/utils";
 
@@ -140,4 +140,4 @@ const LevelListPage = () => {
   );
 };
 
-export default LevelListPage;
+export { LevelListPage };

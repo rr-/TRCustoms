@@ -4,9 +4,13 @@ import { useState } from "react";
 import type { User } from "src/services/user.service";
 import { UserService } from "src/services/user.service";
 
+interface UserContextProviderProps {
+  children: React.ReactNode;
+}
+
 const UserContext = createContext<any>(null);
 
-const UserContextProvider = ({ children }: { children: any }) => {
+const UserContextProvider = ({ children }: UserContextProviderProps) => {
   const [user, setUser] = useState<User | null>(null);
 
   useEffect(() => {

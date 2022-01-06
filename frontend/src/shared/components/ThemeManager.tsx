@@ -175,5 +175,4 @@ const ThemeManager = () => {
   return <></>;
 };
 
-export { useTheme, getAllThemes };
-export default ThemeManager;
+export { useTheme, getAllThemes, ThemeManager };

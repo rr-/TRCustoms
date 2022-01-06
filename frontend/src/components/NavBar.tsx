@@ -8,7 +8,7 @@ import { useLocation } from "react-router-dom";
 import { useResolvedPath } from "react-router-dom";
 import { UserPermission } from "src/services/user.service";
 import { PermissionGuard } from "src/shared/components/PermissionGuard";
-import UserPicture from "src/shared/components/UserPicture";
+import { UserPicture } from "src/shared/components/UserPicture";
 import { UserContext } from "src/shared/contexts/UserContext";
 
 const LevelsNavLink = ({ children, to, ...rest }: LinkProps) => {
@@ -22,7 +22,7 @@ const LevelsNavLink = ({ children, to, ...rest }: LinkProps) => {
 
   let isActive =
     locationPathname === toPathname ||
-    locationPathname.match(/^\/?levels(\/|$)/);
+    locationPathname.match(/^\/?levels(\/(?!upload)|$)/);
 
   let ariaCurrent: "page" | undefined = isActive ? "page" : undefined;
   let className = [isActive ? "active" : null].filter(Boolean).join(" ");
@@ -94,6 +94,11 @@ const NavBar = () => {
                 <li className="TopNavBar--listItem">
                   <LevelsNavLink to={"/"}>Levels</LevelsNavLink>
                 </li>
+                <PermissionGuard require={UserPermission.uploadLevels}>
+                  <li className="TopNavBar--listItem">
+                    <NavLink to={"/levels/upload"}>Upload level</NavLink>
+                  </li>
+                </PermissionGuard>
                 <li className="TopNavBar--listItem">
                   <NavLink to={"/tags"}>Tags</NavLink>
                 </li>
@@ -121,4 +126,4 @@ const NavBar = () => {
   );
 };
 
-export default NavBar;
+export { NavBar };

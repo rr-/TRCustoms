@@ -1,8 +1,8 @@
 import { Link } from "react-router-dom";
-import type { Tag } from "src/services/tag.service";
+import type { TagLite } from "src/services/tag.service";
 
 interface TagLinkProps {
-  tag: Tag;
+  tag: TagLite;
 }
 
 const TagLink = ({ tag }: TagLinkProps) => {
@@ -10,4 +10,4 @@ const TagLink = ({ tag }: TagLinkProps) => {
   return <Link to={`/?tags=${id}`}>{name}</Link>;
 };
 
-export default TagLink;
+export { TagLink };

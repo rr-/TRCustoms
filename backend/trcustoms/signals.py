@@ -23,7 +23,7 @@ def update_uploaded_file_checksum_and_size(sender, instance, **kwargs):
 def update_level_version(sender, instance, **kwargs):
     if instance.version is None:
         max_version = (
-            instance.level.files.exclude(pk=instance.pk)
+            instance.level.files.exclude(id=instance.id)
             .values_list("version", flat=True)
             .order_by("-version")
             .first()

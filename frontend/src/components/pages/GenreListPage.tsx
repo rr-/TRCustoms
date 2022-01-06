@@ -9,7 +9,7 @@ import { QueryPersister } from "src/shared/components/QueryPersister";
 import { deserializeGenericSearchQuery } from "src/shared/components/QueryPersister";
 import { serializeGenericSearchQuery } from "src/shared/components/QueryPersister";
 import { SearchBar } from "src/shared/components/SearchBar";
-import TextFormField from "src/shared/components/TextFormField";
+import { TextFormField } from "src/shared/components/TextFormField";
 import { getCurrentSearchParams } from "src/shared/utils";
 
 const defaultSearchQuery: GenreSearchQuery = {
@@ -106,4 +106,4 @@ const GenreListPage = () => {
   );
 };
 
-export default GenreListPage;
+export { GenreListPage };

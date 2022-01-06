@@ -1,0 +1,37 @@
+.FilePicker {
+  vertical-align: top;
+}
+
+.FilePicker--dropArea {
+  display: block;
+  background: var(--background-color);
+  border: 3px dashed var(--button-background-color);
+  padding: 0.3em 0.5em;
+  line-height: 140%;
+  text-align: center;
+  cursor: pointer;
+  overflow: hidden;
+  word-wrap: break-word;
+}
+
+.FilePicker--fileInput {
+  display: none;
+}
+
+.FilePicker--fileInput:disabled + .FilePicker--dropArea {
+  cursor: default;
+  opacity: 0.5;
+}
+
+.FilePicker--fileInput:active + .FilePicker--dropArea,
+.FilePicker--fileInput:focus + .FilePicker--dropArea,
+.FilePicker--dropArea.active {
+  border-color: var(--text-color);
+}
+
+.FilePicker--previews {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+}

@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 
 interface Level {
-  id: number;
+  id: number | null;
   name: string;
 }
 
@@ -12,7 +12,11 @@ interface LevelLinkProps {
 
 const LevelLink = ({ level, label }: LevelLinkProps) => {
   const { id, name } = level;
-  return <Link to={`/levels/${id}`}>{label || name}</Link>;
+  const text = label || name;
+  if (id) {
+    return <Link to={`/levels/${id}`}>{text}</Link>;
+  }
+  return <>text</>;
 };
 
-export default LevelLink;
+export { LevelLink };

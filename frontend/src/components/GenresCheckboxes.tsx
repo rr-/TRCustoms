@@ -1,23 +1,18 @@
 import { useContext } from "react";
-import CheckboxArrayFormField from "src/shared/components/CheckboxArrayFormField";
-import { LevelFiltersContext } from "src/shared/contexts/LevelFiltersContext";
+import { CheckboxArrayFormField } from "src/shared/components/CheckboxArrayFormField";
+import { ConfigContext } from "src/shared/contexts/ConfigContext";
 
 const GenresCheckboxes = () => {
-  const { levelFilters } = useContext(LevelFiltersContext);
+  const config = useContext(ConfigContext);
+  const source: { value: number; label: string }[] = config.genres.map(
+    (genre) => ({
+      value: genre.id,
+      label: genre.name,
+    })
+  );
   return (
-    <CheckboxArrayFormField
-      label="Genres"
-      name="genres"
-      source={
-        levelFilters
-          ? levelFilters.genres.map((genre) => ({
-              value: genre.id,
-              label: genre.name,
-            }))
-          : []
-      }
-    />
+    <CheckboxArrayFormField label="Genres" name="genres" source={source} />
   );
 };
 
-export default GenresCheckboxes;
+export { GenresCheckboxes };

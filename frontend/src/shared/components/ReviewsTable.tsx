@@ -7,11 +7,11 @@ import type { ReviewSearchResult } from "src/services/review.service";
 import type { ReviewSearchQuery } from "src/services/review.service";
 import type { DataTableColumn } from "src/shared/components/DataTable";
 import { DataTable } from "src/shared/components/DataTable";
-import LevelLink from "src/shared/components/LevelLink";
-import Loader from "src/shared/components/Loader";
+import { LevelLink } from "src/shared/components/LevelLink";
+import { Loader } from "src/shared/components/Loader";
 import { Markdown } from "src/shared/components/Markdown";
-import SectionHeader from "src/shared/components/SectionHeader";
-import UserLink from "src/shared/components/UserLink";
+import { SectionHeader } from "src/shared/components/SectionHeader";
+import { UserLink } from "src/shared/components/UserLink";
 import { avg } from "src/shared/math";
 import { round } from "src/shared/math";
 import { formatDate } from "src/shared/utils";
@@ -45,8 +45,11 @@ const ReviewsTable = ({
     return <Loader />;
   }
 
-  const getAverage = (source, mapper) => {
-    return source?.length
+  const getAverage = <T extends Object>(
+    source: T[],
+    mapper: (item: T) => number
+  ) => {
+    return source.length
       ? round(avg(source.map(mapper)), 2)
       : EMPTY_INPUT_PLACEHOLDER;
   };
@@ -58,7 +61,7 @@ const ReviewsTable = ({
             name: "level",
             sortKey: "level__name",
             label: "Level",
-            itemElement: (review) => <LevelLink level={review.level} />,
+            itemElement: (review: Review) => <LevelLink level={review.level} />,
           },
         ]
       : []),
@@ -68,7 +71,7 @@ const ReviewsTable = ({
             name: "author",
             sortKey: "author__username",
             label: "Author",
-            itemElement: (review) => <UserLink user={review.author} />,
+            itemElement: (review: Review) => <UserLink user={review.author} />,
           },
         ]
       : []),
@@ -80,8 +83,8 @@ const ReviewsTable = ({
       footer: () => (
         <>
           {getAverage(
-            result?.data?.results,
-            (result) => result.rating_gameplay
+            result?.data?.results || [],
+            (review) => review.rating_gameplay
           )}
         </>
       ),
@@ -93,7 +96,10 @@ const ReviewsTable = ({
       itemElement: (review) => `${review.rating_enemies}`,
       footer: () => (
         <>
-          {getAverage(result?.data?.results, (result) => result.rating_enemies)}
+          {getAverage(
+            result?.data?.results || [],
+            (review) => review.rating_enemies
+          )}
         </>
       ),
     },
@@ -105,8 +111,8 @@ const ReviewsTable = ({
       footer: () => (
         <>
           {getAverage(
-            result?.data?.results,
-            (result) => result.rating_atmosphere
+            result?.data?.results || [],
+            (review) => review.rating_atmosphere
           )}
         </>
       ),
@@ -119,8 +125,8 @@ const ReviewsTable = ({
       footer: () => (
         <>
           {getAverage(
-            result?.data?.results,
-            (result) => result.rating_lighting
+            result?.data?.results || [],
+            (review) => review.rating_lighting
           )}
         </>
       ),
@@ -133,7 +139,7 @@ const ReviewsTable = ({
     },
   ];
 
-  const itemKey = (review) => `${review.id}`;
+  const itemKey = (review: Review) => `${review.id}`;
 
   return (
     <>

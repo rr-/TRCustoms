@@ -8,8 +8,8 @@ import { QueryPersister } from "src/shared/components/QueryPersister";
 import { deserializeGenericSearchQuery } from "src/shared/components/QueryPersister";
 import { serializeGenericSearchQuery } from "src/shared/components/QueryPersister";
 import { SearchBar } from "src/shared/components/SearchBar";
-import TextFormField from "src/shared/components/TextFormField";
-import UsersTable from "src/shared/components/UsersTable";
+import { TextFormField } from "src/shared/components/TextFormField";
+import { UsersTable } from "src/shared/components/UsersTable";
 import { getCurrentSearchParams } from "src/shared/utils";
 
 const defaultSearchQuery: UserSearchQuery = {
@@ -106,4 +106,4 @@ const UserListPage = () => {
   );
 };
 
-export default UserListPage;
+export { UserListPage };

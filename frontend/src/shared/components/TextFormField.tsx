@@ -1,6 +1,6 @@
 import "./TextFormField.css";
 import { Field } from "formik";
-import BaseFormField from "src/shared/components/BaseFormField";
+import { BaseFormField } from "src/shared/components/BaseFormField";
 import type { GenericFormFieldProps } from "src/shared/components/BaseFormField";
 
 interface TextFormFieldProps extends GenericFormFieldProps {
@@ -25,4 +25,4 @@ const TextFormField = ({
   );
 };
 
-export default TextFormField;
+export { TextFormField };

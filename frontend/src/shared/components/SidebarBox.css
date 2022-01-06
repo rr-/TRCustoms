@@ -4,9 +4,12 @@
 }
 .SidebarBox--actions {
   display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
 }
 .SidebarBox--actions > .PushButton {
   flex-grow: 1;
+  margin: 0;
 }
 .SidebarBox--actions:empty + *,
 .SidebarBox > :first-child {

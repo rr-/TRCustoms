@@ -1,3 +1,4 @@
+from django.conf import settings
 from rest_framework import status, viewsets
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
@@ -18,7 +19,7 @@ from trcustoms.serializers import (
 )
 
 
-class LevelFilterViewSet(viewsets.ViewSet):
+class ConfigViewSet(viewsets.ViewSet):
     permission_classes = [AllowAny]
 
     def list(self, request) -> Response:
@@ -42,6 +43,16 @@ class LevelFilterViewSet(viewsets.ViewSet):
                 "durations": LevelDurationLiteSerializer(
                     level_durations, many=True
                 ).data,
+                "limits": {
+                    "min_genres": settings.MIN_GENRES,
+                    "max_genres": settings.MAX_GENRES,
+                    "min_tags": settings.MIN_TAGS,
+                    "max_tags": settings.MAX_TAGS,
+                    "min_screenshots": settings.MIN_SCREENSHOTS,
+                    "max_screenshots": settings.MAX_SCREENSHOTS,
+                    "min_authors": settings.MIN_AUTHORS,
+                    "max_authors": settings.MAX_AUTHORS,
+                },
             },
             status.HTTP_200_OK,
         )

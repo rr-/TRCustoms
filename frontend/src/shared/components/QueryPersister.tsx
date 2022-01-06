@@ -32,7 +32,7 @@ interface QueryPersisterProps<TQuery> {
   serializeSearchQuery: (query: TQuery) => { [key: string]: any };
   deserializeSearchQuery: (qp: { [key: string]: string }) => TQuery;
   searchQuery: TQuery;
-  setSearchQuery: (query: TQuery) => any;
+  setSearchQuery: (query: TQuery) => void;
 }
 
 const QueryPersister = <TQuery extends GenericSearchQuery>({

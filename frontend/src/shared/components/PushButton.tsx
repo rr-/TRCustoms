@@ -5,10 +5,10 @@ import { Link } from "react-router-dom";
 import type { To } from "react-router-dom";
 
 interface PushButtonProps {
-  to?: To;
+  to?: To | string | null;
   disableTimeout?: boolean;
   isPlain?: boolean;
-  onClick?: () => any;
+  onClick?: () => void;
   target?: string;
   children: React.ReactNode | string;
 }
@@ -58,4 +58,4 @@ const PushButton = ({
   );
 };
 
-export default PushButton;
+export { PushButton };

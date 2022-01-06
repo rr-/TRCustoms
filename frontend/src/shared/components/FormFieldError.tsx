@@ -10,4 +10,4 @@ const FormFieldError = ({ name }: FormFieldErrorProps) => (
   </ErrorMessage>
 );
 
-export default FormFieldError;
+export { FormFieldError };

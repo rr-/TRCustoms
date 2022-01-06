@@ -108,7 +108,7 @@ input[type="checkbox"]:before {
   height: 100%;
   top: 0;
   left: 0;
-  border: 2px solid var(--button-hovered-background-color);
+  border: 2px solid var(--input-border-color);
   background-color: var(--input-background-color);
   box-sizing: border-box;
 }

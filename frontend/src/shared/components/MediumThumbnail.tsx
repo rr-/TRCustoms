@@ -1,12 +1,12 @@
 import "./MediumThumbnail.css";
 import { ChevronLeftIcon } from "@heroicons/react/outline";
 import { ChevronRightIcon } from "@heroicons/react/outline";
-import uniqueId from "lodash/uniqueId";
+import { uniqueId } from "lodash";
 import { useEffect } from "react";
 import { useCallback } from "react";
 import { useState } from "react";
 import type { UploadedFile } from "src/services/file.service";
-import PushButton from "src/shared/components/PushButton";
+import { PushButton } from "src/shared/components/PushButton";
 import { KEY_ESCAPE } from "src/shared/constants";
 import { KEY_LEFT } from "src/shared/constants";
 import { KEY_RIGHT } from "src/shared/constants";
@@ -29,7 +29,7 @@ const MediumThumbnail = ({ file }: MediumProps) => {
       const allThumbnails = [
         ...document.getElementsByClassName("MediumThumbnail--full"),
       ] as HTMLElement[];
-      let chosenElement: HTMLElement = null;
+      let chosenElement: HTMLElement | null = null;
       for (const [i, element] of allThumbnails.entries()) {
         if (element.getAttribute("id") === elementId) {
           chosenElement = allThumbnails[i + direction];
@@ -44,7 +44,7 @@ const MediumThumbnail = ({ file }: MediumProps) => {
   );
 
   useEffect(() => {
-    const handleKeypress = (event) => {
+    const handleKeypress = (event: KeyboardEvent) => {
       if (isActive) {
         if (event.keyCode === KEY_ESCAPE) {
           setIsActive(false);
