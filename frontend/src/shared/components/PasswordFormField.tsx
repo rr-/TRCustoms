@@ -1,22 +1,8 @@
-import { Field } from "formik";
-import BaseFormField from "src/shared/components/BaseFormField";
+import type { GenericFormFieldProps } from "src/shared/components/BaseFormField";
+import TextFormField from "src/shared/components/TextFormField";
 
-interface PasswordFormFieldProps {
-  name: string;
-  label: string;
-  required?: boolean;
-}
-
-const PasswordFormField = ({
-  name,
-  label,
-  required,
-}: PasswordFormFieldProps) => {
-  return (
-    <BaseFormField required={required} label={label} name={name}>
-      <Field type="password" name={name} />
-    </BaseFormField>
-  );
+const PasswordFormField = (props: GenericFormFieldProps) => {
+  return <TextFormField {...props} type="password" />;
 };
 
 export default PasswordFormField;

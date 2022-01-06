@@ -150,15 +150,7 @@ const UserForm = ({ user, onGoBack, onSubmit }: UserFormProps) => {
 
   return (
     <Formik initialValues={initialValues} validate={validate} onSubmit={submit}>
-      {({
-        setErrors,
-        setSubmitting,
-        setStatus,
-        isSubmitting,
-        setFieldValue,
-        setFieldError,
-        status,
-      }) =>
+      {({ isSubmitting, setFieldValue, status }) =>
         !user && status?.success ? (
           <div className="FormFieldSuccess">{status.success}</div>
         ) : (

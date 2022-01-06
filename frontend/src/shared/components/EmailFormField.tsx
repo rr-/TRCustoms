@@ -1,18 +1,8 @@
-import { Field } from "formik";
-import BaseFormField from "src/shared/components/BaseFormField";
+import type { GenericFormFieldProps } from "src/shared/components/BaseFormField";
+import TextFormField from "src/shared/components/TextFormField";
 
-interface EmailFormFieldProps {
-  name: string;
-  label: string;
-  required?: boolean;
-}
-
-const EmailFormField = ({ name, label, required }: EmailFormFieldProps) => {
-  return (
-    <BaseFormField required={required} name={name} label={label}>
-      <Field type="email" name={name} />
-    </BaseFormField>
-  );
+const EmailFormField = (props: GenericFormFieldProps) => {
+  return <TextFormField {...props} type="email" />;
 };
 
 export default EmailFormField;

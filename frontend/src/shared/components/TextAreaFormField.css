@@ -1,0 +1,11 @@
+.TextAreaFormField--textarea {
+  border: 2px solid var(--input-border-color);
+  background: var(--input-background-color);
+  padding: 0.5rem;
+  font-family: var(--font-family);
+  font-size: var(--font-size);
+  line-height: calc(var(--font-size) * 1.3);
+  min-width: 30rem;
+  min-height: 15rem;
+  box-sizing: border-box;
+}
