@@ -33,7 +33,7 @@ const RegisterPage = () => {
 
       {isComplete ? (
         <>
-          Your account was created. Now it needs to be activated by someone from
+          Your account was created and it now needs to be activated by our
           staff. Please have patience :) In the meantime, why don't you take a
           look at <Link to={"/"}>some levels</Link>?
         </>

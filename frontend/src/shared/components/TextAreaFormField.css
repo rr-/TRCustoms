@@ -8,4 +8,5 @@
   min-width: 30rem;
   min-height: 15rem;
   box-sizing: border-box;
+  vertical-align: top;
 }

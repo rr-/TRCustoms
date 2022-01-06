@@ -54,7 +54,7 @@ const PicturePickerPreview = ({
         <>
           <br />
           <PushButton isPlain={true} onClick={() => clearFile(fileId)}>
-            Delete
+            Remove
           </PushButton>
         </>
       )}

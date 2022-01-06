@@ -7,6 +7,9 @@ import { UserService } from "src/services/user.service";
 import { FetchError } from "src/shared/client";
 import BaseFormField from "src/shared/components/BaseFormField";
 import EmailFormField from "src/shared/components/EmailFormField";
+import { FormGrid } from "src/shared/components/FormGrid";
+import { FormGridButtons } from "src/shared/components/FormGrid";
+import { FormGridFieldSet } from "src/shared/components/FormGrid";
 import PasswordFormField from "src/shared/components/PasswordFormField";
 import PicturePicker from "src/shared/components/PicturePicker";
 import TextAreaFormField from "src/shared/components/TextAreaFormField";
@@ -155,66 +158,70 @@ const UserForm = ({ user, onGoBack, onSubmit }: UserFormProps) => {
           <div className="FormFieldSuccess">{status.success}</div>
         ) : (
           <Form className="Form">
-            <fieldset>
-              <legend>Basic data</legend>
-              <TextFormField required={true} label="Username" name="username" />
-              <EmailFormField required={true} label="E-mail" name="email" />
-              {user && (
-                <PasswordFormField
-                  label="Old password (fill only if you want to change password)"
-                  name="oldPassword"
+            <FormGrid>
+              <FormGridFieldSet title="Basic information">
+                <TextFormField
+                  required={true}
+                  label="Username"
+                  name="username"
                 />
-              )}
-              <PasswordFormField
-                required={!user}
-                label={
-                  user ? "Password (leave empty to keep current)" : "Password"
-                }
-                name="password"
-              />
-              <PasswordFormField
-                required={!user}
-                label="Password (repeat)"
-                name="password2"
-              />
-            </fieldset>
-
-            <fieldset>
-              <legend>Extra information</legend>
-              <TextFormField label="First name" name="firstName" />
-              <TextFormField label="Last name" name="lastName" />
-              <TextAreaFormField label="Bio" name="bio" />
-              {user && (
-                <BaseFormField required={false} label="Picture" name="picture">
-                  <PicturePicker
-                    allowMultiple={false}
-                    allowClear={true}
-                    uploadType={UploadType.UserPicture}
-                    fileIds={user?.picture ? [user?.picture] : []}
-                    onChange={([fileId]) =>
-                      setFieldValue("picture", fileId || null)
-                    }
+                <EmailFormField required={true} label="E-mail" name="email" />
+                {user && (
+                  <PasswordFormField
+                    label="Old password"
+                    extraInformation="Fill only if you want to change the password."
+                    name="oldPassword"
                   />
-                </BaseFormField>
-              )}
-            </fieldset>
+                )}
+                <PasswordFormField
+                  required={!user}
+                  label="Password"
+                  extraInformation={
+                    user ? "Leave empty to keep the current password." : ""
+                  }
+                  name="password"
+                />
+                <PasswordFormField
+                  required={!user}
+                  label="Password (repeat)"
+                  name="password2"
+                />
+              </FormGridFieldSet>
 
-            <div className="FormField">
-              {status?.success && (
-                <div className="FormFieldSuccess">{status.success}</div>
-              )}
-              {status?.error && (
-                <div className="FormFieldError">{status.error}</div>
-              )}
-              <button type="submit" disabled={isSubmitting}>
-                {user ? "Update profile" : "Register"}
-              </button>
-              {onGoBack && (
-                <button type="button" onClick={onGoBack}>
-                  Go back
+              <FormGridFieldSet title="Extra information">
+                <TextFormField label="First name" name="firstName" />
+                <TextFormField label="Last name" name="lastName" />
+                <TextAreaFormField label="Bio" name="bio" />
+                {user && (
+                  <BaseFormField
+                    required={false}
+                    label="Picture"
+                    name="picture"
+                  >
+                    <PicturePicker
+                      allowMultiple={false}
+                      allowClear={true}
+                      uploadType={UploadType.UserPicture}
+                      fileIds={user?.picture ? [user?.picture] : []}
+                      onChange={([fileId]) =>
+                        setFieldValue("picture", fileId || null)
+                      }
+                    />
+                  </BaseFormField>
+                )}
+              </FormGridFieldSet>
+
+              <FormGridButtons status={status}>
+                <button type="submit" disabled={isSubmitting}>
+                  {user ? "Update profile" : "Register"}
                 </button>
-              )}
-            </div>
+                {onGoBack && (
+                  <button type="button" onClick={onGoBack}>
+                    Go back
+                  </button>
+                )}
+              </FormGridButtons>
+            </FormGrid>
           </Form>
         )
       }

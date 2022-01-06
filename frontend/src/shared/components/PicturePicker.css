@@ -1,3 +1,7 @@
+.PicturePicker {
+  vertical-align: top;
+}
+
 .PicturePicker--dropArea {
   display: block;
   background: var(--background-color);

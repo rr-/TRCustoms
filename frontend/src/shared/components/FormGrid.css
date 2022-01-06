@@ -1,0 +1,40 @@
+.FormGrid {
+  display: grid;
+  grid-template-columns: min-content auto;
+  gap: 0.5rem 0;
+}
+
+.FormGridButtons {
+  display: contents;
+}
+.FormGridButtons--status {
+  grid-column: 1 / span 2;
+}
+.FormGridButtons--status,
+.FormGridButtons--buttons {
+  grid-column: 2;
+}
+
+.FormGridFieldSet {
+  display: contents;
+}
+.FormGridFieldSet--title {
+  grid-column: 1 / span 2;
+  margin: 1rem 0 0 0;
+}
+.FormGridFieldSet--fields {
+  display: contents;
+}
+.FormGridFieldSet--fields .FormField {
+  display: contents;
+}
+.FormGridFieldSet--fields .FormField--label {
+  background: var(--label-background-color);
+  border: 2px solid transparent;
+  display: inline-block;
+  padding: 0.25rem 0.5rem 0.25rem 1.5rem;
+  line-height: 1.5rem;
+  height: 1.5rem;
+  box-sizing: padding-box;
+  text-align: right;
+}
