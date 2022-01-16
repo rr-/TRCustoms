@@ -57,6 +57,7 @@ interface LevelFull extends Level {
   media: Medium[];
   trle_id: number | null;
   files: LevelFile[];
+  is_approved: boolean;
 }
 
 interface LevelList extends PagedResponse<Level> {}
@@ -136,11 +137,21 @@ const create = async (payload: LevelCreatePayload): Promise<LevelFull> => {
   return response.data;
 };
 
+const approve = async (levelId: number): Promise<void> => {
+  await api.post(`${API_URL}/levels/${levelId}/approve/`);
+};
+
+const disapprove = async (levelId: number): Promise<void> => {
+  await api.post(`${API_URL}/levels/${levelId}/disapprove/`);
+};
+
 const LevelService = {
   searchLevels,
   getLevelById,
   update,
   create,
+  approve,
+  disapprove,
 };
 
 export type {

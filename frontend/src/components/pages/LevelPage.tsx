@@ -1,4 +1,6 @@
 import "./LevelPage.css";
+import axios from "axios";
+import { AxiosError } from "axios";
 import { Fragment } from "react";
 import { useState } from "react";
 import { useQuery } from "react-query";
@@ -53,6 +55,24 @@ const LevelPage = () => {
     return <Loader />;
   }
 
+  const setLevelApproval = async (isApproved: boolean) => {
+    try {
+      if (isApproved) {
+        await LevelService.approve(+levelId);
+      } else {
+        await LevelService.disapprove(+levelId);
+      }
+      result.refetch();
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        const axiosError = error as AxiosError;
+        alert(axiosError.response?.data.detail || "Unknown error");
+      } else {
+        alert("Unknown error");
+      }
+    }
+  };
+
   const level = result.data;
   const downloadableFiles = level.files.filter((file) => !!file.url);
 
@@ -96,6 +116,14 @@ const LevelPage = () => {
                 ]}
               >
                 <PushButton to={`/levels/${levelId}/edit`}>Edit</PushButton>
+              </PermissionGuard>
+
+              <PermissionGuard require={UserPermission.editLevels}>
+                <PushButton
+                  onClick={() => setLevelApproval(!level.is_approved)}
+                >
+                  {level.is_approved ? "Disapprove" : "Approve"}
+                </PushButton>
               </PermissionGuard>
             </>
           }

@@ -37,6 +37,8 @@ class LevelViewSet(
         "partial_update": [
             HasPermission(UserPermission.EDIT_LEVELS) | IsAccessingOwnResource
         ],
+        "approve": [HasPermission(UserPermission.EDIT_LEVELS)],
+        "disapprove": [HasPermission(UserPermission.EDIT_LEVELS)],
     }
 
     queryset = (
@@ -119,3 +121,17 @@ class LevelViewSet(
         return stream_file_field(
             image.file.content, parts, as_attachment=False
         )
+
+    @action(detail=True, methods=["post"])
+    def approve(self, request, pk: int) -> Response:
+        level = self.get_object()
+        level.is_approved = True
+        level.save()
+        return Response({})
+
+    @action(detail=True, methods=["post"])
+    def disapprove(self, request, pk: int) -> Response:
+        level = self.get_object()
+        level.is_approved = False
+        level.save()
+        return Response({})
