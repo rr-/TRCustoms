@@ -48,6 +48,7 @@ const GenresTable = ({
   return (
     <DataTable
       className="GenresTable"
+      queryName="genres"
       columns={columns}
       itemKey={itemKey}
       searchQuery={searchQuery}

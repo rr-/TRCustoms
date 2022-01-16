@@ -104,6 +104,7 @@ const LevelsTable = ({
   return (
     <DataTable
       className="LevelsTable"
+      queryName="levels"
       columns={columns}
       itemKey={itemKey}
       searchQuery={searchQuery}

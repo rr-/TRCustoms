@@ -3,6 +3,7 @@ import axios from "axios";
 import { AxiosError } from "axios";
 import { Fragment } from "react";
 import { useState } from "react";
+import { useQueryClient } from "react-query";
 import { useQuery } from "react-query";
 import { useParams } from "react-router-dom";
 import type { LevelFull } from "src/services/level.service";
@@ -33,6 +34,7 @@ interface LevelPageParams {
 
 const LevelPage = () => {
   const { levelId } = (useParams() as unknown) as LevelPageParams;
+  const queryClient = useQueryClient();
   const [reviewsSearchQuery, setReviewsSearchQuery] = useState<
     ReviewSearchQuery
   >({
@@ -43,7 +45,7 @@ const LevelPage = () => {
   });
 
   const result = useQuery<LevelFull, Error>(
-    [LevelService.getLevelById, levelId],
+    ["level", LevelService.getLevelById, levelId],
     async () => LevelService.getLevelById(+levelId)
   );
 
@@ -62,7 +64,9 @@ const LevelPage = () => {
       } else {
         await LevelService.disapprove(+levelId);
       }
+
       result.refetch();
+      queryClient.removeQueries("levels");
     } catch (error) {
       if (axios.isAxiosError(error)) {
         const axiosError = error as AxiosError;
