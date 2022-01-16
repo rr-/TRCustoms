@@ -7,6 +7,7 @@ from celery.schedules import crontab
 
 from trcustoms.celery import app
 from trcustoms.tasks.delete_unreferenced_files import delete_unreferenced_files
+from trcustoms.tasks.delete_unreferenced_tags import delete_unreferenced_tags
 from trcustoms.tasks.merge_duplicate_files import merge_duplicate_files
 
 
@@ -20,9 +21,13 @@ def setup_periodic_tasks(sender, **kwargs: Any) -> None:
     sender.add_periodic_task(
         crontab(hour=4, minute=0), delete_unreferenced_files.s()
     )
+    sender.add_periodic_task(
+        crontab(hour=4, minute=0), delete_unreferenced_tags.s()
+    )
 
 
 __all__ = [
     "delete_unreferenced_files",
+    "delete_unreferenced_tags",
     "merge_duplicate_files",
 ]
