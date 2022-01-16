@@ -66,6 +66,7 @@ interface LevelSearchQuery extends GenericSearchQuery {
   genres: number[];
   engines: number[];
   authors: number[];
+  isApproved: boolean;
 }
 
 interface LevelSearchResult
@@ -82,6 +83,7 @@ const searchLevels = async (
     genres: searchQuery.genres?.join(","),
     engines: searchQuery.engines?.join(","),
     authors: searchQuery.authors?.join(","),
+    is_approved: searchQuery.isApproved ? "1" : false,
   });
   const response = (await api.get(`${API_URL}/levels/`, {
     params,

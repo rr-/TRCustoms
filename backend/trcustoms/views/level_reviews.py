@@ -1,4 +1,4 @@
-from rest_framework import filters, mixins, viewsets
+from rest_framework import mixins, viewsets
 from rest_framework.permissions import AllowAny
 
 from trcustoms.models import LevelLegacyReview
@@ -13,7 +13,6 @@ class LevelReviewViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
         "level",
     )
     serializer_class = LevelLegacyReviewSerializer
-    filter_backends = [filters.SearchFilter, filters.OrderingFilter]
     search_fields = [
         "level__name",
         "author__username",

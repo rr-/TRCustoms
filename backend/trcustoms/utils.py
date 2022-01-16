@@ -80,6 +80,12 @@ def parse_ids(source: str | None) -> list[int]:
         return []
 
 
+def parse_boolean(source: str | None) -> bool:
+    if not source:
+        return False
+    return source.lower() in ["1", "true", "y", "yes"]
+
+
 def check_model_references(obj: models.Model):
     """Check whether a Django model is referenced by any other model."""
     # pylint: disable=protected-access
