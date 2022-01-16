@@ -32,6 +32,7 @@ const UserPage = () => {
     genres: [],
     engines: [],
     authors: [+userId],
+    isApproved: true,
   });
   const [reviewSearchQuery, setReviewSearchQuery] = useState<ReviewSearchQuery>(
     {

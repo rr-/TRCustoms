@@ -25,6 +25,7 @@ const defaultSearchQuery: LevelSearchQuery = {
   genres: [],
   engines: [],
   authors: [],
+  isApproved: true,
 };
 
 const deserializeSearchQuery = (qp: {
@@ -35,6 +36,7 @@ const deserializeSearchQuery = (qp: {
   genres: (qp.genres?.split(/,/g) || []).map((item) => +item),
   engines: (qp.engines?.split(/,/g) || []).map((item) => +item),
   authors: [],
+  isApproved: true,
 });
 
 const serializeSearchQuery = (

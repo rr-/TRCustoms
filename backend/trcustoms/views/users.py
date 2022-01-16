@@ -1,5 +1,5 @@
 from django.http import Http404
-from rest_framework import filters, mixins, status, viewsets
+from rest_framework import mixins, status, viewsets
 from rest_framework.decorators import action
 from rest_framework.generics import get_object_or_404
 from rest_framework.permissions import (
@@ -44,7 +44,6 @@ class UserViewSet(
         "picture": [IsAuthenticatedOrReadOnly],
     }
 
-    filter_backends = [filters.SearchFilter, filters.OrderingFilter]
     ordering_fields = [
         "username",
         "first_name",

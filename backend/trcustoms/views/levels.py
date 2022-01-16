@@ -1,5 +1,5 @@
 from django.shortcuts import get_list_or_404
-from rest_framework import filters, mixins, viewsets
+from rest_framework import mixins, viewsets
 from rest_framework.decorators import action
 from rest_framework.generics import get_object_or_404
 from rest_framework.permissions import AllowAny
@@ -14,7 +14,7 @@ from trcustoms.permissions import (
     IsAccessingOwnResource,
 )
 from trcustoms.serializers import LevelFullSerializer, LevelLiteSerializer
-from trcustoms.utils import parse_ids, stream_file_field
+from trcustoms.utils import parse_boolean, parse_ids, stream_file_field
 
 
 class LevelViewSet(
@@ -62,7 +62,6 @@ class LevelViewSet(
         "create": LevelFullSerializer,
     }
 
-    filter_backends = [filters.SearchFilter, filters.OrderingFilter]
     ordering_fields = [
         "name",
         "engine",
@@ -105,6 +104,11 @@ class LevelViewSet(
 
         if engine_ids := parse_ids(self.request.query_params.get("engines")):
             queryset = queryset.filter(engine__id__in=engine_ids)
+
+        if is_approved := parse_boolean(
+            self.request.query_params.get("is_approved")
+        ):
+            queryset = queryset.filter(is_approved=is_approved)
 
         return queryset
 
