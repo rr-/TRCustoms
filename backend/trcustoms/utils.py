@@ -80,9 +80,9 @@ def parse_ids(source: str | None) -> list[int]:
         return []
 
 
-def parse_boolean(source: str | None) -> bool:
+def parse_boolean(source: str | None) -> bool | None:
     if not source:
-        return False
+        return None
     return source.lower() in ["1", "true", "y", "yes"]
 
 

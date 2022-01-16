@@ -9,6 +9,7 @@ import { LevelPage } from "src/components/pages/LevelPage";
 import { LevelUploadPage } from "src/components/pages/LevelUploadPage";
 import { LoginPage } from "src/components/pages/LoginPage";
 import { LogoutPage } from "src/components/pages/LogoutPage";
+import { ModerationPage } from "src/components/pages/ModerationPage";
 import { RegisterPage } from "src/components/pages/RegisterPage";
 import { SettingsPage } from "src/components/pages/SettingsPage";
 import { TagListPage } from "src/components/pages/TagListPage";
@@ -30,6 +31,7 @@ function App() {
         <main id="Content" className="MainContainer">
           <Routes>
             <Route path="/" element={<LevelListPage />} />
+            <Route path="/mod" element={<ModerationPage />} />
             <Route path="/levels/upload" element={<LevelUploadPage />} />
             <Route path="/levels" element={<LevelListPage />} />
             <Route path="/levels/:levelId" element={<LevelPage />} />

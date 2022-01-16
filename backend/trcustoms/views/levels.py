@@ -107,9 +107,11 @@ class LevelViewSet(
         if engine_ids := parse_ids(self.request.query_params.get("engines")):
             queryset = queryset.filter(engine__id__in=engine_ids)
 
-        if is_approved := parse_boolean(
-            self.request.query_params.get("is_approved")
-        ):
+        if (
+            is_approved := parse_boolean(
+                self.request.query_params.get("is_approved")
+            )
+        ) is not None:
             queryset = queryset.filter(is_approved=is_approved)
 
         return queryset
