@@ -7,7 +7,7 @@ import { KEY_UP } from "src/shared/constants";
 import { KEY_DOWN } from "src/shared/constants";
 
 interface AutoCompleteProps<TItem> {
-  suggestions: TItem[] | null;
+  suggestions: TItem[];
   getResultText: (result: TItem) => string;
   getResultKey: (result: TItem) => Key;
   onSearchTrigger: (userInput: string) => void;
@@ -28,7 +28,7 @@ const AutoComplete = <TItem extends Object>({
   const [textInput, setTextInput] = useState("");
 
   useEffect(() => {
-    if (suggestions === null) {
+    if (!suggestions.length) {
       setShowResults(false);
     } else {
       setShowResults(true);
@@ -67,10 +67,10 @@ const AutoComplete = <TItem extends Object>({
     const userInput = (event.target as HTMLInputElement).value;
     if (event.keyCode === KEY_RETURN) {
       event.preventDefault();
-      if (suggestions !== null) {
+      if (suggestions.length) {
         applyResult(userInput, suggestions[activeResultIdx] || null);
       }
-    } else if (suggestions !== null) {
+    } else if (suggestions.length) {
       if (event.keyCode === KEY_UP) {
         if (activeResultIdx - 1 > 0) {
           setActiveResultIdx(activeResultIdx - 1);
@@ -84,7 +84,7 @@ const AutoComplete = <TItem extends Object>({
   };
 
   const onClick = (event: React.MouseEvent<HTMLLIElement>) => {
-    if (suggestions === null) {
+    if (!suggestions.length) {
       return;
     }
     const index = +(
@@ -96,7 +96,7 @@ const AutoComplete = <TItem extends Object>({
   const AutoCompleteSuggestions = () => {
     return (
       <div className="AutoCompleteSuggestions">
-        {suggestions?.length ? (
+        {suggestions.length ? (
           <ul className="AutoCompleteSuggestions--list">
             {suggestions.map((result, index) => {
               let classNames = ["AutoCompleteSuggestions--listItem"];
