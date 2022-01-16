@@ -23,6 +23,10 @@ const UsersFormField = ({
   const selectedUsers = [...value];
 
   const onSearchTrigger = async (userInput: string) => {
+    if (!userInput) {
+      setSuggestions([]);
+      return;
+    }
     const searchQuery = {
       search: userInput,
     };
