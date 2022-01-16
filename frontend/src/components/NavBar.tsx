@@ -94,6 +94,11 @@ const NavBar = () => {
                 <li className="TopNavBar--listItem">
                   <LevelsNavLink to={"/"}>Levels</LevelsNavLink>
                 </li>
+                <PermissionGuard require={UserPermission.editLevels}>
+                  <li className="TopNavBar--listItem">
+                    <NavLink to={"/mod"}>Moderate</NavLink>
+                  </li>
+                </PermissionGuard>
                 <PermissionGuard require={UserPermission.uploadLevels}>
                   <li className="TopNavBar--listItem">
                     <NavLink to={"/levels/upload"}>Upload level</NavLink>
