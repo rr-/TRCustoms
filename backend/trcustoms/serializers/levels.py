@@ -223,4 +223,5 @@ class LevelFullSerializer(LevelLiteSerializer):
             "files",
             "file_id",
             "trle_id",
+            "is_approved",
         ]
