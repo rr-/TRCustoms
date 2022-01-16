@@ -13,6 +13,8 @@ interface UploadedFile {
   id: number;
   url: string;
   upload_type: UploadType;
+  size: number;
+  md5sum: string;
 }
 
 const getFileById = async (fileId: number): Promise<UploadedFile> => {
@@ -24,14 +26,17 @@ const getFileById = async (fileId: number): Promise<UploadedFile> => {
 
 const uploadFile = async (
   file: File,
-  type: UploadType
+  type: UploadType,
+  onUploadProgress?: (progressEvent: ProgressEvent) => void
 ): Promise<UploadedFile> => {
   const formData = new FormData();
   formData.append("content", file);
   formData.append("upload_type", type);
+  const config = { onUploadProgress };
   const response = (await api.post(
     `${API_URL}/uploads/`,
-    formData
+    formData,
+    config
   )) as AxiosResponse<UploadedFile>;
   return response.data;
 };

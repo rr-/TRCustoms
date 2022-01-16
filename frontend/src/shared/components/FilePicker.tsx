@@ -9,14 +9,16 @@ import type { UploadedFile } from "src/services/file.service";
 import { FileService } from "src/services/file.service";
 import { UploadType } from "src/services/file.service";
 import { Loader } from "src/shared/components/Loader";
+import { ProgressBar } from "src/shared/components/ProgressBar";
 import { PushButton } from "src/shared/components/PushButton";
+import { formatFileSize } from "src/shared/utils";
 
 interface FilePickerPreviewProps {
   uploadedFile: UploadedFile;
 }
 
 const FilePickerPreview = ({ uploadedFile }: FilePickerPreviewProps) => {
-  return <>{uploadedFile.url}</>;
+  return <>{`${uploadedFile.md5sum} (${formatFileSize(uploadedFile.size)})`}</>;
 };
 
 interface FilePickerPreviewWrapperProps {
@@ -76,9 +78,12 @@ const FilePicker = ({
   onChange,
 }: FilePickerProps) => {
   const [currentFileIds, setCurrentFileIds] = useState<number[]>(fileIds || []);
+  const [percentCompleted, setPercentCompleted] = useState<number | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [dragCounter, setDragCounter] = useState(0);
   const [elementId] = useState(uniqueId("pictureDropper-"));
+
+  const isUploading = percentCompleted !== null;
 
   const handleError = useCallback(
     (error) => {
@@ -106,13 +111,24 @@ const FilePicker = ({
   const addFile = useCallback(
     (file) => {
       setErrorMessage(null);
+      const onUploadProgress = (progressEvent: ProgressEvent) => {
+        setPercentCompleted(
+          (progressEvent.loaded * 100.0) / progressEvent.total
+        );
+      };
+
       const run = async () => {
         try {
-          const uploadedFile = await FileService.uploadFile(file, uploadType);
+          const uploadedFile = await FileService.uploadFile(
+            file,
+            uploadType,
+            onUploadProgress
+          );
           const newFileIds = [
             ...(allowMultiple ? currentFileIds : []),
             uploadedFile.id,
           ];
+          setPercentCompleted(null);
           setCurrentFileIds(newFileIds);
           onChange?.(newFileIds);
         } catch (error) {
@@ -126,51 +142,64 @@ const FilePicker = ({
       handleError,
       uploadType,
       setCurrentFileIds,
+      setPercentCompleted,
       onChange,
       currentFileIds,
       allowMultiple,
     ]
   );
 
-  const onDragEnter = useCallback(
-    (event: React.DragEvent) => {
-      setDragCounter((dragCounter) => dragCounter + 1);
-    },
-    [setDragCounter]
-  );
+  const onDragEnter = (event: React.DragEvent) => {
+    if (isUploading) {
+      return;
+    }
+    setDragCounter((dragCounter) => dragCounter + 1);
+  };
 
-  const onDragLeave = useCallback(
-    (event: React.DragEvent) => {
-      setDragCounter((dragCounter) => Math.max(0, dragCounter - 1));
-    },
-    [setDragCounter]
-  );
+  const onDragLeave = (event: React.DragEvent) => {
+    if (isUploading) {
+      return;
+    }
+    setDragCounter((dragCounter) => Math.max(0, dragCounter - 1));
+  };
 
   const onDragOver = (event: React.DragEvent) => {
+    if (isUploading) {
+      return;
+    }
     event.preventDefault();
   };
 
-  const onDrop = useCallback(
-    (event) => {
-      event.preventDefault();
-      setDragCounter(0);
-      if (!event.dataTransfer.files.length) {
-        window.alert("Only files are supported.");
-      }
-      if (!allowMultiple && event.dataTransfer.files.length > 1) {
-        window.alert("Cannot select multiple files.");
-      }
-      addFile(event.dataTransfer.files[0]);
-    },
-    [allowMultiple, setDragCounter, addFile]
-  );
+  const onDrop = (event: React.DragEvent) => {
+    event.preventDefault();
+    if (isUploading) {
+      return;
+    }
+    setDragCounter(0);
+    if (!event.dataTransfer.files.length) {
+      window.alert("Only files are supported.");
+    }
+    if (!allowMultiple && event.dataTransfer.files.length > 1) {
+      window.alert("Cannot select multiple files.");
+    }
+    addFile(event.dataTransfer.files[0]);
+  };
 
-  const onFileChange = useCallback(
-    (event) => {
-      addFile(event.currentTarget.files[0]);
-    },
-    [addFile]
-  );
+  const onFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (isUploading) {
+      return;
+    }
+    const input = event.currentTarget as HTMLInputElement;
+    if (!input.files) {
+      return;
+    }
+    for (let file of input.files) {
+      addFile(file);
+      if (!allowMultiple) {
+        break;
+      }
+    }
+  };
 
   return (
     <div className="FilePicker">
@@ -189,7 +218,14 @@ const FilePicker = ({
         onDragOver={(event) => onDragOver(event)}
         onDrop={(event) => onDrop(event)}
       >
-        {allowMultiple ? (
+        {isUploading ? (
+          <>
+            <ProgressBar
+              title="Uploading…"
+              percentCompleted={percentCompleted}
+            />
+          </>
+        ) : allowMultiple ? (
           <>Drop files here, or click on this box.</>
         ) : (
           <>Drop a file here, or click on this box.</>
