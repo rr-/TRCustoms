@@ -1,3 +1,5 @@
+import { AxiosError } from "axios";
+import axios from "axios";
 import { Formik } from "formik";
 import { Form } from "formik";
 import { useContext } from "react";
@@ -8,7 +10,6 @@ import type { LevelFull } from "src/services/level.service";
 import { LevelService } from "src/services/level.service";
 import { TagLite } from "src/services/tag.service";
 import type { UserLite } from "src/services/user.service";
-import { FetchError } from "src/shared/client";
 import { BaseFormField } from "src/shared/components/BaseFormField";
 import { DifficultyFormField } from "src/shared/components/DifficultyFormField";
 import { DurationFormField } from "src/shared/components/DurationFormField";
@@ -109,22 +110,24 @@ const LevelForm = ({ level, onGoBack, onSubmit }: LevelFormProps) => {
   const handleSubmitError = useCallback(
     (error, { setSubmitting, setStatus, setErrors }) => {
       setSubmitting(false);
-      if (error instanceof FetchError) {
-        if (error.message) {
-          setStatus({ error: <>{makeSentence(error.message)}</> });
+      if (axios.isAxiosError(error)) {
+        const axiosError = error as AxiosError;
+        const data = axiosError.response?.data;
+        if (data.detail) {
+          setStatus({ error: <>{makeSentence(data.detail)}</> });
         }
         setErrors({
-          name: error.data?.name,
-          description: error.data?.description,
-          genres: error.data?.genre_ids,
-          authors: error.data?.author_ids,
-          tags: error.data?.tag_ids,
-          engine_id: error.data?.engine_id,
-          difficulty_id: error.data?.difficulty_id,
-          duration_id: error.data?.duration_id,
-          cover_id: error.data?.cover_id,
-          screenshot_ids: error.data?.screenshot_ids,
-          file_id: error.data?.file_id,
+          name: data?.name,
+          description: data?.description,
+          genres: data?.genre_ids,
+          authors: data?.author_ids,
+          tags: data?.tag_ids,
+          engine_id: data?.engine_id,
+          difficulty_id: data?.difficulty_id,
+          duration_id: data?.duration_id,
+          cover_id: data?.cover_id,
+          screenshot_ids: data?.screenshot_ids,
+          file_id: data?.file_id,
         });
       } else {
         console.error(error);

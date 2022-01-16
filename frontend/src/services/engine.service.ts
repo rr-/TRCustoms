@@ -1,4 +1,5 @@
-import { fetchJSON } from "src/shared/client";
+import { AxiosResponse } from "axios";
+import { api } from "src/shared/api";
 import { API_URL } from "src/shared/constants";
 import type { PagedResponse } from "src/shared/types";
 import type { GenericSearchQuery } from "src/shared/types";
@@ -25,11 +26,11 @@ interface EngineSearchResult
 const searchEngines = async (
   searchQuery: EngineSearchQuery
 ): Promise<EngineSearchResult> => {
-  const result = await fetchJSON<EngineList>(`${API_URL}/level_engines/`, {
-    query: getGenericSearchQuery(searchQuery),
-    method: "GET",
-  });
-  return { searchQuery: searchQuery, ...result };
+  const params = getGenericSearchQuery(searchQuery);
+  const response = (await api.get(`${API_URL}/level_engines/`, {
+    params,
+  })) as AxiosResponse<EngineSearchResult>;
+  return { ...response.data, searchQuery };
 };
 
 const EngineService = {

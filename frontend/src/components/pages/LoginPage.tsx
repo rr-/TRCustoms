@@ -1,3 +1,5 @@
+import { AxiosError } from "axios";
+import axios from "axios";
 import { Formik } from "formik";
 import { Form } from "formik";
 import { useCallback } from "react";
@@ -6,7 +8,6 @@ import { useNavigate } from "react-router-dom";
 import { AuthService } from "src/services/auth.service";
 import { UserService } from "src/services/user.service";
 import type { User } from "src/services/user.service";
-import { FetchError } from "src/shared/client";
 import { FormGrid } from "src/shared/components/FormGrid";
 import { FormGridButtons } from "src/shared/components/FormGrid";
 import { FormGridFieldSet } from "src/shared/components/FormGrid";
@@ -27,18 +28,23 @@ const LoginPage = () => {
         navigate("/");
       } catch (error) {
         setSubmitting(false);
-        if (error instanceof FetchError && error.response.status === 401) {
-          let user: User | null = null;
-          try {
-            user = await UserService.getUserByUsername(values.username);
-          } catch (error) {}
-          if (user && !user.is_active) {
-            setStatus({
-              error:
-                "Your account was not yet activated. Please try again later :)",
-            });
+        if (axios.isAxiosError(error)) {
+          const axiosError = error as AxiosError;
+          if (axiosError.response?.status === 401) {
+            let user: User | null = null;
+            try {
+              user = await UserService.getUserByUsername(values.username);
+            } catch (error) {}
+            if (user && !user.is_active) {
+              setStatus({
+                error:
+                  "Your account was not yet activated. Please try again later :)",
+              });
+            } else {
+              setStatus({ error: <>Invalid username or password.</> });
+            }
           } else {
-            setStatus({ error: <>Invalid username or password.</> });
+            setStatus({ error: <>Unknown error.</> });
           }
         } else {
           setStatus({ error: <>Unknown error.</> });

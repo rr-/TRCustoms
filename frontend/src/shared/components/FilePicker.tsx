@@ -1,4 +1,6 @@
 import "./FilePicker.css";
+import { AxiosError } from "axios";
+import axios from "axios";
 import { uniqueId } from "lodash";
 import { useCallback } from "react";
 import { useEffect } from "react";
@@ -6,7 +8,6 @@ import { useState } from "react";
 import type { UploadedFile } from "src/services/file.service";
 import { FileService } from "src/services/file.service";
 import { UploadType } from "src/services/file.service";
-import { FetchError } from "src/shared/client";
 import { Loader } from "src/shared/components/Loader";
 import { PushButton } from "src/shared/components/PushButton";
 
@@ -81,8 +82,9 @@ const FilePicker = ({
 
   const handleError = useCallback(
     (error) => {
-      if (error instanceof FetchError) {
-        setErrorMessage(error.data?.content);
+      if (axios.isAxiosError(error)) {
+        const axiosError = error as AxiosError;
+        setErrorMessage(axiosError.response?.data.content);
       } else {
         setErrorMessage("Unknown error.");
       }

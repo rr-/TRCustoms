@@ -1,4 +1,5 @@
-import { fetchJSON } from "src/shared/client";
+import { AxiosResponse } from "axios";
+import { api } from "src/shared/api";
 import { API_URL } from "src/shared/constants";
 import type { GenericSearchQuery } from "src/shared/types";
 import type { PagedResponse } from "src/shared/types";
@@ -25,11 +26,11 @@ interface GenreSearchResult
 const searchGenres = async (
   searchQuery: GenreSearchQuery
 ): Promise<GenreSearchResult> => {
-  const result = await fetchJSON<GenreList>(`${API_URL}/level_genres/`, {
-    query: getGenericSearchQuery(searchQuery),
-    method: "GET",
-  });
-  return { searchQuery: searchQuery, ...result };
+  const params = getGenericSearchQuery(searchQuery);
+  const response = (await api.get(`${API_URL}/level_genres/`, {
+    params,
+  })) as AxiosResponse<GenreSearchResult>;
+  return { ...response.data, searchQuery };
 };
 
 const GenreService = {

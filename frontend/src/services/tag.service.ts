@@ -1,4 +1,5 @@
-import { fetchJSON } from "src/shared/client";
+import { AxiosResponse } from "axios";
+import { api } from "src/shared/api";
 import { API_URL } from "src/shared/constants";
 import type { GenericSearchQuery } from "src/shared/types";
 import type { PagedResponse } from "src/shared/types";
@@ -23,11 +24,11 @@ interface TagSearchResult extends GenericSearchResult<TagSearchQuery, Tag> {}
 const searchTags = async (
   searchQuery: TagSearchQuery
 ): Promise<TagSearchResult> => {
-  const result = await fetchJSON<TagList>(`${API_URL}/level_tags/`, {
-    query: getGenericSearchQuery(searchQuery),
-    method: "GET",
-  });
-  return { searchQuery: searchQuery, ...result };
+  const params = getGenericSearchQuery(searchQuery);
+  const response = (await api.get(`${API_URL}/level_tags/`, {
+    params,
+  })) as AxiosResponse<TagSearchResult>;
+  return { ...response.data, searchQuery };
 };
 
 const TagService = {

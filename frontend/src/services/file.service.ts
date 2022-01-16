@@ -1,5 +1,5 @@
-import { fetchJSON } from "src/shared/client";
-import { fetchMultipart } from "src/shared/client";
+import { AxiosResponse } from "axios";
+import { api } from "src/shared/api";
 import { API_URL } from "src/shared/constants";
 
 enum UploadType {
@@ -16,9 +16,10 @@ interface UploadedFile {
 }
 
 const getFileById = async (fileId: number): Promise<UploadedFile> => {
-  return await fetchJSON<UploadedFile>(`${API_URL}/uploads/${fileId}/`, {
-    method: "GET",
-  });
+  const response = (await api.get(
+    `${API_URL}/uploads/${fileId}/`
+  )) as AxiosResponse<UploadedFile>;
+  return response.data;
 };
 
 const uploadFile = async (
@@ -28,10 +29,11 @@ const uploadFile = async (
   const formData = new FormData();
   formData.append("content", file);
   formData.append("upload_type", type);
-  return await fetchMultipart(`${API_URL}/uploads/`, {
-    method: "POST",
-    data: formData,
-  });
+  const response = (await api.post(
+    `${API_URL}/uploads/`,
+    formData
+  )) as AxiosResponse<UploadedFile>;
+  return response.data;
 };
 
 const FileService = {

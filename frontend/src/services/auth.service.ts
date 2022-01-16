@@ -1,4 +1,5 @@
-import { fetchJSONWithoutRetry } from "src/shared/client";
+import { AxiosResponse } from "axios";
+import { api } from "src/shared/api";
 import { API_URL } from "src/shared/constants";
 
 interface AccessTokenResponse {
@@ -13,43 +14,38 @@ interface RefreshTokenResponse {
 class AuthError extends Error {}
 
 const login = async (username: string, password: string) => {
-  const data = await fetchJSONWithoutRetry<AccessTokenResponse>(
+  const data = {
+    username: username,
+    password: password,
+  };
+  const response = (await api.post(
     `${API_URL}/auth/token/`,
-    {
-      method: "POST",
-      data: {
-        username: username,
-        password: password,
-      },
-    }
-  );
-  localStorage.setItem("accessToken", data.access);
-  localStorage.setItem("refreshToken", data.refresh);
+    data
+  )) as AxiosResponse<AccessTokenResponse>;
+  localStorage.setItem("accessToken", response.data.access);
+  localStorage.setItem("refreshToken", response.data.refresh);
 };
 
-const getAccessToken = () => {
+const getAccessToken = (): string | null => {
   return localStorage.getItem("accessToken");
 };
 
-const getRefreshToken = () => {
+const getRefreshToken = (): string | null => {
   return localStorage.getItem("refreshToken");
 };
 
-const getNewAccessToken = async () => {
+const getNewAccessToken = async (): Promise<string> => {
   const refreshToken = getRefreshToken();
   if (!refreshToken) {
     throw new AuthError("refresh token not available");
   }
-  const data = await fetchJSONWithoutRetry<RefreshTokenResponse>(
+  const data = { refresh: refreshToken };
+  const response = (await api.post(
     `${API_URL}/auth/token/refresh/`,
-    {
-      method: "POST",
-      data: {
-        refresh: refreshToken,
-      },
-    }
-  );
-  localStorage.setItem("accessToken", data.access);
+    data
+  )) as AxiosResponse<RefreshTokenResponse>;
+  localStorage.setItem("accessToken", response.data.access);
+  return response.data.access;
 };
 
 const logout = () => {
