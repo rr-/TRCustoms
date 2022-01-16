@@ -45,6 +45,7 @@ const TagsTable = ({ searchQuery, onSearchQueryChange }: TagsTableProps) => {
   return (
     <DataTable
       className="TagsTable"
+      queryName="tags"
       columns={columns}
       itemKey={itemKey}
       searchQuery={searchQuery}

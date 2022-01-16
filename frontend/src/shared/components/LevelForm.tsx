@@ -4,6 +4,7 @@ import { Formik } from "formik";
 import { Form } from "formik";
 import { useContext } from "react";
 import { useCallback } from "react";
+import { useQueryClient } from "react-query";
 import { UploadType } from "src/services/file.service";
 import { GenreLite } from "src/services/genre.service";
 import type { LevelFull } from "src/services/level.service";
@@ -54,6 +55,7 @@ const validateRange = <T extends Object>(
 
 const LevelForm = ({ level, onGoBack, onSubmit }: LevelFormProps) => {
   const { user } = useContext(UserContext);
+  const queryClient = useQueryClient();
   const config = useContext(ConfigContext);
   const initialValues = {
     name: level?.name || "",
@@ -156,7 +158,7 @@ const LevelForm = ({ level, onGoBack, onSubmit }: LevelFormProps) => {
 
         if (level?.id) {
           let outLevel = await LevelService.update(level.id, payload);
-
+          queryClient.removeQueries("levels");
           onSubmit?.(outLevel);
 
           setStatus({
@@ -170,13 +172,14 @@ const LevelForm = ({ level, onGoBack, onSubmit }: LevelFormProps) => {
           });
         } else {
           let outLevel = await LevelService.create(payload);
+          queryClient.removeQueries("levels");
           onSubmit?.(outLevel);
         }
       } catch (error) {
         handleSubmitError(error, { setSubmitting, setStatus, setErrors });
       }
     },
-    [level, onSubmit, handleSubmitError]
+    [level, onSubmit, handleSubmitError, queryClient]
   );
 
   const validate = (values: { [key: string]: any }) => {

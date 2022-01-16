@@ -44,7 +44,7 @@ const UserPage = () => {
   );
 
   const result = useQuery<User, Error>(
-    [UserService.getUserById, userId],
+    ["user", UserService.getUserById, userId],
     async () => UserService.getUserById(+userId)
   );
 

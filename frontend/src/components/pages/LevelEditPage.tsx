@@ -16,7 +16,7 @@ const LevelEditPage = () => {
   const { levelId } = (useParams() as unknown) as LevelEditPageParams;
 
   const result = useQuery<LevelFull, Error>(
-    [LevelService.getLevelById, levelId],
+    ["level", LevelService.getLevelById, levelId],
     async () => LevelService.getLevelById(+levelId)
   );
 

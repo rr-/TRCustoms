@@ -33,7 +33,7 @@ const ReviewsTable = ({
   onSearchQueryChange,
 }: ReviewsTableProps) => {
   const result = useQuery<ReviewSearchResult, Error>(
-    [ReviewService.searchReviews, searchQuery],
+    ["reviews", ReviewService.searchReviews, searchQuery],
     async () => ReviewService.searchReviews(searchQuery)
   );
 
@@ -146,6 +146,7 @@ const ReviewsTable = ({
       <SectionHeader>Legacy ratings</SectionHeader>
       <DataTable
         className="ReviewsTable"
+        queryName="reviews"
         columns={columns}
         itemKey={itemKey}
         searchQuery={searchQuery}

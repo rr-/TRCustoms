@@ -27,6 +27,7 @@ interface DataTableColumn<TItem> {
 
 interface DataTableProps<TItem, TQuery> {
   className?: string | null;
+  queryName: string;
   itemKey: (item: TItem) => string;
   columns: DataTableColumn<TItem>[];
 
@@ -167,10 +168,16 @@ const DataTableFooter = <TItem extends {}, TQuery extends GenericSearchQuery>({
 const PagedDataTable = <TItem extends {}, TQuery extends GenericSearchQuery>(
   props: DataTableProps<TItem, TQuery>
 ) => {
-  const { className, searchQuery, onSearchQueryChange, searchFunc } = props;
+  const {
+    className,
+    queryName,
+    searchQuery,
+    onSearchQueryChange,
+    searchFunc,
+  } = props;
 
   const result = useQuery<GenericSearchResult<TQuery, TItem> | null, Error>(
-    [searchFunc, searchQuery],
+    [queryName, searchFunc, searchQuery],
     async () => searchFunc(searchQuery)
   );
 
@@ -200,14 +207,14 @@ const PagedDataTable = <TItem extends {}, TQuery extends GenericSearchQuery>(
 const InfiniteDataTable = <TItem extends {}, TQuery extends GenericSearchQuery>(
   props: DataTableProps<TItem, TQuery>
 ) => {
-  const { className, searchQuery, searchFunc } = props;
+  const { className, queryName, searchQuery, searchFunc } = props;
 
   const [loadingElement, setLoadingElement] = useState(null);
   const result = useInfiniteQuery<
     GenericSearchResult<TQuery, TItem> | null,
     Error
   >(
-    [className /* hack: using class name to cache queries */, searchQuery],
+    [queryName, searchQuery],
     async ({ pageParam }) => {
       return searchFunc({
         ...searchQuery,

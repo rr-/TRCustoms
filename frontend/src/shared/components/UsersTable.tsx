@@ -66,6 +66,7 @@ const UsersTable = ({ searchQuery, onSearchQueryChange }: UsersTableProps) => {
   return (
     <DataTable
       className="UsersTable"
+      queryName="users"
       columns={columns}
       itemKey={itemKey}
       searchQuery={searchQuery}
