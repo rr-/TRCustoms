@@ -1,9 +1,10 @@
+import { AxiosResponse } from "axios";
 import type { EngineLite } from "src/services/engine.service";
 import type { UploadedFile } from "src/services/file.service";
 import type { GenreLite } from "src/services/genre.service";
 import type { TagLite } from "src/services/tag.service";
 import type { UserLite } from "src/services/user.service";
-import { fetchJSON } from "src/shared/client";
+import { api } from "src/shared/api";
 import { API_URL } from "src/shared/constants";
 import type { GenericSearchQuery } from "src/shared/types";
 import type { PagedResponse } from "src/shared/types";
@@ -75,23 +76,24 @@ interface MediumList extends Array<Medium> {}
 const searchLevels = async (
   searchQuery: LevelSearchQuery
 ): Promise<LevelSearchResult> => {
-  const result = await fetchJSON<LevelList>(`${API_URL}/levels/`, {
-    query: filterFalsyObjectValues({
-      ...getGenericSearchQuery(searchQuery),
-      tags: searchQuery.tags.join(","),
-      genres: searchQuery.genres?.join(","),
-      engines: searchQuery.engines?.join(","),
-      authors: searchQuery.authors?.join(","),
-    }),
-    method: "GET",
+  const params = filterFalsyObjectValues({
+    ...getGenericSearchQuery(searchQuery),
+    tags: searchQuery.tags.join(","),
+    genres: searchQuery.genres?.join(","),
+    engines: searchQuery.engines?.join(","),
+    authors: searchQuery.authors?.join(","),
   });
-  return { searchQuery: searchQuery, ...result };
+  const response = (await api.get(`${API_URL}/levels/`, {
+    params,
+  })) as AxiosResponse<LevelSearchResult>;
+  return { ...response.data, searchQuery };
 };
 
 const getLevelById = async (levelId: number): Promise<LevelFull> => {
-  return await fetchJSON<LevelFull>(`${API_URL}/levels/${levelId}/`, {
-    method: "GET",
-  });
+  const response = (await api.get(
+    `${API_URL}/levels/${levelId}/`
+  )) as AxiosResponse<LevelFull>;
+  return response.data;
 };
 
 interface LevelBaseChangePayload {
@@ -116,18 +118,20 @@ const update = async (
   payload: LevelUpdatePayload
 ): Promise<LevelFull> => {
   const data: { [key: string]: any } = filterFalsyObjectValues(payload);
-  return await fetchJSON(`${API_URL}/levels/${levelId}/`, {
-    method: "PATCH",
-    data: data,
-  });
+  const response = (await api.patch(
+    `${API_URL}/levels/${levelId}/`,
+    data
+  )) as AxiosResponse<LevelFull>;
+  return response.data;
 };
 
 const create = async (payload: LevelCreatePayload): Promise<LevelFull> => {
   const data: { [key: string]: any } = filterFalsyObjectValues(payload);
-  return await fetchJSON(`${API_URL}/levels/`, {
-    method: "POST",
-    data: data,
-  });
+  const response = (await api.post(
+    `${API_URL}/levels/`,
+    data
+  )) as AxiosResponse<LevelFull>;
+  return response.data;
 };
 
 const LevelService = {

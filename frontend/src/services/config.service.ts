@@ -1,4 +1,5 @@
-import { fetchJSON } from "src/shared/client";
+import { AxiosResponse } from "axios";
+import { api } from "src/shared/api";
 import { API_URL } from "src/shared/constants";
 
 interface Config {
@@ -20,9 +21,10 @@ interface Config {
 }
 
 const getConfig = async (): Promise<Config> => {
-  return await fetchJSON<Config>(`${API_URL}/config/`, {
-    method: "GET",
-  });
+  const response = (await api.get(`${API_URL}/config/`)) as AxiosResponse<
+    Config
+  >;
+  return response.data;
 };
 
 const ConfigService = {

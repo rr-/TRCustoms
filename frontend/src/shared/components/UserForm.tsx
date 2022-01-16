@@ -1,10 +1,11 @@
+import { AxiosError } from "axios";
+import axios from "axios";
 import { Formik } from "formik";
 import { Form } from "formik";
 import { useCallback } from "react";
 import { UploadType } from "src/services/file.service";
 import type { User } from "src/services/user.service";
 import { UserService } from "src/services/user.service";
-import { FetchError } from "src/shared/client";
 import { BaseFormField } from "src/shared/components/BaseFormField";
 import { EmailFormField } from "src/shared/components/EmailFormField";
 import { FormGrid } from "src/shared/components/FormGrid";
@@ -44,19 +45,21 @@ const UserForm = ({ user, onGoBack, onSubmit }: UserFormProps) => {
   const handleSubmitError = useCallback(
     (error, { setSubmitting, setStatus, setErrors }) => {
       setSubmitting(false);
-      if (error instanceof FetchError) {
-        if (error.message) {
-          setStatus({ error: <>{makeSentence(error.message)}</> });
+      if (axios.isAxiosError(error)) {
+        const axiosError = error as AxiosError;
+        const data = axiosError.response?.data;
+        if (data.detail) {
+          setStatus({ error: <>{makeSentence(data.detail)}</> });
         }
         setErrors({
-          username: error.data?.username,
-          firstName: error.data?.first_name,
-          lastName: error.data?.last_name,
-          email: error.data?.email,
-          oldPassword: error.data?.old_password,
-          password: error.data?.password,
-          bio: error.data?.bio,
-          picture: error.data?.picture,
+          username: data?.username,
+          firstName: data?.first_name,
+          lastName: data?.last_name,
+          email: data?.email,
+          oldPassword: data?.old_password,
+          password: data?.password,
+          bio: data?.bio,
+          picture: data?.picture,
         });
       } else {
         console.error(error);

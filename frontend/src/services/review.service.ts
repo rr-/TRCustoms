@@ -1,4 +1,5 @@
-import { fetchJSON } from "src/shared/client";
+import { AxiosResponse } from "axios";
+import { api } from "src/shared/api";
 import { API_URL } from "src/shared/constants";
 import type { PagedResponse } from "src/shared/types";
 import type { GenericSearchQuery } from "src/shared/types";
@@ -39,15 +40,15 @@ interface ReviewSearchResult
 const searchReviews = async (
   searchQuery: ReviewSearchQuery
 ): Promise<ReviewSearchResult> => {
-  const result = await fetchJSON<ReviewList>(`${API_URL}/level_reviews/`, {
-    query: filterFalsyObjectValues({
-      ...getGenericSearchQuery(searchQuery),
-      levels: searchQuery.levels?.join(",") || null,
-      authors: searchQuery.authors?.join(",") || null,
-    }),
-    method: "GET",
+  const params = filterFalsyObjectValues({
+    ...getGenericSearchQuery(searchQuery),
+    levels: searchQuery.levels?.join(",") || null,
+    authors: searchQuery.authors?.join(",") || null,
   });
-  return { searchQuery: searchQuery, ...result };
+  const response = (await api.get(`${API_URL}/level_reviews/`, {
+    params,
+  })) as AxiosResponse<ReviewSearchResult>;
+  return { ...response.data, searchQuery };
 };
 
 const ReviewService = {

@@ -1,4 +1,5 @@
-import { fetchJSON } from "src/shared/client";
+import { AxiosResponse } from "axios";
+import { api } from "src/shared/api";
 import { API_URL } from "src/shared/constants";
 import type { GenericSearchQuery } from "src/shared/types";
 import type { PagedResponse } from "src/shared/types";
@@ -39,29 +40,28 @@ interface UserSearchQuery extends GenericSearchQuery {}
 interface UserSearchResult extends GenericSearchResult<UserSearchQuery, User> {}
 
 const getCurrentUser = async (): Promise<User | null> => {
-  let data;
   try {
-    data = await fetchJSON<User>(`${API_URL}/users/me/`, { method: "GET" });
+    const response = (await api.get(`${API_URL}/users/me/`)) as AxiosResponse<
+      User
+    >;
+    return response.data;
   } catch (error) {
-    data = null;
+    return null;
   }
-  return data;
 };
 
 const getUserById = async (userId: number): Promise<User> => {
-  let data;
-  data = await fetchJSON<User>(`${API_URL}/users/${userId}/`, {
-    method: "GET",
-  });
-  return data;
+  const response = (await api.get(
+    `${API_URL}/users/${userId}/`
+  )) as AxiosResponse<User>;
+  return response.data;
 };
 
 const getUserByUsername = async (username: string): Promise<User> => {
-  let data;
-  data = await fetchJSON<User>(`${API_URL}/users/by_username/${username}/`, {
-    method: "GET",
-  });
-  return data;
+  const response = (await api.get(
+    `${API_URL}/users/by_username/${username}/`
+  )) as AxiosResponse<User>;
+  return response.data;
 };
 
 interface UserCreatePayload {
@@ -105,10 +105,11 @@ const update = async (
   if (password) {
     data.password = password;
   }
-  return await fetchJSON(`${API_URL}/users/${userId}/`, {
-    method: "PATCH",
-    data: data,
-  });
+  const response = (await api.patch(
+    `${API_URL}/users/${userId}/`,
+    data
+  )) as AxiosResponse<User>;
+  return response.data;
 };
 
 const register = async ({
@@ -129,20 +130,20 @@ const register = async ({
     bio: bio,
     picture: picture,
   };
-  return await fetchJSON(`${API_URL}/users/`, {
-    method: "POST",
-    data: data,
-  });
+  const response = (await api.post(`${API_URL}/users/`, data)) as AxiosResponse<
+    User
+  >;
+  return response.data;
 };
 
 const searchUsers = async (
   searchQuery: UserSearchQuery
 ): Promise<UserSearchResult> => {
-  const result = await fetchJSON<UserList>(`${API_URL}/users/`, {
-    query: getGenericSearchQuery(searchQuery),
-    method: "GET",
-  });
-  return { searchQuery: searchQuery, ...result };
+  const params = getGenericSearchQuery(searchQuery);
+  const response = (await api.get(`${API_URL}/users/`, {
+    params,
+  })) as AxiosResponse<UserSearchResult>;
+  return { ...response.data, searchQuery };
 };
 
 const UserService = {
