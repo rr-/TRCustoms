@@ -1,5 +1,5 @@
 import "./PushButton.css";
-import { useCallback } from "react";
+import { useEffect } from "react";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import type { To } from "react-router-dom";
@@ -21,27 +21,33 @@ const PushButton = ({
   target,
   children,
 }: PushButtonProps) => {
+  const [timer, setTimer] = useState<number | null>(null);
   const [isDisabled, setIsDisabled] = useState(false);
 
-  const linkClick = useCallback(
-    (e) => {
-      if (isDisabled) {
-        e.preventDefault();
-        e.stopPropagation();
-        return;
+  useEffect(() => {
+    return () => {
+      if (timer) {
+        clearTimeout(timer);
       }
-      if (!disableTimeout) {
-        setIsDisabled(true);
-        window.setTimeout(() => setIsDisabled(false), 5000);
-      }
-      if (onClick) {
-        onClick();
-        e.preventDefault();
-        e.stopPropagation();
-      }
-    },
-    [isDisabled, setIsDisabled, disableTimeout, onClick]
-  );
+    };
+  }, [timer]);
+
+  const linkClick = (event: React.MouseEvent) => {
+    if (isDisabled) {
+      event.preventDefault();
+      event.stopPropagation();
+      return;
+    }
+    if (!disableTimeout) {
+      setIsDisabled(true);
+      setTimer(window.setTimeout(() => setIsDisabled(false), 5000));
+    }
+    if (onClick) {
+      onClick();
+      event.preventDefault();
+      event.stopPropagation();
+    }
+  };
 
   return (
     <Link
