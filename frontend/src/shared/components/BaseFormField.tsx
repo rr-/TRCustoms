@@ -3,7 +3,7 @@ import { FormFieldError } from "src/shared/components/FormFieldError";
 
 interface GenericFormFieldProps {
   name: string;
-  label: string;
+  label: string | null;
   extraInformation?: string;
   required?: boolean;
   readonly?: boolean;
@@ -22,10 +22,12 @@ const BaseFormField = ({
 }: BaseFormFieldProps) => {
   return (
     <div className="FormField">
-      <label className="FormField--label" htmlFor={name}>
-        {label}
-        {required && <>*</>}:
-      </label>
+      {label ? (
+        <label className="FormField--label" htmlFor={name}>
+          {label}
+          {required && <>*</>}:
+        </label>
+      ) : null}
       <div className="FormField--field">
         {children}
         {extraInformation ? <div>{extraInformation}</div> : null}
