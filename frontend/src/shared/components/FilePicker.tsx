@@ -21,20 +21,96 @@ const FilePickerPreview = ({ uploadedFile }: FilePickerPreviewProps) => {
   return <>{`${uploadedFile.md5sum} (${formatFileSize(uploadedFile.size)})`}</>;
 };
 
+interface FilePickerReorderTargetProps {
+  position: number;
+  reorderSourcePosition: number | null;
+  reorderTargetPosition: number | null;
+  setReorderSourcePosition: (position: number | null) => void;
+  setReorderTargetPosition: (position: number | null) => void;
+  onReorder: (position: number, targetPosition: number) => void;
+}
+
+const FilePickerReorderTarget = ({
+  position,
+  reorderSourcePosition,
+  reorderTargetPosition,
+  setReorderSourcePosition,
+  setReorderTargetPosition,
+  onReorder,
+}: FilePickerReorderTargetProps) => {
+  const ReorderEvents = {
+    onDragEnter: (event: React.DragEvent) => {
+      setReorderTargetPosition(position);
+    },
+    onDragLeave: (event: React.DragEvent) => {
+      setReorderTargetPosition(null);
+    },
+    onDrop: (event: React.DragEvent) => {
+      setReorderSourcePosition(null);
+      setReorderTargetPosition(null);
+      if (reorderSourcePosition !== null && reorderTargetPosition !== null) {
+        const oldIndex = reorderSourcePosition;
+        const newIndex =
+          reorderTargetPosition > reorderSourcePosition
+            ? reorderTargetPosition - 1
+            : reorderTargetPosition;
+        onReorder(oldIndex, newIndex);
+      }
+    },
+  };
+
+  return (
+    <div
+      className={`FilePickerReorderTarget ${
+        reorderSourcePosition !== null ? "dropActive" : ""
+      } ${reorderTargetPosition === position ? "active" : ""}`}
+    >
+      <div
+        className="FilePickerReorderTarget--zone"
+        draggable={false}
+        onDragStart={(event) => event.preventDefault()}
+        onDragOver={(event) => event.preventDefault()}
+        onDragEnter={(event) => ReorderEvents.onDragEnter(event)}
+        onDragLeave={(event) => ReorderEvents.onDragLeave(event)}
+        onDrop={(event) => ReorderEvents.onDrop(event)}
+      >
+        <div className="FilePickerReorderTarget--divider" />
+      </div>
+    </div>
+  );
+};
+
 interface FilePickerPreviewWrapperProps {
   allowClear: boolean;
+  position: number;
   fileId: number;
   clearFile: (fileId: number) => void;
   previewWidget: typeof FilePickerPreview;
+  reorderSourcePosition: number | null;
+  setReorderSourcePosition: (fileId: number | null) => void;
 }
 
 const FilePickerPreviewWrapper = ({
   allowClear,
+  position,
   fileId,
   clearFile,
   previewWidget,
+  reorderSourcePosition,
+  setReorderSourcePosition,
 }: FilePickerPreviewWrapperProps) => {
   const [uploadedFile, setUploadedFile] = useState<UploadedFile | null>(null);
+
+  const ReorderEvents = {
+    onDragStart: (event: React.DragEvent) => {
+      window.setTimeout(() => {
+        setReorderSourcePosition(position);
+      }, 0);
+    },
+    onDragEnd: (event: React.DragEvent) => {
+      setReorderSourcePosition(null);
+    },
+  };
 
   useEffect(() => {
     const run = async () => {
@@ -43,17 +119,29 @@ const FilePickerPreviewWrapper = ({
     run();
   }, [fileId]);
 
+  const classNames = [];
+  if (reorderSourcePosition === position) {
+    classNames.push("FilePickerPreviewWrapper--reorderSource");
+  }
+
   return (
     <div className="FilePickerPreviewWrapper">
-      {uploadedFile ? previewWidget({ uploadedFile }) : <Loader />}
-      {allowClear && (
-        <>
-          <br />
-          <PushButton isPlain={true} onClick={() => clearFile(fileId)}>
-            Remove
-          </PushButton>
-        </>
-      )}
+      <div
+        className={classNames.join(" ")}
+        draggable={true}
+        onDragStart={ReorderEvents.onDragStart}
+        onDragEnd={ReorderEvents.onDragEnd}
+      >
+        {uploadedFile ? previewWidget({ uploadedFile }) : <Loader />}
+        {allowClear && (
+          <>
+            <br />
+            <PushButton isPlain={true} onClick={() => clearFile(fileId)}>
+              Remove
+            </PushButton>
+          </>
+        )}
+      </div>
     </div>
   );
 };
@@ -78,6 +166,12 @@ const FilePicker = ({
   onChange,
 }: FilePickerProps) => {
   const [currentFileIds, setCurrentFileIds] = useState<number[]>(fileIds || []);
+  const [reorderSourcePosition, setReorderSourcePosition] = useState<
+    number | null
+  >(null);
+  const [reorderTargetPosition, setReorderTargetPosition] = useState<
+    number | null
+  >(null);
   const [percentCompleted, setPercentCompleted] = useState<number | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [dragCounter, setDragCounter] = useState(0);
@@ -149,56 +243,70 @@ const FilePicker = ({
     ]
   );
 
-  const onDragEnter = (event: React.DragEvent) => {
-    if (isUploading) {
-      return;
-    }
-    setDragCounter((dragCounter) => dragCounter + 1);
-  };
-
-  const onDragLeave = (event: React.DragEvent) => {
-    if (isUploading) {
-      return;
-    }
-    setDragCounter((dragCounter) => Math.max(0, dragCounter - 1));
-  };
-
-  const onDragOver = (event: React.DragEvent) => {
-    if (isUploading) {
-      return;
-    }
-    event.preventDefault();
-  };
-
-  const onDrop = (event: React.DragEvent) => {
-    event.preventDefault();
-    if (isUploading) {
-      return;
-    }
-    setDragCounter(0);
-    if (!event.dataTransfer.files.length) {
-      window.alert("Only files are supported.");
-    }
-    if (!allowMultiple && event.dataTransfer.files.length > 1) {
-      window.alert("Cannot select multiple files.");
-    }
-    addFile(event.dataTransfer.files[0]);
-  };
-
-  const onFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (isUploading) {
-      return;
-    }
-    const input = event.currentTarget as HTMLInputElement;
-    if (!input.files) {
-      return;
-    }
-    for (let file of input.files) {
-      addFile(file);
-      if (!allowMultiple) {
-        break;
+  const UploadEvents = {
+    onDragEnter: (event: React.DragEvent) => {
+      if (isUploading) {
+        return;
       }
+      setDragCounter((dragCounter) => dragCounter + 1);
+    },
+
+    onDragLeave: (event: React.DragEvent) => {
+      if (isUploading) {
+        return;
+      }
+      setDragCounter((dragCounter) => Math.max(0, dragCounter - 1));
+    },
+
+    onDragOver: (event: React.DragEvent) => {
+      if (isUploading) {
+        return;
+      }
+      event.preventDefault();
+    },
+
+    onDrop: (event: React.DragEvent) => {
+      event.preventDefault();
+      if (isUploading) {
+        return;
+      }
+      setDragCounter(0);
+      if (!event.dataTransfer.files.length) {
+        window.alert("Only files are supported.");
+      }
+      if (!allowMultiple && event.dataTransfer.files.length > 1) {
+        window.alert("Cannot select multiple files.");
+      }
+      addFile(event.dataTransfer.files[0]);
+    },
+
+    onFileChange: (event: React.ChangeEvent<HTMLInputElement>) => {
+      if (isUploading) {
+        return;
+      }
+      const input = event.currentTarget as HTMLInputElement;
+      if (!input.files) {
+        return;
+      }
+      for (let file of input.files) {
+        addFile(file);
+        if (!allowMultiple) {
+          break;
+        }
+      }
+    },
+  };
+
+  const reorderFiles = (oldIndex: number, newIndex: number) => {
+    if (oldIndex === newIndex) {
+      return;
     }
+    const newFileIds = [...currentFileIds];
+    var fileId = newFileIds[oldIndex];
+    newFileIds.splice(oldIndex, 1);
+    newFileIds.splice(newIndex, 0, fileId);
+    setCurrentFileIds(newFileIds);
+    onChange?.(newFileIds);
   };
 
   return (
@@ -208,15 +316,15 @@ const FilePicker = ({
         className="FilePicker--fileInput"
         id={elementId}
         type="file"
-        onChange={(event) => onFileChange(event)}
+        onChange={(event) => UploadEvents.onFileChange(event)}
       />
       <label
         htmlFor={elementId}
         className={`FilePicker--dropArea ${dragCounter ? "active" : ""}`}
-        onDragEnter={(event) => onDragEnter(event)}
-        onDragLeave={(event) => onDragLeave(event)}
-        onDragOver={(event) => onDragOver(event)}
-        onDrop={(event) => onDrop(event)}
+        onDragEnter={(event) => UploadEvents.onDragEnter(event)}
+        onDragLeave={(event) => UploadEvents.onDragLeave(event)}
+        onDragOver={(event) => UploadEvents.onDragOver(event)}
+        onDrop={(event) => UploadEvents.onDrop(event)}
       >
         {isUploading ? (
           <>
@@ -230,19 +338,43 @@ const FilePicker = ({
         ) : (
           <>Drop a file here, or click on this box.</>
         )}
-        <br />
-        <div className="FilePicker--previews">
-          {currentFileIds.map((fileId) => (
+      </label>
+      <div className="FilePicker--previews">
+        {currentFileIds.length > 1 ? (
+          <FilePickerReorderTarget
+            position={0}
+            reorderSourcePosition={reorderSourcePosition}
+            reorderTargetPosition={reorderTargetPosition}
+            setReorderSourcePosition={setReorderSourcePosition}
+            setReorderTargetPosition={setReorderTargetPosition}
+            onReorder={reorderFiles}
+          />
+        ) : null}
+        {currentFileIds.map((fileId, position) => (
+          <>
             <FilePickerPreviewWrapper
               key={fileId}
+              position={position}
               allowClear={allowClear}
               clearFile={clearFile}
               fileId={fileId}
               previewWidget={previewWidget || FilePickerPreview}
+              reorderSourcePosition={reorderSourcePosition}
+              setReorderSourcePosition={setReorderSourcePosition}
             />
-          ))}
-        </div>
-      </label>
+            {currentFileIds.length > 1 ? (
+              <FilePickerReorderTarget
+                position={position + 1}
+                reorderSourcePosition={reorderSourcePosition}
+                reorderTargetPosition={reorderTargetPosition}
+                setReorderSourcePosition={setReorderSourcePosition}
+                setReorderTargetPosition={setReorderTargetPosition}
+                onReorder={reorderFiles}
+              />
+            ) : null}
+          </>
+        ))}
+      </div>
       {errorMessage && <div className="FormFieldError">{errorMessage}</div>}
     </div>
   );

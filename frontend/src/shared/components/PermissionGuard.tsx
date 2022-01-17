@@ -23,7 +23,7 @@ const PermissionGuard = ({
   useEffect(() => {
     let newIsShown =
       user?.permissions?.includes(require) ||
-      (owningUsers && owningUsers.map((u) => u.id).includes(user.id));
+      (owningUsers && owningUsers.map((u) => u.id).includes(user?.id));
 
     setIsShown(newIsShown);
   }, [user, owningUsers, require]);
