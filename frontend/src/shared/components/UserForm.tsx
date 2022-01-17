@@ -16,6 +16,7 @@ import { PicturePicker } from "src/shared/components/PicturePicker";
 import { TextAreaFormField } from "src/shared/components/TextAreaFormField";
 import { TextFormField } from "src/shared/components/TextFormField";
 import { UserLink } from "src/shared/components/UserLink";
+import { filterFalsyObjectValues } from "src/shared/utils";
 import { makeSentence } from "src/shared/utils";
 import { validateUserName } from "src/shared/utils";
 import { validateRequired } from "src/shared/utils";
@@ -51,7 +52,7 @@ const UserForm = ({ user, onGoBack, onSubmit }: UserFormProps) => {
         if (data.detail) {
           setStatus({ error: <>{makeSentence(data.detail)}</> });
         }
-        setErrors({
+        const errors = {
           username: data?.username,
           firstName: data?.first_name,
           lastName: data?.last_name,
@@ -60,7 +61,13 @@ const UserForm = ({ user, onGoBack, onSubmit }: UserFormProps) => {
           password: data?.password,
           bio: data?.bio,
           picture: data?.picture,
-        });
+        };
+        if (filterFalsyObjectValues(errors).length) {
+          setErrors(errors);
+        } else {
+          console.error(error);
+          setStatus({ error: <>Unknown error.</> });
+        }
       } else {
         console.error(error);
         setStatus({ error: <>Unknown error.</> });
