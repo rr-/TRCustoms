@@ -2,9 +2,9 @@ import { useState } from "react";
 import { useContext } from "react";
 import { TagLite } from "src/services/tag.service";
 import { AutoComplete } from "src/shared/components/AutoComplete";
-import type { GenericFormFieldProps } from "src/shared/components/BaseFormField";
-import { BaseFormField } from "src/shared/components/BaseFormField";
 import { Pills } from "src/shared/components/Pills";
+import type { GenericFormFieldProps } from "src/shared/components/formfields/BaseFormField";
+import { BaseFormField } from "src/shared/components/formfields/BaseFormField";
 import { ConfigContext } from "src/shared/contexts/ConfigContext";
 
 interface TagsFormFieldProps extends GenericFormFieldProps {

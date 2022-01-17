@@ -1,6 +1,6 @@
 import { useContext } from "react";
-import type { GenericFormFieldProps } from "src/shared/components/BaseFormField";
-import { DropDownFormField } from "src/shared/components/DropDownFormField";
+import type { GenericFormFieldProps } from "src/shared/components/formfields/BaseFormField";
+import { DropDownFormField } from "src/shared/components/formfields/DropDownFormField";
 import { ConfigContext } from "src/shared/contexts/ConfigContext";
 
 const EngineFormField = (props: GenericFormFieldProps) => {

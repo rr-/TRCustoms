@@ -9,7 +9,7 @@ import { deserializeGenericSearchQuery } from "src/shared/components/QueryPersis
 import { serializeGenericSearchQuery } from "src/shared/components/QueryPersister";
 import { SearchBar } from "src/shared/components/SearchBar";
 import { TagsTable } from "src/shared/components/TagsTable";
-import { TextFormField } from "src/shared/components/TextFormField";
+import { TextFormField } from "src/shared/components/formfields/TextFormField";
 import { getCurrentSearchParams } from "src/shared/utils";
 
 const defaultSearchQuery: TagSearchQuery = {

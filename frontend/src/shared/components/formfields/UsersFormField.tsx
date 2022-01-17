@@ -2,9 +2,9 @@ import { useState } from "react";
 import type { UserLite } from "src/services/user.service";
 import { UserService } from "src/services/user.service";
 import { AutoComplete } from "src/shared/components/AutoComplete";
-import type { GenericFormFieldProps } from "src/shared/components/BaseFormField";
-import { BaseFormField } from "src/shared/components/BaseFormField";
 import { Pills } from "src/shared/components/Pills";
+import type { GenericFormFieldProps } from "src/shared/components/formfields/BaseFormField";
+import { BaseFormField } from "src/shared/components/formfields/BaseFormField";
 
 interface UsersFormFieldProps extends GenericFormFieldProps {
   value: UserLite[];
