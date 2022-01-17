@@ -71,6 +71,15 @@ def stream_file_field(
     )
 
 
+def parse_id(source: str | None) -> int | None:
+    if not source:
+        return None
+    try:
+        return int(source)
+    except ValueError:
+        return None
+
+
 def parse_ids(source: str | None) -> list[int]:
     if not source:
         return []
@@ -80,7 +89,7 @@ def parse_ids(source: str | None) -> list[int]:
         return []
 
 
-def parse_boolean(source: str | None) -> bool | None:
+def parse_bool(source: str | None) -> bool | None:
     if not source:
         return None
     return source.lower() in ["1", "true", "y", "yes"]

@@ -8,12 +8,15 @@ from .level_genre import LevelGenre
 from .level_legacy_review import LevelLegacyReview
 from .level_medium import LevelMedium
 from .level_tag import LevelTag
+from .snapshot import DiffItem, DiffType, Snapshot
 from .uploaded_file import UploadedFile
 from .user import User, UserPermission
 from .util import DatesInfo
 
 __all__ = [
     "DatesInfo",
+    "DiffItem",
+    "DiffType",
     "Level",
     "LevelDifficulty",
     "LevelDownload",
@@ -24,7 +27,8 @@ __all__ = [
     "LevelLegacyReview",
     "LevelMedium",
     "LevelTag",
+    "Snapshot",
+    "UploadedFile",
     "User",
     "UserPermission",
-    "UploadedFile",
 ]

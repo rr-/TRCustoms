@@ -11,6 +11,7 @@ class UserPermission:
     LIST_USERS = "list_users"
     UPLOAD_LEVELS = "upload_levels"
     EDIT_LEVELS = "edit_levels"
+    REVIEW_SNAPSHOTS = "review_snapshots"
 
 
 class UserManager(BaseUserManager):
@@ -54,5 +55,6 @@ class User(AbstractUser):
             permissions |= {
                 UserPermission.EDIT_USERS,
                 UserPermission.EDIT_LEVELS,
+                UserPermission.REVIEW_SNAPSHOTS,
             }
         return sorted(permissions)

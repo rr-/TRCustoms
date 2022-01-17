@@ -145,22 +145,6 @@ label {
   display: inline-block;
 }
 
-table.borderless {
-  border-spacing: 0;
-  width: 100%;
-}
-table.borderless th,
-table.borderless td {
-  padding: 0;
-}
-table.borderless th + th,
-table.borderless td + td {
-  border-left: 1rem solid transparent;
-}
-table.borderless tr > td {
-  border-top: 0.3rem solid transparent;
-}
-
 svg.icon {
   width: 1.25em;
   height: 1.25em;

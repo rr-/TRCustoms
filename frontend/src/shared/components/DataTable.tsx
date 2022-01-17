@@ -46,8 +46,8 @@ const DataTableHeader = <TItem extends {}, TQuery extends GenericSearchQuery>({
   onSearchQueryChange,
 }: DataTableProps<TItem, TQuery>) => {
   return (
-    <thead>
-      <tr>
+    <thead className="DataTable--header">
+      <tr className="DataTable--row">
         {columns.map((column) => (
           <th
             className={className ? `${className}--${column.name}` : undefined}
@@ -121,9 +121,9 @@ const DataTableBody = <TItem extends {}, TQuery extends GenericSearchQuery>({
   }
 
   return (
-    <tbody>
+    <tbody className="DataTable--body">
       {result.data.results.map((item) => (
-        <tr key={itemKey(item)} ref={lastRowRef}>
+        <tr key={itemKey(item)} className="DataTable--row" ref={lastRowRef}>
           {columns.map((column) => (
             <td
               className={className ? `${className}--${column.name}` : undefined}
@@ -146,8 +146,8 @@ const DataTableFooter = <TItem extends {}, TQuery extends GenericSearchQuery>({
   return (
     <>
       {columns.some((column) => !!column.footer) && (
-        <tfoot>
-          <tr>
+        <tfoot className="DataTable--footer">
+          <tr className="DataTable--row">
             {columns.map((column) => (
               <th
                 className={
@@ -183,7 +183,7 @@ const PagedDataTable = <TItem extends {}, TQuery extends GenericSearchQuery>(
 
   return (
     <>
-      <table className={`DataTable ${className} borderless`}>
+      <table className={`DataTable ${className}`}>
         <DataTableHeader {...props} />
         <DataTableBody result={result} {...props} />
         <DataTableFooter {...props} />
@@ -265,7 +265,7 @@ const InfiniteDataTable = <TItem extends {}, TQuery extends GenericSearchQuery>(
 
   return (
     <>
-      <table className={`DataTable ${className} borderless`}>
+      <table className={`DataTable ${className}`}>
         <DataTableHeader {...props} />
 
         {result.data?.pages?.map((result, i) => (

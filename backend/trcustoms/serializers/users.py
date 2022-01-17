@@ -7,6 +7,12 @@ from rest_framework import serializers
 from trcustoms.models import UploadedFile, User
 
 
+class UserLiteSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ["id", "username", "first_name", "last_name"]
+
+
 class UserSerializer(serializers.ModelSerializer):
     has_picture = serializers.SerializerMethodField(read_only=True)
     old_password = serializers.CharField(write_only=True, required=False)

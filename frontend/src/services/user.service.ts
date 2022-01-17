@@ -11,6 +11,7 @@ enum UserPermission {
   listUsers = "list_users",
   uploadLevels = "upload_levels",
   editLevels = "edit_levels",
+  reviewSnapshots = "review_snapshots",
 }
 
 interface UserLite {

@@ -1,7 +1,9 @@
 from django import forms
 from django.conf import settings
 from django.contrib import admin
+from django.contrib.admin import SimpleListFilter
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
+from django.contrib.contenttypes.models import ContentType
 from django.core.exceptions import ValidationError
 
 from trcustoms.models import (
@@ -14,9 +16,29 @@ from trcustoms.models import (
     LevelLegacyReview,
     LevelMedium,
     LevelTag,
+    Snapshot,
     UploadedFile,
     User,
 )
+from trcustoms.snapshots import make_level_snapshot
+
+
+class ReadOnlyAdmin(admin.ModelAdmin):
+    readonly_fields = []
+
+    def get_readonly_fields(self, request, obj=None):
+        # pylint: disable=protected-access
+        return (
+            list(self.readonly_fields)
+            + [field.name for field in obj._meta.fields]
+            + [field.name for field in obj._meta.many_to_many]
+        )
+
+    def has_add_permission(self, request):
+        return False
+
+    def has_delete_permission(self, request, obj=None):
+        return False
 
 
 class LevelForm(forms.ModelForm):
@@ -146,6 +168,24 @@ class LevelAdmin(admin.ModelAdmin):
     ]
     raw_id_fields = ["uploader", "authors", "cover"]
 
+    def log_addition(self, request, obj, message):
+        super().log_addition(request, obj, message)
+        make_level_snapshot(
+            obj, request=request, change_type=Snapshot.ChangeType.CREATE
+        )
+
+    def log_change(self, request, obj, message):
+        super().log_change(request, obj, message)
+        make_level_snapshot(
+            obj, request=request, change_type=Snapshot.ChangeType.UPDATE
+        )
+
+    def log_deletion(self, request, obj, object_repr):
+        super().log_deletion(request, obj, object_repr)
+        make_level_snapshot(
+            obj, request=request, change_type=Snapshot.ChangeType.DELETE
+        )
+
 
 @admin.register(LevelMedium)
 class LevelMediumAdmin(admin.ModelAdmin):
@@ -215,3 +255,50 @@ class UploadedFileAdmin(admin.ModelAdmin):
         "uploader__last_name",
     ]
     readonly_fields = ["md5sum", "size", "created", "last_updated"]
+
+
+class SnapshotObjectTypeFilter(SimpleListFilter):
+    title = "Object Type"
+    parameter_name = "object_type"
+
+    def lookups(self, request, model_admin):
+        return [
+            (ct.id, ct.model.title())
+            for ct in ContentType.objects.filter(app_label="trcustoms").filter(
+                model__in=["level", "user"]
+            )
+        ]
+
+    def queryset(self, request, queryset):
+        if self.value():
+            return queryset.filter(object_type__id=self.value())
+        return queryset
+
+
+@admin.register(Snapshot)
+class SnapshotAdmin(ReadOnlyAdmin):
+    list_filter = [
+        "change_type",
+        SnapshotObjectTypeFilter,
+    ]
+    search_fields = [
+        "object_id",
+        "object_type__model",
+        "change_author__username",
+        "change_author__first_name",
+        "change_author__last_name",
+        "reviewer__username",
+        "reviewer__first_name",
+        "reviewer__last_name",
+    ]
+    list_display = [
+        "created",
+        "object_type_name",
+        "change_type",
+        "change_author",
+        "is_reviewed",
+        "reviewer",
+    ]
+
+    def object_type_name(self, instance):
+        return instance.object_type.model.title()

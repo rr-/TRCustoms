@@ -5,6 +5,7 @@ from .level_genres import LevelGenreViewSet
 from .level_reviews import LevelReviewViewSet
 from .level_tags import LevelTagViewSet
 from .levels import LevelViewSet
+from .snapshots import SnapshotViewSet
 from .uploads import UploadViewSet
 from .users import UserViewSet
 
@@ -18,4 +19,5 @@ __all__ = [
     "LevelViewSet",
     "UploadViewSet",
     "UserViewSet",
+    "SnapshotViewSet",
 ]
