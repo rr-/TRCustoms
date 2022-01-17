@@ -1,5 +1,6 @@
 from typing import Any
 
+from django.conf import settings
 from rest_framework import serializers
 
 from trcustoms.models import (
@@ -158,6 +159,49 @@ class LevelFullSerializer(LevelLiteSerializer):
             upload_type=UploadedFile.UploadType.LEVEL_FILE
         ),
     )
+
+    def validate(self, data):
+        validated_data = super().validate(data)
+
+        def validate_limits(
+            queryset, field: str, min_count: int, max_count: int
+        ) -> None:
+            count = len(queryset)
+            if count < min_count:
+                raise serializers.ValidationError(
+                    {field: f"At least {min_count} {field} must be added"}
+                )
+            if count > max_count:
+                raise serializers.ValidationError(
+                    {field: f"At most {max_count} {field} can be added"}
+                )
+
+        validate_limits(
+            validated_data.get("screenshots", []),
+            "screenshots",
+            settings.MIN_SCREENSHOTS,
+            settings.MAX_SCREENSHOTS,
+        )
+        validate_limits(
+            validated_data.get("genres", []),
+            "genres",
+            settings.MIN_GENRES,
+            settings.MAX_GENRES,
+        )
+        validate_limits(
+            validated_data.get("tags", []),
+            "tags",
+            settings.MIN_TAGS,
+            settings.MAX_TAGS,
+        )
+        validate_limits(
+            validated_data.get("authors", []),
+            "authors",
+            settings.MIN_AUTHORS,
+            settings.MAX_AUTHORS,
+        )
+
+        return validated_data
 
     def create(self, validated_data):
         screenshots = validated_data.pop("screenshots")

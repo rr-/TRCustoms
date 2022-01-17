@@ -28,6 +28,7 @@ import { TextFormField } from "src/shared/components/TextFormField";
 import { UsersFormField } from "src/shared/components/UsersFormField";
 import { ConfigContext } from "src/shared/contexts/ConfigContext";
 import { UserContext } from "src/shared/contexts/UserContext";
+import { filterFalsyObjectValues } from "src/shared/utils";
 import { makeSentence } from "src/shared/utils";
 import { validateRequired } from "src/shared/utils";
 import { pluralize } from "src/shared/utils";
@@ -118,7 +119,7 @@ const LevelForm = ({ level, onGoBack, onSubmit }: LevelFormProps) => {
         if (data.detail) {
           setStatus({ error: <>{makeSentence(data.detail)}</> });
         }
-        setErrors({
+        const errors = {
           name: data?.name,
           description: data?.description,
           genres: data?.genre_ids,
@@ -130,7 +131,14 @@ const LevelForm = ({ level, onGoBack, onSubmit }: LevelFormProps) => {
           cover_id: data?.cover_id,
           screenshot_ids: data?.screenshot_ids,
           file_id: data?.file_id,
-        });
+        };
+        if (filterFalsyObjectValues(errors).length) {
+          setErrors(errors);
+          setStatus({ error: <>Please review the errors above.</> });
+        } else {
+          console.error(error);
+          setStatus({ error: <>Unknown error.</> });
+        }
       } else {
         console.error(error);
         setStatus({ error: <>Unknown error.</> });
