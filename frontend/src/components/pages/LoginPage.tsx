@@ -11,8 +11,8 @@ import type { User } from "src/services/user.service";
 import { FormGrid } from "src/shared/components/FormGrid";
 import { FormGridButtons } from "src/shared/components/FormGrid";
 import { FormGridFieldSet } from "src/shared/components/FormGrid";
-import { PasswordFormField } from "src/shared/components/PasswordFormField";
-import { TextFormField } from "src/shared/components/TextFormField";
+import { PasswordFormField } from "src/shared/components/formfields/PasswordFormField";
+import { TextFormField } from "src/shared/components/formfields/TextFormField";
 import { UserContext } from "src/shared/contexts/UserContext";
 
 const LoginPage = () => {

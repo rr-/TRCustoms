@@ -9,14 +9,14 @@ import { GenresCheckboxes } from "src/components/GenresCheckboxes";
 import { TagsCheckboxes } from "src/components/TagsCheckboxes";
 import type { LevelSearchQuery } from "src/services/level.service";
 import { UserPermission } from "src/services/user.service";
-import { CheckboxFormField } from "src/shared/components/CheckboxFormField";
 import { LevelsTable } from "src/shared/components/LevelsTable";
 import { PermissionGuard } from "src/shared/components/PermissionGuard";
 import { QueryPersister } from "src/shared/components/QueryPersister";
 import { deserializeGenericSearchQuery } from "src/shared/components/QueryPersister";
 import { serializeGenericSearchQuery } from "src/shared/components/QueryPersister";
 import { SearchBar } from "src/shared/components/SearchBar";
-import { TextFormField } from "src/shared/components/TextFormField";
+import { CheckboxFormField } from "src/shared/components/formfields/CheckboxFormField";
+import { TextFormField } from "src/shared/components/formfields/TextFormField";
 import { filterFalsyObjectValues } from "src/shared/utils";
 import { getCurrentSearchParams } from "src/shared/utils";
 

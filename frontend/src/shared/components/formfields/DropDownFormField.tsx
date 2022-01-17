@@ -1,8 +1,8 @@
 import "./DropDownFormField.css";
 import { Field } from "formik";
 import { useFormikContext } from "formik";
-import { BaseFormField } from "src/shared/components/BaseFormField";
-import type { GenericFormFieldProps } from "src/shared/components/BaseFormField";
+import { BaseFormField } from "src/shared/components/formfields/BaseFormField";
+import type { GenericFormFieldProps } from "src/shared/components/formfields/BaseFormField";
 
 interface DropDownOption {
   value: string | number;

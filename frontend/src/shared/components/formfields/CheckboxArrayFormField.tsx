@@ -1,7 +1,7 @@
 import { Field } from "formik";
 import { useFormikContext } from "formik";
-import { BaseFormField } from "src/shared/components/BaseFormField";
-import type { GenericFormFieldProps } from "src/shared/components/BaseFormField";
+import { BaseFormField } from "src/shared/components/formfields/BaseFormField";
+import type { GenericFormFieldProps } from "src/shared/components/formfields/BaseFormField";
 import { EMPTY_INPUT_PLACEHOLDER } from "src/shared/utils";
 
 interface CheckboxArrayFormFieldProps<TValue> extends GenericFormFieldProps {

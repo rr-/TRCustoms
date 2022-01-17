@@ -1,5 +1,5 @@
 import "./BaseFormField.css";
-import { FormFieldError } from "src/shared/components/FormFieldError";
+import { FormFieldError } from "src/shared/components/formfields/FormFieldError";
 
 interface GenericFormFieldProps {
   name: string;

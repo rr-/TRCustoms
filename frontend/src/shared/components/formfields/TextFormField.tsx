@@ -1,7 +1,7 @@
 import "./TextFormField.css";
 import { Field } from "formik";
-import { BaseFormField } from "src/shared/components/BaseFormField";
-import type { GenericFormFieldProps } from "src/shared/components/BaseFormField";
+import { BaseFormField } from "src/shared/components/formfields/BaseFormField";
+import type { GenericFormFieldProps } from "src/shared/components/formfields/BaseFormField";
 
 interface TextFormFieldProps extends GenericFormFieldProps {
   type?: string;

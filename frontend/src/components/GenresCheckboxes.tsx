@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { CheckboxArrayFormField } from "src/shared/components/CheckboxArrayFormField";
+import { CheckboxArrayFormField } from "src/shared/components/formfields/CheckboxArrayFormField";
 import { ConfigContext } from "src/shared/contexts/ConfigContext";
 
 const GenresCheckboxes = () => {

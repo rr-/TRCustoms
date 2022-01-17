@@ -3,8 +3,8 @@ import { InformationCircleIcon } from "@heroicons/react/outline";
 import { Field } from "formik";
 import { useContext } from "react";
 import { GenreLite } from "src/services/genre.service";
-import { BaseFormField } from "src/shared/components/BaseFormField";
-import type { GenericFormFieldProps } from "src/shared/components/BaseFormField";
+import { BaseFormField } from "src/shared/components/formfields/BaseFormField";
+import type { GenericFormFieldProps } from "src/shared/components/formfields/BaseFormField";
 import { ConfigContext } from "src/shared/contexts/ConfigContext";
 
 interface GenresFormFieldProps extends GenericFormFieldProps {
