@@ -3,10 +3,13 @@
 }
 
 .FilePicker--dropArea {
-  display: block;
+  display: flex;
+  min-height: 5rem;
+  justify-content: center;
+  align-items: center;
+  width: 20rem;
   background: var(--background-color);
   border: 3px dashed var(--button-background-color);
-  padding: 0.3em 0.5em;
   line-height: 140%;
   text-align: center;
   cursor: pointer;
@@ -30,8 +33,38 @@
 }
 
 .FilePicker--previews {
+  margin-top: 0.5rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  text-align: center;
+}
+
+.FilePickerPreviewWrapper--reorderSource {
+  opacity: 0.5;
+}
+.FilePickerReorderTarget {
+  position: relative;
+  top: -1rem;
+  bottom: -1rem;
+  margin: -0.333rem;
+  width: 3px;
+}
+.FilePickerReorderTarget.active {
+  background: var(--text-color);
+}
+.FilePickerReorderTarget--zone {
+  position: absolute;
+  top: -2rem;
+  bottom: -2rem;
+  left: -6rem;
+  right: -6rem;
+  z-index: 10;
   display: flex;
   justify-content: center;
-  flex-wrap: wrap;
-  gap: 1rem;
+  align-items: center;
+  pointer-events: none;
+}
+.FilePickerReorderTarget.dropActive .FilePickerReorderTarget--zone {
+  pointer-events: unset;
 }

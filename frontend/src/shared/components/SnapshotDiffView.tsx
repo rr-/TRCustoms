@@ -100,11 +100,14 @@ const SnapshotDiffView = ({ snapshot }: SnapshotDiffViewProps) => {
       {snapshot.change_type === SnapshotChangeType.Delete ? (
         <li className="SnapshotDiffView--listItem">Deleted</li>
       ) : (
-        snapshot.diff.map((item, i) => (
-          <li key={i} className="SnapshotDiffView--listItem">
-            {formatDiff(item)}
-          </li>
-        ))
+        snapshot.diff.map((item, i) => {
+          const formatted = formatDiff(item);
+          return formatted ? (
+            <li key={i} className="SnapshotDiffView--listItem">
+              {formatted}
+            </li>
+          ) : null;
+        })
       )}
     </ul>
   );
