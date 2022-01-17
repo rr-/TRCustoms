@@ -78,8 +78,12 @@ const validateUserName = (username: string): string | null => {
   return null;
 };
 
+const titleCase = (input: string): string => {
+  return input[0].toUpperCase() + input.substr(1).toLowerCase();
+};
+
 const makeSentence = (input: string): string => {
-  return input[0].toUpperCase() + input.substr(1).replace(/\.$/, "") + ".";
+  return titleCase(input).replace(/\.$/, "") + ".";
 };
 
 const formatDate = (input: string | null): string => {
@@ -143,6 +147,7 @@ export {
   validatePassword,
   validatePassword2,
   validateUserName,
+  titleCase,
   makeSentence,
   formatDate,
   formatDateTime,

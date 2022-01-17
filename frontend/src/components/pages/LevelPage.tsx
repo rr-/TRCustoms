@@ -9,6 +9,7 @@ import { useParams } from "react-router-dom";
 import type { LevelFull } from "src/services/level.service";
 import { LevelService } from "src/services/level.service";
 import type { ReviewSearchQuery } from "src/services/review.service";
+import type { SnapshotSearchQuery } from "src/services/snapshot.service";
 import { UserPermission } from "src/services/user.service";
 import { EngineLink } from "src/shared/components/EngineLink";
 import { GenreLink } from "src/shared/components/GenreLink";
@@ -21,6 +22,7 @@ import { PushButton } from "src/shared/components/PushButton";
 import { ReviewsTable } from "src/shared/components/ReviewsTable";
 import { SectionHeader } from "src/shared/components/SectionHeader";
 import { SidebarBox } from "src/shared/components/SidebarBox";
+import { SnapshotsTable } from "src/shared/components/SnapshotsTable";
 import { TagLink } from "src/shared/components/TagLink";
 import { UserLink } from "src/shared/components/UserLink";
 import { DISABLE_PAGING } from "src/shared/constants";
@@ -35,6 +37,14 @@ interface LevelPageParams {
 const LevelPage = () => {
   const { levelId } = (useParams() as unknown) as LevelPageParams;
   const queryClient = useQueryClient();
+  const [snapshotsSearchQuery, setSnapshotsSearchQuery] = useState<
+    SnapshotSearchQuery
+  >({
+    level: +levelId,
+    page: DISABLE_PAGING,
+    sort: "-created",
+    search: "",
+  });
   const [reviewsSearchQuery, setReviewsSearchQuery] = useState<
     ReviewSearchQuery
   >({
@@ -278,6 +288,16 @@ const LevelPage = () => {
             showAuthors={true}
             searchQuery={reviewsSearchQuery}
             onSearchQueryChange={setReviewsSearchQuery}
+          />
+        </section>
+
+        <section id="LevelPage--changes">
+          <SectionHeader>Changes history</SectionHeader>
+          <SnapshotsTable
+            showObjects={false}
+            showApprovalButton={true}
+            searchQuery={snapshotsSearchQuery}
+            onSearchQueryChange={setSnapshotsSearchQuery}
           />
         </section>
       </div>

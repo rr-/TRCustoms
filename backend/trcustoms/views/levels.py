@@ -1,12 +1,12 @@
 from django.shortcuts import get_list_or_404
-from rest_framework import mixins, viewsets
+from rest_framework import mixins, serializers, viewsets
 from rest_framework.decorators import action
 from rest_framework.generics import get_object_or_404
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 
 from trcustoms.mixins import MultiSerializerMixin, PermissionsMixin
-from trcustoms.models import Level, LevelMedium
+from trcustoms.models import Level, LevelMedium, Snapshot
 from trcustoms.models.user import UserPermission
 from trcustoms.permissions import (
     AllowNone,
@@ -14,7 +14,8 @@ from trcustoms.permissions import (
     IsAccessingOwnResource,
 )
 from trcustoms.serializers import LevelFullSerializer, LevelLiteSerializer
-from trcustoms.utils import parse_boolean, parse_ids, stream_file_field
+from trcustoms.snapshots import make_level_snapshot
+from trcustoms.utils import parse_bool, parse_ids, stream_file_field
 
 
 class LevelViewSet(
@@ -108,7 +109,7 @@ class LevelViewSet(
             queryset = queryset.filter(engine__id__in=engine_ids)
 
         if (
-            is_approved := parse_boolean(
+            is_approved := parse_bool(
                 self.request.query_params.get("is_approved")
             )
         ) is not None:
@@ -129,6 +130,7 @@ class LevelViewSet(
         level = self.get_object()
         level.is_approved = True
         level.save()
+        make_level_snapshot(level, request=self.request)
         return Response({})
 
     @action(detail=True, methods=["post"])
@@ -136,4 +138,17 @@ class LevelViewSet(
         level = self.get_object()
         level.is_approved = False
         level.save()
+        make_level_snapshot(level, request=self.request)
         return Response({})
+
+    def perform_create(self, serializer: serializers.Serializer) -> None:
+        super().perform_create(serializer)
+        make_level_snapshot(
+            serializer.instance,
+            request=self.request,
+            change_type=Snapshot.ChangeType.CREATE,
+        )
+
+    def perform_update(self, serializer: serializers.Serializer) -> None:
+        super().perform_update(serializer)
+        make_level_snapshot(level=serializer.instance, request=self.request)

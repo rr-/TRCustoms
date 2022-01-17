@@ -23,18 +23,7 @@ from trcustoms.serializers.level_genres import LevelGenreLiteSerializer
 from trcustoms.serializers.level_media import LevelMediumSerializer
 from trcustoms.serializers.level_tags import LevelTagLiteSerializer
 from trcustoms.serializers.uploaded_files import UploadedFileSerializer
-
-
-class LevelUploaderSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = User
-        fields = ["id", "username", "first_name", "last_name"]
-
-
-class LevelAuthorSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = User
-        fields = ["id", "username", "first_name", "last_name"]
+from trcustoms.serializers.users import UserLiteSerializer
 
 
 class LevelFileSerializer(serializers.ModelSerializer):
@@ -92,7 +81,7 @@ class LevelLiteSerializer(serializers.ModelSerializer):
         queryset=LevelTag.objects.all(),
     )
 
-    authors = LevelAuthorSerializer(read_only=True, many=True)
+    authors = UserLiteSerializer(read_only=True, many=True)
     author_ids = serializers.PrimaryKeyRelatedField(
         write_only=True,
         many=True,
@@ -100,7 +89,7 @@ class LevelLiteSerializer(serializers.ModelSerializer):
         queryset=User.objects.all(),
     )
 
-    uploader = LevelUploaderSerializer(
+    uploader = UserLiteSerializer(
         read_only=True,
         default=serializers.CreateOnlyDefault(
             serializers.CurrentUserDefault()
@@ -202,10 +191,12 @@ class LevelFullSerializer(LevelLiteSerializer):
         if authors is not None:
             level.authors.set(authors)
         if screenshots is not None:
-            LevelMedium.objects.filter(level=level).delete()
+            LevelMedium.objects.filter(
+                level=level, position__gte=len(screenshots) + 1
+            ).delete()
             for i, screenshot in enumerate(screenshots):
-                LevelMedium.objects.create(
-                    level=level, position=i, file=screenshot
+                LevelMedium.objects.update_or_create(
+                    level=level, position=i, defaults=dict(file=screenshot)
                 )
         if file is not None and (
             not level.last_file or file != level.last_file.file
