@@ -8,7 +8,10 @@ import { EnginesCheckboxes } from "src/components/EnginesCheckboxes";
 import { GenresCheckboxes } from "src/components/GenresCheckboxes";
 import { TagsCheckboxes } from "src/components/TagsCheckboxes";
 import type { LevelSearchQuery } from "src/services/level.service";
+import { UserPermission } from "src/services/user.service";
+import { CheckboxFormField } from "src/shared/components/CheckboxFormField";
 import { LevelsTable } from "src/shared/components/LevelsTable";
+import { PermissionGuard } from "src/shared/components/PermissionGuard";
 import { QueryPersister } from "src/shared/components/QueryPersister";
 import { deserializeGenericSearchQuery } from "src/shared/components/QueryPersister";
 import { serializeGenericSearchQuery } from "src/shared/components/QueryPersister";
@@ -36,7 +39,7 @@ const deserializeSearchQuery = (qp: {
   genres: (qp.genres?.split(/,/g) || []).map((item) => +item),
   engines: (qp.engines?.split(/,/g) || []).map((item) => +item),
   authors: [],
-  isApproved: true,
+  isApproved: qp.approved === "1" ? true : qp.approved === "0" ? false : true,
 });
 
 const serializeSearchQuery = (
@@ -47,6 +50,12 @@ const serializeSearchQuery = (
     tags: searchQuery.tags.join(","),
     genres: searchQuery.genres.join(","),
     engines: searchQuery.engines.join(","),
+    approved:
+      searchQuery.isApproved === true
+        ? null
+        : searchQuery.isApproved === false
+        ? "0"
+        : null,
   });
 
 const convertSearchQueryToFormikValues = (searchQuery: LevelSearchQuery) => {
@@ -55,6 +64,7 @@ const convertSearchQueryToFormikValues = (searchQuery: LevelSearchQuery) => {
     tags: searchQuery.tags,
     genres: searchQuery.genres,
     engines: searchQuery.engines,
+    isApproved: searchQuery.isApproved,
   };
 };
 
@@ -81,6 +91,7 @@ const LevelListPage = () => {
         tags: values.tags,
         genres: values.genres,
         engines: values.engines,
+        isApproved: values.isApproved,
       });
     },
     [searchQuery, setSearchQuery]
@@ -131,6 +142,10 @@ const LevelListPage = () => {
             </div>
 
             <aside id="LevelListPage--sidebar">
+              <PermissionGuard require={UserPermission.editLevels}>
+                <CheckboxFormField label="Approved" name="isApproved" />
+              </PermissionGuard>
+
               <TagsCheckboxes />
               <GenresCheckboxes />
               <EnginesCheckboxes />
