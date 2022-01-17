@@ -236,7 +236,7 @@ class LevelFullSerializer(LevelLiteSerializer):
             level.authors.set(authors)
         if screenshots is not None:
             LevelMedium.objects.filter(
-                level=level, position__gte=len(screenshots) + 1
+                level=level, position__gte=len(screenshots)
             ).delete()
             for i, screenshot in enumerate(screenshots):
                 LevelMedium.objects.update_or_create(
