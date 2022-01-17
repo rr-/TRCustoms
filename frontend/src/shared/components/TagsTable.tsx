@@ -4,7 +4,7 @@ import type { TagSearchQuery } from "src/services/tag.service";
 import { TagService } from "src/services/tag.service";
 import type { DataTableColumn } from "src/shared/components/DataTable";
 import { DataTable } from "src/shared/components/DataTable";
-import { TagLink } from "src/shared/components/TagLink";
+import { TagLink } from "src/shared/components/links/TagLink";
 import { formatDate } from "src/shared/utils";
 
 interface TagsTableProps {

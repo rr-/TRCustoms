@@ -9,12 +9,12 @@ import type { SnapshotSearchQuery } from "src/services/snapshot.service";
 import { UserPermission } from "src/services/user.service";
 import type { DataTableColumn } from "src/shared/components/DataTable";
 import { DataTable } from "src/shared/components/DataTable";
-import { LevelLink } from "src/shared/components/LevelLink";
 import { Loader } from "src/shared/components/Loader";
 import { PermissionGuard } from "src/shared/components/PermissionGuard";
 import { PushButton } from "src/shared/components/PushButton";
 import { SnapshotDiffView } from "src/shared/components/SnapshotDiffView";
-import { UserLink } from "src/shared/components/UserLink";
+import { LevelLink } from "src/shared/components/links/LevelLink";
+import { UserLink } from "src/shared/components/links/UserLink";
 import { formatDate } from "src/shared/utils";
 import { EMPTY_INPUT_PLACEHOLDER } from "src/shared/utils";
 
