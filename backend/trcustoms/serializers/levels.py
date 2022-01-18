@@ -174,7 +174,7 @@ class LevelDetailsSerializer(LevelListingSerializer):
         def validate_limits(
             queryset, field: str, min_count: int, max_count: int
         ) -> None:
-            count = len(queryset)
+            count = len(set(queryset))
             if count < min_count:
                 raise serializers.ValidationError(
                     {field: f"At least {min_count} {field} must be added"}
@@ -185,25 +185,34 @@ class LevelDetailsSerializer(LevelListingSerializer):
                 )
 
         validate_limits(
-            validated_data.get("screenshots", []),
+            validated_data.get(
+                "screenshots",
+                self.instance.screenshots.all() if self.instance else [],
+            ),
             "screenshots",
             settings.MIN_SCREENSHOTS,
             settings.MAX_SCREENSHOTS,
         )
         validate_limits(
-            validated_data.get("genres", []),
+            validated_data.get(
+                "genres", self.instance.genres.all() if self.instance else []
+            ),
             "genres",
             settings.MIN_GENRES,
             settings.MAX_GENRES,
         )
         validate_limits(
-            validated_data.get("tags", []),
+            validated_data.get(
+                "tags", self.instance.tags.all() if self.instance else []
+            ),
             "tags",
             settings.MIN_TAGS,
             settings.MAX_TAGS,
         )
         validate_limits(
-            validated_data.get("authors", []),
+            validated_data.get(
+                "authors", self.instance.authors.all() if self.instance else []
+            ),
             "authors",
             settings.MIN_AUTHORS,
             settings.MAX_AUTHORS,

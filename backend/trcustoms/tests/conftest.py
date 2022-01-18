@@ -15,6 +15,7 @@ from trcustoms.models import (
     LevelDuration,
     LevelEngine,
     LevelGenre,
+    LevelScreenshot,
     LevelTag,
     UploadedFile,
     User,
@@ -83,6 +84,18 @@ class UploadedFileFactory(factory.django.DjangoModelFactory):
 
 
 @register
+class ScreenshotFactory(factory.django.DjangoModelFactory):
+    class Meta:
+        model = LevelScreenshot
+
+    file = factory.SubFactory(
+        UploadedFileFactory,
+        upload_type=UploadedFile.UploadType.LEVEL_SCREENSHOT,
+    )
+    position = factory.Sequence(lambda n: n)
+
+
+@register
 class LevelFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = Level
@@ -92,6 +105,18 @@ class LevelFactory(factory.django.DjangoModelFactory):
     engine = factory.SubFactory(EngineFactory)
     duration = factory.SubFactory(DurationFactory)
     difficulty = factory.SubFactory(DifficultyFactory)
+
+    @factory.post_generation
+    def authors(self, create, extracted, **kwargs):
+        # pylint: disable=no-member
+        if create and extracted:
+            self.authors.set(extracted)
+
+    @factory.post_generation
+    def genres(self, create, extracted, **kwargs):
+        # pylint: disable=no-member
+        if create and extracted:
+            self.genres.set(extracted)
 
 
 @pytest.fixture(name="fake", scope="session")
