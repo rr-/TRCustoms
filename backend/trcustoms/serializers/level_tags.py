@@ -22,6 +22,13 @@ class LevelTagListingSerializer(serializers.ModelSerializer):
 
 
 class LevelTagDetailsSerializer(LevelTagListingSerializer):
+    def validate_name(self, value):
+        if LevelTag.objects.filter(name__iexact=value).exists():
+            raise serializers.ValidationError(
+                "Another tag exists with this name."
+            )
+        return value
+
     class Meta:
         model = LevelTag
         fields = ["id", "name", "created", "last_updated"]

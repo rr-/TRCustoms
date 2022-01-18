@@ -1,7 +1,8 @@
 from django.contrib.auth.models import AbstractUser
 from django.contrib.auth.models import UserManager as BaseUserManager
 from django.db import models
-from django.db.models import Count
+from django.db.models import Count, UniqueConstraint
+from django.db.models.functions import Lower
 
 from trcustoms.models.uploaded_file import UploadedFile
 
@@ -30,6 +31,11 @@ class UserManager(BaseUserManager):
 
 class User(AbstractUser):
     objects = UserManager()
+
+    class Meta(AbstractUser.Meta):
+        constraints = [
+            UniqueConstraint(Lower("username"), name="user_username_unique"),
+        ]
 
     class Source(models.TextChoices):
         trle = "trle", "trle.net"

@@ -78,7 +78,7 @@ def process_reviewer(ctx: ScrapeContext, obj_id: int) -> None:
 
     if not ctx.no_basic_data:
         user, created = User.objects.update_or_create(
-            username=get_trle_user_username(trle_reviewer),
+            username__iexact=get_trle_user_username(trle_reviewer),
             defaults=dict(
                 trle_reviewer_id=obj_id,
             ),
@@ -100,7 +100,7 @@ def process_author(ctx: ScrapeContext, obj_id: int) -> None:
 
     if not ctx.no_basic_data:
         user, created = User.objects.update_or_create(
-            username=get_trle_user_username(trle_author),
+            username__iexact=get_trle_user_username(trle_author),
             defaults=dict(
                 trle_author_id=obj_id,
             ),

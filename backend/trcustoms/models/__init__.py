@@ -1,6 +1,5 @@
 from .level import Level
 from .level_difficulty import LevelDifficulty
-from .level_download import LevelDownload
 from .level_duration import LevelDuration
 from .level_engine import LevelEngine
 from .level_file import LevelFile
@@ -19,7 +18,6 @@ __all__ = [
     "DiffType",
     "Level",
     "LevelDifficulty",
-    "LevelDownload",
     "LevelDuration",
     "LevelEngine",
     "LevelFile",

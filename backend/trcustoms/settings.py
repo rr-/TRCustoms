@@ -195,3 +195,8 @@ MIN_SCREENSHOTS = 3
 MAX_SCREENSHOTS = 9
 MIN_AUTHORS = 1
 MAX_AUTHORS = 25
+
+CSRF_TRUSTED_ORIGINS = [
+    "http://localhost:8000",
+    "https://trcustoms.org",
+]

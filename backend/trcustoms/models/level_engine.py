@@ -1,5 +1,6 @@
 from django.db import models
-from django.db.models import Count
+from django.db.models import Count, UniqueConstraint
+from django.db.models.functions import Lower
 
 from trcustoms.models.util import DatesInfo
 
@@ -15,6 +16,9 @@ class LevelEngine(DatesInfo):
 
     class Meta:
         ordering = ["name"]
+        constraints = [
+            UniqueConstraint(Lower("name"), name="engine_name_unique"),
+        ]
 
     def __str__(self) -> str:
         return f"{self.name} (id={self.pk})"
