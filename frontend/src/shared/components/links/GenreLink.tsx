@@ -1,8 +1,12 @@
 import { Link } from "react-router-dom";
-import type { GenreLite } from "src/services/genre.service";
+
+interface Genre {
+  id: number | null;
+  name: string;
+}
 
 interface GenreLinkProps {
-  genre: GenreLite;
+  genre: Genre;
 }
 
 const GenreLink = ({ genre }: GenreLinkProps) => {

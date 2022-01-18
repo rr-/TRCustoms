@@ -13,6 +13,7 @@ from .level_engines import (
 from .level_genres import (
     LevelGenreListingSerializer,
     LevelGenreNestedSerializer,
+    LevelGenreSnapshotSerializer,
 )
 from .level_reviews import LevelReviewListingSerializer
 from .level_screenshots import LevelScreenshotSerializer
@@ -48,6 +49,7 @@ __all__ = [
     "LevelEngineNestedSerializer",
     "LevelGenreListingSerializer",
     "LevelGenreNestedSerializer",
+    "LevelGenreSnapshotSerializer",
     "LevelListingSerializer",
     "LevelNestedSerializer",
     "LevelNestedSerializer",

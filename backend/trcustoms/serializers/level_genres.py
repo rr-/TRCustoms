@@ -1,5 +1,6 @@
 from rest_framework import serializers
 
+from trcustoms import snapshots
 from trcustoms.models import LevelGenre
 
 
@@ -25,3 +26,16 @@ class LevelGenreListingSerializer(serializers.ModelSerializer):
 
     def get_level_count(self, instance: LevelGenre) -> int:
         return instance.level_count
+
+
+@snapshots.register
+class LevelGenreSnapshotSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = LevelGenre
+        fields = [
+            "id",
+            "name",
+            "description",
+            "created",
+            "last_updated",
+        ]
