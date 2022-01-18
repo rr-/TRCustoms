@@ -76,6 +76,9 @@ const SnapshotsTableObjectLink = ({
         />
       );
 
+    case SnapshotObjectType.LevelDuration:
+      return <>{`Duration ${snapshot.object_name}`}</>;
+
     default:
       return <>{`${snapshot.object_type} #${snapshot.object_id}`}</>;
   }
