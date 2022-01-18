@@ -29,6 +29,7 @@ enum SnapshotChangeType {
 
 enum SnapshotObjectType {
   Level = "level",
+  LevelEngine = "levelengine",
   LevelGenre = "levelgenre",
   LevelTag = "leveltag",
 }
