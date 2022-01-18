@@ -1,4 +1,3 @@
-from django.shortcuts import get_list_or_404
 from rest_framework import mixins, serializers, viewsets
 from rest_framework.decorators import action
 from rest_framework.generics import get_object_or_404
@@ -6,7 +5,7 @@ from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 
 from trcustoms.mixins import MultiSerializerMixin, PermissionsMixin
-from trcustoms.models import Level, LevelScreenshot, Snapshot
+from trcustoms.models import Level, Snapshot
 from trcustoms.models.user import UserPermission
 from trcustoms.permissions import (
     AllowNone,
@@ -18,7 +17,7 @@ from trcustoms.serializers import (
     LevelListingSerializer,
 )
 from trcustoms.snapshots import make_level_snapshot
-from trcustoms.utils import parse_bool, parse_ids, stream_file_field
+from trcustoms.utils import parse_bool, parse_ids
 
 
 class LevelViewSet(
@@ -120,16 +119,6 @@ class LevelViewSet(
             queryset = queryset.filter(is_approved=is_approved)
 
         return queryset
-
-    @action(detail=True, url_path=r"images/(?P<position>\d+)")
-    def screenshot(self, request, pk: int, position: int) -> Response:
-        image = get_list_or_404(
-            LevelScreenshot, level_id=pk, position=position
-        )[0]
-        parts = [f"{pk}", image.level.name, f"screenshot{position}"]
-        return stream_file_field(
-            image.file.content, parts, as_attachment=False
-        )
 
     @action(detail=True, methods=["post"])
     def approve(self, request, pk: int) -> Response:

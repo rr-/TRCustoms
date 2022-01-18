@@ -1,4 +1,5 @@
 import { AxiosResponse } from "axios";
+import type { UploadedFile } from "src/services/file.service";
 import { api } from "src/shared/api";
 import { API_URL } from "src/shared/constants";
 import type { GenericSearchQuery } from "src/shared/types";
@@ -23,14 +24,13 @@ interface UserLite {
 
 interface User extends UserLite {
   email: string;
-  has_picture: boolean;
+  picture: UploadedFile | null;
   bio: string;
   date_joined: string;
   last_login: string;
   is_active: boolean;
   authored_level_count: number;
   reviewed_level_count: number;
-  picture: number;
   permissions: UserPermission[];
   trle_author_id?: number;
   trle_reviewer_id?: number;
@@ -72,7 +72,7 @@ interface UserCreatePayload {
   email: string;
   password: string;
   bio: string;
-  picture: number;
+  picture_id?: number | null;
 }
 
 interface UserUpdatePayload extends UserCreatePayload {
@@ -89,7 +89,7 @@ const update = async (
     oldPassword,
     password,
     bio,
-    picture,
+    picture_id,
   }: UserUpdatePayload
 ): Promise<User> => {
   const data: { [key: string]: any } = {
@@ -98,7 +98,7 @@ const update = async (
     last_name: lastName,
     email: email,
     bio: bio,
-    picture: picture,
+    picture_id: picture_id,
   };
   if (oldPassword) {
     data.old_password = oldPassword;
@@ -120,7 +120,7 @@ const register = async ({
   email,
   password,
   bio,
-  picture,
+  picture_id,
 }: UserCreatePayload): Promise<User> => {
   const data: { [key: string]: any } = {
     username: username,
@@ -129,7 +129,7 @@ const register = async ({
     email: email,
     password: password,
     bio: bio,
-    picture: picture,
+    picture_id: picture_id,
   };
   const response = (await api.post(`${API_URL}/users/`, data)) as AxiosResponse<
     User

@@ -10,9 +10,7 @@ const UserPicture = ({ user, className }: UserPictureProps) => {
     <img
       className={className}
       alt={`Avatar for ${user.username}`}
-      src={
-        user.has_picture ? `/api/users/${user.id}/picture` : "/anonymous.png"
-      }
+      src={user.picture ? user.picture.url : "/anonymous.png"}
     />
   );
 };

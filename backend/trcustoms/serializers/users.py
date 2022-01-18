@@ -5,6 +5,7 @@ from django.db import transaction
 from rest_framework import serializers
 
 from trcustoms.models import UploadedFile, User
+from trcustoms.serializers.uploaded_files import UploadedFileNestedSerializer
 
 
 class UserNestedSerializer(serializers.ModelSerializer):
@@ -14,17 +15,16 @@ class UserNestedSerializer(serializers.ModelSerializer):
 
 
 class UserListingSerializer(serializers.ModelSerializer):
-    has_picture = serializers.SerializerMethodField(read_only=True)
+    picture = UploadedFileNestedSerializer(read_only=True)
     old_password = serializers.CharField(write_only=True, required=False)
     authored_level_count = serializers.SerializerMethodField(read_only=True)
     reviewed_level_count = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
         model = User
-        fields = (
+        fields = [
             "id",
             "username",
-            "has_picture",
             "first_name",
             "last_name",
             "email",
@@ -40,7 +40,7 @@ class UserListingSerializer(serializers.ModelSerializer):
             "permissions",
             "trle_reviewer_id",
             "trle_author_id",
-        )
+        ]
 
     username = serializers.CharField(
         required=True,
@@ -70,9 +70,6 @@ class UserListingSerializer(serializers.ModelSerializer):
         required=False, validators=[MaxLengthValidator(5000)], allow_blank=True
     )
 
-    def get_has_picture(self, instance: User) -> bool:
-        return bool(instance.picture)
-
     def get_authored_level_count(self, instance: User) -> int:
         return instance.authored_level_count
 
@@ -81,6 +78,16 @@ class UserListingSerializer(serializers.ModelSerializer):
 
 
 class UserDetailsSerializer(UserListingSerializer):
+    picture_id = serializers.PrimaryKeyRelatedField(
+        write_only=True,
+        required=False,
+        allow_null=True,
+        source="picture",
+        queryset=UploadedFile.objects.filter(
+            upload_type=UploadedFile.UploadType.USER_PICTURE
+        ),
+    )
+
     def validate_username(self, value):
         if (
             (user := User.objects.filter(username__iexact=value).first())
@@ -118,15 +125,6 @@ class UserDetailsSerializer(UserListingSerializer):
         password = validated_data.pop("password", None)
 
         super().update(instance, validated_data)
-
-        if (
-            instance.picture
-            and instance.picture.upload_type
-            != UploadedFile.UploadType.USER_PICTURE
-        ):
-            raise serializers.ValidationError(
-                {"picture": "Invalid upload type."}
-            )
 
         if password:
             try:
@@ -178,3 +176,9 @@ class UserDetailsSerializer(UserListingSerializer):
         user.save()
 
         return User.objects.with_counts().get(pk=user.pk)
+
+    class Meta:
+        model = User
+        fields = UserListingSerializer.Meta.fields + [
+            "picture_id",
+        ]

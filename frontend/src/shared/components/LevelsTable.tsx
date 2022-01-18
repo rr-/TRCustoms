@@ -7,7 +7,6 @@ import { LevelService } from "src/services/level.service";
 import type { DataTableColumn } from "src/shared/components/DataTable";
 import { DataTable } from "src/shared/components/DataTable";
 import { MediumThumbnail } from "src/shared/components/MediumThumbnail";
-import { PushButton } from "src/shared/components/PushButton";
 import { LevelLink } from "src/shared/components/links/LevelLink";
 import { UserLink } from "src/shared/components/links/UserLink";
 import { formatDate } from "src/shared/utils";
