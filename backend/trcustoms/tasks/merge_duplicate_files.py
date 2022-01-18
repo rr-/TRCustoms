@@ -1,7 +1,7 @@
 from django.db.models import Count
 
 from trcustoms.celery import app, logger
-from trcustoms.models import LevelFile, LevelMedium, UploadedFile, User
+from trcustoms.models import LevelFile, LevelScreenshot, UploadedFile, User
 from trcustoms.utils import check_model_references
 
 
@@ -21,7 +21,7 @@ def merge_duplicate_files() -> None:
         rest = UploadedFile.objects.filter(md5sum=md5sum).exclude(pk=chosen.pk)
 
         LevelFile.objects.filter(file__in=rest).update(file=chosen)
-        LevelMedium.objects.filter(file__in=rest).update(file=chosen)
+        LevelScreenshot.objects.filter(file__in=rest).update(file=chosen)
         User.objects.filter(picture__in=rest).update(picture=chosen)
 
         assert not any(check_model_references(model) for model in rest)

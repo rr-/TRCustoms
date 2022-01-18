@@ -10,7 +10,7 @@ from trcustoms.models import (
     LevelEngine,
     LevelFile,
     LevelGenre,
-    LevelMedium,
+    LevelScreenshot,
     LevelTag,
     UploadedFile,
     User,
@@ -21,7 +21,7 @@ from trcustoms.serializers.level_difficulties import (
 from trcustoms.serializers.level_durations import LevelDurationNestedSerializer
 from trcustoms.serializers.level_engines import LevelEngineNestedSerializer
 from trcustoms.serializers.level_genres import LevelGenreNestedSerializer
-from trcustoms.serializers.level_media import LevelMediumSerializer
+from trcustoms.serializers.level_screenshots import LevelScreenshotSerializer
 from trcustoms.serializers.level_tags import LevelTagNestedSerializer
 from trcustoms.serializers.uploaded_files import UploadedFileNestedSerializer
 from trcustoms.serializers.users import UserNestedSerializer
@@ -105,7 +105,7 @@ class LevelListingSerializer(serializers.ModelSerializer):
 
     last_file = serializers.SerializerMethodField(read_only=True)
     cover = UploadedFileNestedSerializer(read_only=True)
-    media = LevelMediumSerializer(read_only=True, many=True)
+    screenshots = LevelScreenshotSerializer(read_only=True, many=True)
 
     def get_last_file(self, instance: Level) -> dict[str, Any] | None:
         """Get last file ID from the LevelViewSet's annotated queryset."""
@@ -134,7 +134,7 @@ class LevelListingSerializer(serializers.ModelSerializer):
             "uploader",
             "created",
             "cover",
-            "media",
+            "screenshots",
             "last_updated",
             "last_file",
             "download_count",
@@ -223,7 +223,7 @@ class LevelDetailsSerializer(LevelListingSerializer):
         level.authors.set(authors)
         level.uploader = self.context["request"].user
         for i, screenshot in enumerate(screenshots):
-            LevelMedium.objects.create(
+            LevelScreenshot.objects.create(
                 level=level, position=i, file=screenshot
             )
         LevelFile.objects.create(level=level, file=file)
@@ -246,17 +246,17 @@ class LevelDetailsSerializer(LevelListingSerializer):
         if screenshots is not None:
             # be smart about the updates to make sure snapshots do not report
             # extraneous additions and deletions
-            LevelMedium.objects.filter(
+            LevelScreenshot.objects.filter(
                 level=level, position__gte=len(screenshots)
             ).delete()
             # first, try to update matching file positions
             for i, screenshot in enumerate(screenshots):
-                LevelMedium.objects.update_or_create(
+                LevelScreenshot.objects.update_or_create(
                     level=level, file=screenshot, defaults=dict(position=i)
                 )
             # next, try to update matching position files
             for i, screenshot in enumerate(screenshots):
-                LevelMedium.objects.update_or_create(
+                LevelScreenshot.objects.update_or_create(
                     level=level, position=i, defaults=dict(file=screenshot)
                 )
 

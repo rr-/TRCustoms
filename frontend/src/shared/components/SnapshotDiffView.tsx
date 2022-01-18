@@ -64,7 +64,7 @@ const formatDiff = (item: DiffItem): React.ReactNode | null => {
     }
   }
 
-  if (item.path?.[0] === "media") {
+  if (item.path?.[0] === "screenshots") {
     if (item.diff_type === DiffType.Updated && item.path?.[2] === "position") {
       return (
         <>

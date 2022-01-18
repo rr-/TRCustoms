@@ -12,7 +12,7 @@ import { GenericSearchResult } from "src/shared/types";
 import { filterFalsyObjectValues } from "src/shared/utils";
 import { getGenericSearchQuery } from "src/shared/utils";
 
-interface Medium {
+interface Screenshot {
   id: number;
   file: UploadedFile;
 }
@@ -51,7 +51,7 @@ interface Level {
   duration: LevelDuration;
   download_count: number;
   cover: UploadedFile;
-  media: Medium[];
+  screenshots: Screenshot[];
 }
 
 interface LevelFull extends Level {
@@ -73,7 +73,7 @@ interface LevelSearchQuery extends GenericSearchQuery {
 interface LevelSearchResult
   extends GenericSearchResult<LevelSearchQuery, Level> {}
 
-interface MediumList extends Array<Medium> {}
+interface ScreenshotList extends Array<Screenshot> {}
 
 const searchLevels = async (
   searchQuery: LevelSearchQuery
@@ -165,8 +165,8 @@ export type {
   LevelList,
   LevelSearchQuery,
   LevelSearchResult,
-  Medium,
-  MediumList,
+  Screenshot,
+  ScreenshotList,
 };
 
 export { LevelService };

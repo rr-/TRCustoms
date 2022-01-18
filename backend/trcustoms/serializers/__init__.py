@@ -14,8 +14,8 @@ from .level_genres import (
     LevelGenreListingSerializer,
     LevelGenreNestedSerializer,
 )
-from .level_media import LevelMediumSerializer
 from .level_reviews import LevelReviewListingSerializer
+from .level_screenshots import LevelScreenshotSerializer
 from .level_tags import LevelTagListingSerializer, LevelTagNestedSerializer
 from .levels import (
     LevelDetailsSerializer,
@@ -44,7 +44,7 @@ __all__ = [
     "LevelGenreListingSerializer",
     "LevelGenreNestedSerializer",
     "LevelListingSerializer",
-    "LevelMediumSerializer",
+    "LevelScreenshotSerializer",
     "LevelNestedSerializer",
     "LevelNestedSerializer",
     "LevelReviewListingSerializer",

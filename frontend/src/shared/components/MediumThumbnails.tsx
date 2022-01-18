@@ -1,16 +1,20 @@
 import "./MediumThumbnails.css";
-import type { MediumList } from "src/services/level.service";
+import type { UploadedFile } from "src/services/file.service";
 import { MediumThumbnail } from "src/shared/components/MediumThumbnail";
 
+interface Medium {
+  file: UploadedFile;
+}
+
 interface MediumThumbnailsProps {
-  media: MediumList;
+  media: Medium[];
 }
 
 const MediumThumbnails = ({ media }: MediumThumbnailsProps) => {
   return (
     <div className="MediumThumbnails">
       {media.map((medium) => (
-        <MediumThumbnail key={medium.id} file={medium.file} />
+        <MediumThumbnail key={medium.file.id} file={medium.file} />
       ))}
     </div>
   );

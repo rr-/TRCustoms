@@ -267,9 +267,9 @@ const LevelPage = () => {
       </aside>
 
       <div id="LevelPage--main">
-        {!!level.media.length && (
+        {!!level.screenshots.length && (
           <section id="LevelPage--media">
-            <MediumThumbnails media={level.media} />
+            <MediumThumbnails media={level.screenshots} />
           </section>
         )}
 
