@@ -1,4 +1,6 @@
-from collections.abc import Iterable
+import functools
+from collections.abc import Callable, Iterable
+from dataclasses import dataclass, field
 from typing import Any
 
 from django.contrib.contenttypes.models import ContentType
@@ -6,8 +8,7 @@ from django.db import models
 from rest_framework import serializers
 from rest_framework.request import Request
 
-from trcustoms.models import DiffItem, DiffType, Level, Snapshot
-from trcustoms.serializers.levels import LevelDetailsSerializer
+from trcustoms.models.snapshot import DiffItem, DiffType, Snapshot
 
 
 def transform_for_diff(obj: Any, ignore_fields: list[str]) -> Any:
@@ -124,18 +125,61 @@ def collect_diff(
     yield from collect_diff_object(obj1, obj2, None)
 
 
+@dataclass
+class SnapshotRegistryEntry:
+    model: type[models.Model]
+    serializer_cls: type[serializers.ModelSerializer]
+    name_getter: Callable[[models.Model], str] = field(
+        default_factory=lambda: lambda entity: entity.name
+    )
+    ignore_fields: list[str] = field(
+        default_factory=lambda: ["created", "last_updated"]
+    )
+
+
+registry = []
+
+
+def register(function=None, **register_kwargs):
+    def actual_decorator(serializer_cls):
+        registry.append(
+            SnapshotRegistryEntry(
+                model=serializer_cls.Meta.model,
+                serializer_cls=serializer_cls,
+                **register_kwargs,
+            )
+        )
+
+        @functools.wraps(serializer_cls)
+        def wrapper(*args, **kwargs):
+            return serializer_cls(*args, **kwargs)
+
+        return wrapper
+
+    if function:
+        return actual_decorator(function)
+    return actual_decorator
+
+
+def get_registry_entry(obj: models.Model) -> SnapshotRegistryEntry:
+    for entry in registry:
+        if isinstance(obj, entry.model):
+            return entry
+    raise ValueError(f"Cannot make snapshot of {obj}")
+
+
 def make_snapshot(
     obj: models.Model,
-    object_name: str,
-    serializer_cls: type[serializers.Serializer],
     request: Request,
-    change_type: Snapshot.ChangeType,
-    ignore_fields: list[str],
-) -> Snapshot:
-    serializer = serializer_cls(instance=obj)
-    object_desc = serializer.data
-    object_type = ContentType.objects.get_for_model(obj)
+    change_type: Snapshot.ChangeType = Snapshot.ChangeType.UPDATE,
+) -> None:
+    entry = get_registry_entry(obj)
+
+    serializer = entry.serializer_cls(instance=obj)
     object_id = obj.pk
+    object_name = entry.name_getter(obj)
+    object_type = ContentType.objects.get_for_model(obj)
+    object_desc = serializer.data
 
     last_snapshot = (
         Snapshot.objects.filter(object_id=object_id, object_type=object_type)
@@ -147,7 +191,7 @@ def make_snapshot(
         collect_diff(
             last_snapshot.object_desc if last_snapshot else None,
             object_desc,
-            ignore_fields=ignore_fields,
+            ignore_fields=entry.ignore_fields,
         )
     )
 
@@ -168,18 +212,3 @@ def make_snapshot(
     )
 
     return snapshot
-
-
-def make_level_snapshot(
-    level: Level,
-    request: Request,
-    change_type: Snapshot.ChangeType = Snapshot.ChangeType.UPDATE,
-) -> None:
-    make_snapshot(
-        obj=level,
-        object_name=level.name,
-        serializer_cls=LevelDetailsSerializer,
-        request=request,
-        change_type=change_type,
-        ignore_fields=["created", "last_updated"],
-    )
