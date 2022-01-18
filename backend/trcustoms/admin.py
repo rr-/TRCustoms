@@ -154,7 +154,7 @@ class LevelGenreAdmin(admin.ModelAdmin):
 
 
 @admin.register(LevelTag)
-class LevelTagAdmin(admin.ModelAdmin):
+class LevelTagAdmin(SnapshotAdminMixin, admin.ModelAdmin):
     ordering = ["name"]
     search_fields = ["name"]
     readonly_fields = ["created", "last_updated"]
