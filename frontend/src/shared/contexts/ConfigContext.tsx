@@ -26,21 +26,26 @@ const defaultConfig = {
   },
 };
 
-const ConfigContext = createContext<Config>(defaultConfig);
+const ConfigContext = createContext<{
+  config: Config;
+  refetchConfig: () => Promise<void>;
+}>({ config: defaultConfig, refetchConfig: async () => {} });
 
 const ConfigContextProvider = ({ children }: ConfigContextProviderProps) => {
   const [config, setConfig] = useState<Config>(defaultConfig);
 
-  useEffect(() => {
-    const fetchUser = async () => {
-      setConfig(await ConfigService.getConfig());
-    };
+  const refetchConfig = async () => {
+    setConfig(await ConfigService.getConfig());
+  };
 
-    fetchUser();
-  }, [setConfig]);
+  useEffect(() => {
+    refetchConfig();
+  }, []);
 
   return (
-    <ConfigContext.Provider value={config}>{children}</ConfigContext.Provider>
+    <ConfigContext.Provider value={{ config, refetchConfig }}>
+      {children}
+    </ConfigContext.Provider>
   );
 };
 

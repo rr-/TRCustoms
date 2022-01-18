@@ -57,7 +57,7 @@ const validateRange = <T extends Object>(
 const LevelForm = ({ level, onGoBack, onSubmit }: LevelFormProps) => {
   const { user } = useContext(UserContext);
   const queryClient = useQueryClient();
-  const config = useContext(ConfigContext);
+  const { config } = useContext(ConfigContext);
   const initialValues = {
     name: level?.name || "",
     description: level?.description || "",

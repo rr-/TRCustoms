@@ -3,7 +3,7 @@ import { CheckboxArrayFormField } from "src/shared/components/formfields/Checkbo
 import { ConfigContext } from "src/shared/contexts/ConfigContext";
 
 const EnginesCheckboxes = () => {
-  const config = useContext(ConfigContext);
+  const { config } = useContext(ConfigContext);
   const source: { value: number; label: string }[] = config.engines.map(
     (engine) => ({
       value: engine.id,
