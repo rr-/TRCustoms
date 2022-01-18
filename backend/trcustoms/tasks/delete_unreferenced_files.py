@@ -8,7 +8,7 @@ def delete_unreferenced_files() -> None:
     for uploaded_file in UploadedFile.objects.filter(
         level__isnull=True,
         levelfile__isnull=True,
-        levelmedium__isnull=True,
+        levelscreenshot__isnull=True,
         user__isnull=True,
     ):
         logger.info("%s: deleting unused file", uploaded_file.md5sum)
