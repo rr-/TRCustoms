@@ -90,10 +90,8 @@ class UserDetailsSerializer(UserListingSerializer):
 
     def validate_username(self, value):
         if (
-            (user := User.objects.filter(username__iexact=value).first())
-            and user != self.instance
-            and user.source == User.Source.trcustoms
-        ):
+            user := User.objects.filter(username__iexact=value).first()
+        ) and user != self.instance:
             raise serializers.ValidationError(
                 "Another account exists with this name."
                 if user.is_active
