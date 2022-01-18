@@ -170,7 +170,7 @@ def get_registry_entry(obj: models.Model) -> SnapshotRegistryEntry:
 
 def make_snapshot(
     obj: models.Model,
-    request: Request,
+    request: Request | None,
     change_type: Snapshot.ChangeType = Snapshot.ChangeType.UPDATE,
 ) -> None:
     entry = get_registry_entry(obj)
@@ -204,7 +204,7 @@ def make_snapshot(
         object_type=object_type,
         object_desc=object_desc,
         change_type=change_type,
-        change_author=request.user,
+        change_author=request.user if request else None,
         is_reviewed=False,
         reviewer=None,
         previous=last_snapshot,
