@@ -104,6 +104,8 @@ class LevelListingSerializer(serializers.ModelSerializer):
     )
 
     last_file = serializers.SerializerMethodField(read_only=True)
+    cover = UploadedFileNestedSerializer(read_only=True)
+    media = LevelMediumSerializer(read_only=True, many=True)
 
     def get_last_file(self, instance: Level) -> dict[str, Any] | None:
         """Get last file ID from the LevelViewSet's annotated queryset."""
@@ -131,6 +133,8 @@ class LevelListingSerializer(serializers.ModelSerializer):
             "author_ids",
             "uploader",
             "created",
+            "cover",
+            "media",
             "last_updated",
             "last_file",
             "download_count",
@@ -138,7 +142,6 @@ class LevelListingSerializer(serializers.ModelSerializer):
 
 
 class LevelDetailsSerializer(LevelListingSerializer):
-    cover = UploadedFileNestedSerializer(read_only=True)
     cover_id = serializers.PrimaryKeyRelatedField(
         write_only=True,
         source="cover",
@@ -147,7 +150,6 @@ class LevelDetailsSerializer(LevelListingSerializer):
         ),
     )
 
-    media = LevelMediumSerializer(read_only=True, many=True)
     screenshot_ids = serializers.PrimaryKeyRelatedField(
         write_only=True,
         many=True,
@@ -267,9 +269,7 @@ class LevelDetailsSerializer(LevelListingSerializer):
     class Meta:
         model = Level
         fields = LevelListingSerializer.Meta.fields + [
-            "cover",
             "cover_id",
-            "media",
             "screenshot_ids",
             "files",
             "file_id",
