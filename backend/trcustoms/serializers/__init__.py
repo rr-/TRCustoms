@@ -5,6 +5,7 @@ from .level_difficulties import (
 from .level_durations import (
     LevelDurationListingSerializer,
     LevelDurationNestedSerializer,
+    LevelDurationSnapshotSerializer,
 )
 from .level_engines import (
     LevelEngineListingSerializer,
@@ -46,6 +47,7 @@ __all__ = [
     "LevelDifficultyNestedSerializer",
     "LevelDurationListingSerializer",
     "LevelDurationNestedSerializer",
+    "LevelDurationSnapshotSerializer",
     "LevelEngineListingSerializer",
     "LevelEngineNestedSerializer",
     "LevelEngineSnapshotSerializer",

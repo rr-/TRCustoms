@@ -32,6 +32,7 @@ enum SnapshotObjectType {
   LevelEngine = "levelengine",
   LevelGenre = "levelgenre",
   LevelTag = "leveltag",
+  LevelDuration = "levelduration",
 }
 
 interface Snapshot {

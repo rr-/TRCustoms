@@ -138,7 +138,7 @@ class LevelDifficultyAdmin(admin.ModelAdmin):
 
 
 @admin.register(LevelDuration)
-class LevelDurationAdmin(admin.ModelAdmin):
+class LevelDurationAdmin(SnapshotAdminMixin, admin.ModelAdmin):
     ordering = ["position"]
     search_fields = ["name"]
     readonly_fields = ["created", "last_updated"]
