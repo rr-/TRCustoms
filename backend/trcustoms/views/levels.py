@@ -6,7 +6,7 @@ from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 
 from trcustoms.mixins import MultiSerializerMixin, PermissionsMixin
-from trcustoms.models import Level, LevelMedium, Snapshot
+from trcustoms.models import Level, LevelScreenshot, Snapshot
 from trcustoms.models.user import UserPermission
 from trcustoms.permissions import (
     AllowNone,
@@ -123,7 +123,9 @@ class LevelViewSet(
 
     @action(detail=True, url_path=r"images/(?P<position>\d+)")
     def screenshot(self, request, pk: int, position: int) -> Response:
-        image = get_list_or_404(LevelMedium, level_id=pk, position=position)[0]
+        image = get_list_or_404(
+            LevelScreenshot, level_id=pk, position=position
+        )[0]
         parts = [f"{pk}", image.level.name, f"screenshot{position}"]
         return stream_file_field(
             image.file.content, parts, as_attachment=False

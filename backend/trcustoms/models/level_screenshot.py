@@ -5,9 +5,9 @@ from trcustoms.models.uploaded_file import UploadedFile
 from trcustoms.models.util import DatesInfo
 
 
-class LevelMedium(DatesInfo):
+class LevelScreenshot(DatesInfo):
     level = models.ForeignKey(
-        Level, on_delete=models.CASCADE, related_name="media"
+        Level, on_delete=models.CASCADE, related_name="screenshots"
     )
 
     file = models.ForeignKey(
@@ -17,7 +17,6 @@ class LevelMedium(DatesInfo):
 
     class Meta:
         ordering = ["position"]
-        verbose_name_plural = "Level media"
 
     def __str__(self) -> str:
-        return f"{self.level.name} (medium id={self.pk})"
+        return f"{self.level.name} (screenshot id={self.pk})"

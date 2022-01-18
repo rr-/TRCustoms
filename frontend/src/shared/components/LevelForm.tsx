@@ -69,7 +69,7 @@ const LevelForm = ({ level, onGoBack, onSubmit }: LevelFormProps) => {
     duration_id: level?.duration?.id,
     cover_id: level?.cover?.id,
     screenshot_ids: level
-      ? [...level.media.map((medium) => medium.file.id)]
+      ? [...level.screenshots.map((screenshot) => screenshot.file.id)]
       : [],
     file_id: null,
   };
@@ -316,7 +316,11 @@ const LevelForm = ({ level, onGoBack, onSubmit }: LevelFormProps) => {
                     uploadType={UploadType.LevelScreenshot}
                     fileIds={
                       level
-                        ? [...level.media.map((medium) => medium.file.id)]
+                        ? [
+                            ...level.screenshots.map(
+                              (screenshot) => screenshot.file.id
+                            ),
+                          ]
                         : []
                     }
                     onChange={(fileIds) =>

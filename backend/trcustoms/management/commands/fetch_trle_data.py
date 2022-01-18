@@ -22,7 +22,7 @@ from trcustoms.models import (
     LevelEngine,
     LevelFile,
     LevelLegacyReview,
-    LevelMedium,
+    LevelScreenshot,
     LevelTag,
     UploadedFile,
     User,
@@ -212,7 +212,7 @@ def process_level_images(level: Level, trle_level: TRLELevel) -> None:
                 level.cover = uploaded_file
                 level.save(update_fields=["cover"])
         else:
-            LevelMedium.objects.update_or_create(
+            LevelScreenshot.objects.update_or_create(
                 level=level,
                 position=pos,
                 defaults=dict(

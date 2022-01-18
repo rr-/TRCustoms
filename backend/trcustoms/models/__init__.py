@@ -6,7 +6,7 @@ from .level_engine import LevelEngine
 from .level_file import LevelFile
 from .level_genre import LevelGenre
 from .level_legacy_review import LevelLegacyReview
-from .level_medium import LevelMedium
+from .level_screenshot import LevelScreenshot
 from .level_tag import LevelTag
 from .snapshot import DiffItem, DiffType, Snapshot
 from .uploaded_file import UploadedFile
@@ -25,7 +25,7 @@ __all__ = [
     "LevelFile",
     "LevelGenre",
     "LevelLegacyReview",
-    "LevelMedium",
+    "LevelScreenshot",
     "LevelTag",
     "Snapshot",
     "UploadedFile",

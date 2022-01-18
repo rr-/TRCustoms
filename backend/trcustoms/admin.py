@@ -14,7 +14,7 @@ from trcustoms.models import (
     LevelFile,
     LevelGenre,
     LevelLegacyReview,
-    LevelMedium,
+    LevelScreenshot,
     LevelTag,
     Snapshot,
     UploadedFile,
@@ -187,8 +187,8 @@ class LevelAdmin(admin.ModelAdmin):
         )
 
 
-@admin.register(LevelMedium)
-class LevelMediumAdmin(admin.ModelAdmin):
+@admin.register(LevelScreenshot)
+class LevelScreenshotAdmin(admin.ModelAdmin):
     ordering = ["level", "position"]
     list_display = ["id", "level", "position", "created", "last_updated"]
     search_fields = ["level__name"]

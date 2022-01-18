@@ -93,7 +93,7 @@ def test_level_creation_success(
     assert list(level.tags.values_list("id", flat=True)) == [tag.id]
     assert list(level.authors.values_list("id", flat=True)) == [user.id]
     assert level.cover == cover
-    assert list(level.media.values_list("file__id", flat=True)) == [
+    assert list(level.screenshots.values_list("file__id", flat=True)) == [
         screenshot.id
     ]
     assert list(level.files.values_list("file__id", flat=True)) == [file.id]
@@ -138,9 +138,9 @@ def test_level_partial_update_success(
         level.authors.values_list("id", flat=True)
     )
     assert out_level.cover == level.cover
-    assert list(out_level.media.values_list("file__id", flat=True)) == list(
-        level.media.values_list("file__id", flat=True)
-    )
+    assert list(
+        out_level.screenshots.values_list("file__id", flat=True)
+    ) == list(level.screenshots.values_list("file__id", flat=True))
     assert list(out_level.files.values_list("file__id", flat=True)) == list(
         level.files.values_list("file__id", flat=True)
     )
@@ -208,7 +208,7 @@ def test_level_update_success(
     assert list(level.tags.values_list("id", flat=True)) == [tag.id]
     assert list(level.authors.values_list("id", flat=True)) == [user.id]
     assert level.cover == cover
-    assert list(level.media.values_list("file__id", flat=True)) == [
+    assert list(level.screenshots.values_list("file__id", flat=True)) == [
         screenshot.id
     ]
     assert list(level.files.values_list("file__id", flat=True)) == [file.id]
