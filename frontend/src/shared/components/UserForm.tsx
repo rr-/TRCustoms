@@ -40,7 +40,7 @@ const UserForm = ({ user, onGoBack, onSubmit }: UserFormProps) => {
     password: "",
     password2: "",
     bio: user?.bio || "",
-    picture: user?.picture || null,
+    picture_id: user?.picture?.id || null,
   };
 
   const handleSubmitError = useCallback(
@@ -60,7 +60,7 @@ const UserForm = ({ user, onGoBack, onSubmit }: UserFormProps) => {
           oldPassword: data?.old_password,
           password: data?.password,
           bio: data?.bio,
-          picture: data?.picture,
+          picture_id: data?.picture,
         };
         if (filterFalsyObjectValues(errors).length) {
           setErrors(errors);
@@ -87,7 +87,7 @@ const UserForm = ({ user, onGoBack, onSubmit }: UserFormProps) => {
           oldPassword: values.oldPassword || values.password,
           password: values.password,
           bio: values.bio,
-          picture: values.picture,
+          picture_id: values.picture_id,
         };
 
         if (user?.id) {
@@ -198,15 +198,15 @@ const UserForm = ({ user, onGoBack, onSubmit }: UserFormProps) => {
                   <BaseFormField
                     required={false}
                     label="Picture"
-                    name="picture"
+                    name="picture_id"
                   >
                     <PicturePicker
                       allowMultiple={false}
                       allowClear={true}
                       uploadType={UploadType.UserPicture}
-                      fileIds={user?.picture ? [user?.picture] : []}
+                      fileIds={user?.picture ? [user?.picture.id] : []}
                       onChange={([fileId]) =>
-                        setFieldValue("picture", fileId || null)
+                        setFieldValue("picture_id", fileId || null)
                       }
                     />
                   </BaseFormField>

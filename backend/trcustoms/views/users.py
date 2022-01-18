@@ -2,14 +2,10 @@ from django.http import Http404
 from rest_framework import mixins, status, viewsets
 from rest_framework.decorators import action
 from rest_framework.generics import get_object_or_404
-from rest_framework.permissions import (
-    AllowAny,
-    IsAuthenticated,
-    IsAuthenticatedOrReadOnly,
-)
+from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 
-from trcustoms.mixins import PermissionsMixin
+from trcustoms.mixins import MultiSerializerMixin, PermissionsMixin
 from trcustoms.models import User
 from trcustoms.models.user import UserPermission
 from trcustoms.permissions import (
@@ -18,11 +14,11 @@ from trcustoms.permissions import (
     IsAccessingOwnResource,
 )
 from trcustoms.serializers import UserDetailsSerializer, UserListingSerializer
-from trcustoms.utils import stream_file_field
 
 
 class UserViewSet(
     PermissionsMixin,
+    MultiSerializerMixin,
     mixins.ListModelMixin,
     mixins.RetrieveModelMixin,
     mixins.CreateModelMixin,
@@ -41,7 +37,6 @@ class UserViewSet(
         "partial_update": [
             HasPermission(UserPermission.EDIT_USERS) | IsAccessingOwnResource
         ],
-        "picture": [IsAuthenticatedOrReadOnly],
     }
 
     ordering_fields = [
@@ -61,6 +56,14 @@ class UserViewSet(
 
     queryset = User.objects.with_counts()
     serializer_class = UserListingSerializer
+    serializer_class_by_action = {
+        "retrieve": UserDetailsSerializer,
+        "update": UserDetailsSerializer,
+        "partial_update": UserDetailsSerializer,
+        "create": UserDetailsSerializer,
+        "by_username": UserDetailsSerializer,
+        "me": UserDetailsSerializer,
+    }
 
     def get_object(self):
         obj = get_object_or_404(self.get_queryset(), pk=self.kwargs["pk"])
@@ -72,7 +75,7 @@ class UserViewSet(
         user = self.queryset.filter(username__iexact=username).first()
         if not user:
             raise Http404("No user found with this username.")
-        serializer = UserDetailsSerializer(user)
+        serializer = self.get_serializer(user)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     @action(detail=False, permission_classes=[IsAuthenticated])
@@ -80,10 +83,3 @@ class UserViewSet(
         user = self.queryset.filter(id=self.request.user.id).first()
         serializer = self.get_serializer(user)
         return Response(serializer.data)
-
-    @action(detail=True)
-    def picture(self, request, pk) -> Response:
-        user = self.get_object()
-        return stream_file_field(
-            user.picture.content, [user.username], as_attachment=False
-        )
