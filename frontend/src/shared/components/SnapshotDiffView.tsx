@@ -39,9 +39,9 @@ const formatDiff = (item: DiffItem): React.ReactNode | null => {
 
   if (item.path?.[0] === "authors") {
     if (item.diff_type === DiffType.Added) {
-      return <>{`Added an author ${item.new.username}`}</>;
+      return <>{`Added author ${item.new.username}`}</>;
     } else if (item.diff_type === DiffType.Deleted) {
-      return <>{`Removed an author ${item.old.username}`}</>;
+      return <>{`Removed author ${item.old.username}`}</>;
     }
   }
 
@@ -65,10 +65,17 @@ const formatDiff = (item: DiffItem): React.ReactNode | null => {
   }
 
   if (item.path?.[0] === "media") {
-    if (item.diff_type === DiffType.Added) {
-      return <>Added a screenshot</>;
+    if (item.diff_type === DiffType.Updated && item.path?.[2] === "position") {
+      return (
+        <>
+          Reordered screenshots ({JSON.stringify(item.old)} →{" "}
+          {JSON.stringify(item.new)})
+        </>
+      );
+    } else if (item.diff_type === DiffType.Added) {
+      return <>Added screenshot {item.new?.position}</>;
     } else if (item.diff_type === DiffType.Deleted) {
-      return <>Removed a screenshot</>;
+      return <>Removed screenshot {item.old?.position}</>;
     }
   }
 
@@ -88,8 +95,8 @@ const formatDiff = (item: DiffItem): React.ReactNode | null => {
 
   return (
     <>
-      {formatDiffType(item.diff_type)} {item.path} {JSON.stringify(item.old)} →{" "}
-      {JSON.stringify(item.new)}
+      {formatDiffType(item.diff_type)} {item.path.join(" ")} (
+      {JSON.stringify(item.old)} → {JSON.stringify(item.new)})
     </>
   );
 };

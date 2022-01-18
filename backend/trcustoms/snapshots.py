@@ -26,34 +26,48 @@ def transform_for_diff(obj: Any, ignore_fields: list[str]) -> Any:
 
 
 def collect_diff_list(
-    obj1: Any,
-    obj2: Any,
-    ignore_fields: list[str],
-    path: list[str] | None = None,
+    obj1: Any, obj2: Any, path: list[str] | None
 ) -> Iterable[DiffItem]:
-    for idx, item1 in enumerate(obj1):
+    obj1t = [(item, transform_for_diff(item, ["position"])) for item in obj1]
+    obj2t = [(item, transform_for_diff(item, ["position"])) for item in obj2]
+
+    # find deleted or updated items
+    for idx, (item1, item1t) in enumerate(obj1t):
         if item1 not in obj2:
-            yield DiffItem(
-                diff_type=DiffType.deleted,
-                path=(path or []) + [str(idx)],
-                old=item1,
-                new=None,
-            )
-    for idx, item2 in enumerate(obj2):
+            for item2, item2t in obj2t:
+                if item1t == item2t:
+                    yield from collect_diff_object(
+                        item1,
+                        item2,
+                        path=(path or []) + [str(idx)],
+                    )
+                    break
+            else:
+                yield DiffItem(
+                    diff_type=DiffType.deleted,
+                    path=(path or []) + [str(idx)],
+                    old=item1,
+                    new=None,
+                )
+
+    # find added items
+    for idx, (item2, item2t) in enumerate(obj2t):
         if item2 not in obj1:
-            yield DiffItem(
-                diff_type=DiffType.added,
-                path=(path or []) + [str(idx)],
-                old=None,
-                new=item2,
-            )
+            for item1, item1t in obj1t:
+                if item1t == item2t:
+                    # handled in the first loop above
+                    break
+            else:
+                yield DiffItem(
+                    diff_type=DiffType.added,
+                    path=(path or []) + [str(idx)],
+                    old=None,
+                    new=item2,
+                )
 
 
 def collect_diff_dict(
-    obj1: Any,
-    obj2: Any,
-    ignore_fields: list[str],
-    path: list[str] | None = None,
+    obj1: Any, obj2: Any, path: list[str] | None
 ) -> Iterable[DiffItem]:
     for key, value in obj1.items():
         if key not in obj2:
@@ -72,31 +86,21 @@ def collect_diff_dict(
                 new=value,
             )
     for key in obj1.keys() & obj2.keys():
-        yield from collect_diff(
+        yield from collect_diff_object(
             obj1[key],
             obj2[key],
-            ignore_fields=ignore_fields,
             path=(path or []) + [key],
         )
 
 
-def collect_diff(
-    obj1: Any,
-    obj2: Any,
-    ignore_fields: list[str],
-    path: list[str] | None = None,
+def collect_diff_object(
+    obj1: Any, obj2: Any, path: list[str] | None
 ) -> Iterable[DiffItem]:
-    obj1 = transform_for_diff(obj1, ignore_fields=ignore_fields)
-    obj2 = transform_for_diff(obj2, ignore_fields=ignore_fields)
     if isinstance(obj1, list) and isinstance(obj2, list):
-        yield from collect_diff_list(
-            obj1, obj2, ignore_fields=ignore_fields, path=path
-        )
+        yield from collect_diff_list(obj1, obj2, path=path)
 
     elif isinstance(obj1, dict) and isinstance(obj2, dict):
-        yield from collect_diff_dict(
-            obj1, obj2, ignore_fields=ignore_fields, path=path
-        )
+        yield from collect_diff_dict(obj1, obj2, path=path)
 
     elif isinstance(obj1, str) and isinstance(obj2, str):
         if obj1.replace("\r\n", "\n") != obj2.replace("\r\n", "\n"):
@@ -108,6 +112,16 @@ def collect_diff(
         yield DiffItem(
             diff_type=DiffType.updated, path=path, old=obj1, new=obj2
         )
+
+
+def collect_diff(
+    obj1: Any,
+    obj2: Any,
+    ignore_fields: list[str],
+) -> Iterable[DiffItem]:
+    obj1 = transform_for_diff(obj1, ignore_fields=ignore_fields)
+    obj2 = transform_for_diff(obj2, ignore_fields=ignore_fields)
+    yield from collect_diff_object(obj1, obj2, None)
 
 
 def make_snapshot(

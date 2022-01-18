@@ -9,4 +9,4 @@ class LevelMediumSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = LevelMedium
-        fields = ["id", "file"]
+        fields = ["id", "position", "file"]

@@ -234,14 +234,24 @@ class LevelFullSerializer(LevelLiteSerializer):
             level.genres.set(genres)
         if authors is not None:
             level.authors.set(authors)
+
         if screenshots is not None:
+            # be smart about the updates to make sure snapshots do not report
+            # extraneous additions and deletions
             LevelMedium.objects.filter(
                 level=level, position__gte=len(screenshots)
             ).delete()
+            # first, try to update matching file positions
+            for i, screenshot in enumerate(screenshots):
+                LevelMedium.objects.update_or_create(
+                    level=level, file=screenshot, defaults=dict(position=i)
+                )
+            # next, try to update matching position files
             for i, screenshot in enumerate(screenshots):
                 LevelMedium.objects.update_or_create(
                     level=level, position=i, defaults=dict(file=screenshot)
                 )
+
         if file is not None and (
             not level.last_file or file != level.last_file.file
         ):
