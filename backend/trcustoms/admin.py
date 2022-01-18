@@ -130,7 +130,7 @@ class LevelEngineAdmin(SnapshotAdminMixin, admin.ModelAdmin):
 
 
 @admin.register(LevelDifficulty)
-class LevelDifficultyAdmin(admin.ModelAdmin):
+class LevelDifficultyAdmin(SnapshotAdminMixin, admin.ModelAdmin):
     ordering = ["position"]
     search_fields = ["name"]
     readonly_fields = ["created", "last_updated"]
