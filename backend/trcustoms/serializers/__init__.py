@@ -21,6 +21,7 @@ from .levels import (
     LevelDetailsSerializer,
     LevelListingSerializer,
     LevelNestedSerializer,
+    LevelSnapshotSerializer,
 )
 from .snapshots import SnapshotListingSerializer
 from .uploaded_files import (
@@ -44,10 +45,11 @@ __all__ = [
     "LevelGenreListingSerializer",
     "LevelGenreNestedSerializer",
     "LevelListingSerializer",
-    "LevelScreenshotSerializer",
     "LevelNestedSerializer",
     "LevelNestedSerializer",
     "LevelReviewListingSerializer",
+    "LevelScreenshotSerializer",
+    "LevelSnapshotSerializer",
     "LevelTagListingSerializer",
     "LevelTagNestedSerializer",
     "SnapshotListingSerializer",

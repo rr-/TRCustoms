@@ -16,7 +16,7 @@ from trcustoms.serializers import (
     LevelDetailsSerializer,
     LevelListingSerializer,
 )
-from trcustoms.snapshots import make_level_snapshot
+from trcustoms.snapshots import make_snapshot
 from trcustoms.utils import parse_bool, parse_ids
 
 
@@ -125,7 +125,7 @@ class LevelViewSet(
         level = self.get_object()
         level.is_approved = True
         level.save()
-        make_level_snapshot(level, request=self.request)
+        make_snapshot(level, request=self.request)
         return Response({})
 
     @action(detail=True, methods=["post"])
@@ -133,12 +133,12 @@ class LevelViewSet(
         level = self.get_object()
         level.is_approved = False
         level.save()
-        make_level_snapshot(level, request=self.request)
+        make_snapshot(level, request=self.request)
         return Response({})
 
     def perform_create(self, serializer: serializers.Serializer) -> None:
         super().perform_create(serializer)
-        make_level_snapshot(
+        make_snapshot(
             serializer.instance,
             request=self.request,
             change_type=Snapshot.ChangeType.CREATE,
@@ -146,4 +146,4 @@ class LevelViewSet(
 
     def perform_update(self, serializer: serializers.Serializer) -> None:
         super().perform_update(serializer)
-        make_level_snapshot(level=serializer.instance, request=self.request)
+        make_snapshot(serializer.instance, request=self.request)

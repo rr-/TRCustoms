@@ -3,6 +3,7 @@ from typing import Any
 from django.conf import settings
 from rest_framework import serializers
 
+from trcustoms import snapshots
 from trcustoms.models import (
     Level,
     LevelDifficulty,
@@ -285,3 +286,8 @@ class LevelDetailsSerializer(LevelListingSerializer):
             "trle_id",
             "is_approved",
         ]
+
+
+@snapshots.register
+class LevelSnapshotSerializer(LevelDetailsSerializer):
+    pass

@@ -20,10 +20,36 @@ from trcustoms.models import (
     UploadedFile,
     User,
 )
-from trcustoms.snapshots import make_level_snapshot
+from trcustoms.snapshots import make_snapshot
 
 
-class ReadOnlyAdmin(admin.ModelAdmin):
+class SnapshotAdminMixin:
+    def log_addition(self, request, obj, message):
+        super().log_addition(request, obj, message)
+        obj = self.get_snapshot_obj(obj)
+        make_snapshot(
+            obj, request=request, change_type=Snapshot.ChangeType.CREATE
+        )
+
+    def log_change(self, request, obj, message):
+        super().log_change(request, obj, message)
+        obj = self.get_snapshot_obj(obj)
+        make_snapshot(
+            obj, request=request, change_type=Snapshot.ChangeType.UPDATE
+        )
+
+    def log_deletion(self, request, obj, object_repr):
+        super().log_deletion(request, obj, object_repr)
+        obj = self.get_snapshot_obj(obj)
+        make_snapshot(
+            obj, request=request, change_type=Snapshot.ChangeType.DELETE
+        )
+
+    def get_snapshot_obj(self, obj):
+        return obj
+
+
+class ReadOnlyAdminMixin:
     readonly_fields = []
 
     def get_readonly_fields(self, request, obj=None):
@@ -136,7 +162,7 @@ class LevelTagAdmin(admin.ModelAdmin):
 
 
 @admin.register(Level)
-class LevelAdmin(admin.ModelAdmin):
+class LevelAdmin(SnapshotAdminMixin, admin.ModelAdmin):
     ordering = ["-created"]
     search_fields = [
         "name",
@@ -167,24 +193,6 @@ class LevelAdmin(admin.ModelAdmin):
         "last_file",
     ]
     raw_id_fields = ["uploader", "authors", "cover"]
-
-    def log_addition(self, request, obj, message):
-        super().log_addition(request, obj, message)
-        make_level_snapshot(
-            obj, request=request, change_type=Snapshot.ChangeType.CREATE
-        )
-
-    def log_change(self, request, obj, message):
-        super().log_change(request, obj, message)
-        make_level_snapshot(
-            obj, request=request, change_type=Snapshot.ChangeType.UPDATE
-        )
-
-    def log_deletion(self, request, obj, object_repr):
-        super().log_deletion(request, obj, object_repr)
-        make_level_snapshot(
-            obj, request=request, change_type=Snapshot.ChangeType.DELETE
-        )
 
 
 @admin.register(LevelScreenshot)
@@ -276,7 +284,7 @@ class SnapshotObjectTypeFilter(SimpleListFilter):
 
 
 @admin.register(Snapshot)
-class SnapshotAdmin(ReadOnlyAdmin):
+class SnapshotAdmin(ReadOnlyAdminMixin, admin.ModelAdmin):
     list_filter = [
         "change_type",
         SnapshotObjectTypeFilter,
