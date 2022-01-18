@@ -196,16 +196,19 @@ class LevelAdmin(SnapshotAdminMixin, admin.ModelAdmin):
 
 
 @admin.register(LevelScreenshot)
-class LevelScreenshotAdmin(admin.ModelAdmin):
+class LevelScreenshotAdmin(SnapshotAdminMixin, admin.ModelAdmin):
     ordering = ["level", "position"]
     list_display = ["id", "level", "position", "created", "last_updated"]
     search_fields = ["level__name"]
     readonly_fields = ["created", "last_updated"]
     raw_id_fields = ["level", "file"]
 
+    def get_snapshot_obj(self, obj):
+        return obj.level
+
 
 @admin.register(LevelFile)
-class LevelFileAdmin(admin.ModelAdmin):
+class LevelFileAdmin(SnapshotAdminMixin, admin.ModelAdmin):
     ordering = ["level", "version"]
     list_display = [
         "id",
@@ -218,6 +221,9 @@ class LevelFileAdmin(admin.ModelAdmin):
     search_fields = ["level__name"]
     readonly_fields = ["created", "last_updated", "version"]
     raw_id_fields = ["level", "file"]
+
+    def get_snapshot_obj(self, obj):
+        return obj.level
 
 
 @admin.register(LevelLegacyReview)

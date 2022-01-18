@@ -133,7 +133,7 @@ class SnapshotRegistryEntry:
         default_factory=lambda: lambda entity: entity.name
     )
     ignore_fields: list[str] = field(
-        default_factory=lambda: ["created", "last_updated"]
+        default_factory=lambda: ["created", "last_updated", "download_count"]
     )
 
 
