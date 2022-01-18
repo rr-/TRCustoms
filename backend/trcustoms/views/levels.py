@@ -55,6 +55,8 @@ class LevelViewSet(
             "difficulty",
             "last_file",
             "last_file__file",
+            "screenshots",
+            "screenshots__file",
             "cover",
         )
         .distinct()
