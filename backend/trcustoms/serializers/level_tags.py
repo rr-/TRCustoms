@@ -1,5 +1,6 @@
 from rest_framework import serializers
 
+from trcustoms import snapshots
 from trcustoms.models import LevelTag
 
 
@@ -18,3 +19,10 @@ class LevelTagListingSerializer(serializers.ModelSerializer):
 
     def get_level_count(self, instance: LevelTag) -> int:
         return instance.level_count
+
+
+@snapshots.register
+class LevelTagSnapshotSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = LevelTag
+        fields = ["id", "name", "created", "last_updated"]

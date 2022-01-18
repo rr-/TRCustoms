@@ -14,6 +14,7 @@ import { PermissionGuard } from "src/shared/components/PermissionGuard";
 import { PushButton } from "src/shared/components/PushButton";
 import { SnapshotDiffView } from "src/shared/components/SnapshotDiffView";
 import { LevelLink } from "src/shared/components/links/LevelLink";
+import { TagLink } from "src/shared/components/links/TagLink";
 import { UserLink } from "src/shared/components/links/UserLink";
 import { formatDate } from "src/shared/utils";
 import { EMPTY_INPUT_PLACEHOLDER } from "src/shared/utils";
@@ -24,6 +25,39 @@ interface SnapshotsTableProps {
   searchQuery: SnapshotSearchQuery;
   onSearchQueryChange?: (searchQuery: SnapshotSearchQuery) => any | null;
 }
+
+interface SnapshotsTableObjectLinkProps {
+  snapshot: Snapshot;
+}
+
+const SnapshotsTableObjectLink = ({
+  snapshot,
+}: SnapshotsTableObjectLinkProps) => {
+  switch (snapshot.object_type) {
+    case SnapshotObjectType.Level:
+      return (
+        <LevelLink
+          level={{
+            id: +snapshot.object_id,
+            name: snapshot.object_name,
+          }}
+        />
+      );
+
+    case SnapshotObjectType.LevelTag:
+      return (
+        <TagLink
+          tag={{
+            id: +snapshot.object_id,
+            name: snapshot.object_name,
+          }}
+        />
+      );
+
+    default:
+      return <>{`${snapshot.object_type} #${snapshot.object_id}`}</>;
+  }
+};
 
 const SnapshotsTable = ({
   showObjects,
@@ -74,17 +108,9 @@ const SnapshotsTable = ({
           {
             name: "object",
             label: "Object",
-            itemElement: (snapshot: Snapshot) =>
-              snapshot.object_type === SnapshotObjectType.Level ? (
-                <LevelLink
-                  level={{
-                    id: +snapshot.object_id,
-                    name: snapshot.object_name,
-                  }}
-                />
-              ) : (
-                `${snapshot.object_type} #${snapshot.object_id}`
-              ),
+            itemElement: (snapshot: Snapshot) => (
+              <SnapshotsTableObjectLink snapshot={snapshot} />
+            ),
           },
         ]
       : []),

@@ -29,6 +29,7 @@ enum SnapshotChangeType {
 
 enum SnapshotObjectType {
   Level = "level",
+  LevelTag = "leveltag",
 }
 
 interface Snapshot {
