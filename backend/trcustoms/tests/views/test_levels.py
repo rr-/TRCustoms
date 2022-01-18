@@ -9,6 +9,7 @@ from trcustoms.tests.conftest import (
     EngineFactory,
     GenreFactory,
     LevelFactory,
+    ScreenshotFactory,
     TagFactory,
     UploadedFileFactory,
     UserFactory,
@@ -55,9 +56,12 @@ def test_level_creation_success(
     cover = uploaded_file_factory(
         upload_type=UploadedFile.UploadType.LEVEL_COVER
     )
-    screenshot = uploaded_file_factory(
-        upload_type=UploadedFile.UploadType.LEVEL_SCREENSHOT
-    )
+    screenshots = [
+        uploaded_file_factory(
+            upload_type=UploadedFile.UploadType.LEVEL_SCREENSHOT
+        )
+        for _ in range(3)
+    ]
     file = uploaded_file_factory(
         upload_type=UploadedFile.UploadType.LEVEL_FILE
     )
@@ -75,7 +79,7 @@ def test_level_creation_success(
             "tag_ids": [tag.id],
             "author_ids": [user.id],
             "cover_id": cover.id,
-            "screenshot_ids": [screenshot.id],
+            "screenshot_ids": [screenshot.id for screenshot in screenshots],
             "file_id": file.id,
         },
     )
@@ -94,7 +98,7 @@ def test_level_creation_success(
     assert list(level.authors.values_list("id", flat=True)) == [user.id]
     assert level.cover == cover
     assert list(level.screenshots.values_list("file__id", flat=True)) == [
-        screenshot.id
+        screenshot.id for screenshot in screenshots
     ]
     assert list(level.files.values_list("file__id", flat=True)) == [file.id]
     assert level.last_file.file.id == file.id
@@ -108,11 +112,17 @@ def test_level_partial_update_success(
     difficulty_factory: DifficultyFactory,
     genre_factory: GenreFactory,
     tag_factory: TagFactory,
+    screenshot_factory: ScreenshotFactory,
     uploaded_file_factory: UploadedFileFactory,
     user_factory: UserFactory,
     auth_api_client: APIClient,
 ) -> None:
-    level = level_factory()
+    level = level_factory(
+        authors=[auth_api_client.user],
+        genres=[genre_factory()],
+    )
+    for _ in range(3):
+        screenshot_factory(level=level)
 
     response = auth_api_client.patch(
         f"/api/levels/{level.id}/",
@@ -155,11 +165,14 @@ def test_level_update_success(
     difficulty_factory: DifficultyFactory,
     genre_factory: GenreFactory,
     tag_factory: TagFactory,
+    screenshot_factory: ScreenshotFactory,
     uploaded_file_factory: UploadedFileFactory,
     user_factory: UserFactory,
     auth_api_client: APIClient,
 ) -> None:
-    level = level_factory()
+    level = level_factory(authors=[auth_api_client.user])
+    for _ in range(3):
+        screenshot_factory(level=level)
 
     engine = engine_factory()
     duration = duration_factory()
@@ -170,9 +183,12 @@ def test_level_update_success(
     cover = uploaded_file_factory(
         upload_type=UploadedFile.UploadType.LEVEL_COVER
     )
-    screenshot = uploaded_file_factory(
-        upload_type=UploadedFile.UploadType.LEVEL_SCREENSHOT
-    )
+    screenshots = [
+        uploaded_file_factory(
+            upload_type=UploadedFile.UploadType.LEVEL_SCREENSHOT
+        )
+        for _ in range(3)
+    ]
     file = uploaded_file_factory(
         upload_type=UploadedFile.UploadType.LEVEL_FILE
     )
@@ -190,7 +206,7 @@ def test_level_update_success(
             "tag_ids": [tag.id],
             "author_ids": [user.id],
             "cover_id": cover.id,
-            "screenshot_ids": [screenshot.id],
+            "screenshot_ids": [screenshot.id for screenshot in screenshots],
             "file_id": file.id,
         },
     )
@@ -209,7 +225,7 @@ def test_level_update_success(
     assert list(level.authors.values_list("id", flat=True)) == [user.id]
     assert level.cover == cover
     assert list(level.screenshots.values_list("file__id", flat=True)) == [
-        screenshot.id
+        screenshot.id for screenshot in screenshots
     ]
     assert list(level.files.values_list("file__id", flat=True)) == [file.id]
     assert level.last_file.file.id == file.id
