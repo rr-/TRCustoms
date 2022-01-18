@@ -50,11 +50,11 @@ interface Level {
   difficulty: LevelDifficulty;
   duration: LevelDuration;
   download_count: number;
+  cover: UploadedFile;
+  media: Medium[];
 }
 
 interface LevelFull extends Level {
-  cover: UploadedFile;
-  media: Medium[];
   trle_id: number | null;
   files: LevelFile[];
   is_approved: boolean;

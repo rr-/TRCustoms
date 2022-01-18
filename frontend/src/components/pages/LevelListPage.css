@@ -2,8 +2,8 @@
   display: grid;
   grid-template-areas:
     "search search"
-    "results sidebar ";
-  grid-template-columns: 6fr min-content;
+    "sidebar results";
+  grid-template-columns: min-content 6fr;
   grid-template-rows: min-content 1fr;
   gap: 0 2rem;
 }

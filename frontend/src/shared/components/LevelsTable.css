@@ -1,19 +1,21 @@
-.LevelsTable--created,
-.LevelsTable--updated,
-.LevelsTable--size {
-  white-space: nowrap;
+.LevelsTable thead {
+  display: none;
 }
-.LevelsTable--name {
-  width: 50%;
+.DataTable .LevelsTable--image,
+.DataTable .LevelsTable--details {
+  padding-bottom: 1rem;
 }
-.LevelsTable--genres,
-.LevelsTable--authors {
-  width: 25%;
+.LevelsTable--image,
+.LevelsTable--details {
+  vertical-align: middle;
 }
-.LevelsTable--engine,
-.LevelsTable--created,
-.LevelsTable--updated,
-.LevelsTable--size,
-.LevelsTable--download {
-  width: 5%;
+.LevelsTable--details small {
+  line-height: 1.2rem;
+  display: inline-block;
+}
+.LevelsTable--details {
+  width: 100%;
+}
+.LevelsTable .MediumThumbnail--thumb {
+  max-height: 8rem;
 }
