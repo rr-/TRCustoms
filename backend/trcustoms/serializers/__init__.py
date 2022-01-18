@@ -24,6 +24,7 @@ from .level_reviews import (
 )
 from .level_screenshots import LevelScreenshotSerializer
 from .level_tags import (
+    LevelTagDetailsSerializer,
     LevelTagListingSerializer,
     LevelTagNestedSerializer,
     LevelTagSnapshotSerializer,
@@ -66,6 +67,7 @@ __all__ = [
     "LevelReviewSnapshotSerializer",
     "LevelScreenshotSerializer",
     "LevelSnapshotSerializer",
+    "LevelTagDetailsSerializer",
     "LevelTagListingSerializer",
     "LevelTagNestedSerializer",
     "LevelTagSnapshotSerializer",

@@ -2,6 +2,7 @@ import "./FilePicker.css";
 import { AxiosError } from "axios";
 import axios from "axios";
 import { uniqueId } from "lodash";
+import { Fragment } from "react";
 import { useCallback } from "react";
 import { useEffect } from "react";
 import { useState } from "react";
@@ -351,9 +352,8 @@ const FilePicker = ({
           />
         ) : null}
         {currentFileIds.map((fileId, position) => (
-          <>
+          <Fragment key={fileId}>
             <FilePickerPreviewWrapper
-              key={fileId}
               position={position}
               allowClear={allowClear}
               clearFile={clearFile}
@@ -372,7 +372,7 @@ const FilePicker = ({
                 onReorder={reorderFiles}
               />
             ) : null}
-          </>
+          </Fragment>
         ))}
       </div>
       {errorMessage && <div className="FormFieldError">{errorMessage}</div>}

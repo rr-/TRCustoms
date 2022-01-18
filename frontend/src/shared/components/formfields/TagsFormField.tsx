@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useContext } from "react";
+import { TagService } from "src/services/tag.service";
 import { TagLite } from "src/services/tag.service";
 import { AutoComplete } from "src/shared/components/AutoComplete";
 import { Pills } from "src/shared/components/Pills";
@@ -25,7 +26,7 @@ const TagsFormField = ({
   const allTags: {
     [tagId: string]: TagLite;
   } = Object.fromEntries(config.tags.map((tag) => [tag.id, tag]));
-  const selectedTags = value.map((tag) => allTags[tag.id]);
+  const selectedTags = [...value];
 
   const onSearchTrigger = (userInput: string) => {
     setSuggestions(
@@ -40,6 +41,14 @@ const TagsFormField = ({
   const onResultApply = (tag: TagLite) =>
     onChange(value.map((t) => t.id).includes(tag.id) ? value : [...value, tag]);
 
+  const onNewResultApply = async (text: string) => {
+    if (value.map((t) => t.name).includes(text)) {
+      return;
+    }
+    const tag = await TagService.create({ name: text });
+    onChange([...value, tag]);
+  };
+
   const removeTag = (tag: TagLite) =>
     onChange(value.filter((t) => t.id !== tag.id));
 
@@ -51,6 +60,7 @@ const TagsFormField = ({
         getResultKey={(tag) => tag.id}
         onSearchTrigger={onSearchTrigger}
         onResultApply={onResultApply}
+        onNewResultApply={onNewResultApply}
       />
       <Pills
         source={selectedTags}
