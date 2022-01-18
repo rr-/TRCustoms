@@ -1,0 +1,11 @@
+.ModerationPage--disclaimer {
+  display: flex;
+  gap: 0.5rem;
+}
+.ModerationPage--disclaimerType {
+  background: var(--label-background-color);
+  padding: 0.25rem;
+}
+.ModerationPage--disclaimerText {
+  padding: 0.25rem 0;
+}

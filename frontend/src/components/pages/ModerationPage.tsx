@@ -1,4 +1,5 @@
-import { ExclamationIcon } from "@heroicons/react/outline";
+import "./ModerationPage.css";
+import { InformationCircleIcon } from "@heroicons/react/outline";
 import { useState } from "react";
 import type { SnapshotSearchQuery } from "src/services/snapshot.service";
 import { SectionHeader } from "src/shared/components/SectionHeader";
@@ -14,23 +15,20 @@ const ModerationPage = () => {
 
   return (
     <div id="ModerationPage">
-      <p>
-        This page lists all actions recently performed by the users. As a
-        moderator, you can review these changes and once you are sure that the
-        change is OK, you can mark it as reviewed by clicking on the "reviewed"
-        button near each item. Clicking on it will make it disappear from this
-        listing only. Trolling attempts need to be dealt with through manual
-        action.
-      </p>
-      <p>
-        <ExclamationIcon className="icon" /> The changes listed here have
-        happened in the past and are already live.
-      </p>
-      <p>
-        <ExclamationIcon className="icon" /> New levels need to be approved
-        separately from the level page. This approval can be reverted at any
-        time.
-      </p>
+      <div className="ModerationPage--disclaimer">
+        <div className="ModerationPage--disclaimerType">
+          <InformationCircleIcon className="icon" />
+        </div>
+        <div className="ModerationPage--disclaimerText">
+          The log contains recent changes made by all users. All these changes
+          are already live.
+          <br />
+          Click "Mark as read" if the change doesn't need further action and can
+          be hidden from everyone's audit log.
+          <br />
+          New levels can be approved on the individual level page.
+        </div>
+      </div>
       <SectionHeader>Recent actions</SectionHeader>
       <SnapshotsTable
         showObjects={true}
