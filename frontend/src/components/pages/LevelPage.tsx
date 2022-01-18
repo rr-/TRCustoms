@@ -77,6 +77,7 @@ const LevelPage = () => {
 
       result.refetch();
       queryClient.removeQueries("levels");
+      queryClient.removeQueries("snapshots");
     } catch (error) {
       if (axios.isAxiosError(error)) {
         const axiosError = error as AxiosError;
