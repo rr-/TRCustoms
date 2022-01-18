@@ -1,4 +1,5 @@
 from django.db import models
+from django.db.models import UniqueConstraint
 
 from trcustoms.models.level import Level
 from trcustoms.models.user import User
@@ -19,3 +20,10 @@ class LevelLegacyReview(DatesInfo):
     rating_atmosphere = models.IntegerField()
     rating_lighting = models.IntegerField()
     text = models.TextField(max_length=5000, null=True, blank=True)
+
+    class Meta:
+        constraints = [
+            UniqueConstraint(
+                "level", "author", name="review_level_author_unique"
+            ),
+        ]
