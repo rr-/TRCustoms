@@ -21,8 +21,12 @@ class LevelTagListingSerializer(serializers.ModelSerializer):
         return instance.level_count
 
 
-@snapshots.register
-class LevelTagSnapshotSerializer(serializers.ModelSerializer):
+class LevelTagDetailsSerializer(LevelTagListingSerializer):
     class Meta:
         model = LevelTag
         fields = ["id", "name", "created", "last_updated"]
+
+
+@snapshots.register
+class LevelTagSnapshotSerializer(LevelTagDetailsSerializer):
+    pass

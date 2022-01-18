@@ -67,9 +67,7 @@ const AutoComplete = <TItem extends Object>({
     const userInput = (event.target as HTMLInputElement).value;
     if (event.keyCode === KEY_RETURN) {
       event.preventDefault();
-      if (suggestions.length) {
-        applyResult(userInput, suggestions[activeResultIdx] || null);
-      }
+      applyResult(userInput, suggestions[activeResultIdx] || null);
     } else if (suggestions.length) {
       if (event.keyCode === KEY_UP) {
         if (activeResultIdx - 1 > 0) {
