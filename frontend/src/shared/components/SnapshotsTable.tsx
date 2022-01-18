@@ -13,6 +13,7 @@ import { Loader } from "src/shared/components/Loader";
 import { PermissionGuard } from "src/shared/components/PermissionGuard";
 import { PushButton } from "src/shared/components/PushButton";
 import { SnapshotDiffView } from "src/shared/components/SnapshotDiffView";
+import { GenreLink } from "src/shared/components/links/GenreLink";
 import { LevelLink } from "src/shared/components/links/LevelLink";
 import { TagLink } from "src/shared/components/links/TagLink";
 import { UserLink } from "src/shared/components/links/UserLink";
@@ -38,6 +39,16 @@ const SnapshotsTableObjectLink = ({
       return (
         <LevelLink
           level={{
+            id: +snapshot.object_id,
+            name: snapshot.object_name,
+          }}
+        />
+      );
+
+    case SnapshotObjectType.LevelGenre:
+      return (
+        <GenreLink
+          genre={{
             id: +snapshot.object_id,
             name: snapshot.object_name,
           }}

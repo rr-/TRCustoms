@@ -146,7 +146,7 @@ class LevelDurationAdmin(admin.ModelAdmin):
 
 
 @admin.register(LevelGenre)
-class LevelGenreAdmin(admin.ModelAdmin):
+class LevelGenreAdmin(SnapshotAdminMixin, admin.ModelAdmin):
     ordering = ["name"]
     search_fields = ["name"]
     readonly_fields = ["created", "last_updated"]
