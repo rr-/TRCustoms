@@ -62,7 +62,7 @@ const UserForm = ({ user, onGoBack, onSubmit }: UserFormProps) => {
           bio: data?.bio,
           picture_id: data?.picture,
         };
-        if (filterFalsyObjectValues(errors).length) {
+        if (Object.keys(filterFalsyObjectValues(errors)).length) {
           setErrors(errors);
         } else {
           console.error(error);

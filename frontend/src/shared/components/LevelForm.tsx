@@ -132,7 +132,7 @@ const LevelForm = ({ level, onGoBack, onSubmit }: LevelFormProps) => {
           screenshot_ids: data?.screenshot_ids,
           file_id: data?.file_id,
         };
-        if (filterFalsyObjectValues(errors).length) {
+        if (Object.keys(filterFalsyObjectValues(errors)).length) {
           setErrors(errors);
           setStatus({ error: <>Please review the errors above.</> });
         } else {
