@@ -108,7 +108,7 @@ const SnapshotsTable = ({
               disableTimeout={true}
               onClick={() => approveSnapshot(snapshot)}
             >
-              Reviewed
+              Mark as read
             </PushButton>
           </PermissionGuard>
         ) : (
