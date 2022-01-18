@@ -86,7 +86,7 @@ const formatDiff = (item: DiffItem): React.ReactNode | null => {
     return `Updated the ${matches?.[1]} rating (${item.old} → ${item.new})`;
   }
 
-  if (item.path?.[0] === "screenshots") {
+  if (item.path?.[0] === "screenshots" || item.path?.[0] === "media") {
     if (item.diff_type === DiffType.Updated && item.path?.[2] === "position") {
       return (
         <>
