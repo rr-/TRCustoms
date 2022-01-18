@@ -7,13 +7,13 @@ from rest_framework import serializers
 from trcustoms.models import UploadedFile, User
 
 
-class UserLiteSerializer(serializers.ModelSerializer):
+class UserNestedSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ["id", "username", "first_name", "last_name"]
 
 
-class UserSerializer(serializers.ModelSerializer):
+class UserListingSerializer(serializers.ModelSerializer):
     has_picture = serializers.SerializerMethodField(read_only=True)
     old_password = serializers.CharField(write_only=True, required=False)
     authored_level_count = serializers.SerializerMethodField(read_only=True)
@@ -70,6 +70,17 @@ class UserSerializer(serializers.ModelSerializer):
         required=False, validators=[MaxLengthValidator(5000)], allow_blank=True
     )
 
+    def get_has_picture(self, instance: User) -> bool:
+        return bool(instance.picture)
+
+    def get_authored_level_count(self, instance: User) -> int:
+        return instance.authored_level_count
+
+    def get_reviewed_level_count(self, instance: User) -> int:
+        return instance.reviewed_level_count
+
+
+class UserDetailsSerializer(UserListingSerializer):
     def validate_username(self, value):
         if (
             (user := User.objects.filter(username__iexact=value).first())
@@ -167,12 +178,3 @@ class UserSerializer(serializers.ModelSerializer):
         user.save()
 
         return User.objects.with_counts().get(pk=user.pk)
-
-    def get_has_picture(self, instance: User) -> bool:
-        return bool(instance.picture)
-
-    def get_authored_level_count(self, instance: User) -> int:
-        return instance.authored_level_count
-
-    def get_reviewed_level_count(self, instance: User) -> int:
-        return instance.reviewed_level_count

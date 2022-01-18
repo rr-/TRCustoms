@@ -13,7 +13,10 @@ from trcustoms.permissions import (
     HasPermission,
     IsAccessingOwnResource,
 )
-from trcustoms.serializers import LevelFullSerializer, LevelLiteSerializer
+from trcustoms.serializers import (
+    LevelDetailsSerializer,
+    LevelListingSerializer,
+)
 from trcustoms.snapshots import make_level_snapshot
 from trcustoms.utils import parse_bool, parse_ids, stream_file_field
 
@@ -57,12 +60,12 @@ class LevelViewSet(
         .distinct()
     )
 
-    serializer_class = LevelLiteSerializer
+    serializer_class = LevelListingSerializer
     serializer_class_by_action = {
-        "retrieve": LevelFullSerializer,
-        "update": LevelFullSerializer,
-        "partial_update": LevelFullSerializer,
-        "create": LevelFullSerializer,
+        "retrieve": LevelDetailsSerializer,
+        "update": LevelDetailsSerializer,
+        "partial_update": LevelDetailsSerializer,
+        "create": LevelDetailsSerializer,
     }
 
     ordering_fields = [

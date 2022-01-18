@@ -8,14 +8,14 @@ from trcustoms.mixins import PermissionsMixin
 from trcustoms.models import Level, Snapshot
 from trcustoms.models.user import UserPermission
 from trcustoms.permissions import AllowNone, HasPermission
-from trcustoms.serializers import SnapshotSerializer
+from trcustoms.serializers import SnapshotListingSerializer
 from trcustoms.utils import parse_bool, parse_id
 
 
 class SnapshotViewSet(
     PermissionsMixin, mixins.ListModelMixin, viewsets.GenericViewSet
 ):
-    serializer_class = SnapshotSerializer
+    serializer_class = SnapshotListingSerializer
 
     permission_classes = [AllowNone]
     permission_classes_by_action = {

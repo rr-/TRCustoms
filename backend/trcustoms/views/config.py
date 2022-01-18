@@ -11,11 +11,11 @@ from trcustoms.models import (
     LevelTag,
 )
 from trcustoms.serializers import (
-    LevelDifficultyLiteSerializer,
-    LevelDurationLiteSerializer,
-    LevelEngineLiteSerializer,
-    LevelGenreLiteSerializer,
-    LevelTagLiteSerializer,
+    LevelDifficultyListingSerializer,
+    LevelDurationListingSerializer,
+    LevelEngineListingSerializer,
+    LevelGenreListingSerializer,
+    LevelTagListingSerializer,
 )
 
 
@@ -23,24 +23,24 @@ class ConfigViewSet(viewsets.ViewSet):
     permission_classes = [AllowAny]
 
     def list(self, request) -> Response:
-        level_tags = LevelTag.objects.all()
-        level_genres = LevelGenre.objects.all()
-        level_engines = LevelEngine.objects.all()
+        level_tags = LevelTag.objects.with_counts()
+        level_genres = LevelGenre.objects.with_counts()
+        level_engines = LevelEngine.objects.with_counts()
         level_difficulties = LevelDifficulty.objects.all()
         level_durations = LevelDuration.objects.all()
         return Response(
             {
-                "tags": LevelTagLiteSerializer(level_tags, many=True).data,
-                "genres": LevelGenreLiteSerializer(
+                "tags": LevelTagListingSerializer(level_tags, many=True).data,
+                "genres": LevelGenreListingSerializer(
                     level_genres, many=True
                 ).data,
-                "engines": LevelEngineLiteSerializer(
+                "engines": LevelEngineListingSerializer(
                     level_engines, many=True
                 ).data,
-                "difficulties": LevelDifficultyLiteSerializer(
+                "difficulties": LevelDifficultyListingSerializer(
                     level_difficulties, many=True
                 ).data,
-                "durations": LevelDurationLiteSerializer(
+                "durations": LevelDurationListingSerializer(
                     level_durations, many=True
                 ).data,
                 "limits": {

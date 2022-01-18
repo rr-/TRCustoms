@@ -3,13 +3,13 @@ from rest_framework import serializers
 from trcustoms.models import LevelGenre
 
 
-class LevelGenreLiteSerializer(serializers.ModelSerializer):
+class LevelGenreNestedSerializer(serializers.ModelSerializer):
     class Meta:
         model = LevelGenre
-        fields = ["id", "name", "description"]
+        fields = ["id", "name"]
 
 
-class LevelGenreFullSerializer(serializers.ModelSerializer):
+class LevelGenreListingSerializer(serializers.ModelSerializer):
     level_count = serializers.SerializerMethodField(read_only=True)
 
     class Meta:

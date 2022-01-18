@@ -7,7 +7,7 @@ from rest_framework.response import Response
 
 from trcustoms.mixins import PermissionsMixin
 from trcustoms.models import UploadedFile
-from trcustoms.serializers import UploadedFileSerializer
+from trcustoms.serializers import UploadedFileDetailsSerializer
 from trcustoms.utils import stream_file_field
 
 
@@ -22,7 +22,9 @@ class UploadViewSet(PermissionsMixin, viewsets.GenericViewSet):
 
     def create(self, request) -> Response:
         uploaded_file = UploadedFile(uploader=request.user)
-        serializer = UploadedFileSerializer(uploaded_file, data=request.data)
+        serializer = UploadedFileDetailsSerializer(
+            uploaded_file, data=request.data
+        )
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status.HTTP_200_OK)
@@ -31,7 +33,8 @@ class UploadViewSet(PermissionsMixin, viewsets.GenericViewSet):
     def retrieve(self, request, pk) -> Response:
         uploaded_file = get_object_or_404(UploadedFile, pk=pk)
         return Response(
-            UploadedFileSerializer(uploaded_file).data, status.HTTP_200_OK
+            UploadedFileDetailsSerializer(uploaded_file).data,
+            status.HTTP_200_OK,
         )
 
     @action(detail=True)

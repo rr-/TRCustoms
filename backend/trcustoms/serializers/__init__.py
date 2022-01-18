@@ -1,30 +1,59 @@
-from .level_difficulties import LevelDifficultyLiteSerializer
-from .level_durations import LevelDurationLiteSerializer
-from .level_engines import LevelEngineFullSerializer, LevelEngineLiteSerializer
-from .level_genres import LevelGenreFullSerializer, LevelGenreLiteSerializer
+from .level_difficulties import (
+    LevelDifficultyListingSerializer,
+    LevelDifficultyNestedSerializer,
+)
+from .level_durations import (
+    LevelDurationListingSerializer,
+    LevelDurationNestedSerializer,
+)
+from .level_engines import (
+    LevelEngineListingSerializer,
+    LevelEngineNestedSerializer,
+)
+from .level_genres import (
+    LevelGenreListingSerializer,
+    LevelGenreNestedSerializer,
+)
 from .level_media import LevelMediumSerializer
-from .level_reviews import LevelLegacyReviewSerializer
-from .level_tags import LevelTagFullSerializer, LevelTagLiteSerializer
-from .levels import LevelFullSerializer, LevelLiteSerializer
-from .snapshots import SnapshotSerializer
-from .uploaded_files import UploadedFileSerializer
-from .users import UserLiteSerializer, UserSerializer
+from .level_reviews import LevelReviewListingSerializer
+from .level_tags import LevelTagListingSerializer, LevelTagNestedSerializer
+from .levels import (
+    LevelDetailsSerializer,
+    LevelListingSerializer,
+    LevelNestedSerializer,
+)
+from .snapshots import SnapshotListingSerializer
+from .uploaded_files import (
+    UploadedFileDetailsSerializer,
+    UploadedFileNestedSerializer,
+)
+from .users import (
+    UserDetailsSerializer,
+    UserListingSerializer,
+    UserNestedSerializer,
+)
 
 __all__ = [
-    "LevelDifficultyLiteSerializer",
-    "LevelDurationLiteSerializer",
-    "LevelEngineFullSerializer",
-    "LevelEngineLiteSerializer",
-    "LevelFullSerializer",
-    "LevelGenreFullSerializer",
-    "LevelGenreLiteSerializer",
-    "LevelLegacyReviewSerializer",
-    "LevelLiteSerializer",
+    "LevelDetailsSerializer",
+    "LevelDifficultyListingSerializer",
+    "LevelDifficultyNestedSerializer",
+    "LevelDurationListingSerializer",
+    "LevelDurationNestedSerializer",
+    "LevelEngineListingSerializer",
+    "LevelEngineNestedSerializer",
+    "LevelGenreListingSerializer",
+    "LevelGenreNestedSerializer",
+    "LevelListingSerializer",
     "LevelMediumSerializer",
-    "LevelTagFullSerializer",
-    "LevelTagLiteSerializer",
-    "SnapshotSerializer",
-    "UploadedFileSerializer",
-    "UserLiteSerializer",
-    "UserSerializer",
+    "LevelNestedSerializer",
+    "LevelNestedSerializer",
+    "LevelReviewListingSerializer",
+    "LevelTagListingSerializer",
+    "LevelTagNestedSerializer",
+    "SnapshotListingSerializer",
+    "UploadedFileDetailsSerializer",
+    "UploadedFileNestedSerializer",
+    "UserDetailsSerializer",
+    "UserListingSerializer",
+    "UserNestedSerializer",
 ]
