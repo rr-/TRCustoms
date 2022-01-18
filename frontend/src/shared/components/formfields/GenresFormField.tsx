@@ -19,7 +19,7 @@ const GenresFormField = ({
   onChange,
   ...props
 }: GenresFormFieldProps) => {
-  const config = useContext(ConfigContext);
+  const { config } = useContext(ConfigContext);
   const genreMap: { [genreId: string]: GenreLite } = Object.fromEntries(
     config.genres.map(({ id, ...rest }) => [id, { id, ...rest }])
   );

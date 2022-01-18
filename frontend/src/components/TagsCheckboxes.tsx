@@ -3,7 +3,7 @@ import { CheckboxArrayFormField } from "src/shared/components/formfields/Checkbo
 import { ConfigContext } from "src/shared/contexts/ConfigContext";
 
 const TagsCheckboxes = () => {
-  const config = useContext(ConfigContext);
+  const { config } = useContext(ConfigContext);
   const source: { value: number; label: string }[] = config.tags.map((tag) => ({
     value: tag.id,
     label: tag.name,

@@ -20,19 +20,18 @@ const TagsFormField = ({
   onChange,
   ...props
 }: TagsFormFieldProps) => {
-  const config = useContext(ConfigContext);
+  const { config, refetchConfig } = useContext(ConfigContext);
   const [suggestions, setSuggestions] = useState<TagLite[]>([]);
 
-  const allTags: {
-    [tagId: string]: TagLite;
-  } = Object.fromEntries(config.tags.map((tag) => [tag.id, tag]));
-  const selectedTags = [...value];
-
   const onSearchTrigger = (userInput: string) => {
+    const allTags: {
+      [tagId: string]: TagLite;
+    } = Object.fromEntries(config.tags.map((tag) => [tag.id, tag]));
+
     setSuggestions(
       Object.values(allTags).filter(
         (tag) =>
-          selectedTags.every((t) => t.id !== tag.id) &&
+          value.every((t) => t.id !== tag.id) &&
           tag.name.toLowerCase().indexOf(userInput.toLowerCase()) > -1
       )
     );
@@ -47,6 +46,7 @@ const TagsFormField = ({
     }
     const tag = await TagService.create({ name: text });
     onChange([...value, tag]);
+    await refetchConfig();
   };
 
   const removeTag = (tag: TagLite) =>
@@ -63,7 +63,7 @@ const TagsFormField = ({
         onNewResultApply={onNewResultApply}
       />
       <Pills
-        source={selectedTags}
+        source={value}
         getKey={(tag) => tag.id}
         getText={(tag) => tag.name}
         onRemove={removeTag}
