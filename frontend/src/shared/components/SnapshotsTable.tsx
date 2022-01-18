@@ -76,6 +76,17 @@ const SnapshotsTableObjectLink = ({
         />
       );
 
+    case SnapshotObjectType.LevelReview:
+      return (
+        <LevelLink
+          level={{
+            id: snapshot.object_desc.level.id,
+            name: snapshot.object_desc.level.name,
+          }}
+          label={`Review for ${snapshot.object_desc.level.name}`}
+        />
+      );
+
     case SnapshotObjectType.LevelDuration:
       return <>{`Duration ${snapshot.object_name}`}</>;
 

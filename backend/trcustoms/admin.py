@@ -221,7 +221,7 @@ class LevelFileAdmin(admin.ModelAdmin):
 
 
 @admin.register(LevelLegacyReview)
-class LevelLegacyReviewAdmin(admin.ModelAdmin):
+class LevelLegacyReviewAdmin(SnapshotAdminMixin, admin.ModelAdmin):
     ordering = ["level__name"]
     list_display = [
         "id",

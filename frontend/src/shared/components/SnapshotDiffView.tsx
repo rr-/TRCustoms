@@ -33,8 +33,16 @@ const formatDiff = (item: DiffItem): React.ReactNode | null => {
     }
   }
 
-  if (item.path?.[0] === "description") {
-    return "Updated the description";
+  for (let path of ["description", "text"]) {
+    if (item.path?.[0] === path) {
+      return `Updated the ${path}`;
+    }
+  }
+
+  for (let path of ["name"]) {
+    if (item.path?.[0] === path) {
+      return `Updated the ${path} (${item.old} → ${item.new})`;
+    }
   }
 
   if (item.path?.[0] === "authors") {
@@ -55,13 +63,27 @@ const formatDiff = (item: DiffItem): React.ReactNode | null => {
     }
   }
 
-  for (let path of ["engine", "difficulty", "duration"]) {
+  for (let path of ["engine", "difficulty", "duration", "level"]) {
     if (item.path?.[0] === path) {
       if (item.path?.[1] === "name") {
-        return `Updated the ${path} to ${item.new}`;
+        return `Updated the ${path} (${item.old} → ${item.new})`;
       }
       return null;
     }
+  }
+
+  for (let path of ["author", "uploader"]) {
+    if (item.path?.[0] === path) {
+      if (item.path?.[1] === "username") {
+        return `Updated the ${path} (${item.old} → ${item.new})`;
+      }
+      return null;
+    }
+  }
+
+  let matches = item.path?.[0]?.match(/rating_(\w+)/);
+  if (matches) {
+    return `Updated the ${matches?.[1]} rating (${item.old} → ${item.new})`;
   }
 
   if (item.path?.[0] === "screenshots") {

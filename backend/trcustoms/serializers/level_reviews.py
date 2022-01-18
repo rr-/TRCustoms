@@ -1,5 +1,6 @@
 from rest_framework import serializers
 
+from trcustoms import snapshots
 from trcustoms.models import LevelLegacyReview
 from trcustoms.serializers.levels import LevelNestedSerializer
 from trcustoms.serializers.users import UserNestedSerializer
@@ -23,3 +24,8 @@ class LevelReviewListingSerializer(serializers.ModelSerializer):
             "created",
             "last_updated",
         ]
+
+
+@snapshots.register(name_getter=lambda review: review.level.name)
+class LevelReviewSnapshotSerializer(LevelReviewListingSerializer):
+    pass
