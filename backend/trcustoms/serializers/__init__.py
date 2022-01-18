@@ -18,7 +18,10 @@ from .level_genres import (
     LevelGenreNestedSerializer,
     LevelGenreSnapshotSerializer,
 )
-from .level_reviews import LevelReviewListingSerializer
+from .level_reviews import (
+    LevelReviewListingSerializer,
+    LevelReviewSnapshotSerializer,
+)
 from .level_screenshots import LevelScreenshotSerializer
 from .level_tags import (
     LevelTagListingSerializer,
@@ -60,6 +63,7 @@ __all__ = [
     "LevelNestedSerializer",
     "LevelNestedSerializer",
     "LevelReviewListingSerializer",
+    "LevelReviewSnapshotSerializer",
     "LevelScreenshotSerializer",
     "LevelSnapshotSerializer",
     "LevelTagListingSerializer",

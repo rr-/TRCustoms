@@ -34,6 +34,7 @@ enum SnapshotObjectType {
   LevelTag = "leveltag",
   LevelDuration = "levelduration",
   LevelDifficulty = "leveldifficulty",
+  LevelReview = "levellegacyreview",
 }
 
 interface Snapshot {
@@ -42,7 +43,7 @@ interface Snapshot {
   object_id: string;
   object_name: string;
   object_type: SnapshotObjectType;
-  object_desc: Object;
+  object_desc: any;
   change_author: UserLite | null;
   change_type: SnapshotChangeType;
   diff: DiffItem[];
