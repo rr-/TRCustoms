@@ -1,13 +1,13 @@
 from rest_framework import serializers
 
 from trcustoms.models import Snapshot
-from trcustoms.serializers.users import UserLiteSerializer
+from trcustoms.serializers.users import UserNestedSerializer
 
 
-class SnapshotSerializer(serializers.ModelSerializer):
+class SnapshotListingSerializer(serializers.ModelSerializer):
     object_type = serializers.SerializerMethodField(read_only=True)
-    change_author = UserLiteSerializer(read_only=True)
-    reviewer = UserLiteSerializer(read_only=True)
+    change_author = UserNestedSerializer(read_only=True)
+    reviewer = UserNestedSerializer(read_only=True)
 
     class Meta:
         model = Snapshot

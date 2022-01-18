@@ -3,13 +3,13 @@ from rest_framework import serializers
 from trcustoms.models import LevelTag
 
 
-class LevelTagLiteSerializer(serializers.ModelSerializer):
+class LevelTagNestedSerializer(serializers.ModelSerializer):
     class Meta:
         model = LevelTag
         fields = ["id", "name"]
 
 
-class LevelTagFullSerializer(serializers.ModelSerializer):
+class LevelTagListingSerializer(serializers.ModelSerializer):
     level_count = serializers.SerializerMethodField(read_only=True)
 
     class Meta:

@@ -2,7 +2,7 @@ from rest_framework import mixins, viewsets
 from rest_framework.permissions import AllowAny
 
 from trcustoms.models import LevelLegacyReview
-from trcustoms.serializers import LevelLegacyReviewSerializer
+from trcustoms.serializers import LevelReviewListingSerializer
 from trcustoms.utils import parse_ids
 
 
@@ -12,7 +12,7 @@ class LevelReviewViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
         "author",
         "level",
     )
-    serializer_class = LevelLegacyReviewSerializer
+    serializer_class = LevelReviewListingSerializer
     search_fields = [
         "level__name",
         "author__username",

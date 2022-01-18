@@ -17,7 +17,39 @@ CONTENT_TYPE_MAP = {
 }
 
 
-class UploadedFileSerializer(serializers.ModelSerializer):
+class UploadedFileNestedSerializer(serializers.ModelSerializer):
+    url = serializers.SerializerMethodField(read_only=True)
+    size = serializers.SerializerMethodField(read_only=True)
+    md5sum = serializers.SerializerMethodField(read_only=True)
+
+    class Meta:
+        model = UploadedFile
+        fields = [
+            "id",
+            "content",
+            "upload_type",
+            "url",
+            "size",
+            "md5sum",
+        ]
+
+    def get_url(self, instance) -> str | None:
+        if not instance.content:
+            return None
+        return instance.content.url
+
+    def get_size(self, instance) -> int | None:
+        if not instance.content:
+            return None
+        return instance.content.size
+
+    def get_md5sum(self, instance) -> str | None:
+        if not instance.content:
+            return None
+        return instance.md5sum
+
+
+class UploadedFileDetailsSerializer(serializers.ModelSerializer):
     url = serializers.SerializerMethodField(read_only=True)
     size = serializers.SerializerMethodField(read_only=True)
     md5sum = serializers.SerializerMethodField(read_only=True)

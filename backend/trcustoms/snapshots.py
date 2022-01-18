@@ -7,7 +7,7 @@ from rest_framework import serializers
 from rest_framework.request import Request
 
 from trcustoms.models import DiffItem, DiffType, Level, Snapshot
-from trcustoms.serializers.levels import LevelFullSerializer
+from trcustoms.serializers.levels import LevelDetailsSerializer
 
 
 def transform_for_diff(obj: Any, ignore_fields: list[str]) -> Any:
@@ -178,7 +178,7 @@ def make_level_snapshot(
     make_snapshot(
         obj=level,
         object_name=level.name,
-        serializer_cls=LevelFullSerializer,
+        serializer_cls=LevelDetailsSerializer,
         request=request,
         change_type=change_type,
         ignore_fields=["created", "last_updated"],

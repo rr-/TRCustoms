@@ -1,11 +1,11 @@
 from rest_framework import serializers
 
 from trcustoms.models import LevelMedium
-from trcustoms.serializers.uploaded_files import UploadedFileSerializer
+from trcustoms.serializers.uploaded_files import UploadedFileNestedSerializer
 
 
 class LevelMediumSerializer(serializers.ModelSerializer):
-    file = UploadedFileSerializer(read_only=True)
+    file = UploadedFileNestedSerializer(read_only=True)
 
     class Meta:
         model = LevelMedium

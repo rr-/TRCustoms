@@ -16,15 +16,21 @@ from trcustoms.models import (
     User,
 )
 from trcustoms.serializers.level_difficulties import (
-    LevelDifficultyLiteSerializer,
+    LevelDifficultyNestedSerializer,
 )
-from trcustoms.serializers.level_durations import LevelDurationLiteSerializer
-from trcustoms.serializers.level_engines import LevelEngineLiteSerializer
-from trcustoms.serializers.level_genres import LevelGenreLiteSerializer
+from trcustoms.serializers.level_durations import LevelDurationNestedSerializer
+from trcustoms.serializers.level_engines import LevelEngineNestedSerializer
+from trcustoms.serializers.level_genres import LevelGenreNestedSerializer
 from trcustoms.serializers.level_media import LevelMediumSerializer
-from trcustoms.serializers.level_tags import LevelTagLiteSerializer
-from trcustoms.serializers.uploaded_files import UploadedFileSerializer
-from trcustoms.serializers.users import UserLiteSerializer
+from trcustoms.serializers.level_tags import LevelTagNestedSerializer
+from trcustoms.serializers.uploaded_files import UploadedFileNestedSerializer
+from trcustoms.serializers.users import UserNestedSerializer
+
+
+class LevelNestedSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Level
+        fields = ["id", "name"]
 
 
 class LevelFileSerializer(serializers.ModelSerializer):
@@ -46,27 +52,27 @@ class LevelFileSerializer(serializers.ModelSerializer):
         return None
 
 
-class LevelLiteSerializer(serializers.ModelSerializer):
-    engine = LevelEngineLiteSerializer(read_only=True)
+class LevelListingSerializer(serializers.ModelSerializer):
+    engine = LevelEngineNestedSerializer(read_only=True)
     engine_id = serializers.PrimaryKeyRelatedField(
         write_only=True, source="engine", queryset=LevelEngine.objects.all()
     )
 
-    duration = LevelDurationLiteSerializer(read_only=True)
+    duration = LevelDurationNestedSerializer(read_only=True)
     duration_id = serializers.PrimaryKeyRelatedField(
         write_only=True,
         source="duration",
         queryset=LevelDuration.objects.all(),
     )
 
-    difficulty = LevelDifficultyLiteSerializer(read_only=True)
+    difficulty = LevelDifficultyNestedSerializer(read_only=True)
     difficulty_id = serializers.PrimaryKeyRelatedField(
         write_only=True,
         source="difficulty",
         queryset=LevelDifficulty.objects.all(),
     )
 
-    genres = LevelGenreLiteSerializer(read_only=True, many=True)
+    genres = LevelGenreNestedSerializer(read_only=True, many=True)
     genre_ids = serializers.PrimaryKeyRelatedField(
         write_only=True,
         many=True,
@@ -74,7 +80,7 @@ class LevelLiteSerializer(serializers.ModelSerializer):
         queryset=LevelGenre.objects.all(),
     )
 
-    tags = LevelTagLiteSerializer(read_only=True, many=True)
+    tags = LevelTagNestedSerializer(read_only=True, many=True)
     tag_ids = serializers.PrimaryKeyRelatedField(
         write_only=True,
         many=True,
@@ -82,7 +88,7 @@ class LevelLiteSerializer(serializers.ModelSerializer):
         queryset=LevelTag.objects.all(),
     )
 
-    authors = UserLiteSerializer(read_only=True, many=True)
+    authors = UserNestedSerializer(read_only=True, many=True)
     author_ids = serializers.PrimaryKeyRelatedField(
         write_only=True,
         many=True,
@@ -90,7 +96,7 @@ class LevelLiteSerializer(serializers.ModelSerializer):
         queryset=User.objects.all(),
     )
 
-    uploader = UserLiteSerializer(
+    uploader = UserNestedSerializer(
         read_only=True,
         default=serializers.CreateOnlyDefault(
             serializers.CurrentUserDefault()
@@ -131,8 +137,8 @@ class LevelLiteSerializer(serializers.ModelSerializer):
         ]
 
 
-class LevelFullSerializer(LevelLiteSerializer):
-    cover = UploadedFileSerializer(read_only=True)
+class LevelDetailsSerializer(LevelListingSerializer):
+    cover = UploadedFileNestedSerializer(read_only=True)
     cover_id = serializers.PrimaryKeyRelatedField(
         write_only=True,
         source="cover",
@@ -260,7 +266,7 @@ class LevelFullSerializer(LevelLiteSerializer):
 
     class Meta:
         model = Level
-        fields = LevelLiteSerializer.Meta.fields + [
+        fields = LevelListingSerializer.Meta.fields + [
             "cover",
             "cover_id",
             "media",

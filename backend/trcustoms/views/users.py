@@ -17,7 +17,7 @@ from trcustoms.permissions import (
     HasPermission,
     IsAccessingOwnResource,
 )
-from trcustoms.serializers import UserSerializer
+from trcustoms.serializers import UserDetailsSerializer, UserListingSerializer
 from trcustoms.utils import stream_file_field
 
 
@@ -60,7 +60,7 @@ class UserViewSet(
     ]
 
     queryset = User.objects.with_counts()
-    serializer_class = UserSerializer
+    serializer_class = UserListingSerializer
 
     def get_object(self):
         obj = get_object_or_404(self.get_queryset(), pk=self.kwargs["pk"])
@@ -72,7 +72,7 @@ class UserViewSet(
         user = self.queryset.filter(username__iexact=username).first()
         if not user:
             raise Http404("No user found with this username.")
-        serializer = UserSerializer(user)
+        serializer = UserDetailsSerializer(user)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     @action(detail=False, permission_classes=[IsAuthenticated])
