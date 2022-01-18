@@ -122,7 +122,7 @@ class UserAdmin(BaseUserAdmin):
 
 
 @admin.register(LevelEngine)
-class LevelEngineAdmin(admin.ModelAdmin):
+class LevelEngineAdmin(SnapshotAdminMixin, admin.ModelAdmin):
     ordering = ["name"]
     search_fields = ["name"]
     readonly_fields = ["created", "last_updated"]

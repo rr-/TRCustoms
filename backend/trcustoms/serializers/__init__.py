@@ -9,6 +9,7 @@ from .level_durations import (
 from .level_engines import (
     LevelEngineListingSerializer,
     LevelEngineNestedSerializer,
+    LevelEngineSnapshotSerializer,
 )
 from .level_genres import (
     LevelGenreListingSerializer,
@@ -47,6 +48,7 @@ __all__ = [
     "LevelDurationNestedSerializer",
     "LevelEngineListingSerializer",
     "LevelEngineNestedSerializer",
+    "LevelEngineSnapshotSerializer",
     "LevelGenreListingSerializer",
     "LevelGenreNestedSerializer",
     "LevelGenreSnapshotSerializer",
