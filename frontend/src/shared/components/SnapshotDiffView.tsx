@@ -1,4 +1,5 @@
 import "./SnapshotDiffView.css";
+import { formatLinkType } from "src/services/level.service";
 import type { DiffItem } from "src/services/snapshot.service";
 import type { Snapshot } from "src/services/snapshot.service";
 import { SnapshotChangeType } from "src/services/snapshot.service";
@@ -84,6 +85,31 @@ const formatDiff = (item: DiffItem): React.ReactNode | null => {
   let matches = item.path?.[0]?.match(/rating_(\w+)/);
   if (matches) {
     return `Updated the ${matches?.[1]} rating (${item.old} → ${item.new})`;
+  }
+
+  if (item.path?.[0] === "external_links") {
+    if (item.diff_type === DiffType.Updated && item.path?.[2] === "position") {
+      return (
+        <>
+          Reordered external links ({JSON.stringify(item.old)} →{" "}
+          {JSON.stringify(item.new)})
+        </>
+      );
+    } else if (item.diff_type === DiffType.Added) {
+      return (
+        <>
+          Added external link {item.new?.url} (
+          {formatLinkType(item.new?.link_type)})
+        </>
+      );
+    } else if (item.diff_type === DiffType.Deleted) {
+      return (
+        <>
+          Removed external link {item.old?.url} (
+          {formatLinkType(item.old?.link_type)})
+        </>
+      );
+    }
   }
 
   if (item.path?.[0] === "screenshots" || item.path?.[0] === "media") {

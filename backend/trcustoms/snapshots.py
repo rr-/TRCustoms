@@ -100,6 +100,12 @@ def collect_diff_object(
     if isinstance(obj1, list) and isinstance(obj2, list):
         yield from collect_diff_list(obj1, obj2, path=path)
 
+    elif obj1 is None and isinstance(obj2, list):
+        yield from collect_diff_list([], obj2, path=path)
+
+    elif obj2 is None and isinstance(obj1, list):
+        yield from collect_diff_list(obj1, [], path=path)
+
     elif isinstance(obj1, dict) and isinstance(obj2, dict):
         yield from collect_diff_dict(obj1, obj2, path=path)
 

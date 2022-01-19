@@ -34,8 +34,10 @@ def get(url: str, headers: dict[str, str] | None = None) -> requests.Response:
 
 
 @file_cache("trle_scraper", "head")
-def head(url: str) -> requests.Response:
-    return requests.head(url, timeout=30, verify=False, allow_redirects=True)
+def head(url: str, allow_redirects: bool) -> requests.Response:
+    return requests.head(
+        url, timeout=30, verify=False, allow_redirects=allow_redirects
+    )
 
 
 def strip_tags(value: str) -> str:
@@ -128,6 +130,8 @@ class TRLELevel:
     main_image_url: str
     screenshot_urls: list[str]
     author_ids: list[int]
+    website_url: str | None
+    showcase_urls: list[str]
 
 
 class TRLEScraper:
@@ -275,6 +279,27 @@ class TRLEScraper:
         }
 
         download_url = f"https://www.trle.net/scadm/trle_dl.php?lid={level_id}"
+        website_url = self.get_url_redirect(download_url)
+
+        showcase_urls: list[str] = []
+
+        def process_yt_links(match):
+            if (url := match.group(0)) not in showcase_urls:
+                print(url)
+                showcase_urls.append(url)
+            return ""
+
+        synopsis = re.sub(
+            r"https?://(?:www\.)?"
+            r"(?:youtube\.com|youtu\.be)/"
+            r"(?:v/|/u/\w/|embed/|watch\?)?"
+            r"\??(?:v=)?"
+            r"([^#&?]*).*",
+            process_yt_links,
+            synopsis,
+        )
+        synopsis = synopsis.strip()
+        synopsis = re.sub(r"\n\s*\n\s*\n+", "\n\n", synopsis, flags=re.M)
 
         return TRLELevel(
             level_id=level_id,
@@ -297,6 +322,8 @@ class TRLEScraper:
             main_image_url=main_image_url,
             screenshot_urls=screenshot_urls,
             author_ids=author_ids,
+            website_url=website_url,
+            showcase_urls=showcase_urls,
         )
 
     def fetch_level_walkthrough(
@@ -338,7 +365,7 @@ class TRLEScraper:
             except IndexError:
                 text_node = None
 
-            text = get_inner_html(text_node) if text_node else ""
+            text = get_inner_html(text_node) if text_node is not None else ""
             text = re.sub(
                 re.escape(f'" - <b>{reviewer_name}</b> <small>') + ".*",
                 "",
@@ -416,9 +443,15 @@ class TRLEScraper:
             raise
         return response
 
-    def safe_head(self, url: str) -> requests.Response:
+    def safe_head(
+        self, url: str, allow_redirects: bool = True
+    ) -> requests.Response:
         logger.debug("HEAD %s", url)
-        response = head(url, disable_cache=self.disable_cache)
+        response = head(
+            url,
+            disable_cache=self.disable_cache,
+            allow_redirects=allow_redirects,
+        )
         try:
             response.raise_for_status()
         except Exception:
@@ -439,6 +472,10 @@ class TRLEScraper:
     def is_url_download(self, url) -> bool:
         response = self.safe_head(url)
         return response.headers["Content-Type"].startswith("application/")
+
+    def get_url_redirect(self, url) -> str | None:
+        response = self.safe_head(url, allow_redirects=False)
+        return response.headers.get("Location")
 
     def get_bytes(self, url: str) -> bytes:
         return self.safe_get(url).content

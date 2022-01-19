@@ -2,6 +2,7 @@ from .level import Level
 from .level_difficulty import LevelDifficulty
 from .level_duration import LevelDuration
 from .level_engine import LevelEngine
+from .level_external_link import LevelExternalLink
 from .level_file import LevelFile
 from .level_genre import LevelGenre
 from .level_legacy_review import LevelLegacyReview
@@ -20,6 +21,7 @@ __all__ = [
     "LevelDifficulty",
     "LevelDuration",
     "LevelEngine",
+    "LevelExternalLink",
     "LevelFile",
     "LevelGenre",
     "LevelLegacyReview",

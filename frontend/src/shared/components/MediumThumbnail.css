@@ -18,6 +18,27 @@
   visibility: visible;
 }
 
+.MediumThumbnail:hover {
+  opacity: 0.9;
+}
+
+.MediumThumbnail {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  color: black;
+}
+.MediumThumbnail--overlay {
+  position: absolute;
+  pointer-events: none;
+  filter: drop-shadow(0 0 2px rgba(255, 255, 255, 0.7));
+}
+.MediumThumbnail:hover .MediumThumbnail--overlay {
+  filter: drop-shadow(0 0 4px rgba(255, 255, 255, 0.5))
+    drop-shadow(0 0 2px rgba(255, 255, 255, 0.5));
+}
+
 .MediumThumbnail img {
   display: block;
 }

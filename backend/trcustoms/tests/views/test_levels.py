@@ -2,7 +2,7 @@ import pytest
 from rest_framework import status
 from rest_framework.test import APIClient
 
-from trcustoms.models import Level, UploadedFile
+from trcustoms.models import Level, LevelExternalLink, UploadedFile
 from trcustoms.tests.conftest import (
     DifficultyFactory,
     DurationFactory,
@@ -81,6 +81,18 @@ def test_level_creation_success(
             "cover_id": cover.id,
             "screenshot_ids": [screenshot.id for screenshot in screenshots],
             "file_id": file.id,
+            "external_links": [
+                {
+                    "link_type": "sh",
+                    "url": "https://example.com",
+                    "position": 0,
+                },
+                {
+                    "link_type": "ma",
+                    "url": "http://example.com",
+                    "position": 1,
+                },
+            ],
         },
     )
 
@@ -102,6 +114,19 @@ def test_level_creation_success(
     ]
     assert list(level.files.values_list("file__id", flat=True)) == [file.id]
     assert level.last_file.file.id == file.id
+    assert level.external_links.count() == 2
+    assert level.external_links.all()[0].url == "https://example.com"
+    assert level.external_links.all()[0].position == 0
+    assert (
+        level.external_links.all()[0].link_type
+        == LevelExternalLink.LinkType.SHOWCASE
+    )
+    assert level.external_links.all()[1].url == "http://example.com"
+    assert level.external_links.all()[1].position == 1
+    assert (
+        level.external_links.all()[1].link_type
+        == LevelExternalLink.LinkType.MAIN
+    )
 
 
 @pytest.mark.django_db

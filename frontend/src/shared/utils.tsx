@@ -1,3 +1,5 @@
+import { isString } from "lodash";
+import { isArray } from "lodash";
 import { DISABLE_PAGING } from "src/shared/constants";
 import type { GenericSearchQuery } from "src/shared/types";
 
@@ -140,6 +142,28 @@ const pluralize = (noun: string, count: number) => {
   return count === 1 ? noun : `${noun}s`;
 };
 
+const extractNestedErrorText = (source: any): string[] => {
+  if (isArray(source)) {
+    return source.reduce(
+      (acc: string[], item: any) => [...acc, ...extractNestedErrorText(item)],
+      []
+    );
+  }
+  if (isString(source)) {
+    return [source];
+  }
+  return Object.values(source).reduce(
+    (acc: string[], item: any) => [...acc, ...extractNestedErrorText(item)],
+    []
+  );
+};
+
+const getYoutubeVideoID = (url: string): string | null => {
+  let regExp = /^https?:\/\/(?:www\.)?(?:youtube\.com|youtu\.be)\/(?:v\/|\/u\/\w\/|embed\/|watch\?)?\??(?:v=)?([^#&?]*).*/;
+  let match = url.match(regExp);
+  return match ? match[1] : null;
+};
+
 export {
   pluralize,
   validateRequired,
@@ -155,5 +179,7 @@ export {
   filterFalsyObjectValues,
   getGenericSearchQuery,
   getCurrentSearchParams,
+  extractNestedErrorText,
+  getYoutubeVideoID,
   EMPTY_INPUT_PLACEHOLDER,
 };

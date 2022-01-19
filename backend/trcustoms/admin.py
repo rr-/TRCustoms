@@ -11,6 +11,7 @@ from trcustoms.models import (
     LevelDifficulty,
     LevelDuration,
     LevelEngine,
+    LevelExternalLink,
     LevelFile,
     LevelGenre,
     LevelLegacyReview,
@@ -161,6 +162,11 @@ class LevelTagAdmin(SnapshotAdminMixin, admin.ModelAdmin):
     list_display = ["id", "name", "created", "last_updated"]
 
 
+class LevelExternalLinkInline(admin.StackedInline):
+    model = LevelExternalLink
+    extra = 0
+
+
 @admin.register(Level)
 class LevelAdmin(SnapshotAdminMixin, admin.ModelAdmin):
     ordering = ["-created"]
@@ -186,6 +192,7 @@ class LevelAdmin(SnapshotAdminMixin, admin.ModelAdmin):
     ]
     list_filter = ["genres", "tags"]
     form = LevelForm
+    inlines = [LevelExternalLinkInline]
     readonly_fields = [
         "download_count",
         "created",

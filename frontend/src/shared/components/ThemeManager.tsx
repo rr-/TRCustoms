@@ -10,6 +10,7 @@ interface Theme {
     "background-color": string;
     "input-background-color": string;
     "input-border-color": string;
+    "input-invalid-border-color": string;
     "button-background-color": string;
     "button-text-color": string;
     "button-hovered-background-color": string;
@@ -44,6 +45,7 @@ const themes: Array<Theme> = [
       "background-color": "lemonchiffon",
       "input-background-color": "floralwhite",
       "input-border-color": "var(--button-background-color)",
+      "input-invalid-border-color": "red",
       "button-background-color": "var(--navbar-primary-background-color)",
       "button-text-color": "var(--text-color)",
       "button-hovered-background-color":
@@ -79,6 +81,7 @@ const themes: Array<Theme> = [
       "background-color": "white",
       "input-background-color": "var(--background-color)",
       "input-border-color": "var(--button-background-color)",
+      "input-invalid-border-color": "red",
       "button-background-color": "grey",
       "button-text-color": "white",
       "button-hovered-background-color": "silver",
@@ -113,6 +116,7 @@ const themes: Array<Theme> = [
       "background-color": "#20232e",
       "input-background-color": "#a8c7e0",
       "input-border-color": "var(--button-background-color)",
+      "input-invalid-border-color": "red",
       "button-background-color": "#1e67a1",
       "button-text-color": "white",
       "button-hovered-background-color": "var(--button-background-color)",

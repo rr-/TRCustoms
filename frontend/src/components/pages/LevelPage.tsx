@@ -1,5 +1,6 @@
 import "./LevelPage.css";
 import { DownloadIcon } from "@heroicons/react/outline";
+import { GlobeAltIcon } from "@heroicons/react/outline";
 import { PencilIcon } from "@heroicons/react/outline";
 import { BadgeCheckIcon } from "@heroicons/react/outline";
 import { ExclamationIcon } from "@heroicons/react/outline";
@@ -10,6 +11,7 @@ import { useState } from "react";
 import { useQueryClient } from "react-query";
 import { useQuery } from "react-query";
 import { useParams } from "react-router-dom";
+import { ExternalLinkType } from "src/services/level.service";
 import type { LevelFull } from "src/services/level.service";
 import { LevelService } from "src/services/level.service";
 import type { ReviewSearchQuery } from "src/services/review.service";
@@ -94,6 +96,13 @@ const LevelPage = () => {
 
   const level = result.data;
   const downloadableFiles = level.files.filter((file) => !!file.url);
+  const mainLink =
+    level.external_links.filter(
+      (link) => link.link_type === ExternalLinkType.Main
+    )[0]?.url || null;
+  const showcaseLinks = level.external_links
+    .filter((link) => link.link_type === ExternalLinkType.Showcase)
+    .map((link) => link.url);
 
   const showFileGoneAlert = () =>
     alert("This file is no longer available on our website.");
@@ -133,6 +142,14 @@ const LevelPage = () => {
                   Download
                 </PushButton>
               ) : null}
+              {mainLink && (
+                <PushButton
+                  to={mainLink}
+                  icon={<GlobeAltIcon className="icon" />}
+                >
+                  Website
+                </PushButton>
+              )}
               <PermissionGuard
                 require={UserPermission.editLevels}
                 owningUsers={[
@@ -295,7 +312,10 @@ const LevelPage = () => {
       <div id="LevelPage--main">
         {!!level.screenshots.length && (
           <section id="LevelPage--media">
-            <MediumThumbnails media={level.screenshots} />
+            <MediumThumbnails
+              files={level.screenshots.map((screenshot) => screenshot.file)}
+              links={showcaseLinks}
+            />
           </section>
         )}
 

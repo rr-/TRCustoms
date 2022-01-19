@@ -1,0 +1,41 @@
+.ExternalLinksFormField--entry {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.ExternalLinksFormField--input {
+  border: 2px solid var(--input-border-color);
+  background: var(--input-background-color);
+  line-height: 1.5rem;
+  padding: 0.25rem 0.5rem;
+  font-family: var(--font-family);
+  font-size: var(--font-size);
+  min-width: 15rem;
+  box-sizing: border-box;
+}
+.ExternalLinksFormField--input:focus {
+  outline: 0;
+  border-color: var(--outline-color);
+}
+.ExternalLinksFormField--input:invalid {
+  border-color: var(--input-invalid-border-color);
+}
+
+.ExternalLinksFormField--select {
+  border: 2px solid var(--input-border-color);
+  background: var(--input-background-color);
+  font-family: var(--font-family);
+  font-size: var(--font-size);
+  padding: 0.25rem 0.5rem;
+  line-height: 1.5rem;
+  min-height: 1.5rem;
+  box-sizing: content-box;
+  vertical-align: top;
+}
+.ExternalLinksFormField--select:focus {
+  outline: 0;
+  border-color: var(--outline-color);
+}
+.ExternalLinksFormField--table .PushButton {
+  margin: 0 0.25rem;
+}

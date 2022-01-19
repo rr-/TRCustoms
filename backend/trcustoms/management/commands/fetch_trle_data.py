@@ -20,6 +20,7 @@ from trcustoms.models import (
     LevelDifficulty,
     LevelDuration,
     LevelEngine,
+    LevelExternalLink,
     LevelFile,
     LevelLegacyReview,
     LevelScreenshot,
@@ -157,6 +158,28 @@ def process_level_basic_data(obj_id: int, trle_level: TRLELevel) -> Level:
 
     for user in User.objects.filter(trle_author_id__in=trle_level.author_ids):
         level.authors.add(user)
+
+    external_links: list[str, LevelExternalLink.LinkType] = []
+    if url := trle_level.website_url:
+        external_links.append((url, LevelExternalLink.LinkType.MAIN))
+    for url in trle_level.showcase_urls:
+        external_links.append((url, LevelExternalLink.LinkType.SHOWCASE))
+
+    LevelExternalLink.objects.filter(
+        position__gte=len(external_links)
+    ).delete()
+    for i, (url, link_type) in enumerate(external_links):
+        LevelExternalLink.objects.update_or_create(
+            level=level,
+            url=url,
+            defaults=dict(position=i, link_type=link_type),
+        )
+    for i, (url, link_type) in enumerate(external_links):
+        LevelExternalLink.objects.update_or_create(
+            level=level,
+            position=i,
+            defaults=dict(url=url, link_type=link_type),
+        )
 
     return level
 
