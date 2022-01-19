@@ -263,27 +263,31 @@ const LevelPage = () => {
               <SectionHeader>Version history</SectionHeader>
             </div>
 
-            {level.files
-              .sort((a, b) => b.version - a.version)
-              .map((file) => (
-                <Fragment key={file.id}>
-                  <dt className="LevelPage--fileTableTerm">
-                    {file.url ? (
-                      <PushButton isPlain={true} to={file.url}>
-                        Version {file.version}
-                      </PushButton>
-                    ) : (
-                      <PushButton
-                        isPlain={true}
-                        onClick={() => showFileGoneAlert()}
-                      >
-                        Version {file.version}
-                      </PushButton>
-                    )}
-                  </dt>
-                  <dd>{formatDate(file.created)}</dd>
-                </Fragment>
-              ))}
+            {level.files.length ? (
+              level.files
+                .sort((a, b) => b.version - a.version)
+                .map((file) => (
+                  <Fragment key={file.id}>
+                    <dt className="LevelPage--fileTableTerm">
+                      {file.url ? (
+                        <PushButton isPlain={true} to={file.url}>
+                          Version {file.version}
+                        </PushButton>
+                      ) : (
+                        <PushButton
+                          isPlain={true}
+                          onClick={() => showFileGoneAlert()}
+                        >
+                          Version {file.version}
+                        </PushButton>
+                      )}
+                    </dt>
+                    <dd>{formatDate(file.created)}</dd>
+                  </Fragment>
+                ))
+            ) : (
+              <div>Downloads for this level are not available.</div>
+            )}
           </dl>
         </SidebarBox>
       </aside>
