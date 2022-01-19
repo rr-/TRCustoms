@@ -28,26 +28,26 @@ x-base-trcustoms-backend: &base-trcustoms-backend
   networks:
     - trcustoms
   depends_on:
-    - redis
-    - db
+    - trcustoms-redis
+    - trcustoms-db
 
 services:
-  backend:
+  trcustoms:
     <<: *base-trcustoms-backend
     container_name: trcustoms_dev_backend
     command: dev
 
-  celery:
+  trcustoms-celery:
     <<: *base-trcustoms-backend
     container_name: trcustoms_dev_celery
     command: celery
 
-  celery-beat:
+  trcustoms-celery-beat:
     <<: *base-trcustoms-backend
     container_name: trcustoms_dev_celery_beat
     command: celery-beat
 
-  frontend:
+  trcustoms-frontend:
     <<: *base-trcustoms
     container_name: trcustoms_dev_frontend
     restart: unless-stopped
@@ -62,12 +62,12 @@ services:
     networks:
       - trcustoms
     depends_on:
-      - backend
+      - trcustoms
     command: dev
     ports:
       - '3000:3000'
 
-  db:
+  trcustoms-db:
     <<: *base-trcustoms
     container_name: trcustoms_dev_db
     image: postgres:14.0
@@ -79,7 +79,7 @@ services:
     networks:
       - trcustoms
 
-  redis:
+  trcustoms-redis:
     <<: *base-trcustoms
     container_name: trcustoms_dev_redis
     image: redis:6
@@ -102,7 +102,7 @@ services:
     ports:
       - '${TRCUSTOMS_PORT}:8000'
     depends_on:
-      - backend
+      - trcustoms
 
 networks:
   trcustoms:

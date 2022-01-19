@@ -28,26 +28,26 @@ x-base-trcustoms-backend: &base-trcustoms-backend
   networks:
     - trcustoms
   depends_on:
-    - redis
-    - db
+    - trcustoms-redis
+    - trcustoms-db
 
 services:
-  backend:
+  trcustoms:
     <<: *base-trcustoms-backend
     container_name: trcustoms_prd_backend
     command: uwsgi
 
-  celery:
+  trcustoms-celery:
     <<: *base-trcustoms-backend
     container_name: trcustoms_prd_celery
     command: celery
 
-  celery-beat:
+  trcustoms-celery-beat:
     <<: *base-trcustoms-backend
     container_name: trcustoms_prd_celery_beat
     command: celery-beat
 
-  db:
+  trcustoms-db:
     <<: *base-trcustoms
     container_name: trcustoms_prd_db
     image: postgres:14.0
@@ -59,7 +59,7 @@ services:
     networks:
       - trcustoms
 
-  redis:
+  trcustoms-redis:
     <<: *base-trcustoms
     container_name: trcustoms_prd_redis
     image: redis:6
@@ -68,7 +68,7 @@ services:
     networks:
       - trcustoms
 
-  nginx:
+  trcustoms-nginx:
     <<: *base-trcustoms
     container_name: trcustoms_prd_nginx
     build:
@@ -79,7 +79,7 @@ services:
     ports:
       - '${TRCUSTOMS_PORT}:8000'
     depends_on:
-      - backend
+      - trcustoms
     volumes:
       - ./backend/volumes/django_static:/app/backend/django_static
       - ./backend/volumes/uploads:/app/backend/django_uploads

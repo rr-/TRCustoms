@@ -102,7 +102,7 @@ DATABASES = {
         "NAME": get_setting("POSTGRES_DB"),
         "USER": get_setting("POSTGRES_USER"),
         "PASSWORD": get_setting("POSTGRES_PASSWORD"),
-        "HOST": "db",
+        "HOST": "trcustoms-db",
         "PORT": 5432,
     }
 }
@@ -175,8 +175,8 @@ STATIC_ROOT = BASE_DIR / "django_static"
 MEDIA_URL = "/uploads/"
 MEDIA_ROOT = BASE_DIR / "uploads"
 
-CELERY_BROKER_URL = "redis://redis:6379"
-CELERY_RESULT_BACKEND = "redis://redis:6379"
+CELERY_BROKER_URL = "redis://trcustoms-redis:6379"
+CELERY_RESULT_BACKEND = "redis://trcustoms-redis:6379"
 CELERY_TASK_TRACK_STARTED = True
 CELERY_TASK_TIME_LIMIT = 30 * 60
 CELERY_IMPORTS = ("trcustoms.tasks",)
