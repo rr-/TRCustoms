@@ -21,7 +21,7 @@ def test_level_creation_missing_fields(auth_api_client: APIClient) -> None:
     response = auth_api_client.post("/api/levels/", json={})
     data = response.json()
 
-    assert response.status_code == status.HTTP_400_BAD_REQUEST
+    assert response.status_code == status.HTTP_400_BAD_REQUEST, data
     assert data == {
         "name": ["This field is required."],
         "engine_id": ["This field is required."],
@@ -132,6 +132,7 @@ def test_level_partial_update_success(
 
     data = response.json()
     assert response.status_code == status.HTTP_200_OK, data
+
     out_level = Level.objects.get(id=data["id"])
     assert out_level.name == level.name
     assert out_level.description == level.description

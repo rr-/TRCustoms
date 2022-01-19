@@ -15,8 +15,9 @@ def test_tag_creation_no_auth(
         "name": fake.text.word(),
     }
     response = api_client.post("/api/level_tags/", data=payload)
+    data = response.json()
 
-    assert response.status_code == status.HTTP_401_UNAUTHORIZED
+    assert response.status_code == status.HTTP_401_UNAUTHORIZED, data
 
 
 @pytest.mark.django_db
@@ -30,7 +31,7 @@ def test_tag_creation(
     response = auth_api_client.post("/api/level_tags/", data=payload)
     data = response.json()
 
-    assert response.status_code == status.HTTP_201_CREATED
+    assert response.status_code == status.HTTP_201_CREATED, data
     assert data == {
         "id": any_integer(),
         "name": payload["name"],
@@ -51,7 +52,7 @@ def test_tag_creation_duplicate_name(
     response = auth_api_client.post("/api/level_tags/", data=payload)
     data = response.json()
 
-    assert response.status_code == status.HTTP_400_BAD_REQUEST
+    assert response.status_code == status.HTTP_400_BAD_REQUEST, data
     assert data == {"name": ["Another tag exists with this name."]}
 
 
@@ -67,5 +68,5 @@ def test_tag_creation_duplicate_name_case_sensitivity(
     response = auth_api_client.post("/api/level_tags/", data=payload)
     data = response.json()
 
-    assert response.status_code == status.HTTP_400_BAD_REQUEST
+    assert response.status_code == status.HTTP_400_BAD_REQUEST, data
     assert data == {"name": ["Another tag exists with this name."]}
