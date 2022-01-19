@@ -55,6 +55,7 @@ const TagsFormField = ({
   return (
     <BaseFormField name={name} readonly={readonly} {...props}>
       <AutoComplete
+        maxLength={config.limits.max_tag_length}
         suggestions={suggestions}
         getResultText={(tag) => tag.name}
         getResultKey={(tag) => tag.id}

@@ -1,3 +1,4 @@
+from django.conf import settings
 from rest_framework import serializers
 
 from trcustoms import snapshots
@@ -23,6 +24,11 @@ class LevelTagListingSerializer(serializers.ModelSerializer):
 
 class LevelTagDetailsSerializer(LevelTagListingSerializer):
     def validate_name(self, value):
+        if len(value) > settings.MAX_TAG_LENGTH:
+            raise serializers.ValidationError(
+                "A tag name cannot have more than "
+                f"{settings.MAX_TAG_LENGTH} characters."
+            )
         if LevelTag.objects.filter(name__iexact=value).exists():
             raise serializers.ValidationError(
                 "Another tag exists with this name."

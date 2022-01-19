@@ -7,6 +7,7 @@ import { KEY_UP } from "src/shared/constants";
 import { KEY_DOWN } from "src/shared/constants";
 
 interface AutoCompleteProps<TItem> {
+  maxLength?: number;
   suggestions: TItem[];
   getResultText: (result: TItem) => string;
   getResultKey: (result: TItem) => Key;
@@ -16,6 +17,7 @@ interface AutoCompleteProps<TItem> {
 }
 
 const AutoComplete = <TItem extends Object>({
+  maxLength,
   suggestions,
   getResultText,
   getResultKey,
@@ -123,6 +125,7 @@ const AutoComplete = <TItem extends Object>({
   return (
     <>
       <input
+        maxLength={maxLength}
         className="AutoComplete--input"
         type="text"
         onChange={onChange}

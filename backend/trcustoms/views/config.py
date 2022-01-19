@@ -54,6 +54,7 @@ class ConfigViewSet(viewsets.ViewSet):
                     "max_showcase_links": settings.MAX_SHOWCASE_LINKS,
                     "min_authors": settings.MIN_AUTHORS,
                     "max_authors": settings.MAX_AUTHORS,
+                    "max_tag_length": settings.MAX_TAG_LENGTH,
                 },
             },
             status.HTTP_200_OK,
