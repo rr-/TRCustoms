@@ -37,6 +37,10 @@ class SnapshotViewSet(
         ) is not None:
             queryset = queryset.filter(is_reviewed=is_reviewed)
 
+        queryset = queryset.prefetch_related(
+            "change_author", "reviewer", "object_type"
+        )
+
         return queryset
 
     @action(detail=True, methods=["post"])
