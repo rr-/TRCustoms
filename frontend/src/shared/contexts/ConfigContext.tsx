@@ -21,6 +21,8 @@ const defaultConfig = {
     max_genres: 0,
     min_screenshots: 0,
     max_screenshots: 0,
+    min_showcase_links: 0,
+    max_showcase_links: 0,
     min_authors: 0,
     max_authors: 0,
   },

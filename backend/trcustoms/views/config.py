@@ -50,6 +50,8 @@ class ConfigViewSet(viewsets.ViewSet):
                     "max_tags": settings.MAX_TAGS,
                     "min_screenshots": settings.MIN_SCREENSHOTS,
                     "max_screenshots": settings.MAX_SCREENSHOTS,
+                    "min_showcase_links": settings.MIN_SHOWCASE_LINKS,
+                    "max_showcase_links": settings.MAX_SHOWCASE_LINKS,
                     "min_authors": settings.MIN_AUTHORS,
                     "max_authors": settings.MAX_AUTHORS,
                 },

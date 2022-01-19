@@ -35,6 +35,18 @@ interface LevelDuration {
   name: string;
 }
 
+enum ExternalLinkType {
+  Showcase = "sh",
+  Main = "ma",
+}
+
+interface ExternalLink {
+  id?: number;
+  url: string;
+  position: number;
+  link_type: ExternalLinkType;
+}
+
 interface Level {
   id: number | null;
   name: string;
@@ -52,6 +64,7 @@ interface Level {
   download_count: number;
   cover: UploadedFile;
   screenshots: Screenshot[];
+  external_links: ExternalLink[];
 }
 
 interface LevelFull extends Level {
@@ -159,14 +172,27 @@ const LevelService = {
   disapprove,
 };
 
+const formatLinkType = (linkType: ExternalLinkType): string => {
+  switch (linkType) {
+    case ExternalLinkType.Showcase:
+      return "Showcase";
+    case ExternalLinkType.Main:
+      return "Main";
+  }
+};
+
 export type {
   Level,
   LevelFull,
   LevelList,
+  LevelFile,
+  LevelDifficulty,
+  LevelDuration,
+  ExternalLink,
   LevelSearchQuery,
   LevelSearchResult,
   Screenshot,
   ScreenshotList,
 };
 
-export { LevelService };
+export { ExternalLinkType, LevelService, formatLinkType };

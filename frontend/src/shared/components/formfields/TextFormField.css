@@ -12,3 +12,6 @@
   outline: 0;
   border-color: var(--outline-color);
 }
+.TextFormField--input:invalid {
+  border-color: var(--input-invalid-border-color);
+}

@@ -57,6 +57,7 @@ class LevelViewSet(
             "last_file__file",
             "screenshots",
             "screenshots__file",
+            "external_links",
             "cover",
         )
         .distinct()

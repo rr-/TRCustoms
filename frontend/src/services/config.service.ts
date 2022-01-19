@@ -15,6 +15,8 @@ interface Config {
     max_genres: number;
     min_screenshots: number;
     max_screenshots: number;
+    min_showcase_links: number;
+    max_showcase_links: number;
     min_authors: number;
     max_authors: number;
   };

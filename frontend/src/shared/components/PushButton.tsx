@@ -6,6 +6,7 @@ import { Link } from "react-router-dom";
 interface PushButtonProps {
   to?: string | null;
   disableTimeout?: boolean;
+  disabled?: boolean;
   isPlain?: boolean;
   onClick?: () => void;
   icon?: React.ReactElement | null;
@@ -19,9 +20,10 @@ const PushButton = ({
   isPlain,
   icon,
   children,
+  disabled,
 }: PushButtonProps) => {
   const [timer, setTimer] = useState<number | null>(null);
-  const [isDisabled, setIsDisabled] = useState(false);
+  const [isDisabled, setIsDisabled] = useState(disabled);
 
   useEffect(() => {
     return () => {
@@ -38,7 +40,7 @@ const PushButton = ({
       return;
     }
     if (!disableTimeout) {
-      setIsDisabled(true);
+      setIsDisabled(disabled);
       setTimer(window.setTimeout(() => setIsDisabled(false), 5000));
     }
     if (onClick) {

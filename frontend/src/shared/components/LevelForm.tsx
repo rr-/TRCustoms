@@ -7,6 +7,8 @@ import { useCallback } from "react";
 import { useQueryClient } from "react-query";
 import { UploadType } from "src/services/file.service";
 import { GenreLite } from "src/services/genre.service";
+import type { ExternalLink } from "src/services/level.service";
+import { ExternalLinkType } from "src/services/level.service";
 import type { LevelFull } from "src/services/level.service";
 import { LevelService } from "src/services/level.service";
 import { TagLite } from "src/services/tag.service";
@@ -20,6 +22,7 @@ import { BaseFormField } from "src/shared/components/formfields/BaseFormField";
 import { DifficultyFormField } from "src/shared/components/formfields/DifficultyFormField";
 import { DurationFormField } from "src/shared/components/formfields/DurationFormField";
 import { EngineFormField } from "src/shared/components/formfields/EngineFormField";
+import { ExternalLinksFormField } from "src/shared/components/formfields/ExternalLinksFormField";
 import { GenresFormField } from "src/shared/components/formfields/GenresFormField";
 import { TagsFormField } from "src/shared/components/formfields/TagsFormField";
 import { TextAreaFormField } from "src/shared/components/formfields/TextAreaFormField";
@@ -31,6 +34,7 @@ import { UserContext } from "src/shared/contexts/UserContext";
 import { filterFalsyObjectValues } from "src/shared/utils";
 import { makeSentence } from "src/shared/utils";
 import { validateRequired } from "src/shared/utils";
+import { extractNestedErrorText } from "src/shared/utils";
 import { pluralize } from "src/shared/utils";
 
 interface LevelFormProps {
@@ -62,6 +66,7 @@ const LevelForm = ({ level, onGoBack, onSubmit }: LevelFormProps) => {
     name: level?.name || "",
     description: level?.description || "",
     genres: level ? [...level.genres] : [],
+    external_links: level ? [...level.external_links] : [],
     authors: level ? [...level.authors] : user ? [user] : [],
     tags: level ? [...level.tags] : [],
     engine_id: level?.engine?.id,
@@ -80,6 +85,23 @@ const LevelForm = ({ level, onGoBack, onSubmit }: LevelFormProps) => {
       "genre",
       config.limits.min_genres,
       config.limits.max_genres
+    );
+  };
+
+  const validateExternalLinks = (value: ExternalLink[]): string | null => {
+    return (
+      validateRange(
+        value.filter((link) => link.link_type === ExternalLinkType.Showcase),
+        "showcase link",
+        config.limits.min_showcase_links,
+        config.limits.max_showcase_links
+      ) ||
+      validateRange(
+        value.filter((link) => link.link_type === ExternalLinkType.Main),
+        "main link",
+        0,
+        1
+      )
     );
   };
 
@@ -123,6 +145,7 @@ const LevelForm = ({ level, onGoBack, onSubmit }: LevelFormProps) => {
           name: data?.name,
           description: data?.description,
           genres: data?.genre_ids,
+          external_links: extractNestedErrorText(data?.external_links),
           authors: data?.author_ids,
           tags: data?.tag_ids,
           engine_id: data?.engine_id,
@@ -157,6 +180,9 @@ const LevelForm = ({ level, onGoBack, onSubmit }: LevelFormProps) => {
           duration_id: values.duration_id,
           difficulty_id: values.difficulty_id,
           genre_ids: values.genres.map((genre: GenreLite) => genre.id),
+          external_links: values.external_links.map(
+            (link: ExternalLink, i: number) => ({ ...link, position: i })
+          ),
           author_ids: values.authors.map((author: UserLite) => author.id),
           tag_ids: values.tags.map((tag: TagLite) => tag.id),
           cover_id: values.cover_id,
@@ -200,6 +226,7 @@ const LevelForm = ({ level, onGoBack, onSubmit }: LevelFormProps) => {
     const validatorMap = {
       name: [validateRequired],
       genres: [validateGenres],
+      external_links: [validateExternalLinks],
       tags: [validateTags],
       authors: [validateAuthors],
       description: [validateRequired],
@@ -289,7 +316,7 @@ const LevelForm = ({ level, onGoBack, onSubmit }: LevelFormProps) => {
                 />
               </FormGridFieldSet>
 
-              <FormGridFieldSet title="Images">
+              <FormGridFieldSet title="Showcase">
                 <BaseFormField
                   required={true}
                   label="Cover image"
@@ -305,6 +332,7 @@ const LevelForm = ({ level, onGoBack, onSubmit }: LevelFormProps) => {
                     }
                   />
                 </BaseFormField>
+
                 <BaseFormField
                   required={config.limits.min_screenshots > 0}
                   label="Screenshots"
@@ -328,6 +356,14 @@ const LevelForm = ({ level, onGoBack, onSubmit }: LevelFormProps) => {
                     }
                   />
                 </BaseFormField>
+
+                <ExternalLinksFormField
+                  required={false}
+                  label="External links"
+                  name="external_links"
+                  value={values.external_links}
+                  setValue={(value) => setFieldValue("external_links", value)}
+                />
               </FormGridFieldSet>
 
               <FormGridFieldSet title="File">

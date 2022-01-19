@@ -1,15 +1,10 @@
 import "./Markdown.css";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
+import { getYoutubeVideoID } from "src/shared/utils";
 
 interface MarkdownProps {
   children: string;
-}
-
-function getYoutubeVideoID(url: string): string | null {
-  var regExp = /^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\?))\??v?=?([^#&?]*).*/;
-  var match = url.match(regExp);
-  return match && match[7].length === 11 ? match[7] : null;
 }
 
 const transformLink = (link: any): any => {
