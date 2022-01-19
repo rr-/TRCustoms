@@ -25,6 +25,7 @@ const defaultConfig = {
     max_showcase_links: 0,
     min_authors: 0,
     max_authors: 0,
+    max_tag_length: 0,
   },
 };
 

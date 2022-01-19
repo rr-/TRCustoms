@@ -19,6 +19,7 @@ interface Config {
     max_showcase_links: number;
     min_authors: number;
     max_authors: number;
+    max_tag_length: number;
   };
 }
 
