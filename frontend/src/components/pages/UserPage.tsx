@@ -1,4 +1,5 @@
 import "./UserPage.css";
+import { PencilIcon } from "@heroicons/react/outline";
 import { useState } from "react";
 import { useQuery } from "react-query";
 import { useParams } from "react-router-dom";
@@ -82,7 +83,10 @@ const UserPage = () => {
               require={UserPermission.editUsers}
               owningUsers={[user]}
             >
-              <PushButton to={`/users/${user.id}/edit`}>
+              <PushButton
+                icon={<PencilIcon className="icon" />}
+                to={`/users/${user.id}/edit`}
+              >
                 Edit profile
               </PushButton>
             </PermissionGuard>

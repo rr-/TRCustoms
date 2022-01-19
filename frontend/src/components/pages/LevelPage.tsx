@@ -1,4 +1,8 @@
 import "./LevelPage.css";
+import { DownloadIcon } from "@heroicons/react/outline";
+import { PencilIcon } from "@heroicons/react/outline";
+import { BadgeCheckIcon } from "@heroicons/react/outline";
+import { ExclamationIcon } from "@heroicons/react/outline";
 import axios from "axios";
 import { AxiosError } from "axios";
 import { Fragment } from "react";
@@ -114,12 +118,19 @@ const LevelPage = () => {
         <SidebarBox
           actions={
             <>
-              {downloadableFiles.length ? (
-                <PushButton target="_blank" to={downloadableFiles[0].url}>
+              {downloadableFiles.length > 0 ? (
+                <PushButton
+                  target="_blank"
+                  to={downloadableFiles[0].url}
+                  icon={<DownloadIcon className="icon" />}
+                >
                   Download ({formatFileSize(downloadableFiles[0].size)})
                 </PushButton>
-              ) : level.files.length ? (
-                <PushButton onClick={() => showFileGoneAlert()}>
+              ) : level.files.length > 0 ? (
+                <PushButton
+                  onClick={() => showFileGoneAlert()}
+                  icon={<DownloadIcon className="icon" />}
+                >
                   Download
                 </PushButton>
               ) : null}
@@ -130,11 +141,23 @@ const LevelPage = () => {
                   ...(level.uploader ? [level.uploader] : []),
                 ]}
               >
-                <PushButton to={`/levels/${levelId}/edit`}>Edit</PushButton>
+                <PushButton
+                  icon={<PencilIcon className="icon" />}
+                  to={`/levels/${levelId}/edit`}
+                >
+                  Edit
+                </PushButton>
               </PermissionGuard>
 
               <PermissionGuard require={UserPermission.editLevels}>
                 <PushButton
+                  icon={
+                    level.is_approved ? (
+                      <ExclamationIcon className="icon" />
+                    ) : (
+                      <BadgeCheckIcon className="icon" />
+                    )
+                  }
                   onClick={() => setLevelApproval(!level.is_approved)}
                 >
                   {level.is_approved ? "Disapprove" : "Approve"}
