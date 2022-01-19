@@ -120,7 +120,6 @@ const LevelPage = () => {
             <>
               {downloadableFiles.length > 0 ? (
                 <PushButton
-                  target="_blank"
                   to={downloadableFiles[0].url}
                   icon={<DownloadIcon className="icon" />}
                 >
@@ -270,7 +269,7 @@ const LevelPage = () => {
                 <Fragment key={file.id}>
                   <dt className="LevelPage--fileTableTerm">
                     {file.url ? (
-                      <PushButton isPlain={true} target="_blank" to={file.url}>
+                      <PushButton isPlain={true} to={file.url}>
                         Version {file.version}
                       </PushButton>
                     ) : (

@@ -2,10 +2,9 @@ import "./PushButton.css";
 import { useEffect } from "react";
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import type { To } from "react-router-dom";
 
 interface PushButtonProps {
-  to?: To | string | null;
+  to?: string | null;
   disableTimeout?: boolean;
   isPlain?: boolean;
   onClick?: () => void;
@@ -18,7 +17,6 @@ const PushButton = ({
   disableTimeout,
   onClick,
   isPlain,
-  target,
   icon,
   children,
 }: PushButtonProps) => {
@@ -50,12 +48,30 @@ const PushButton = ({
     }
   };
 
+  if (to?.includes("://")) {
+    // handle external links
+    return (
+      <a
+        rel="noopener noreferrer"
+        target="_blank"
+        className={`PushButton ${
+          isPlain ? "PushButton--link" : "PushButton--button"
+        }`}
+        onClick={linkClick}
+        onAuxClick={linkClick}
+        href={to}
+      >
+        {icon && <span className="PushButton--icon">{icon}</span>}
+        <span className="PushButton--label">{children}</span>
+      </a>
+    );
+  }
+
   return (
     <Link
       className={`PushButton ${
         isPlain ? "PushButton--link" : "PushButton--button"
       } ${isDisabled && "PushButton--disabled"}`}
-      target={target}
       onClick={linkClick}
       onAuxClick={linkClick}
       to={to || "#"}
