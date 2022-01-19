@@ -136,6 +136,10 @@ class UserDetailsSerializer(UserListingSerializer):
             and not self.instance.check_password(
                 validated_data.get("old_password")
             )
+            and (
+                self.instance.is_active
+                or self.instance.source != User.Source.trle
+            )
         ):
             raise serializers.ValidationError(
                 {"old_password": "Password does not match."}
