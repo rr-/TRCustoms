@@ -9,7 +9,7 @@ interface PushButtonProps {
   disableTimeout?: boolean;
   isPlain?: boolean;
   onClick?: () => void;
-  target?: string;
+  icon?: React.ReactElement | null;
   children: React.ReactNode | string;
 }
 
@@ -19,6 +19,7 @@ const PushButton = ({
   onClick,
   isPlain,
   target,
+  icon,
   children,
 }: PushButtonProps) => {
   const [timer, setTimer] = useState<number | null>(null);
@@ -59,7 +60,8 @@ const PushButton = ({
       onAuxClick={linkClick}
       to={to || "#"}
     >
-      {children}
+      {icon && <span className="PushButton--icon">{icon}</span>}
+      <span className="PushButton--label">{children}</span>
     </Link>
   );
 };
