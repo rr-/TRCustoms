@@ -12,16 +12,21 @@ import { KEY_LEFT } from "src/shared/constants";
 import { KEY_RIGHT } from "src/shared/constants";
 
 interface MediumProps {
+  onClick?: () => void | null;
   file: UploadedFile;
 }
 
-const MediumThumbnail = ({ file }: MediumProps) => {
+const MediumThumbnail = ({ file, onClick }: MediumProps) => {
   const [isActive, setIsActive] = useState<boolean>(false);
   const [elementId] = useState(uniqueId("mediumThumbnail-"));
 
-  const imageClick = useCallback(() => {
-    setIsActive(!isActive);
-  }, [isActive, setIsActive]);
+  const onImageClick = useCallback(() => {
+    if (onClick) {
+      onClick();
+    } else {
+      setIsActive(!isActive);
+    }
+  }, [onClick, isActive, setIsActive]);
 
   const navigate = useCallback(
     (direction) => {
@@ -67,12 +72,12 @@ const MediumThumbnail = ({ file }: MediumProps) => {
         className="MediumThumbnail--thumb"
         tabIndex={1}
         src={file.url}
-        onClick={imageClick}
+        onClick={onImageClick}
       />
       <span
         className={`MediumThumbnail--full ${isActive ? "active" : null}`}
         id={elementId}
-        onClick={imageClick}
+        onClick={onImageClick}
       >
         <PushButton
           isPlain={true}
