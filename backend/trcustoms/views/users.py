@@ -83,3 +83,19 @@ class UserViewSet(
         user = self.queryset.filter(id=self.request.user.id).first()
         serializer = self.get_serializer(user)
         return Response(serializer.data)
+
+    def create(self, request, *args, **kwargs):
+        # Allow acquiring inactive TRLE accounts for new users.
+        kwarg_field: str = self.lookup_url_kwarg or self.lookup_field
+        trle_user = User.objects.filter(
+            username__iexact=request.data.get("username"),
+            is_active=False,
+            source=User.Source.trle,
+        ).first()
+        if trle_user:
+            self.kwargs[kwarg_field] = trle_user.id
+            response = self.update(request, *args, **kwargs)
+            if response.status_code == status.HTTP_200_OK:
+                response.status_code = status.HTTP_201_CREATED
+            return response
+        return super().create(request, *args, **kwargs)
