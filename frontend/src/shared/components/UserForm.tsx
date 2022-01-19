@@ -155,7 +155,7 @@ const UserForm = ({ user, onGoBack, onSubmit }: UserFormProps) => {
 
   return (
     <Formik initialValues={initialValues} validate={validate} onSubmit={submit}>
-      {({ isSubmitting, setFieldValue, status, errors }) =>
+      {({ isSubmitting, setFieldValue, status }) =>
         !user && status?.success ? (
           <div className="FormFieldSuccess">{status.success}</div>
         ) : (
@@ -213,7 +213,7 @@ const UserForm = ({ user, onGoBack, onSubmit }: UserFormProps) => {
                 )}
               </FormGridFieldSet>
 
-              <FormGridButtons status={status} errors={errors}>
+              <FormGridButtons status={status}>
                 <button type="submit" disabled={isSubmitting}>
                   {user ? "Update profile" : "Register"}
                 </button>

@@ -69,14 +69,14 @@ const LoginPage = () => {
     <div className="LoginForm">
       <h1>Login</h1>
       <Formik initialValues={{ username: "", password: "" }} onSubmit={submit}>
-        {({ isSubmitting, status, errors }) => (
+        {({ isSubmitting, status }) => (
           <Form>
             <FormGrid>
               <FormGridFieldSet>
                 <TextFormField label="Username" name="username" />
                 <PasswordFormField label="Password" name="password" />
               </FormGridFieldSet>
-              <FormGridButtons status={status} errors={errors}>
+              <FormGridButtons status={status}>
                 <button type="submit" disabled={isSubmitting}>
                   Log in
                 </button>
