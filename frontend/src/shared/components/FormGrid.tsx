@@ -1,4 +1,6 @@
 import "./FormGrid.css";
+import { useFormikContext } from "formik";
+import { intersection } from "lodash";
 
 interface FormGridProps {
   children: React.ReactNode;
@@ -7,7 +9,6 @@ interface FormGridProps {
 interface FormGridButtonsProps {
   status?: { success?: React.ReactElement; error?: React.ReactElement };
   children: React.ReactNode;
-  errors: any;
 }
 
 interface FormGridFieldSetProps {
@@ -19,15 +20,12 @@ const FormGrid = ({ children }: FormGridProps) => {
   return <div className="FormGrid">{children}</div>;
 };
 
-const FormGridButtons = ({
-  status,
-  children,
-  errors,
-}: FormGridButtonsProps) => {
+const FormGridButtons = ({ status, children }: FormGridButtonsProps) => {
+  const { errors, touched } = useFormikContext();
   return (
     <div className="FormGridButtons">
       <div className="FormGridButtons--status">
-        {Object.keys(errors).length > 0 && (
+        {intersection(Object.keys(errors), Object.keys(touched)).length > 0 && (
           <div className="FormFieldError">Please review the errors above.</div>
         )}
 
