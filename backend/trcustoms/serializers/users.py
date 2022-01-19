@@ -15,8 +15,11 @@ class UserNestedSerializer(serializers.ModelSerializer):
 
 
 class UserListingSerializer(serializers.ModelSerializer):
+    trle_reviewer_id = serializers.ReadOnlyField()
+    trle_author_id = serializers.ReadOnlyField()
+    permissions = serializers.ReadOnlyField()
+    is_active = serializers.ReadOnlyField()
     picture = UploadedFileNestedSerializer(read_only=True)
-    old_password = serializers.CharField(write_only=True, required=False)
     authored_level_count = serializers.SerializerMethodField(read_only=True)
     reviewed_level_count = serializers.SerializerMethodField(read_only=True)
 
@@ -28,8 +31,6 @@ class UserListingSerializer(serializers.ModelSerializer):
             "first_name",
             "last_name",
             "email",
-            "old_password",
-            "password",
             "bio",
             "date_joined",
             "last_login",
@@ -58,8 +59,6 @@ class UserListingSerializer(serializers.ModelSerializer):
         ],
     )
 
-    password = serializers.CharField(write_only=True, required=True)
-
     first_name = serializers.CharField(
         required=False, validators=[MaxLengthValidator(30)], allow_blank=True
     )
@@ -78,6 +77,9 @@ class UserListingSerializer(serializers.ModelSerializer):
 
 
 class UserDetailsSerializer(UserListingSerializer):
+    old_password = serializers.CharField(write_only=True, required=False)
+    password = serializers.CharField(write_only=True, required=True)
+
     picture_id = serializers.PrimaryKeyRelatedField(
         write_only=True,
         required=False,
@@ -118,65 +120,58 @@ class UserDetailsSerializer(UserListingSerializer):
 
         return value
 
+    def validate_password(self, value):
+        try:
+            validate_password(value, user=self.instance)
+        except ValidationError as ex:
+            raise serializers.ValidationError(list(ex.messages))
+        return value
+
+    def validate(self, data):
+        validated_data = super().validate(data)
+
+        if (
+            validated_data.get("password")
+            and self.instance
+            and not self.instance.check_password(
+                validated_data.get("old_password")
+            )
+        ):
+            raise serializers.ValidationError(
+                {"old_password": "Password does not match."}
+            )
+
+        return validated_data
+
     @transaction.atomic
     def update(self, instance, validated_data):
         password = validated_data.pop("password", None)
 
-        super().update(instance, validated_data)
-
-        if password:
-            try:
-                validate_password(password, user=instance)
-            except ValidationError as ex:
-                raise serializers.ValidationError(
-                    {"password": list(ex.messages)}
-                )
-
-            if not instance.check_password(validated_data["old_password"]):
-                raise serializers.ValidationError(
-                    {"old_password": "Password does not match."}
-                )
+        instance = super().update(instance, validated_data)
 
         if password:
             instance.set_password(password)
             instance.save()
-        return instance
+
+        return User.objects.with_counts().get(pk=instance.pk)
 
     @transaction.atomic
     def create(self, validated_data):
-        user = (
-            User.objects.filter(
-                username__iexact=validated_data["username"],
-                is_active=False,
-            )
-            .exclude(source=User.Source.trcustoms)
-            .first()
-        )
+        password = validated_data.pop("password", None)
 
-        if not user:
-            user = User(
-                username=validated_data["username"],
-                source=User.Source.trcustoms,
-                is_active=False,
-            )
+        instance = super().create(validated_data)
 
-        user.first_name = validated_data.get("first_name") or ""
-        user.last_name = validated_data.get("last_name") or ""
-        user.email = validated_data.get("email") or ""
-        user.bio = validated_data.get("bio") or ""
+        if password:
+            instance.set_password(password)
+        instance.is_active = False
+        instance.save()
 
-        try:
-            validate_password(validated_data["password"], user=user)
-        except ValidationError as ex:
-            raise serializers.ValidationError({"password": list(ex.messages)})
-
-        user.set_password(validated_data["password"])
-        user.save()
-
-        return User.objects.with_counts().get(pk=user.pk)
+        return User.objects.with_counts().get(pk=instance.pk)
 
     class Meta:
         model = User
         fields = UserListingSerializer.Meta.fields + [
+            "old_password",
+            "password",
             "picture_id",
         ]

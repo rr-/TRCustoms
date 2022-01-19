@@ -17,7 +17,7 @@ def test_user_creation_missing_fields(api_client: APIClient) -> None:
     response = api_client.post("/api/users/", data={})
     data = response.json()
 
-    assert response.status_code == status.HTTP_400_BAD_REQUEST
+    assert response.status_code == status.HTTP_400_BAD_REQUEST, data
     assert data == {
         "username": ["This field is required."],
         "password": ["This field is required."],
@@ -58,7 +58,7 @@ def test_user_creation_weak_password(
     response = api_client.post("/api/users/", data=payload)
     data = response.json()
 
-    assert response.status_code == status.HTTP_400_BAD_REQUEST
+    assert response.status_code == status.HTTP_400_BAD_REQUEST, data
     assert data == {"password": [expected_message]}
 
 
@@ -78,7 +78,7 @@ def test_user_creation(
     response = api_client.post("/api/users/", data=payload)
     data = response.json()
 
-    assert response.status_code == status.HTTP_201_CREATED
+    assert response.status_code == status.HTTP_201_CREATED, data
     assert data == {
         "id": any_integer(),
         "email": payload["email"],
@@ -97,6 +97,9 @@ def test_user_creation(
         "trle_reviewer_id": None,
     }
 
+    user = User.objects.get(id=data["id"])
+    assert user.check_password(VALID_PASSWORD)
+
 
 @pytest.mark.django_db
 def test_user_creation_duplicate_username_active_user(
@@ -114,7 +117,7 @@ def test_user_creation_duplicate_username_active_user(
     response = api_client.post("/api/users/", data=payload)
     data = response.json()
 
-    assert response.status_code == status.HTTP_400_BAD_REQUEST
+    assert response.status_code == status.HTTP_400_BAD_REQUEST, data
     assert data == {"username": ["Another account exists with this name."]}
 
 
@@ -134,7 +137,7 @@ def test_user_creation_duplicate_username_inactive_user(
     response = api_client.post("/api/users/", data=payload)
     data = response.json()
 
-    assert response.status_code == status.HTTP_400_BAD_REQUEST
+    assert response.status_code == status.HTTP_400_BAD_REQUEST, data
     assert data == {
         "username": [
             "An account with this name is currently awaiting activation."
@@ -158,7 +161,7 @@ def test_user_creation_duplicate_username_case_sensitivity(
     response = api_client.post("/api/users/", data=payload)
     data = response.json()
 
-    assert response.status_code == status.HTTP_400_BAD_REQUEST
+    assert response.status_code == status.HTTP_400_BAD_REQUEST, data
     assert data == {"username": ["Another account exists with this name."]}
 
 
@@ -178,7 +181,7 @@ def test_user_creation_duplicate_email_active_user(
     response = api_client.post("/api/users/", data=payload)
     data = response.json()
 
-    assert response.status_code == status.HTTP_400_BAD_REQUEST
+    assert response.status_code == status.HTTP_400_BAD_REQUEST, data
     assert data == {"email": ["Another account exists with this email."]}
 
 
@@ -198,7 +201,7 @@ def test_user_creation_duplicate_email_inactive_user(
     response = api_client.post("/api/users/", data=payload)
     data = response.json()
 
-    assert response.status_code == status.HTTP_400_BAD_REQUEST
+    assert response.status_code == status.HTTP_400_BAD_REQUEST, data
     assert data == {
         "email": [
             "An account with this email is currently awaiting activation."
@@ -222,7 +225,7 @@ def test_user_creation_duplicate_email_case_sensitivity(
     response = api_client.post("/api/users/", data=payload)
     data = response.json()
 
-    assert response.status_code == status.HTTP_400_BAD_REQUEST
+    assert response.status_code == status.HTTP_400_BAD_REQUEST, data
     assert data == {"email": ["Another account exists with this email."]}
 
 
@@ -246,7 +249,7 @@ def test_user_creation_acquiring_trle_account(
     response = api_client.post("/api/users/", data=payload)
     data = response.json()
 
-    assert response.status_code == status.HTTP_201_CREATED
+    assert response.status_code == status.HTTP_201_CREATED, data
     assert data == {
         "id": any_integer(),
         "email": payload["email"],
@@ -283,10 +286,117 @@ def test_user_creation_spoofing_privileges(
     response = api_client.post("/api/users/", data=payload)
     data = response.json()
 
-    assert response.status_code == status.HTTP_201_CREATED
+    assert response.status_code == status.HTTP_201_CREATED, data
     assert not data["is_active"]
     assert not User.objects.get(id=data["id"]).is_staff
     assert not User.objects.get(id=data["id"]).is_active
+
+
+@pytest.mark.django_db
+def test_user_update_missing_old_password(auth_api_client: APIClient) -> None:
+    """Test that user update refuses to update a user if the user didn't supply
+    the old password.
+    """
+    user = auth_api_client.user
+    payload = {"password": VALID_PASSWORD}
+    response = auth_api_client.patch(f"/api/users/{user.id}/", data=payload)
+    data = response.json()
+
+    assert response.status_code == status.HTTP_400_BAD_REQUEST, data
+    assert data == {"old_password": ["Password does not match."]}
+
+
+@pytest.mark.django_db
+def test_user_update_bad_old_password(
+    auth_api_client: APIClient, fake: Generic
+) -> None:
+    """Test that user update refuses to update a user if the user didn't supply
+    the old password.
+    """
+    user = auth_api_client.user
+    payload = {"old_password": fake.text.word(), "password": VALID_PASSWORD}
+    response = auth_api_client.patch(f"/api/users/{user.id}/", data=payload)
+    data = response.json()
+
+    assert response.status_code == status.HTTP_400_BAD_REQUEST, data
+    assert data == {"old_password": ["Password does not match."]}
+
+
+@pytest.mark.parametrize(
+    "password,expected_message",
+    [
+        ("", "This field may not be blank."),
+        (
+            "T1!",
+            (
+                "This password is too short. "
+                "It must contain at least 7 characters."
+            ),
+        ),
+        ("nodigits!", "Passwords must contain at least one digit."),
+        (
+            "nospecialcharacters123",
+            "Passwords must contain at least one special character.",
+        ),
+    ],
+)
+@pytest.mark.django_db
+def test_user_update_weak_password(
+    auth_api_client: APIClient,
+    password: str,
+    expected_message: str,
+) -> None:
+    """Test that user update refuses to update a user if the password is too
+    weak.
+    """
+    user = auth_api_client.user
+    payload = {"password": password}
+    response = auth_api_client.patch(f"/api/users/{user.id}/", data=payload)
+    data = response.json()
+
+    assert response.status_code == status.HTTP_400_BAD_REQUEST, data
+    assert data == {"password": [expected_message]}
+
+
+@pytest.mark.django_db
+def test_user_update_valid_password(
+    auth_api_client: APIClient, fake: Generic
+) -> None:
+    """Test that user update refuses to update a user if the user didn't supply
+    the old password.
+    """
+    payload = {
+        "old_password": VALID_PASSWORD,
+        "password": VALID_PASSWORD + "2",
+    }
+    user = auth_api_client.user
+    user.set_password(payload["old_password"])
+    user.save()
+    response = auth_api_client.patch(f"/api/users/{user.id}/", data=payload)
+    data = response.json()
+
+    assert response.status_code == status.HTTP_200_OK, data
+    assert User.objects.get(id=data["id"]).check_password(payload["password"])
+
+
+@pytest.mark.django_db
+def test_user_update_spoofing_privileges(auth_api_client: APIClient) -> None:
+    """Test that the serializer does not look at the user-supplied payload when
+    it comes to security information.
+    """
+    payload = {
+        "is_active": False,
+        "is_staff": True,
+    }
+    user = auth_api_client.user
+    response = auth_api_client.patch(f"/api/users/{user.id}/", data=payload)
+    data = response.json()
+
+    assert response.status_code == status.HTTP_200_OK, data
+    assert data["is_active"]
+    user.refresh_from_db()
+    assert user.is_active
+    assert not user.is_staff
 
 
 @pytest.mark.django_db
@@ -295,7 +405,8 @@ def test_user_profile_requires_access(api_client: APIClient) -> None:
     available to unauthenticated users.
     """
     response = api_client.get("/api/users/me/")
-    assert response.status_code == status.HTTP_401_UNAUTHORIZED
+    data = response.json()
+    assert response.status_code == status.HTTP_401_UNAUTHORIZED, data
 
 
 @pytest.mark.django_db
@@ -305,7 +416,7 @@ def test_user_profile(auth_api_client: APIClient) -> None:
     """
     response = auth_api_client.get("/api/users/me/")
     data = response.json()
-    assert response.status_code == status.HTTP_200_OK
+    assert response.status_code == status.HTTP_200_OK, data
     assert "username" in data
 
 
@@ -326,7 +437,7 @@ def test_login_success(
         },
     )
     data = response.json()
-    assert response.status_code == status.HTTP_200_OK
+    assert response.status_code == status.HTTP_200_OK, data
     assert "refresh" in data
 
 
@@ -347,5 +458,5 @@ def test_login_success_case_insensitive(
         },
     )
     data = response.json()
-    assert response.status_code == status.HTTP_200_OK
+    assert response.status_code == status.HTTP_200_OK, data
     assert "refresh" in data
