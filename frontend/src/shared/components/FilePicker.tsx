@@ -227,6 +227,7 @@ const FilePicker = ({
           setCurrentFileIds(newFileIds);
           onChange?.(newFileIds);
         } catch (error) {
+          setPercentCompleted(null);
           handleError(error);
         }
       };
