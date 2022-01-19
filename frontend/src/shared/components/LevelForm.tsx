@@ -230,7 +230,7 @@ const LevelForm = ({ level, onGoBack, onSubmit }: LevelFormProps) => {
       validate={validate}
       onSubmit={submit}
     >
-      {({ isSubmitting, values, setFieldValue, status }) =>
+      {({ isSubmitting, values, setFieldValue, status, errors }) =>
         !level && status?.success ? (
           <div className="FormFieldSuccess">{status.success}</div>
         ) : (
@@ -348,7 +348,7 @@ const LevelForm = ({ level, onGoBack, onSubmit }: LevelFormProps) => {
                 </BaseFormField>
               </FormGridFieldSet>
 
-              <FormGridButtons status={status}>
+              <FormGridButtons status={status} errors={errors}>
                 <button type="submit" disabled={isSubmitting}>
                   {level ? "Update level" : "Create"}
                 </button>
