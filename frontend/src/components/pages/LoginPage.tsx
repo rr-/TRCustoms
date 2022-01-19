@@ -14,6 +14,7 @@ import { FormGridFieldSet } from "src/shared/components/FormGrid";
 import { PasswordFormField } from "src/shared/components/formfields/PasswordFormField";
 import { TextFormField } from "src/shared/components/formfields/TextFormField";
 import { UserContext } from "src/shared/contexts/UserContext";
+import { filterFalsyObjectValues } from "src/shared/utils";
 
 const LoginPage = () => {
   const navigate = useNavigate();
@@ -30,6 +31,7 @@ const LoginPage = () => {
         setSubmitting(false);
         if (axios.isAxiosError(error)) {
           const axiosError = error as AxiosError;
+          const data = axiosError.response?.data;
           if (axiosError.response?.status === 401) {
             let user: User | null = null;
             try {
@@ -44,7 +46,16 @@ const LoginPage = () => {
               setStatus({ error: <>Invalid username or password.</> });
             }
           } else {
-            setStatus({ error: <>Unknown error.</> });
+            const errors = {
+              username: data?.username,
+              password: data?.password,
+            };
+            if (Object.keys(filterFalsyObjectValues(errors)).length) {
+              setErrors(errors);
+            } else {
+              console.error(error);
+              setStatus({ error: <>Unknown error.</> });
+            }
           }
         } else {
           setStatus({ error: <>Unknown error.</> });
@@ -58,14 +69,14 @@ const LoginPage = () => {
     <div className="LoginForm">
       <h1>Login</h1>
       <Formik initialValues={{ username: "", password: "" }} onSubmit={submit}>
-        {({ isSubmitting, status }) => (
+        {({ isSubmitting, status, errors }) => (
           <Form>
             <FormGrid>
               <FormGridFieldSet>
                 <TextFormField label="Username" name="username" />
                 <PasswordFormField label="Password" name="password" />
               </FormGridFieldSet>
-              <FormGridButtons status={status}>
+              <FormGridButtons status={status} errors={errors}>
                 <button type="submit" disabled={isSubmitting}>
                   Log in
                 </button>

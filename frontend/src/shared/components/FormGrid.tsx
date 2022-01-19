@@ -7,6 +7,7 @@ interface FormGridProps {
 interface FormGridButtonsProps {
   status?: { success?: React.ReactElement; error?: React.ReactElement };
   children: React.ReactNode;
+  errors: any;
 }
 
 interface FormGridFieldSetProps {
@@ -18,10 +19,18 @@ const FormGrid = ({ children }: FormGridProps) => {
   return <div className="FormGrid">{children}</div>;
 };
 
-const FormGridButtons = ({ status, children }: FormGridButtonsProps) => {
+const FormGridButtons = ({
+  status,
+  children,
+  errors,
+}: FormGridButtonsProps) => {
   return (
     <div className="FormGridButtons">
       <div className="FormGridButtons--status">
+        {Object.keys(errors).length > 0 && (
+          <div className="FormFieldError">Please review the errors above.</div>
+        )}
+
         {status?.success && (
           <div className="FormFieldSuccess">{status.success}</div>
         )}
