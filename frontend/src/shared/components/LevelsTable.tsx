@@ -1,5 +1,6 @@
 import "./LevelsTable.css";
 import { DownloadIcon } from "@heroicons/react/outline";
+import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import type { Level } from "src/services/level.service";
 import type { LevelSearchQuery } from "src/services/level.service";
@@ -22,11 +23,20 @@ const LevelsTable = ({
   searchQuery,
   onSearchQueryChange,
 }: LevelsTableProps) => {
+  const navigate = useNavigate();
+
+  const onCoverClick = (level: Level) => navigate(`/levels/${level.id}`);
+
   const columns: DataTableColumn<Level>[] = [
     {
       name: "image",
       label: "Image",
-      itemElement: (level) => <MediumThumbnail file={level.cover} />,
+      itemElement: (level) => (
+        <MediumThumbnail
+          onClick={() => onCoverClick(level)}
+          file={level.cover}
+        />
+      ),
     },
     {
       name: "details",
