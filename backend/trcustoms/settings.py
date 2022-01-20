@@ -202,4 +202,5 @@ MAX_TAG_LENGTH = 20
 CSRF_TRUSTED_ORIGINS = [
     "http://localhost:8000",
     "https://trcustoms.org",
+    "https://trcustoms.wind.garden",
 ]
