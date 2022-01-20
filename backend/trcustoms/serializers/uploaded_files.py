@@ -82,7 +82,7 @@ class UploadedFileDetailsSerializer(serializers.ModelSerializer):
         if not data.get("content"):
             raise serializers.ValidationError({"content": "Missing file."})
 
-        if data["content"].content_type not in allowed_content_types:
+        if data["content"].content_type.lower() not in allowed_content_types:
             allowed_content_types_readable = [
                 content_type.split("/")[1].upper()
                 for content_type in allowed_content_types
@@ -90,7 +90,8 @@ class UploadedFileDetailsSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError(
                 {
                     "content": (
-                        "Invalid file type. Allowed types: "
+                        f"Invalid file type {data['content'].content_type}. "
+                        "Allowed types: "
                         f"{', '.join(allowed_content_types_readable)}"
                     )
                 }
