@@ -152,7 +152,7 @@ const LevelForm = ({ level, onGoBack, onSubmit }: LevelFormProps) => {
           difficulty_id: data?.difficulty_id,
           duration_id: data?.duration_id,
           cover_id: data?.cover_id,
-          screenshot_ids: data?.screenshot_ids,
+          screenshot_ids: data?.screenshot_ids || data?.screenshots,
           file_id: data?.file_id,
         };
         if (Object.keys(filterFalsyObjectValues(errors)).length) {
@@ -235,6 +235,7 @@ const LevelForm = ({ level, onGoBack, onSubmit }: LevelFormProps) => {
       difficulty_id: [validateRequired],
       cover_id: [validateRequired],
       screenshot_ids: [validateScreenshots],
+      file_id: level ? [] : [validateRequired],
     };
 
     for (const [field, validators] of Object.entries(validatorMap)) {

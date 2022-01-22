@@ -1,4 +1,5 @@
 .PicturePickerPreview {
-  max-height: 10rem;
-  max-width: 15rem;
+  width: 15rem;
+  aspect-ratio: calc(4 / 3);
+  object-fit: cover;
 }
