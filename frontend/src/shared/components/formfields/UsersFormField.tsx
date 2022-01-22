@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useCallback } from "react";
 import type { UserLite } from "src/services/user.service";
 import { UserService } from "src/services/user.service";
 import { AutoComplete } from "src/shared/components/AutoComplete";
@@ -20,37 +21,43 @@ const UsersFormField = ({
 }: UsersFormFieldProps) => {
   const [suggestions, setSuggestions] = useState<UserLite[]>([]);
 
-  const selectedUsers = [...value];
-
-  const onSearchTrigger = async (userInput: string) => {
-    if (!userInput) {
-      setSuggestions([]);
-      return;
-    }
-    const searchQuery = {
-      search: userInput,
-    };
-    try {
-      const response = await UserService.searchUsers(searchQuery);
-      if (response.results) {
-        setSuggestions(
-          response.results.filter((user) =>
-            selectedUsers.every((u) => u.id !== user.id)
-          )
-        );
+  const onSearchTrigger = useCallback(
+    async (userInput: string) => {
+      if (!userInput) {
+        setSuggestions([]);
+        return;
       }
-    } catch (error) {
-      console.error(error);
-    }
-  };
+      const searchQuery = {
+        search: userInput,
+      };
+      try {
+        const response = await UserService.searchUsers(searchQuery);
+        if (response.results) {
+          setSuggestions(
+            response.results.filter((user) =>
+              value.every((u) => u.id !== user.id)
+            )
+          );
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    },
+    [value]
+  );
 
-  const onResultApply = (user: UserLite) =>
-    onChange(
-      value.map((u) => u.id).includes(user.id) ? value : [...value, user]
-    );
+  const onResultApply = useCallback(
+    (user: UserLite) =>
+      onChange(
+        value.map((u) => u.id).includes(user.id) ? value : [...value, user]
+      ),
+    [onChange, value]
+  );
 
-  const removeUser = (user: UserLite) =>
-    onChange(value.filter((u) => u.id !== user.id));
+  const removeUser = useCallback(
+    (user: UserLite) => onChange(value.filter((u) => u.id !== user.id)),
+    [onChange, value]
+  );
 
   return (
     <BaseFormField name={name} readonly={readonly} {...props}>
@@ -62,7 +69,7 @@ const UsersFormField = ({
         onResultApply={onResultApply}
       />
       <Pills
-        source={selectedUsers}
+        source={value}
         getKey={(user) => user.username}
         getText={(user) => user.username}
         onRemove={removeUser}

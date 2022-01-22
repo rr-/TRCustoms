@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useCallback } from "react";
 import { useContext } from "react";
 import { TagService } from "src/services/tag.service";
 import { TagLite } from "src/services/tag.service";
@@ -23,34 +24,47 @@ const TagsFormField = ({
   const { config, refetchConfig } = useContext(ConfigContext);
   const [suggestions, setSuggestions] = useState<TagLite[]>([]);
 
-  const onSearchTrigger = (userInput: string) => {
-    const allTags: {
-      [tagId: string]: TagLite;
-    } = Object.fromEntries(config.tags.map((tag) => [tag.id, tag]));
+  const onSearchTrigger = useCallback(
+    (userInput: string) => {
+      const allTags: {
+        [tagId: string]: TagLite;
+      } = Object.fromEntries(config.tags.map((tag) => [tag.id, tag]));
 
-    setSuggestions(
-      Object.values(allTags).filter(
-        (tag) =>
-          value.every((t) => t.id !== tag.id) &&
-          tag.name.toLowerCase().indexOf(userInput.toLowerCase()) > -1
-      )
-    );
-  };
+      setSuggestions(
+        Object.values(allTags).filter(
+          (tag) =>
+            value.every((t) => t.id !== tag.id) &&
+            tag.name.toLowerCase().indexOf(userInput.toLowerCase()) > -1
+        )
+      );
+    },
+    [config, value]
+  );
 
-  const onResultApply = (tag: TagLite) =>
-    onChange(value.map((t) => t.id).includes(tag.id) ? value : [...value, tag]);
+  const onResultApply = useCallback(
+    (tag: TagLite) =>
+      onChange(
+        value.map((t) => t.id).includes(tag.id) ? value : [...value, tag]
+      ),
+    [onChange, value]
+  );
 
-  const onNewResultApply = async (text: string) => {
-    if (value.map((t) => t.name).includes(text)) {
-      return;
-    }
-    const tag = await TagService.create({ name: text });
-    onChange([...value, tag]);
-    await refetchConfig();
-  };
+  const onNewResultApply = useCallback(
+    async (text: string) => {
+      if (value.map((t) => t.name).includes(text)) {
+        return;
+      }
+      const tag = await TagService.create({ name: text });
+      onChange([...value, tag]);
+      await refetchConfig();
+    },
+    [onChange, refetchConfig, value]
+  );
 
-  const removeTag = (tag: TagLite) =>
-    onChange(value.filter((t) => t.id !== tag.id));
+  const removeTag = useCallback(
+    (tag: TagLite) => onChange(value.filter((t) => t.id !== tag.id)),
+    [onChange, value]
+  );
 
   return (
     <BaseFormField name={name} readonly={readonly} {...props}>
