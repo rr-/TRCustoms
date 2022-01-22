@@ -147,6 +147,7 @@ class LevelViewSet(
 
     def perform_create(self, serializer: serializers.Serializer) -> None:
         super().perform_create(serializer)
+        serializer.instance.refresh_from_db()
         make_snapshot(
             serializer.instance,
             request=self.request,
@@ -155,4 +156,5 @@ class LevelViewSet(
 
     def perform_update(self, serializer: serializers.Serializer) -> None:
         super().perform_update(serializer)
+        serializer.instance.refresh_from_db()
         make_snapshot(serializer.instance, request=self.request)
