@@ -1,3 +1,6 @@
+.AutoComplete .PushButton {
+  margin-left: 0.5rem;
+}
 .AutoComplete--input {
   border: 2px solid var(--input-border-color);
   background: var(--input-background-color);

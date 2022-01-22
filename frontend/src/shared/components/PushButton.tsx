@@ -23,7 +23,7 @@ const PushButton = ({
   disabled,
 }: PushButtonProps) => {
   const [timer, setTimer] = useState<number | null>(null);
-  const [isDisabled, setIsDisabled] = useState(disabled);
+  const [isTimeoutActive, setIsTimeoutActive] = useState(false);
 
   useEffect(() => {
     return () => {
@@ -34,14 +34,14 @@ const PushButton = ({
   }, [timer]);
 
   const linkClick = (event: React.MouseEvent) => {
-    if (isDisabled) {
+    if (isTimeoutActive || disabled) {
       event.preventDefault();
       event.stopPropagation();
       return;
     }
     if (!disableTimeout) {
-      setIsDisabled(disabled);
-      setTimer(window.setTimeout(() => setIsDisabled(false), 5000));
+      setIsTimeoutActive(true);
+      setTimer(window.setTimeout(() => setIsTimeoutActive(false), 5000));
     }
     if (onClick) {
       onClick();
@@ -73,7 +73,7 @@ const PushButton = ({
     <Link
       className={`PushButton ${
         isPlain ? "PushButton--link" : "PushButton--button"
-      } ${isDisabled && "PushButton--disabled"}`}
+      } ${(disabled || isTimeoutActive) && "PushButton--disabled"}`}
       onClick={linkClick}
       onAuxClick={linkClick}
       to={to || "#"}

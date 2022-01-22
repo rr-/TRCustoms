@@ -1,7 +1,9 @@
 import "./AutoComplete.css";
+import { useCallback } from "react";
 import { Key } from "react";
 import { useState } from "react";
 import { useEffect } from "react";
+import { PushButton } from "src/shared/components/PushButton";
 import { KEY_RETURN } from "src/shared/constants";
 import { KEY_UP } from "src/shared/constants";
 import { KEY_DOWN } from "src/shared/constants";
@@ -11,9 +13,9 @@ interface AutoCompleteProps<TItem> {
   suggestions: TItem[];
   getResultText: (result: TItem) => string;
   getResultKey: (result: TItem) => Key;
-  onSearchTrigger: (userInput: string) => void;
+  onSearchTrigger: (textInput: string) => void;
   onResultApply: (result: TItem) => void;
-  onNewResultApply?: (userInput: string) => any | null;
+  onNewResultApply?: (textInput: string) => any | null;
 }
 
 const AutoComplete = <TItem extends Object>({
@@ -43,13 +45,12 @@ const AutoComplete = <TItem extends Object>({
     }
   }, [suggestions, activeResultIdx, setActiveResultIdx, setShowResults]);
 
-  const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const userInput = event.target.value;
-    setTextInput(userInput);
-    onSearchTrigger(userInput);
-  };
+  useEffect(() => {
+    onSearchTrigger(textInput);
+  }, [textInput, onSearchTrigger]);
 
-  const applyResult = (userInput: string, selectedResult: TItem | null) => {
+  const applyResult = useCallback(() => {
+    const selectedResult = suggestions[activeResultIdx] || null;
     if (selectedResult) {
       if (onResultApply) {
         onResultApply(selectedResult);
@@ -58,18 +59,29 @@ const AutoComplete = <TItem extends Object>({
         setTextInput(getResultText(selectedResult));
       }
     } else if (onNewResultApply) {
-      onNewResultApply(userInput);
+      onNewResultApply(textInput);
       setTextInput("");
     }
     setActiveResultIdx(0);
     setShowResults(false);
+  }, [
+    activeResultIdx,
+    getResultText,
+    onNewResultApply,
+    onResultApply,
+    suggestions,
+    textInput,
+  ]);
+
+  const onInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setTextInput(event.target.value);
   };
 
-  const onKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    const userInput = (event.target as HTMLInputElement).value;
+  const onInputKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    setTextInput((event.target as HTMLInputElement).value);
     if (event.keyCode === KEY_RETURN) {
       event.preventDefault();
-      applyResult(userInput, suggestions[activeResultIdx] || null);
+      applyResult();
     } else if (suggestions.length) {
       if (event.keyCode === KEY_UP) {
         if (activeResultIdx - 1 > 0) {
@@ -83,14 +95,25 @@ const AutoComplete = <TItem extends Object>({
     }
   };
 
-  const onClick = (event: React.MouseEvent<HTMLLIElement>) => {
+  const onAddButtonClick = () => {
+    if (textInput) {
+      applyResult();
+    }
+  };
+
+  const onSuggestionMouseDown = (event: React.MouseEvent<HTMLLIElement>) => {
     if (!suggestions.length) {
       return;
     }
-    const index = +(
-      (event.target as HTMLLIElement).getAttribute("data-index") || ""
+    setActiveResultIdx(
+      +((event.target as HTMLLIElement).getAttribute("data-index") || "")
     );
-    applyResult(textInput, suggestions[index]);
+  };
+
+  const onSuggestionMouseUp = (event: React.MouseEvent<HTMLLIElement>) => {
+    if (activeResultIdx >= 0) {
+      applyResult();
+    }
   };
 
   const AutoCompleteSuggestions = () => {
@@ -108,7 +131,8 @@ const AutoComplete = <TItem extends Object>({
                   className={classNames.join(" ")}
                   key={getResultKey(result)}
                   data-index={index}
-                  onClick={onClick}
+                  onMouseDown={onSuggestionMouseDown}
+                  onMouseUp={onSuggestionMouseUp}
                 >
                   {getResultText(result)}
                 </li>
@@ -123,18 +147,23 @@ const AutoComplete = <TItem extends Object>({
   };
 
   return (
-    <>
+    <div className="AutoComplete">
       <input
         maxLength={maxLength}
         className="AutoComplete--input"
         type="text"
-        onChange={onChange}
-        onKeyDown={onKeyDown}
+        onChange={onInputChange}
+        onKeyDown={onInputKeyDown}
         value={textInput}
         placeholder="Start typing to search…"
       />
       {showResults && textInput && <AutoCompleteSuggestions />}
-    </>
+      {onNewResultApply && (
+        <PushButton disabled={!textInput.length} onClick={onAddButtonClick}>
+          Add new
+        </PushButton>
+      )}
+    </div>
   );
 };
 
