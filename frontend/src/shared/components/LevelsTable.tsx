@@ -1,13 +1,11 @@
 import "./LevelsTable.css";
 import { DownloadIcon } from "@heroicons/react/outline";
-import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import type { Level } from "src/services/level.service";
 import type { LevelSearchQuery } from "src/services/level.service";
 import { LevelService } from "src/services/level.service";
 import type { DataTableColumn } from "src/shared/components/DataTable";
 import { DataTable } from "src/shared/components/DataTable";
-import { MediumThumbnail } from "src/shared/components/MediumThumbnail";
 import { LevelLink } from "src/shared/components/links/LevelLink";
 import { UserLink } from "src/shared/components/links/UserLink";
 import { formatDate } from "src/shared/utils";
@@ -23,19 +21,18 @@ const LevelsTable = ({
   searchQuery,
   onSearchQueryChange,
 }: LevelsTableProps) => {
-  const navigate = useNavigate();
-
-  const onCoverClick = (level: Level) => navigate(`/levels/${level.id}`);
-
   const columns: DataTableColumn<Level>[] = [
     {
       name: "image",
       label: "Image",
       itemElement: (level) => (
-        <MediumThumbnail
-          onClick={() => onCoverClick(level)}
-          file={level.cover}
-        />
+        <Link className="LevelsTable--previewLink" to={`/levels/${level.id}`}>
+          <img
+            className="LevelsTable--previewImage"
+            src={level.cover.url}
+            alt={level.name}
+          />
+        </Link>
       ),
     },
     {

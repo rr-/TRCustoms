@@ -16,6 +16,13 @@
 .LevelsTable--details {
   width: 100%;
 }
-.LevelsTable .MediumThumbnail--thumb {
-  max-height: 8rem;
+.LevelsTable--previewLink {
+  display: block;
+  aspect-ratio: calc(4 / 3);
+  height: 8rem;
+}
+.LevelsTable--previewImage {
+  object-fit: cover;
+  width: 100%;
+  height: 100%;
 }
