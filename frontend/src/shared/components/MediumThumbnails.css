@@ -4,8 +4,9 @@
   grid-template-columns: repeat(3, 1fr);
   gap: 0.25rem;
 }
-.MediumThumbnail {
+.MediumThumbnails .MediumThumbnail {
   max-width: 100%;
   height: auto;
   font-size: 4rem;
+  aspect-ratio: calc(4 / 3);
 }
