@@ -8,6 +8,9 @@ interface Theme {
   secondaryColor: string;
   cssVariables: {
     "background-color": string;
+    "failure-text-color": string;
+    "warning-text-color": string;
+    "success-text-color": string;
     "input-background-color": string;
     "input-border-color": string;
     "input-invalid-border-color": string;
@@ -43,6 +46,9 @@ const themes: Array<Theme> = [
     secondaryColor: "lemonchiffon",
     cssVariables: {
       "background-color": "lemonchiffon",
+      "failure-text-color": "#f32d0a",
+      "warning-text-color": "#9e921e",
+      "success-text-color": "#1e921e",
       "input-background-color": "floralwhite",
       "input-border-color": "var(--button-background-color)",
       "input-invalid-border-color": "red",
@@ -79,6 +85,9 @@ const themes: Array<Theme> = [
     secondaryColor: "red",
     cssVariables: {
       "background-color": "white",
+      "failure-text-color": "firebrick",
+      "warning-text-color": "darkorange",
+      "success-text-color": "green",
       "input-background-color": "var(--background-color)",
       "input-border-color": "var(--button-background-color)",
       "input-invalid-border-color": "red",
@@ -114,6 +123,9 @@ const themes: Array<Theme> = [
     secondaryColor: "#2196f3",
     cssVariables: {
       "background-color": "#20232e",
+      "failure-text-color": "tomato",
+      "warning-text-color": "yellow",
+      "success-text-color": "limegreen",
       "input-background-color": "#a8c7e0",
       "input-border-color": "var(--button-background-color)",
       "input-invalid-border-color": "red",

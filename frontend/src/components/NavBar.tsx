@@ -100,9 +100,14 @@ const NavBar = () => {
                   </li>
                 </PermissionGuard>
                 <PermissionGuard require={UserPermission.uploadLevels}>
-                  <li className="TopNavBar--listItem">
-                    <NavLink to={"/levels/upload"}>Upload level</NavLink>
-                  </li>
+                  <>
+                    <li className="TopNavBar--listItem">
+                      <NavLink to={"/levels/upload"}>Upload level</NavLink>
+                    </li>
+                    <li className="TopNavBar--listItem">
+                      <NavLink to={"/my-levels"}>My levels</NavLink>
+                    </li>
+                  </>
                 </PermissionGuard>
                 <li className="TopNavBar--listItem">
                   <NavLink to={"/tags"}>Tags</NavLink>

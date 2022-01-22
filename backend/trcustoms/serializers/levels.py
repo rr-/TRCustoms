@@ -58,6 +58,9 @@ class LevelFileSerializer(serializers.ModelSerializer):
 
 
 class LevelListingSerializer(serializers.ModelSerializer):
+    is_approved = serializers.ReadOnlyField()
+    rejection_reason = serializers.ReadOnlyField()
+
     engine = LevelEngineNestedSerializer(read_only=True)
     engine_id = serializers.PrimaryKeyRelatedField(
         write_only=True, source="engine", queryset=LevelEngine.objects.all()
@@ -145,13 +148,12 @@ class LevelListingSerializer(serializers.ModelSerializer):
             "last_updated",
             "last_file",
             "download_count",
+            "is_approved",
+            "rejection_reason",
         ]
 
 
 class LevelDetailsSerializer(LevelListingSerializer):
-    is_approved = serializers.ReadOnlyField()
-    disapproval_reason = serializers.ReadOnlyField()
-
     cover_id = serializers.PrimaryKeyRelatedField(
         write_only=True,
         source="cover",
@@ -325,8 +327,6 @@ class LevelDetailsSerializer(LevelListingSerializer):
             "files",
             "file_id",
             "trle_id",
-            "is_approved",
-            "disapproval_reason",
         ]
 
 
@@ -335,5 +335,5 @@ class LevelSnapshotSerializer(LevelDetailsSerializer):
     pass
 
 
-class LevelDisapprovalSerializer(serializers.Serializer):
+class LevelRejectionSerializer(serializers.Serializer):
     reason = serializers.CharField(max_length=200)
