@@ -18,7 +18,7 @@
   visibility: visible;
 }
 
-.MediumThumbnail:hover {
+.MediumThumbnail--thumb:hover {
   opacity: 0.9;
 }
 
