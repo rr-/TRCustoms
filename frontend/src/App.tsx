@@ -10,6 +10,7 @@ import { LevelUploadPage } from "src/components/pages/LevelUploadPage";
 import { LoginPage } from "src/components/pages/LoginPage";
 import { LogoutPage } from "src/components/pages/LogoutPage";
 import { ModerationPage } from "src/components/pages/ModerationPage";
+import { MyLevelsPage } from "src/components/pages/MyLevelsPage";
 import { RegisterPage } from "src/components/pages/RegisterPage";
 import { SettingsPage } from "src/components/pages/SettingsPage";
 import { TagListPage } from "src/components/pages/TagListPage";
@@ -34,6 +35,7 @@ function App() {
             <Route path="/mod" element={<ModerationPage />} />
             <Route path="/levels/upload" element={<LevelUploadPage />} />
             <Route path="/levels" element={<LevelListPage />} />
+            <Route path="/my-levels" element={<MyLevelsPage />} />
             <Route path="/levels/:levelId" element={<LevelPage />} />
             <Route path="/levels/:levelId/edit" element={<LevelEditPage />} />
             <Route path="/tags" element={<TagListPage />} />

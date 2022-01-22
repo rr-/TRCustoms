@@ -30,7 +30,7 @@ const formatDiff = (item: DiffItem): React.ReactNode | null => {
       return "Approved the level";
     }
     if (item.new === false) {
-      return "Disapproved the level";
+      return "Rejected the level";
     }
   }
 
@@ -40,7 +40,7 @@ const formatDiff = (item: DiffItem): React.ReactNode | null => {
     }
   }
 
-  for (let path of ["name", "disapproval_reason"]) {
+  for (let path of ["name", "rejection_reason"]) {
     if (item.path?.[0] === path) {
       return `Updated the ${path.replace(/_/g, " ")} (${item.old} → ${
         item.new

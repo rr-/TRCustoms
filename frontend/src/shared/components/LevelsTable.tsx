@@ -1,4 +1,7 @@
 import "./LevelsTable.css";
+import { ClockIcon } from "@heroicons/react/outline";
+import { BadgeCheckIcon } from "@heroicons/react/outline";
+import { XCircleIcon } from "@heroicons/react/outline";
 import { DownloadIcon } from "@heroicons/react/outline";
 import { Link } from "react-router-dom";
 import type { Level } from "src/services/level.service";
@@ -13,11 +16,13 @@ import { formatFileSize } from "src/shared/utils";
 import { EMPTY_INPUT_PLACEHOLDER } from "src/shared/utils";
 
 interface LevelsTableProps {
+  showStatus?: boolean;
   searchQuery: LevelSearchQuery;
   onSearchQueryChange?: (searchQuery: LevelSearchQuery) => any | null;
 }
 
 const LevelsTable = ({
+  showStatus,
   searchQuery,
   onSearchQueryChange,
 }: LevelsTableProps) => {
@@ -26,13 +31,32 @@ const LevelsTable = ({
       name: "image",
       label: "Image",
       itemElement: (level) => (
-        <Link className="LevelsTable--previewLink" to={`/levels/${level.id}`}>
-          <img
-            className="LevelsTable--previewImage"
-            src={level.cover.url}
-            alt={level.name}
-          />
-        </Link>
+        <>
+          <Link className="LevelsTable--previewLink" to={`/levels/${level.id}`}>
+            <img
+              className="LevelsTable--previewImage"
+              src={level.cover.url}
+              alt={level.name}
+            />
+          </Link>
+          {showStatus && (
+            <>
+              {level.is_approved ? (
+                <span className="LevelsTable--statusApproved">
+                  <BadgeCheckIcon className="icon" /> Approved!
+                </span>
+              ) : level.rejection_reason ? (
+                <span className="LevelsTable--statusRejected">
+                  <XCircleIcon className="icon" /> Rejected
+                </span>
+              ) : (
+                <span className="LevelsTable--statusPending">
+                  <ClockIcon className="icon" /> Pending approval
+                </span>
+              )}
+            </>
+          )}
+        </>
       ),
     },
     {

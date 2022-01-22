@@ -38,9 +38,7 @@ class Level(DatesInfo):
     )
 
     is_approved = models.BooleanField(default=False)
-    disapproval_reason = models.CharField(
-        max_length=200, null=True, blank=True
-    )
+    rejection_reason = models.CharField(max_length=200, null=True, blank=True)
 
     # denormalized fields for faster db lookups
     download_count = models.IntegerField(default=0)

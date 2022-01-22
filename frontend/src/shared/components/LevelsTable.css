@@ -1,13 +1,18 @@
 .LevelsTable thead {
   display: none;
 }
+
+.DataTable .LevelsTable--image {
+  text-align: center;
+}
+
 .DataTable .LevelsTable--image,
 .DataTable .LevelsTable--details {
   padding-bottom: 1rem;
 }
 .LevelsTable--image,
 .LevelsTable--details {
-  vertical-align: middle;
+  vertical-align: top;
 }
 .LevelsTable--details small {
   line-height: 1.2rem;
@@ -25,4 +30,13 @@
   object-fit: cover;
   width: 100%;
   height: 100%;
+}
+.LevelsTable--statusApproved {
+  color: var(--success-text-color);
+}
+.LevelsTable--statusPending {
+  color: var(--warning-text-color);
+}
+.LevelsTable--statusRejected {
+  color: var(--failure-text-color);
 }

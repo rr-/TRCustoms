@@ -3,7 +3,7 @@ import { DownloadIcon } from "@heroicons/react/outline";
 import { GlobeAltIcon } from "@heroicons/react/outline";
 import { PencilIcon } from "@heroicons/react/outline";
 import { BadgeCheckIcon } from "@heroicons/react/outline";
-import { ExclamationIcon } from "@heroicons/react/outline";
+import { XCircleIcon } from "@heroicons/react/outline";
 import axios from "axios";
 import { AxiosError } from "axios";
 import { Fragment } from "react";
@@ -94,15 +94,15 @@ const LevelPage = () => {
     }
   };
 
-  const onDisapproveButtonClick = async () => {
+  const onRejectButtonClick = async () => {
     const reason = prompt(
-      "Please provide the reason for disapproving this level."
+      "Please provide the reason for rejecting this level."
     );
     if (!reason) {
       return;
     }
     try {
-      await LevelService.disapprove(+levelId, reason);
+      await LevelService.reject(+levelId, reason);
       result.refetch();
       queryClient.removeQueries("levels");
       queryClient.removeQueries("snapshots");
@@ -190,11 +190,11 @@ const LevelPage = () => {
               <PermissionGuard require={UserPermission.editLevels}>
                 {level.is_approved ? (
                   <PushButton
-                    icon={<ExclamationIcon className="icon" />}
-                    onClick={onDisapproveButtonClick}
+                    icon={<XCircleIcon className="icon" />}
+                    onClick={onRejectButtonClick}
                     tooltip="Hides this level from the level listing."
                   >
-                    Disapprove
+                    Reject
                   </PushButton>
                 ) : (
                   <PushButton
@@ -339,10 +339,10 @@ const LevelPage = () => {
       <div id="LevelPage--main">
         {level.is_approved || (
           <InfoMessage type={InfoMessageType.Warning}>
-            {level.disapproval_reason ? (
+            {level.rejection_reason ? (
               <>
-                This level was disapproved by staff. Reason:{" "}
-                {level.disapproval_reason}
+                This level was rejected by staff. Reason:{" "}
+                {level.rejection_reason}
               </>
             ) : (
               <>This level is currently pending approval.</>

@@ -65,13 +65,13 @@ interface Level {
   cover: UploadedFile;
   screenshots: Screenshot[];
   external_links: ExternalLink[];
+  is_approved: boolean;
+  rejection_reason: string | null;
 }
 
 interface LevelFull extends Level {
   trle_id: number | null;
   files: LevelFile[];
-  is_approved: boolean;
-  disapproval_reason: string | null;
 }
 
 interface LevelList extends PagedResponse<Level> {}
@@ -160,9 +160,9 @@ const approve = async (levelId: number): Promise<void> => {
   await api.post(`${API_URL}/levels/${levelId}/approve/`);
 };
 
-const disapprove = async (levelId: number, reason: string): Promise<void> => {
+const reject = async (levelId: number, reason: string): Promise<void> => {
   const data = { reason };
-  await api.post(`${API_URL}/levels/${levelId}/disapprove/`, data);
+  await api.post(`${API_URL}/levels/${levelId}/reject/`, data);
 };
 
 const LevelService = {
@@ -171,7 +171,7 @@ const LevelService = {
   update,
   create,
   approve,
-  disapprove,
+  reject,
 };
 
 const formatLinkType = (linkType: ExternalLinkType): string => {

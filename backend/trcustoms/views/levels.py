@@ -14,8 +14,8 @@ from trcustoms.permissions import (
 )
 from trcustoms.serializers import (
     LevelDetailsSerializer,
-    LevelDisapprovalSerializer,
     LevelListingSerializer,
+    LevelRejectionSerializer,
 )
 from trcustoms.snapshots import make_snapshot
 from trcustoms.utils import parse_bool, parse_ids
@@ -42,7 +42,7 @@ class LevelViewSet(
             HasPermission(UserPermission.EDIT_LEVELS) | IsAccessingOwnResource
         ],
         "approve": [HasPermission(UserPermission.EDIT_LEVELS)],
-        "disapprove": [HasPermission(UserPermission.EDIT_LEVELS)],
+        "reject": [HasPermission(UserPermission.EDIT_LEVELS)],
     }
 
     queryset = (
@@ -128,19 +128,19 @@ class LevelViewSet(
     def approve(self, request, pk: int) -> Response:
         level = self.get_object()
         level.is_approved = True
-        level.disapproval_reason = None
+        level.rejection_reason = None
         level.save()
         make_snapshot(level, request=self.request)
         return Response({})
 
     @action(detail=True, methods=["post"])
-    def disapprove(self, request, pk: int) -> Response:
-        serializer = LevelDisapprovalSerializer(data=request.data)
+    def reject(self, request, pk: int) -> Response:
+        serializer = LevelRejectionSerializer(data=request.data)
         if not serializer.is_valid():
             return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
         level = self.get_object()
         level.is_approved = False
-        level.disapproval_reason = serializer.data["reason"]
+        level.rejection_reason = serializer.data["reason"]
         level.save()
         make_snapshot(level, request=self.request)
         return Response({})
