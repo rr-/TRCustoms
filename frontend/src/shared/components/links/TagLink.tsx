@@ -3,11 +3,13 @@ import type { TagLite } from "src/services/tag.service";
 
 interface TagLinkProps {
   tag: TagLite;
+  label?: string | null;
 }
 
-const TagLink = ({ tag }: TagLinkProps) => {
+const TagLink = ({ tag, label }: TagLinkProps) => {
   const { id, name } = tag;
-  return <Link to={`/?tags=${id}`}>{name}</Link>;
+  label ||= name;
+  return <Link to={`/?tags=${id}`}>{label}</Link>;
 };
 
 export { TagLink };

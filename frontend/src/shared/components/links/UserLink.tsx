@@ -14,10 +14,10 @@ interface UserLinkProps {
 
 const UserLink = ({ user, label }: UserLinkProps) => {
   const { id, username } = user;
-  const text = label || username;
+  label ||= username;
   return (
     <PermissionGuard require={UserPermission.listUsers} alternative={username}>
-      {id ? <Link to={`/users/${id}`}>{text}</Link> : <>text</>}
+      {id ? <Link to={`/users/${id}`}>{label}</Link> : <>label</>}
     </PermissionGuard>
   );
 };
