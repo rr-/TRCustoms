@@ -1,4 +1,4 @@
-from rest_framework import mixins, serializers, viewsets
+from rest_framework import mixins, serializers, status, viewsets
 from rest_framework.decorators import action
 from rest_framework.generics import get_object_or_404
 from rest_framework.permissions import AllowAny
@@ -14,6 +14,7 @@ from trcustoms.permissions import (
 )
 from trcustoms.serializers import (
     LevelDetailsSerializer,
+    LevelDisapprovalSerializer,
     LevelListingSerializer,
 )
 from trcustoms.snapshots import make_snapshot
@@ -127,14 +128,19 @@ class LevelViewSet(
     def approve(self, request, pk: int) -> Response:
         level = self.get_object()
         level.is_approved = True
+        level.disapproval_reason = None
         level.save()
         make_snapshot(level, request=self.request)
         return Response({})
 
     @action(detail=True, methods=["post"])
     def disapprove(self, request, pk: int) -> Response:
+        serializer = LevelDisapprovalSerializer(data=request.data)
+        if not serializer.is_valid():
+            return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
         level = self.get_object()
         level.is_approved = False
+        level.disapproval_reason = serializer.data["reason"]
         level.save()
         make_snapshot(level, request=self.request)
         return Response({})

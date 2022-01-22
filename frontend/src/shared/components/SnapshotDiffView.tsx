@@ -40,9 +40,11 @@ const formatDiff = (item: DiffItem): React.ReactNode | null => {
     }
   }
 
-  for (let path of ["name"]) {
+  for (let path of ["name", "disapproval_reason"]) {
     if (item.path?.[0] === path) {
-      return `Updated the ${path} (${item.old} → ${item.new})`;
+      return `Updated the ${path.replace(/_/g, " ")} (${item.old} → ${
+        item.new
+      })`;
     }
   }
 

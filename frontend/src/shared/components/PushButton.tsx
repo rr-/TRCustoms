@@ -11,6 +11,7 @@ interface PushButtonProps {
   onClick?: () => void;
   icon?: React.ReactElement | null;
   children: React.ReactNode | string;
+  tooltip?: string;
 }
 
 const PushButton = ({
@@ -21,6 +22,7 @@ const PushButton = ({
   icon,
   children,
   disabled,
+  tooltip,
 }: PushButtonProps) => {
   const [timer, setTimer] = useState<number | null>(null);
   const [isTimeoutActive, setIsTimeoutActive] = useState(false);
@@ -54,6 +56,7 @@ const PushButton = ({
     // handle external links
     return (
       <a
+        title={tooltip}
         rel="noopener noreferrer"
         target="_blank"
         className={`PushButton ${
@@ -71,6 +74,7 @@ const PushButton = ({
 
   return (
     <Link
+      title={tooltip}
       className={`PushButton ${
         isPlain ? "PushButton--link" : "PushButton--button"
       } ${(disabled || isTimeoutActive) && "PushButton--disabled"}`}
