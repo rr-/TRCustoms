@@ -43,6 +43,7 @@ const SnapshotsTableObjectLink = ({
             id: +snapshot.object_id,
             name: snapshot.object_name,
           }}
+          label={`Level ${snapshot.object_name}`}
         />
       );
 
@@ -53,6 +54,7 @@ const SnapshotsTableObjectLink = ({
             id: +snapshot.object_id,
             name: snapshot.object_name,
           }}
+          label={`Engine ${snapshot.object_name}`}
         />
       );
 
@@ -63,6 +65,7 @@ const SnapshotsTableObjectLink = ({
             id: +snapshot.object_id,
             name: snapshot.object_name,
           }}
+          label={`Genre ${snapshot.object_name}`}
         />
       );
 
@@ -73,6 +76,7 @@ const SnapshotsTableObjectLink = ({
             id: +snapshot.object_id,
             name: snapshot.object_name,
           }}
+          label={`Tag ${snapshot.object_name}`}
         />
       );
 

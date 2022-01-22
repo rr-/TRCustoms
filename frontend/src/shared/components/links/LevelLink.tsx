@@ -12,11 +12,11 @@ interface LevelLinkProps {
 
 const LevelLink = ({ level, label }: LevelLinkProps) => {
   const { id, name } = level;
-  const text = label || name;
+  label ||= name;
   if (id) {
-    return <Link to={`/levels/${id}`}>{text}</Link>;
+    return <Link to={`/levels/${id}`}>{label}</Link>;
   }
-  return <>text</>;
+  return <>label</>;
 };
 
 export { LevelLink };

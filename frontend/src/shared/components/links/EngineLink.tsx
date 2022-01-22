@@ -3,11 +3,13 @@ import type { EngineLite } from "src/services/engine.service";
 
 interface EngineLinkProps {
   engine: EngineLite;
+  label?: string | null;
 }
 
-const EngineLink = ({ engine }: EngineLinkProps) => {
+const EngineLink = ({ engine, label }: EngineLinkProps) => {
   const { id, name } = engine;
-  return <Link to={`/?engines=${id}`}>{name}</Link>;
+  label ||= name;
+  return <Link to={`/?engines=${id}`}>{label}</Link>;
 };
 
 export { EngineLink };

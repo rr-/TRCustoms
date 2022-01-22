@@ -7,11 +7,13 @@ interface Genre {
 
 interface GenreLinkProps {
   genre: Genre;
+  label?: string | null;
 }
 
-const GenreLink = ({ genre }: GenreLinkProps) => {
+const GenreLink = ({ genre, label }: GenreLinkProps) => {
   const { id, name } = genre;
-  return <Link to={`/?genres=${id}`}>{name}</Link>;
+  label ||= name;
+  return <Link to={`/?genres=${id}`}>{label}</Link>;
 };
 
 export { GenreLink };
