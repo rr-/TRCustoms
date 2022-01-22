@@ -254,43 +254,30 @@ class LevelDetailsSerializer(LevelListingSerializer):
         # extraneous additions and deletions
 
         if external_links is not None:
-            LevelExternalLink.objects.filter(level=level).exclude(
-                position__in=[
-                    external_link["position"]
-                    for external_link in external_links
-                ]
-            ).delete()
-            # first, try to update matching url positions
+            qs = LevelExternalLink.objects.filter(level=level)
             for external_link in external_links:
-                LevelExternalLink.objects.update_or_create(
-                    level=level,
+                qs = qs.exclude(
+                    position=external_link["position"],
                     url=external_link["url"],
-                    defaults=dict(
-                        position=external_link["position"],
-                        link_type=external_link["link_type"],
-                    ),
                 )
-            # next, try to update matching position urls
+            qs.delete()
+            # first, try to update matching url positions
             for external_link in external_links:
                 LevelExternalLink.objects.update_or_create(
                     level=level,
                     position=external_link["position"],
                     defaults=dict(
-                        link_type=external_link["link_type"],
                         url=external_link["url"],
+                        link_type=external_link["link_type"],
                     ),
                 )
 
         if screenshots is not None:
-            LevelScreenshot.objects.filter(
-                level=level, position__gte=len(screenshots)
-            ).delete()
-            # first, try to update matching file positions
+            qs = LevelScreenshot.objects.filter(level=level)
             for i, screenshot in enumerate(screenshots):
-                LevelScreenshot.objects.update_or_create(
-                    level=level, file=screenshot, defaults=dict(position=i)
-                )
-            # next, try to update matching position files
+                qs = qs.exclude(position=i, file=screenshot)
+            qs.delete()
+            # try to update matching files
             for i, screenshot in enumerate(screenshots):
                 LevelScreenshot.objects.update_or_create(
                     level=level, position=i, defaults=dict(file=screenshot)
