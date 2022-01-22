@@ -1,0 +1,6 @@
+[
+  { "position": 0, "name": "Easy" },
+  { "position": 1, "name": "Medium" },
+  { "position": 2, "name": "Hard" },
+  { "position": 3, "name": "Very hard" }
+]

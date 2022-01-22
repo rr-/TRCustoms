@@ -1,0 +1,220 @@
+[
+  {
+    "position": 0,
+    "weight": 20,
+    "question_text": "Do you plan on revisiting this game?",
+    "answers": [
+      { "points": 0, "answer_text": "I am going to bin this" },
+      {
+        "points": 1,
+        "answer_text": "Not sure, I usually only play things once"
+      },
+      {
+        "points": 2,
+        "answer_text": "I will revisit some areas that were nice"
+      },
+      {
+        "points": 3,
+        "answer_text": "I want to get all secrets and then put it to rest forever"
+      },
+      {
+        "points": 4,
+        "answer_text": "I want to re-experience it again in the future"
+      }
+    ]
+  },
+
+  {
+    "position": 1,
+    "weight": 5,
+    "question_text": "What did you think of the length of the game?",
+    "answers": [
+      { "points": 1, "answer_text": "It ended sooner than expected" },
+      { "points": 2, "answer_text": "Perfect length for the content provided" },
+      { "points": 0, "answer_text": "It dragged for too long" }
+    ]
+  },
+
+  {
+    "position": 2,
+    "weight": 15,
+    "question_text": "The visual quality was consistently good throughout the game.",
+    "answers": [
+      { "points": 0, "answer_text": "Strongly disagree" },
+      { "points": 1, "answer_text": "Disagree" },
+      { "points": 2, "answer_text": "Slightly disagree" },
+      { "points": 3, "answer_text": "Slightly agree" },
+      { "points": 4, "answer_text": "Agree" },
+      { "points": 5, "answer_text": "Strongly agree" }
+    ]
+  },
+
+  {
+    "position": 3,
+    "weight": 15,
+    "question_text": "The level featured enjoyable unique things I have never seen before.",
+    "answers": [
+      { "points": 0, "answer_text": "Strongly disagree" },
+      { "points": 1, "answer_text": "Disagree" },
+      { "points": 2, "answer_text": "Slightly disagree" },
+      { "points": 3, "answer_text": "Slightly agree" },
+      { "points": 4, "answer_text": "Agree" },
+      { "points": 5, "answer_text": "Strongly agree" }
+    ]
+  },
+
+  {
+    "position": 4,
+    "weight": 15,
+    "question_text": "The sound design enhanced the game's environment and set pieces.",
+    "answers": [
+      { "points": 0, "answer_text": "Strongly disagree" },
+      { "points": 1, "answer_text": "Disagree" },
+      { "points": 2, "answer_text": "Slightly disagree" },
+      { "points": 3, "answer_text": "Slightly agree" },
+      { "points": 4, "answer_text": "Agree" },
+      { "points": 5, "answer_text": "Strongly agree" }
+    ]
+  },
+
+  {
+    "position": 5,
+    "weight": 15,
+    "question_text": "The builder used various techniques to set an atmospheric tone and immerse the player.",
+    "answers": [
+      { "points": 0, "answer_text": "Strongly disagree" },
+      { "points": 1, "answer_text": "Disagree" },
+      { "points": 2, "answer_text": "Slightly disagree" },
+      { "points": 3, "answer_text": "Slightly agree" },
+      { "points": 4, "answer_text": "Agree" },
+      { "points": 5, "answer_text": "Strongly agree" }
+    ]
+  },
+
+  {
+    "position": 6,
+    "weight": 15,
+    "question_text": "The level lived up to the expectations set by the information on the level page.",
+    "answers": [
+      { "points": 0, "answer_text": "Strongly disagree" },
+      { "points": 1, "answer_text": "Disagree" },
+      { "points": 2, "answer_text": "Slightly disagree" },
+      { "points": 3, "answer_text": "Slightly agree" },
+      { "points": 4, "answer_text": "Agree" },
+      { "points": 5, "answer_text": "Strongly agree" }
+    ]
+  },
+
+  {
+    "position": 7,
+    "weight": 15,
+    "question_text": "How often did you get bored due to unintuitive, messy, or repetitive game design?",
+    "answers": [
+      { "points": 0, "answer_text": "Almost always" },
+      { "points": 1, "answer_text": "Occasionally" },
+      { "points": 2, "answer_text": "Just a little" },
+      { "points": 3, "answer_text": "Never" }
+    ]
+  },
+
+  {
+    "position": 8,
+    "weight": 10,
+    "question_text": "Ingame actions were random and lacked real sense; they felt unrelated to the story/context.",
+    "answers": [
+      { "points": 5, "answer_text": "Strongly disagree" },
+      { "points": 4, "answer_text": "Disagree" },
+      { "points": 3, "answer_text": "Slightly disagree" },
+      { "points": 2, "answer_text": "Slightly agree" },
+      { "points": 1, "answer_text": "Agree" },
+      { "points": 0, "answer_text": "Strongly agree" }
+    ]
+  },
+
+  {
+    "position": 9,
+    "weight": 15,
+    "question_text": "What did you think of the game's difficulty?",
+    "answers": [
+      { "points": 0, "answer_text": "Too easy for my taste" },
+      { "points": 1, "answer_text": "Wishing it was a little more difficult" },
+      {
+        "points": 2,
+        "answer_text": "Its easiness did not take away the challenge"
+      },
+      {
+        "points": 2,
+        "answer_text": "On the difficult side, but quite enjoyable"
+      },
+      {
+        "points": 1,
+        "answer_text": "Could've used some more hints here and there"
+      },
+      { "points": 0, "answer_text": "It was frequently frustrating and unfair" }
+    ]
+  },
+
+  {
+    "position": 10,
+    "weight": 20,
+    "question_text": "The level was overall fun and fulfilling in the end.",
+    "answers": [
+      { "points": 0, "answer_text": "Strongly disagree" },
+      { "points": 1, "answer_text": "Disagree" },
+      { "points": 2, "answer_text": "Slightly disagree" },
+      { "points": 3, "answer_text": "Slightly agree" },
+      { "points": 4, "answer_text": "Agree" },
+      { "points": 5, "answer_text": "Strongly agree" }
+    ]
+  },
+
+  {
+    "position": 11,
+    "weight": 10,
+    "question_text": "There were visual glitches.",
+    "answers": [
+      { "points": 3, "answer_text": "Did not notice any" },
+      { "points": 2, "answer_text": "Infrequent" },
+      { "points": 1, "answer_text": "Often" },
+      { "points": 0, "answer_text": "Constant visual errors" }
+    ]
+  },
+
+  {
+    "position": 12,
+    "weight": 10,
+    "question_text": "There were audio issues.",
+    "answers": [
+      { "points": 3, "answer_text": "Did not notice any" },
+      { "points": 2, "answer_text": "Infrequent" },
+      { "points": 1, "answer_text": "Often" },
+      { "points": 0, "answer_text": "Constant messed up or missing sounds" }
+    ]
+  },
+
+  {
+    "position": 13,
+    "weight": 10,
+    "question_text": "There were gameplay bugs.",
+    "answers": [
+      { "points": 3, "answer_text": "Did not notice any" },
+      { "points": 2, "answer_text": "One or two" },
+      { "points": 1, "answer_text": "Jarring" },
+      { "points": 0, "answer_text": "Softlocked several times" }
+    ]
+  },
+
+  {
+    "position": 14,
+    "weight": 20,
+    "question_text": "There were bugs/problems that seriously ruined my experience.",
+    "answers": [
+      { "points": 0, "answer_text": "Strongly disagree" },
+      { "points": 1, "answer_text": "Disagree" },
+      { "points": 2, "answer_text": "Slightly disagree" },
+      { "points": 3, "answer_text": "Slightly agree" },
+      { "points": 4, "answer_text": "Agree" },
+      { "points": 5, "answer_text": "Strongly agree" }
+    ]
+  }
+]
