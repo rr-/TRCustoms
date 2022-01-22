@@ -175,9 +175,9 @@ const LevelService = {
 const formatLinkType = (linkType: ExternalLinkType): string => {
   switch (linkType) {
     case ExternalLinkType.Showcase:
-      return "Showcase";
+      return "YouTube";
     case ExternalLinkType.Main:
-      return "Main";
+      return "Website";
   }
 };
 
