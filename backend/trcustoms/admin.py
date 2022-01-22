@@ -17,6 +17,8 @@ from trcustoms.models import (
     LevelLegacyReview,
     LevelScreenshot,
     LevelTag,
+    ReviewTemplateAnswer,
+    ReviewTemplateQuestion,
     Snapshot,
     UploadedFile,
     User,
@@ -323,3 +325,16 @@ class SnapshotAdmin(ReadOnlyAdminMixin, admin.ModelAdmin):
 
     def object_type_name(self, instance):
         return instance.object_type.model.title()
+
+
+@admin.register(ReviewTemplateQuestion)
+class ReviewTemplateQuestionAdmin(admin.ModelAdmin):
+    ordering = ["position"]
+    list_display = ["position", "question_text", "weight"]
+
+
+@admin.register(ReviewTemplateAnswer)
+class ReviewTemplateAnswerAdmin(admin.ModelAdmin):
+    list_filter = ["question"]
+    ordering = ["position"]
+    list_display = ["question", "position", "answer_text", "points"]
