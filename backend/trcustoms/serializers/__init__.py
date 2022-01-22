@@ -31,6 +31,7 @@ from .level_tags import (
 )
 from .levels import (
     LevelDetailsSerializer,
+    LevelDisapprovalSerializer,
     LevelListingSerializer,
     LevelNestedSerializer,
     LevelSnapshotSerializer,
@@ -51,6 +52,7 @@ __all__ = [
     "LevelDifficultyListingSerializer",
     "LevelDifficultyNestedSerializer",
     "LevelDifficultySnapshotSerializer",
+    "LevelDisapprovalSerializer",
     "LevelDurationListingSerializer",
     "LevelDurationNestedSerializer",
     "LevelDurationSnapshotSerializer",

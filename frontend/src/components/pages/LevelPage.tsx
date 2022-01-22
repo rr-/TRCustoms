@@ -17,6 +17,8 @@ import { LevelService } from "src/services/level.service";
 import type { ReviewSearchQuery } from "src/services/review.service";
 import type { SnapshotSearchQuery } from "src/services/snapshot.service";
 import { UserPermission } from "src/services/user.service";
+import { InfoMessage } from "src/shared/components/InfoMessage";
+import { InfoMessageType } from "src/shared/components/InfoMessage";
 import { Loader } from "src/shared/components/Loader";
 import { Markdown } from "src/shared/components/Markdown";
 import { MediumThumbnail } from "src/shared/components/MediumThumbnail";
@@ -73,14 +75,34 @@ const LevelPage = () => {
     return <Loader />;
   }
 
-  const setLevelApproval = async (isApproved: boolean) => {
+  const onApproveButtonClick = async () => {
+    if (!window.confirm("Are you sure you want to approve this level?")) {
+      return;
+    }
     try {
-      if (isApproved) {
-        await LevelService.approve(+levelId);
+      await LevelService.approve(+levelId);
+      result.refetch();
+      queryClient.removeQueries("levels");
+      queryClient.removeQueries("snapshots");
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        const axiosError = error as AxiosError;
+        alert(axiosError.response?.data.detail || "Unknown error");
       } else {
-        await LevelService.disapprove(+levelId);
+        alert("Unknown error");
       }
+    }
+  };
 
+  const onDisapproveButtonClick = async () => {
+    const reason = prompt(
+      "Please provide the reason for disapproving this level."
+    );
+    if (!reason) {
+      return;
+    }
+    try {
+      await LevelService.disapprove(+levelId, reason);
       result.refetch();
       queryClient.removeQueries("levels");
       queryClient.removeQueries("snapshots");
@@ -166,18 +188,23 @@ const LevelPage = () => {
               </PermissionGuard>
 
               <PermissionGuard require={UserPermission.editLevels}>
-                <PushButton
-                  icon={
-                    level.is_approved ? (
-                      <ExclamationIcon className="icon" />
-                    ) : (
-                      <BadgeCheckIcon className="icon" />
-                    )
-                  }
-                  onClick={() => setLevelApproval(!level.is_approved)}
-                >
-                  {level.is_approved ? "Disapprove" : "Approve"}
-                </PushButton>
+                {level.is_approved ? (
+                  <PushButton
+                    icon={<ExclamationIcon className="icon" />}
+                    onClick={onDisapproveButtonClick}
+                    tooltip="Hides this level from the level listing."
+                  >
+                    Disapprove
+                  </PushButton>
+                ) : (
+                  <PushButton
+                    icon={<BadgeCheckIcon className="icon" />}
+                    onClick={onApproveButtonClick}
+                    tooltip="Shows this level from the level listing."
+                  >
+                    Approve
+                  </PushButton>
+                )}
               </PermissionGuard>
             </>
           }
@@ -310,6 +337,19 @@ const LevelPage = () => {
       </aside>
 
       <div id="LevelPage--main">
+        {level.is_approved || (
+          <InfoMessage type={InfoMessageType.Warning}>
+            {level.disapproval_reason ? (
+              <>
+                This level was disapproved by staff. Reason:{" "}
+                {level.disapproval_reason}
+              </>
+            ) : (
+              <>This level is currently pending approval.</>
+            )}
+          </InfoMessage>
+        )}
+
         {!!level.screenshots.length && (
           <section id="LevelPage--media">
             <MediumThumbnails

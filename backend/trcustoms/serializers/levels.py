@@ -149,6 +149,9 @@ class LevelListingSerializer(serializers.ModelSerializer):
 
 
 class LevelDetailsSerializer(LevelListingSerializer):
+    is_approved = serializers.ReadOnlyField()
+    disapproval_reason = serializers.ReadOnlyField()
+
     cover_id = serializers.PrimaryKeyRelatedField(
         write_only=True,
         source="cover",
@@ -323,9 +326,14 @@ class LevelDetailsSerializer(LevelListingSerializer):
             "file_id",
             "trle_id",
             "is_approved",
+            "disapproval_reason",
         ]
 
 
 @snapshots.register
 class LevelSnapshotSerializer(LevelDetailsSerializer):
     pass
+
+
+class LevelDisapprovalSerializer(serializers.Serializer):
+    reason = serializers.CharField(max_length=200)
