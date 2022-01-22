@@ -14,21 +14,16 @@ import { KEY_RIGHT } from "src/shared/constants";
 import { getYoutubeVideoID } from "src/shared/utils";
 
 interface MediumProps {
-  onClick?: () => void | null;
   file?: UploadedFile;
   link?: string;
 }
 
-const MediumThumbnail = ({ file, link, onClick }: MediumProps) => {
+const MediumThumbnail = ({ file, link }: MediumProps) => {
   const [isActive, setIsActive] = useState<boolean>(false);
   const [elementId] = useState(uniqueId("mediumThumbnail-"));
 
   const onImageClick = () => {
-    if (onClick) {
-      onClick();
-    } else {
-      setIsActive(!isActive);
-    }
+    setIsActive(!isActive);
   };
 
   const navigate = useCallback(
