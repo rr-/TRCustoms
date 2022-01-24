@@ -34,6 +34,7 @@ import { GenreLink } from "src/shared/components/links/GenreLink";
 import { TagLink } from "src/shared/components/links/TagLink";
 import { UserLink } from "src/shared/components/links/UserLink";
 import { DISABLE_PAGING } from "src/shared/constants";
+import { DisplayMode } from "src/shared/types";
 import { formatFileSize } from "src/shared/utils";
 import { formatDate } from "src/shared/utils";
 import { EMPTY_INPUT_PLACEHOLDER } from "src/shared/utils";
@@ -142,7 +143,7 @@ const LevelPage = () => {
       </header>
 
       <div id="LevelPage--cover">
-        <MediumThumbnail file={level.cover} />
+        <MediumThumbnail displayMode={DisplayMode.Cover} file={level.cover} />
       </div>
 
       <aside id="LevelPage--sidebar">
@@ -353,6 +354,7 @@ const LevelPage = () => {
         {!!level.screenshots.length && (
           <section id="LevelPage--media">
             <MediumThumbnails
+              displayMode={DisplayMode.Contain}
               files={level.screenshots.map((screenshot) => screenshot.file)}
               links={showcaseLinks}
             />

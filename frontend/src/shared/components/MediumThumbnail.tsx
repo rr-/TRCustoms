@@ -11,14 +11,16 @@ import { PushButton } from "src/shared/components/PushButton";
 import { KEY_ESCAPE } from "src/shared/constants";
 import { KEY_LEFT } from "src/shared/constants";
 import { KEY_RIGHT } from "src/shared/constants";
+import { DisplayMode } from "src/shared/types";
 import { getYoutubeVideoID } from "src/shared/utils";
 
-interface MediumProps {
+interface MediumThumbnailProps {
   file?: UploadedFile;
   link?: string;
+  displayMode: DisplayMode;
 }
 
-const MediumThumbnail = ({ file, link }: MediumProps) => {
+const MediumThumbnail = ({ file, link, displayMode }: MediumThumbnailProps) => {
   const [isActive, setIsActive] = useState<boolean>(false);
   const [elementId] = useState(uniqueId("mediumThumbnail-"));
 
@@ -68,9 +70,19 @@ const MediumThumbnail = ({ file, link }: MediumProps) => {
 
   useEffect(onLoad, [handleKeypress]);
 
+  const classNames = ["MediumThumbnail"];
+  switch (displayMode) {
+    case DisplayMode.Cover:
+      classNames.push("cover");
+      break;
+    case DisplayMode.Contain:
+      classNames.push("contain");
+      break;
+  }
+
   if (file) {
     return (
-      <div className="MediumThumbnail">
+      <div className={classNames.join(" ")}>
         <img
           alt="Thumbnail"
           className="MediumThumbnail--thumb"
@@ -107,7 +119,7 @@ const MediumThumbnail = ({ file, link }: MediumProps) => {
       const thumbnailUrl = `https://img.youtube.com/vi/${youtubeVideoID}/mqdefault.jpg`;
       return (
         <a
-          className="MediumThumbnail"
+          className={classNames.join(" ")}
           target="_blank"
           rel="noreferrer noopener"
           href={link}

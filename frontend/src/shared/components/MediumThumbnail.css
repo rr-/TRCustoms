@@ -54,8 +54,13 @@
   display: block;
   width: 100%;
   height: 100%;
-  object-fit: cover;
   aspect-ratio: calc(4 / 3);
+}
+.MediumThumbnail.cover .MediumThumbnail--thumb {
+  object-fit: cover;
+}
+.MediumThumbnail.contain .MediumThumbnail--thumb {
+  object-fit: contain;
 }
 .MediumThumbnail--thumb:hover {
   opacity: 0.9;
