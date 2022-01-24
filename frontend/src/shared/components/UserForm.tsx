@@ -16,6 +16,7 @@ import { PasswordFormField } from "src/shared/components/formfields/PasswordForm
 import { TextAreaFormField } from "src/shared/components/formfields/TextAreaFormField";
 import { TextFormField } from "src/shared/components/formfields/TextFormField";
 import { UserLink } from "src/shared/components/links/UserLink";
+import { DisplayMode } from "src/shared/types";
 import { filterFalsyObjectValues } from "src/shared/utils";
 import { makeSentence } from "src/shared/utils";
 import { validateUserName } from "src/shared/utils";
@@ -201,6 +202,7 @@ const UserForm = ({ user, onGoBack, onSubmit }: UserFormProps) => {
                     name="picture_id"
                   >
                     <PicturePicker
+                      displayMode={DisplayMode.Contain}
                       allowMultiple={false}
                       allowClear={true}
                       uploadType={UploadType.UserPicture}

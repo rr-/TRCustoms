@@ -22,4 +22,10 @@ interface GenericSearchResult<TSearchQuery, TItem>
   searchQuery: TSearchQuery;
 }
 
+enum DisplayMode {
+  Cover = "cover",
+  Contain = "contain",
+}
+
 export type { PagedResponse, GenericSearchQuery, GenericSearchResult };
+export { DisplayMode };

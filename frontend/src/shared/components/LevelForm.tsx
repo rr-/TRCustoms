@@ -31,6 +31,7 @@ import { UsersFormField } from "src/shared/components/formfields/UsersFormField"
 import { LevelLink } from "src/shared/components/links/LevelLink";
 import { ConfigContext } from "src/shared/contexts/ConfigContext";
 import { UserContext } from "src/shared/contexts/UserContext";
+import { DisplayMode } from "src/shared/types";
 import { filterFalsyObjectValues } from "src/shared/utils";
 import { makeSentence } from "src/shared/utils";
 import { validateRequired } from "src/shared/utils";
@@ -324,6 +325,7 @@ const LevelForm = ({ level, onGoBack, onSubmit }: LevelFormProps) => {
                   name="cover_id"
                 >
                   <PicturePicker
+                    displayMode={DisplayMode.Cover}
                     allowMultiple={false}
                     allowClear={true}
                     uploadType={UploadType.LevelCover}
@@ -340,6 +342,7 @@ const LevelForm = ({ level, onGoBack, onSubmit }: LevelFormProps) => {
                   name="screenshot_ids"
                 >
                   <PicturePicker
+                    displayMode={DisplayMode.Contain}
                     allowMultiple={true}
                     allowClear={true}
                     uploadType={UploadType.LevelScreenshot}
