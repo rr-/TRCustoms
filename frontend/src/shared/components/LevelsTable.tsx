@@ -68,9 +68,13 @@ const LevelsTable = ({
             <LevelLink level={level} />
           </strong>{" "}
           by{" "}
-          {level.authors.map((author) => (
-            <UserLink key={author.id} user={author} />
-          ))}
+          <ul className="LevelsTable--authorList">
+            {level.authors.map((author) => (
+              <li className="LevelsTable--authorListItem">
+                <UserLink key={author.id} user={author} />
+              </li>
+            ))}
+          </ul>
           <br />
           <small>
             Genres:{" "}
