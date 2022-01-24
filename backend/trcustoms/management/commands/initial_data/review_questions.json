@@ -209,12 +209,12 @@
     "weight": 20,
     "question_text": "There were bugs/problems that seriously ruined my experience.",
     "answers": [
-      { "points": 0, "answer_text": "Strongly disagree" },
-      { "points": 1, "answer_text": "Disagree" },
-      { "points": 2, "answer_text": "Slightly disagree" },
-      { "points": 3, "answer_text": "Slightly agree" },
-      { "points": 4, "answer_text": "Agree" },
-      { "points": 5, "answer_text": "Strongly agree" }
+      { "points": 5, "answer_text": "Strongly disagree" },
+      { "points": 4, "answer_text": "Disagree" },
+      { "points": 3, "answer_text": "Slightly disagree" },
+      { "points": 2, "answer_text": "Slightly agree" },
+      { "points": 1, "answer_text": "Agree" },
+      { "points": 0, "answer_text": "Strongly agree" }
     ]
   }
 ]

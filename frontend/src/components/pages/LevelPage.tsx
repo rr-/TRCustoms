@@ -4,8 +4,10 @@ import { GlobeAltIcon } from "@heroicons/react/outline";
 import { PencilIcon } from "@heroicons/react/outline";
 import { BadgeCheckIcon } from "@heroicons/react/outline";
 import { XCircleIcon } from "@heroicons/react/outline";
+import { AnnotationIcon } from "@heroicons/react/outline";
 import axios from "axios";
 import { AxiosError } from "axios";
+import { useContext } from "react";
 import { Fragment } from "react";
 import { useState } from "react";
 import { useQueryClient } from "react-query";
@@ -19,13 +21,14 @@ import type { SnapshotSearchQuery } from "src/services/snapshot.service";
 import { UserPermission } from "src/services/user.service";
 import { InfoMessage } from "src/shared/components/InfoMessage";
 import { InfoMessageType } from "src/shared/components/InfoMessage";
+import { LevelRating } from "src/shared/components/LevelRating";
 import { Loader } from "src/shared/components/Loader";
 import { Markdown } from "src/shared/components/Markdown";
 import { MediumThumbnail } from "src/shared/components/MediumThumbnail";
 import { MediumThumbnails } from "src/shared/components/MediumThumbnails";
 import { PermissionGuard } from "src/shared/components/PermissionGuard";
 import { PushButton } from "src/shared/components/PushButton";
-import { ReviewsTable } from "src/shared/components/ReviewsTable";
+import { ReviewsList } from "src/shared/components/ReviewsList";
 import { SectionHeader } from "src/shared/components/SectionHeader";
 import { SidebarBox } from "src/shared/components/SidebarBox";
 import { SnapshotsTable } from "src/shared/components/SnapshotsTable";
@@ -34,6 +37,7 @@ import { GenreLink } from "src/shared/components/links/GenreLink";
 import { TagLink } from "src/shared/components/links/TagLink";
 import { UserLink } from "src/shared/components/links/UserLink";
 import { DISABLE_PAGING } from "src/shared/constants";
+import { UserContext } from "src/shared/contexts/UserContext";
 import { DisplayMode } from "src/shared/types";
 import { formatFileSize } from "src/shared/utils";
 import { formatDate } from "src/shared/utils";
@@ -44,6 +48,7 @@ interface LevelPageParams {
 }
 
 const LevelPage = () => {
+  const { user } = useContext(UserContext);
   const { levelId } = (useParams() as unknown) as LevelPageParams;
   const queryClient = useQueryClient();
   const [snapshotsSearchQuery, setSnapshotsSearchQuery] = useState<
@@ -207,6 +212,17 @@ const LevelPage = () => {
                   </PushButton>
                 )}
               </PermissionGuard>
+
+              {level.authors.every((author) => author.id !== user.id) && (
+                <PermissionGuard require={UserPermission.reviewLevels}>
+                  <PushButton
+                    icon={<AnnotationIcon className="icon" />}
+                    to={`/levels/${levelId}/review`}
+                  >
+                    Review
+                  </PushButton>
+                </PermissionGuard>
+              )}
             </>
           }
         >
@@ -227,6 +243,10 @@ const LevelPage = () => {
               ) : (
                 EMPTY_INPUT_PLACEHOLDER
               )}
+            </dd>
+            <dt>Rating</dt>
+            <dd>
+              <LevelRating ratingClass={level.rating_class} />
             </dd>
 
             <div>
@@ -371,10 +391,8 @@ const LevelPage = () => {
         </section>
 
         <section id="LevelPage--reviews">
-          <ReviewsTable
+          <ReviewsList
             showLevels={false}
-            showDetails={true}
-            showAuthors={true}
             searchQuery={reviewsSearchQuery}
             onSearchQueryChange={setReviewsSearchQuery}
           />

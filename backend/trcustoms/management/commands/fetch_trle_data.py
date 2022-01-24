@@ -22,7 +22,7 @@ from trcustoms.models import (
     LevelEngine,
     LevelExternalLink,
     LevelFile,
-    LevelLegacyReview,
+    LevelReview,
     LevelScreenshot,
     LevelTag,
     UploadedFile,
@@ -201,14 +201,15 @@ def process_level_reviews(level: Level, trle_level: TRLELevel) -> None:
                 trle_level.level_id,
             )
         else:
-            review, _created = LevelLegacyReview.objects.update_or_create(
+            review, _created = LevelReview.objects.update_or_create(
                 level=level,
                 author=reviewer,
+                review_type=LevelReview.ReviewType.TRLE,
                 defaults=dict(
-                    rating_gameplay=trle_review.rating_gameplay,
-                    rating_enemies=trle_review.rating_enemies,
-                    rating_atmosphere=trle_review.rating_atmosphere,
-                    rating_lighting=trle_review.rating_lighting,
+                    trle_rating_gameplay=trle_review.rating_gameplay,
+                    trle_rating_enemies=trle_review.rating_enemies,
+                    trle_rating_atmosphere=trle_review.rating_atmosphere,
+                    trle_rating_lighting=trle_review.rating_lighting,
                     text=trle_review.text,
                 ),
             )

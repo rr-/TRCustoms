@@ -28,10 +28,10 @@ router.register(r"uploads", UploadViewSet, basename="uploads")
 router.register(r"snapshots", SnapshotViewSet, basename="snapshots")
 router.register(r"levels", LevelViewSet)
 router.register(r"level_tags", LevelTagViewSet)
-router.register(r"level_reviews", LevelReviewViewSet)
 router.register(r"level_genres", LevelGenreViewSet)
 router.register(r"level_engines", LevelEngineViewSet)
 router.register(r"level_files", LevelFileViewSet)
+router.register(r"reviews", LevelReviewViewSet)
 
 urlpatterns = [
     path("api/auth/token/", TokenObtainPairView.as_view()),

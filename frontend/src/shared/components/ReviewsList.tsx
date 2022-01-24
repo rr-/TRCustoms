@@ -4,8 +4,11 @@ import type { ReviewListing } from "src/services/review.service";
 import { ReviewService } from "src/services/review.service";
 import type { ReviewSearchResult } from "src/services/review.service";
 import type { ReviewSearchQuery } from "src/services/review.service";
+import { UserPermission } from "src/services/user.service";
 import { Loader } from "src/shared/components/Loader";
 import { Markdown } from "src/shared/components/Markdown";
+import { PermissionGuard } from "src/shared/components/PermissionGuard";
+import { PushButton } from "src/shared/components/PushButton";
 import { SectionHeader } from "src/shared/components/SectionHeader";
 import { LevelLink } from "src/shared/components/links/LevelLink";
 import { UserLink } from "src/shared/components/links/UserLink";
@@ -45,6 +48,18 @@ const ReviewView = ({ review, showLevels }: ReviewViewProps) => {
       <em>
         <UserLink user={review.author} />, {formatDate(review.created)}
       </em>
+      <PermissionGuard
+        require={UserPermission.editReviews}
+        owningUsers={[review.author]}
+      >
+        <div>
+          <PushButton
+            to={`/levels/${review.level.id}/review/${review.id}/edit`}
+          >
+            Edit
+          </PushButton>
+        </div>
+      </PermissionGuard>
     </div>
   );
 };

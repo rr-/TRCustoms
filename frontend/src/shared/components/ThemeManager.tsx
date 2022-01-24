@@ -11,6 +11,12 @@ interface Theme {
     "failure-text-color": string;
     "warning-text-color": string;
     "success-text-color": string;
+    "positive-border-color": string;
+    "neutral-border-color": string;
+    "negative-border-color": string;
+    "positive-background-color": string;
+    "neutral-background-color": string;
+    "negative-background-color": string;
     "input-background-color": string;
     "input-border-color": string;
     "input-invalid-border-color": string;
@@ -49,6 +55,12 @@ const themes: Array<Theme> = [
       "failure-text-color": "#f32d0a",
       "warning-text-color": "#9e921e",
       "success-text-color": "#1e921e",
+      "positive-border-color": "#4cc24c",
+      "neutral-border-color": "#cbc544",
+      "negative-border-color": "#e0735f",
+      "positive-background-color": "#c5f0ac",
+      "neutral-background-color": "#ffe6aa",
+      "negative-background-color": "#fed0d0",
       "input-background-color": "floralwhite",
       "input-border-color": "var(--button-background-color)",
       "input-invalid-border-color": "red",
@@ -88,6 +100,12 @@ const themes: Array<Theme> = [
       "failure-text-color": "firebrick",
       "warning-text-color": "darkorange",
       "success-text-color": "green",
+      "positive-border-color": "#4cc24c",
+      "neutral-border-color": "#cbc544",
+      "negative-border-color": "#e0735f",
+      "positive-background-color": "#c5f0ac",
+      "neutral-background-color": "#efefd7",
+      "negative-background-color": "#fed0d0",
       "input-background-color": "var(--background-color)",
       "input-border-color": "var(--button-background-color)",
       "input-invalid-border-color": "red",
@@ -126,6 +144,12 @@ const themes: Array<Theme> = [
       "failure-text-color": "tomato",
       "warning-text-color": "yellow",
       "success-text-color": "limegreen",
+      "positive-border-color": "#2f4323",
+      "neutral-border-color": "#383824",
+      "negative-border-color": "#5d2f2f",
+      "positive-background-color": "#2f4323",
+      "neutral-background-color": "#383824",
+      "negative-background-color": "#5d2f2f",
       "input-background-color": "#a8c7e0",
       "input-border-color": "var(--button-background-color)",
       "input-invalid-border-color": "red",

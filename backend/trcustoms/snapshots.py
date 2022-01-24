@@ -139,7 +139,12 @@ class SnapshotRegistryEntry:
         default_factory=lambda: lambda entity: entity.name
     )
     ignore_fields: list[str] = field(
-        default_factory=lambda: ["created", "last_updated", "download_count"]
+        default_factory=lambda: [
+            "created",
+            "last_updated",
+            "download_count",
+            "rating_class",
+        ]
     )
 
 
@@ -186,6 +191,7 @@ def make_snapshot(
     object_name = entry.name_getter(obj)
     object_type = ContentType.objects.get_for_model(obj)
     object_desc = serializer.data
+    print(object_desc, flush=True)
 
     last_snapshot = (
         Snapshot.objects.filter(object_id=object_id, object_type=object_type)

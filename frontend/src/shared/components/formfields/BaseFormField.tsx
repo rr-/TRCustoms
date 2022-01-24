@@ -25,7 +25,8 @@ const BaseFormField = ({
       {label ? (
         <label className="FormField--label" htmlFor={name}>
           {label}
-          {required && <>*</>}:
+          {required && <>*</>}
+          {!label.match(/[.?!:]$/) && <>:</>}
         </label>
       ) : null}
       <div className="FormField--field">

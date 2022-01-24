@@ -34,7 +34,7 @@ enum SnapshotObjectType {
   LevelTag = "leveltag",
   LevelDuration = "levelduration",
   LevelDifficulty = "leveldifficulty",
-  LevelReview = "levellegacyreview",
+  LevelReview = "levelreview",
 }
 
 interface SnapshotListing {

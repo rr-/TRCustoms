@@ -22,10 +22,21 @@ interface GenericSearchResult<TSearchQuery, TItem>
   searchQuery: TSearchQuery;
 }
 
+interface RatingClass {
+  id: number;
+  name: string;
+  position: number;
+}
+
 enum DisplayMode {
   Cover = "cover",
   Contain = "contain",
 }
 
-export type { PagedResponse, GenericSearchQuery, GenericSearchResult };
+export type {
+  PagedResponse,
+  GenericSearchQuery,
+  GenericSearchResult,
+  RatingClass,
+};
 export { DisplayMode };

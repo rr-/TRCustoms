@@ -20,7 +20,7 @@ const formatDiffType = (diffType: DiffType): string => {
   }
 };
 
-const formatDiff = (item: DiffItem): React.ReactNode | null => {
+const formatDiff = (item: DiffItem): string | null => {
   if (item.path === null && item?.old === null) {
     return "Initial revision";
   }
@@ -34,7 +34,7 @@ const formatDiff = (item: DiffItem): React.ReactNode | null => {
     }
   }
 
-  for (let path of ["description", "text"]) {
+  for (let path of ["description", "text", "answers", "cover"]) {
     if (item.path?.[0] === path) {
       return `Updated the ${path}`;
     }
@@ -50,18 +50,18 @@ const formatDiff = (item: DiffItem): React.ReactNode | null => {
 
   if (item.path?.[0] === "authors") {
     if (item.diff_type === DiffType.Added) {
-      return <>{`Added author ${item.new.username}`}</>;
+      return `Added author ${item.new.username}`;
     } else if (item.diff_type === DiffType.Deleted) {
-      return <>{`Removed author ${item.old.username}`}</>;
+      return `Removed author ${item.old.username}`;
     }
   }
 
   for (let path of ["genre", "tag"]) {
     if (item.path?.[0] === `${path}s`) {
       if (item.diff_type === DiffType.Added) {
-        return <>{`Added ${path} ${item.new.name}`}</>;
+        return `Added ${path} ${item.new.name}`;
       } else if (item.diff_type === DiffType.Deleted) {
-        return <>{`Removed ${path} ${item.old.name}`}</>;
+        return `Removed ${path} ${item.old.name}`;
       }
     }
   }
@@ -91,41 +91,29 @@ const formatDiff = (item: DiffItem): React.ReactNode | null => {
 
   if (item.path?.[0] === "external_links") {
     if (item.diff_type === DiffType.Updated && item.path?.[2] === "position") {
-      return (
-        <>
-          Reordered external links ({JSON.stringify(item.old)} →{" "}
-          {JSON.stringify(item.new)})
-        </>
-      );
+      return `Reordered external links (${JSON.stringify(
+        item.old
+      )} → ${JSON.stringify(item.new)})`;
     } else if (item.diff_type === DiffType.Added) {
-      return (
-        <>
-          Added external link {item.new?.url} (
-          {formatLinkType(item.new?.link_type)})
-        </>
-      );
+      return `Added external link ${item.new?.url} (${formatLinkType(
+        item.new?.link_type
+      )})`;
     } else if (item.diff_type === DiffType.Deleted) {
-      return (
-        <>
-          Removed external link {item.old?.url} (
-          {formatLinkType(item.old?.link_type)})
-        </>
-      );
+      return `Removed external link ${item.old?.url} (${formatLinkType(
+        item.old?.link_type
+      )})`;
     }
   }
 
   if (item.path?.[0] === "screenshots" || item.path?.[0] === "media") {
     if (item.diff_type === DiffType.Updated && item.path?.[2] === "position") {
-      return (
-        <>
-          Reordered screenshots ({JSON.stringify(item.old)} →{" "}
-          {JSON.stringify(item.new)})
-        </>
-      );
+      return `Reordered screenshots (${JSON.stringify(
+        item.old
+      )} → ${JSON.stringify(item.new)})`;
     } else if (item.diff_type === DiffType.Added) {
-      return <>Added screenshot {item.new?.position}</>;
+      return `Added screenshot ${item.new?.position}`;
     } else if (item.diff_type === DiffType.Deleted) {
-      return <>Removed screenshot {item.old?.position}</>;
+      return `Removed screenshot ${item.old?.position}`;
     }
   }
 
@@ -136,35 +124,41 @@ const formatDiff = (item: DiffItem): React.ReactNode | null => {
 
   if (item.path?.[0] === "files") {
     if (item.diff_type === DiffType.Added) {
-      return <>Uploaded a new level file</>;
+      return "Uploaded a new level file";
     }
     if (item.diff_type === DiffType.Deleted) {
-      return <>Removed a level file</>;
+      return "Removed a level file";
     }
   }
 
-  return (
-    <>
-      {formatDiffType(item.diff_type)} {item.path.join(" ")} (
-      {JSON.stringify(item.old)} → {JSON.stringify(item.new)})
-    </>
-  );
+  return `${formatDiffType(item.diff_type)} ${item.path.join(
+    " "
+  )} (${JSON.stringify(item.old)} → ${JSON.stringify(item.new)})`;
 };
 
 const SnapshotDiffView = ({ snapshot }: SnapshotDiffViewProps) => {
+  const formattedDiffs: string[] = [];
+  for (let item of snapshot.diff) {
+    const formattedItem = formatDiff(item);
+    if (formattedItem && !formattedDiffs.includes(formattedItem)) {
+      formattedDiffs.push(formattedItem);
+    }
+  }
+
+  if (!formattedDiffs.length) {
+    return null;
+  }
+
   return (
     <ul className="SnapshotDiffView--list">
       {snapshot.change_type === SnapshotChangeType.Delete ? (
         <li className="SnapshotDiffView--listItem">Deleted</li>
       ) : (
-        snapshot.diff.map((item, i) => {
-          const formatted = formatDiff(item);
-          return formatted ? (
-            <li key={i} className="SnapshotDiffView--listItem">
-              {formatted}
-            </li>
-          ) : null;
-        })
+        formattedDiffs.map((formattedItem, i) => (
+          <li key={i} className="SnapshotDiffView--listItem">
+            {formattedItem}
+          </li>
+        ))
       )}
     </ul>
   );

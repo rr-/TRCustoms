@@ -15,12 +15,26 @@ interface DifficultyListing {
   name: string;
 }
 
+interface ReviewTemplateAnswer {
+  position: number;
+  id: number;
+  answer_text: string;
+}
+
+interface ReviewTemplateQuestion {
+  position: number;
+  id: number;
+  question_text: string;
+  answers: ReviewTemplateAnswer[];
+}
+
 interface Config {
   tags: TagListing[];
   genres: GenreListing[];
   engines: EngineListing[];
   durations: DurationListing[];
   difficulties: DifficultyListing[];
+  review_questions: ReviewTemplateQuestion[];
   limits: {
     min_tags: number;
     max_tags: number;
@@ -47,6 +61,12 @@ const ConfigService = {
   getConfig,
 };
 
-export type { Config };
+export type {
+  DurationListing,
+  DifficultyListing,
+  ReviewTemplateAnswer,
+  ReviewTemplateQuestion,
+  Config,
+};
 
 export { ConfigService };

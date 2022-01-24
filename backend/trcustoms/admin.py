@@ -14,15 +14,17 @@ from trcustoms.models import (
     LevelExternalLink,
     LevelFile,
     LevelGenre,
-    LevelLegacyReview,
+    LevelReview,
     LevelScreenshot,
     LevelTag,
+    RatingClass,
     ReviewTemplateAnswer,
     ReviewTemplateQuestion,
     Snapshot,
     UploadedFile,
     User,
 )
+from trcustoms.ratings import get_review_score
 from trcustoms.snapshots import make_snapshot
 
 
@@ -188,13 +190,16 @@ class LevelAdmin(SnapshotAdminMixin, admin.ModelAdmin):
         "name",
         "uploader",
         "download_count",
+        "rating_class",
         "is_approved",
         "created",
         "last_updated",
     ]
-    list_filter = ["genres", "tags"]
-    form = LevelForm
-    inlines = [LevelExternalLinkInline]
+    list_filter = [
+        "rating_class",
+        "genres",
+        "tags",
+    ]
     readonly_fields = [
         "download_count",
         "created",
@@ -202,6 +207,8 @@ class LevelAdmin(SnapshotAdminMixin, admin.ModelAdmin):
         "last_file",
     ]
     raw_id_fields = ["uploader", "authors", "cover"]
+    form = LevelForm
+    inlines = [LevelExternalLinkInline]
 
 
 @admin.register(LevelScreenshot)
@@ -235,28 +242,30 @@ class LevelFileAdmin(SnapshotAdminMixin, admin.ModelAdmin):
         return obj.level
 
 
-@admin.register(LevelLegacyReview)
-class LevelLegacyReviewAdmin(SnapshotAdminMixin, admin.ModelAdmin):
-    ordering = ["level__name"]
+@admin.register(LevelReview)
+class LevelReviewAdmin(SnapshotAdminMixin, admin.ModelAdmin):
+    ordering = ["-created"]
     list_display = [
         "id",
         "author",
         "level",
-        "rating_gameplay",
-        "rating_enemies",
-        "rating_atmosphere",
-        "rating_lighting",
+        "review_type",
+        "rating_class",
         "created",
         "last_updated",
     ]
+    list_filter = ["review_type"]
     search_fields = [
         "level__name",
         "author__username",
         "author__first_name",
         "author__last_name",
     ]
-    readonly_fields = ["created", "last_updated"]
+    readonly_fields = ["created", "last_updated", "score", "rating_class"]
     raw_id_fields = ["level", "author"]
+
+    def score(self, obj):
+        return get_review_score(obj)
 
 
 @admin.register(UploadedFile)
@@ -338,3 +347,16 @@ class ReviewTemplateAnswerAdmin(admin.ModelAdmin):
     list_filter = ["question"]
     ordering = ["position"]
     list_display = ["question", "position", "answer_text", "points"]
+
+
+@admin.register(RatingClass)
+class RatingClassAdmin(ReadOnlyAdminMixin, admin.ModelAdmin):
+    ordering = ["target", "position"]
+    list_display = [
+        "target",
+        "position",
+        "name",
+        "min_rating_count",
+        "min_rating_average",
+        "max_rating_average",
+    ]

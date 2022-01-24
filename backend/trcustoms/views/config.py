@@ -9,6 +9,7 @@ from trcustoms.models import (
     LevelEngine,
     LevelGenre,
     LevelTag,
+    ReviewTemplateQuestion,
 )
 from trcustoms.serializers import (
     LevelDifficultyListingSerializer,
@@ -16,6 +17,7 @@ from trcustoms.serializers import (
     LevelEngineListingSerializer,
     LevelGenreListingSerializer,
     LevelTagListingSerializer,
+    ReviewTemplateQuestionSerializer,
 )
 
 
@@ -28,6 +30,7 @@ class ConfigViewSet(viewsets.ViewSet):
         level_engines = LevelEngine.objects.with_counts()
         level_difficulties = LevelDifficulty.objects.all()
         level_durations = LevelDuration.objects.all()
+        review_questions = ReviewTemplateQuestion.objects.all()
         return Response(
             {
                 "tags": LevelTagListingSerializer(level_tags, many=True).data,
@@ -42,6 +45,9 @@ class ConfigViewSet(viewsets.ViewSet):
                 ).data,
                 "durations": LevelDurationListingSerializer(
                     level_durations, many=True
+                ).data,
+                "review_questions": ReviewTemplateQuestionSerializer(
+                    review_questions, many=True
                 ).data,
                 "limits": {
                     "min_genres": settings.MIN_GENRES,

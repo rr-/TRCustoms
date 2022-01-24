@@ -9,6 +9,7 @@ import type { LevelSearchQuery } from "src/services/level.service";
 import { LevelService } from "src/services/level.service";
 import type { DataTableColumn } from "src/shared/components/DataTable";
 import { DataTable } from "src/shared/components/DataTable";
+import { LevelRating } from "src/shared/components/LevelRating";
 import { LevelLink } from "src/shared/components/links/LevelLink";
 import { UserLink } from "src/shared/components/links/UserLink";
 import { formatDate } from "src/shared/utils";
@@ -77,6 +78,8 @@ const LevelsTable = ({
           </ul>
           <br />
           <small>
+            Reviews: <LevelRating ratingClass={level.rating_class} />
+            <br />
             Genres:{" "}
             {level.genres.map((tag) => tag.name).join(", ") ||
               EMPTY_INPUT_PLACEHOLDER}

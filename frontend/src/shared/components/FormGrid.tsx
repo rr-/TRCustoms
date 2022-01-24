@@ -2,7 +2,13 @@ import "./FormGrid.css";
 import { useFormikContext } from "formik";
 import { intersection } from "lodash";
 
+enum FormGridType {
+  Column = "column",
+  Grid = "grid",
+}
+
 interface FormGridProps {
+  gridType?: FormGridType;
   children: React.ReactNode;
 }
 
@@ -16,8 +22,10 @@ interface FormGridFieldSetProps {
   children: React.ReactNode;
 }
 
-const FormGrid = ({ children }: FormGridProps) => {
-  return <div className="FormGrid">{children}</div>;
+const FormGrid = ({ gridType, children }: FormGridProps) => {
+  gridType ||= FormGridType.Grid;
+  const classNames = ["FormGrid", gridType];
+  return <div className={classNames.join(" ")}>{children}</div>;
 };
 
 const FormGridButtons = ({ status, children }: FormGridButtonsProps) => {
@@ -48,4 +56,4 @@ const FormGridFieldSet = ({ title, children }: FormGridFieldSetProps) => {
   );
 };
 
-export { FormGrid, FormGridButtons, FormGridFieldSet };
+export { FormGridType, FormGrid, FormGridButtons, FormGridFieldSet };
