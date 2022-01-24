@@ -40,3 +40,16 @@
 .LevelsTable--statusRejected {
   color: var(--failure-text-color);
 }
+.LevelsTable--authorList {
+  display: inline;
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+.LevelsTable--authorListItem {
+  display: inline;
+}
+.LevelsTable--authorListItem:not(:last-child):after {
+  content: ", ";
+  padding: 0;
+}
