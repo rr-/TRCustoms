@@ -60,6 +60,7 @@ class LevelViewSet(
             "screenshots__file",
             "external_links",
             "cover",
+            "rating_class",
         )
         .distinct()
     )
@@ -77,6 +78,7 @@ class LevelViewSet(
         "engine",
         "created",
         "download_count",
+        "rating_class__position",
         "last_updated",
         "last_file__file__size",
     ]

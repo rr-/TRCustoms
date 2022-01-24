@@ -5,6 +5,7 @@ from trcustoms.models.level_duration import LevelDuration
 from trcustoms.models.level_engine import LevelEngine
 from trcustoms.models.level_genre import LevelGenre
 from trcustoms.models.level_tag import LevelTag
+from trcustoms.models.rating_class import RatingClass
 from trcustoms.models.uploaded_file import UploadedFile
 from trcustoms.models.user import User
 from trcustoms.models.util import DatesInfo
@@ -39,6 +40,10 @@ class Level(DatesInfo):
 
     is_approved = models.BooleanField(default=False)
     rejection_reason = models.CharField(max_length=200, null=True, blank=True)
+
+    rating_class = models.ForeignKey(
+        RatingClass, blank=True, null=True, on_delete=models.SET_NULL
+    )
 
     # denormalized fields for faster db lookups
     download_count = models.IntegerField(default=0)

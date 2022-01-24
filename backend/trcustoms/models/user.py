@@ -12,6 +12,8 @@ class UserPermission:
     LIST_USERS = "list_users"
     UPLOAD_LEVELS = "upload_levels"
     EDIT_LEVELS = "edit_levels"
+    REVIEW_LEVELS = "review_levels"
+    EDIT_REVIEWS = "edit_reviews"
     REVIEW_SNAPSHOTS = "review_snapshots"
 
 
@@ -55,12 +57,14 @@ class User(AbstractUser):
     def permissions(self) -> list[UserPermission]:
         permissions = {
             UserPermission.LIST_USERS,
+            UserPermission.REVIEW_LEVELS,
             UserPermission.UPLOAD_LEVELS,
         }
         if self.is_staff:
             permissions |= {
                 UserPermission.EDIT_USERS,
                 UserPermission.EDIT_LEVELS,
+                UserPermission.EDIT_REVIEWS,
                 UserPermission.REVIEW_SNAPSHOTS,
             }
         return sorted(permissions)

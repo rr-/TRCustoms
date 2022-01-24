@@ -1,6 +1,6 @@
 from rest_framework.permissions import BasePermission
 
-from trcustoms.models import Level, LevelLegacyReview, User, UserPermission
+from trcustoms.models import Level, LevelReview, User, UserPermission
 
 
 class AllowNone(BasePermission):
@@ -35,6 +35,6 @@ class IsAccessingOwnResource(BasePermission):
                 obj.uploader == request.user
                 or obj.authors.filter(id=request.user.id).exists()
             )
-        if isinstance(obj, LevelLegacyReview):
+        if isinstance(obj, LevelReview):
             return obj.author == request.user
         return False

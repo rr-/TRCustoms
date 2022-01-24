@@ -8,6 +8,7 @@ import { api } from "src/shared/api";
 import { API_URL } from "src/shared/constants";
 import type { GenericSearchQuery } from "src/shared/types";
 import { GenericSearchResult } from "src/shared/types";
+import type { RatingClass } from "src/shared/types";
 import { filterFalsyObjectValues } from "src/shared/utils";
 import { getGenericSearchQuery } from "src/shared/utils";
 
@@ -71,6 +72,8 @@ interface LevelListing {
   external_links: ExternalLink[];
   is_approved: boolean;
   rejection_reason: string | null;
+  rating_class: RatingClass | null;
+  review_count: number;
 }
 
 interface LevelDetails extends LevelListing {

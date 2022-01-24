@@ -6,6 +6,8 @@ import { GenreListPage } from "src/components/pages/GenreListPage";
 import { LevelEditPage } from "src/components/pages/LevelEditPage";
 import { LevelListPage } from "src/components/pages/LevelListPage";
 import { LevelPage } from "src/components/pages/LevelPage";
+import { LevelReviewEditPage } from "src/components/pages/LevelReviewEditPage";
+import { LevelReviewPage } from "src/components/pages/LevelReviewPage";
 import { LevelUploadPage } from "src/components/pages/LevelUploadPage";
 import { LoginPage } from "src/components/pages/LoginPage";
 import { LogoutPage } from "src/components/pages/LogoutPage";
@@ -37,6 +39,14 @@ function App() {
             <Route path="/levels" element={<LevelListPage />} />
             <Route path="/my-levels" element={<MyLevelsPage />} />
             <Route path="/levels/:levelId" element={<LevelPage />} />
+            <Route
+              path="/levels/:levelId/review"
+              element={<LevelReviewPage />}
+            />
+            <Route
+              path="/levels/:levelId/review/:reviewId/edit"
+              element={<LevelReviewEditPage />}
+            />
             <Route path="/levels/:levelId/edit" element={<LevelEditPage />} />
             <Route path="/tags" element={<TagListPage />} />
             <Route path="/genres" element={<GenreListPage />} />

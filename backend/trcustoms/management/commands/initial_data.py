@@ -8,6 +8,7 @@ from trcustoms.models import (
     LevelDuration,
     LevelEngine,
     LevelGenre,
+    RatingClass,
     ReviewTemplateAnswer,
     ReviewTemplateQuestion,
 )
@@ -22,6 +23,7 @@ class Command(BaseCommand):
         self.create_durations()
         self.create_difficulties()
         self.create_review_template()
+        self.create_rating_classes()
 
     def create_genres(self) -> None:
         for item in self.read_json("genres.json"):
@@ -66,6 +68,24 @@ class Command(BaseCommand):
                         question=question,
                         points=aitem["points"],
                         answer_text=aitem["answer_text"],
+                    ),
+                )
+
+    def create_rating_classes(self) -> None:
+        data = self.read_json("rating_classes.json")
+        for (path, target) in [
+            ("levels", RatingClass.Target.LEVEL),
+            ("reviews", RatingClass.Target.REVIEW),
+        ]:
+            for item in data[path]:
+                RatingClass.objects.update_or_create(
+                    target=target,
+                    position=item["position"],
+                    defaults=dict(
+                        name=item["name"],
+                        min_rating_average=item["min_rating_average"],
+                        max_rating_average=item["max_rating_average"],
+                        min_rating_count=item["min_rating_count"],
                     ),
                 )
 

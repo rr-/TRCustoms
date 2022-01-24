@@ -13,7 +13,7 @@ import { Loader } from "src/shared/components/Loader";
 import { Markdown } from "src/shared/components/Markdown";
 import { PermissionGuard } from "src/shared/components/PermissionGuard";
 import { PushButton } from "src/shared/components/PushButton";
-import { ReviewsTable } from "src/shared/components/ReviewsTable";
+import { ReviewsList } from "src/shared/components/ReviewsList";
 import { SectionHeader } from "src/shared/components/SectionHeader";
 import { SidebarBox } from "src/shared/components/SidebarBox";
 import { UserPicture } from "src/shared/components/UserPicture";
@@ -153,10 +153,8 @@ const UserPage = () => {
         </section>
 
         <section id="UserPage--reviewedLevels">
-          <ReviewsTable
+          <ReviewsList
             showLevels={true}
-            showDetails={false}
-            showAuthors={false}
             searchQuery={reviewSearchQuery}
             onSearchQueryChange={setReviewSearchQuery}
           />

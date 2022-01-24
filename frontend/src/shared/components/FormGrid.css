@@ -1,31 +1,37 @@
-.FormGrid {
+.FormGrid.grid {
   display: grid;
   grid-template-columns: min-content auto;
   gap: 0.5rem 0;
 }
 
-.FormGridButtons {
+.FormGrid.grid .FormGridButtons {
   display: contents;
 }
-.FormGridButtons--status {
+.FormGrid.grid .FormGridButtons--status {
   grid-column: 1 / span 2;
 }
-.FormGridButtons--status,
-.FormGridButtons--buttons {
+.FormGrid.grid .FormGridButtons--status,
+.FormGrid.grid .FormGridButtons--buttons {
   grid-column: 2;
 }
 
-.FormGridFieldSet {
+.FormGrid.column .FormGridButtons {
+  margin-top: 1rem;
+}
+
+.FormGrid.grid .FormGridFieldSet {
   display: contents;
+}
+.FormGrid.grid .FormGridFieldSet--title {
+  grid-column: 1 / span 2;
 }
 .FormGridFieldSet--title {
-  grid-column: 1 / span 2;
   margin: 1rem 0 0 0;
 }
-.FormGridFieldSet--fields {
+.FormGrid.grid .FormGridFieldSet--fields {
   display: contents;
 }
-.FormGridFieldSet--fields .FormField {
+.FormGrid.grid .FormGridFieldSet--fields .FormField {
   display: contents;
 }
 .FormGridFieldSet--fields .FormField--label {
@@ -37,4 +43,8 @@
   height: 1.5rem;
   box-sizing: padding-box;
   text-align: right;
+}
+.FormGrid.column .FormGridFieldSet--fields .FormField--label {
+  margin: 1rem 0 0 0;
+  padding-left: 0.5rem;
 }

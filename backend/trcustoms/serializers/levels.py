@@ -28,6 +28,7 @@ from trcustoms.serializers.level_external_links import (
 from trcustoms.serializers.level_genres import LevelGenreNestedSerializer
 from trcustoms.serializers.level_screenshots import LevelScreenshotSerializer
 from trcustoms.serializers.level_tags import LevelTagNestedSerializer
+from trcustoms.serializers.rating_classes import RatingClassNestedSerializer
 from trcustoms.serializers.uploaded_files import UploadedFileNestedSerializer
 from trcustoms.serializers.users import UserNestedSerializer
 
@@ -60,6 +61,7 @@ class LevelFileSerializer(serializers.ModelSerializer):
 class LevelListingSerializer(serializers.ModelSerializer):
     is_approved = serializers.ReadOnlyField()
     rejection_reason = serializers.ReadOnlyField()
+    rating_class = RatingClassNestedSerializer(read_only=True)
 
     engine = LevelEngineNestedSerializer(read_only=True)
     engine_id = serializers.PrimaryKeyRelatedField(
@@ -150,6 +152,7 @@ class LevelListingSerializer(serializers.ModelSerializer):
             "download_count",
             "is_approved",
             "rejection_reason",
+            "rating_class",
         ]
 
 
@@ -232,14 +235,16 @@ class LevelDetailsSerializer(LevelListingSerializer):
 
         return validated_data
 
-    @staticmethod
-    def handle_m2m(level_factory, validated_data):
+    def handle_m2m(self, level_factory, validated_data):
         external_links = validated_data.pop("external_links", None)
         screenshots = validated_data.pop("screenshots", None)
         file = validated_data.pop("file", None)
         tags = validated_data.pop("tags", None)
         genres = validated_data.pop("genres", None)
         authors = validated_data.pop("authors", None)
+
+        if "uploader" not in validated_data:
+            validated_data["uploader"] = self.context["request"].user
 
         level = level_factory()
 

@@ -1,0 +1,47 @@
+.ReviewsList--author {
+  width: 26%;
+}
+.ReviewsList--ratingGameplay {
+  width: 12%;
+  text-align: center;
+}
+.ReviewsList--ratingEnemies {
+  width: 17%;
+  text-align: center;
+}
+.ReviewsList--ratingAtmosphere {
+  width: 18%;
+  text-align: center;
+}
+.ReviewsList--ratingLighting {
+  width: 12%;
+  text-align: center;
+}
+.ReviewsList--created {
+  width: 15%;
+  white-space: nowrap;
+}
+.ReviewsList .SortLink {
+  white-space: normal;
+}
+
+.ReviewsList--review {
+  padding: 1rem;
+  border: 2px solid;
+  margin-bottom: 1rem;
+}
+.ReviewsList--review > *:first-child {
+  margin-top: 0;
+}
+.ReviewsList--review.positive {
+  border-color: var(--positive-border-color);
+  background-color: var(--positive-background-color);
+}
+.ReviewsList--review.neutral {
+  border-color: var(--neutral-border-color);
+  background-color: var(--neutral-background-color);
+}
+.ReviewsList--review.negative {
+  border-color: var(--negative-border-color);
+  background-color: var(--negative-background-color);
+}

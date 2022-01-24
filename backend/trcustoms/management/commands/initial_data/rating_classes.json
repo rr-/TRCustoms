@@ -1,0 +1,104 @@
+{
+  "levels": [
+    {
+      "position": 5,
+      "min_rating_count": 50,
+      "min_rating_average": 0.95,
+      "max_rating_average": null,
+      "name": "Masterpiece"
+    },
+    {
+      "position": 4,
+      "min_rating_count": 25,
+      "min_rating_average": 0.85,
+      "max_rating_average": null,
+      "name": "Overwhelmingly positive"
+    },
+    {
+      "position": 3,
+      "min_rating_count": 20,
+      "min_rating_average": 0.7,
+      "max_rating_average": null,
+      "name": "Very positive"
+    },
+    {
+      "position": 2,
+      "min_rating_count": 10,
+      "min_rating_average": 0.7,
+      "max_rating_average": null,
+      "name": "Positive"
+    },
+    {
+      "position": 1,
+      "min_rating_count": 5,
+      "min_rating_average": 0.6,
+      "max_rating_average": null,
+      "name": "Slightly positive"
+    },
+    {
+      "position": 0,
+      "min_rating_count": 0,
+      "min_rating_average": 0.4,
+      "max_rating_average": 0.6,
+      "name": "Mixed"
+    },
+    {
+      "position": -1,
+      "min_rating_count": 5,
+      "min_rating_average": null,
+      "max_rating_average": 0.4,
+      "name": "Slightly negative"
+    },
+    {
+      "position": -2,
+      "min_rating_count": 5,
+      "min_rating_average": null,
+      "max_rating_average": 0.3,
+      "name": "Negative"
+    },
+    {
+      "position": -3,
+      "min_rating_count": 5,
+      "min_rating_average": null,
+      "max_rating_average": 0.2,
+      "name": "Very negative"
+    },
+    {
+      "position": -4,
+      "min_rating_count": 10,
+      "min_rating_average": null,
+      "max_rating_average": 0.1,
+      "name": "Overwhelmingly negative"
+    },
+    {
+      "position": -5,
+      "min_rating_count": 20,
+      "min_rating_average": null,
+      "max_rating_average": 0.05,
+      "name": "Failure"
+    }
+  ],
+  "reviews": [
+    {
+      "position": -1,
+      "min_rating_count": 1,
+      "min_rating_average": null,
+      "max_rating_average": 0.4,
+      "name": "Negative"
+    },
+    {
+      "position": 0,
+      "min_rating_count": 1,
+      "min_rating_average": 0.4,
+      "max_rating_average": 0.6,
+      "name": "Neutral"
+    },
+    {
+      "position": 1,
+      "min_rating_count": 1,
+      "min_rating_average": 0.6,
+      "max_rating_average": null,
+      "name": "Positive"
+    }
+  ]
+}

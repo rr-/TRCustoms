@@ -1,9 +1,48 @@
 import hashlib
+from collections import defaultdict
+from contextlib import contextmanager
 
-from django.db.models.signals import post_save, pre_save
+from django.db.models.signals import (
+    m2m_changed,
+    post_delete,
+    post_init,
+    post_migrate,
+    post_save,
+    pre_delete,
+    pre_init,
+    pre_migrate,
+    pre_save,
+)
 from django.dispatch import receiver
 
-from trcustoms.models import LevelFile, UploadedFile
+from trcustoms.models import LevelFile, LevelReview, UploadedFile
+from trcustoms.ratings import get_level_rating_class, get_review_rating_class
+
+
+@contextmanager
+def disable_signals():
+    stashed_signals = defaultdict(list)
+    disabled_signals = [
+        pre_init,
+        post_init,
+        pre_save,
+        post_save,
+        pre_delete,
+        post_delete,
+        pre_migrate,
+        post_migrate,
+        m2m_changed,
+    ]
+
+    for signal in disabled_signals:
+        stashed_signals[signal] = signal.receivers
+        signal.receivers = []
+
+    yield
+
+    for signal in list(stashed_signals):
+        signal.receivers = stashed_signals.get(signal, [])
+        del stashed_signals[signal]
 
 
 @receiver(pre_save, sender=UploadedFile)
@@ -48,3 +87,21 @@ def update_level_last_file(sender, instance, **kwargs):
     if last_file != level.last_file:
         level.last_file = last_file
         level.save()
+
+
+@receiver(post_save, sender=LevelReview)
+@receiver(m2m_changed, sender=LevelReview)
+def update_review_rating_class(sender, instance, **kwargs):
+    with disable_signals():
+        instance.rating_class = get_review_rating_class(instance)
+        instance.save()
+        level = instance.level
+        level.rating_class = get_level_rating_class(level)
+        level.save(update_fields=["rating_class"])
+
+
+@receiver(post_delete, sender=LevelReview)
+def update_review_level_rating_class(sender, instance, **kwargs):
+    level = instance.level
+    level.rating_class = get_level_rating_class(level)
+    level.save(update_fields=["rating_class"])

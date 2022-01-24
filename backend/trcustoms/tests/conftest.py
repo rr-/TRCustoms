@@ -15,8 +15,11 @@ from trcustoms.models import (
     LevelDuration,
     LevelEngine,
     LevelGenre,
+    LevelReview,
     LevelScreenshot,
     LevelTag,
+    ReviewTemplateAnswer,
+    ReviewTemplateQuestion,
     UploadedFile,
     User,
 )
@@ -117,6 +120,36 @@ class LevelFactory(factory.django.DjangoModelFactory):
         # pylint: disable=no-member
         if create and extracted:
             self.genres.set(extracted)
+
+
+@register
+class ReviewTemplateQuestionFactory(factory.django.DjangoModelFactory):
+    class Meta:
+        model = ReviewTemplateQuestion
+
+    position = factory.Sequence(lambda n: n)
+    weight = 10
+    question_text = factory.Sequence(lambda n: f"Question {n}")
+
+
+@register
+class ReviewTemplateAnswerFactory(factory.django.DjangoModelFactory):
+    class Meta:
+        model = ReviewTemplateAnswer
+
+    question = factory.SubFactory(ReviewTemplateQuestionFactory)
+    position = factory.Sequence(lambda n: n)
+    points = 10
+    answer_text = factory.Sequence(lambda n: f"Question {n}")
+
+
+@register
+class ReviewFactory(factory.django.DjangoModelFactory):
+    class Meta:
+        model = LevelReview
+
+    author = factory.SubFactory(UserFactory)
+    level = factory.SubFactory(LevelFactory)
 
 
 @pytest.fixture(name="fake", scope="session")
