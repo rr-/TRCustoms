@@ -5,7 +5,7 @@ import { useQuery } from "react-query";
 import { useParams } from "react-router-dom";
 import type { LevelSearchQuery } from "src/services/level.service";
 import type { ReviewSearchQuery } from "src/services/review.service";
-import type { User } from "src/services/user.service";
+import type { UserDetails } from "src/services/user.service";
 import { UserPermission } from "src/services/user.service";
 import { UserService } from "src/services/user.service";
 import { LevelsTable } from "src/shared/components/LevelsTable";
@@ -44,7 +44,7 @@ const UserPage = () => {
     }
   );
 
-  const result = useQuery<User, Error>(
+  const result = useQuery<UserDetails, Error>(
     ["user", UserService.getUserById, userId],
     async () => UserService.getUserById(+userId)
   );

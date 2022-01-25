@@ -4,7 +4,7 @@ import { BadgeCheckIcon } from "@heroicons/react/outline";
 import { XCircleIcon } from "@heroicons/react/outline";
 import { DownloadIcon } from "@heroicons/react/outline";
 import { Link } from "react-router-dom";
-import type { Level } from "src/services/level.service";
+import type { LevelListing } from "src/services/level.service";
 import type { LevelSearchQuery } from "src/services/level.service";
 import { LevelService } from "src/services/level.service";
 import type { DataTableColumn } from "src/shared/components/DataTable";
@@ -26,7 +26,7 @@ const LevelsTable = ({
   searchQuery,
   onSearchQueryChange,
 }: LevelsTableProps) => {
-  const columns: DataTableColumn<Level>[] = [
+  const columns: DataTableColumn<LevelListing>[] = [
     {
       name: "image",
       label: "Image",
@@ -107,7 +107,7 @@ const LevelsTable = ({
     },
   ];
 
-  const itemKey = (level: Level) => `${level.id}`;
+  const itemKey = (level: LevelListing) => `${level.id}`;
 
   return (
     <DataTable

@@ -1,13 +1,12 @@
 import { AxiosResponse } from "axios";
-import type { EngineLite } from "src/services/engine.service";
+import type { EngineNested } from "src/services/engine.service";
 import type { UploadedFile } from "src/services/file.service";
-import type { GenreLite } from "src/services/genre.service";
-import type { TagLite } from "src/services/tag.service";
-import type { UserLite } from "src/services/user.service";
+import type { GenreNested } from "src/services/genre.service";
+import type { TagNested } from "src/services/tag.service";
+import type { UserNested } from "src/services/user.service";
 import { api } from "src/shared/api";
 import { API_URL } from "src/shared/constants";
 import type { GenericSearchQuery } from "src/shared/types";
-import type { PagedResponse } from "src/shared/types";
 import { GenericSearchResult } from "src/shared/types";
 import { filterFalsyObjectValues } from "src/shared/utils";
 import { getGenericSearchQuery } from "src/shared/utils";
@@ -47,15 +46,20 @@ interface ExternalLink {
   link_type: ExternalLinkType;
 }
 
-interface Level {
-  id: number | null;
+interface LevelNested {
+  id: number;
+  name: string;
+}
+
+interface LevelListing {
+  id: number;
   name: string;
   description: string;
-  genres: GenreLite[];
-  tags: TagLite[];
-  engine: EngineLite;
-  authors: UserLite[];
-  uploader: UserLite | null;
+  genres: GenreNested[];
+  tags: TagNested[];
+  engine: EngineNested;
+  authors: UserNested[];
+  uploader: UserNested | null;
   created: string;
   last_updated: string;
   last_file: LevelFile | null;
@@ -69,12 +73,10 @@ interface Level {
   rejection_reason: string | null;
 }
 
-interface LevelFull extends Level {
+interface LevelDetails extends LevelListing {
   trle_id: number | null;
   files: LevelFile[];
 }
-
-interface LevelList extends PagedResponse<Level> {}
 
 interface LevelSearchQuery extends GenericSearchQuery {
   tags: number[];
@@ -85,7 +87,7 @@ interface LevelSearchQuery extends GenericSearchQuery {
 }
 
 interface LevelSearchResult
-  extends GenericSearchResult<LevelSearchQuery, Level> {}
+  extends GenericSearchResult<LevelSearchQuery, LevelListing> {}
 
 interface ScreenshotList extends Array<Screenshot> {}
 
@@ -111,10 +113,10 @@ const searchLevels = async (
   return { ...response.data, searchQuery };
 };
 
-const getLevelById = async (levelId: number): Promise<LevelFull> => {
+const getLevelById = async (levelId: number): Promise<LevelDetails> => {
   const response = (await api.get(
     `${API_URL}/levels/${levelId}/`
-  )) as AxiosResponse<LevelFull>;
+  )) as AxiosResponse<LevelDetails>;
   return response.data;
 };
 
@@ -138,21 +140,21 @@ interface LevelCreatePayload extends LevelBaseChangePayload {}
 const update = async (
   levelId: number,
   payload: LevelUpdatePayload
-): Promise<LevelFull> => {
+): Promise<LevelDetails> => {
   const data: { [key: string]: any } = filterFalsyObjectValues(payload);
   const response = (await api.patch(
     `${API_URL}/levels/${levelId}/`,
     data
-  )) as AxiosResponse<LevelFull>;
+  )) as AxiosResponse<LevelDetails>;
   return response.data;
 };
 
-const create = async (payload: LevelCreatePayload): Promise<LevelFull> => {
+const create = async (payload: LevelCreatePayload): Promise<LevelDetails> => {
   const data: { [key: string]: any } = filterFalsyObjectValues(payload);
   const response = (await api.post(
     `${API_URL}/levels/`,
     data
-  )) as AxiosResponse<LevelFull>;
+  )) as AxiosResponse<LevelDetails>;
   return response.data;
 };
 
@@ -184,13 +186,13 @@ const formatLinkType = (linkType: ExternalLinkType): string => {
 };
 
 export type {
-  Level,
-  LevelFull,
-  LevelList,
-  LevelFile,
+  ExternalLink,
+  LevelDetails,
   LevelDifficulty,
   LevelDuration,
-  ExternalLink,
+  LevelFile,
+  LevelListing,
+  LevelNested,
   LevelSearchQuery,
   LevelSearchResult,
   Screenshot,

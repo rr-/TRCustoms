@@ -2,14 +2,15 @@ import "./GenresFormField.css";
 import { InformationCircleIcon } from "@heroicons/react/outline";
 import { Field } from "formik";
 import { useContext } from "react";
-import { GenreLite } from "src/services/genre.service";
+import { GenreNested } from "src/services/genre.service";
+import { GenreListing } from "src/services/genre.service";
 import { BaseFormField } from "src/shared/components/formfields/BaseFormField";
 import type { GenericFormFieldProps } from "src/shared/components/formfields/BaseFormField";
 import { ConfigContext } from "src/shared/contexts/ConfigContext";
 
 interface GenresFormFieldProps extends GenericFormFieldProps {
-  value: GenreLite[];
-  onChange: (value: GenreLite[]) => void;
+  value: GenreNested[];
+  onChange: (value: GenreNested[]) => void;
 }
 
 const GenresFormField = ({
@@ -20,7 +21,7 @@ const GenresFormField = ({
   ...props
 }: GenresFormFieldProps) => {
   const { config } = useContext(ConfigContext);
-  const genreMap: { [genreId: string]: GenreLite } = Object.fromEntries(
+  const genreMap: { [genreId: string]: GenreListing } = Object.fromEntries(
     config.genres.map(({ id, ...rest }) => [id, { id, ...rest }])
   );
 

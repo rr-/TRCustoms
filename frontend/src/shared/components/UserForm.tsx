@@ -4,7 +4,7 @@ import { Formik } from "formik";
 import { Form } from "formik";
 import { useCallback } from "react";
 import { UploadType } from "src/services/file.service";
-import type { User } from "src/services/user.service";
+import type { UserDetails } from "src/services/user.service";
 import { UserService } from "src/services/user.service";
 import { FormGrid } from "src/shared/components/FormGrid";
 import { FormGridButtons } from "src/shared/components/FormGrid";
@@ -26,9 +26,9 @@ import { validatePassword2 } from "src/shared/utils";
 import { validateEmail } from "src/shared/utils";
 
 interface UserFormProps {
-  user?: User | null;
+  user?: UserDetails | null;
   onGoBack?: () => any | null;
-  onSubmit?: (user: User, password: string | null) => any | null;
+  onSubmit?: (user: UserDetails, password: string | null) => any | null;
 }
 
 const UserForm = ({ user, onGoBack, onSubmit }: UserFormProps) => {

@@ -1,12 +1,12 @@
 import { useEffect } from "react";
 import { useContext } from "react";
 import { useState } from "react";
-import type { UserLite } from "src/services/user.service";
+import type { UserNested } from "src/services/user.service";
 import { UserContext } from "src/shared/contexts/UserContext";
 
 interface PermissionGuardProps {
   require: string;
-  owningUsers?: UserLite[];
+  owningUsers?: UserNested[];
   children: React.ReactElement;
   alternative?: React.ReactElement | string | null;
 }

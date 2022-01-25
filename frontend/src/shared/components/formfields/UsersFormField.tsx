@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useCallback } from "react";
-import type { UserLite } from "src/services/user.service";
+import type { UserNested } from "src/services/user.service";
 import { UserService } from "src/services/user.service";
 import { AutoComplete } from "src/shared/components/AutoComplete";
 import { Pills } from "src/shared/components/Pills";
@@ -8,8 +8,8 @@ import type { GenericFormFieldProps } from "src/shared/components/formfields/Bas
 import { BaseFormField } from "src/shared/components/formfields/BaseFormField";
 
 interface UsersFormFieldProps extends GenericFormFieldProps {
-  value: UserLite[];
-  onChange: (value: UserLite[]) => void;
+  value: UserNested[];
+  onChange: (value: UserNested[]) => void;
 }
 
 const UsersFormField = ({
@@ -19,7 +19,7 @@ const UsersFormField = ({
   onChange,
   ...props
 }: UsersFormFieldProps) => {
-  const [suggestions, setSuggestions] = useState<UserLite[]>([]);
+  const [suggestions, setSuggestions] = useState<UserNested[]>([]);
 
   const onSearchTrigger = useCallback(
     async (userInput: string) => {
@@ -47,7 +47,7 @@ const UsersFormField = ({
   );
 
   const onResultApply = useCallback(
-    (user: UserLite) =>
+    (user: UserNested) =>
       onChange(
         value.map((u) => u.id).includes(user.id) ? value : [...value, user]
       ),
@@ -55,7 +55,7 @@ const UsersFormField = ({
   );
 
   const removeUser = useCallback(
-    (user: UserLite) => onChange(value.filter((u) => u.id !== user.id)),
+    (user: UserNested) => onChange(value.filter((u) => u.id !== user.id)),
     [onChange, value]
   );
 

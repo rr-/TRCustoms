@@ -1,27 +1,25 @@
 import { AxiosResponse } from "axios";
 import { api } from "src/shared/api";
 import { API_URL } from "src/shared/constants";
-import type { PagedResponse } from "src/shared/types";
 import type { GenericSearchQuery } from "src/shared/types";
 import { GenericSearchResult } from "src/shared/types";
 import { filterFalsyObjectValues } from "src/shared/utils";
 import { getGenericSearchQuery } from "src/shared/utils";
 
-interface EngineLite {
+interface EngineNested {
   id: number;
   name: string;
 }
 
-interface Engine extends EngineLite {
+interface EngineListing extends EngineNested {
   level_count: number;
   created: string;
   last_updated: string;
 }
 
 interface EngineSearchQuery extends GenericSearchQuery {}
-interface EngineList extends PagedResponse<Engine> {}
 interface EngineSearchResult
-  extends GenericSearchResult<EngineSearchQuery, Engine> {}
+  extends GenericSearchResult<EngineSearchQuery, EngineListing> {}
 
 const searchEngines = async (
   searchQuery: EngineSearchQuery
@@ -38,9 +36,8 @@ const EngineService = {
 };
 
 export type {
-  Engine,
-  EngineLite,
-  EngineList,
+  EngineNested,
+  EngineListing,
   EngineSearchQuery,
   EngineSearchResult,
 };

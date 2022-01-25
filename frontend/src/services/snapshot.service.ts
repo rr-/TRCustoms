@@ -1,5 +1,5 @@
 import { AxiosResponse } from "axios";
-import type { UserLite } from "src/services/user.service";
+import type { UserNested } from "src/services/user.service";
 import { api } from "src/shared/api";
 import { API_URL } from "src/shared/constants";
 import type { PagedResponse } from "src/shared/types";
@@ -37,20 +37,20 @@ enum SnapshotObjectType {
   LevelReview = "levellegacyreview",
 }
 
-interface Snapshot {
+interface SnapshotListing {
   id: number;
   created: string;
   object_id: string;
   object_name: string;
   object_type: SnapshotObjectType;
   object_desc: any;
-  change_author: UserLite | null;
+  change_author: UserNested | null;
   change_type: SnapshotChangeType;
   diff: DiffItem[];
-  reviewer: UserLite | null;
+  reviewer: UserNested | null;
 }
 
-interface SnapshotList extends PagedResponse<Snapshot> {}
+interface SnapshotList extends PagedResponse<SnapshotListing> {}
 
 interface SnapshotSearchQuery extends GenericSearchQuery {
   level?: number | null;
@@ -58,7 +58,7 @@ interface SnapshotSearchQuery extends GenericSearchQuery {
 }
 
 interface SnapshotSearchResult
-  extends GenericSearchResult<SnapshotSearchQuery, Snapshot> {}
+  extends GenericSearchResult<SnapshotSearchQuery, SnapshotListing> {}
 
 const searchSnapshots = async (
   searchQuery: SnapshotSearchQuery
@@ -90,7 +90,7 @@ const SnapshotService = {
 
 export type {
   DiffItem,
-  Snapshot,
+  SnapshotListing,
   SnapshotList,
   SnapshotSearchQuery,
   SnapshotSearchResult,

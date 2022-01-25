@@ -1,8 +1,8 @@
 import { Link } from "react-router-dom";
-import type { TagLite } from "src/services/tag.service";
+import type { TagNested } from "src/services/tag.service";
 
 interface TagLinkProps {
-  tag: TagLite;
+  tag: TagNested;
   label?: string | null;
 }
 

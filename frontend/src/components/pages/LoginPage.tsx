@@ -7,7 +7,7 @@ import { useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { AuthService } from "src/services/auth.service";
 import { UserService } from "src/services/user.service";
-import type { User } from "src/services/user.service";
+import type { UserDetails } from "src/services/user.service";
 import { FormGrid } from "src/shared/components/FormGrid";
 import { FormGridButtons } from "src/shared/components/FormGrid";
 import { FormGridFieldSet } from "src/shared/components/FormGrid";
@@ -33,7 +33,7 @@ const LoginPage = () => {
           const axiosError = error as AxiosError;
           const data = axiosError.response?.data;
           if (axiosError.response?.status === 401) {
-            let user: User | null = null;
+            let user: UserDetails | null = null;
             try {
               user = await UserService.getUserByUsername(values.username);
             } catch (error) {}

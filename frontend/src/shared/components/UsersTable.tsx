@@ -1,5 +1,5 @@
 import "./UsersTable.css";
-import type { User } from "src/services/user.service";
+import type { UserListing } from "src/services/user.service";
 import type { UserSearchQuery } from "src/services/user.service";
 import { UserService } from "src/services/user.service";
 import type { DataTableColumn } from "src/shared/components/DataTable";
@@ -14,7 +14,7 @@ interface UsersTableProps {
 }
 
 const UsersTable = ({ searchQuery, onSearchQueryChange }: UsersTableProps) => {
-  const columns: DataTableColumn<User>[] = [
+  const columns: DataTableColumn<UserListing>[] = [
     {
       name: "username",
       sortKey: "username",
@@ -61,7 +61,7 @@ const UsersTable = ({ searchQuery, onSearchQueryChange }: UsersTableProps) => {
     },
   ];
 
-  const itemKey = (user: User) => `${user.id}`;
+  const itemKey = (user: UserListing) => `${user.id}`;
 
   return (
     <DataTable

@@ -1,12 +1,8 @@
 import { Link } from "react-router-dom";
-
-interface Level {
-  id: number | null;
-  name: string;
-}
+import { LevelNested } from "src/services/level.service";
 
 interface LevelLinkProps {
-  level: Level;
+  level: LevelNested;
   label?: string | null;
 }
 

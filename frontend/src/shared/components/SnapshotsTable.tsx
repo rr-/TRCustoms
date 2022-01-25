@@ -2,7 +2,7 @@ import "./SnapshotsTable.css";
 import { useQueryClient } from "react-query";
 import { useQuery } from "react-query";
 import { SnapshotService } from "src/services/snapshot.service";
-import type { Snapshot } from "src/services/snapshot.service";
+import type { SnapshotListing } from "src/services/snapshot.service";
 import { SnapshotObjectType } from "src/services/snapshot.service";
 import type { SnapshotSearchResult } from "src/services/snapshot.service";
 import type { SnapshotSearchQuery } from "src/services/snapshot.service";
@@ -29,7 +29,7 @@ interface SnapshotsTableProps {
 }
 
 interface SnapshotsTableObjectLinkProps {
-  snapshot: Snapshot;
+  snapshot: SnapshotListing;
 }
 
 const SnapshotsTableObjectLink = ({
@@ -122,7 +122,7 @@ const SnapshotsTable = ({
     return <Loader />;
   }
 
-  const approveSnapshot = async (snapshot: Snapshot) => {
+  const approveSnapshot = async (snapshot: SnapshotListing) => {
     if (window.confirm("Are you sure this change is OK?")) {
       await SnapshotService.approve(snapshot.id);
       result.refetch();
@@ -130,7 +130,7 @@ const SnapshotsTable = ({
     }
   };
 
-  const columns: DataTableColumn<Snapshot>[] = [
+  const columns: DataTableColumn<SnapshotListing>[] = [
     {
       name: "created",
       label: "Created",
@@ -151,7 +151,7 @@ const SnapshotsTable = ({
           {
             name: "object",
             label: "Object",
-            itemElement: (snapshot: Snapshot) => (
+            itemElement: (snapshot: SnapshotListing) => (
               <SnapshotsTableObjectLink snapshot={snapshot} />
             ),
           },
@@ -186,7 +186,7 @@ const SnapshotsTable = ({
     },
   ];
 
-  const itemKey = (snapshot: Snapshot) => `${snapshot.id}`;
+  const itemKey = (snapshot: SnapshotListing) => `${snapshot.id}`;
 
   return (
     <div className="SnapshotsTable">

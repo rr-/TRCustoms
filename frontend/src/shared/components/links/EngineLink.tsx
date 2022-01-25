@@ -1,8 +1,8 @@
 import { Link } from "react-router-dom";
-import type { EngineLite } from "src/services/engine.service";
+import type { EngineNested } from "src/services/engine.service";
 
 interface EngineLinkProps {
-  engine: EngineLite;
+  engine: EngineNested;
   label?: string | null;
 }
 

@@ -6,13 +6,13 @@ import { useContext } from "react";
 import { useCallback } from "react";
 import { useQueryClient } from "react-query";
 import { UploadType } from "src/services/file.service";
-import { GenreLite } from "src/services/genre.service";
+import { GenreNested } from "src/services/genre.service";
 import type { ExternalLink } from "src/services/level.service";
 import { ExternalLinkType } from "src/services/level.service";
-import type { LevelFull } from "src/services/level.service";
+import type { LevelDetails } from "src/services/level.service";
 import { LevelService } from "src/services/level.service";
-import { TagLite } from "src/services/tag.service";
-import type { UserLite } from "src/services/user.service";
+import { TagNested } from "src/services/tag.service";
+import type { UserNested } from "src/services/user.service";
 import { FilePicker } from "src/shared/components/FilePicker";
 import { FormGrid } from "src/shared/components/FormGrid";
 import { FormGridButtons } from "src/shared/components/FormGrid";
@@ -39,9 +39,9 @@ import { extractNestedErrorText } from "src/shared/utils";
 import { pluralize } from "src/shared/utils";
 
 interface LevelFormProps {
-  level?: LevelFull | null;
+  level?: LevelDetails | null;
   onGoBack?: () => any | null;
-  onSubmit?: (level: LevelFull) => any | null;
+  onSubmit?: (level: LevelDetails) => any | null;
 }
 
 const validateRange = <T extends Object>(
@@ -180,12 +180,12 @@ const LevelForm = ({ level, onGoBack, onSubmit }: LevelFormProps) => {
           engine_id: values.engine_id,
           duration_id: values.duration_id,
           difficulty_id: values.difficulty_id,
-          genre_ids: values.genres.map((genre: GenreLite) => genre.id),
+          genre_ids: values.genres.map((genre: GenreNested) => genre.id),
           external_links: values.external_links.map(
             (link: ExternalLink, i: number) => ({ ...link, position: i })
           ),
-          author_ids: values.authors.map((author: UserLite) => author.id),
-          tag_ids: values.tags.map((tag: TagLite) => tag.id),
+          author_ids: values.authors.map((author: UserNested) => author.id),
+          tag_ids: values.tags.map((tag: TagNested) => tag.id),
           cover_id: values.cover_id,
           screenshot_ids: values.screenshot_ids,
           file_id: values.file_id,

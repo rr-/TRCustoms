@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useCallback } from "react";
 import { useContext } from "react";
 import { TagService } from "src/services/tag.service";
-import { TagLite } from "src/services/tag.service";
+import { TagNested } from "src/services/tag.service";
 import { AutoComplete } from "src/shared/components/AutoComplete";
 import { Pills } from "src/shared/components/Pills";
 import type { GenericFormFieldProps } from "src/shared/components/formfields/BaseFormField";
@@ -10,8 +10,8 @@ import { BaseFormField } from "src/shared/components/formfields/BaseFormField";
 import { ConfigContext } from "src/shared/contexts/ConfigContext";
 
 interface TagsFormFieldProps extends GenericFormFieldProps {
-  value: TagLite[];
-  onChange: (value: TagLite[]) => void;
+  value: TagNested[];
+  onChange: (value: TagNested[]) => void;
 }
 
 const TagsFormField = ({
@@ -22,12 +22,12 @@ const TagsFormField = ({
   ...props
 }: TagsFormFieldProps) => {
   const { config, refetchConfig } = useContext(ConfigContext);
-  const [suggestions, setSuggestions] = useState<TagLite[]>([]);
+  const [suggestions, setSuggestions] = useState<TagNested[]>([]);
 
   const onSearchTrigger = useCallback(
     (userInput: string) => {
       const allTags: {
-        [tagId: string]: TagLite;
+        [tagId: string]: TagNested;
       } = Object.fromEntries(config.tags.map((tag) => [tag.id, tag]));
 
       setSuggestions(
@@ -42,7 +42,7 @@ const TagsFormField = ({
   );
 
   const onResultApply = useCallback(
-    (tag: TagLite) =>
+    (tag: TagNested) =>
       onChange(
         value.map((t) => t.id).includes(tag.id) ? value : [...value, tag]
       ),
@@ -62,7 +62,7 @@ const TagsFormField = ({
   );
 
   const removeTag = useCallback(
-    (tag: TagLite) => onChange(value.filter((t) => t.id !== tag.id)),
+    (tag: TagNested) => onChange(value.filter((t) => t.id !== tag.id)),
     [onChange, value]
   );
 
