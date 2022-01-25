@@ -1,5 +1,5 @@
 import "./TagsTable.css";
-import type { Tag } from "src/services/tag.service";
+import type { TagListing } from "src/services/tag.service";
 import type { TagSearchQuery } from "src/services/tag.service";
 import { TagService } from "src/services/tag.service";
 import type { DataTableColumn } from "src/shared/components/DataTable";
@@ -13,7 +13,7 @@ interface TagsTableProps {
 }
 
 const TagsTable = ({ searchQuery, onSearchQueryChange }: TagsTableProps) => {
-  const columns: DataTableColumn<Tag>[] = [
+  const columns: DataTableColumn<TagListing>[] = [
     {
       name: "name",
       sortKey: "name",
@@ -40,7 +40,7 @@ const TagsTable = ({ searchQuery, onSearchQueryChange }: TagsTableProps) => {
     },
   ];
 
-  const itemKey = (tag: Tag) => `${tag.id}`;
+  const itemKey = (tag: TagListing) => `${tag.id}`;
 
   return (
     <DataTable

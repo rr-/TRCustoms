@@ -12,7 +12,7 @@ import { useQueryClient } from "react-query";
 import { useQuery } from "react-query";
 import { useParams } from "react-router-dom";
 import { ExternalLinkType } from "src/services/level.service";
-import type { LevelFull } from "src/services/level.service";
+import type { LevelDetails } from "src/services/level.service";
 import { LevelService } from "src/services/level.service";
 import type { ReviewSearchQuery } from "src/services/review.service";
 import type { SnapshotSearchQuery } from "src/services/snapshot.service";
@@ -63,7 +63,7 @@ const LevelPage = () => {
     search: "",
   });
 
-  const result = useQuery<LevelFull, Error>(
+  const result = useQuery<LevelDetails, Error>(
     ["level", LevelService.getLevelById, levelId],
     async () => LevelService.getLevelById(+levelId)
   );

@@ -1,8 +1,8 @@
 import "./UserPicture.css";
-import type { User } from "src/services/user.service";
+import type { UserDetails } from "src/services/user.service";
 
 interface UserPictureProps {
-  user: User;
+  user: UserDetails;
   className?: string;
 }
 

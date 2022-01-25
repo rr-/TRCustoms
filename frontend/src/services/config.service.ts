@@ -1,13 +1,26 @@
 import { AxiosResponse } from "axios";
+import { EngineListing } from "src/services/engine.service";
+import { GenreListing } from "src/services/genre.service";
+import { TagListing } from "src/services/tag.service";
 import { api } from "src/shared/api";
 import { API_URL } from "src/shared/constants";
 
+interface DurationListing {
+  id: number;
+  name: string;
+}
+
+interface DifficultyListing {
+  id: number;
+  name: string;
+}
+
 interface Config {
-  tags: { id: number; name: string }[];
-  genres: { id: number; name: string; description: string }[];
-  engines: { id: number; name: string }[];
-  durations: { id: number; name: string }[];
-  difficulties: { id: number; name: string }[];
+  tags: TagListing[];
+  genres: GenreListing[];
+  engines: EngineListing[];
+  durations: DurationListing[];
+  difficulties: DifficultyListing[];
   limits: {
     min_tags: number;
     max_tags: number;

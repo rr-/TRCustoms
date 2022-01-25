@@ -3,7 +3,6 @@ import type { UploadedFile } from "src/services/file.service";
 import { api } from "src/shared/api";
 import { API_URL } from "src/shared/constants";
 import type { GenericSearchQuery } from "src/shared/types";
-import type { PagedResponse } from "src/shared/types";
 import { GenericSearchResult } from "src/shared/types";
 import { getGenericSearchQuery } from "src/shared/utils";
 
@@ -12,17 +11,19 @@ enum UserPermission {
   listUsers = "list_users",
   uploadLevels = "upload_levels",
   editLevels = "edit_levels",
+  reviewLevels = "review_levels",
+  editReviews = "edit_reviews",
   reviewSnapshots = "review_snapshots",
 }
 
-interface UserLite {
-  id: number | null;
+interface UserNested {
+  id: number;
   username: string;
   first_name: string;
   last_name: string;
 }
 
-interface User extends UserLite {
+interface UserListing extends UserNested {
   email: string;
   picture: UploadedFile | null;
   bio: string;
@@ -36,14 +37,16 @@ interface User extends UserLite {
   trle_reviewer_id?: number;
 }
 
-interface UserList extends PagedResponse<User> {}
-interface UserSearchQuery extends GenericSearchQuery {}
-interface UserSearchResult extends GenericSearchResult<UserSearchQuery, User> {}
+interface UserDetails extends UserListing {}
 
-const getCurrentUser = async (): Promise<User | null> => {
+interface UserSearchQuery extends GenericSearchQuery {}
+interface UserSearchResult
+  extends GenericSearchResult<UserSearchQuery, UserListing> {}
+
+const getCurrentUser = async (): Promise<UserDetails | null> => {
   try {
     const response = (await api.get(`${API_URL}/users/me/`)) as AxiosResponse<
-      User
+      UserDetails
     >;
     return response.data;
   } catch (error) {
@@ -51,17 +54,17 @@ const getCurrentUser = async (): Promise<User | null> => {
   }
 };
 
-const getUserById = async (userId: number): Promise<User> => {
+const getUserById = async (userId: number): Promise<UserDetails> => {
   const response = (await api.get(
     `${API_URL}/users/${userId}/`
-  )) as AxiosResponse<User>;
+  )) as AxiosResponse<UserDetails>;
   return response.data;
 };
 
-const getUserByUsername = async (username: string): Promise<User> => {
+const getUserByUsername = async (username: string): Promise<UserDetails> => {
   const response = (await api.get(
     `${API_URL}/users/by_username/${username}/`
-  )) as AxiosResponse<User>;
+  )) as AxiosResponse<UserDetails>;
   return response.data;
 };
 
@@ -91,7 +94,7 @@ const update = async (
     bio,
     picture_id,
   }: UserUpdatePayload
-): Promise<User> => {
+): Promise<UserDetails> => {
   const data: { [key: string]: any } = {
     username: username,
     first_name: firstName,
@@ -109,7 +112,7 @@ const update = async (
   const response = (await api.patch(
     `${API_URL}/users/${userId}/`,
     data
-  )) as AxiosResponse<User>;
+  )) as AxiosResponse<UserDetails>;
   return response.data;
 };
 
@@ -121,7 +124,7 @@ const register = async ({
   password,
   bio,
   picture_id,
-}: UserCreatePayload): Promise<User> => {
+}: UserCreatePayload): Promise<UserDetails> => {
   const data: { [key: string]: any } = {
     username: username,
     first_name: firstName,
@@ -132,7 +135,7 @@ const register = async ({
     picture_id: picture_id,
   };
   const response = (await api.post(`${API_URL}/users/`, data)) as AxiosResponse<
-    User
+    UserDetails
   >;
   return response.data;
 };
@@ -156,5 +159,11 @@ const UserService = {
   searchUsers,
 };
 
-export type { User, UserLite, UserList, UserSearchQuery, UserSearchResult };
+export type {
+  UserDetails,
+  UserListing,
+  UserNested,
+  UserSearchQuery,
+  UserSearchResult,
+};
 export { UserPermission, UserService };

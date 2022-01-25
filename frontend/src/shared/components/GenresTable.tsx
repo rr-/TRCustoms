@@ -1,5 +1,5 @@
 import "./GenresTable.css";
-import type { Genre } from "src/services/genre.service";
+import type { GenreListing } from "src/services/genre.service";
 import type { GenreSearchQuery } from "src/services/genre.service";
 import { GenreService } from "src/services/genre.service";
 import type { DataTableColumn } from "src/shared/components/DataTable";
@@ -16,7 +16,7 @@ const GenresTable = ({
   searchQuery,
   onSearchQueryChange,
 }: GenresTableProps) => {
-  const columns: DataTableColumn<Genre>[] = [
+  const columns: DataTableColumn<GenreListing>[] = [
     {
       name: "name",
       sortKey: "name",
@@ -43,7 +43,7 @@ const GenresTable = ({
     },
   ];
 
-  const itemKey = (genre: Genre) => `${genre.id}`;
+  const itemKey = (genre: GenreListing) => `${genre.id}`;
 
   return (
     <DataTable

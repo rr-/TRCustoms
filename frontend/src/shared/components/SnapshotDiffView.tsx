@@ -1,12 +1,12 @@
 import "./SnapshotDiffView.css";
 import { formatLinkType } from "src/services/level.service";
 import type { DiffItem } from "src/services/snapshot.service";
-import type { Snapshot } from "src/services/snapshot.service";
+import type { SnapshotListing } from "src/services/snapshot.service";
 import { SnapshotChangeType } from "src/services/snapshot.service";
 import { DiffType } from "src/services/snapshot.service";
 
 interface SnapshotDiffViewProps {
-  snapshot: Snapshot;
+  snapshot: SnapshotListing;
 }
 
 const formatDiffType = (diffType: DiffType): string => {

@@ -2,7 +2,7 @@ import { useCallback } from "react";
 import { useQuery } from "react-query";
 import { useNavigate } from "react-router-dom";
 import { useParams } from "react-router-dom";
-import type { LevelFull } from "src/services/level.service";
+import type { LevelDetails } from "src/services/level.service";
 import { LevelService } from "src/services/level.service";
 import { LevelForm } from "src/shared/components/LevelForm";
 import { Loader } from "src/shared/components/Loader";
@@ -15,7 +15,7 @@ const LevelEditPage = () => {
   const navigate = useNavigate();
   const { levelId } = (useParams() as unknown) as LevelEditPageParams;
 
-  const result = useQuery<LevelFull, Error>(
+  const result = useQuery<LevelDetails, Error>(
     ["level", LevelService.getLevelById, levelId],
     async () => LevelService.getLevelById(+levelId)
   );

@@ -1,12 +1,8 @@
 import { Link } from "react-router-dom";
-
-interface Genre {
-  id: number | null;
-  name: string;
-}
+import type { GenreNested } from "src/services/genre.service";
 
 interface GenreLinkProps {
-  genre: Genre;
+  genre: GenreNested;
   label?: string | null;
 }
 

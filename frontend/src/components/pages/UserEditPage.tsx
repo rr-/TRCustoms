@@ -4,7 +4,7 @@ import { useQuery } from "react-query";
 import { useNavigate } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import { UserService } from "src/services/user.service";
-import type { User } from "src/services/user.service";
+import type { UserDetails } from "src/services/user.service";
 import { Loader } from "src/shared/components/Loader";
 import { UserForm } from "src/shared/components/UserForm";
 import { UserContext } from "src/shared/contexts/UserContext";
@@ -18,7 +18,7 @@ const UserEditPage = () => {
   const navigate = useNavigate();
   const { userId } = (useParams() as unknown) as UserEditPageParams;
 
-  const result = useQuery<User, Error>(
+  const result = useQuery<UserDetails, Error>(
     ["user", UserService.getUserById, userId],
     async () => await UserService.getUserById(+userId)
   );

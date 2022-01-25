@@ -1,14 +1,10 @@
 import { Link } from "react-router-dom";
+import { UserNested } from "src/services/user.service";
 import { UserPermission } from "src/services/user.service";
 import { PermissionGuard } from "src/shared/components/PermissionGuard";
 
-interface User {
-  id: number | null;
-  username: string;
-}
-
 interface UserLinkProps {
-  user: User;
+  user: UserNested;
   label?: string | null;
 }
 

@@ -4,7 +4,7 @@ import { useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { AuthService } from "src/services/auth.service";
-import type { User } from "src/services/user.service";
+import type { UserDetails } from "src/services/user.service";
 import { UserService } from "src/services/user.service";
 import { UserForm } from "src/shared/components/UserForm";
 import { UserContext } from "src/shared/contexts/UserContext";
@@ -15,7 +15,7 @@ const RegisterPage = () => {
   const [isComplete, setIsComplete] = useState<boolean>(false);
 
   const onSubmit = useCallback(
-    async (user: User, password: string | null) => {
+    async (user: UserDetails, password: string | null) => {
       if (user.is_active && password) {
         await AuthService.login(user.username, password);
         setUser(await UserService.getCurrentUser());

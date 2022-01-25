@@ -1,7 +1,6 @@
 import { AxiosResponse } from "axios";
 import { api } from "src/shared/api";
 import { API_URL } from "src/shared/constants";
-import type { PagedResponse } from "src/shared/types";
 import type { GenericSearchQuery } from "src/shared/types";
 import { GenericSearchResult } from "src/shared/types";
 import { filterFalsyObjectValues } from "src/shared/utils";
@@ -14,7 +13,7 @@ interface ReviewAuthor {
   last_name: string;
 }
 
-interface Review {
+interface ReviewListing {
   level: { id: number; name: string };
   id: number;
   author: ReviewAuthor;
@@ -27,15 +26,13 @@ interface Review {
   last_updated: string;
 }
 
-interface ReviewList extends PagedResponse<Review> {}
-
 interface ReviewSearchQuery extends GenericSearchQuery {
   levels?: Array<number> | null;
   authors?: Array<number> | null;
 }
 
 interface ReviewSearchResult
-  extends GenericSearchResult<ReviewSearchQuery, Review> {}
+  extends GenericSearchResult<ReviewSearchQuery, ReviewListing> {}
 
 const searchReviews = async (
   searchQuery: ReviewSearchQuery
@@ -55,6 +52,6 @@ const ReviewService = {
   searchReviews,
 };
 
-export type { Review, ReviewList, ReviewSearchQuery, ReviewSearchResult };
+export type { ReviewListing, ReviewSearchQuery, ReviewSearchResult };
 
 export { ReviewService };

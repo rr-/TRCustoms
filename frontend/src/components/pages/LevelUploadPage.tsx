@@ -1,14 +1,14 @@
 import { useState } from "react";
 import { useCallback } from "react";
 import { Link } from "react-router-dom";
-import type { LevelFull } from "src/services/level.service";
+import type { LevelDetails } from "src/services/level.service";
 import { LevelForm } from "src/shared/components/LevelForm";
 
 const LevelUploadPage = () => {
   const [isComplete, setIsComplete] = useState(false);
 
   const onSubmit = useCallback(
-    async (level: LevelFull) => {
+    async (level: LevelDetails) => {
       setIsComplete(true);
     },
     [setIsComplete]
