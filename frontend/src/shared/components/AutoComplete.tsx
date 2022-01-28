@@ -4,6 +4,7 @@ import { Key } from "react";
 import { useState } from "react";
 import { useEffect } from "react";
 import { PushButton } from "src/shared/components/PushButton";
+import { TextInput } from "src/shared/components/TextInput";
 import { KEY_RETURN } from "src/shared/constants";
 import { KEY_UP } from "src/shared/constants";
 import { KEY_DOWN } from "src/shared/constants";
@@ -148,10 +149,8 @@ const AutoComplete = <TItem extends Object>({
 
   return (
     <div className="AutoComplete">
-      <input
+      <TextInput
         maxLength={maxLength}
-        className="AutoComplete--input"
-        type="text"
         onChange={onInputChange}
         onKeyDown={onInputKeyDown}
         value={textInput}
