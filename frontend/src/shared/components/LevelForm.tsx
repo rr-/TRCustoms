@@ -158,7 +158,6 @@ const LevelForm = ({ level, onGoBack, onSubmit }: LevelFormProps) => {
         };
         if (Object.keys(filterFalsyObjectValues(errors)).length) {
           setErrors(errors);
-          setStatus({ error: <>Please review the errors above.</> });
         } else {
           console.error(error);
           setStatus({ error: <>Unknown error.</> });
