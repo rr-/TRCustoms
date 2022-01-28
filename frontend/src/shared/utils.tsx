@@ -143,6 +143,9 @@ const pluralize = (noun: string, count: number) => {
 };
 
 const extractNestedErrorText = (source: any): string[] => {
+  if (source === null || source === undefined) {
+    return [];
+  }
   if (isArray(source)) {
     return source.reduce(
       (acc: string[], item: any) => [...acc, ...extractNestedErrorText(item)],
