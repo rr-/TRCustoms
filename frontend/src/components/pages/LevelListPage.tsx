@@ -146,9 +146,18 @@ const LevelListPage = () => {
                 <CheckboxFormField label="Approved" name="isApproved" />
               </PermissionGuard>
 
-              <TagsCheckboxes />
-              <GenresCheckboxes />
-              <EnginesCheckboxes />
+              <TagsCheckboxes
+                searchQuery={searchQuery}
+                onSearchQueryChange={setSearchQuery}
+              />
+              <GenresCheckboxes
+                searchQuery={searchQuery}
+                onSearchQueryChange={setSearchQuery}
+              />
+              <EnginesCheckboxes
+                searchQuery={searchQuery}
+                onSearchQueryChange={setSearchQuery}
+              />
             </aside>
           </Form>
         )}

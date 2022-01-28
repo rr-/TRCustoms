@@ -1,4 +1,5 @@
 import "./SettingsPage.css";
+import { Checkbox } from "src/shared/components/Checkbox";
 import { useInfiniteScroll } from "src/shared/components/DataTable";
 import { getAllThemes } from "src/shared/components/ThemeManager";
 import { useTheme } from "src/shared/components/ThemeManager";
@@ -36,14 +37,11 @@ const SettingsPage = () => {
 
       <h2>Other settings</h2>
 
-      <label>
-        <input
-          type="checkbox"
-          onChange={(e) => setEnableInfiniteScroll(e.target.checked)}
-          checked={enableInfiniteScroll}
-        />
-        Enable infinite scroll
-      </label>
+      <Checkbox
+        label="Enable infinite scroll"
+        onChange={(e) => setEnableInfiniteScroll(e.target.checked)}
+        checked={enableInfiniteScroll}
+      />
     </div>
   );
 };
