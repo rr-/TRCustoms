@@ -31,7 +31,7 @@ const GenresCheckboxes = ({
 
   return (
     <div className="GenresCheckboxes">
-      Genres:
+      <p>Genres:</p>
       {visibleGenres.map((genre) => (
         <div>
           <Checkbox

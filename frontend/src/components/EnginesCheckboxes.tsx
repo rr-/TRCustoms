@@ -31,7 +31,7 @@ const EnginesCheckboxes = ({
 
   return (
     <div className="EnginesCheckboxes">
-      Engines:
+      <p>Engines:</p>
       {visibleEngines.map((engine) => (
         <div>
           <Checkbox

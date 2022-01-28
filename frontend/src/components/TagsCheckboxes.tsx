@@ -63,8 +63,7 @@ const TagsCheckboxes = ({
 
   return (
     <div className="TagsCheckboxes">
-      Tags:
-      <br />
+      <p>Tags:</p>
       <TextInput
         onKeyDown={onSearchInputKeyDown}
         onChange={onSearchInputChange}
