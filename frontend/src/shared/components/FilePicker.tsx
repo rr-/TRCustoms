@@ -148,6 +148,7 @@ const FilePickerPreviewWrapper = ({
 };
 
 interface FilePickerProps {
+  label?: React.ReactNode;
   uploadType: UploadType;
   fileIds?: number[] | null;
   onError?: (error: any) => void;
@@ -164,6 +165,7 @@ const FilePicker = ({
   uploadType,
   previewWidget,
   onError,
+  label,
   onChange,
 }: FilePickerProps) => {
   const [currentFileIds, setCurrentFileIds] = useState<number[]>(fileIds || []);
@@ -335,6 +337,8 @@ const FilePicker = ({
               percentCompleted={percentCompleted}
             />
           </>
+        ) : label ? (
+          label
         ) : allowMultiple ? (
           <>Drop files here, or click on this box.</>
         ) : (
