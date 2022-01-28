@@ -45,8 +45,10 @@ def get_review_score(review: LevelReview) -> float:
 
 @cache
 def get_rating_classes(target: RatingClass.Target) -> QuerySet:
-    return RatingClass.objects.filter(target=target).order_by(
-        "-min_rating_count"
+    return sorted(
+        RatingClass.objects.filter(target=target),
+        key=lambda rating_class: abs(rating_class.position),
+        reverse=True,
     )
 
 
