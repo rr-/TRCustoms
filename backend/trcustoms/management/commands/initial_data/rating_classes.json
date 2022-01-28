@@ -2,28 +2,28 @@
   "levels": [
     {
       "position": 5,
-      "min_rating_count": 50,
+      "min_rating_count": 30,
       "min_rating_average": 0.95,
       "max_rating_average": null,
       "name": "Masterpiece"
     },
     {
       "position": 4,
-      "min_rating_count": 25,
+      "min_rating_count": 20,
       "min_rating_average": 0.85,
       "max_rating_average": null,
       "name": "Overwhelmingly positive"
     },
     {
       "position": 3,
-      "min_rating_count": 20,
-      "min_rating_average": 0.7,
+      "min_rating_count": 15,
+      "min_rating_average": 0.75,
       "max_rating_average": null,
       "name": "Very positive"
     },
     {
       "position": 2,
-      "min_rating_count": 10,
+      "min_rating_count": 5,
       "min_rating_average": 0.7,
       "max_rating_average": null,
       "name": "Positive"
