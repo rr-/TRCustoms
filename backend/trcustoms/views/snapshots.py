@@ -26,9 +26,14 @@ class SnapshotViewSet(
     def get_queryset(self):
         queryset = Snapshot.objects.all()
 
+        disable_paging = self.request.query_params.get("disable_paging")
+        self.paginator.disable_paging = False
+
         if level := parse_id(self.request.query_params.get("level")):
             level = get_object_or_404(Level, id=level)
             queryset = Snapshot.objects.filter_for_model(level)
+            if disable_paging:
+                self.paginator.disable_paging = True
 
         if (
             is_reviewed := parse_bool(
