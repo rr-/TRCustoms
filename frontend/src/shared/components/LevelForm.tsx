@@ -325,6 +325,13 @@ const LevelForm = ({ level, onGoBack, onSubmit }: LevelFormProps) => {
                 >
                   <PicturePicker
                     displayMode={DisplayMode.Cover}
+                    label={
+                      <>
+                        Drop an image here, or click on this box.
+                        <br />
+                        The image will be cropped to 4:3 aspect ratio.
+                      </>
+                    }
                     allowMultiple={false}
                     allowClear={true}
                     uploadType={UploadType.LevelCover}

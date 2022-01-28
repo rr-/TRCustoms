@@ -7,7 +7,7 @@
   min-height: 5rem;
   justify-content: center;
   align-items: center;
-  width: 20rem;
+  width: 25rem;
   background: var(--background-color);
   border: 3px dashed var(--button-background-color);
   line-height: 140%;
