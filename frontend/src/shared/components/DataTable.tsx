@@ -231,6 +231,9 @@ const InfiniteDataTable = <TItem extends {}, TQuery extends GenericSearchQuery>(
         if (!lastPage) {
           return undefined;
         }
+        if (lastPage.disable_paging) {
+          return undefined;
+        }
         return lastPage.current_page < lastPage.last_page
           ? lastPage.current_page + 1
           : undefined;
