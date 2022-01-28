@@ -1,14 +1,50 @@
+import { sortBy } from "lodash";
 import { useContext } from "react";
-import { CheckboxArrayFormField } from "src/shared/components/formfields/CheckboxArrayFormField";
+import type { LevelSearchQuery } from "src/services/level.service";
+import type { TagNested } from "src/services/tag.service";
+import { Checkbox } from "src/shared/components/Checkbox";
 import { ConfigContext } from "src/shared/contexts/ConfigContext";
 
-const TagsCheckboxes = () => {
+interface TagsCheckboxesProps {
+  searchQuery: LevelSearchQuery;
+  onSearchQueryChange: (searchQuery: LevelSearchQuery) => any;
+}
+
+const TagsCheckboxes = ({
+  searchQuery,
+  onSearchQueryChange,
+}: TagsCheckboxesProps) => {
   const { config } = useContext(ConfigContext);
-  const source: { value: number; label: string }[] = config.tags.map((tag) => ({
-    value: tag.id,
-    label: tag.name,
-  }));
-  return <CheckboxArrayFormField label="Tags" name="tags" source={source} />;
+  const visibleTags = sortBy(config.tags, (tag) => tag.name);
+
+  const onChange = (
+    event: React.ChangeEvent<HTMLInputElement>,
+    tag: TagNested
+  ) => {
+    onSearchQueryChange({
+      ...searchQuery,
+      tags: event.target.checked
+        ? [...searchQuery.tags, tag.id]
+        : searchQuery.tags.filter((tagId) => tagId !== tag.id),
+    });
+  };
+
+  return (
+    <div className="TagsCheckboxes">
+      Tags:
+      {visibleTags.map((tag) => (
+        <div>
+          <Checkbox
+            label={tag.name}
+            onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
+              onChange(event, tag)
+            }
+            checked={searchQuery.tags.includes(tag.id)}
+          />
+        </div>
+      ))}
+    </div>
+  );
 };
 
 export { TagsCheckboxes };

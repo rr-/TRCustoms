@@ -16,10 +16,11 @@ const CheckboxFormField = ({
 
   return (
     <BaseFormField name={name} readonly={readonly} label={null} {...props}>
-      <label>
+      <label className="Checkbox--label">
         <Field
           disabled={readonly}
           type="checkbox"
+          className="Checkbox--input"
           onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
             setFieldValue(name, event.target.checked);
           }}
