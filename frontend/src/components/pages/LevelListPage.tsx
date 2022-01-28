@@ -143,21 +143,31 @@ const LevelListPage = () => {
 
             <aside id="LevelListPage--sidebar">
               <PermissionGuard require={UserPermission.editLevels}>
-                <CheckboxFormField label="Approved" name="isApproved" />
+                <div className="LevelListPage--sidebarSection">
+                  <CheckboxFormField label="Approved" name="isApproved" />
+                </div>
               </PermissionGuard>
 
-              <TagsCheckboxes
-                searchQuery={searchQuery}
-                onSearchQueryChange={setSearchQuery}
-              />
-              <GenresCheckboxes
-                searchQuery={searchQuery}
-                onSearchQueryChange={setSearchQuery}
-              />
-              <EnginesCheckboxes
-                searchQuery={searchQuery}
-                onSearchQueryChange={setSearchQuery}
-              />
+              <div className="LevelListPage--sidebarSection">
+                <EnginesCheckboxes
+                  searchQuery={searchQuery}
+                  onSearchQueryChange={setSearchQuery}
+                />
+              </div>
+
+              <div className="LevelListPage--sidebarSection">
+                <GenresCheckboxes
+                  searchQuery={searchQuery}
+                  onSearchQueryChange={setSearchQuery}
+                />
+              </div>
+
+              <div className="LevelListPage--sidebarSection">
+                <TagsCheckboxes
+                  searchQuery={searchQuery}
+                  onSearchQueryChange={setSearchQuery}
+                />
+              </div>
             </aside>
           </Form>
         )}

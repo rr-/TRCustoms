@@ -3,6 +3,9 @@
   align-items: flex-end;
   gap: 1rem;
 }
+.SearchBar .FormField {
+  margin-bottom: 0;
+}
 .SearchBar .FormField--label {
   display: inline;
   margin-right: 1rem;
