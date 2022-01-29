@@ -5,11 +5,12 @@ import { useState } from "react";
 import type { LevelSearchQuery } from "src/services/level.service";
 import type { TagNested } from "src/services/tag.service";
 import { Checkbox } from "src/shared/components/Checkbox";
+import { PushButton } from "src/shared/components/PushButton";
 import { TextInput } from "src/shared/components/TextInput";
 import { KEY_RETURN } from "src/shared/constants";
 import { ConfigContext } from "src/shared/contexts/ConfigContext";
 
-const MAX_VISIBLE_TAGS = 15;
+const MAX_VISIBLE_TAGS = 12;
 
 interface TagsCheckboxesProps {
   searchQuery: LevelSearchQuery;
@@ -82,8 +83,14 @@ const TagsCheckboxes = ({
           />
         </div>
       ))}
-      {filteredTags.length > MAX_VISIBLE_TAGS &&
-        `(${filteredTags.length - MAX_VISIBLE_TAGS} tag(s) hidden)`}
+      {filteredTags.length > MAX_VISIBLE_TAGS && (
+        <p>({filteredTags.length - MAX_VISIBLE_TAGS} tag(s) hidden)</p>
+      )}
+      <div>
+        <PushButton isPlain={true} disableTimeout={true} to={`/tags`}>
+          Browse all
+        </PushButton>
+      </div>
     </div>
   );
 };

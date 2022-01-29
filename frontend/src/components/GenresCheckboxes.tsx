@@ -1,9 +1,14 @@
 import { sortBy } from "lodash";
+import { useState } from "react";
+import { useEffect } from "react";
 import { useContext } from "react";
 import type { GenreNested } from "src/services/genre.service";
 import type { LevelSearchQuery } from "src/services/level.service";
 import { Checkbox } from "src/shared/components/Checkbox";
+import { PushButton } from "src/shared/components/PushButton";
 import { ConfigContext } from "src/shared/contexts/ConfigContext";
+
+const MAX_VISIBLE_GENRES = 8;
 
 interface GenresCheckboxesProps {
   searchQuery: LevelSearchQuery;
@@ -15,7 +20,20 @@ const GenresCheckboxes = ({
   onSearchQueryChange,
 }: GenresCheckboxesProps) => {
   const { config } = useContext(ConfigContext);
-  const visibleGenres = sortBy(config.genres, (genre) => genre.name);
+  const [isExpanded, setIsExpanded] = useState(false);
+  const [visibleGenres, setVisibleGenres] = useState<GenreNested[]>([]);
+
+  useEffect(() => {
+    setVisibleGenres(
+      sortBy(config.genres, (genre) => genre.name).filter(
+        (genre, i) => isExpanded || i < MAX_VISIBLE_GENRES
+      )
+    );
+  }, [isExpanded, setVisibleGenres]);
+
+  const handleExpandButtonClick = () => {
+    setIsExpanded((value) => !value);
+  };
 
   const handleChange = (
     event: React.ChangeEvent<HTMLInputElement>,
@@ -43,6 +61,15 @@ const GenresCheckboxes = ({
           />
         </div>
       ))}
+      <div>
+        <PushButton
+          isPlain={true}
+          disableTimeout={true}
+          onClick={handleExpandButtonClick}
+        >
+          {isExpanded ? "Show less" : "Show all"}
+        </PushButton>
+      </div>
     </div>
   );
 };
