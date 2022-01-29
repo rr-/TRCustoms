@@ -62,21 +62,36 @@ const ReviewView = ({ review, showLevels }: ReviewViewProps) => {
 
   return (
     <div className={classNames.join(" ")}>
-      <aside className="Review--aside">
-        <UserLink user={review.author}>
+      <div className="Review--badge">{badge}</div>
+
+      <div className="Review--content">
+        {showLevels ? (
+          <p className="ReviewsList--level">
+            Review on <LevelLink level={review.level} />
+          </p>
+        ) : null}
+
+        <Markdown children={review.text || "No review text is available."} />
+      </div>
+
+      <footer className="Review--footer">
+        <UserLink className="Review--userLink" user={review.author}>
           <>
             <UserPicture className="Review--userPic" user={review.author} />
-            <br />
             {review.author.username}
           </>
         </UserLink>
 
-        <dl>
+        <dl className="Review--userInfo">
           <dt>Reviews</dt>
-          <dd>{review.author.reviewed_level_count}</dd>
+          <dd className="Review--userInfoDefinition">
+            {review.author.reviewed_level_count}
+          </dd>
 
-          <dt>Published</dt>
-          <dd>{formatDate(review.created)}</dd>
+          <dt>Posted</dt>
+          <dd className="Review--userInfoDefinition">
+            {formatDate(review.created)}
+          </dd>
         </dl>
 
         <PermissionGuard
@@ -89,19 +104,7 @@ const ReviewView = ({ review, showLevels }: ReviewViewProps) => {
             Edit review
           </PushButton>
         </PermissionGuard>
-      </aside>
-
-      <div className="Review--content">
-        <div className="Review--badge">{badge}</div>
-
-        {showLevels ? (
-          <p className="ReviewsList--level">
-            Review on <LevelLink level={review.level} />
-          </p>
-        ) : null}
-
-        <Markdown children={review.text || "No review text is available."} />
-      </div>
+      </footer>
     </div>
   );
 };
