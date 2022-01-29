@@ -29,7 +29,7 @@ const GenresCheckboxes = ({
         (genre, i) => isExpanded || i < MAX_VISIBLE_GENRES
       )
     );
-  }, [isExpanded, setVisibleGenres]);
+  }, [isExpanded, setVisibleGenres, config]);
 
   const handleExpandButtonClick = () => {
     setIsExpanded((value) => !value);
