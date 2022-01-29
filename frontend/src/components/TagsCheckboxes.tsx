@@ -37,11 +37,13 @@ const TagsCheckboxes = ({
     setVisibleTags(filteredTags.filter((tag, i) => i < MAX_VISIBLE_TAGS));
   }, [setVisibleTags, filteredTags]);
 
-  const onSearchInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleSearchInputChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
     setSearchFilter(event.target.value);
   };
 
-  const onSearchInputKeyDown = (
+  const handleSearchInputKeyDown = (
     event: React.KeyboardEvent<HTMLInputElement>
   ) => {
     if (event.keyCode === KEY_RETURN) {
@@ -49,7 +51,7 @@ const TagsCheckboxes = ({
     }
   };
 
-  const onTagChange = (
+  const handleTagChange = (
     event: React.ChangeEvent<HTMLInputElement>,
     tag: TagNested
   ) => {
@@ -65,8 +67,8 @@ const TagsCheckboxes = ({
     <div className="TagsCheckboxes">
       <p>Tags:</p>
       <TextInput
-        onKeyDown={onSearchInputKeyDown}
-        onChange={onSearchInputChange}
+        onKeyDown={handleSearchInputKeyDown}
+        onChange={handleSearchInputChange}
         placeholder="Search tags…"
       />
       {visibleTags.map((tag) => (
@@ -74,7 +76,7 @@ const TagsCheckboxes = ({
           <Checkbox
             label={tag.name}
             onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
-              onTagChange(event, tag)
+              handleTagChange(event, tag)
             }
             checked={searchQuery.tags.includes(tag.id)}
           />

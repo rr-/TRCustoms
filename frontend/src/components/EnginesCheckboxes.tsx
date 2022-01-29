@@ -17,7 +17,7 @@ const EnginesCheckboxes = ({
   const { config } = useContext(ConfigContext);
   const visibleEngines = sortBy(config.engines, (engine) => engine.name);
 
-  const onChange = (
+  const handleChange = (
     event: React.ChangeEvent<HTMLInputElement>,
     engine: EngineNested
   ) => {
@@ -37,7 +37,7 @@ const EnginesCheckboxes = ({
           <Checkbox
             label={engine.name}
             onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
-              onChange(event, engine)
+              handleChange(event, engine)
             }
             checked={searchQuery.engines.includes(engine.id)}
           />

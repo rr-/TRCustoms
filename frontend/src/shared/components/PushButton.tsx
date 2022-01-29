@@ -35,7 +35,7 @@ const PushButton = ({
     };
   }, [timer]);
 
-  const linkClick = (event: React.MouseEvent) => {
+  const handleLinkClick = (event: React.MouseEvent) => {
     if (isTimeoutActive || disabled) {
       event.preventDefault();
       event.stopPropagation();
@@ -62,8 +62,8 @@ const PushButton = ({
         className={`PushButton ${
           isPlain ? "PushButton--link" : "PushButton--button"
         }`}
-        onClick={linkClick}
-        onAuxClick={linkClick}
+        onClick={handleLinkClick}
+        onAuxClick={handleLinkClick}
         href={to}
       >
         {icon && <span className="PushButton--icon">{icon}</span>}
@@ -78,8 +78,8 @@ const PushButton = ({
       className={`PushButton ${
         isPlain ? "PushButton--link" : "PushButton--button"
       } ${(disabled || isTimeoutActive) && "PushButton--disabled"}`}
-      onClick={linkClick}
-      onAuxClick={linkClick}
+      onClick={handleLinkClick}
+      onAuxClick={handleLinkClick}
       to={to || "#"}
     >
       {icon && <span className="PushButton--icon">{icon}</span>}

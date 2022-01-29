@@ -48,7 +48,7 @@ const ReviewQuestionFormField = ({
 }: ReviewQuestionFormFieldProps) => {
   const { values, setFieldValue } = useFormikContext();
 
-  const onAnswerChange = (
+  const handleAnswerChange = (
     event: React.ChangeEvent<HTMLInputElement>,
     templateAnswer: ReviewTemplateAnswer
   ) => {
@@ -82,7 +82,7 @@ const ReviewQuestionFormField = ({
               disabled={readonly}
               type="radio"
               onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
-                onAnswerChange(event, templateAnswer)
+                handleAnswerChange(event, templateAnswer)
               }
               checked={property(name)(values) === templateAnswer.id}
             />
@@ -138,7 +138,7 @@ const ReviewForm = ({ level, review, onGoBack, onSubmit }: ReviewFormProps) => {
     []
   );
 
-  const submit = useCallback(
+  const handleSubmit = useCallback(
     async (values, { setSubmitting, setStatus, setErrors }) => {
       try {
         const payload = {
@@ -193,7 +193,7 @@ const ReviewForm = ({ level, review, onGoBack, onSubmit }: ReviewFormProps) => {
     <Formik
       initialValues={initialValues}
       enableReinitialize={true}
-      onSubmit={submit}
+      onSubmit={handleSubmit}
     >
       {({ isSubmitting, values, setFieldValue, status }) =>
         status?.success ? (

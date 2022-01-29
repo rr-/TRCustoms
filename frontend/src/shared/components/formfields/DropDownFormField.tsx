@@ -25,7 +25,7 @@ const DropDownFormField = ({
 }: DropDownFormFieldProps) => {
   const { setFieldValue } = useFormikContext();
 
-  const onFieldChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+  const handleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     setFieldValue(
       name,
       multiple
@@ -47,7 +47,7 @@ const DropDownFormField = ({
         multiple={multiple}
         className="DropDownFormField--select"
         defaultValue={"-"}
-        onChange={onFieldChange}
+        onChange={handleChange}
       >
         {!multiple && (
           <option disabled value={"-"}>

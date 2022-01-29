@@ -24,7 +24,7 @@ const MediumThumbnail = ({ file, link, displayMode }: MediumThumbnailProps) => {
   const [isActive, setIsActive] = useState<boolean>(false);
   const [elementId] = useState(uniqueId("mediumThumbnail-"));
 
-  const onImageClick = () => {
+  const handleImageClick = () => {
     setIsActive(!isActive);
   };
 
@@ -63,12 +63,12 @@ const MediumThumbnail = ({ file, link, displayMode }: MediumThumbnailProps) => {
     [navigate, isActive]
   );
 
-  const onLoad = () => {
+  const handleLoad = () => {
     window.addEventListener("keydown", handleKeypress);
     return () => window.removeEventListener("keydown", handleKeypress);
   };
 
-  useEffect(onLoad, [handleKeypress]);
+  useEffect(handleLoad, [handleKeypress]);
 
   const classNames = ["MediumThumbnail"];
   switch (displayMode) {
@@ -88,12 +88,12 @@ const MediumThumbnail = ({ file, link, displayMode }: MediumThumbnailProps) => {
           className="MediumThumbnail--thumb"
           tabIndex={1}
           src={file.url}
-          onClick={onImageClick}
+          onClick={handleImageClick}
         />
         <span
           className={`MediumThumbnail--full ${isActive ? "active" : null}`}
           id={elementId}
-          onClick={onImageClick}
+          onClick={handleImageClick}
         >
           <PushButton
             isPlain={true}
@@ -128,7 +128,7 @@ const MediumThumbnail = ({ file, link, displayMode }: MediumThumbnailProps) => {
             alt="Thumbnail"
             className="MediumThumbnail--thumb"
             src={thumbnailUrl}
-            onClick={onImageClick}
+            onClick={handleImageClick}
           />
           <span className="MediumThumbnail--overlay">
             <PlayIcon className="icon" />

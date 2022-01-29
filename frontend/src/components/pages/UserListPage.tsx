@@ -44,7 +44,7 @@ const UserListPage = () => {
     [searchQuery]
   );
 
-  const searchClick = useCallback(
+  const handleSubmit = useCallback(
     // push changes to query on Formik submit
     async (values: any) => {
       setSearchQuery({
@@ -56,7 +56,7 @@ const UserListPage = () => {
     [searchQuery, setSearchQuery]
   );
 
-  const clearClick = useCallback(
+  const handleReset = useCallback(
     async (resetForm) => {
       setSearchQuery(defaultSearchQuery);
       resetForm();
@@ -75,7 +75,7 @@ const UserListPage = () => {
       <Formik
         enableReinitialize={true}
         initialValues={formikValues}
-        onSubmit={searchClick}
+        onSubmit={handleSubmit}
       >
         {({ resetForm }: { resetForm: any }) => (
           <Form id="UserListPage--container">
@@ -87,7 +87,10 @@ const UserListPage = () => {
               </div>
 
               <div className="FormField">
-                <button onClick={clearClick.bind(null, resetForm)} type="reset">
+                <button
+                  onClick={handleReset.bind(null, resetForm)}
+                  type="reset"
+                >
                   Reset
                 </button>
               </div>

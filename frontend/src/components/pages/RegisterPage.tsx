@@ -14,7 +14,7 @@ const RegisterPage = () => {
   const { setUser } = useContext(UserContext);
   const [isComplete, setIsComplete] = useState<boolean>(false);
 
-  const onSubmit = useCallback(
+  const handleSubmit = useCallback(
     async (user: UserDetails, password: string | null) => {
       if (user.is_active && password) {
         await AuthService.login(user.username, password);
@@ -38,7 +38,7 @@ const RegisterPage = () => {
           look at <Link to={"/"}>some levels</Link>?
         </>
       ) : (
-        <UserForm onSubmit={onSubmit} />
+        <UserForm onSubmit={handleSubmit} />
       )}
     </div>
   );

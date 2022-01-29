@@ -20,7 +20,7 @@ const LevelEditPage = () => {
     async () => LevelService.getLevelById(+levelId)
   );
 
-  const goBack = useCallback(() => {
+  const handleGoBack = useCallback(() => {
     navigate(`/levels/${levelId}`);
   }, [navigate, levelId]);
 
@@ -38,7 +38,7 @@ const LevelEditPage = () => {
     <div id="LevelEditPage">
       <h1>Editing {level.name}</h1>
 
-      <LevelForm onGoBack={goBack} level={level} />
+      <LevelForm onGoBack={handleGoBack} level={level} />
     </div>
   );
 };

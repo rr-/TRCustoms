@@ -43,28 +43,32 @@ const ExternalLinksFormField = ({
     }
   };
 
-  const onTextInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleTextInputChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
     setTextInput(event.target.value);
     setTextInputIsValid(event.target.checkValidity());
   };
 
-  const onTextInputKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+  const handleTextInputKeyDown = (
+    event: React.KeyboardEvent<HTMLInputElement>
+  ) => {
     if (event.keyCode === KEY_RETURN) {
       event.preventDefault();
       addCurrentLink();
     }
   };
 
-  const onSelectChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+  const handleSelectChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const chosen: string = event.target.selectedOptions?.[0].value;
     setLinkType(chosen as ExternalLinkType);
   };
 
-  const onRemoveButtonClick = (link: ExternalLink) => {
+  const handleRemoveButtonClick = (link: ExternalLink) => {
     setValue(value.filter((l) => l.url !== link.url));
   };
 
-  const onMoveUpButtonClick = (link: ExternalLink) => {
+  const handleMoveUpButtonClick = (link: ExternalLink) => {
     const newValue = [...value];
     const idx = value.findIndex((v) => v.url === link.url);
     newValue.splice(idx, 1);
@@ -72,7 +76,7 @@ const ExternalLinksFormField = ({
     setValue(newValue);
   };
 
-  const onMoveDownButtonClick = (link: ExternalLink) => {
+  const handleMoveDownButtonClick = (link: ExternalLink) => {
     const newValue = [...value];
     const idx = value.findIndex((v) => v.url === link.url);
     newValue.splice(idx, 1);
@@ -87,15 +91,15 @@ const ExternalLinksFormField = ({
           className="ExternalLinksFormField--input"
           type="url"
           value={textInput}
-          onChange={onTextInputChange}
-          onKeyDown={onTextInputKeyDown}
+          onChange={handleTextInputChange}
+          onKeyDown={handleTextInputKeyDown}
           placeholder="Enter URL…"
         />
 
         <select
           className="ExternalLinksFormField--select"
           value={linkType}
-          onChange={onSelectChange}
+          onChange={handleSelectChange}
         >
           {Object.values(ExternalLinkType).map((linkType) => (
             <option key={linkType} value={linkType}>
@@ -119,7 +123,7 @@ const ExternalLinksFormField = ({
                 <PushButton
                   disableTimeout={true}
                   isPlain={true}
-                  onClick={() => onRemoveButtonClick(link)}
+                  onClick={() => handleRemoveButtonClick(link)}
                 >
                   <XIcon className="icon" />
                 </PushButton>
@@ -128,7 +132,7 @@ const ExternalLinksFormField = ({
                   disabled={i === 0}
                   disableTimeout={true}
                   isPlain={true}
-                  onClick={() => onMoveUpButtonClick(link)}
+                  onClick={() => handleMoveUpButtonClick(link)}
                 >
                   <ChevronUpIcon className="icon" />
                 </PushButton>
@@ -137,7 +141,7 @@ const ExternalLinksFormField = ({
                   disabled={i === value.length - 1}
                   disableTimeout={true}
                   isPlain={true}
-                  onClick={() => onMoveDownButtonClick(link)}
+                  onClick={() => handleMoveDownButtonClick(link)}
                 >
                   <ChevronDownIcon className="icon" />
                 </PushButton>

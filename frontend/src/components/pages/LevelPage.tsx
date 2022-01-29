@@ -81,7 +81,7 @@ const LevelPage = () => {
     return <Loader />;
   }
 
-  const onApproveButtonClick = async () => {
+  const handleApproveButtonClick = async () => {
     if (!window.confirm("Are you sure you want to approve this level?")) {
       return;
     }
@@ -100,7 +100,7 @@ const LevelPage = () => {
     }
   };
 
-  const onRejectButtonClick = async () => {
+  const handleRejectButtonClick = async () => {
     const reason = prompt(
       "Please provide the reason for rejecting this level."
     );
@@ -197,7 +197,7 @@ const LevelPage = () => {
                 {level.is_approved ? (
                   <PushButton
                     icon={<XCircleIcon className="icon" />}
-                    onClick={onRejectButtonClick}
+                    onClick={handleRejectButtonClick}
                     tooltip="Hides this level from the level listing."
                   >
                     Reject
@@ -205,7 +205,7 @@ const LevelPage = () => {
                 ) : (
                   <PushButton
                     icon={<BadgeCheckIcon className="icon" />}
-                    onClick={onApproveButtonClick}
+                    onClick={handleApproveButtonClick}
                     tooltip="Shows this level from the level listing."
                   >
                     Approve

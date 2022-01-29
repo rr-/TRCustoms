@@ -31,7 +31,7 @@ const LevelReviewEditPage = () => {
     async () => ReviewService.getReviewById(+reviewId)
   );
 
-  const goBack = useCallback(() => {
+  const handleGoBack = useCallback(() => {
     navigate(`/levels/${levelId}`);
   }, [navigate, levelId]);
 
@@ -58,7 +58,7 @@ const LevelReviewEditPage = () => {
     <div id="LevelReviewEditPage">
       <h1>Reviewing {level.name}</h1>
 
-      <ReviewForm onGoBack={goBack} review={review} level={level} />
+      <ReviewForm onGoBack={handleGoBack} review={review} level={level} />
     </div>
   );
 };

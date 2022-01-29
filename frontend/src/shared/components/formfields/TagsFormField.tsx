@@ -24,7 +24,7 @@ const TagsFormField = ({
   const { config, refetchConfig } = useContext(ConfigContext);
   const [suggestions, setSuggestions] = useState<TagNested[]>([]);
 
-  const onSearchTrigger = useCallback(
+  const handleSearchTrigger = useCallback(
     (userInput: string) => {
       const allTags: {
         [tagId: string]: TagNested;
@@ -41,7 +41,7 @@ const TagsFormField = ({
     [config, value]
   );
 
-  const onResultApply = useCallback(
+  const handleResultApply = useCallback(
     (tag: TagNested) =>
       onChange(
         value.map((t) => t.id).includes(tag.id) ? value : [...value, tag]
@@ -49,7 +49,7 @@ const TagsFormField = ({
     [onChange, value]
   );
 
-  const onNewResultApply = useCallback(
+  const handleNewResultApply = useCallback(
     async (text: string) => {
       if (value.map((t) => t.name).includes(text)) {
         return;
@@ -73,9 +73,9 @@ const TagsFormField = ({
         suggestions={suggestions}
         getResultText={(tag) => tag.name}
         getResultKey={(tag) => tag.id}
-        onSearchTrigger={onSearchTrigger}
-        onResultApply={onResultApply}
-        onNewResultApply={onNewResultApply}
+        onSearchTrigger={handleSearchTrigger}
+        onResultApply={handleResultApply}
+        onNewResultApply={handleNewResultApply}
       />
       <Pills
         source={value}

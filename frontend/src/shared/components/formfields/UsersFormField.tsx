@@ -21,7 +21,7 @@ const UsersFormField = ({
 }: UsersFormFieldProps) => {
   const [suggestions, setSuggestions] = useState<UserNested[]>([]);
 
-  const onSearchTrigger = useCallback(
+  const handleSearchTrigger = useCallback(
     async (userInput: string) => {
       if (!userInput) {
         setSuggestions([]);
@@ -46,7 +46,7 @@ const UsersFormField = ({
     [value]
   );
 
-  const onResultApply = useCallback(
+  const handleResultApply = useCallback(
     (user: UserNested) =>
       onChange(
         value.map((u) => u.id).includes(user.id) ? value : [...value, user]
@@ -54,7 +54,7 @@ const UsersFormField = ({
     [onChange, value]
   );
 
-  const removeUser = useCallback(
+  const handleRemoveUser = useCallback(
     (user: UserNested) => onChange(value.filter((u) => u.id !== user.id)),
     [onChange, value]
   );
@@ -65,14 +65,14 @@ const UsersFormField = ({
         suggestions={suggestions}
         getResultText={(user) => user.username}
         getResultKey={(user) => user.username}
-        onSearchTrigger={onSearchTrigger}
-        onResultApply={onResultApply}
+        onSearchTrigger={handleSearchTrigger}
+        onResultApply={handleResultApply}
       />
       <Pills
         source={value}
         getKey={(user) => user.username}
         getText={(user) => user.username}
-        onRemove={removeUser}
+        onRemove={handleRemoveUser}
       />
     </BaseFormField>
   );

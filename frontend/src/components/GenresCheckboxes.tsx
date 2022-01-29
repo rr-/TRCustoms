@@ -17,7 +17,7 @@ const GenresCheckboxes = ({
   const { config } = useContext(ConfigContext);
   const visibleGenres = sortBy(config.genres, (genre) => genre.name);
 
-  const onChange = (
+  const handleChange = (
     event: React.ChangeEvent<HTMLInputElement>,
     genre: GenreNested
   ) => {
@@ -38,7 +38,7 @@ const GenresCheckboxes = ({
             label={genre.name}
             checked={searchQuery.genres.includes(genre.id)}
             onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
-              onChange(event, genre)
+              handleChange(event, genre)
             }
           />
         </div>

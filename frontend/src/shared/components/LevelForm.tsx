@@ -170,7 +170,7 @@ const LevelForm = ({ level, onGoBack, onSubmit }: LevelFormProps) => {
     []
   );
 
-  const submit = useCallback(
+  const handleSubmit = useCallback(
     async (values, { setSubmitting, setStatus, setErrors }) => {
       try {
         const payload = {
@@ -256,7 +256,7 @@ const LevelForm = ({ level, onGoBack, onSubmit }: LevelFormProps) => {
       initialValues={initialValues}
       enableReinitialize={true}
       validate={validate}
-      onSubmit={submit}
+      onSubmit={handleSubmit}
     >
       {({ isSubmitting, values, setFieldValue, status }) =>
         !level && status?.success ? (
