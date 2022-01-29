@@ -213,7 +213,7 @@ const LevelPage = () => {
                 )}
               </PermissionGuard>
 
-              {level.authors.every((author) => author.id !== user.id) && (
+              {level.authors.every((author) => author.id !== user?.id) && (
                 <PermissionGuard require={UserPermission.reviewLevels}>
                   <PushButton
                     icon={<AnnotationIcon className="icon" />}
