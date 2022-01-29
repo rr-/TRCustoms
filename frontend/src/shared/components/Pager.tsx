@@ -6,7 +6,7 @@ const PAGES_AROUND = 2;
 interface PagerProps<TCollection> {
   onPageChange: (page: number) => void;
   pagedResponse: PagedResponse<TCollection>;
-  className?: string | null;
+  className?: string | undefined;
 }
 
 const getPagesShown = (

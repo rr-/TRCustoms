@@ -1,7 +1,7 @@
 import "./SearchBar.css";
 
 interface SearchBarProps {
-  id?: string;
+  id?: string | undefined;
   children: React.ReactNode;
 }
 

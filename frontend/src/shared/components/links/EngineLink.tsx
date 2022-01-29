@@ -3,7 +3,7 @@ import type { EngineNested } from "src/services/engine.service";
 
 interface EngineLinkProps {
   engine: EngineNested;
-  label?: string | null;
+  label?: string | undefined;
 }
 
 const EngineLink = ({ engine, label }: EngineLinkProps) => {

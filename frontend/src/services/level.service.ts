@@ -41,7 +41,7 @@ enum ExternalLinkType {
 }
 
 interface ExternalLink {
-  id?: number;
+  id?: number | undefined;
   url: string;
   position: number;
   link_type: ExternalLinkType;
@@ -124,17 +124,17 @@ const getLevelById = async (levelId: number): Promise<LevelDetails> => {
 };
 
 interface LevelBaseChangePayload {
-  name?: string;
-  description?: string;
-  engine_id?: number;
+  name: string;
+  description: string;
+  engine_id: number;
   duration_id: number;
   difficulty_id: number;
-  genres?: number[];
-  tag_ids?: number[];
-  author_ids?: number[];
-  cover_id?: number;
-  screenshot_ids?: number[];
-  file_id?: number;
+  genre_ids: number[];
+  tag_ids: number[];
+  author_ids: number[];
+  cover_id: number;
+  screenshot_ids: number[];
+  file_id?: number | undefined;
 }
 
 interface LevelUpdatePayload extends LevelBaseChangePayload {}

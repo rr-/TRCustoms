@@ -33,8 +33,8 @@ interface UserListing extends UserNested {
   authored_level_count: number;
   reviewed_level_count: number;
   permissions: UserPermission[];
-  trle_author_id?: number;
-  trle_reviewer_id?: number;
+  trle_author_id: number | null;
+  trle_reviewer_id: number | null;
 }
 
 interface UserDetails extends UserListing {}
@@ -75,7 +75,7 @@ interface UserCreatePayload {
   email: string;
   password: string;
   bio: string;
-  picture_id?: number | null;
+  picture_id?: number | undefined;
 }
 
 interface UserUpdatePayload extends UserCreatePayload {

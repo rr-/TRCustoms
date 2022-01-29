@@ -8,12 +8,12 @@ import { getCurrentSearchParams } from "src/shared/utils";
 
 const deserializeGenericSearchQuery = (
   qp: { [key: string]: string },
-  defaults?: GenericSearchQuery | null
+  defaults?: GenericSearchQuery | undefined
 ): GenericSearchQuery => {
   return {
-    page: +qp.page || defaults?.page || null,
-    sort: qp.sort || defaults?.sort || null,
-    search: qp.search || defaults?.search || null,
+    page: +qp.page || defaults?.page || undefined,
+    sort: qp.sort || defaults?.sort || undefined,
+    search: qp.search || defaults?.search || undefined,
   };
 };
 
@@ -22,9 +22,10 @@ const serializeGenericSearchQuery = (
   defaults?: GenericSearchQuery
 ): { [key: string]: any } => {
   return filterFalsyObjectValues({
-    page: searchQuery.page === defaults?.page ? null : searchQuery.page,
-    sort: searchQuery.sort === defaults?.sort ? null : searchQuery.sort,
-    search: searchQuery.search === defaults?.search ? null : searchQuery.search,
+    page: searchQuery.page === defaults?.page ? undefined : searchQuery.page,
+    sort: searchQuery.sort === defaults?.sort ? undefined : searchQuery.sort,
+    search:
+      searchQuery.search === defaults?.search ? undefined : searchQuery.search,
   }) as any;
 };
 

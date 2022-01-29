@@ -6,9 +6,9 @@ import { UserContext } from "src/shared/contexts/UserContext";
 
 interface PermissionGuardProps {
   require: string;
-  owningUsers?: UserNested[];
+  owningUsers?: UserNested[] | undefined;
   children: React.ReactElement;
-  alternative?: React.ReactElement | string | null;
+  alternative?: React.ReactNode | undefined;
 }
 
 const PermissionGuard = ({

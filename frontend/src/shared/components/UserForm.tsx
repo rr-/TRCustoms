@@ -26,9 +26,9 @@ import { validatePassword2 } from "src/shared/utils";
 import { validateEmail } from "src/shared/utils";
 
 interface UserFormProps {
-  user?: UserDetails | null;
-  onGoBack?: () => any | null;
-  onSubmit?: (user: UserDetails, password: string | null) => any | null;
+  user?: UserDetails | undefined;
+  onGoBack?: (() => void) | undefined;
+  onSubmit?: ((user: UserDetails, password: string | null) => void) | undefined;
 }
 
 const UserForm = ({ user, onGoBack, onSubmit }: UserFormProps) => {
@@ -41,7 +41,7 @@ const UserForm = ({ user, onGoBack, onSubmit }: UserFormProps) => {
     password: "",
     password2: "",
     bio: user?.bio || "",
-    picture_id: user?.picture?.id || null,
+    picture_id: user?.picture?.id || undefined,
   };
 
   const handleSubmitError = useCallback(

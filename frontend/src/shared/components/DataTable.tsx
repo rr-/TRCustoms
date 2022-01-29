@@ -17,16 +17,16 @@ const useInfiniteScroll = createLocalStorageStateHook("infiniteScroll", false);
 
 interface DataTableColumn<TItem> {
   name: string;
-  tooltip?: string | null;
-  sortKey?: string | null;
+  tooltip?: string | undefined;
+  sortKey?: string | undefined;
   label: string;
-  itemTooltip?: (item: TItem) => string | null;
-  itemElement: (item: TItem) => React.ReactElement | string;
-  footer?: () => React.ReactElement | string;
+  itemTooltip?: ((item: TItem) => string) | undefined;
+  itemElement: (item: TItem) => React.ReactNode;
+  footer?: () => React.ReactNode;
 }
 
 interface DataTableProps<TItem, TQuery> {
-  className?: string | null;
+  className?: string | undefined;
   queryName: string;
   itemKey: (item: TItem) => string;
   columns: DataTableColumn<TItem>[];
@@ -36,7 +36,7 @@ interface DataTableProps<TItem, TQuery> {
     searchQuery: TQuery
   ) => Promise<GenericSearchResult<TQuery, TItem>>;
 
-  onSearchQueryChange?: (searchQuery: TQuery) => any | null;
+  onSearchQueryChange?: ((searchQuery: TQuery) => void) | undefined;
 }
 
 const DataTableHeader = <TItem extends {}, TQuery extends GenericSearchQuery>({
@@ -82,11 +82,11 @@ const DataTableBody = <TItem extends {}, TQuery extends GenericSearchQuery>({
   columns,
 }: {
   result: {
-    isLoading?: boolean;
-    data?: GenericSearchResult<TQuery, TItem> | null;
-    error?: Error | null;
+    isLoading?: boolean | undefined;
+    data?: GenericSearchResult<TQuery, TItem> | null | undefined;
+    error?: Error | null | undefined;
   };
-  lastRowRef?: any;
+  lastRowRef?: any | undefined;
 } & DataTableProps<TItem, TQuery>) => {
   if (result.error) {
     return (

@@ -12,7 +12,7 @@ interface DropDownOption {
 interface DropDownFormFieldProps extends GenericFormFieldProps {
   options: DropDownOption[];
   onChange?: () => void | undefined;
-  multiple?: boolean;
+  multiple?: boolean | undefined;
 }
 
 const DropDownFormField = ({

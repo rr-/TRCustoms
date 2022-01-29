@@ -39,9 +39,9 @@ import { extractNestedErrorText } from "src/shared/utils";
 import { pluralize } from "src/shared/utils";
 
 interface LevelFormProps {
-  level?: LevelDetails | null;
-  onGoBack?: () => any | null;
-  onSubmit?: (level: LevelDetails) => any | null;
+  level?: LevelDetails | undefined;
+  onGoBack?: (() => void) | undefined;
+  onSubmit?: ((level: LevelDetails) => void) | undefined;
 }
 
 const validateRange = <T extends Object>(

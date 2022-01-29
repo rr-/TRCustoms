@@ -17,7 +17,7 @@ import { formatDate } from "src/shared/utils";
 interface ReviewsListProps {
   showLevels: boolean;
   searchQuery: ReviewSearchQuery;
-  onSearchQueryChange?: (searchQuery: ReviewSearchQuery) => any | null;
+  onSearchQueryChange?: ((searchQuery: ReviewSearchQuery) => void) | undefined;
 }
 
 interface ReviewViewProps {

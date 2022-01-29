@@ -29,8 +29,8 @@ interface ReviewDetails extends ReviewListing {
 }
 
 interface ReviewSearchQuery extends GenericSearchQuery {
-  levels?: Array<number> | null;
-  authors?: Array<number> | null;
+  levels?: Array<number> | undefined;
+  authors?: Array<number> | undefined;
 }
 
 interface ReviewSearchResult

@@ -3,7 +3,7 @@ import type { TagNested } from "src/services/tag.service";
 
 interface TagLinkProps {
   tag: TagNested;
-  label?: string | null;
+  label?: string | undefined;
 }
 
 const TagLink = ({ tag, label }: TagLinkProps) => {

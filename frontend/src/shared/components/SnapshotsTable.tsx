@@ -25,7 +25,9 @@ interface SnapshotsTableProps {
   showObjects: boolean;
   showApprovalButton: boolean;
   searchQuery: SnapshotSearchQuery;
-  onSearchQueryChange?: (searchQuery: SnapshotSearchQuery) => any | null;
+  onSearchQueryChange?:
+    | ((searchQuery: SnapshotSearchQuery) => void)
+    | undefined;
 }
 
 interface SnapshotsTableObjectLinkProps {

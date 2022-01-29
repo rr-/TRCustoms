@@ -5,7 +5,7 @@ import { PermissionGuard } from "src/shared/components/PermissionGuard";
 
 interface UserLinkProps {
   user: UserNested;
-  label?: string | null;
+  label?: string | undefined;
 }
 
 const UserLink = ({ user, label }: UserLinkProps) => {

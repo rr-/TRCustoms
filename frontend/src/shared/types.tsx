@@ -12,9 +12,9 @@ interface PagedResponse<TItem> {
 }
 
 interface GenericSearchQuery {
-  page?: number | null | typeof DISABLE_PAGING;
-  sort?: string | null;
-  search?: string | null;
+  page?: number | null | undefined | typeof DISABLE_PAGING;
+  sort?: string | null | undefined;
+  search?: string | null | undefined;
 }
 
 interface GenericSearchResult<TSearchQuery, TItem>

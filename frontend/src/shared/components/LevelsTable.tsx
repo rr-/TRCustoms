@@ -17,9 +17,9 @@ import { formatFileSize } from "src/shared/utils";
 import { EMPTY_INPUT_PLACEHOLDER } from "src/shared/utils";
 
 interface LevelsTableProps {
-  showStatus?: boolean;
+  showStatus?: boolean | undefined;
   searchQuery: LevelSearchQuery;
-  onSearchQueryChange?: (searchQuery: LevelSearchQuery) => any | null;
+  onSearchQueryChange?: ((searchQuery: LevelSearchQuery) => void) | undefined;
 }
 
 const LevelsTable = ({

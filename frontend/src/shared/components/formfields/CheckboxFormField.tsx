@@ -25,7 +25,7 @@ const CheckboxFormField = ({
   };
 
   return (
-    <BaseFormField name={name} readonly={readonly} label={null} {...props}>
+    <BaseFormField name={name} readonly={readonly} {...props}>
       <label className="Checkbox--label">
         <Field
           disabled={readonly}

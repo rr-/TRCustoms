@@ -53,8 +53,8 @@ interface SnapshotListing {
 interface SnapshotList extends PagedResponse<SnapshotListing> {}
 
 interface SnapshotSearchQuery extends GenericSearchQuery {
-  level?: number | null;
-  isReviewed?: boolean | null;
+  level?: number | undefined;
+  isReviewed?: boolean | undefined;
 }
 
 interface SnapshotSearchResult

@@ -5,12 +5,12 @@ import type { FilePickerPreviewProps } from "src/shared/components/FilePicker";
 import { DisplayMode } from "src/shared/types";
 
 interface PicturePickerProps {
-  label?: React.ReactNode;
+  label?: React.ReactNode | undefined;
   uploadType: UploadType;
-  fileIds?: number[] | null;
-  onError?: (error: any) => void;
-  onChange?: (fileIds: number[]) => void;
-  allowMultiple?: boolean;
+  fileIds?: number[] | undefined;
+  onError?: ((error: any) => void) | undefined;
+  onChange?: ((fileIds: number[]) => void) | undefined;
+  allowMultiple?: boolean | undefined;
   allowClear: boolean;
   displayMode: DisplayMode;
 }

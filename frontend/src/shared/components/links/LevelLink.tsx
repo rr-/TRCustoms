@@ -3,7 +3,7 @@ import { LevelNested } from "src/services/level.service";
 
 interface LevelLinkProps {
   level: LevelNested;
-  label?: string | null;
+  label?: string | undefined;
 }
 
 const LevelLink = ({ level, label }: LevelLinkProps) => {
