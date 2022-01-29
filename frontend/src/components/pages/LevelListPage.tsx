@@ -169,7 +169,13 @@ const LevelListPage = () => {
             <aside id="LevelListPage--sidebar">
               <PermissionGuard require={UserPermission.editLevels}>
                 <div className="LevelListPage--sidebarSection">
-                  <CheckboxFormField label="Approved" name="isApproved" />
+                  <CheckboxFormField
+                    onChange={() => {
+                      submitForm();
+                    }}
+                    label="Approved"
+                    name="isApproved"
+                  />
                 </div>
               </PermissionGuard>
 
