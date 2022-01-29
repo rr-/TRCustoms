@@ -16,6 +16,7 @@ import { deserializeGenericSearchQuery } from "src/shared/components/QueryPersis
 import { serializeGenericSearchQuery } from "src/shared/components/QueryPersister";
 import { SearchBar } from "src/shared/components/SearchBar";
 import { CheckboxFormField } from "src/shared/components/formfields/CheckboxFormField";
+import { DropDownFormField } from "src/shared/components/formfields/DropDownFormField";
 import { TextFormField } from "src/shared/components/formfields/TextFormField";
 import { filterFalsyObjectValues } from "src/shared/utils";
 import { getCurrentSearchParams } from "src/shared/utils";
@@ -60,6 +61,7 @@ const serializeSearchQuery = (
 
 const convertSearchQueryToFormikValues = (searchQuery: LevelSearchQuery) => {
   return {
+    sort: searchQuery.sort || defaultSearchQuery.sort,
     search: searchQuery.search || "",
     tags: searchQuery.tags,
     genres: searchQuery.genres,
@@ -87,6 +89,7 @@ const LevelListPage = () => {
       setSearchQuery({
         ...searchQuery,
         page: null,
+        sort: values.sort,
         search: values.search,
         tags: values.tags,
         genres: values.genres,
@@ -105,6 +108,19 @@ const LevelListPage = () => {
     [setSearchQuery]
   );
 
+  const sortOptions = [
+    { label: "Alphabetically", value: "name" },
+    { label: "By engine", value: "engine" },
+    { label: "Newest first", value: "-created" },
+    { label: "Oldest first", value: "created" },
+    { label: "Best rated", value: "-rating" },
+    { label: "Worst rated", value: "rating" },
+    { label: "Most downloaded", value: "-download_count" },
+    { label: "Least downloaded", value: "download_count" },
+    { label: "Biggest first", value: "-size" },
+    { label: "Smallest first", value: "size" },
+  ];
+
   return (
     <div id="LevelListPage">
       <QueryPersister
@@ -118,9 +134,18 @@ const LevelListPage = () => {
         initialValues={formikValues}
         onSubmit={searchClick}
       >
-        {({ resetForm }: { resetForm: any }) => (
+        {({ submitForm, resetForm }) => (
           <Form id="LevelListPage--container">
             <SearchBar id="LevelListPage--search">
+              <DropDownFormField
+                onChange={() => {
+                  submitForm();
+                }}
+                label="Sort"
+                name="sort"
+                options={sortOptions}
+              />
+
               <TextFormField label="Search" name="search" />
 
               <div className="FormField">

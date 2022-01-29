@@ -1,15 +1,17 @@
 .SearchBar {
   display: flex;
-  align-items: flex-end;
+  justify-content: flex-start;
+  align-items: center;
   gap: 1rem;
 }
 .SearchBar .FormField {
   margin-bottom: 0;
+  display: contents;
 }
 .SearchBar .FormField--label {
   display: inline;
-  margin-right: 1rem;
 }
 .SearchBar .FormField--field {
   display: inline;
+  flex-grow: 0;
 }
