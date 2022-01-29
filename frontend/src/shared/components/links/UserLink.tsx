@@ -5,15 +5,15 @@ import { PermissionGuard } from "src/shared/components/PermissionGuard";
 
 interface UserLinkProps {
   user: UserNested;
-  label?: string | undefined;
+  children?: React.ReactNode | undefined;
 }
 
-const UserLink = ({ user, label }: UserLinkProps) => {
+const UserLink = ({ user, children }: UserLinkProps) => {
   const { id, username } = user;
-  label ||= username;
+  children ||= username;
   return (
     <PermissionGuard require={UserPermission.listUsers} alternative={username}>
-      {id ? <Link to={`/users/${id}`}>{label}</Link> : <>label</>}
+      {id ? <Link to={`/users/${id}`}>{children}</Link> : <>{children}</>}
     </PermissionGuard>
   );
 };

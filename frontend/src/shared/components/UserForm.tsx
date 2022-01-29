@@ -100,7 +100,7 @@ const UserForm = ({ user, onGoBack, onSubmit }: UserFormProps) => {
             success: (
               <>
                 Profile information updated.{" "}
-                <UserLink user={outUser} label="Click here" /> to see the
+                <UserLink user={outUser}>Click here</UserLink> to see the
                 changes.
               </>
             ),

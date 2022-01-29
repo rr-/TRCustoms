@@ -177,12 +177,14 @@ dl > div > hr {
 }
 dl dt {
   white-space: nowrap;
+  text-align: left;
 }
 dl dt:after {
   content: ":";
 }
 dl dd {
   margin: 0;
+  text-align: left;
 }
 
 hr {
