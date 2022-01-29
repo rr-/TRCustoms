@@ -9,7 +9,7 @@ import { formatDate } from "src/shared/utils";
 
 interface TagsTableProps {
   searchQuery: TagSearchQuery;
-  onSearchQueryChange?: (searchQuery: TagSearchQuery) => any | null;
+  onSearchQueryChange?: ((searchQuery: TagSearchQuery) => void) | undefined;
 }
 
 const TagsTable = ({ searchQuery, onSearchQueryChange }: TagsTableProps) => {

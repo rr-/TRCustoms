@@ -3,10 +3,10 @@ import { FormFieldError } from "src/shared/components/formfields/FormFieldError"
 
 interface GenericFormFieldProps {
   name: string;
-  label: string | null;
-  extraInformation?: string;
-  required?: boolean;
-  readonly?: boolean;
+  label?: string | undefined;
+  extraInformation?: string | undefined;
+  required?: boolean | undefined;
+  readonly?: boolean | undefined;
 }
 
 interface BaseFormFieldProps extends GenericFormFieldProps {

@@ -9,7 +9,7 @@ import { formatDate } from "src/shared/utils";
 
 interface GenresTableProps {
   searchQuery: GenreSearchQuery;
-  onSearchQueryChange?: (searchQuery: GenreSearchQuery) => any | null;
+  onSearchQueryChange?: ((searchQuery: GenreSearchQuery) => void) | undefined;
 }
 
 const GenresTable = ({

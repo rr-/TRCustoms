@@ -10,13 +10,13 @@ import { KEY_UP } from "src/shared/constants";
 import { KEY_DOWN } from "src/shared/constants";
 
 interface AutoCompleteProps<TItem> {
-  maxLength?: number;
+  maxLength?: number | undefined;
   suggestions: TItem[];
   getResultText: (result: TItem) => string;
   getResultKey: (result: TItem) => Key;
   onSearchTrigger: (textInput: string) => void;
   onResultApply: (result: TItem) => void;
-  onNewResultApply?: (textInput: string) => any | null;
+  onNewResultApply?: ((textInput: string) => void) | undefined;
 }
 
 const AutoComplete = <TItem extends Object>({

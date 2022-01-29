@@ -4,7 +4,7 @@ import { BaseFormField } from "src/shared/components/formfields/BaseFormField";
 import type { GenericFormFieldProps } from "src/shared/components/formfields/BaseFormField";
 
 interface TextFormFieldProps extends GenericFormFieldProps {
-  type?: string;
+  type?: string | undefined;
 }
 
 const TextFormField = ({

@@ -10,7 +10,7 @@ import { EMPTY_INPUT_PLACEHOLDER } from "src/shared/utils";
 
 interface UsersTableProps {
   searchQuery: UserSearchQuery;
-  onSearchQueryChange?: (searchQuery: UserSearchQuery) => any | null;
+  onSearchQueryChange?: ((searchQuery: UserSearchQuery) => void) | undefined;
 }
 
 const UsersTable = ({ searchQuery, onSearchQueryChange }: UsersTableProps) => {

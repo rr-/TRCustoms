@@ -3,7 +3,7 @@ import type { GenreNested } from "src/services/genre.service";
 
 interface GenreLinkProps {
   genre: GenreNested;
-  label?: string | null;
+  label?: string | undefined;
 }
 
 const GenreLink = ({ genre, label }: GenreLinkProps) => {

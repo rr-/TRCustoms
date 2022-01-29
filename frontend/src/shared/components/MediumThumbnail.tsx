@@ -15,8 +15,8 @@ import { DisplayMode } from "src/shared/types";
 import { getYoutubeVideoID } from "src/shared/utils";
 
 interface MediumThumbnailProps {
-  file?: UploadedFile;
-  link?: string;
+  file?: UploadedFile | undefined;
+  link?: string | undefined;
   displayMode: DisplayMode;
 }
 

@@ -8,17 +8,22 @@ enum FormGridType {
 }
 
 interface FormGridProps {
-  gridType?: FormGridType;
+  gridType?: FormGridType | undefined;
   children: React.ReactNode;
 }
 
 interface FormGridButtonsProps {
-  status?: { success?: React.ReactElement; error?: React.ReactElement };
+  status?:
+    | {
+        success?: React.ReactElement | undefined;
+        error?: React.ReactElement | undefined;
+      }
+    | undefined;
   children: React.ReactNode;
 }
 
 interface FormGridFieldSetProps {
-  title?: React.ReactElement | string;
+  title?: React.ReactElement | string | undefined;
   children: React.ReactNode;
 }
 

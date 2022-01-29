@@ -4,14 +4,14 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 
 interface PushButtonProps {
-  to?: string | null;
-  disableTimeout?: boolean;
-  disabled?: boolean;
-  isPlain?: boolean;
-  onClick?: () => void;
-  icon?: React.ReactElement | null;
+  to?: string | null | undefined;
+  disableTimeout?: boolean | undefined;
+  disabled?: boolean | undefined;
+  isPlain?: boolean | undefined;
+  onClick?: (() => void) | undefined;
+  icon?: React.ReactNode | undefined;
   children: React.ReactNode | string;
-  tooltip?: string;
+  tooltip?: string | undefined;
 }
 
 const PushButton = ({

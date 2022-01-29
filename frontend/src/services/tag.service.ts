@@ -32,7 +32,7 @@ const searchTags = async (
 };
 
 interface TagCreatePayload {
-  name?: string;
+  name: string;
 }
 
 const create = async (payload: TagCreatePayload): Promise<TagListing> => {

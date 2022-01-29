@@ -1,8 +1,8 @@
 import "./SidebarBox.css";
 
 interface SidebarBoxProps {
-  id?: string | null;
-  actions?: React.ReactNode | null;
+  id?: string | undefined;
+  actions?: React.ReactNode | undefined;
   children: React.ReactNode;
 }
 

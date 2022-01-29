@@ -30,14 +30,14 @@ import { extractNestedErrorText } from "src/shared/utils";
 
 interface ReviewFormProps {
   level: LevelNested;
-  review?: ReviewDetails | null;
-  onGoBack?: () => any | null;
-  onSubmit?: (review: ReviewDetails) => any | null;
+  review?: ReviewDetails | null | undefined;
+  onGoBack?: (() => void) | undefined;
+  onSubmit?: ((review: ReviewDetails) => void) | undefined;
 }
 
 interface ReviewQuestionFormFieldProps {
   name: string;
-  readonly?: boolean;
+  readonly?: boolean | undefined;
   templateQuestion: ReviewTemplateQuestion;
 }
 

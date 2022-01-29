@@ -3,7 +3,7 @@ import type { UserDetails } from "src/services/user.service";
 
 interface UserPictureProps {
   user: UserDetails;
-  className?: string;
+  className?: string | undefined;
 }
 
 const UserPicture = ({ user, className }: UserPictureProps) => {

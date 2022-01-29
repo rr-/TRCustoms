@@ -7,7 +7,7 @@ const axios = require("axios");
 const api = axios.create();
 
 interface AxiosRequestConfigWithRetry extends AxiosRequestConfig {
-  _retry?: boolean;
+  _retry?: boolean | undefined;
 }
 
 api.interceptors.request.use(
