@@ -12,14 +12,17 @@ interface UserLinkProps {
 const UserLink = ({ user, className, children }: UserLinkProps) => {
   const { id, username } = user;
   children ||= username;
+
+  const fallback = <span className={className}>{children}</span>;
+
   return (
-    <PermissionGuard require={UserPermission.listUsers} alternative={username}>
+    <PermissionGuard require={UserPermission.listUsers} alternative={fallback}>
       {id ? (
         <Link className={className} to={`/users/${id}`}>
           {children}
         </Link>
       ) : (
-        <span className={className}>{children}</span>
+        fallback
       )}
     </PermissionGuard>
   );
