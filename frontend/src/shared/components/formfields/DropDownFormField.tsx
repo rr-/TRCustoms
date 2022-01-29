@@ -11,17 +11,31 @@ interface DropDownOption {
 
 interface DropDownFormFieldProps extends GenericFormFieldProps {
   options: DropDownOption[];
+  onChange?: () => void | undefined;
   multiple?: boolean;
 }
 
 const DropDownFormField = ({
   name,
   options,
+  onChange,
   multiple,
   readonly,
   ...props
 }: DropDownFormFieldProps) => {
   const { setFieldValue } = useFormikContext();
+
+  const onFieldChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    setFieldValue(
+      name,
+      multiple
+        ? [].slice
+            .call(event.target.selectedOptions)
+            .map((option: HTMLOptionElement) => option.value)
+        : event.target.selectedOptions?.[0].value
+    );
+    onChange?.();
+  };
 
   return (
     <BaseFormField name={name} readonly={readonly} {...props}>
@@ -33,16 +47,7 @@ const DropDownFormField = ({
         multiple={multiple}
         className="DropDownFormField--select"
         defaultValue={"-"}
-        onChange={(event: React.ChangeEvent<HTMLSelectElement>) =>
-          setFieldValue(
-            name,
-            multiple
-              ? [].slice
-                  .call(event.target.selectedOptions)
-                  .map((option: HTMLOptionElement) => option.value)
-              : event.target.selectedOptions?.[0].value
-          )
-        }
+        onChange={onFieldChange}
       >
         {!multiple && (
           <option disabled value={"-"}>

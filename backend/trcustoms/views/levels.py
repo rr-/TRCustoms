@@ -1,3 +1,4 @@
+from django.db.models import F
 from rest_framework import mixins, serializers, status, viewsets
 from rest_framework.decorators import action
 from rest_framework.generics import get_object_or_404
@@ -73,15 +74,7 @@ class LevelViewSet(
         "create": LevelDetailsSerializer,
     }
 
-    ordering_fields = [
-        "name",
-        "engine",
-        "created",
-        "download_count",
-        "rating_class__position",
-        "last_updated",
-        "last_file__file__size",
-    ]
+    ordering_fields = []
     search_fields = [
         "name",
         "authors__username",
@@ -99,6 +92,38 @@ class LevelViewSet(
 
         disable_paging = self.request.query_params.get("disable_paging")
         self.paginator.disable_paging = False
+
+        if sort_style := self.request.query_params.get("sort"):
+            match sort_style:
+                case (
+                    "name"
+                    | "-name"
+                    | "created"
+                    | "-created"
+                    | "download_count"
+                    | "-download_count"
+                ):
+                    queryset = queryset.order_by(sort_style)
+                case "engine":
+                    queryset = queryset.order_by("engine__name")
+                case "-engine":
+                    queryset = queryset.order_by("-engine__name")
+                case "rating":
+                    queryset = queryset.order_by(
+                        F("rating_class__position").asc(nulls_first=True)
+                    )
+                case "-rating":
+                    queryset = queryset.order_by(
+                        F("rating_class__position").desc(nulls_last=True)
+                    )
+                case "size":
+                    queryset = queryset.order_by(
+                        F("last_file__file__size").asc(nulls_first=True)
+                    )
+                case "-size":
+                    queryset = queryset.order_by(
+                        F("last_file__file__size").desc(nulls_last=True)
+                    )
 
         if author_ids := parse_ids(self.request.query_params.get("authors")):
             for author_id in author_ids:
