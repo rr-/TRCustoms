@@ -26,11 +26,9 @@
 }
 
 .Review {
-  padding: 1rem;
   display: grid;
-  margin-bottom: 1rem;
-  gap: 1rem;
-  grid-template-columns: min-content auto;
+  margin-bottom: 3rem;
+  grid-template-rows: auto auto auto;
   background: var(--sidebar-background-color);
 }
 .Review.positive .Review--badge {
@@ -43,37 +41,69 @@
   background-color: var(--negative-background-color);
 }
 
+.Review--content {
+  padding: 1rem;
+  border-bottom: 2px solid;
+}
+.Review.positive .Review--content {
+  border-bottom-color: var(--positive-background-color);
+}
+.Review.neutral .Review--content {
+  border-bottom-color: var(--neutral-background-color);
+}
+.Review.negative .Review--content {
+  border-bottom-color: var(--negative-background-color);
+}
+
 .Review--badge {
-  width: 7rem;
-  float: right;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   align-items: center;
-  padding: 0.5rem 1rem;
-  border-radius: 1rem;
-  margin: 0 0 0 1rem;
-  font-size: 0.9rem;
+  gap: 1rem;
 }
 .Review--badge .icon {
-  font-size: 3rem;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  font-size: 2rem;
+}
+
+.Review--footer {
+  padding: 1rem;
+  display: flex;
+  flex-direction: row;
+  text-align: center;
+  white-space: nowrap;
+  align-items: center;
+  gap: 2rem;
+}
+
+.Review--userLink {
+  display: flex;
+  max-width: 100%;
+  align-items: center;
+  gap: 0.5rem;
+  flex-basis: 0;
 }
 
 .Review--userPic {
-  max-width: 100%;
+  display: block;
+  width: 2rem;
+  max-height: 100%;
 }
 
-.Review--aside {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-  text-align: center;
-  white-space: nowrap;
-}
-
-.Review--aside dl {
+.Review--userInfo {
   margin: 0;
+  display: flex;
+  flex-direction: row;
+  flex: 1 1 0;
+}
+.Review--userInfoDefinition {
+  margin-right: 2rem;
 }
 
+.Review--content p:last-of-type {
+  margin-bottom: 0;
+}
 .Review--content p:first-of-type {
   margin-top: 0;
 }
