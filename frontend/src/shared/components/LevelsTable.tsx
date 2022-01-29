@@ -69,13 +69,17 @@ const LevelsTable = ({
             <LevelLink level={level} />
           </strong>{" "}
           by{" "}
-          <ul className="LevelsTable--authorList">
-            {level.authors.map((author) => (
-              <li className="LevelsTable--authorListItem">
-                <UserLink key={author.id} user={author} />
-              </li>
-            ))}
-          </ul>
+          {level.authors.length > 1 ? (
+            <span
+              title={level.authors.map((author) => author.username).join(", ")}
+            >
+              Multiple authors
+            </span>
+          ) : level.authors.length === 1 ? (
+            <UserLink user={level.authors[0]} />
+          ) : (
+            "Unknown"
+          )}
           <br />
           <small>
             Reviews: <LevelRating ratingClass={level.rating_class} />
