@@ -3,15 +3,25 @@ import { useFormikContext } from "formik";
 import { BaseFormField } from "src/shared/components/formfields/BaseFormField";
 import type { GenericFormFieldProps } from "src/shared/components/formfields/BaseFormField";
 
+interface CheckboxFormFieldProps extends GenericFormFieldProps {
+  onChange?: () => void | undefined;
+}
+
 const CheckboxFormField = ({
   name,
   label,
   readonly,
+  onChange,
   ...props
-}: GenericFormFieldProps) => {
+}: CheckboxFormFieldProps) => {
   const { values, setFieldValue } = useFormikContext() as {
     values: { [key: string]: any };
     setFieldValue: (name: string, value: any) => void;
+  };
+
+  const onFieldChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setFieldValue(name, event.target.checked);
+    onChange?.();
   };
 
   return (
@@ -21,9 +31,7 @@ const CheckboxFormField = ({
           disabled={readonly}
           type="checkbox"
           className="Checkbox--input"
-          onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-            setFieldValue(name, event.target.checked);
-          }}
+          onChange={onFieldChange}
           checked={values[name]}
         />
         {label}
