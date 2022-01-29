@@ -117,8 +117,8 @@ const LevelListPage = () => {
     { label: "Worst rated", value: "rating" },
     { label: "Most downloaded", value: "-download_count" },
     { label: "Least downloaded", value: "download_count" },
-    { label: "Biggest first", value: "-size" },
-    { label: "Smallest first", value: "size" },
+    { label: "Biggest size", value: "-size" },
+    { label: "Smallest size", value: "size" },
   ];
 
   return (
