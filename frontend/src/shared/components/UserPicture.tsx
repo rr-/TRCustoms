@@ -1,8 +1,9 @@
 import "./UserPicture.css";
-import type { UserDetails } from "src/services/user.service";
+import type { UploadedFile } from "src/services/file.service";
+import type { UserNested } from "src/services/user.service";
 
 interface UserPictureProps {
-  user: UserDetails;
+  user: UserNested & { picture: UploadedFile | null };
   className?: string | undefined;
 }
 

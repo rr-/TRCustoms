@@ -1,4 +1,7 @@
 import "./ReviewsList.css";
+import { ThumbUpIcon } from "@heroicons/react/outline";
+import { ThumbDownIcon } from "@heroicons/react/outline";
+import { DotsCircleHorizontalIcon } from "@heroicons/react/outline";
 import { useQuery } from "react-query";
 import type { ReviewListing } from "src/services/review.service";
 import { ReviewService } from "src/services/review.service";
@@ -10,6 +13,7 @@ import { Markdown } from "src/shared/components/Markdown";
 import { PermissionGuard } from "src/shared/components/PermissionGuard";
 import { PushButton } from "src/shared/components/PushButton";
 import { SectionHeader } from "src/shared/components/SectionHeader";
+import { UserPicture } from "src/shared/components/UserPicture";
 import { LevelLink } from "src/shared/components/links/LevelLink";
 import { UserLink } from "src/shared/components/links/UserLink";
 import { formatDate } from "src/shared/utils";
@@ -26,40 +30,78 @@ interface ReviewViewProps {
 }
 
 const ReviewView = ({ review, showLevels }: ReviewViewProps) => {
-  const classNames = ["ReviewsList--review"];
+  const classNames = ["Review"];
 
   const position = review.rating_class?.position || 0;
+  let badge: React.ReactNode;
   if (position > 0) {
     classNames.push("positive");
+    badge = (
+      <>
+        <ThumbUpIcon className="icon" />
+        Recommended
+      </>
+    );
   } else if (position < 0) {
     classNames.push("negative");
+    badge = (
+      <>
+        <ThumbDownIcon className="icon" />
+        Not recommended
+      </>
+    );
   } else {
     classNames.push("neutral");
+    badge = (
+      <>
+        <DotsCircleHorizontalIcon className="icon" />
+        Neutral
+      </>
+    );
   }
 
   return (
     <div className={classNames.join(" ")}>
-      {showLevels ? (
-        <div className="ReviewsList--level">
-          <LevelLink level={review.level} />
-        </div>
-      ) : null}
-      <Markdown children={review.text || "No review text is available."} />—{" "}
-      <em>
-        <UserLink user={review.author} />, {formatDate(review.created)}
-      </em>
-      <PermissionGuard
-        require={UserPermission.editReviews}
-        owningUsers={[review.author]}
-      >
-        <div>
+      <aside className="Review--aside">
+        <UserLink user={review.author}>
+          <>
+            <UserPicture className="Review--userPic" user={review.author} />
+            <br />
+            {review.author.username}
+          </>
+        </UserLink>
+
+        <dl>
+          <dt>Reviews</dt>
+          <dd>{review.author.reviewed_level_count}</dd>
+
+          <dt>Published</dt>
+          <dd>{formatDate(review.created)}</dd>
+        </dl>
+
+        <PermissionGuard
+          require={UserPermission.editReviews}
+          owningUsers={[review.author]}
+        >
           <PushButton
             to={`/levels/${review.level.id}/review/${review.id}/edit`}
           >
-            Edit
+            Edit review
           </PushButton>
-        </div>
-      </PermissionGuard>
+        </PermissionGuard>
+      </aside>
+
+      <div className="Review--content">
+        <div className="Review--badge">{badge}</div>
+
+        {showLevels ? (
+          <p className="ReviewsList--level">
+            Review on <LevelLink level={review.level} />
+          </p>
+        ) : null}
+
+        <Markdown children={review.text || "No review text is available."} />
+      </div>
     </div>
   );
 };

@@ -41,6 +41,7 @@ class LevelReviewViewSet(
     }
     queryset = LevelReview.objects.all().prefetch_related(
         "author",
+        "author__picture",
         "level",
     )
     serializer_class = LevelReviewListingSerializer

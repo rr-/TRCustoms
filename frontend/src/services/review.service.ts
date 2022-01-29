@@ -1,4 +1,6 @@
 import { AxiosResponse } from "axios";
+import type { UploadedFile } from "src/services/file.service";
+import type { UserNested } from "src/services/user.service";
 import { api } from "src/shared/api";
 import { API_URL } from "src/shared/constants";
 import type { GenericSearchQuery } from "src/shared/types";
@@ -7,11 +9,9 @@ import type { RatingClass } from "src/shared/types";
 import { filterFalsyObjectValues } from "src/shared/utils";
 import { getGenericSearchQuery } from "src/shared/utils";
 
-interface ReviewAuthor {
-  id: number;
-  username: string;
-  first_name: string;
-  last_name: string;
+interface ReviewAuthor extends UserNested {
+  picture: UploadedFile | null;
+  reviewed_level_count: number;
 }
 
 interface ReviewListing {
