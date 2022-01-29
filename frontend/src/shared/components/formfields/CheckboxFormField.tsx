@@ -19,7 +19,7 @@ const CheckboxFormField = ({
     setFieldValue: (name: string, value: any) => void;
   };
 
-  const onFieldChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setFieldValue(name, event.target.checked);
     onChange?.();
   };
@@ -31,7 +31,7 @@ const CheckboxFormField = ({
           disabled={readonly}
           type="checkbox"
           className="Checkbox--input"
-          onChange={onFieldChange}
+          onChange={handleChange}
           checked={values[name]}
         />
         {label}

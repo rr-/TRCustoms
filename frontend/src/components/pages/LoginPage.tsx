@@ -20,7 +20,7 @@ const LoginPage = () => {
   const navigate = useNavigate();
   const { setUser } = useContext(UserContext);
 
-  const submit = useCallback(
+  const handleSubmit = useCallback(
     async (values, { setSubmitting, setStatus, setErrors }) => {
       try {
         await AuthService.login(values.username, values.password);
@@ -68,7 +68,10 @@ const LoginPage = () => {
   return (
     <div className="LoginForm">
       <h1>Login</h1>
-      <Formik initialValues={{ username: "", password: "" }} onSubmit={submit}>
+      <Formik
+        initialValues={{ username: "", password: "" }}
+        onSubmit={handleSubmit}
+      >
         {({ isSubmitting, status }) => (
           <Form>
             <FormGrid>

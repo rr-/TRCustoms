@@ -7,7 +7,7 @@ import { LevelForm } from "src/shared/components/LevelForm";
 const LevelUploadPage = () => {
   const [isComplete, setIsComplete] = useState(false);
 
-  const onSubmit = useCallback(
+  const handleSubmit = useCallback(
     async (level: LevelDetails) => {
       setIsComplete(true);
     },
@@ -25,7 +25,7 @@ const LevelUploadPage = () => {
           <Link to={"/"}>some levels</Link>?
         </>
       ) : (
-        <LevelForm onSubmit={onSubmit} />
+        <LevelForm onSubmit={handleSubmit} />
       )}
     </div>
   );

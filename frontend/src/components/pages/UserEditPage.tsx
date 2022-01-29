@@ -23,7 +23,7 @@ const UserEditPage = () => {
     async () => await UserService.getUserById(+userId)
   );
 
-  const submit = useCallback(
+  const handleSubmit = useCallback(
     (outUser, password) => {
       if (outUser.id === userContext.user.id) {
         userContext.setUser(outUser);
@@ -32,7 +32,7 @@ const UserEditPage = () => {
     [userContext]
   );
 
-  const goBack = useCallback(() => {
+  const handleBack = useCallback(() => {
     navigate(`/users/${userId}`);
   }, [navigate, userId]);
 
@@ -50,7 +50,7 @@ const UserEditPage = () => {
     <div id="UserEditPage">
       <h1>Editing {user.username}'s profile</h1>
 
-      <UserForm onGoBack={goBack} onSubmit={submit} user={user} />
+      <UserForm onGoBack={handleBack} onSubmit={handleSubmit} user={user} />
     </div>
   );
 };

@@ -32,12 +32,13 @@ const SortLink = ({
 
   const descending = status === SortLinkStatus.Active;
   const isActive = status !== SortLinkStatus.Inactive;
-  const buttonClick = () => onSortChange((descending ? "-" : "") + targetSort);
+  const handleButtonClick = () =>
+    onSortChange((descending ? "-" : "") + targetSort);
 
   return (
     <button
       type="button"
-      onClick={buttonClick}
+      onClick={handleButtonClick}
       className={`link ${isActive ? "SortLink SortLink--active" : "SortLink"}`}
     >
       {children}

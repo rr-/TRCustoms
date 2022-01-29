@@ -208,7 +208,7 @@ const FilePicker = ({
   const addFile = useCallback(
     (file) => {
       setErrorMessage(null);
-      const onUploadProgress = (progressEvent: ProgressEvent) => {
+      const handleUploadProgress = (progressEvent: ProgressEvent) => {
         setPercentCompleted(
           (progressEvent.loaded * 100.0) / progressEvent.total
         );
@@ -219,7 +219,7 @@ const FilePicker = ({
           const uploadedFile = await FileService.uploadFile(
             file,
             uploadType,
-            onUploadProgress
+            handleUploadProgress
           );
           const newFileIds = [
             ...(allowMultiple ? currentFileIds : []),

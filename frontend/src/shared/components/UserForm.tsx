@@ -77,7 +77,7 @@ const UserForm = ({ user, onGoBack, onSubmit }: UserFormProps) => {
     []
   );
 
-  const submit = useCallback(
+  const handleSubmit = useCallback(
     async (values, { setSubmitting, setStatus, setErrors }) => {
       try {
         const payload = {
@@ -155,7 +155,11 @@ const UserForm = ({ user, onGoBack, onSubmit }: UserFormProps) => {
   };
 
   return (
-    <Formik initialValues={initialValues} validate={validate} onSubmit={submit}>
+    <Formik
+      initialValues={initialValues}
+      validate={validate}
+      onSubmit={handleSubmit}
+    >
       {({ isSubmitting, setFieldValue, status }) =>
         !user && status?.success ? (
           <div className="FormFieldSuccess">{status.success}</div>
