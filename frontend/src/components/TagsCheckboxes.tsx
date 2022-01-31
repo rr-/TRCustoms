@@ -2,6 +2,7 @@ import { sortBy } from "lodash";
 import { useContext } from "react";
 import { useEffect } from "react";
 import { useState } from "react";
+import { FilterCheckboxesHeader } from "src/components/FilterCheckboxesHeader";
 import type { LevelSearchQuery } from "src/services/level.service";
 import type { TagNested } from "src/services/tag.service";
 import { Checkbox } from "src/shared/components/Checkbox";
@@ -70,9 +71,15 @@ const TagsCheckboxes = ({
     });
   };
 
+  const handleClear = () => {
+    onSearchQueryChange({ ...searchQuery, tags: [] });
+  };
+
   return (
     <div className="TagsCheckboxes">
-      <p>Tags:</p>
+      <FilterCheckboxesHeader onClear={handleClear}>
+        Tags:
+      </FilterCheckboxesHeader>
       <TextInput
         onKeyDown={handleSearchInputKeyDown}
         onChange={handleSearchInputChange}

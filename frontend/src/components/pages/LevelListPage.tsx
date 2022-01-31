@@ -12,10 +12,10 @@ import type { LevelSearchQuery } from "src/services/level.service";
 import { UserPermission } from "src/services/user.service";
 import { LevelsTable } from "src/shared/components/LevelsTable";
 import { PermissionGuard } from "src/shared/components/PermissionGuard";
+import { PushButton } from "src/shared/components/PushButton";
 import { QueryPersister } from "src/shared/components/QueryPersister";
 import { deserializeGenericSearchQuery } from "src/shared/components/QueryPersister";
 import { serializeGenericSearchQuery } from "src/shared/components/QueryPersister";
-import { SearchBar } from "src/shared/components/SearchBar";
 import { SectionHeader } from "src/shared/components/SectionHeader";
 import { SidebarBox } from "src/shared/components/SidebarBox";
 import { CheckboxFormField } from "src/shared/components/formfields/CheckboxFormField";
@@ -86,6 +86,10 @@ const LevelListPage = () => {
     [searchQuery]
   );
 
+  const handleClear = useCallback(() => setSearchQuery(defaultSearchQuery), [
+    setSearchQuery,
+  ]);
+
   const handleSubmit = useCallback(
     // push changes to query on Formik submit
     async (values: any) => {
@@ -139,7 +143,16 @@ const LevelListPage = () => {
             </div>
 
             <SidebarBox id="LevelListPage--sidebar">
-              <SectionHeader>Search filter</SectionHeader>
+              <SectionHeader className="LevelListPage--sidebarHeader">
+                Search filter
+                <PushButton
+                  isPlain={true}
+                  disableTimeout={true}
+                  onClick={handleClear}
+                >
+                  (reset)
+                </PushButton>
+              </SectionHeader>
 
               <PermissionGuard require={UserPermission.editLevels}>
                 <div className="LevelListPage--sidebarSection">
