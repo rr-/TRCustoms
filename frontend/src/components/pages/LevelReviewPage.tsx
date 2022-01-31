@@ -27,7 +27,7 @@ const LevelReviewPage = () => {
 
   const reviewResult = useQuery<ReviewDetails | null, Error>(
     ["review", ReviewService.getReviewByAuthorAndLevelIds, levelId],
-    async () => ReviewService.getReviewByAuthorAndLevelIds(+levelId, user.id)
+    async () => ReviewService.getReviewByAuthorAndLevelIds(+levelId, user?.id)
   );
 
   const handleGoBack = useCallback(() => {

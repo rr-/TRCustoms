@@ -1,4 +1,5 @@
 import "./ReviewForm.css";
+import { InformationCircleIcon } from "@heroicons/react/outline";
 import { AxiosError } from "axios";
 import axios from "axios";
 import { Field } from "formik";
@@ -211,6 +212,12 @@ const ReviewForm = ({ level, review, onGoBack, onSubmit }: ReviewFormProps) => {
               </FormGridFieldSet>
 
               <FormGridFieldSet title="Questionnaire">
+                <p className="ReviewForm--questionnaireDisclaimer">
+                  <InformationCircleIcon className="icon" /> The results of this
+                  questionnaire will aggregate a hidden score that contributes
+                  to the average rating.
+                </p>
+
                 {config.review_questions.map((templateQuestion) => (
                   <ReviewQuestionFormField
                     key={templateQuestion.id}
