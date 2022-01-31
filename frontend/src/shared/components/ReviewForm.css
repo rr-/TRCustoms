@@ -1,3 +1,6 @@
 .ReviewQuestionFormField--answerRow:first-of-type {
   margin-top: 0.5rem;
 }
+.ReviewForm--questionnaireDisclaimer {
+  margin-bottom: 0;
+}
