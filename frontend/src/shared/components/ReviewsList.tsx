@@ -39,7 +39,7 @@ const ReviewView = ({ review, showLevels }: ReviewViewProps) => {
     badge = (
       <>
         <ThumbUpIcon className="icon" />
-        Recommended
+        Positive
       </>
     );
   } else if (position < 0) {
@@ -47,7 +47,7 @@ const ReviewView = ({ review, showLevels }: ReviewViewProps) => {
     badge = (
       <>
         <ThumbDownIcon className="icon" />
-        Not recommended
+        Negative
       </>
     );
   } else {
