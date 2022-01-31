@@ -1,3 +1,5 @@
+from functools import cache
+
 from django.db.models import Count
 from rest_framework import serializers
 
@@ -15,6 +17,13 @@ from trcustoms.serializers.uploaded_files import UploadedFileNestedSerializer
 from trcustoms.serializers.users import UserNestedSerializer
 
 
+@cache
+def get_reviewed_level_count(user_id: int) -> int:
+    return User.objects.filter(id=user_id).aggregate(
+        count=Count("reviewed_levels")
+    )["count"]
+
+
 class ReviewAuthorSerializer(UserNestedSerializer):
     picture = UploadedFileNestedSerializer(read_only=True)
     reviewed_level_count = serializers.SerializerMethodField(read_only=True)
@@ -27,9 +36,7 @@ class ReviewAuthorSerializer(UserNestedSerializer):
         ]
 
     def get_reviewed_level_count(self, instance: User) -> int:
-        return User.objects.filter(id=instance.id).aggregate(
-            count=Count("reviewed_levels")
-        )["count"]
+        return get_reviewed_level_count(instance.id)
 
 
 class LevelReviewListingSerializer(serializers.ModelSerializer):
@@ -50,7 +57,6 @@ class LevelReviewListingSerializer(serializers.ModelSerializer):
             "level",
             "text",
             "created",
-            "answers",
             "last_updated",
             "rating_class",
         ]

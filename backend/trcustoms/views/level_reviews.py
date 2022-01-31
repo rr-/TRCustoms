@@ -40,6 +40,7 @@ class LevelReviewViewSet(
         ],
     }
     queryset = LevelReview.objects.all().prefetch_related(
+        "rating_class",
         "author",
         "author__picture",
         "level",
