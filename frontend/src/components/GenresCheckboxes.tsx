@@ -2,6 +2,7 @@ import { sortBy } from "lodash";
 import { useState } from "react";
 import { useEffect } from "react";
 import { useContext } from "react";
+import { FilterCheckboxesHeader } from "src/components/FilterCheckboxesHeader";
 import type { GenreNested } from "src/services/genre.service";
 import type { LevelSearchQuery } from "src/services/level.service";
 import { Checkbox } from "src/shared/components/Checkbox";
@@ -50,9 +51,15 @@ const GenresCheckboxes = ({
     });
   };
 
+  const handleClear = () => {
+    onSearchQueryChange({ ...searchQuery, genres: [] });
+  };
+
   return (
     <div className="GenresCheckboxes">
-      <p>Genres:</p>
+      <FilterCheckboxesHeader onClear={handleClear}>
+        Genres:
+      </FilterCheckboxesHeader>
       {visibleGenres.map((genre) => (
         <div key={genre.id}>
           <Checkbox

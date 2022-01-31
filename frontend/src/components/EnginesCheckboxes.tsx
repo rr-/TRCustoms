@@ -1,5 +1,6 @@
 import { sortBy } from "lodash";
 import { useContext } from "react";
+import { FilterCheckboxesHeader } from "src/components/FilterCheckboxesHeader";
 import type { EngineNested } from "src/services/engine.service";
 import type { LevelSearchQuery } from "src/services/level.service";
 import { Checkbox } from "src/shared/components/Checkbox";
@@ -29,9 +30,15 @@ const EnginesCheckboxes = ({
     });
   };
 
+  const handleClear = () => {
+    onSearchQueryChange({ ...searchQuery, engines: [] });
+  };
+
   return (
     <div className="EnginesCheckboxes">
-      <p>Engines:</p>
+      <FilterCheckboxesHeader onClear={handleClear}>
+        Engines:
+      </FilterCheckboxesHeader>
       {visibleEngines.map((engine) => (
         <div key={engine.id}>
           <Checkbox

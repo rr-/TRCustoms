@@ -44,3 +44,12 @@
   width: 1.5rem;
   height: 1.5rem;
 }
+
+.LevelListPage--sidebarHeader {
+  display: flex;
+  justify-content: space-between;
+}
+.LevelListPage--sidebarHeader .PushButton {
+  font-size: 1rem;
+  font-weight: normal;
+}
