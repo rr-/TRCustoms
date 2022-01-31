@@ -267,42 +267,40 @@ const InfiniteDataTable = <TItem extends {}, TQuery extends GenericSearchQuery>(
   }, [loadingElement]);
 
   return (
-    <>
-      <table className={`DataTable ${className}`}>
-        <DataTableHeader {...props} />
+    <table className={`DataTable ${className}`}>
+      <DataTableHeader {...props} />
 
-        {result.data?.pages?.map((result, i) => (
-          <Fragment key={`body${i}`}>
-            <DataTableBody
-              lastRowRef={setLoadingElement}
-              result={{ isLoading: false, data: result, error: undefined }}
-              {...props}
-            />
-          </Fragment>
-        ))}
+      {result.data?.pages?.map((result, i) => (
+        <Fragment key={`body${i}`}>
+          <DataTableBody
+            lastRowRef={setLoadingElement}
+            result={{ isLoading: false, data: result, error: undefined }}
+            {...props}
+          />
+        </Fragment>
+      ))}
 
-        <tfoot>
-          <tr>
-            <td colSpan={100}>
-              <div>
-                <span
-                  style={{
-                    display:
-                      result.isFetching || result.isFetchingNextPage
-                        ? "block"
-                        : "none",
-                  }}
-                >
-                  Loading…
-                </span>
-              </div>
-            </td>
-          </tr>
-        </tfoot>
+      <tfoot>
+        <tr>
+          <td colSpan={100}>
+            <div>
+              <span
+                style={{
+                  display:
+                    result.isFetching || result.isFetchingNextPage
+                      ? "block"
+                      : "none",
+                }}
+              >
+                Loading…
+              </span>
+            </div>
+          </td>
+        </tr>
+      </tfoot>
 
-        <DataTableFooter {...props} />
-      </table>
-    </>
+      <DataTableFooter {...props} />
+    </table>
   );
 };
 
