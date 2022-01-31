@@ -19,6 +19,7 @@ import { formatDate } from "src/shared/utils";
 interface ReviewsListProps {
   showLevels: boolean;
   searchQuery: ReviewSearchQuery;
+  onResultCountChange?: ((count: number) => void) | undefined;
   onSearchQueryChange?: ((searchQuery: ReviewSearchQuery) => void) | undefined;
 }
 
@@ -110,13 +111,15 @@ const ReviewView = ({ review, showLevels }: ReviewViewProps) => {
 const ReviewsList = ({
   showLevels,
   searchQuery,
+  onResultCountChange,
   onSearchQueryChange,
 }: ReviewsListProps) => {
   return (
-    <>
+    <div className="ReviewsList">
       <SectionHeader>Reviews</SectionHeader>
       <DataList
         searchQuery={searchQuery}
+        onResultCountChange={onResultCountChange}
         queryName="reviews"
         onSearchQueryChange={onSearchQueryChange}
         searchFunc={ReviewService.searchReviews}
@@ -125,7 +128,7 @@ const ReviewsList = ({
           <ReviewView review={review} showLevels={showLevels} />
         )}
       />
-    </>
+    </div>
   );
 };
 
