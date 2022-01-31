@@ -26,7 +26,10 @@ const GenresCheckboxes = ({
   useEffect(() => {
     setVisibleGenres(
       sortBy(config.genres, (genre) => genre.name).filter(
-        (genre, i) => isExpanded || i < MAX_VISIBLE_GENRES
+        (genre, i) =>
+          isExpanded ||
+          i < MAX_VISIBLE_GENRES ||
+          searchQuery.genres.includes(genre.id)
       )
     );
   }, [isExpanded, setVisibleGenres, config]);
