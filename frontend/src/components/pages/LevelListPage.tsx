@@ -1,4 +1,5 @@
 import "./LevelListPage.css";
+import { SearchIcon } from "@heroicons/react/outline";
 import { Formik } from "formik";
 import { Form } from "formik";
 import { useEffect } from "react";
@@ -15,6 +16,8 @@ import { QueryPersister } from "src/shared/components/QueryPersister";
 import { deserializeGenericSearchQuery } from "src/shared/components/QueryPersister";
 import { serializeGenericSearchQuery } from "src/shared/components/QueryPersister";
 import { SearchBar } from "src/shared/components/SearchBar";
+import { SectionHeader } from "src/shared/components/SectionHeader";
+import { SidebarBox } from "src/shared/components/SidebarBox";
 import { CheckboxFormField } from "src/shared/components/formfields/CheckboxFormField";
 import { DropDownFormField } from "src/shared/components/formfields/DropDownFormField";
 import { TextFormField } from "src/shared/components/formfields/TextFormField";
@@ -100,14 +103,6 @@ const LevelListPage = () => {
     [searchQuery, setSearchQuery]
   );
 
-  const handleReset = useCallback(
-    async (resetForm) => {
-      setSearchQuery(defaultSearchQuery);
-      resetForm();
-    },
-    [setSearchQuery]
-  );
-
   const sortOptions = [
     { label: "Alphabetically", value: "name" },
     { label: "By engine", value: "engine" },
@@ -136,32 +131,6 @@ const LevelListPage = () => {
       >
         {({ submitForm, resetForm }) => (
           <Form id="LevelListPage--container">
-            <SearchBar id="LevelListPage--search">
-              <DropDownFormField
-                onChange={() => {
-                  submitForm();
-                }}
-                label="Sort"
-                name="sort"
-                options={sortOptions}
-              />
-
-              <TextFormField label="Search" name="search" />
-
-              <div className="FormField">
-                <button type="submit">Search</button>
-              </div>
-
-              <div className="FormField">
-                <button
-                  onClick={handleReset.bind(null, resetForm)}
-                  type="reset"
-                >
-                  Reset
-                </button>
-              </div>
-            </SearchBar>
-
             <div id="LevelListPage--results">
               <LevelsTable
                 searchQuery={searchQuery}
@@ -169,7 +138,9 @@ const LevelListPage = () => {
               />
             </div>
 
-            <aside id="LevelListPage--sidebar">
+            <SidebarBox id="LevelListPage--sidebar">
+              <SectionHeader>Search filter</SectionHeader>
+
               <PermissionGuard require={UserPermission.editLevels}>
                 <div className="LevelListPage--sidebarSection">
                   <CheckboxFormField
@@ -181,6 +152,26 @@ const LevelListPage = () => {
                   />
                 </div>
               </PermissionGuard>
+
+              <div className="LevelListPage--sidebarSection">
+                <DropDownFormField
+                  onChange={() => {
+                    submitForm();
+                  }}
+                  label="Sort"
+                  name="sort"
+                  options={sortOptions}
+                />
+              </div>
+
+              <div className="LevelListPage--sidebarSection LevelListPage--searchBar">
+                <TextFormField label="Search level/author" name="search" />
+                <div className="FormField">
+                  <button type="submit">
+                    <SearchIcon className="Icon" />
+                  </button>
+                </div>
+              </div>
 
               <div className="LevelListPage--sidebarSection">
                 <EnginesCheckboxes
@@ -202,7 +193,7 @@ const LevelListPage = () => {
                   onSearchQueryChange={setSearchQuery}
                 />
               </div>
-            </aside>
+            </SidebarBox>
           </Form>
         )}
       </Formik>
