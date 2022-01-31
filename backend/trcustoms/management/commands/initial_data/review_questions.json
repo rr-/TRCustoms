@@ -4,10 +4,13 @@
     "weight": 20,
     "question_text": "Do you plan on revisiting this game?",
     "answers": [
-      { "points": 0, "answer_text": "I am going to bin this" },
+      {
+        "points": 0,
+        "answer_text": "Very unmemorable, I'm going to forget about this game"
+      },
       {
         "points": 1,
-        "answer_text": "Not sure, I usually only play things once"
+        "answer_text": "Perhaps in my memories"
       },
       {
         "points": 2,
@@ -80,7 +83,7 @@
   {
     "position": 5,
     "weight": 15,
-    "question_text": "The builder used various techniques to set an atmospheric tone and immerse the player.",
+    "question_text": "The builder was able to set an atmospheric tone and immerse the player.",
     "answers": [
       { "points": 0, "answer_text": "Strongly disagree" },
       { "points": 1, "answer_text": "Disagree" },
