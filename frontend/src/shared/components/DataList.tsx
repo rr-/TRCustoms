@@ -22,6 +22,7 @@ interface DataListProps<TItem, TQuery> {
     searchQuery: TQuery
   ) => Promise<GenericSearchResult<TQuery, TItem>>;
 
+  onResultCountChange?: ((count: number) => void) | undefined;
   onSearchQueryChange?: ((searchQuery: TQuery) => void) | undefined;
 }
 
@@ -29,6 +30,7 @@ const PagedDataList = <TItem extends {}, TQuery extends GenericSearchQuery>({
   className,
   searchQuery,
   searchFunc,
+  onResultCountChange,
   onSearchQueryChange,
   itemKey,
   itemView,
@@ -45,6 +47,10 @@ const PagedDataList = <TItem extends {}, TQuery extends GenericSearchQuery>({
 
   if (result.isLoading || !result.data) {
     return <Loader />;
+  }
+
+  if (result.data.total_count !== undefined) {
+    onResultCountChange?.(result.data.total_count);
   }
 
   return (
@@ -75,6 +81,7 @@ const InfiniteDataList = <TItem extends {}, TQuery extends GenericSearchQuery>({
   className,
   searchQuery,
   searchFunc,
+  onResultCountChange,
   onSearchQueryChange,
   itemKey,
   itemView,
@@ -110,6 +117,10 @@ const InfiniteDataList = <TItem extends {}, TQuery extends GenericSearchQuery>({
       refetchOnWindowFocus: false,
     }
   );
+
+  if (result.data?.pages?.[0]?.total_count !== undefined) {
+    onResultCountChange?.(result.data?.pages?.[0].total_count);
+  }
 
   const observer = useRef(
     new IntersectionObserver((entries) => {

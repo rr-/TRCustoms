@@ -59,6 +59,7 @@ const LevelPage = () => {
     sort: "-created",
     search: "",
   });
+  const [reviewCount, setReviewCount] = useState<number | undefined>();
   const [reviewsSearchQuery, setReviewsSearchQuery] = useState<
     ReviewSearchQuery
   >({
@@ -120,6 +121,12 @@ const LevelPage = () => {
         alert("Unknown error");
       }
     }
+  };
+
+  const handleReviewCountClick = () => {
+    document
+      .getElementsByClassName("ReviewsList")[0]
+      .scrollIntoView({ behavior: "smooth" });
   };
 
   const level = result.data;
@@ -251,6 +258,21 @@ const LevelPage = () => {
             <dt>Rating</dt>
             <dd>
               <LevelRating ratingClass={level.rating_class} />
+            </dd>
+
+            <dt>Reviews</dt>
+            <dd>
+              {reviewCount !== undefined ? (
+                <PushButton
+                  isPlain={true}
+                  disableTimeout={true}
+                  onClick={handleReviewCountClick}
+                >
+                  {reviewCount}
+                </PushButton>
+              ) : (
+                <Loader inline={true} />
+              )}
             </dd>
 
             <div>
@@ -398,6 +420,7 @@ const LevelPage = () => {
           <ReviewsList
             showLevels={false}
             searchQuery={reviewsSearchQuery}
+            onResultCountChange={setReviewCount}
             onSearchQueryChange={setReviewsSearchQuery}
           />
         </section>
