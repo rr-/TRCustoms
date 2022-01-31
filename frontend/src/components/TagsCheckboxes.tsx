@@ -34,7 +34,7 @@ const TagsCheckboxes = ({
           searchQuery.tags.includes(tag.id)
       )
     );
-  }, [searchFilter, setFilteredTags, config]);
+  }, [searchFilter, setFilteredTags, config, searchQuery.tags]);
 
   useEffect(() => {
     setVisibleTags(
@@ -42,7 +42,7 @@ const TagsCheckboxes = ({
         (tag, i) => i < MAX_VISIBLE_TAGS || searchQuery.tags.includes(tag.id)
       )
     );
-  }, [setVisibleTags, filteredTags]);
+  }, [setVisibleTags, filteredTags, searchQuery.tags]);
 
   const handleSearchInputChange = (
     event: React.ChangeEvent<HTMLInputElement>
