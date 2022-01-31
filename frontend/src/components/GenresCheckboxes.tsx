@@ -32,7 +32,7 @@ const GenresCheckboxes = ({
           searchQuery.genres.includes(genre.id)
       )
     );
-  }, [isExpanded, setVisibleGenres, config]);
+  }, [isExpanded, setVisibleGenres, config, searchQuery.genres]);
 
   const handleExpandButtonClick = () => {
     setIsExpanded((value) => !value);
