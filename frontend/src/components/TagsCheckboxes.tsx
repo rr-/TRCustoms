@@ -28,14 +28,20 @@ const TagsCheckboxes = ({
 
   useEffect(() => {
     setFilteredTags(
-      sortBy(config.tags, (tag) => tag.name).filter((tag, i) =>
-        tag.name.toLowerCase().includes(searchFilter.toLowerCase())
+      sortBy(config.tags, (tag) => tag.name).filter(
+        (tag, i) =>
+          tag.name.toLowerCase().includes(searchFilter.toLowerCase()) ||
+          searchQuery.tags.includes(tag.id)
       )
     );
   }, [searchFilter, setFilteredTags, config]);
 
   useEffect(() => {
-    setVisibleTags(filteredTags.filter((tag, i) => i < MAX_VISIBLE_TAGS));
+    setVisibleTags(
+      filteredTags.filter(
+        (tag, i) => i < MAX_VISIBLE_TAGS || searchQuery.tags.includes(tag.id)
+      )
+    );
   }, [setVisibleTags, filteredTags]);
 
   const handleSearchInputChange = (
