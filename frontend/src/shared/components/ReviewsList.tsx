@@ -2,13 +2,11 @@ import "./ReviewsList.css";
 import { ThumbUpIcon } from "@heroicons/react/outline";
 import { ThumbDownIcon } from "@heroicons/react/outline";
 import { DotsCircleHorizontalIcon } from "@heroicons/react/outline";
-import { useQuery } from "react-query";
 import type { ReviewListing } from "src/services/review.service";
 import { ReviewService } from "src/services/review.service";
-import type { ReviewSearchResult } from "src/services/review.service";
 import type { ReviewSearchQuery } from "src/services/review.service";
 import { UserPermission } from "src/services/user.service";
-import { Loader } from "src/shared/components/Loader";
+import { DataList } from "src/shared/components/DataList";
 import { Markdown } from "src/shared/components/Markdown";
 import { PermissionGuard } from "src/shared/components/PermissionGuard";
 import { PushButton } from "src/shared/components/PushButton";
@@ -114,31 +112,19 @@ const ReviewsList = ({
   searchQuery,
   onSearchQueryChange,
 }: ReviewsListProps) => {
-  const result = useQuery<ReviewSearchResult, Error>(
-    ["reviews", ReviewService.searchReviews, searchQuery],
-    async () => ReviewService.searchReviews(searchQuery)
-  );
-
-  if (result.error) {
-    return <p>{result.error.message}</p>;
-  }
-
-  if (result.isLoading || !result.data) {
-    return <Loader />;
-  }
-
-  const reviews = result.data.results.filter((review) => !!review.text);
-
   return (
     <>
       <SectionHeader>Reviews</SectionHeader>
-      {reviews.length ? (
-        reviews.map((review) => (
-          <ReviewView key={review.id} review={review} showLevels={showLevels} />
-        ))
-      ) : (
-        <p>There are no result to show.</p>
-      )}
+      <DataList
+        searchQuery={searchQuery}
+        queryName="reviews"
+        onSearchQueryChange={onSearchQueryChange}
+        searchFunc={ReviewService.searchReviews}
+        itemKey={(review: ReviewListing) => review.id.toString()}
+        itemView={(review: ReviewListing) => (
+          <ReviewView review={review} showLevels={showLevels} />
+        )}
+      />
     </>
   );
 };
