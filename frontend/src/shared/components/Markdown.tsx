@@ -1,4 +1,5 @@
 import "./Markdown.css";
+import { useMemo } from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { getYoutubeVideoID } from "src/shared/utils";
@@ -22,14 +23,19 @@ const transformLink = (link: any): any => {
 };
 
 const Markdown = ({ children }: MarkdownProps) => {
-  return (
-    <ReactMarkdown
-      remarkPlugins={[remarkGfm]}
-      components={{ a: transformLink }}
-    >
-      {children}
-    </ReactMarkdown>
+  const rendered = useMemo(
+    () => (
+      <ReactMarkdown
+        remarkPlugins={[remarkGfm]}
+        components={{ a: transformLink }}
+      >
+        {children}
+      </ReactMarkdown>
+    ),
+    [children]
   );
+
+  return rendered;
 };
 
 export { Markdown };
