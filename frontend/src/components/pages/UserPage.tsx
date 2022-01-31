@@ -1,6 +1,7 @@
 import "./UserPage.css";
 import { PencilIcon } from "@heroicons/react/outline";
 import { useState } from "react";
+import { useEffect } from "react";
 import { useQuery } from "react-query";
 import { useParams } from "react-router-dom";
 import type { LevelSearchQuery } from "src/services/level.service";
@@ -23,41 +24,52 @@ interface UserPageParams {
   userId: string;
 }
 
+const getLevelSearchQuery = (userId: number): LevelSearchQuery => ({
+  page: null,
+  sort: "-created",
+  search: null,
+  tags: [],
+  genres: [],
+  engines: [],
+  authors: [+userId],
+  isApproved: true,
+});
+
+const getReviewSearchQuery = (userId: number): ReviewSearchQuery => ({
+  authors: [+userId],
+  page: null,
+  sort: "-created",
+  search: "",
+});
+
 const UserPage = () => {
   const { userId } = (useParams() as unknown) as UserPageParams;
-  const [levelSearchQuery, setLevelSearchQuery] = useState<LevelSearchQuery>({
-    page: null,
-    sort: "-created",
-    search: null,
-    tags: [],
-    genres: [],
-    engines: [],
-    authors: [+userId],
-    isApproved: true,
-  });
+  const [levelSearchQuery, setLevelSearchQuery] = useState<LevelSearchQuery>(
+    getLevelSearchQuery(+userId)
+  );
   const [reviewSearchQuery, setReviewSearchQuery] = useState<ReviewSearchQuery>(
-    {
-      authors: [+userId],
-      page: null,
-      sort: "-created",
-      search: "",
-    }
+    getReviewSearchQuery(+userId)
   );
 
-  const result = useQuery<UserDetails, Error>(
+  const userResult = useQuery<UserDetails, Error>(
     ["user", UserService.getUserById, userId],
     async () => UserService.getUserById(+userId)
   );
 
-  if (result.error) {
-    return <p>{result.error.message}</p>;
+  useEffect(() => {
+    setLevelSearchQuery(getLevelSearchQuery(+userId));
+    setReviewSearchQuery(getReviewSearchQuery(+userId));
+  }, [userId]);
+
+  if (userResult.error) {
+    return <p>{userResult.error.message}</p>;
   }
 
-  if (result.isLoading || !result.data) {
+  if (userResult.isLoading || !userResult.data) {
     return <Loader />;
   }
 
-  const user = result.data;
+  const user = userResult.data;
 
   return (
     <div id="UserPage">
