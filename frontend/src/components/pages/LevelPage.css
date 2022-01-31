@@ -2,7 +2,6 @@
   display: grid;
   grid-template-areas:
     "header header"
-    "cover main"
     "sidebar main";
   grid-template-columns: 25% auto;
   grid-template-rows: min-content min-content 1fr;
@@ -11,9 +10,6 @@
 
 #LevelPage--header {
   grid-area: header;
-}
-#LevelPage--cover {
-  grid-area: cover;
 }
 #LevelPage--sidebar {
   grid-area: sidebar;
@@ -29,12 +25,6 @@
 
 #LevelPage .MediumThumbnail--thumb {
   width: 100%;
-}
-
-#LevelPage h1 {
-  margin: 0;
-  font-size: 3rem;
-  line-height: 3rem;
 }
 
 .LevelPage--fileTableTerm:after {
@@ -56,6 +46,9 @@
 }
 
 .LevelPage--headerWrapper {
+  margin: 0;
+  font-size: 2.5rem;
+  line-height: 2.5rem;
   display: flex;
   flex-wrap: wrap;
 }
