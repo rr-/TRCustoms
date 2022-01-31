@@ -54,7 +54,7 @@ const GenresCheckboxes = ({
     <div className="GenresCheckboxes">
       <p>Genres:</p>
       {visibleGenres.map((genre) => (
-        <div>
+        <div key={genre.id}>
           <Checkbox
             label={genre.name}
             checked={searchQuery.genres.includes(genre.id)}

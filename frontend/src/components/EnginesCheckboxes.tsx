@@ -33,7 +33,7 @@ const EnginesCheckboxes = ({
     <div className="EnginesCheckboxes">
       <p>Engines:</p>
       {visibleEngines.map((engine) => (
-        <div>
+        <div key={engine.id}>
           <Checkbox
             label={engine.name}
             onChange={(event: React.ChangeEvent<HTMLInputElement>) =>

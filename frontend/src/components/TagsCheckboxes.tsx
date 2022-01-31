@@ -79,7 +79,7 @@ const TagsCheckboxes = ({
         placeholder="Search tags…"
       />
       {visibleTags.map((tag) => (
-        <div>
+        <div key={tag.id}>
           <Checkbox
             label={tag.name}
             onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
