@@ -1,8 +1,7 @@
 #UserPage {
   display: grid;
   grid-template-areas:
-    "picture header"
-    "picture main"
+    "header header"
     "sidebar main";
   grid-template-columns: 25% auto;
   grid-template-rows: min-content min-content 1fr;
@@ -11,9 +10,6 @@
 
 #UserPage--header {
   grid-area: header;
-}
-#UserPage--picture {
-  grid-area: picture;
 }
 #UserPage--sidebar {
   grid-area: sidebar;
@@ -35,4 +31,10 @@
 }
 #UserPage--header :last-child {
   margin-bottom: 0;
+}
+
+.UserPage--headerWrapper {
+  margin: 0;
+  font-size: 2.5rem;
+  line-height: 2.5rem;
 }

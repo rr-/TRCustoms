@@ -74,7 +74,7 @@ const UserPage = () => {
   return (
     <div id="UserPage">
       <header id="UserPage--header">
-        <h1>{user.username}</h1>
+        <h1 className="UserPage--headerWrapper">{user.username}'s profile</h1>
         {user.is_active &&
           (user.first_name || user.last_name) &&
           `${user.first_name} ${user.last_name}` !== user.username && (
@@ -84,12 +84,13 @@ const UserPage = () => {
           )}
       </header>
 
-      <div id="UserPage--picture">
-        <UserPicture user={user} />
-      </div>
-
       <aside id="UserPage--sidebar">
         <SidebarBox
+          header={
+            <div id="UserPage--picture">
+              <UserPicture user={user} />
+            </div>
+          }
           actions={
             <PermissionGuard
               require={UserPermission.editUsers}
@@ -149,6 +150,7 @@ const UserPage = () => {
 
       <div id="UserPage--main">
         <section id="UserPage--basicInfo">
+          <SectionHeader>About</SectionHeader>
           {user.is_active && user.bio ? (
             <Markdown children={user.bio} />
           ) : (
