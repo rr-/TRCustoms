@@ -2,6 +2,9 @@
   padding: var(--sidebar-padding);
   background: var(--sidebar-background-color);
 }
+.SidebarBox--header {
+  margin-bottom: 1rem;
+}
 .SidebarBox--actions {
   display: flex;
   flex-direction: column;

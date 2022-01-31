@@ -147,12 +147,16 @@ const LevelPage = () => {
         </h1>
       </header>
 
-      <div id="LevelPage--cover">
-        <MediumThumbnail displayMode={DisplayMode.Cover} file={level.cover} />
-      </div>
-
       <aside id="LevelPage--sidebar">
         <SidebarBox
+          header={
+            <div id="LevelPage--cover">
+              <MediumThumbnail
+                displayMode={DisplayMode.Cover}
+                file={level.cover}
+              />
+            </div>
+          }
           actions={
             <>
               {downloadableFiles.length > 0 ? (
