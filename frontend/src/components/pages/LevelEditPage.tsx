@@ -1,4 +1,6 @@
 import { useCallback } from "react";
+import { useContext } from "react";
+import { useEffect } from "react";
 import { useQuery } from "react-query";
 import { useNavigate } from "react-router-dom";
 import { useParams } from "react-router-dom";
@@ -6,6 +8,7 @@ import type { LevelDetails } from "src/services/level.service";
 import { LevelService } from "src/services/level.service";
 import { LevelForm } from "src/shared/components/LevelForm";
 import { Loader } from "src/shared/components/Loader";
+import { TitleContext } from "src/shared/contexts/TitleContext";
 
 interface LevelEditPageParams {
   levelId: string;
@@ -13,6 +16,7 @@ interface LevelEditPageParams {
 
 const LevelEditPage = () => {
   const navigate = useNavigate();
+  const { setTitle } = useContext(TitleContext);
   const { levelId } = (useParams() as unknown) as LevelEditPageParams;
 
   const result = useQuery<LevelDetails, Error>(
@@ -23,6 +27,10 @@ const LevelEditPage = () => {
   const handleGoBack = useCallback(() => {
     navigate(`/levels/${levelId}`);
   }, [navigate, levelId]);
+
+  useEffect(() => {
+    setTitle(result?.data?.name || "");
+  }, [setTitle, result]);
 
   if (result.error) {
     return <p>{result.error.message}</p>;

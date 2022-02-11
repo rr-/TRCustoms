@@ -3,6 +3,7 @@ import { Form } from "formik";
 import { useEffect } from "react";
 import { useCallback } from "react";
 import { useState } from "react";
+import { useContext } from "react";
 import type { TagSearchQuery } from "src/services/tag.service";
 import { QueryPersister } from "src/shared/components/QueryPersister";
 import { deserializeGenericSearchQuery } from "src/shared/components/QueryPersister";
@@ -10,6 +11,7 @@ import { serializeGenericSearchQuery } from "src/shared/components/QueryPersiste
 import { SearchBar } from "src/shared/components/SearchBar";
 import { TagsTable } from "src/shared/components/TagsTable";
 import { TextFormField } from "src/shared/components/formfields/TextFormField";
+import { TitleContext } from "src/shared/contexts/TitleContext";
 import { getCurrentSearchParams } from "src/shared/utils";
 
 const defaultSearchQuery: TagSearchQuery = {
@@ -32,12 +34,17 @@ const serializeSearchQuery = (
   serializeGenericSearchQuery(searchQuery, defaultSearchQuery);
 
 const TagListPage = () => {
+  const { setTitle } = useContext(TitleContext);
   const [searchQuery, setSearchQuery] = useState<TagSearchQuery>(
     deserializeSearchQuery(getCurrentSearchParams())
   );
   const [formikValues, setFormikValues] = useState<any>(
     convertSearchQueryToFormikValues(searchQuery)
   );
+
+  useEffect(() => {
+    setTitle("tags");
+  }, [setTitle]);
 
   useEffect(
     () => setFormikValues(convertSearchQueryToFormikValues(searchQuery)),

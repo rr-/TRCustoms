@@ -1,10 +1,12 @@
 import { useState } from "react";
 import { useContext } from "react";
+import { useEffect } from "react";
 import type { LevelSearchQuery } from "src/services/level.service";
 import { LevelsTable } from "src/shared/components/LevelsTable";
 import { QueryPersister } from "src/shared/components/QueryPersister";
 import { deserializeGenericSearchQuery } from "src/shared/components/QueryPersister";
 import { serializeGenericSearchQuery } from "src/shared/components/QueryPersister";
+import { TitleContext } from "src/shared/contexts/TitleContext";
 import { UserContext } from "src/shared/contexts/UserContext";
 import { filterFalsyObjectValues } from "src/shared/utils";
 import { getCurrentSearchParams } from "src/shared/utils";
@@ -22,6 +24,7 @@ const defaultSearchQuery: LevelSearchQuery = {
 
 const MyLevelsPage = () => {
   const { user } = useContext(UserContext);
+  const { setTitle } = useContext(TitleContext);
 
   const deserializeSearchQuery = (qp: {
     [key: string]: string;
@@ -36,6 +39,10 @@ const MyLevelsPage = () => {
   const [searchQuery, setSearchQuery] = useState<LevelSearchQuery>(
     deserializeSearchQuery(getCurrentSearchParams())
   );
+
+  useEffect(() => {
+    setTitle("my levels");
+  }, [setTitle]);
 
   const serializeSearchQuery = (
     searchQuery: LevelSearchQuery

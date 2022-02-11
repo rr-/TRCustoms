@@ -3,6 +3,7 @@ import { Form } from "formik";
 import { useEffect } from "react";
 import { useCallback } from "react";
 import { useState } from "react";
+import { useContext } from "react";
 import type { UserSearchQuery } from "src/services/user.service";
 import { QueryPersister } from "src/shared/components/QueryPersister";
 import { deserializeGenericSearchQuery } from "src/shared/components/QueryPersister";
@@ -10,6 +11,7 @@ import { serializeGenericSearchQuery } from "src/shared/components/QueryPersiste
 import { SearchBar } from "src/shared/components/SearchBar";
 import { UsersTable } from "src/shared/components/UsersTable";
 import { TextFormField } from "src/shared/components/formfields/TextFormField";
+import { TitleContext } from "src/shared/contexts/TitleContext";
 import { getCurrentSearchParams } from "src/shared/utils";
 
 const defaultSearchQuery: UserSearchQuery = {
@@ -32,12 +34,17 @@ const serializeSearchQuery = (
   serializeGenericSearchQuery(searchQuery, defaultSearchQuery);
 
 const UserListPage = () => {
+  const { setTitle } = useContext(TitleContext);
   const [searchQuery, setSearchQuery] = useState<UserSearchQuery>(
     deserializeSearchQuery(getCurrentSearchParams())
   );
   const [formikValues, setFormikValues] = useState<any>(
     convertSearchQueryToFormikValues(searchQuery)
   );
+
+  useEffect(() => {
+    setTitle("users");
+  }, [setTitle]);
 
   useEffect(
     () => setFormikValues(convertSearchQueryToFormikValues(searchQuery)),
