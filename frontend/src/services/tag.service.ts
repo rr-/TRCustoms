@@ -35,6 +35,13 @@ interface TagCreatePayload {
   name: string;
 }
 
+const getStats = async (tagId: number): Promise<TagListing[]> => {
+  const response = (await api.get(
+    `${API_URL}/level_tags/${tagId}/stats/`
+  )) as AxiosResponse<TagListing[]>;
+  return response.data;
+};
+
 const create = async (payload: TagCreatePayload): Promise<TagListing> => {
   const data: { [key: string]: any } = filterFalsyObjectValues(payload);
   const response = (await api.post(
@@ -46,6 +53,7 @@ const create = async (payload: TagCreatePayload): Promise<TagListing> => {
 
 const TagService = {
   searchTags,
+  getStats,
   create,
 };
 
