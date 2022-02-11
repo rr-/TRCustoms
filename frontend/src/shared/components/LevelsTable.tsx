@@ -31,22 +31,22 @@ const LevelsTable = ({
     {
       name: "image",
       label: "Image",
-      itemElement: (level) => (
+      itemElement: ({ item }) => (
         <>
-          <Link className="LevelsTable--previewLink" to={`/levels/${level.id}`}>
+          <Link className="LevelsTable--previewLink" to={`/levels/${item.id}`}>
             <img
               className="LevelsTable--previewImage"
-              src={level.cover.url}
-              alt={level.name}
+              src={item.cover.url}
+              alt={item.name}
             />
           </Link>
           {showStatus && (
             <>
-              {level.is_approved ? (
+              {item.is_approved ? (
                 <span className="LevelsTable--statusApproved">
                   <BadgeCheckIcon className="icon" /> Approved!
                 </span>
-              ) : level.rejection_reason ? (
+              ) : item.rejection_reason ? (
                 <span className="LevelsTable--statusRejected">
                   <XCircleIcon className="icon" /> Rejected
                 </span>
@@ -63,48 +63,48 @@ const LevelsTable = ({
     {
       name: "details",
       label: "Details",
-      itemElement: (level) => (
+      itemElement: ({ item }) => (
         <>
           <strong>
-            <LevelLink level={level} />
+            <LevelLink level={item} />
           </strong>{" "}
           by{" "}
-          {level.authors.length > 1 ? (
+          {item.authors.length > 1 ? (
             <span
-              title={level.authors.map((author) => author.username).join(", ")}
+              title={item.authors.map((author) => author.username).join(", ")}
             >
               Multiple authors
             </span>
-          ) : level.authors.length === 1 ? (
-            <UserLink user={level.authors[0]} />
+          ) : item.authors.length === 1 ? (
+            <UserLink user={item.authors[0]} />
           ) : (
             "Unknown"
           )}
           <br />
           <small>
-            Reviews: <LevelRating ratingClass={level.rating_class} />
+            Reviews: <LevelRating ratingClass={item.rating_class} />
             <br />
             Genres:{" "}
-            {level.genres.map((tag) => tag.name).join(", ") ||
+            {item.genres.map((tag) => tag.name).join(", ") ||
               EMPTY_INPUT_PLACEHOLDER}
             <br />
-            Engine: {level.engine.name}
+            Engine: {item.engine.name}
             <br />
-            Published: {formatDate(level.created)}
+            Published: {formatDate(item.created)}
             <br />
-            Last update: {formatDate(level.last_file?.created || level.created)}
+            Last update: {formatDate(item.last_file?.created || item.created)}
           </small>
           <br />
           Download:{" "}
-          {level.last_file?.url ? (
+          {item.last_file?.url ? (
             <>
-              <Link target="_blank" to={level.last_file.url}>
+              <Link target="_blank" to={item.last_file.url}>
                 <strong>
                   <DownloadIcon className="icon" />(
-                  {formatFileSize(level.last_file?.size)})
+                  {formatFileSize(item.last_file?.size)})
                 </strong>
               </Link>{" "}
-              ({level.download_count} downloads)
+              ({item.download_count} downloads)
             </>
           ) : (
             <>No download available</>

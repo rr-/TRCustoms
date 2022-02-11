@@ -21,7 +21,13 @@ interface DataTableColumn<TItem> {
   sortKey?: string | undefined;
   label: string;
   itemTooltip?: ((item: TItem) => string) | undefined;
-  itemElement: (item: TItem) => React.ReactNode;
+  itemElement: ({
+    item,
+    toggleActive,
+  }: {
+    item: TItem;
+    toggleActive: () => void;
+  }) => React.ReactNode;
   footer?: () => React.ReactNode;
 }
 
@@ -30,6 +36,8 @@ interface DataTableProps<TItem, TQuery> {
   queryName: string;
   itemKey: (item: TItem) => string;
   columns: DataTableColumn<TItem>[];
+
+  detailsElement?: ((item: TItem) => React.ReactNode) | undefined;
 
   searchQuery: TQuery;
   searchFunc: (
@@ -80,6 +88,7 @@ const DataTableBody = <TItem extends {}, TQuery extends GenericSearchQuery>({
   lastRowRef,
   itemKey,
   columns,
+  detailsElement,
 }: {
   result: {
     isLoading?: boolean | undefined;
@@ -88,6 +97,8 @@ const DataTableBody = <TItem extends {}, TQuery extends GenericSearchQuery>({
   };
   lastRowRef?: any | undefined;
 } & DataTableProps<TItem, TQuery>) => {
+  const [activeRow, setActiveRow] = useState<string | null>(null);
+
   if (result.error) {
     return (
       <tbody>
@@ -122,19 +133,35 @@ const DataTableBody = <TItem extends {}, TQuery extends GenericSearchQuery>({
 
   return (
     <tbody className="DataTable--body">
-      {result.data.results.map((item) => (
-        <tr key={itemKey(item)} className="DataTable--row" ref={lastRowRef}>
-          {columns.map((column) => (
-            <td
-              className={className ? `${className}--${column.name}` : undefined}
-              title={column.itemTooltip?.(item) || undefined}
-              key={`${itemKey(item)}-${column.name}`}
-            >
-              {column.itemElement(item)}
-            </td>
-          ))}
-        </tr>
-      ))}
+      {result.data.results.map((item) => {
+        const key = itemKey(item);
+        return (
+          <Fragment key={key}>
+            <tr className="DataTable--row" ref={lastRowRef}>
+              {columns.map((column) => (
+                <td
+                  className={
+                    className ? `${className}--${column.name}` : undefined
+                  }
+                  title={column.itemTooltip?.(item) || undefined}
+                  key={`${key}-${column.name}`}
+                >
+                  {column.itemElement({
+                    item,
+                    toggleActive: () =>
+                      setActiveRow(key !== activeRow ? key : null),
+                  })}
+                </td>
+              ))}
+            </tr>
+            {detailsElement && activeRow === key && (
+              <tr>
+                <td colSpan={100}>{detailsElement(item)}</td>
+              </tr>
+            )}
+          </Fragment>
+        );
+      })}
     </tbody>
   );
 };

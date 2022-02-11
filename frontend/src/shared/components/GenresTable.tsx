@@ -4,6 +4,7 @@ import type { GenreSearchQuery } from "src/services/genre.service";
 import { GenreService } from "src/services/genre.service";
 import type { DataTableColumn } from "src/shared/components/DataTable";
 import { DataTable } from "src/shared/components/DataTable";
+import { PushButton } from "src/shared/components/PushButton";
 import { GenreLink } from "src/shared/components/links/GenreLink";
 import { formatDate } from "src/shared/utils";
 
@@ -11,6 +12,10 @@ interface GenresTableProps {
   searchQuery: GenreSearchQuery;
   onSearchQueryChange?: ((searchQuery: GenreSearchQuery) => void) | undefined;
 }
+
+const GenresTableDetails = (genre: GenreListing) => {
+  return <p>Name: {genre.name}</p>;
+};
 
 const GenresTable = ({
   searchQuery,
@@ -21,25 +26,29 @@ const GenresTable = ({
       name: "name",
       sortKey: "name",
       label: "Name",
-      itemElement: (genre) => <GenreLink genre={genre} />,
+      itemElement: ({ item, toggleActive }) => (
+        <PushButton isPlain={true} disableTimeout={true} onClick={toggleActive}>
+          {item.name}
+        </PushButton>
+      ),
     },
     {
       name: "level-count",
       sortKey: "level_count",
       label: "Usages",
-      itemElement: (genre) => `${genre.level_count}`,
+      itemElement: ({ item }) => `${item.level_count}`,
     },
     {
       name: "created",
       sortKey: "created",
       label: "Created",
-      itemElement: (genre) => formatDate(genre.created),
+      itemElement: ({ item }) => formatDate(item.created),
     },
     {
       name: "updated",
       sortKey: "last_updated",
       label: "Updated",
-      itemElement: (genre) => formatDate(genre.last_updated),
+      itemElement: ({ item }) => formatDate(item.last_updated),
     },
   ];
 
@@ -51,6 +60,7 @@ const GenresTable = ({
       queryName="genres"
       columns={columns}
       itemKey={itemKey}
+      detailsElement={GenresTableDetails}
       searchQuery={searchQuery}
       searchFunc={GenreService.searchGenres}
       onSearchQueryChange={onSearchQueryChange}
