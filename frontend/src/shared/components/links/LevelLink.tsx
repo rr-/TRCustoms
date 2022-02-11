@@ -3,16 +3,15 @@ import { LevelNested } from "src/services/level.service";
 
 interface LevelLinkProps {
   level: LevelNested;
-  label?: string | undefined;
+  children?: React.ReactNode | undefined;
 }
 
-const LevelLink = ({ level, label }: LevelLinkProps) => {
+const LevelLink = ({ level, children }: LevelLinkProps) => {
   const { id, name } = level;
-  label ||= name;
   if (id) {
-    return <Link to={`/levels/${id}`}>{label}</Link>;
+    return <Link to={`/levels/${id}`}>{children || name}</Link>;
   }
-  return <>label</>;
+  return <>{children || name}</>;
 };
 
 export { LevelLink };

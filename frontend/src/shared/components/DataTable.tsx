@@ -155,7 +155,7 @@ const DataTableBody = <TItem extends {}, TQuery extends GenericSearchQuery>({
               ))}
             </tr>
             {detailsElement && activeRow === key && (
-              <tr>
+              <tr className="DataTable--details">
                 <td colSpan={100}>{detailsElement(item)}</td>
               </tr>
             )}

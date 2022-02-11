@@ -45,8 +45,9 @@ const SnapshotsTableObjectLink = ({
             id: +snapshot.object_id,
             name: snapshot.object_name,
           }}
-          label={`Level ${snapshot.object_name}`}
-        />
+        >
+          Level ${snapshot.object_name}
+        </LevelLink>
       );
 
     case SnapshotObjectType.LevelEngine:
@@ -56,8 +57,9 @@ const SnapshotsTableObjectLink = ({
             id: +snapshot.object_id,
             name: snapshot.object_name,
           }}
-          label={`Engine ${snapshot.object_name}`}
-        />
+        >
+          Engine ${snapshot.object_name}
+        </EngineLink>
       );
 
     case SnapshotObjectType.LevelGenre:
@@ -67,8 +69,9 @@ const SnapshotsTableObjectLink = ({
             id: +snapshot.object_id,
             name: snapshot.object_name,
           }}
-          label={`Genre ${snapshot.object_name}`}
-        />
+        >
+          Genre ${snapshot.object_name}
+        </GenreLink>
       );
 
     case SnapshotObjectType.LevelTag:
@@ -78,8 +81,9 @@ const SnapshotsTableObjectLink = ({
             id: +snapshot.object_id,
             name: snapshot.object_name,
           }}
-          label={`Tag ${snapshot.object_name}`}
-        />
+        >
+          Tag ${snapshot.object_name}
+        </TagLink>
       );
 
     case SnapshotObjectType.LevelReview:
@@ -89,8 +93,9 @@ const SnapshotsTableObjectLink = ({
             id: snapshot.object_desc.level.id,
             name: snapshot.object_desc.level.name,
           }}
-          label={`Review for ${snapshot.object_desc.level.name}`}
-        />
+        >
+          Review of ${snapshot.object_desc.level.name}
+        </LevelLink>
       );
 
     case SnapshotObjectType.LevelDuration:

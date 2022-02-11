@@ -3,13 +3,12 @@ import type { TagNested } from "src/services/tag.service";
 
 interface TagLinkProps {
   tag: TagNested;
-  label?: string | undefined;
+  children?: React.ReactNode | undefined;
 }
 
-const TagLink = ({ tag, label }: TagLinkProps) => {
+const TagLink = ({ tag, children }: TagLinkProps) => {
   const { id, name } = tag;
-  label ||= name;
-  return <Link to={`/?tags=${id}`}>{label}</Link>;
+  return <Link to={`/?tags=${id}`}>{children || name}</Link>;
 };
 
 export { TagLink };

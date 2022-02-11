@@ -3,13 +3,12 @@ import type { EngineNested } from "src/services/engine.service";
 
 interface EngineLinkProps {
   engine: EngineNested;
-  label?: string | undefined;
+  children?: React.ReactNode | undefined;
 }
 
-const EngineLink = ({ engine, label }: EngineLinkProps) => {
+const EngineLink = ({ engine, children }: EngineLinkProps) => {
   const { id, name } = engine;
-  label ||= name;
-  return <Link to={`/?engines=${id}`}>{label}</Link>;
+  return <Link to={`/?engines=${id}`}>{children || name}</Link>;
 };
 
 export { EngineLink };
