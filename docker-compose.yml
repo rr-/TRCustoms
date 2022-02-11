@@ -100,7 +100,10 @@ services:
     networks:
       - trcustoms
     ports:
-      - '${TRCUSTOMS_PORT}:8000'
+      - mode: host
+        protocol: tcp
+        published: ${TRCUSTOMS_PORT}
+        target: 8000
     depends_on:
       - trcustoms
 

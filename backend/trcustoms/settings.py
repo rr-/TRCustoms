@@ -94,6 +94,13 @@ LOGGING = {
     },
 }
 
+CACHES = {
+    "default": {
+        "BACKEND": "django.core.cache.backends.redis.RedisCache",
+        "LOCATION": "redis://trcustoms-redis:6379",
+    }
+}
+
 WSGI_APPLICATION = "trcustoms.wsgi.application"
 
 DATABASES = {
@@ -149,6 +156,12 @@ REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": [
         "rest_framework_simplejwt.authentication.JWTAuthentication",
     ],
+    "DEFAULT_THROTTLE_CLASSES": [
+        "trcustoms.throttling.UnsafeOperationsRateThrottle"
+    ],
+    "DEFAULT_THROTTLE_RATES": {
+        "unsafe_operations": "10/min",
+    },
     "DEFAULT_PAGINATION_CLASS": "trcustoms.pagination.CustomPagination",
     "ORDERING_PARAM": "sort",
     "PAGE_SIZE": 20,
