@@ -1,5 +1,6 @@
 import { Formik } from "formik";
 import { Form } from "formik";
+import { useContext } from "react";
 import { useEffect } from "react";
 import { useCallback } from "react";
 import { useState } from "react";
@@ -10,6 +11,7 @@ import { deserializeGenericSearchQuery } from "src/shared/components/QueryPersis
 import { serializeGenericSearchQuery } from "src/shared/components/QueryPersister";
 import { SearchBar } from "src/shared/components/SearchBar";
 import { TextFormField } from "src/shared/components/formfields/TextFormField";
+import { TitleContext } from "src/shared/contexts/TitleContext";
 import { getCurrentSearchParams } from "src/shared/utils";
 
 const defaultSearchQuery: GenreSearchQuery = {
@@ -32,12 +34,17 @@ const serializeSearchQuery = (
   serializeGenericSearchQuery(searchQuery, defaultSearchQuery);
 
 const GenreListPage = () => {
+  const { setTitle } = useContext(TitleContext);
   const [searchQuery, setSearchQuery] = useState<GenreSearchQuery>(
     deserializeSearchQuery(getCurrentSearchParams())
   );
   const [formikValues, setFormikValues] = useState<any>(
     convertSearchQueryToFormikValues(searchQuery)
   );
+
+  useEffect(() => {
+    setTitle("genres");
+  }, [setTitle]);
 
   useEffect(
     () => setFormikValues(convertSearchQueryToFormikValues(searchQuery)),

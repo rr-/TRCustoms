@@ -22,45 +22,48 @@ import { UserPage } from "src/components/pages/UserPage";
 import { ScrollToTop } from "src/shared/components/ScrollToTop";
 import { ThemeManager } from "src/shared/components/ThemeManager";
 import { ConfigContextProvider } from "src/shared/contexts/ConfigContext";
+import { TitleContextProvider } from "src/shared/contexts/TitleContext";
 import { UserContextProvider } from "src/shared/contexts/UserContext";
 
 function App() {
   return (
-    <ConfigContextProvider>
-      <UserContextProvider>
-        <ThemeManager />
-        <ScrollToTop />
-        <NavBar />
-        <main id="Content" className="MainContainer">
-          <Routes>
-            <Route path="/" element={<LevelListPage />} />
-            <Route path="/mod" element={<ModerationPage />} />
-            <Route path="/levels/upload" element={<LevelUploadPage />} />
-            <Route path="/levels" element={<LevelListPage />} />
-            <Route path="/my-levels" element={<MyLevelsPage />} />
-            <Route path="/levels/:levelId" element={<LevelPage />} />
-            <Route
-              path="/levels/:levelId/review"
-              element={<LevelReviewPage />}
-            />
-            <Route
-              path="/levels/:levelId/review/:reviewId/edit"
-              element={<LevelReviewEditPage />}
-            />
-            <Route path="/levels/:levelId/edit" element={<LevelEditPage />} />
-            <Route path="/tags" element={<TagListPage />} />
-            <Route path="/genres" element={<GenreListPage />} />
-            <Route path="/users" element={<UserListPage />} />
-            <Route path="/login" element={<LoginPage />} />
-            <Route path="/logout" element={<LogoutPage />} />
-            <Route path="/register" element={<RegisterPage />} />
-            <Route path="/settings" element={<SettingsPage />} />
-            <Route path="/users/:userId" element={<UserPage />} />
-            <Route path="/users/:userId/edit" element={<UserEditPage />} />
-          </Routes>
-        </main>
-      </UserContextProvider>
-    </ConfigContextProvider>
+    <TitleContextProvider>
+      <ConfigContextProvider>
+        <UserContextProvider>
+          <ThemeManager />
+          <ScrollToTop />
+          <NavBar />
+          <main id="Content" className="MainContainer">
+            <Routes>
+              <Route path="/" element={<LevelListPage />} />
+              <Route path="/mod" element={<ModerationPage />} />
+              <Route path="/levels/upload" element={<LevelUploadPage />} />
+              <Route path="/levels" element={<LevelListPage />} />
+              <Route path="/my-levels" element={<MyLevelsPage />} />
+              <Route path="/levels/:levelId" element={<LevelPage />} />
+              <Route
+                path="/levels/:levelId/review"
+                element={<LevelReviewPage />}
+              />
+              <Route
+                path="/levels/:levelId/review/:reviewId/edit"
+                element={<LevelReviewEditPage />}
+              />
+              <Route path="/levels/:levelId/edit" element={<LevelEditPage />} />
+              <Route path="/tags" element={<TagListPage />} />
+              <Route path="/genres" element={<GenreListPage />} />
+              <Route path="/users" element={<UserListPage />} />
+              <Route path="/login" element={<LoginPage />} />
+              <Route path="/logout" element={<LogoutPage />} />
+              <Route path="/register" element={<RegisterPage />} />
+              <Route path="/settings" element={<SettingsPage />} />
+              <Route path="/users/:userId" element={<UserPage />} />
+              <Route path="/users/:userId/edit" element={<UserEditPage />} />
+            </Routes>
+          </main>
+        </UserContextProvider>
+      </ConfigContextProvider>
+    </TitleContextProvider>
   );
 }
 

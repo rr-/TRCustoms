@@ -4,6 +4,7 @@ import { Formik } from "formik";
 import { Form } from "formik";
 import { useCallback } from "react";
 import { useContext } from "react";
+import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { AuthService } from "src/services/auth.service";
 import { UserService } from "src/services/user.service";
@@ -13,11 +14,13 @@ import { FormGridButtons } from "src/shared/components/FormGrid";
 import { FormGridFieldSet } from "src/shared/components/FormGrid";
 import { PasswordFormField } from "src/shared/components/formfields/PasswordFormField";
 import { TextFormField } from "src/shared/components/formfields/TextFormField";
+import { TitleContext } from "src/shared/contexts/TitleContext";
 import { UserContext } from "src/shared/contexts/UserContext";
 import { filterFalsyObjectValues } from "src/shared/utils";
 
 const LoginPage = () => {
   const navigate = useNavigate();
+  const { setTitle } = useContext(TitleContext);
   const { setUser } = useContext(UserContext);
 
   const handleSubmit = useCallback(
@@ -64,6 +67,10 @@ const LoginPage = () => {
     },
     [navigate, setUser]
   );
+
+  useEffect(() => {
+    setTitle("login");
+  }, [setTitle]);
 
   return (
     <div className="LoginForm">

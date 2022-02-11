@@ -2,6 +2,7 @@ import "./UserPage.css";
 import { PencilIcon } from "@heroicons/react/outline";
 import { useState } from "react";
 import { useEffect } from "react";
+import { useContext } from "react";
 import { useQuery } from "react-query";
 import { useParams } from "react-router-dom";
 import type { LevelSearchQuery } from "src/services/level.service";
@@ -18,6 +19,7 @@ import { ReviewsList } from "src/shared/components/ReviewsList";
 import { SectionHeader } from "src/shared/components/SectionHeader";
 import { SidebarBox } from "src/shared/components/SidebarBox";
 import { UserPicture } from "src/shared/components/UserPicture";
+import { TitleContext } from "src/shared/contexts/TitleContext";
 import { formatDate } from "src/shared/utils";
 
 interface UserPageParams {
@@ -44,6 +46,7 @@ const getReviewSearchQuery = (userId: number): ReviewSearchQuery => ({
 
 const UserPage = () => {
   const { userId } = (useParams() as unknown) as UserPageParams;
+  const { setTitle } = useContext(TitleContext);
   const [levelSearchQuery, setLevelSearchQuery] = useState<LevelSearchQuery>(
     getLevelSearchQuery(+userId)
   );
@@ -55,6 +58,10 @@ const UserPage = () => {
     ["user", UserService.getUserById, userId],
     async () => UserService.getUserById(+userId)
   );
+
+  useEffect(() => {
+    setTitle(userResult?.data?.username || "");
+  }, [setTitle, userResult]);
 
   useEffect(() => {
     setLevelSearchQuery(getLevelSearchQuery(+userId));

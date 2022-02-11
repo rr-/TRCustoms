@@ -5,6 +5,7 @@ import { Form } from "formik";
 import { useEffect } from "react";
 import { useCallback } from "react";
 import { useState } from "react";
+import { useContext } from "react";
 import { EnginesCheckboxes } from "src/components/EnginesCheckboxes";
 import { GenresCheckboxes } from "src/components/GenresCheckboxes";
 import { TagsCheckboxes } from "src/components/TagsCheckboxes";
@@ -21,6 +22,7 @@ import { SidebarBox } from "src/shared/components/SidebarBox";
 import { CheckboxFormField } from "src/shared/components/formfields/CheckboxFormField";
 import { DropDownFormField } from "src/shared/components/formfields/DropDownFormField";
 import { TextFormField } from "src/shared/components/formfields/TextFormField";
+import { TitleContext } from "src/shared/contexts/TitleContext";
 import { filterFalsyObjectValues } from "src/shared/utils";
 import { getCurrentSearchParams } from "src/shared/utils";
 
@@ -74,12 +76,17 @@ const convertSearchQueryToFormikValues = (searchQuery: LevelSearchQuery) => {
 };
 
 const LevelListPage = () => {
+  const { setTitle } = useContext(TitleContext);
   const [searchQuery, setSearchQuery] = useState<LevelSearchQuery>(
     deserializeSearchQuery(getCurrentSearchParams())
   );
   const [formikValues, setFormikValues] = useState<any>(
     convertSearchQueryToFormikValues(searchQuery)
   );
+
+  useEffect(() => {
+    setTitle("level search");
+  }, [setTitle]);
 
   useEffect(
     () => setFormikValues(convertSearchQueryToFormikValues(searchQuery)),

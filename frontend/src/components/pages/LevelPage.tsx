@@ -7,6 +7,7 @@ import { XCircleIcon } from "@heroicons/react/outline";
 import { AnnotationIcon } from "@heroicons/react/outline";
 import axios from "axios";
 import { AxiosError } from "axios";
+import { useEffect } from "react";
 import { useContext } from "react";
 import { Fragment } from "react";
 import { useState } from "react";
@@ -37,6 +38,7 @@ import { GenreLink } from "src/shared/components/links/GenreLink";
 import { TagLink } from "src/shared/components/links/TagLink";
 import { UserLink } from "src/shared/components/links/UserLink";
 import { DISABLE_PAGING } from "src/shared/constants";
+import { TitleContext } from "src/shared/contexts/TitleContext";
 import { UserContext } from "src/shared/contexts/UserContext";
 import { DisplayMode } from "src/shared/types";
 import { formatFileSize } from "src/shared/utils";
@@ -49,6 +51,7 @@ interface LevelPageParams {
 
 const LevelPage = () => {
   const { user } = useContext(UserContext);
+  const { setTitle } = useContext(TitleContext);
   const { levelId } = (useParams() as unknown) as LevelPageParams;
   const queryClient = useQueryClient();
   const [snapshotsSearchQuery, setSnapshotsSearchQuery] = useState<
@@ -73,6 +76,10 @@ const LevelPage = () => {
     ["level", LevelService.getLevelById, levelId],
     async () => LevelService.getLevelById(+levelId)
   );
+
+  useEffect(() => {
+    setTitle(result?.data?.name || "");
+  }, [setTitle, result]);
 
   if (result.error) {
     return <p>{result.error.message}</p>;

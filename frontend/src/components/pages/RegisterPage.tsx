@@ -1,17 +1,20 @@
 import { useState } from "react";
 import { useCallback } from "react";
 import { useContext } from "react";
+import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { AuthService } from "src/services/auth.service";
 import type { UserDetails } from "src/services/user.service";
 import { UserService } from "src/services/user.service";
 import { UserForm } from "src/shared/components/UserForm";
+import { TitleContext } from "src/shared/contexts/TitleContext";
 import { UserContext } from "src/shared/contexts/UserContext";
 
 const RegisterPage = () => {
   const navigate = useNavigate();
   const { setUser } = useContext(UserContext);
+  const { setTitle } = useContext(TitleContext);
   const [isComplete, setIsComplete] = useState<boolean>(false);
 
   const handleSubmit = useCallback(
@@ -26,6 +29,10 @@ const RegisterPage = () => {
     },
     [setIsComplete, navigate, setUser]
   );
+
+  useEffect(() => {
+    setTitle("register");
+  }, [setTitle]);
 
   return (
     <div className="RegisterForm">

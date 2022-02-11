@@ -1,5 +1,6 @@
 import { useCallback } from "react";
 import { useContext } from "react";
+import { useEffect } from "react";
 import { useQuery } from "react-query";
 import { useNavigate } from "react-router-dom";
 import { useParams } from "react-router-dom";
@@ -9,6 +10,7 @@ import type { ReviewDetails } from "src/services/review.service";
 import { ReviewService } from "src/services/review.service";
 import { Loader } from "src/shared/components/Loader";
 import { ReviewForm } from "src/shared/components/ReviewForm";
+import { TitleContext } from "src/shared/contexts/TitleContext";
 import { UserContext } from "src/shared/contexts/UserContext";
 
 interface LevelReviewPageParams {
@@ -17,6 +19,7 @@ interface LevelReviewPageParams {
 
 const LevelReviewPage = () => {
   const { user } = useContext(UserContext);
+  const { setTitle } = useContext(TitleContext);
   const navigate = useNavigate();
   const { levelId } = (useParams() as unknown) as LevelReviewPageParams;
 
@@ -33,6 +36,12 @@ const LevelReviewPage = () => {
   const handleGoBack = useCallback(() => {
     navigate(`/levels/${levelId}`);
   }, [navigate, levelId]);
+
+  useEffect(() => {
+    setTitle(
+      levelResult?.data?.name ? `review for ${levelResult.data.name}` : "review"
+    );
+  }, [setTitle, levelResult]);
 
   if (levelResult.error) {
     return <p>{levelResult.error.message}</p>;

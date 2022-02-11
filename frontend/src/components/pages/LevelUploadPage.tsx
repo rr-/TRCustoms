@@ -1,10 +1,14 @@
 import { useState } from "react";
 import { useCallback } from "react";
+import { useEffect } from "react";
+import { useContext } from "react";
 import { Link } from "react-router-dom";
 import type { LevelDetails } from "src/services/level.service";
 import { LevelForm } from "src/shared/components/LevelForm";
+import { TitleContext } from "src/shared/contexts/TitleContext";
 
 const LevelUploadPage = () => {
+  const { setTitle } = useContext(TitleContext);
   const [isComplete, setIsComplete] = useState(false);
 
   const handleSubmit = useCallback(
@@ -13,6 +17,10 @@ const LevelUploadPage = () => {
     },
     [setIsComplete]
   );
+
+  useEffect(() => {
+    setTitle("upload a level");
+  }, [setTitle]);
 
   return (
     <div className="LevelUploadForm">
