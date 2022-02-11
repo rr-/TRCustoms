@@ -12,6 +12,7 @@ import { KEY_RETURN } from "src/shared/constants";
 import { ConfigContext } from "src/shared/contexts/ConfigContext";
 
 const MAX_VISIBLE_TAGS = 12;
+const MAX_TAGS_FILTER = 10;
 
 interface TagsCheckboxesProps {
   searchQuery: LevelSearchQuery;
@@ -66,7 +67,9 @@ const TagsCheckboxes = ({
     onSearchQueryChange({
       ...searchQuery,
       tags: event.target.checked
-        ? [...searchQuery.tags, tag.id]
+        ? searchQuery.tags.length < MAX_TAGS_FILTER
+          ? [...searchQuery.tags, tag.id]
+          : searchQuery.tags
         : searchQuery.tags.filter((tagId) => tagId !== tag.id),
     });
   };
@@ -96,6 +99,9 @@ const TagsCheckboxes = ({
           />
         </div>
       ))}
+      {searchQuery.tags.length === MAX_TAGS_FILTER && (
+        <p>Maximum tag filter reached.</p>
+      )}
       {filteredTags.length > MAX_VISIBLE_TAGS && (
         <p>({filteredTags.length - MAX_VISIBLE_TAGS} tag(s) hidden)</p>
       )}
