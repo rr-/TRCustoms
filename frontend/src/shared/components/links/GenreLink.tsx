@@ -3,13 +3,12 @@ import type { GenreNested } from "src/services/genre.service";
 
 interface GenreLinkProps {
   genre: GenreNested;
-  label?: string | undefined;
+  children?: React.ReactNode | undefined;
 }
 
-const GenreLink = ({ genre, label }: GenreLinkProps) => {
+const GenreLink = ({ genre, children }: GenreLinkProps) => {
   const { id, name } = genre;
-  label ||= name;
-  return <Link to={`/?genres=${id}`}>{label}</Link>;
+  return <Link to={`/?genres=${id}`}>{children || name}</Link>;
 };
 
 export { GenreLink };

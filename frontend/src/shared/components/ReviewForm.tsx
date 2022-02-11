@@ -158,7 +158,7 @@ const ReviewForm = ({ level, review, onGoBack, onSubmit }: ReviewFormProps) => {
           setStatus({
             success: (
               <>
-                Review updated. <LevelLink level={level} label="Click here" />{" "}
+                Review updated. <LevelLink level={level}>Click here</LevelLink>{" "}
                 to see the changes.
               </>
             ),
@@ -173,8 +173,8 @@ const ReviewForm = ({ level, review, onGoBack, onSubmit }: ReviewFormProps) => {
           setStatus({
             success: (
               <>
-                Review posted. <LevelLink level={level} label="Click here" /> to
-                go back to the level page.
+                Review posted. <LevelLink level={level}>Click here</LevelLink>{" "}
+                to go back to the level page.
               </>
             ),
           });

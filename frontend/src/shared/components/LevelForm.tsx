@@ -200,7 +200,7 @@ const LevelForm = ({ level, onGoBack, onSubmit }: LevelFormProps) => {
             success: (
               <>
                 Level information updated.{" "}
-                <LevelLink level={outLevel} label="Click here" /> to see the
+                <LevelLink level={outLevel}>Click here</LevelLink> to see the
                 changes.
               </>
             ),

@@ -33,8 +33,16 @@ const searchGenres = async (
   return { ...response.data, searchQuery };
 };
 
+const getStats = async (genreId: number): Promise<GenreListing[]> => {
+  const response = (await api.get(
+    `${API_URL}/level_genres/${genreId}/stats/`
+  )) as AxiosResponse<GenreListing[]>;
+  return response.data;
+};
+
 const GenreService = {
   searchGenres,
+  getStats,
 };
 
 export type { GenreListing, GenreNested, GenreSearchQuery, GenreSearchResult };

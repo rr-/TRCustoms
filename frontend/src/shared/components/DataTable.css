@@ -17,3 +17,14 @@
 .DataTable td:last-child {
   padding-right: 0;
 }
+
+.DataTable .DataTable--details td {
+  background: var(--sidebar-background-color);
+  padding: 1rem;
+}
+.DataTable .DataTable--details td > *:first-child {
+  margin-top: 0;
+}
+.DataTable .DataTable--details td > *:last-child {
+  margin-bottom: 0;
+}
