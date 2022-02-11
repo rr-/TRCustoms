@@ -136,14 +136,14 @@ const SnapshotsTable = ({
     {
       name: "created",
       label: "Created",
-      itemElement: (snapshot) => formatDate(snapshot.created),
+      itemElement: ({ item }) => formatDate(item.created),
     },
     {
       name: "author",
       label: "Author",
-      itemElement: (snapshot) =>
-        snapshot.change_author ? (
-          <UserLink user={snapshot.change_author} />
+      itemElement: ({ item }) =>
+        item.change_author ? (
+          <UserLink user={item.change_author} />
         ) : (
           EMPTY_INPUT_PLACEHOLDER
         ),
@@ -153,8 +153,8 @@ const SnapshotsTable = ({
           {
             name: "object",
             label: "Object",
-            itemElement: (snapshot: SnapshotListing) => (
-              <SnapshotsTableObjectLink snapshot={snapshot} />
+            itemElement: ({ item }: { item: SnapshotListing }) => (
+              <SnapshotsTableObjectLink snapshot={item} />
             ),
           },
         ]
@@ -162,14 +162,14 @@ const SnapshotsTable = ({
     {
       name: "changes",
       label: "Changes",
-      itemElement: (snapshot) => <SnapshotDiffView snapshot={snapshot} />,
+      itemElement: ({ item }) => <SnapshotDiffView snapshot={item} />,
     },
     {
       name: "review",
       label: "Review",
-      itemElement: (snapshot) =>
-        snapshot.reviewer ? (
-          <UserLink user={snapshot.reviewer} />
+      itemElement: ({ item }) =>
+        item.reviewer ? (
+          <UserLink user={item.reviewer} />
         ) : showApprovalButton ? (
           <PermissionGuard
             require={UserPermission.reviewSnapshots}
@@ -177,7 +177,7 @@ const SnapshotsTable = ({
           >
             <PushButton
               disableTimeout={true}
-              onClick={() => approveSnapshot(snapshot)}
+              onClick={() => approveSnapshot(item)}
             >
               Mark as read
             </PushButton>

@@ -18,25 +18,25 @@ const TagsTable = ({ searchQuery, onSearchQueryChange }: TagsTableProps) => {
       name: "name",
       sortKey: "name",
       label: "Name",
-      itemElement: (tag) => <TagLink tag={tag} />,
+      itemElement: ({ item }) => <TagLink tag={item} />,
     },
     {
       name: "level-count",
       sortKey: "level_count",
       label: "Usages",
-      itemElement: (tag) => `${tag.level_count}`,
+      itemElement: ({ item }) => `${item.level_count}`,
     },
     {
       name: "created",
       sortKey: "created",
       label: "Created",
-      itemElement: (tag) => formatDate(tag.created),
+      itemElement: ({ item }) => formatDate(item.created),
     },
     {
       name: "updated",
       sortKey: "last_updated",
       label: "Updated",
-      itemElement: (tag) => formatDate(tag.last_updated),
+      itemElement: ({ item }) => formatDate(item.last_updated),
     },
   ];
 
