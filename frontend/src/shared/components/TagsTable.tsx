@@ -34,6 +34,21 @@ const TagsTableDetails = ({ tag }: TagsTableDetailsProps) => {
     return <Loader />;
   }
 
+  const mergeTag = async () => {
+    let newTagName = window.prompt(
+      `Enter name of the tag to merge ${tag.name} with:`
+    );
+    if (!newTagName) {
+      return;
+    }
+    showAlertOnError(async () => {
+      const targetTag = await TagService.getByName(newTagName as string);
+      await TagService.merge(tag.id, targetTag.id);
+      queryClient.removeQueries("tags");
+      queryClient.removeQueries("auditLogs");
+    });
+  };
+
   const renameTag = async () => {
     let newTagName = window.prompt(`Enter new name for ${tag.name}:`);
     if (!newTagName) {
@@ -76,6 +91,9 @@ const TagsTableDetails = ({ tag }: TagsTableDetailsProps) => {
         <p>Not used with other tags.</p>
       )}
       <PermissionGuard require={UserPermission.editTags}>
+        <PushButton disableTimeout={true} onClick={() => mergeTag()}>
+          Merge
+        </PushButton>
         <PushButton disableTimeout={true} onClick={() => renameTag()}>
           Rename
         </PushButton>

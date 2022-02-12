@@ -31,6 +31,14 @@ const searchTags = async (
   return { ...response.data, searchQuery };
 };
 
+const getByName = async (name: string): Promise<TagListing> => {
+  const params = { name: name };
+  const response = (await api.get(`${API_URL}/level_tags/by_name/`, {
+    params,
+  })) as AxiosResponse<TagListing>;
+  return response.data;
+};
+
 interface TagCreatePayload {
   name: string;
 }
@@ -71,12 +79,21 @@ const deleteTag = async (tagId: number): Promise<void> => {
   await api.delete(`${API_URL}/level_tags/${tagId}/`);
 };
 
+const merge = async (
+  sourceTagId: number,
+  targetTagId: number
+): Promise<void> => {
+  await api.post(`${API_URL}/level_tags/${sourceTagId}/merge/${targetTagId}/`);
+};
+
 const TagService = {
   searchTags,
   getStats,
+  getByName,
   create,
   update,
   delete: deleteTag,
+  merge,
 };
 
 export type { TagListing, TagNested, TagSearchQuery, TagSearchResult };
