@@ -35,6 +35,8 @@ interface TagCreatePayload {
   name: string;
 }
 
+interface TagUpdatePayload extends TagCreatePayload {}
+
 const getStats = async (tagId: number): Promise<TagListing[]> => {
   const response = (await api.get(
     `${API_URL}/level_tags/${tagId}/stats/`
@@ -51,6 +53,20 @@ const create = async (payload: TagCreatePayload): Promise<TagListing> => {
   return response.data;
 };
 
+const update = async (
+  tagId: number,
+  { name }: TagUpdatePayload
+): Promise<TagListing> => {
+  const data: { [key: string]: any } = {
+    name: name,
+  };
+  const response = (await api.patch(
+    `${API_URL}/level_tags/${tagId}/`,
+    data
+  )) as AxiosResponse<TagListing>;
+  return response.data;
+};
+
 const deleteTag = async (tagId: number): Promise<void> => {
   await api.delete(`${API_URL}/level_tags/${tagId}/`);
 };
@@ -59,6 +75,7 @@ const TagService = {
   searchTags,
   getStats,
   create,
+  update,
   delete: deleteTag,
 };
 

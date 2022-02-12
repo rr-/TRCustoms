@@ -5,8 +5,6 @@ import { PencilIcon } from "@heroicons/react/outline";
 import { BadgeCheckIcon } from "@heroicons/react/outline";
 import { XCircleIcon } from "@heroicons/react/outline";
 import { AnnotationIcon } from "@heroicons/react/outline";
-import axios from "axios";
-import { AxiosError } from "axios";
 import { useEffect } from "react";
 import { useContext } from "react";
 import { Fragment } from "react";
@@ -43,6 +41,7 @@ import { DisplayMode } from "src/shared/types";
 import { formatFileSize } from "src/shared/utils";
 import { formatDate } from "src/shared/utils";
 import { EMPTY_INPUT_PLACEHOLDER } from "src/shared/utils";
+import { showAlertOnError } from "src/shared/utils";
 
 interface LevelPageParams {
   levelId: string;
@@ -84,19 +83,12 @@ const LevelPage = () => {
     if (!window.confirm("Are you sure you want to approve this level?")) {
       return;
     }
-    try {
+    showAlertOnError(async () => {
       await LevelService.approve(+levelId);
       result.refetch();
       queryClient.removeQueries("levels");
       queryClient.removeQueries("auditLogs");
-    } catch (error) {
-      if (axios.isAxiosError(error)) {
-        const axiosError = error as AxiosError;
-        alert(axiosError.response?.data.detail || "Unknown error");
-      } else {
-        alert("Unknown error");
-      }
-    }
+    });
   };
 
   const handleRejectButtonClick = async () => {
@@ -106,19 +98,12 @@ const LevelPage = () => {
     if (!reason) {
       return;
     }
-    try {
+    showAlertOnError(async () => {
       await LevelService.reject(+levelId, reason);
       result.refetch();
       queryClient.removeQueries("levels");
       queryClient.removeQueries("auditLogs");
-    } catch (error) {
-      if (axios.isAxiosError(error)) {
-        const axiosError = error as AxiosError;
-        alert(axiosError.response?.data.detail || "Unknown error");
-      } else {
-        alert("Unknown error");
-      }
-    }
+    });
   };
 
   const handleReviewCountClick = () => {

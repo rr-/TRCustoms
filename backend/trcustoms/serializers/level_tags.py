@@ -28,7 +28,11 @@ class LevelTagDetailsSerializer(LevelTagListingSerializer):
                 "A tag name cannot have more than "
                 f"{settings.MAX_TAG_LENGTH} characters."
             )
-        if LevelTag.objects.filter(name__iexact=value).exists():
+        if (
+            LevelTag.objects.filter(name__iexact=value)
+            .exclude(id=self.instance.id if self.instance else None)
+            .exists()
+        ):
             raise serializers.ValidationError(
                 "Another tag exists with this name."
             )

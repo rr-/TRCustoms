@@ -7,8 +7,8 @@ import { UserContext } from "src/shared/contexts/UserContext";
 interface PermissionGuardProps {
   require: string;
   owningUsers?: UserNested[] | undefined;
-  children: React.ReactElement;
   alternative?: React.ReactNode | undefined;
+  children: React.ReactNode;
 }
 
 const PermissionGuard = ({
@@ -29,7 +29,7 @@ const PermissionGuard = ({
   }, [user, owningUsers, require]);
 
   if (isShown) {
-    return children;
+    return <>{children}</>;
   }
   return <>{alternative}</>;
 };

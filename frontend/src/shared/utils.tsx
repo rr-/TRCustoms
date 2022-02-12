@@ -1,3 +1,5 @@
+import axios from "axios";
+import { AxiosError } from "axios";
 import { isString } from "lodash";
 import { isArray } from "lodash";
 import { DISABLE_PAGING } from "src/shared/constants";
@@ -167,6 +169,19 @@ const getYoutubeVideoID = (url: string): string | null => {
   return match ? match[1] : null;
 };
 
+const showAlertOnError = async (func: () => Promise<void>): Promise<void> => {
+  try {
+    await func();
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      const axiosError = error as AxiosError;
+      alert(axiosError.response?.data.detail || "Unknown error");
+    } else {
+      alert("Unknown error");
+    }
+  }
+};
+
 export {
   pluralize,
   validateRequired,
@@ -185,4 +200,5 @@ export {
   extractNestedErrorText,
   getYoutubeVideoID,
   EMPTY_INPUT_PLACEHOLDER,
+  showAlertOnError,
 };
