@@ -22,6 +22,12 @@ class AuditLogViewSet(
         "list": [AllowAny],
         "approve": [HasPermission(UserPermission.REVIEW_AUDIT_LOGS)],
     }
+    search_fields = [
+        "object_name",
+        "change_author__username",
+        "change_author__first_name",
+        "change_author__last_name",
+    ]
 
     def get_queryset(self):
         queryset = AuditLog.objects.all()
