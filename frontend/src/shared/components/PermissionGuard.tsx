@@ -4,34 +4,59 @@ import { useState } from "react";
 import type { UserNested } from "src/services/user.service";
 import { UserContext } from "src/shared/contexts/UserContext";
 
-interface PermissionGuardProps {
-  require: string;
-  owningUsers?: UserNested[] | undefined;
+interface CommonGuardProps {
   alternative?: React.ReactNode | undefined;
   children: React.ReactNode;
 }
 
+interface GenericGuardProps extends CommonGuardProps {
+  isShown: boolean;
+}
+
+interface PermissionGuardProps extends CommonGuardProps {
+  require: string;
+  owningUsers?: UserNested[] | undefined;
+}
+
+interface UserGuardProps extends CommonGuardProps {
+  user?: UserNested | undefined;
+}
+
+const GenericGuard = ({
+  isShown,
+  children,
+  alternative,
+}: GenericGuardProps) => {
+  return <>{isShown ? children : alternative}</>;
+};
+
 const PermissionGuard = ({
   require,
   owningUsers,
-  children,
-  alternative,
+  ...props
 }: PermissionGuardProps) => {
   const { user } = useContext(UserContext);
   const [isShown, setIsShown] = useState<boolean>(false);
 
   useEffect(() => {
-    let newIsShown =
+    setIsShown(
       user?.permissions?.includes(require) ||
-      (owningUsers && owningUsers.map((u) => u.id).includes(user?.id));
-
-    setIsShown(newIsShown);
+        (owningUsers && owningUsers.map((u) => u.id).includes(user?.id))
+    );
   }, [user, owningUsers, require]);
 
-  if (isShown) {
-    return <>{children}</>;
-  }
-  return <>{alternative}</>;
+  return <GenericGuard {...props} isShown={isShown} />;
 };
 
-export { PermissionGuard };
+const LoggedInUserGuard = ({ user, ...props }: UserGuardProps) => {
+  const userContext = useContext(UserContext);
+  const [isShown, setIsShown] = useState<boolean>(false);
+
+  useEffect(() => {
+    setIsShown(user?.id === userContext.user?.id);
+  }, [user, userContext]);
+
+  return <GenericGuard {...props} isShown={isShown} />;
+};
+
+export { PermissionGuard, LoggedInUserGuard };

@@ -14,6 +14,7 @@ import { LevelsTable } from "src/shared/components/LevelsTable";
 import { Loader } from "src/shared/components/Loader";
 import { Markdown } from "src/shared/components/Markdown";
 import { PermissionGuard } from "src/shared/components/PermissionGuard";
+import { LoggedInUserGuard } from "src/shared/components/PermissionGuard";
 import { PushButton } from "src/shared/components/PushButton";
 import { ReviewsList } from "src/shared/components/ReviewsList";
 import { Section } from "src/shared/components/Section";
@@ -100,17 +101,24 @@ const UserPage = () => {
             </div>
           }
           actions={
-            <PermissionGuard
-              require={UserPermission.editUsers}
-              owningUsers={[user]}
-            >
-              <PushButton
-                icon={<PencilIcon className="icon" />}
-                to={`/users/${user.id}/edit`}
+            <>
+              <PermissionGuard require={UserPermission.uploadLevels}>
+                <LoggedInUserGuard user={user}>
+                  <PushButton to={"/my-levels"}>My levels</PushButton>
+                </LoggedInUserGuard>
+              </PermissionGuard>
+              <PermissionGuard
+                require={UserPermission.editUsers}
+                owningUsers={[user]}
               >
-                Edit profile
-              </PushButton>
-            </PermissionGuard>
+                <PushButton
+                  icon={<PencilIcon className="icon" />}
+                  to={`/users/${user.id}/edit`}
+                >
+                  Edit profile
+                </PushButton>
+              </PermissionGuard>
+            </>
           }
         >
           <dl>
