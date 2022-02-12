@@ -174,6 +174,13 @@ def fixture_auth_api_client(
     return api_client
 
 
+@pytest.fixture(name="admin_api_client")
+def fixture_admin_api_client(auth_api_client: APIClient) -> APIClient:
+    auth_api_client.user.is_staff = True
+    auth_api_client.user.save()
+    return auth_api_client
+
+
 @pytest.fixture(name="any_integer")
 def fixture_any_integer() -> object:
     class AnyInteger:
