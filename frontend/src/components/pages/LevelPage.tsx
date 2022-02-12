@@ -18,7 +18,6 @@ import { ExternalLinkType } from "src/services/level.service";
 import type { LevelDetails } from "src/services/level.service";
 import { LevelService } from "src/services/level.service";
 import type { ReviewSearchQuery } from "src/services/review.service";
-import type { SnapshotSearchQuery } from "src/services/snapshot.service";
 import { UserPermission } from "src/services/user.service";
 import { InfoMessage } from "src/shared/components/InfoMessage";
 import { InfoMessageType } from "src/shared/components/InfoMessage";
@@ -32,7 +31,6 @@ import { PushButton } from "src/shared/components/PushButton";
 import { ReviewsList } from "src/shared/components/ReviewsList";
 import { SectionHeader } from "src/shared/components/SectionHeader";
 import { SidebarBox } from "src/shared/components/SidebarBox";
-import { SnapshotsTable } from "src/shared/components/SnapshotsTable";
 import { EngineLink } from "src/shared/components/links/EngineLink";
 import { GenreLink } from "src/shared/components/links/GenreLink";
 import { TagLink } from "src/shared/components/links/TagLink";
@@ -54,14 +52,6 @@ const LevelPage = () => {
   const { setTitle } = useContext(TitleContext);
   const { levelId } = (useParams() as unknown) as LevelPageParams;
   const queryClient = useQueryClient();
-  const [snapshotsSearchQuery, setSnapshotsSearchQuery] = useState<
-    SnapshotSearchQuery
-  >({
-    level: +levelId,
-    page: DISABLE_PAGING,
-    sort: "-created",
-    search: "",
-  });
   const [reviewCount, setReviewCount] = useState<number | undefined>();
   const [reviewsSearchQuery, setReviewsSearchQuery] = useState<
     ReviewSearchQuery
@@ -429,16 +419,6 @@ const LevelPage = () => {
             searchQuery={reviewsSearchQuery}
             onResultCountChange={setReviewCount}
             onSearchQueryChange={setReviewsSearchQuery}
-          />
-        </section>
-
-        <section id="LevelPage--changes">
-          <SectionHeader>Changes history</SectionHeader>
-          <SnapshotsTable
-            showObjects={false}
-            showApprovalButton={true}
-            searchQuery={snapshotsSearchQuery}
-            onSearchQueryChange={setSnapshotsSearchQuery}
           />
         </section>
       </div>
