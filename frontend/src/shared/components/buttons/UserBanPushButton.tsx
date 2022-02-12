@@ -4,6 +4,7 @@ import { UserService } from "src/services/user.service";
 import type { UserBasic } from "src/services/user.service";
 import { PushButton } from "src/shared/components/PushButton";
 import { showAlertOnError } from "src/shared/utils";
+import { resetQueries } from "src/shared/utils";
 
 interface UserBanPushButtonProps {
   user: UserBasic;
@@ -19,8 +20,7 @@ const UserBanPushButton = ({ user }: UserBanPushButtonProps) => {
     }
     showAlertOnError(async () => {
       await UserService.ban(user.id, reason);
-      queryClient.removeQueries("users");
-      queryClient.removeQueries("auditLogs");
+      resetQueries(queryClient, ["users", "auditLogs"]);
     });
   };
 

@@ -13,6 +13,7 @@ import { PushButton } from "src/shared/components/PushButton";
 import { TagLink } from "src/shared/components/links/TagLink";
 import { formatDate } from "src/shared/utils";
 import { showAlertOnError } from "src/shared/utils";
+import { resetQueries } from "src/shared/utils";
 
 interface TagsTableProps {
   searchQuery: TagSearchQuery;
@@ -44,8 +45,7 @@ const TagsTableDetails = ({ tag }: TagsTableDetailsProps) => {
     showAlertOnError(async () => {
       const targetTag = await TagService.getByName(newTagName as string);
       await TagService.merge(tag.id, targetTag.id);
-      queryClient.removeQueries("tags");
-      queryClient.removeQueries("auditLogs");
+      resetQueries(queryClient, ["tags", "auditLogs"]);
     });
   };
 
@@ -56,8 +56,7 @@ const TagsTableDetails = ({ tag }: TagsTableDetailsProps) => {
     }
     showAlertOnError(async () => {
       await TagService.update(tag.id, { name: newTagName as string });
-      queryClient.removeQueries("tags");
-      queryClient.removeQueries("auditLogs");
+      resetQueries(queryClient, ["tags", "auditLogs"]);
     });
   };
 
@@ -65,8 +64,7 @@ const TagsTableDetails = ({ tag }: TagsTableDetailsProps) => {
     if (window.confirm(`Really delete tag ${tag.name}?`)) {
       showAlertOnError(async () => {
         await TagService.delete(tag.id);
-        queryClient.removeQueries("tags");
-        queryClient.removeQueries("auditLogs");
+        resetQueries(queryClient, ["tags", "auditLogs"]);
       });
     }
   };

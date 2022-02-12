@@ -4,6 +4,7 @@ import { UserService } from "src/services/user.service";
 import type { UserBasic } from "src/services/user.service";
 import { PushButton } from "src/shared/components/PushButton";
 import { showAlertOnError } from "src/shared/utils";
+import { resetQueries } from "src/shared/utils";
 
 interface UserDeactivatePushButtonProps {
   user: UserBasic;
@@ -23,8 +24,7 @@ const UserDeactivatePushButton = ({
     }
     showAlertOnError(async () => {
       await UserService.deactivate(user.id, reason);
-      queryClient.removeQueries("users");
-      queryClient.removeQueries("auditLogs");
+      resetQueries(queryClient, ["users", "auditLogs"]);
     });
   };
 
