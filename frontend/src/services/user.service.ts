@@ -17,9 +17,14 @@ enum UserPermission {
   editTags = "edit_tags",
 }
 
-interface UserNested {
+interface UserBasic {
   id: number;
   username: string;
+  first_name?: string | undefined;
+  last_name?: string | undefined;
+}
+
+interface UserNested extends UserBasic {
   first_name: string;
   last_name: string;
 }
@@ -163,6 +168,7 @@ const UserService = {
 export type {
   UserDetails,
   UserListing,
+  UserBasic,
   UserNested,
   UserSearchQuery,
   UserSearchResult,

@@ -37,6 +37,18 @@ const AuditLogTableObjectLink = ({
   auditLog,
 }: AuditLogTableObjectLinkProps) => {
   switch (auditLog.object_type) {
+    case AuditLogObjectType.User:
+      return (
+        <UserLink
+          user={{
+            id: +auditLog.object_id,
+            username: auditLog.object_name,
+          }}
+        >
+          User {auditLog.object_name}
+        </UserLink>
+      );
+
     case AuditLogObjectType.Level:
       return (
         <LevelLink

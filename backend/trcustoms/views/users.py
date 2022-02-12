@@ -5,6 +5,7 @@ from rest_framework.generics import get_object_or_404
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 
+from trcustoms.audit_logs.utils import track_model_creation
 from trcustoms.mixins import MultiSerializerMixin, PermissionsMixin
 from trcustoms.models import User
 from trcustoms.models.user import UserPermission
@@ -97,5 +98,11 @@ class UserViewSet(
             response = self.update(request, *args, **kwargs)
             if response.status_code == status.HTTP_200_OK:
                 response.status_code = status.HTTP_201_CREATED
-            return response
-        return super().create(request, *args, **kwargs)
+        else:
+            response = super().create(request, *args, **kwargs)
+
+        user = User.objects.filter(
+            username__iexact=request.data.get("username")
+        ).first()
+        track_model_creation(user, request=request, change_author=user)
+        return response

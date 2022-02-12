@@ -22,6 +22,7 @@ enum AuditLogObjectType {
   LevelDuration = "levelduration",
   LevelDifficulty = "leveldifficulty",
   LevelReview = "levelreview",
+  User = "user",
 }
 
 interface AuditLogListing {
