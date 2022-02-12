@@ -56,6 +56,9 @@ class User(AbstractUser):
     bio = models.TextField(max_length=5000, blank=True)
     source = models.CharField(max_length=10, choices=Source.choices)
 
+    is_banned = models.BooleanField(default=False)
+    ban_reason = models.CharField(max_length=200, null=True, blank=True)
+
     @property
     def permissions(self) -> list[UserPermission]:
         permissions = {

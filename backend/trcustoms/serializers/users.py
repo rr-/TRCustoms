@@ -40,6 +40,7 @@ class UserListingSerializer(serializers.ModelSerializer):
             "date_joined",
             "last_login",
             "is_active",
+            "is_banned",
             "authored_level_count",
             "reviewed_level_count",
             "picture",
@@ -184,3 +185,7 @@ class UserDetailsSerializer(UserListingSerializer):
             "password",
             "picture_id",
         ]
+
+
+class UserBanSerializer(serializers.Serializer):
+    reason = serializers.CharField(max_length=200)

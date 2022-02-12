@@ -29,6 +29,7 @@ api.interceptors.response.use(
     const originalRequest = error.config as AxiosRequestConfigWithRetry;
     if (
       error.response?.data.code === "user_not_found" ||
+      error.response?.data.code === "user_banned" ||
       error.response?.data.code === "user_inactive"
     ) {
       AuthService.logout();

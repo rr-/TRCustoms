@@ -36,6 +36,7 @@ interface UserListing extends UserNested {
   date_joined: string;
   last_login: string;
   is_active: boolean;
+  is_banned: boolean;
   authored_level_count: number;
   reviewed_level_count: number;
   permissions: UserPermission[];
@@ -156,9 +157,31 @@ const searchUsers = async (
   return { ...response.data, searchQuery };
 };
 
+const activate = async (userId: number): Promise<void> => {
+  await api.post(`${API_URL}/users/${userId}/activate/`);
+};
+
+const deactivate = async (userId: number, reason: string): Promise<void> => {
+  const data = { reason };
+  await api.post(`${API_URL}/users/${userId}/deactivate/`, data);
+};
+
+const ban = async (userId: number, reason: string): Promise<void> => {
+  const data = { reason };
+  await api.post(`${API_URL}/users/${userId}/ban/`, data);
+};
+
+const unban = async (userId: number): Promise<void> => {
+  await api.post(`${API_URL}/users/${userId}/unban/`);
+};
+
 const UserService = {
   register,
   update,
+  activate,
+  deactivate,
+  ban,
+  unban,
   getCurrentUser,
   getUserById,
   getUserByUsername,

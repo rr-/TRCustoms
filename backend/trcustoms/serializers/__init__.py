@@ -40,6 +40,7 @@ from .uploaded_files import (
     UploadedFileNestedSerializer,
 )
 from .users import (
+    UserBanSerializer,
     UserDetailsSerializer,
     UserListingSerializer,
     UserNestedSerializer,
@@ -70,6 +71,7 @@ __all__ = [
     "ReviewTemplateQuestionSerializer",
     "UploadedFileDetailsSerializer",
     "UploadedFileNestedSerializer",
+    "UserBanSerializer",
     "UserDetailsSerializer",
     "UserListingSerializer",
     "UserNestedSerializer",

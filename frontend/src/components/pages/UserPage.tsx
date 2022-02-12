@@ -21,6 +21,10 @@ import { Section } from "src/shared/components/Section";
 import { SectionHeader } from "src/shared/components/Section";
 import { SidebarBox } from "src/shared/components/SidebarBox";
 import { UserPicture } from "src/shared/components/UserPicture";
+import { UserActivatePushButton } from "src/shared/components/buttons/UserActivatePushButton";
+import { UserBanPushButton } from "src/shared/components/buttons/UserBanPushButton";
+import { UserDeactivatePushButton } from "src/shared/components/buttons/UserDeactivatePushButton";
+import { UserUnbanPushButton } from "src/shared/components/buttons/UserUnbanPushButton";
 import { TitleContext } from "src/shared/contexts/TitleContext";
 import { formatDate } from "src/shared/utils";
 
@@ -47,8 +51,8 @@ const getReviewSearchQuery = (userId: number): ReviewSearchQuery => ({
 });
 
 const UserPage = () => {
-  const { userId } = (useParams() as unknown) as UserPageParams;
   const { setTitle } = useContext(TitleContext);
+  const { userId } = (useParams() as unknown) as UserPageParams;
   const [levelSearchQuery, setLevelSearchQuery] = useState<LevelSearchQuery>(
     getLevelSearchQuery(+userId)
   );
@@ -107,17 +111,36 @@ const UserPage = () => {
                   <PushButton to={"/my-levels"}>My levels</PushButton>
                 </LoggedInUserGuard>
               </PermissionGuard>
-              <PermissionGuard
-                require={UserPermission.editUsers}
-                owningUsers={[user]}
-              >
-                <PushButton
-                  icon={<PencilIcon className="icon" />}
-                  to={`/users/${user.id}/edit`}
-                >
-                  Edit profile
-                </PushButton>
-              </PermissionGuard>
+              {user.is_active ? (
+                <>
+                  <PermissionGuard
+                    require={UserPermission.editUsers}
+                    owningUsers={[user]}
+                  >
+                    <PushButton
+                      icon={<PencilIcon className="icon" />}
+                      to={`/users/${user.id}/edit`}
+                    >
+                      Edit profile
+                    </PushButton>
+                  </PermissionGuard>
+                  <PermissionGuard require={UserPermission.editUsers}>
+                    {user.is_banned ? (
+                      <UserUnbanPushButton user={user} />
+                    ) : (
+                      <UserBanPushButton user={user} />
+                    )}
+                    <UserDeactivatePushButton user={user}>
+                      Deactivate
+                    </UserDeactivatePushButton>
+                  </PermissionGuard>
+                </>
+              ) : (
+                <PermissionGuard require={UserPermission.editUsers}>
+                  <UserActivatePushButton user={user} />
+                  <UserDeactivatePushButton user={user} />
+                </PermissionGuard>
+              )}
             </>
           }
         >
