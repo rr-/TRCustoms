@@ -51,10 +51,15 @@ const create = async (payload: TagCreatePayload): Promise<TagListing> => {
   return response.data;
 };
 
+const deleteTag = async (tagId: number): Promise<void> => {
+  await api.delete(`${API_URL}/level_tags/${tagId}/`);
+};
+
 const TagService = {
   searchTags,
   getStats,
   create,
+  delete: deleteTag,
 };
 
 export type { TagListing, TagNested, TagSearchQuery, TagSearchResult };

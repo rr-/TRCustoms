@@ -6,7 +6,8 @@ from rest_framework.response import Response
 
 from trcustoms.mixins import MultiSerializerMixin, PermissionsMixin
 from trcustoms.models import Level, LevelTag
-from trcustoms.permissions import AllowNone
+from trcustoms.models.user import UserPermission
+from trcustoms.permissions import AllowNone, HasPermission
 from trcustoms.serializers import (
     LevelTagDetailsSerializer,
     LevelTagListingSerializer,
@@ -17,6 +18,7 @@ class LevelTagViewSet(
     PermissionsMixin,
     MultiSerializerMixin,
     mixins.CreateModelMixin,
+    mixins.DestroyModelMixin,
     mixins.ListModelMixin,
     viewsets.GenericViewSet,
 ):
@@ -30,6 +32,7 @@ class LevelTagViewSet(
         "list": [AllowAny],
         "retrieve": [IsAuthenticated],
         "stats": [AllowAny],
+        "destroy": [HasPermission(UserPermission.EDIT_TAGS)],
     }
 
     serializer_class = LevelTagListingSerializer

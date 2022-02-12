@@ -15,6 +15,7 @@ class UserPermission:
     REVIEW_LEVELS = "review_levels"
     EDIT_REVIEWS = "edit_reviews"
     REVIEW_SNAPSHOTS = "review_snapshots"
+    EDIT_TAGS = "edit_tags"
 
 
 class UserManager(BaseUserManager):
@@ -62,6 +63,7 @@ class User(AbstractUser):
         }
         if self.is_staff:
             permissions |= {
+                UserPermission.EDIT_TAGS,
                 UserPermission.EDIT_USERS,
                 UserPermission.EDIT_LEVELS,
                 UserPermission.EDIT_REVIEWS,
