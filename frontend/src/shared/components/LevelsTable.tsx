@@ -40,23 +40,6 @@ const LevelsTable = ({
               alt={item.name}
             />
           </Link>
-          {showStatus && (
-            <>
-              {item.is_approved ? (
-                <span className="LevelsTable--statusApproved">
-                  <BadgeCheckIcon className="icon" /> Approved!
-                </span>
-              ) : item.rejection_reason ? (
-                <span className="LevelsTable--statusRejected">
-                  <XCircleIcon className="icon" /> Rejected
-                </span>
-              ) : (
-                <span className="LevelsTable--statusPending">
-                  <ClockIcon className="icon" /> Pending approval
-                </span>
-              )}
-            </>
-          )}
         </>
       ),
     },
@@ -81,6 +64,24 @@ const LevelsTable = ({
             "Unknown"
           )}
           <br />
+          {showStatus && (
+            <>
+              {item.is_approved ? (
+                <span className="LevelsTable--statusApproved">
+                  <BadgeCheckIcon className="icon" /> Approved!
+                </span>
+              ) : item.rejection_reason ? (
+                <span className="LevelsTable--statusRejected">
+                  <XCircleIcon className="icon" /> Rejected
+                </span>
+              ) : (
+                <span className="LevelsTable--statusPending">
+                  <ClockIcon className="icon" /> Pending approval
+                </span>
+              )}
+              <br />
+            </>
+          )}
           <small>
             Reviews: <LevelRating ratingClass={item.rating_class} />
             <br />

@@ -2,7 +2,7 @@
   display: grid;
   margin-bottom: 3rem;
   grid-template-rows: auto auto auto;
-  background: var(--sidebar-background-color);
+  background: var(--reviews-table-background-color);
 }
 .Review.positive .Review--badge {
   background-color: var(--positive-background-color);

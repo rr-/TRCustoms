@@ -140,9 +140,9 @@ const DataTableBody = <TItem extends {}, TQuery extends GenericSearchQuery>({
             <tr className="DataTable--row" ref={lastRowRef}>
               {columns.map((column) => (
                 <td
-                  className={
-                    className ? `${className}--${column.name}` : undefined
-                  }
+                  className={`DataTable--cell ${
+                    className ? `${className}--${column.name}` : ""
+                  }`}
                   title={column.itemTooltip?.(item) || undefined}
                   key={`${key}-${column.name}`}
                 >

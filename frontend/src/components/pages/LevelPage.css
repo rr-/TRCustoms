@@ -1,4 +1,4 @@
-#LevelPage {
+.LevelPage {
   display: grid;
   grid-template-areas:
     "header header"
@@ -8,22 +8,22 @@
   gap: 1.5rem;
 }
 
-#LevelPage--header {
+.LevelPage--header {
   grid-area: header;
 }
-#LevelPage--sidebar {
+.LevelPage--sidebar {
   grid-area: sidebar;
 }
-#LevelPage--main {
+.LevelPage--main {
   grid-area: main;
 }
 
 /* fix for empty media */
-#LevelPage--main > :first-child > :first-child {
+.LevelPage--main > :first-child > :first-child {
   margin-top: 0;
 }
 
-#LevelPage .MediumThumbnail--thumb {
+.LevelPage .MediumThumbnail--thumb {
   width: 100%;
 }
 
