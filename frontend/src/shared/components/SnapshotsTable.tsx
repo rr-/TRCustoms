@@ -58,7 +58,7 @@ const SnapshotsTableObjectLink = ({
             name: snapshot.object_name,
           }}
         >
-          Engine ${snapshot.object_name}
+          Engine {snapshot.object_name}
         </EngineLink>
       );
 
