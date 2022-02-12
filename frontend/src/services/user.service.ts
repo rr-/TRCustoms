@@ -13,7 +13,7 @@ enum UserPermission {
   editLevels = "edit_levels",
   reviewLevels = "review_levels",
   editReviews = "edit_reviews",
-  reviewSnapshots = "review_snapshots",
+  reviewAuditLogs = "review_audit_logs",
   editTags = "edit_tags",
 }
 

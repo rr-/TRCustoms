@@ -37,6 +37,7 @@ const TagsTableDetails = ({ tag }: TagsTableDetailsProps) => {
     if (window.confirm(`Really delete tag ${tag.name}?`)) {
       await TagService.delete(tag.id);
       queryClient.removeQueries("tags");
+      queryClient.removeQueries("auditLogs");
     }
   };
 

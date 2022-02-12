@@ -87,7 +87,7 @@ const LevelPage = () => {
       await LevelService.approve(+levelId);
       result.refetch();
       queryClient.removeQueries("levels");
-      queryClient.removeQueries("snapshots");
+      queryClient.removeQueries("auditLogs");
     } catch (error) {
       if (axios.isAxiosError(error)) {
         const axiosError = error as AxiosError;
@@ -109,7 +109,7 @@ const LevelPage = () => {
       await LevelService.reject(+levelId, reason);
       result.refetch();
       queryClient.removeQueries("levels");
-      queryClient.removeQueries("snapshots");
+      queryClient.removeQueries("auditLogs");
     } catch (error) {
       if (axios.isAxiosError(error)) {
         const axiosError = error as AxiosError;

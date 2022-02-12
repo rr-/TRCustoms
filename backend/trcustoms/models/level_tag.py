@@ -2,6 +2,7 @@ from django.db import models
 from django.db.models import Count, UniqueConstraint
 from django.db.models.functions import Lower
 
+from trcustoms.audit_logs import registry
 from trcustoms.models.util import DatesInfo
 
 
@@ -10,6 +11,7 @@ class LevelTagManager(models.Manager):
         return self.annotate(level_count=Count("level"))
 
 
+@registry.register_model(name_getter=lambda instance: instance.name)
 class LevelTag(DatesInfo):
     objects = LevelTagManager()
     name = models.CharField(max_length=100)

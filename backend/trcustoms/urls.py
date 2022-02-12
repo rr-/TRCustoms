@@ -9,6 +9,7 @@ from rest_framework_simplejwt.views import (
 )
 
 from trcustoms.views import (
+    AuditLogViewSet,
     ConfigViewSet,
     LevelEngineViewSet,
     LevelFileViewSet,
@@ -16,7 +17,6 @@ from trcustoms.views import (
     LevelReviewViewSet,
     LevelTagViewSet,
     LevelViewSet,
-    SnapshotViewSet,
     UploadViewSet,
     UserViewSet,
 )
@@ -25,7 +25,7 @@ router = DefaultRouter()
 router.register(r"config", ConfigViewSet, basename="config")
 router.register(r"users", UserViewSet)
 router.register(r"uploads", UploadViewSet, basename="uploads")
-router.register(r"snapshots", SnapshotViewSet, basename="snapshots")
+router.register(r"auditlogs", AuditLogViewSet, basename="auditlogs")
 router.register(r"levels", LevelViewSet)
 router.register(r"level_tags", LevelTagViewSet)
 router.register(r"level_genres", LevelGenreViewSet)

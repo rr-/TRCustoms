@@ -193,7 +193,7 @@ const LevelForm = ({ level, onGoBack, onSubmit }: LevelFormProps) => {
         if (level?.id) {
           let outLevel = await LevelService.update(level.id, payload);
           queryClient.removeQueries("levels");
-          queryClient.removeQueries("snapshots");
+          queryClient.removeQueries("auditLogs");
           onSubmit?.(outLevel);
 
           setStatus({
@@ -208,7 +208,7 @@ const LevelForm = ({ level, onGoBack, onSubmit }: LevelFormProps) => {
         } else {
           let outLevel = await LevelService.create(payload);
           queryClient.removeQueries("levels");
-          queryClient.removeQueries("snapshots");
+          queryClient.removeQueries("auditLogs");
           onSubmit?.(outLevel);
         }
       } catch (error) {

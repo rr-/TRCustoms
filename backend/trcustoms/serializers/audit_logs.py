@@ -1,29 +1,28 @@
 from rest_framework import serializers
 
-from trcustoms.models import Snapshot
+from trcustoms.models import AuditLog
 from trcustoms.serializers.users import UserNestedSerializer
 
 
-class SnapshotListingSerializer(serializers.ModelSerializer):
+class AuditLogListingSerializer(serializers.ModelSerializer):
     object_type = serializers.SerializerMethodField(read_only=True)
     change_author = UserNestedSerializer(read_only=True)
     reviewer = UserNestedSerializer(read_only=True)
 
     class Meta:
-        model = Snapshot
+        model = AuditLog
         fields = [
             "id",
             "created",
             "object_id",
             "object_name",
             "object_type",
-            "object_desc",
             "change_type",
             "change_author",
             "is_reviewed",
             "reviewer",
-            "diff",
+            "changes",
         ]
 
-    def get_object_type(self, instance: Snapshot) -> str:
+    def get_object_type(self, instance: AuditLog) -> str:
         return instance.object_type.model

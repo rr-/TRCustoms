@@ -1,7 +1,6 @@
 from django.conf import settings
 from rest_framework import serializers
 
-from trcustoms import snapshots
 from trcustoms.models import LevelTag
 
 
@@ -38,8 +37,3 @@ class LevelTagDetailsSerializer(LevelTagListingSerializer):
     class Meta:
         model = LevelTag
         fields = ["id", "name", "created", "last_updated"]
-
-
-@snapshots.register
-class LevelTagSnapshotSerializer(LevelTagDetailsSerializer):
-    pass

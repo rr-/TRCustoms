@@ -8,26 +8,13 @@ import { GenericSearchResult } from "src/shared/types";
 import { filterFalsyObjectValues } from "src/shared/utils";
 import { getGenericSearchQuery } from "src/shared/utils";
 
-enum DiffType {
-  Added = 1,
-  Deleted = 2,
-  Updated = 3,
-}
-
-interface DiffItem {
-  diff_type: DiffType;
-  path: string[];
-  old: any;
-  new: any;
-}
-
-enum SnapshotChangeType {
+enum AuditLogChangeType {
   Update = "UPDATE",
   Create = "CREATE",
   Delete = "DELETE",
 }
 
-enum SnapshotObjectType {
+enum AuditLogObjectType {
   Level = "level",
   LevelEngine = "levelengine",
   LevelGenre = "levelgenre",
@@ -37,32 +24,31 @@ enum SnapshotObjectType {
   LevelReview = "levelreview",
 }
 
-interface SnapshotListing {
+interface AuditLogListing {
   id: number;
   created: string;
   object_id: string;
   object_name: string;
-  object_type: SnapshotObjectType;
-  object_desc: any;
+  object_type: AuditLogObjectType;
   change_author: UserNested | null;
-  change_type: SnapshotChangeType;
-  diff: DiffItem[];
+  change_type: AuditLogChangeType;
   reviewer: UserNested | null;
+  changes: string[];
 }
 
-interface SnapshotList extends PagedResponse<SnapshotListing> {}
+interface AuditLogList extends PagedResponse<AuditLogListing> {}
 
-interface SnapshotSearchQuery extends GenericSearchQuery {
+interface AuditLogSearchQuery extends GenericSearchQuery {
   level?: number | undefined;
   isReviewed?: boolean | undefined;
 }
 
-interface SnapshotSearchResult
-  extends GenericSearchResult<SnapshotSearchQuery, SnapshotListing> {}
+interface AuditLogSearchResult
+  extends GenericSearchResult<AuditLogSearchQuery, AuditLogListing> {}
 
-const searchSnapshots = async (
-  searchQuery: SnapshotSearchQuery
-): Promise<SnapshotSearchResult> => {
+const searchAuditLogs = async (
+  searchQuery: AuditLogSearchQuery
+): Promise<AuditLogSearchResult> => {
   const params = filterFalsyObjectValues({
     ...getGenericSearchQuery(searchQuery),
     level: searchQuery.level || null,
@@ -73,27 +59,26 @@ const searchSnapshots = async (
         ? "0"
         : false,
   });
-  const response = (await api.get(`${API_URL}/snapshots/`, {
+  const response = (await api.get(`${API_URL}/auditlogs/`, {
     params,
-  })) as AxiosResponse<SnapshotSearchResult>;
+  })) as AxiosResponse<AuditLogSearchResult>;
   return { ...response.data, searchQuery };
 };
 
-const approve = async (snapshotId: number): Promise<void> => {
-  await api.post(`${API_URL}/snapshots/${snapshotId}/approve/`);
+const approve = async (auditLogId: number): Promise<void> => {
+  await api.post(`${API_URL}/auditlogs/${auditLogId}/approve/`);
 };
 
-const SnapshotService = {
-  searchSnapshots,
+const AuditLogService = {
+  searchAuditLogs,
   approve,
 };
 
 export type {
-  DiffItem,
-  SnapshotListing,
-  SnapshotList,
-  SnapshotSearchQuery,
-  SnapshotSearchResult,
+  AuditLogListing,
+  AuditLogList,
+  AuditLogSearchQuery,
+  AuditLogSearchResult,
 };
 
-export { DiffType, SnapshotObjectType, SnapshotChangeType, SnapshotService };
+export { AuditLogObjectType, AuditLogChangeType, AuditLogService };

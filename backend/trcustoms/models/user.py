@@ -4,6 +4,7 @@ from django.db import models
 from django.db.models import Count, UniqueConstraint
 from django.db.models.functions import Lower
 
+from trcustoms.audit_logs import registry
 from trcustoms.models.uploaded_file import UploadedFile
 
 
@@ -14,7 +15,7 @@ class UserPermission:
     EDIT_LEVELS = "edit_levels"
     REVIEW_LEVELS = "review_levels"
     EDIT_REVIEWS = "edit_reviews"
-    REVIEW_SNAPSHOTS = "review_snapshots"
+    REVIEW_AUDIT_LOGS = "review_audit_logs"
     EDIT_TAGS = "edit_tags"
 
 
@@ -32,6 +33,7 @@ class UserManager(BaseUserManager):
         return self.get(**{case_insensitive_username_field: username})
 
 
+@registry.register_model(name_getter=lambda instance: instance.name)
 class User(AbstractUser):
     objects = UserManager()
 
@@ -67,6 +69,6 @@ class User(AbstractUser):
                 UserPermission.EDIT_USERS,
                 UserPermission.EDIT_LEVELS,
                 UserPermission.EDIT_REVIEWS,
-                UserPermission.REVIEW_SNAPSHOTS,
+                UserPermission.REVIEW_AUDIT_LOGS,
             }
         return sorted(permissions)

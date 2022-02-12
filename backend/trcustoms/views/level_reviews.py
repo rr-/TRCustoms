@@ -1,9 +1,13 @@
-from rest_framework import mixins, serializers, viewsets
+from rest_framework import mixins, viewsets
 from rest_framework.generics import get_object_or_404
 from rest_framework.permissions import AllowAny, IsAuthenticated
 
-from trcustoms.mixins import MultiSerializerMixin, PermissionsMixin
-from trcustoms.models import LevelReview, Snapshot
+from trcustoms.mixins import (
+    AuditLogModelWatcherMixin,
+    MultiSerializerMixin,
+    PermissionsMixin,
+)
+from trcustoms.models import LevelReview
 from trcustoms.models.user import UserPermission
 from trcustoms.permissions import (
     AllowNone,
@@ -14,11 +18,11 @@ from trcustoms.serializers import (
     LevelReviewDetailsSerializer,
     LevelReviewListingSerializer,
 )
-from trcustoms.snapshots import make_snapshot
 from trcustoms.utils import parse_ids
 
 
 class LevelReviewViewSet(
+    AuditLogModelWatcherMixin,
     PermissionsMixin,
     MultiSerializerMixin,
     mixins.ListModelMixin,
@@ -94,17 +98,3 @@ class LevelReviewViewSet(
                 self.paginator.disable_paging = True
 
         return queryset
-
-    def perform_create(self, serializer: serializers.Serializer) -> None:
-        super().perform_create(serializer)
-        serializer.instance.refresh_from_db()
-        make_snapshot(
-            serializer.instance,
-            request=self.request,
-            change_type=Snapshot.ChangeType.CREATE,
-        )
-
-    def perform_update(self, serializer: serializers.Serializer) -> None:
-        super().perform_update(serializer)
-        serializer.instance.refresh_from_db()
-        make_snapshot(serializer.instance, request=self.request)
