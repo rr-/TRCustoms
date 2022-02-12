@@ -1,4 +1,5 @@
 import os
+import sys
 from datetime import timedelta
 from pathlib import Path
 
@@ -19,6 +20,7 @@ CACHE_DIR = BASE_DIR / "cache"
 
 SECRET_KEY = get_setting("SECRET_KEY")
 DEBUG = get_setting("DEBUG").lower() in {"1", "true"}
+TESTING = any(arg.endswith("test") for arg in sys.argv)
 ALLOWED_HOSTS = ["*"]
 
 INSTALLED_APPS = [
@@ -217,3 +219,8 @@ CSRF_TRUSTED_ORIGINS = [
     "https://trcustoms.org",
     "https://trcustoms.wind.garden",
 ]
+
+
+if TESTING:
+    del REST_FRAMEWORK["DEFAULT_THROTTLE_CLASSES"]
+    del REST_FRAMEWORK["DEFAULT_THROTTLE_RATES"]
