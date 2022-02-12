@@ -13,7 +13,7 @@ const SettingsPage = () => {
   const [enableInfiniteScroll, setEnableInfiniteScroll] = useInfiniteScroll();
 
   useEffect(() => {
-    setTitle("settings");
+    setTitle("Settings");
   }, [setTitle]);
 
   return (

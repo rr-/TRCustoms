@@ -43,7 +43,7 @@ const UserListPage = () => {
   );
 
   useEffect(() => {
-    setTitle("users");
+    setTitle("Users");
   }, [setTitle]);
 
   useEffect(

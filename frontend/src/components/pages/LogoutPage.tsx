@@ -11,7 +11,7 @@ const LogoutPage = () => {
   const { setTitle } = useContext(TitleContext);
 
   useEffect(() => {
-    setTitle("logout");
+    setTitle("Logout");
   }, [setTitle]);
 
   useEffect(() => {

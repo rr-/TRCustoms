@@ -36,7 +36,7 @@ const UserEditPage = () => {
   );
 
   useEffect(() => {
-    setTitle("editing user profile");
+    setTitle("Editing user profile");
   }, [setTitle]);
 
   const handleBack = useCallback(() => {

@@ -31,7 +31,7 @@ const RegisterPage = () => {
   );
 
   useEffect(() => {
-    setTitle("register");
+    setTitle("Register");
   }, [setTitle]);
 
   return (

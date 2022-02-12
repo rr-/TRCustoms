@@ -48,7 +48,7 @@ const ModerationPage = () => {
   );
 
   useEffect(() => {
-    setTitle("moderate");
+    setTitle("Moderate");
   }, [setTitle]);
 
   useEffect(

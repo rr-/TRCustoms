@@ -1,7 +1,6 @@
 import { useEffect } from "react";
 import { createContext } from "react";
 import { useState } from "react";
-import { titleCase } from "src/shared/utils";
 
 interface TitleContextProviderProps {
   children: React.ReactNode;
@@ -19,7 +18,7 @@ const TitleContextProvider = ({ children }: TitleContextProviderProps) => {
 
   useEffect(() => {
     if (title) {
-      document.title = `${BASE_TITLE} - ${titleCase(title)}`;
+      document.title = `${BASE_TITLE} - ${title}`;
     } else {
       document.title = BASE_TITLE;
     }

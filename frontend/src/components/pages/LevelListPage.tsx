@@ -85,7 +85,7 @@ const LevelListPage = () => {
   );
 
   useEffect(() => {
-    setTitle("level search");
+    setTitle("Level search");
   }, [setTitle]);
 
   useEffect(
