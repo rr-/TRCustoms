@@ -145,10 +145,6 @@ const SnapshotDiffView = ({ snapshot }: SnapshotDiffViewProps) => {
     }
   }
 
-  if (!formattedDiffs.length) {
-    return null;
-  }
-
   return (
     <ul className="SnapshotDiffView--list">
       {snapshot.change_type === SnapshotChangeType.Delete ? (
