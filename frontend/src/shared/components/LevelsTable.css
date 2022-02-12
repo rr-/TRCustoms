@@ -21,6 +21,9 @@
 .LevelsTable .DataTable--row {
   display: contents;
 }
+.LevelsTable .DataTable--cell[colspan] {
+  grid-column: 1 / span 2;
+}
 .LevelsTable .DataTable--cell {
   box-sizing: border-box;
   background: var(--levels-table-background-color);

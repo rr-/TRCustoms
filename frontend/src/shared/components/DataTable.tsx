@@ -99,33 +99,22 @@ const DataTableBody = <TItem extends {}, TQuery extends GenericSearchQuery>({
 } & DataTableProps<TItem, TQuery>) => {
   const [activeRow, setActiveRow] = useState<string | null>(null);
 
+  let message: React.ReactNode | null = null;
   if (result.error) {
-    return (
-      <tbody>
-        <tr>
-          <td colSpan={100}>{result.error.message}</td>
-        </tr>
-      </tbody>
-    );
+    message = result.error.message;
+  } else if (result.isLoading || !result.data) {
+    message = <Loader />;
+  } else if (!result.data.results.length) {
+    message = "There are no results to show.";
   }
 
-  if (result.isLoading || !result.data) {
+  if (message) {
     return (
-      <tbody>
-        <tr>
-          <td colSpan={100}>
-            <Loader />
+      <tbody className="DataTable--body">
+        <tr className="DataTable--row">
+          <td className="DataTable--cell" colSpan={100}>
+            {message}
           </td>
-        </tr>
-      </tbody>
-    );
-  }
-
-  if (!result.data.results.length) {
-    return (
-      <tbody>
-        <tr>
-          <td colSpan={100}>There are no results to show.</td>
         </tr>
       </tbody>
     );
@@ -133,7 +122,7 @@ const DataTableBody = <TItem extends {}, TQuery extends GenericSearchQuery>({
 
   return (
     <tbody className="DataTable--body">
-      {result.data.results.map((item) => {
+      {result?.data?.results.map((item) => {
         const key = itemKey(item);
         return (
           <Fragment key={key}>
