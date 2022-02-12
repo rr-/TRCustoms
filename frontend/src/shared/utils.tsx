@@ -174,16 +174,34 @@ const getYoutubeVideoID = (url: string): string | null => {
   return match ? match[1] : null;
 };
 
+const extractErrorMessage = (error: unknown) => {
+  if (!axios.isAxiosError(error)) {
+    return error;
+  }
+  const axiosError = error as AxiosError;
+  if (axiosError.response?.data.detail) {
+    return axiosError.response?.data.detail;
+  }
+  const values = Object.values(axiosError.response?.data);
+  if (values.length === 1 && isString(values[0])) {
+    return values[0];
+  }
+  if (
+    values.length === 1 &&
+    isArray(values[0]) &&
+    values[0].length === 1 &&
+    isString(values[0][0])
+  ) {
+    return values[0][0];
+  }
+  return "Unknown error";
+};
+
 const showAlertOnError = async (func: () => Promise<void>): Promise<void> => {
   try {
     await func();
   } catch (error) {
-    if (axios.isAxiosError(error)) {
-      const axiosError = error as AxiosError;
-      alert(axiosError.response?.data.detail || "Unknown error");
-    } else {
-      alert("Unknown error");
-    }
+    alert(extractErrorMessage(error));
   }
 };
 
