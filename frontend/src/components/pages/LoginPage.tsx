@@ -8,7 +8,6 @@ import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { AuthService } from "src/services/auth.service";
 import { UserService } from "src/services/user.service";
-import type { UserDetails } from "src/services/user.service";
 import { FormGrid } from "src/shared/components/FormGrid";
 import { FormGridButtons } from "src/shared/components/FormGrid";
 import { FormGridFieldSet } from "src/shared/components/FormGrid";
@@ -16,6 +15,7 @@ import { PasswordFormField } from "src/shared/components/formfields/PasswordForm
 import { TextFormField } from "src/shared/components/formfields/TextFormField";
 import { TitleContext } from "src/shared/contexts/TitleContext";
 import { UserContext } from "src/shared/contexts/UserContext";
+import { makeSentence } from "src/shared/utils";
 import { filterFalsyObjectValues } from "src/shared/utils";
 
 const LoginPage = () => {
@@ -36,17 +36,10 @@ const LoginPage = () => {
           const axiosError = error as AxiosError;
           const data = axiosError.response?.data;
           if (axiosError.response?.status === 401) {
-            let user: UserDetails | null = null;
-            try {
-              user = await UserService.getUserByUsername(values.username);
-            } catch (error) {}
-            if (user && !user.is_active) {
-              setStatus({
-                error:
-                  "Your account was not yet activated. Please try again later :)",
-              });
+            if (data.detail) {
+              setStatus({ error: <>{makeSentence(data.detail)}</> });
             } else {
-              setStatus({ error: <>Invalid username or password.</> });
+              setStatus({ error: <>Unknown error.</> });
             }
           } else {
             const errors = {

@@ -156,7 +156,7 @@ REST_FRAMEWORK = {
         "rest_framework.permissions.IsAuthenticated",
     ],
     "DEFAULT_AUTHENTICATION_CLASSES": [
-        "rest_framework_simplejwt.authentication.JWTAuthentication",
+        "trcustoms.authentication.CustomAuthentication",
     ],
     "DEFAULT_THROTTLE_CLASSES": [
         "trcustoms.throttling.UnsafeOperationsRateThrottle"
@@ -173,6 +173,9 @@ SIMPLE_JWT = {
     "UPDATE_LAST_LOGIN": True,
     "ACCESS_TOKEN_LIFETIME": timedelta(hours=1),
     "REFRESH_TOKEN_LIFETIME": timedelta(days=365),
+    "USER_AUTHENTICATION_RULE": (
+        "trcustoms.authentication.user_authentication_rule"
+    ),
 }
 
 LANGUAGE_CODE = "en-us"

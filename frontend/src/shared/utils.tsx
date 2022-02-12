@@ -83,7 +83,12 @@ const validateUserName = (username: string): string | null => {
 };
 
 const titleCase = (input: string): string => {
-  return input[0].toUpperCase() + input.substr(1).toLowerCase();
+  let sentences = input.split(/\. /);
+  return sentences
+    .map(
+      (sentence) => sentence[0].toUpperCase() + sentence.substr(1).toLowerCase()
+    )
+    .join(". ");
 };
 
 const makeSentence = (input: string): string => {
