@@ -19,6 +19,7 @@ class AuditLogListingSerializer(serializers.ModelSerializer):
             "change_type",
             "change_author",
             "changes",
+            "meta",
             "is_action_required",
         ]
 

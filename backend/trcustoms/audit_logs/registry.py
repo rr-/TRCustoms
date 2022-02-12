@@ -1,5 +1,6 @@
 from collections.abc import Callable
 from dataclasses import dataclass, field
+from typing import Any
 
 from django.db import models
 
@@ -9,6 +10,9 @@ class AuditLogModelInfo:
     model_cls: type[models.Model]
     name_getter: Callable[[models.Model], str] = field(
         default_factory=lambda: lambda entity: entity.name
+    )
+    meta_factory: Callable[[models.Model], Any] = field(
+        default_factory=lambda: lambda entity: {}
     )
 
 

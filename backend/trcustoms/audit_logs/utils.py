@@ -1,4 +1,5 @@
 import contextlib
+from typing import Any
 
 from django.contrib.contenttypes.models import ContentType
 from django.db import models
@@ -16,11 +17,16 @@ def make_audit_log(
     changes: list[str],
     change_author: User | None = None,
     is_action_required: bool = False,
+    meta: Any = None,
 ) -> None:
     info = get_registered_model_info(obj)
     object_id = obj.pk
     object_name = info.name_getter(obj)
     object_type = ContentType.objects.get_for_model(obj)
+    if meta is None:
+        meta = info.meta_factory(obj)
+    if meta is None:
+        meta = {}
 
     if not changes:
         return
@@ -40,6 +46,7 @@ def make_audit_log(
         ),
         is_action_required=is_action_required,
         changes=changes,
+        meta=meta,
     )
 
 

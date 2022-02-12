@@ -9,7 +9,13 @@ from trcustoms.models.user import User
 from trcustoms.models.util import DatesInfo
 
 
-@registry.register_model(name_getter=lambda instance: instance.level.name)
+@registry.register_model(
+    name_getter=lambda instance: instance.level.name,
+    meta_factory=lambda instance: {
+        "level_id": instance.level.id,
+        "level_name": instance.level.name,
+    },
+)
 class LevelReview(DatesInfo):
     class ReviewType(models.TextChoices):
         TRLE = ("le", "Legacy (TRLE.net)")
