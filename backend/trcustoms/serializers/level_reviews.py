@@ -3,7 +3,6 @@ from functools import cache
 from django.db.models import Count
 from rest_framework import serializers
 
-from trcustoms import snapshots
 from trcustoms.models import (
     Level,
     LevelReview,
@@ -146,8 +145,3 @@ class LevelReviewDetailsSerializer(LevelReviewListingSerializer):
             return func(instance, validated_data)
 
         return self.handle_m2m(review_factory, validated_data)
-
-
-@snapshots.register(name_getter=lambda review: review.level.name)
-class LevelReviewSnapshotSerializer(LevelReviewListingSerializer):
-    pass

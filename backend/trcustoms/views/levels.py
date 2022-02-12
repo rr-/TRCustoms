@@ -1,12 +1,17 @@
 from django.db.models import F
-from rest_framework import mixins, serializers, status, viewsets
+from rest_framework import mixins, status, viewsets
 from rest_framework.decorators import action
 from rest_framework.generics import get_object_or_404
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 
-from trcustoms.mixins import MultiSerializerMixin, PermissionsMixin
-from trcustoms.models import Level, Snapshot
+from trcustoms.audit_logs.utils import track_model_update
+from trcustoms.mixins import (
+    AuditLogModelWatcherMixin,
+    MultiSerializerMixin,
+    PermissionsMixin,
+)
+from trcustoms.models import Level
 from trcustoms.models.user import UserPermission
 from trcustoms.permissions import (
     AllowNone,
@@ -18,11 +23,11 @@ from trcustoms.serializers import (
     LevelListingSerializer,
     LevelRejectionSerializer,
 )
-from trcustoms.snapshots import make_snapshot
 from trcustoms.utils import parse_bool, parse_ids
 
 
 class LevelViewSet(
+    AuditLogModelWatcherMixin,
     PermissionsMixin,
     MultiSerializerMixin,
     mixins.RetrieveModelMixin,
@@ -154,10 +159,10 @@ class LevelViewSet(
     @action(detail=True, methods=["post"])
     def approve(self, request, pk: int) -> Response:
         level = self.get_object()
-        level.is_approved = True
-        level.rejection_reason = None
-        level.save()
-        make_snapshot(level, request=self.request)
+        with track_model_update(obj=level, request=request):
+            level.is_approved = True
+            level.rejection_reason = None
+            level.save()
         return Response({})
 
     @action(detail=True, methods=["post"])
@@ -166,22 +171,8 @@ class LevelViewSet(
         if not serializer.is_valid():
             return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
         level = self.get_object()
-        level.is_approved = False
-        level.rejection_reason = serializer.data["reason"]
-        level.save()
-        make_snapshot(level, request=self.request)
+        with track_model_update(obj=level, request=request):
+            level.is_approved = False
+            level.rejection_reason = serializer.data["reason"]
+            level.save()
         return Response({})
-
-    def perform_create(self, serializer: serializers.Serializer) -> None:
-        super().perform_create(serializer)
-        serializer.instance.refresh_from_db()
-        make_snapshot(
-            serializer.instance,
-            request=self.request,
-            change_type=Snapshot.ChangeType.CREATE,
-        )
-
-    def perform_update(self, serializer: serializers.Serializer) -> None:
-        super().perform_update(serializer)
-        serializer.instance.refresh_from_db()
-        make_snapshot(serializer.instance, request=self.request)

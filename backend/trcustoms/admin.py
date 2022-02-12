@@ -6,7 +6,13 @@ from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.contrib.contenttypes.models import ContentType
 from django.core.exceptions import ValidationError
 
+from trcustoms.audit_logs.utils import (
+    track_model_creation,
+    track_model_deletion,
+    track_model_update,
+)
 from trcustoms.models import (
+    AuditLog,
     Level,
     LevelDifficulty,
     LevelDuration,
@@ -20,37 +26,32 @@ from trcustoms.models import (
     RatingClass,
     ReviewTemplateAnswer,
     ReviewTemplateQuestion,
-    Snapshot,
     UploadedFile,
     User,
 )
 from trcustoms.ratings import get_review_score
-from trcustoms.snapshots import make_snapshot
 
 
-class SnapshotAdminMixin:
+class AuditLogAdminMixin:
     def log_addition(self, request, obj, message):
         super().log_addition(request, obj, message)
-        obj = self.get_snapshot_obj(obj)
-        make_snapshot(
-            obj, request=request, change_type=Snapshot.ChangeType.CREATE
+        obj = self.get_audit_log_obj(obj)
+        track_model_creation(
+            obj, request=request, change_type=AuditLog.ChangeType.CREATE
         )
 
     def log_change(self, request, obj, message):
         super().log_change(request, obj, message)
-        obj = self.get_snapshot_obj(obj)
-        make_snapshot(
-            obj, request=request, change_type=Snapshot.ChangeType.UPDATE
-        )
+        obj = self.get_audit_log_obj(obj)
+        # TODO: figure out a way to track more detailed changes
+        track_model_update(obj, request=request, force=True)
 
     def log_deletion(self, request, obj, object_repr):
         super().log_deletion(request, obj, object_repr)
-        obj = self.get_snapshot_obj(obj)
-        make_snapshot(
-            obj, request=request, change_type=Snapshot.ChangeType.DELETE
-        )
+        obj = self.get_audit_log_obj(obj)
+        track_model_deletion(obj, request=request)
 
-    def get_snapshot_obj(self, obj):
+    def get_audit_log_obj(self, obj):
         return obj
 
 
@@ -127,7 +128,7 @@ class UserAdmin(BaseUserAdmin):
 
 
 @admin.register(LevelEngine)
-class LevelEngineAdmin(SnapshotAdminMixin, admin.ModelAdmin):
+class LevelEngineAdmin(AuditLogAdminMixin, admin.ModelAdmin):
     ordering = ["name"]
     search_fields = ["name"]
     readonly_fields = ["created", "last_updated"]
@@ -135,7 +136,7 @@ class LevelEngineAdmin(SnapshotAdminMixin, admin.ModelAdmin):
 
 
 @admin.register(LevelDifficulty)
-class LevelDifficultyAdmin(SnapshotAdminMixin, admin.ModelAdmin):
+class LevelDifficultyAdmin(AuditLogAdminMixin, admin.ModelAdmin):
     ordering = ["position"]
     search_fields = ["name"]
     readonly_fields = ["created", "last_updated"]
@@ -143,7 +144,7 @@ class LevelDifficultyAdmin(SnapshotAdminMixin, admin.ModelAdmin):
 
 
 @admin.register(LevelDuration)
-class LevelDurationAdmin(SnapshotAdminMixin, admin.ModelAdmin):
+class LevelDurationAdmin(AuditLogAdminMixin, admin.ModelAdmin):
     ordering = ["position"]
     search_fields = ["name"]
     readonly_fields = ["created", "last_updated"]
@@ -151,7 +152,7 @@ class LevelDurationAdmin(SnapshotAdminMixin, admin.ModelAdmin):
 
 
 @admin.register(LevelGenre)
-class LevelGenreAdmin(SnapshotAdminMixin, admin.ModelAdmin):
+class LevelGenreAdmin(AuditLogAdminMixin, admin.ModelAdmin):
     ordering = ["name"]
     search_fields = ["name"]
     readonly_fields = ["created", "last_updated"]
@@ -159,7 +160,7 @@ class LevelGenreAdmin(SnapshotAdminMixin, admin.ModelAdmin):
 
 
 @admin.register(LevelTag)
-class LevelTagAdmin(SnapshotAdminMixin, admin.ModelAdmin):
+class LevelTagAdmin(AuditLogAdminMixin, admin.ModelAdmin):
     ordering = ["name"]
     search_fields = ["name"]
     readonly_fields = ["created", "last_updated"]
@@ -172,7 +173,7 @@ class LevelExternalLinkInline(admin.StackedInline):
 
 
 @admin.register(Level)
-class LevelAdmin(SnapshotAdminMixin, admin.ModelAdmin):
+class LevelAdmin(AuditLogAdminMixin, admin.ModelAdmin):
     ordering = ["-created"]
     search_fields = [
         "name",
@@ -212,19 +213,19 @@ class LevelAdmin(SnapshotAdminMixin, admin.ModelAdmin):
 
 
 @admin.register(LevelScreenshot)
-class LevelScreenshotAdmin(SnapshotAdminMixin, admin.ModelAdmin):
+class LevelScreenshotAdmin(AuditLogAdminMixin, admin.ModelAdmin):
     ordering = ["level", "position"]
     list_display = ["id", "level", "position", "created", "last_updated"]
     search_fields = ["level__name"]
     readonly_fields = ["created", "last_updated"]
     raw_id_fields = ["level", "file"]
 
-    def get_snapshot_obj(self, obj):
+    def get_audit_log_obj(self, obj):
         return obj.level
 
 
 @admin.register(LevelFile)
-class LevelFileAdmin(SnapshotAdminMixin, admin.ModelAdmin):
+class LevelFileAdmin(AuditLogAdminMixin, admin.ModelAdmin):
     ordering = ["level", "version"]
     list_display = [
         "id",
@@ -238,12 +239,12 @@ class LevelFileAdmin(SnapshotAdminMixin, admin.ModelAdmin):
     readonly_fields = ["created", "last_updated", "version"]
     raw_id_fields = ["level", "file"]
 
-    def get_snapshot_obj(self, obj):
+    def get_audit_log_obj(self, obj):
         return obj.level
 
 
 @admin.register(LevelReview)
-class LevelReviewAdmin(SnapshotAdminMixin, admin.ModelAdmin):
+class LevelReviewAdmin(AuditLogAdminMixin, admin.ModelAdmin):
     ordering = ["-created"]
     list_display = [
         "id",
@@ -289,7 +290,7 @@ class UploadedFileAdmin(admin.ModelAdmin):
     readonly_fields = ["md5sum", "size", "created", "last_updated"]
 
 
-class SnapshotObjectTypeFilter(SimpleListFilter):
+class AuditLogObjectTypeFilter(SimpleListFilter):
     title = "Object Type"
     parameter_name = "object_type"
 
@@ -307,11 +308,11 @@ class SnapshotObjectTypeFilter(SimpleListFilter):
         return queryset
 
 
-@admin.register(Snapshot)
-class SnapshotAdmin(ReadOnlyAdminMixin, admin.ModelAdmin):
+@admin.register(AuditLog)
+class AuditLogAdmin(ReadOnlyAdminMixin, admin.ModelAdmin):
     list_filter = [
         "change_type",
-        SnapshotObjectTypeFilter,
+        AuditLogObjectTypeFilter,
     ]
     search_fields = [
         "object_id",

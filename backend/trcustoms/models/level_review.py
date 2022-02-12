@@ -1,6 +1,7 @@
 from django.db import models
 from django.db.models import UniqueConstraint
 
+from trcustoms.audit_logs import registry
 from trcustoms.models.level import Level
 from trcustoms.models.rating_class import RatingClass
 from trcustoms.models.review_template import ReviewTemplateAnswer
@@ -8,6 +9,7 @@ from trcustoms.models.user import User
 from trcustoms.models.util import DatesInfo
 
 
+@registry.register_model(name_getter=lambda instance: instance.level.name)
 class LevelReview(DatesInfo):
     class ReviewType(models.TextChoices):
         TRLE = ("le", "Legacy (TRLE.net)")

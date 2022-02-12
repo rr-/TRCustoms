@@ -152,7 +152,7 @@ const ReviewForm = ({ level, review, onGoBack, onSubmit }: ReviewFormProps) => {
           let outReview = await ReviewService.update(review.id, payload);
           queryClient.removeQueries("levels");
           queryClient.removeQueries("reviews");
-          queryClient.removeQueries("snapshots");
+          queryClient.removeQueries("auditLogs");
           onSubmit?.(outReview);
 
           setStatus({
@@ -167,7 +167,7 @@ const ReviewForm = ({ level, review, onGoBack, onSubmit }: ReviewFormProps) => {
           let outReview = await ReviewService.create(payload);
           queryClient.removeQueries("levels");
           queryClient.removeQueries("reviews");
-          queryClient.removeQueries("snapshots");
+          queryClient.removeQueries("auditLogs");
           onSubmit?.(outReview);
 
           setStatus({

@@ -1,18 +1,17 @@
-import "./SnapshotsTable.css";
+import "./AuditLogTable.css";
 import { useQueryClient } from "react-query";
 import { useQuery } from "react-query";
-import { SnapshotService } from "src/services/snapshot.service";
-import type { SnapshotListing } from "src/services/snapshot.service";
-import { SnapshotObjectType } from "src/services/snapshot.service";
-import type { SnapshotSearchResult } from "src/services/snapshot.service";
-import type { SnapshotSearchQuery } from "src/services/snapshot.service";
+import { AuditLogService } from "src/services/auditLog.service";
+import type { AuditLogListing } from "src/services/auditLog.service";
+import { AuditLogObjectType } from "src/services/auditLog.service";
+import type { AuditLogSearchResult } from "src/services/auditLog.service";
+import type { AuditLogSearchQuery } from "src/services/auditLog.service";
 import { UserPermission } from "src/services/user.service";
 import type { DataTableColumn } from "src/shared/components/DataTable";
 import { DataTable } from "src/shared/components/DataTable";
 import { Loader } from "src/shared/components/Loader";
 import { PermissionGuard } from "src/shared/components/PermissionGuard";
 import { PushButton } from "src/shared/components/PushButton";
-import { SnapshotDiffView } from "src/shared/components/SnapshotDiffView";
 import { EngineLink } from "src/shared/components/links/EngineLink";
 import { GenreLink } from "src/shared/components/links/GenreLink";
 import { LevelLink } from "src/shared/components/links/LevelLink";
@@ -21,104 +20,104 @@ import { UserLink } from "src/shared/components/links/UserLink";
 import { formatDate } from "src/shared/utils";
 import { EMPTY_INPUT_PLACEHOLDER } from "src/shared/utils";
 
-interface SnapshotsTableProps {
+interface AuditLogTableProps {
   showObjects: boolean;
   showApprovalButton: boolean;
-  searchQuery: SnapshotSearchQuery;
+  searchQuery: AuditLogSearchQuery;
   onSearchQueryChange?:
-    | ((searchQuery: SnapshotSearchQuery) => void)
+    | ((searchQuery: AuditLogSearchQuery) => void)
     | undefined;
 }
 
-interface SnapshotsTableObjectLinkProps {
-  snapshot: SnapshotListing;
+interface AuditLogTableObjectLinkProps {
+  auditLog: AuditLogListing;
 }
 
-const SnapshotsTableObjectLink = ({
-  snapshot,
-}: SnapshotsTableObjectLinkProps) => {
-  switch (snapshot.object_type) {
-    case SnapshotObjectType.Level:
+const AuditLogTableObjectLink = ({
+  auditLog,
+}: AuditLogTableObjectLinkProps) => {
+  switch (auditLog.object_type) {
+    case AuditLogObjectType.Level:
       return (
         <LevelLink
           level={{
-            id: +snapshot.object_id,
-            name: snapshot.object_name,
+            id: +auditLog.object_id,
+            name: auditLog.object_name,
           }}
         >
-          Level {snapshot.object_name}
+          Level {auditLog.object_name}
         </LevelLink>
       );
 
-    case SnapshotObjectType.LevelEngine:
+    case AuditLogObjectType.LevelEngine:
       return (
         <EngineLink
           engine={{
-            id: +snapshot.object_id,
-            name: snapshot.object_name,
+            id: +auditLog.object_id,
+            name: auditLog.object_name,
           }}
         >
-          Engine {snapshot.object_name}
+          Engine {auditLog.object_name}
         </EngineLink>
       );
 
-    case SnapshotObjectType.LevelGenre:
+    case AuditLogObjectType.LevelGenre:
       return (
         <GenreLink
           genre={{
-            id: +snapshot.object_id,
-            name: snapshot.object_name,
+            id: +auditLog.object_id,
+            name: auditLog.object_name,
           }}
         >
-          Genre {snapshot.object_name}
+          Genre {auditLog.object_name}
         </GenreLink>
       );
 
-    case SnapshotObjectType.LevelTag:
+    case AuditLogObjectType.LevelTag:
       return (
         <TagLink
           tag={{
-            id: +snapshot.object_id,
-            name: snapshot.object_name,
+            id: +auditLog.object_id,
+            name: auditLog.object_name,
           }}
         >
-          Tag {snapshot.object_name}
+          Tag {auditLog.object_name}
         </TagLink>
       );
 
-    case SnapshotObjectType.LevelReview:
+    case AuditLogObjectType.LevelReview:
       return (
         <LevelLink
           level={{
-            id: snapshot.object_desc.level.id,
-            name: snapshot.object_desc.level.name,
+            id: +auditLog.object_id,
+            name: auditLog.object_name,
           }}
         >
-          Review of {snapshot.object_desc.level.name}
+          Review of {auditLog.object_name}
         </LevelLink>
       );
 
-    case SnapshotObjectType.LevelDuration:
-      return <>{`Duration ${snapshot.object_name}`}</>;
+    case AuditLogObjectType.LevelDuration:
+      return <>{`Duration ${auditLog.object_name}`}</>;
 
-    case SnapshotObjectType.LevelDifficulty:
-      return <>{`Difficulty ${snapshot.object_name}`}</>;
+    case AuditLogObjectType.LevelDifficulty:
+      return <>{`Difficulty ${auditLog.object_name}`}</>;
 
     default:
-      return <>{`${snapshot.object_type} #${snapshot.object_id}`}</>;
+      return <>{`${auditLog.object_type} #${auditLog.object_id}`}</>;
   }
 };
 
-const SnapshotsTable = ({
+const AuditLogTable = ({
   showObjects,
   showApprovalButton,
   searchQuery,
   onSearchQueryChange,
-}: SnapshotsTableProps) => {
+}: AuditLogTableProps) => {
   const queryClient = useQueryClient();
-  const result = useQuery<SnapshotSearchResult, Error>(
-    ["snapshots", SnapshotService.searchSnapshots, searchQuery],
-    async () => SnapshotService.searchSnapshots(searchQuery)
+  const result = useQuery<AuditLogSearchResult, Error>(
+    ["auditLogs", AuditLogService.searchAuditLogs, searchQuery],
+    async () => AuditLogService.searchAuditLogs(searchQuery)
   );
 
   if (result.error) {
@@ -129,15 +128,15 @@ const SnapshotsTable = ({
     return <Loader />;
   }
 
-  const approveSnapshot = async (snapshot: SnapshotListing) => {
+  const approveAuditLog = async (auditLog: AuditLogListing) => {
     if (window.confirm("Are you sure this change is OK?")) {
-      await SnapshotService.approve(snapshot.id);
+      await AuditLogService.approve(auditLog.id);
       result.refetch();
-      queryClient.removeQueries("snapshots");
+      queryClient.removeQueries("auditLogs");
     }
   };
 
-  const columns: DataTableColumn<SnapshotListing>[] = [
+  const columns: DataTableColumn<AuditLogListing>[] = [
     {
       name: "created",
       label: "Created",
@@ -158,8 +157,8 @@ const SnapshotsTable = ({
           {
             name: "object",
             label: "Object",
-            itemElement: ({ item }: { item: SnapshotListing }) => (
-              <SnapshotsTableObjectLink snapshot={item} />
+            itemElement: ({ item }: { item: AuditLogListing }) => (
+              <AuditLogTableObjectLink auditLog={item} />
             ),
           },
         ]
@@ -167,7 +166,15 @@ const SnapshotsTable = ({
     {
       name: "changes",
       label: "Changes",
-      itemElement: ({ item }) => <SnapshotDiffView snapshot={item} />,
+      itemElement: ({ item }) => (
+        <ul className="AuditLogTable--changeList">
+          {item.changes.map((change, i) => (
+            <li key={i} className="AuditLogTable--changeListItem">
+              {change}
+            </li>
+          ))}
+        </ul>
+      ),
     },
     {
       name: "review",
@@ -177,12 +184,12 @@ const SnapshotsTable = ({
           <UserLink user={item.reviewer} />
         ) : showApprovalButton ? (
           <PermissionGuard
-            require={UserPermission.reviewSnapshots}
+            require={UserPermission.reviewAuditLogs}
             alternative={EMPTY_INPUT_PLACEHOLDER}
           >
             <PushButton
               disableTimeout={true}
-              onClick={() => approveSnapshot(item)}
+              onClick={() => approveAuditLog(item)}
             >
               Mark as read
             </PushButton>
@@ -193,21 +200,21 @@ const SnapshotsTable = ({
     },
   ];
 
-  const itemKey = (snapshot: SnapshotListing) => `${snapshot.id}`;
+  const itemKey = (auditLog: AuditLogListing) => `${auditLog.id}`;
 
   return (
-    <div className="SnapshotsTable">
+    <div className="AuditLogTable">
       <DataTable
-        className="SnapshotsTable"
-        queryName="snapshots"
+        className="AuditLogTable"
+        queryName="auditLogs"
         columns={columns}
         itemKey={itemKey}
         searchQuery={searchQuery}
-        searchFunc={SnapshotService.searchSnapshots}
+        searchFunc={AuditLogService.searchAuditLogs}
         onSearchQueryChange={onSearchQueryChange}
       />
     </div>
   );
 };
 
-export { SnapshotsTable };
+export { AuditLogTable };

@@ -1,16 +1,16 @@
 import { useState } from "react";
 import { useEffect } from "react";
 import { useContext } from "react";
-import type { SnapshotSearchQuery } from "src/services/snapshot.service";
+import type { AuditLogSearchQuery } from "src/services/auditLog.service";
+import { AuditLogTable } from "src/shared/components/AuditLogTable";
 import { InfoMessage } from "src/shared/components/InfoMessage";
 import { InfoMessageType } from "src/shared/components/InfoMessage";
 import { SectionHeader } from "src/shared/components/SectionHeader";
-import { SnapshotsTable } from "src/shared/components/SnapshotsTable";
 import { TitleContext } from "src/shared/contexts/TitleContext";
 
 const ModerationPage = () => {
   const { setTitle } = useContext(TitleContext);
-  const [searchQuery, setSearchQuery] = useState<SnapshotSearchQuery>({
+  const [searchQuery, setSearchQuery] = useState<AuditLogSearchQuery>({
     isReviewed: false,
     page: null,
     sort: "-created",
@@ -33,7 +33,7 @@ const ModerationPage = () => {
         New levels can be approved on the individual level page.
       </InfoMessage>
       <SectionHeader>Recent actions</SectionHeader>
-      <SnapshotsTable
+      <AuditLogTable
         showObjects={true}
         showApprovalButton={true}
         searchQuery={searchQuery}

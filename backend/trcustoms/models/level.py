@@ -1,5 +1,6 @@
 from django.db import models
 
+from trcustoms.audit_logs import registry
 from trcustoms.models.level_difficulty import LevelDifficulty
 from trcustoms.models.level_duration import LevelDuration
 from trcustoms.models.level_engine import LevelEngine
@@ -11,6 +12,7 @@ from trcustoms.models.user import User
 from trcustoms.models.util import DatesInfo
 
 
+@registry.register_model(name_getter=lambda instance: instance.name)
 class Level(DatesInfo):
     name = models.CharField(max_length=100)
     description = models.TextField(max_length=5000, null=True, blank=True)

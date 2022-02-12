@@ -3,7 +3,6 @@ from typing import Any
 from django.conf import settings
 from rest_framework import serializers
 
-from trcustoms import snapshots
 from trcustoms.models import (
     Level,
     LevelDifficulty,
@@ -255,7 +254,7 @@ class LevelDetailsSerializer(LevelListingSerializer):
         if authors is not None:
             level.authors.set(authors)
 
-        # be smart about the updates to make sure snapshots do not report
+        # be smart about the updates to make sure audit logs do not report
         # extraneous additions and deletions
 
         if external_links is not None:
@@ -320,11 +319,6 @@ class LevelDetailsSerializer(LevelListingSerializer):
             "file_id",
             "trle_id",
         ]
-
-
-@snapshots.register
-class LevelSnapshotSerializer(LevelDetailsSerializer):
-    pass
 
 
 class LevelRejectionSerializer(serializers.Serializer):

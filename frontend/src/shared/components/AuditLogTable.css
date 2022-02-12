@@ -1,0 +1,14 @@
+.AuditLogTable .DataTable--row td {
+  border-bottom: 1px solid var(--label-background-color);
+}
+.AuditLogTable--changeList {
+  list-style-type: none;
+  display: inline-block;
+  margin: 0;
+  padding: 0;
+}
+.AuditLogTable--changeListItem {
+  display: block;
+  margin: 0;
+  padding: 0;
+}

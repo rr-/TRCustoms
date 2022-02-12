@@ -1,6 +1,6 @@
+from trcustoms.audit_logs.utils import track_model_deletion
 from trcustoms.celery import app, logger
-from trcustoms.models import LevelTag, Snapshot
-from trcustoms.snapshots import make_snapshot
+from trcustoms.models import LevelTag
 from trcustoms.utils import check_model_references
 
 
@@ -13,7 +13,5 @@ def delete_unreferenced_tags() -> None:
 
         assert not check_model_references(tag)
 
-        make_snapshot(
-            tag, request=None, change_type=Snapshot.ChangeType.DELETE
-        )
+        track_model_deletion(tag, request=None)
         tag.delete()
