@@ -4,6 +4,7 @@
   grid-template-columns: min-content 6fr;
   grid-template-rows: min-content 1fr;
   gap: 1rem 1rem;
+  align-items: flex-start;
 }
 #LevelListPage--sidebar {
   grid-area: sidebar;

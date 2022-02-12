@@ -17,7 +17,7 @@ import { PushButton } from "src/shared/components/PushButton";
 import { QueryPersister } from "src/shared/components/QueryPersister";
 import { deserializeGenericSearchQuery } from "src/shared/components/QueryPersister";
 import { serializeGenericSearchQuery } from "src/shared/components/QueryPersister";
-import { SectionHeader } from "src/shared/components/SectionHeader";
+import { SectionHeader } from "src/shared/components/Section";
 import { SidebarBox } from "src/shared/components/SidebarBox";
 import { CheckboxFormField } from "src/shared/components/formfields/CheckboxFormField";
 import { DropDownFormField } from "src/shared/components/formfields/DropDownFormField";

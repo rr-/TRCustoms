@@ -5,7 +5,7 @@ import type { AuditLogSearchQuery } from "src/services/auditLog.service";
 import { AuditLogTable } from "src/shared/components/AuditLogTable";
 import { InfoMessage } from "src/shared/components/InfoMessage";
 import { InfoMessageType } from "src/shared/components/InfoMessage";
-import { SectionHeader } from "src/shared/components/SectionHeader";
+import { SectionHeader } from "src/shared/components/Section";
 import { TitleContext } from "src/shared/contexts/TitleContext";
 
 const ModerationPage = () => {

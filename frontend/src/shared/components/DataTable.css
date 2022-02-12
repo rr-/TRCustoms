@@ -19,7 +19,7 @@
 }
 
 .DataTable .DataTable--details td {
-  background: var(--sidebar-background-color);
+  background: var(--table-details-background-color);
   padding: 1rem;
 }
 .DataTable .DataTable--details td > *:first-child {

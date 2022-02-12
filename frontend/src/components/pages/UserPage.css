@@ -1,4 +1,4 @@
-#UserPage {
+.UserPage {
   display: grid;
   grid-template-areas:
     "header header"
@@ -8,28 +8,28 @@
   gap: 1.5rem;
 }
 
-#UserPage--header {
+.UserPage--header {
   grid-area: header;
 }
-#UserPage--sidebar {
+.UserPage--sidebar {
   grid-area: sidebar;
   white-space: nowrap;
 }
-#UserPage--main {
+.UserPage--main {
   width: 100%;
   grid-area: main;
 }
 
-#UserPage--picture img {
+.UserPage--picture img {
   width: 100%;
   display: block;
 }
 
-#UserPage--header :first-child,
-#UserPage--basicInfo :first-child {
+.UserPage--header :first-child,
+.UserPage--basicInfo :first-child {
   margin-top: 0;
 }
-#UserPage--header :last-child {
+.UserPage--header :last-child {
   margin-bottom: 0;
 }
 

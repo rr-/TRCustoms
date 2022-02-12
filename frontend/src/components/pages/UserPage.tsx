@@ -16,7 +16,8 @@ import { Markdown } from "src/shared/components/Markdown";
 import { PermissionGuard } from "src/shared/components/PermissionGuard";
 import { PushButton } from "src/shared/components/PushButton";
 import { ReviewsList } from "src/shared/components/ReviewsList";
-import { SectionHeader } from "src/shared/components/SectionHeader";
+import { Section } from "src/shared/components/Section";
+import { SectionHeader } from "src/shared/components/Section";
 import { SidebarBox } from "src/shared/components/SidebarBox";
 import { UserPicture } from "src/shared/components/UserPicture";
 import { TitleContext } from "src/shared/contexts/TitleContext";
@@ -79,8 +80,8 @@ const UserPage = () => {
   const user = userResult.data;
 
   return (
-    <div id="UserPage">
-      <header id="UserPage--header">
+    <div className="UserPage">
+      <header className="UserPage--header">
         <h1 className="UserPage--headerWrapper">{user.username}'s profile</h1>
         {user.is_active &&
           (user.first_name || user.last_name) &&
@@ -91,10 +92,10 @@ const UserPage = () => {
           )}
       </header>
 
-      <aside id="UserPage--sidebar">
+      <aside className="UserPage--sidebar">
         <SidebarBox
           header={
-            <div id="UserPage--picture">
+            <div className="UserPage--picture">
               <UserPicture user={user} />
             </div>
           }
@@ -155,31 +156,32 @@ const UserPage = () => {
         </SidebarBox>
       </aside>
 
-      <div id="UserPage--main">
-        <section id="UserPage--basicInfo">
+      <div className="UserPage--main">
+        <Section className="UserPage--basicInfo">
           <SectionHeader>About</SectionHeader>
           {user.is_active && user.bio ? (
             <Markdown children={user.bio} />
           ) : (
             <p>This user prefers to keep an air of mystery around them.</p>
           )}
-        </section>
+        </Section>
 
-        <section id="UserPage--authoredLevels">
+        <Section className="UserPage--authoredLevels">
           <SectionHeader>Authored levels</SectionHeader>
           <LevelsTable
             searchQuery={levelSearchQuery}
             onSearchQueryChange={setLevelSearchQuery}
           />
-        </section>
+        </Section>
 
-        <section id="UserPage--reviewedLevels">
+        <Section className="UserPage--reviewedLevels">
+          <SectionHeader>Reviews</SectionHeader>
           <ReviewsList
             showLevels={true}
             searchQuery={reviewSearchQuery}
             onSearchQueryChange={setReviewSearchQuery}
           />
-        </section>
+        </Section>
       </div>
     </div>
   );

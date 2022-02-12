@@ -10,7 +10,6 @@ import { DataList } from "src/shared/components/DataList";
 import { Markdown } from "src/shared/components/Markdown";
 import { PermissionGuard } from "src/shared/components/PermissionGuard";
 import { PushButton } from "src/shared/components/PushButton";
-import { SectionHeader } from "src/shared/components/SectionHeader";
 import { UserPicture } from "src/shared/components/UserPicture";
 import { LevelLink } from "src/shared/components/links/LevelLink";
 import { UserLink } from "src/shared/components/links/UserLink";
@@ -115,20 +114,17 @@ const ReviewsList = ({
   onSearchQueryChange,
 }: ReviewsListProps) => {
   return (
-    <div className="ReviewsList">
-      <SectionHeader>Reviews</SectionHeader>
-      <DataList
-        searchQuery={searchQuery}
-        onResultCountChange={onResultCountChange}
-        queryName="reviews"
-        onSearchQueryChange={onSearchQueryChange}
-        searchFunc={ReviewService.searchReviews}
-        itemKey={(review: ReviewListing) => review.id.toString()}
-        itemView={(review: ReviewListing) => (
-          <ReviewView review={review} showLevels={showLevels} />
-        )}
-      />
-    </div>
+    <DataList
+      searchQuery={searchQuery}
+      onResultCountChange={onResultCountChange}
+      queryName="reviews"
+      onSearchQueryChange={onSearchQueryChange}
+      searchFunc={ReviewService.searchReviews}
+      itemKey={(review: ReviewListing) => review.id.toString()}
+      itemView={(review: ReviewListing) => (
+        <ReviewView review={review} showLevels={showLevels} />
+      )}
+    />
   );
 };
 

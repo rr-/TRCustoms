@@ -29,7 +29,8 @@ import { MediumThumbnails } from "src/shared/components/MediumThumbnails";
 import { PermissionGuard } from "src/shared/components/PermissionGuard";
 import { PushButton } from "src/shared/components/PushButton";
 import { ReviewsList } from "src/shared/components/ReviewsList";
-import { SectionHeader } from "src/shared/components/SectionHeader";
+import { Section } from "src/shared/components/Section";
+import { SectionHeader } from "src/shared/components/Section";
 import { SidebarBox } from "src/shared/components/SidebarBox";
 import { EngineLink } from "src/shared/components/links/EngineLink";
 import { GenreLink } from "src/shared/components/links/GenreLink";
@@ -140,8 +141,8 @@ const LevelPage = () => {
     alert("This file is no longer available on our website.");
 
   return (
-    <div id="LevelPage">
-      <header id="LevelPage--header">
+    <div className="LevelPage">
+      <header className="LevelPage--header">
         <h1 className="LevelPage--headerWrapper">
           {level.name.split(/(\s*[:-]\s*)/).map((word, i) => (
             <span key={i} className="LevelPage--headerPart">
@@ -151,10 +152,10 @@ const LevelPage = () => {
         </h1>
       </header>
 
-      <aside id="LevelPage--sidebar">
+      <aside className="LevelPage--sidebar">
         <SidebarBox
           header={
-            <div id="LevelPage--cover">
+            <div className="LevelPage--cover">
               <MediumThumbnail
                 displayMode={DisplayMode.Cover}
                 file={level.cover}
@@ -234,7 +235,7 @@ const LevelPage = () => {
             </>
           }
         >
-          <dl id="LevelPage--basicInfo">
+          <dl className="LevelPage--basicInfo">
             <dt>Author(s)</dt>
             <dd>
               {level.authors.length ? (
@@ -380,7 +381,7 @@ const LevelPage = () => {
         </SidebarBox>
       </aside>
 
-      <div id="LevelPage--main">
+      <div className="LevelPage--main">
         {level.is_approved || (
           <InfoMessage type={InfoMessageType.Warning}>
             {level.rejection_reason ? (
@@ -395,32 +396,33 @@ const LevelPage = () => {
         )}
 
         {!!level.screenshots.length && (
-          <section id="LevelPage--media">
+          <Section className="LevelPage--media">
             <MediumThumbnails
               displayMode={DisplayMode.Contain}
               files={level.screenshots.map((screenshot) => screenshot.file)}
               links={showcaseLinks}
             />
-          </section>
+          </Section>
         )}
 
-        <section id="LevelPage--basicInfo">
+        <Section className="LevelPage--basicInfo">
           <SectionHeader>About the game</SectionHeader>
           {level.description ? (
             <Markdown children={level.description} />
           ) : (
             <p>This level has no description yet.</p>
           )}
-        </section>
+        </Section>
 
-        <section id="LevelPage--reviews">
+        <Section className="LevelPage--reviews">
+          <SectionHeader>Reviews</SectionHeader>
           <ReviewsList
             showLevels={false}
             searchQuery={reviewsSearchQuery}
             onResultCountChange={setReviewCount}
             onSearchQueryChange={setReviewsSearchQuery}
           />
-        </section>
+        </Section>
       </div>
     </div>
   );
