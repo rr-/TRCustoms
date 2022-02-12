@@ -82,10 +82,13 @@ class LevelReviewDetailsSerializer(LevelReviewListingSerializer):
     def validate(self, data):
         validated_data = super().validate(data)
 
-        if "author" not in validated_data:
-            validated_data["author"] = self.context["request"].user
+        author = (
+            self.instance.author
+            if self.instance
+            else self.context["request"].user
+        )
+        validated_data["author"] = author
 
-        author = validated_data.get("author", None)
         level = validated_data.get("level", None)
         if (
             level
@@ -96,7 +99,7 @@ class LevelReviewDetailsSerializer(LevelReviewListingSerializer):
             raise serializers.ValidationError(
                 "This user has already reviewed this level."
             )
-        if level and author and level.authors.filter(id=author.id).exists():
+        if level and level.authors.filter(id=author.id).exists():
             raise serializers.ValidationError("Cannot review own level.")
 
         # validate that for each question there is exactly one answer.
