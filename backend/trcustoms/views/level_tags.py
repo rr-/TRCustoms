@@ -23,6 +23,7 @@ class LevelTagViewSet(
     PermissionsMixin,
     MultiSerializerMixin,
     mixins.CreateModelMixin,
+    mixins.UpdateModelMixin,
     mixins.DestroyModelMixin,
     mixins.ListModelMixin,
     viewsets.GenericViewSet,
@@ -33,16 +34,20 @@ class LevelTagViewSet(
 
     permission_classes = [AllowNone]
     permission_classes_by_action = {
-        "create": [IsAuthenticated],
         "list": [AllowAny],
         "retrieve": [IsAuthenticated],
         "stats": [AllowAny],
+        "create": [IsAuthenticated],
+        "update": [HasPermission(UserPermission.EDIT_TAGS)],
+        "partial_update": [HasPermission(UserPermission.EDIT_TAGS)],
         "destroy": [HasPermission(UserPermission.EDIT_TAGS)],
     }
 
     serializer_class = LevelTagListingSerializer
     serializer_class_by_action = {
         "create": LevelTagDetailsSerializer,
+        "update": LevelTagDetailsSerializer,
+        "partial_update": LevelTagDetailsSerializer,
     }
 
     @action(detail=True)

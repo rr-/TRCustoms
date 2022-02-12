@@ -12,6 +12,7 @@ import { PermissionGuard } from "src/shared/components/PermissionGuard";
 import { PushButton } from "src/shared/components/PushButton";
 import { TagLink } from "src/shared/components/links/TagLink";
 import { formatDate } from "src/shared/utils";
+import { showAlertOnError } from "src/shared/utils";
 
 interface TagsTableProps {
   searchQuery: TagSearchQuery;
@@ -33,11 +34,25 @@ const TagsTableDetails = ({ tag }: TagsTableDetailsProps) => {
     return <Loader />;
   }
 
-  const deleteTag = async () => {
-    if (window.confirm(`Really delete tag ${tag.name}?`)) {
-      await TagService.delete(tag.id);
+  const renameTag = async () => {
+    let newTagName = window.prompt(`Enter new name for ${tag.name}:`);
+    if (!newTagName) {
+      return;
+    }
+    showAlertOnError(async () => {
+      await TagService.update(tag.id, { name: newTagName as string });
       queryClient.removeQueries("tags");
       queryClient.removeQueries("auditLogs");
+    });
+  };
+
+  const deleteTag = async () => {
+    if (window.confirm(`Really delete tag ${tag.name}?`)) {
+      showAlertOnError(async () => {
+        await TagService.delete(tag.id);
+        queryClient.removeQueries("tags");
+        queryClient.removeQueries("auditLogs");
+      });
     }
   };
 
@@ -61,6 +76,9 @@ const TagsTableDetails = ({ tag }: TagsTableDetailsProps) => {
         <p>Not used with other tags.</p>
       )}
       <PermissionGuard require={UserPermission.editTags}>
+        <PushButton disableTimeout={true} onClick={() => renameTag()}>
+          Rename
+        </PushButton>
         <PushButton disableTimeout={true} onClick={() => deleteTag()}>
           Delete
         </PushButton>
