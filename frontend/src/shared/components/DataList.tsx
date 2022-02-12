@@ -1,3 +1,4 @@
+import "./DataList.css";
 import { useRef } from "react";
 import { Fragment } from "react";
 import { useState } from "react";
@@ -54,7 +55,7 @@ const PagedDataList = <TItem extends {}, TQuery extends GenericSearchQuery>({
   }
 
   return (
-    <div className={`DataList ${className}`}>
+    <div className={`DataList ${className || ""}`}>
       {result.data.results.length ? (
         result.data.results.map((item) => (
           <Fragment key={itemKey(item)}>{itemView(item)}</Fragment>
