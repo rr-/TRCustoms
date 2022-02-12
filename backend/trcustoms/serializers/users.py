@@ -4,7 +4,7 @@ from django.core.validators import MaxLengthValidator, MinLengthValidator
 from django.db import transaction
 from rest_framework import serializers
 
-from trcustoms.models import UploadedFile, User
+from trcustoms.models import UploadedFile, User, UserPermission
 from trcustoms.serializers.uploaded_files import UploadedFileNestedSerializer
 
 
@@ -136,22 +136,34 @@ class UserDetailsSerializer(UserListingSerializer):
     def validate(self, data):
         validated_data = super().validate(data)
 
-        if (
-            validated_data.get("password")
-            and self.instance
-            and not self.instance.check_password(
-                validated_data.get("old_password")
-            )
-            and (
-                self.instance.is_active
-                or self.instance.source != User.Source.trle
-            )
-        ):
-            raise serializers.ValidationError(
-                {"old_password": "Password does not match."}
-            )
+        # only validate the password if the user supplied something
+        if not validated_data.get("password"):
+            return validated_data
 
-        return validated_data
+        # admin can do whatever they want
+        if UserPermission.EDIT_USERS in getattr(
+            self.context["request"].user, "permissions", []
+        ):
+            return validated_data
+
+        # only compare if there is an old password
+        if not self.instance:
+            return validated_data
+
+        # only reject if the passwords are not the same
+        if self.instance.check_password(validated_data.get("old_password")):
+            return validated_data
+
+        # allow wrong password if this is about claming an old TRLE account
+        if (
+            not self.instance.is_active
+            and self.instance.source == User.Source.trle
+        ):
+            return validated_data
+
+        raise serializers.ValidationError(
+            {"old_password": "Password does not match."}
+        )
 
     @transaction.atomic
     def update(self, instance, validated_data):
