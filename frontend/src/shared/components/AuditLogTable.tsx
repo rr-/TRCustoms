@@ -1,4 +1,5 @@
 import "./AuditLogTable.css";
+import { ExclamationIcon } from "@heroicons/react/outline";
 import { useQueryClient } from "react-query";
 import { useQuery } from "react-query";
 import { AuditLogService } from "src/services/auditLog.service";
@@ -22,7 +23,6 @@ import { EMPTY_INPUT_PLACEHOLDER } from "src/shared/utils";
 
 interface AuditLogTableProps {
   showObjects: boolean;
-  showApprovalButton: boolean;
   searchQuery: AuditLogSearchQuery;
   onSearchQueryChange?:
     | ((searchQuery: AuditLogSearchQuery) => void)
@@ -122,7 +122,6 @@ const AuditLogTableObjectLink = ({
 
 const AuditLogTable = ({
   showObjects,
-  showApprovalButton,
   searchQuery,
   onSearchQueryChange,
 }: AuditLogTableProps) => {
@@ -189,25 +188,15 @@ const AuditLogTable = ({
       ),
     },
     {
-      name: "review",
-      label: "Review",
+      name: "requires_action",
+      label: "",
       itemElement: ({ item }) =>
-        item.reviewer ? (
-          <UserLink user={item.reviewer} />
-        ) : showApprovalButton ? (
-          <PermissionGuard
-            require={UserPermission.reviewAuditLogs}
-            alternative={EMPTY_INPUT_PLACEHOLDER}
-          >
-            <PushButton
-              disableTimeout={true}
-              onClick={() => approveAuditLog(item)}
-            >
-              Mark as read
-            </PushButton>
-          </PermissionGuard>
+        item.is_action_required ? (
+          <>
+            <ExclamationIcon className="icon" /> Requires action
+          </>
         ) : (
-          EMPTY_INPUT_PLACEHOLDER
+          ""
         ),
     },
   ];

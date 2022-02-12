@@ -33,8 +33,8 @@ interface AuditLogListing {
   object_type: AuditLogObjectType;
   change_author: UserNested | null;
   change_type: AuditLogChangeType;
-  reviewer: UserNested | null;
   changes: string[];
+  is_action_required: boolean;
 }
 
 interface AuditLogList extends PagedResponse<AuditLogListing> {}

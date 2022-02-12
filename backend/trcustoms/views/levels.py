@@ -1,11 +1,15 @@
 from django.db.models import F
-from rest_framework import mixins, status, viewsets
+from rest_framework import mixins, serializers, status, viewsets
 from rest_framework.decorators import action
 from rest_framework.generics import get_object_or_404
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 
-from trcustoms.audit_logs.utils import track_model_update
+from trcustoms.audit_logs.utils import (
+    clear_audit_log_action_flags,
+    track_model_creation,
+    track_model_update,
+)
 from trcustoms.mixins import (
     AuditLogModelWatcherMixin,
     MultiSerializerMixin,
@@ -159,10 +163,13 @@ class LevelViewSet(
     @action(detail=True, methods=["post"])
     def approve(self, request, pk: int) -> Response:
         level = self.get_object()
-        with track_model_update(obj=level, request=request):
+        with track_model_update(
+            obj=level, request=request, changes=["Approved"]
+        ):
             level.is_approved = True
             level.rejection_reason = None
             level.save()
+        clear_audit_log_action_flags(obj=level)
         return Response({})
 
     @action(detail=True, methods=["post"])
@@ -171,8 +178,20 @@ class LevelViewSet(
         if not serializer.is_valid():
             return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
         level = self.get_object()
-        with track_model_update(obj=level, request=request):
+        reason = serializer.data["reason"]
+        with track_model_update(
+            obj=level,
+            request=request,
+            changes=[f"Rejected (reason: {reason})"],
+        ):
             level.is_approved = False
-            level.rejection_reason = serializer.data["reason"]
+            level.rejection_reason = reason
             level.save()
+        clear_audit_log_action_flags(obj=level)
         return Response({})
+
+    def perform_create(self, serializer: serializers.Serializer) -> None:
+        super().perform_create(serializer)
+        track_model_creation(
+            serializer.instance, request=self.request, is_action_required=True
+        )

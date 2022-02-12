@@ -1,8 +1,6 @@
 from rest_framework import mixins, viewsets
-from rest_framework.decorators import action
 from rest_framework.generics import get_object_or_404
 from rest_framework.permissions import AllowAny
-from rest_framework.response import Response
 
 from trcustoms.mixins import PermissionsMixin
 from trcustoms.models import AuditLog, Level
@@ -48,16 +46,6 @@ class AuditLogViewSet(
         ) is not None:
             queryset = queryset.filter(is_reviewed=is_reviewed)
 
-        queryset = queryset.prefetch_related(
-            "change_author", "reviewer", "object_type"
-        )
+        queryset = queryset.prefetch_related("change_author", "object_type")
 
         return queryset
-
-    @action(detail=True, methods=["post"])
-    def approve(self, request, pk: int) -> Response:
-        audit_log = self.get_object()
-        audit_log.is_reviewed = True
-        audit_log.reviewer = self.request.user
-        audit_log.save()
-        return Response({})
