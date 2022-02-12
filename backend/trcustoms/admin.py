@@ -36,9 +36,7 @@ class AuditLogAdminMixin:
     def log_addition(self, request, obj, message):
         super().log_addition(request, obj, message)
         obj = self.get_audit_log_obj(obj)
-        track_model_creation(
-            obj, request=request, change_type=AuditLog.ChangeType.CREATE
-        )
+        track_model_creation(obj, request=request)
 
     def log_change(self, request, obj, message):
         super().log_change(request, obj, message)
