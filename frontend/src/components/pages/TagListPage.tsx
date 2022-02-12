@@ -43,7 +43,7 @@ const TagListPage = () => {
   );
 
   useEffect(() => {
-    setTitle("tags");
+    setTitle("Tags");
   }, [setTitle]);
 
   useEffect(

@@ -62,7 +62,7 @@ const LoginPage = () => {
   );
 
   useEffect(() => {
-    setTitle("login");
+    setTitle("Login");
   }, [setTitle]);
 
   return (

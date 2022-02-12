@@ -39,7 +39,7 @@ const LevelReviewPage = () => {
 
   useEffect(() => {
     setTitle(
-      levelResult?.data?.name ? `review for ${levelResult.data.name}` : "review"
+      levelResult?.data?.name ? `Review for ${levelResult.data.name}` : "Review"
     );
   }, [setTitle, levelResult]);
 

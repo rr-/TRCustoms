@@ -41,7 +41,7 @@ const MyLevelsPage = () => {
   );
 
   useEffect(() => {
-    setTitle("my levels");
+    setTitle("My levels");
   }, [setTitle]);
 
   const serializeSearchQuery = (

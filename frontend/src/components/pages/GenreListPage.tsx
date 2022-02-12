@@ -43,7 +43,7 @@ const GenreListPage = () => {
   );
 
   useEffect(() => {
-    setTitle("genres");
+    setTitle("Genres");
   }, [setTitle]);
 
   useEffect(

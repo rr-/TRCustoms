@@ -19,7 +19,7 @@ const LevelUploadPage = () => {
   );
 
   useEffect(() => {
-    setTitle("upload a level");
+    setTitle("Upload a level");
   }, [setTitle]);
 
   return (
