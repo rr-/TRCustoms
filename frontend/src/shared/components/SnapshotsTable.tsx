@@ -46,7 +46,7 @@ const SnapshotsTableObjectLink = ({
             name: snapshot.object_name,
           }}
         >
-          Level ${snapshot.object_name}
+          Level {snapshot.object_name}
         </LevelLink>
       );
 
@@ -70,7 +70,7 @@ const SnapshotsTableObjectLink = ({
             name: snapshot.object_name,
           }}
         >
-          Genre ${snapshot.object_name}
+          Genre {snapshot.object_name}
         </GenreLink>
       );
 
@@ -82,7 +82,7 @@ const SnapshotsTableObjectLink = ({
             name: snapshot.object_name,
           }}
         >
-          Tag ${snapshot.object_name}
+          Tag {snapshot.object_name}
         </TagLink>
       );
 
@@ -94,7 +94,7 @@ const SnapshotsTableObjectLink = ({
             name: snapshot.object_desc.level.name,
           }}
         >
-          Review of ${snapshot.object_desc.level.name}
+          Review of {snapshot.object_desc.level.name}
         </LevelLink>
       );
 
