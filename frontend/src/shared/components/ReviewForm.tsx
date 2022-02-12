@@ -28,6 +28,7 @@ import { filterFalsyObjectValues } from "src/shared/utils";
 import { makeSentence } from "src/shared/utils";
 import { validateRequired } from "src/shared/utils";
 import { extractNestedErrorText } from "src/shared/utils";
+import { resetQueries } from "src/shared/utils";
 
 interface ReviewFormProps {
   level: LevelNested;
@@ -150,9 +151,7 @@ const ReviewForm = ({ level, review, onGoBack, onSubmit }: ReviewFormProps) => {
 
         if (review?.id) {
           let outReview = await ReviewService.update(review.id, payload);
-          queryClient.removeQueries("levels");
-          queryClient.removeQueries("reviews");
-          queryClient.removeQueries("auditLogs");
+          resetQueries(queryClient, ["levels", "reviews", "auditLogs"]);
           onSubmit?.(outReview);
 
           setStatus({
@@ -165,9 +164,7 @@ const ReviewForm = ({ level, review, onGoBack, onSubmit }: ReviewFormProps) => {
           });
         } else {
           let outReview = await ReviewService.create(payload);
-          queryClient.removeQueries("levels");
-          queryClient.removeQueries("reviews");
-          queryClient.removeQueries("auditLogs");
+          resetQueries(queryClient, ["levels", "reviews", "auditLogs"]);
           onSubmit?.(outReview);
 
           setStatus({

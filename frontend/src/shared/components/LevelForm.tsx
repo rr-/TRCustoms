@@ -37,6 +37,7 @@ import { makeSentence } from "src/shared/utils";
 import { validateRequired } from "src/shared/utils";
 import { extractNestedErrorText } from "src/shared/utils";
 import { pluralize } from "src/shared/utils";
+import { resetQueries } from "src/shared/utils";
 
 interface LevelFormProps {
   level?: LevelDetails | undefined;
@@ -192,8 +193,7 @@ const LevelForm = ({ level, onGoBack, onSubmit }: LevelFormProps) => {
 
         if (level?.id) {
           let outLevel = await LevelService.update(level.id, payload);
-          queryClient.removeQueries("levels");
-          queryClient.removeQueries("auditLogs");
+          resetQueries(queryClient, ["levels", "auditLogs"]);
           onSubmit?.(outLevel);
 
           setStatus({
@@ -207,8 +207,7 @@ const LevelForm = ({ level, onGoBack, onSubmit }: LevelFormProps) => {
           });
         } else {
           let outLevel = await LevelService.create(payload);
-          queryClient.removeQueries("levels");
-          queryClient.removeQueries("auditLogs");
+          resetQueries(queryClient, ["levels", "auditLogs"]);
           onSubmit?.(outLevel);
         }
       } catch (error) {

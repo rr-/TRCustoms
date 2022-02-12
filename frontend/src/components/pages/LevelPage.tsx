@@ -41,6 +41,7 @@ import { DisplayMode } from "src/shared/types";
 import { formatFileSize } from "src/shared/utils";
 import { formatDate } from "src/shared/utils";
 import { EMPTY_INPUT_PLACEHOLDER } from "src/shared/utils";
+import { resetQueries } from "src/shared/utils";
 import { showAlertOnError } from "src/shared/utils";
 
 interface LevelPageParams {
@@ -86,8 +87,7 @@ const LevelPage = () => {
     showAlertOnError(async () => {
       await LevelService.approve(+levelId);
       result.refetch();
-      queryClient.removeQueries("levels");
-      queryClient.removeQueries("auditLogs");
+      resetQueries(queryClient, ["level", "levels", "auditLogs"]);
     });
   };
 
@@ -101,8 +101,7 @@ const LevelPage = () => {
     showAlertOnError(async () => {
       await LevelService.reject(+levelId, reason);
       result.refetch();
-      queryClient.removeQueries("levels");
-      queryClient.removeQueries("auditLogs");
+      resetQueries(queryClient, ["level", "levels", "auditLogs"]);
     });
   };
 
