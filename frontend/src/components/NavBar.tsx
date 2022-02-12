@@ -94,26 +94,11 @@ const NavBar = () => {
                 <li className="TopNavBar--listItem">
                   <LevelsNavLink to={"/"}>Levels</LevelsNavLink>
                 </li>
-                <PermissionGuard require={UserPermission.editLevels}>
-                  <li className="TopNavBar--listItem">
-                    <NavLink to={"/mod"}>Moderate</NavLink>
-                  </li>
-                </PermissionGuard>
-                <PermissionGuard require={UserPermission.uploadLevels}>
-                  <>
-                    <li className="TopNavBar--listItem">
-                      <NavLink to={"/levels/upload"}>Upload level</NavLink>
-                    </li>
-                    <li className="TopNavBar--listItem">
-                      <NavLink to={"/my-levels"}>My levels</NavLink>
-                    </li>
-                  </>
-                </PermissionGuard>
-                <li className="TopNavBar--listItem">
-                  <NavLink to={"/tags"}>Tags</NavLink>
-                </li>
                 <li className="TopNavBar--listItem">
                   <NavLink to={"/genres"}>Genres</NavLink>
+                </li>
+                <li className="TopNavBar--listItem">
+                  <NavLink to={"/tags"}>Tags</NavLink>
                 </li>
                 <PermissionGuard require={UserPermission.listUsers}>
                   <li className="TopNavBar--listItem">
@@ -124,6 +109,21 @@ const NavBar = () => {
             </nav>
             <div className="NavBar NavBar--right">
               <ul className="TopNavBar--list">
+                <PermissionGuard require={UserPermission.uploadLevels}>
+                  <>
+                    <li className="TopNavBar--listItem">
+                      <NavLink to={"/levels/upload"}>Upload level</NavLink>
+                    </li>
+                    <li className="TopNavBar--listItem">
+                      <NavLink to={"/my-levels"}>My levels</NavLink>
+                    </li>
+                  </>
+                </PermissionGuard>
+                <PermissionGuard require={UserPermission.editLevels}>
+                  <li className="TopNavBar--listItem">
+                    <NavLink to={"/mod"}>Moderate</NavLink>
+                  </li>
+                </PermissionGuard>
                 <li className="TopNavBar--listItem">
                   <NavLink to={"/settings"}>Settings</NavLink>
                 </li>
