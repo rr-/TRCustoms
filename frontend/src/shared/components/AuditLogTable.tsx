@@ -1,18 +1,14 @@
 import "./AuditLogTable.css";
 import { ExclamationIcon } from "@heroicons/react/outline";
-import { useQueryClient } from "react-query";
 import { useQuery } from "react-query";
 import { AuditLogService } from "src/services/auditLog.service";
 import type { AuditLogListing } from "src/services/auditLog.service";
 import { AuditLogObjectType } from "src/services/auditLog.service";
 import type { AuditLogSearchResult } from "src/services/auditLog.service";
 import type { AuditLogSearchQuery } from "src/services/auditLog.service";
-import { UserPermission } from "src/services/user.service";
 import type { DataTableColumn } from "src/shared/components/DataTable";
 import { DataTable } from "src/shared/components/DataTable";
 import { Loader } from "src/shared/components/Loader";
-import { PermissionGuard } from "src/shared/components/PermissionGuard";
-import { PushButton } from "src/shared/components/PushButton";
 import { EngineLink } from "src/shared/components/links/EngineLink";
 import { GenreLink } from "src/shared/components/links/GenreLink";
 import { LevelLink } from "src/shared/components/links/LevelLink";
@@ -125,7 +121,6 @@ const AuditLogTable = ({
   searchQuery,
   onSearchQueryChange,
 }: AuditLogTableProps) => {
-  const queryClient = useQueryClient();
   const result = useQuery<AuditLogSearchResult, Error>(
     ["auditLogs", AuditLogService.searchAuditLogs, searchQuery],
     async () => AuditLogService.searchAuditLogs(searchQuery)
@@ -138,14 +133,6 @@ const AuditLogTable = ({
   if (result.isLoading || !result.data) {
     return <Loader />;
   }
-
-  const approveAuditLog = async (auditLog: AuditLogListing) => {
-    if (window.confirm("Are you sure this change is OK?")) {
-      await AuditLogService.approve(auditLog.id);
-      result.refetch();
-      queryClient.removeQueries("auditLogs");
-    }
-  };
 
   const columns: DataTableColumn<AuditLogListing>[] = [
     {
