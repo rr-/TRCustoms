@@ -33,6 +33,7 @@ interface AuditLogListing {
   object_type: AuditLogObjectType;
   change_author: UserNested | null;
   change_type: AuditLogChangeType;
+  meta: any;
   changes: string[];
   is_action_required: boolean;
 }

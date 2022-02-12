@@ -97,8 +97,8 @@ const AuditLogTableObjectLink = ({
       return (
         <LevelLink
           level={{
-            id: +auditLog.object_id,
-            name: auditLog.object_name,
+            id: +auditLog.meta.level_id,
+            name: auditLog.meta.level_name,
           }}
         >
           Review of {auditLog.object_name}
