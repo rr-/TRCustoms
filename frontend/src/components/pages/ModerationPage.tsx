@@ -95,10 +95,7 @@ const ModerationPage = () => {
               The log contains recent changes made by all users. All these
               changes are already live.
               <br />
-              Click "Mark as read" if the change doesn't need further action and
-              can be hidden from everyone's audit log.
-              <br />
-              New levels can be approved on the individual level page.
+              New levels and users can be approved on their individual pages.
             </InfoMessage>
 
             <SearchBar id="ModerationPage--search">
@@ -122,7 +119,6 @@ const ModerationPage = () => {
               <SectionHeader>Recent actions</SectionHeader>
               <AuditLogTable
                 showObjects={true}
-                showApprovalButton={true}
                 searchQuery={searchQuery}
                 onSearchQueryChange={setSearchQuery}
               />

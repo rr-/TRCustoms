@@ -33,22 +33,7 @@ class AuditLog(DatesInfo):
         related_name="+",
     )
 
-    is_reviewed = models.BooleanField(default=False)
-    reviewer = models.ForeignKey(
-        User,
-        blank=True,
-        null=True,
-        on_delete=models.SET_NULL,
-        related_name="+",
-    )
-
-    previous = models.ForeignKey(
-        "AuditLog",
-        blank=True,
-        null=True,
-        on_delete=models.SET_NULL,
-        related_name="+",
-    )
+    is_action_required = models.BooleanField(default=False)
 
     def __str__(self) -> str:
         return (

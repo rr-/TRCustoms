@@ -5,7 +5,11 @@ from rest_framework.generics import get_object_or_404
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 
-from trcustoms.audit_logs.utils import track_model_creation, track_model_update
+from trcustoms.audit_logs.utils import (
+    clear_audit_log_action_flags,
+    track_model_creation,
+    track_model_update,
+)
 from trcustoms.mixins import MultiSerializerMixin, PermissionsMixin
 from trcustoms.models import User
 from trcustoms.models.user import UserPermission
@@ -112,16 +116,21 @@ class UserViewSet(
         user = User.objects.filter(
             username__iexact=request.data.get("username")
         ).first()
-        track_model_creation(user, request=request, change_author=user)
+        track_model_creation(
+            user, request=request, change_author=user, is_action_required=True
+        )
         return response
 
     @action(detail=True, methods=["post"])
     def activate(self, request, pk: int) -> Response:
         user = self.get_object()
-        with track_model_update(obj=user, request=request):
+        with track_model_update(
+            obj=user, request=request, changes=["Activated"]
+        ):
             user.is_active = True
             user.ban_reason = None
             user.save()
+        clear_audit_log_action_flags(obj=user)
         return Response({})
 
     @action(detail=True, methods=["post"])
@@ -130,23 +139,32 @@ class UserViewSet(
         if not serializer.is_valid():
             return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
         user = self.get_object()
-        with track_model_update(obj=user, request=request):
+        reason = serializer.data["reason"]
+        with track_model_update(
+            obj=user,
+            request=request,
+            changes=[f"Deactivated (reason: {reason})"],
+        ):
             user.is_active = False
             user.email = ""
             user.first_name = ""
             user.last_name = ""
-            user.ban_reason = serializer.data["reason"]
+            user.ban_reason = reason
             user.set_unusable_password()
             user.save()
+        clear_audit_log_action_flags(obj=user)
         return Response({})
 
     @action(detail=True, methods=["post"])
     def unban(self, request, pk: int) -> Response:
         user = self.get_object()
-        with track_model_update(obj=user, request=request):
+        with track_model_update(
+            obj=user, request=request, changes=["Unbanned"]
+        ):
             user.is_banned = False
             user.ban_reason = None
             user.save()
+        clear_audit_log_action_flags(obj=user)
         return Response({})
 
     @action(detail=True, methods=["post"])
@@ -155,8 +173,12 @@ class UserViewSet(
         if not serializer.is_valid():
             return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
         user = self.get_object()
-        with track_model_update(obj=user, request=request):
+        reason = serializer.data["reason"]
+        with track_model_update(
+            obj=user, request=request, changes=[f"Banned (reason: {reason})"]
+        ):
             user.is_banned = True
-            user.ban_reason = serializer.data["reason"]
+            user.ban_reason = reason
             user.save()
+        clear_audit_log_action_flags(obj=user)
         return Response({})

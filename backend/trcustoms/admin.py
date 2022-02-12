@@ -309,7 +309,7 @@ class AuditLogObjectTypeFilter(SimpleListFilter):
 
 
 @admin.register(AuditLog)
-class AuditLogAdmin(ReadOnlyAdminMixin, admin.ModelAdmin):
+class AuditLogAdmin(admin.ModelAdmin):
     list_filter = [
         "change_type",
         AuditLogObjectTypeFilter,
@@ -329,8 +329,7 @@ class AuditLogAdmin(ReadOnlyAdminMixin, admin.ModelAdmin):
         "object_type_name",
         "change_type",
         "change_author",
-        "is_reviewed",
-        "reviewer",
+        "is_action_required",
     ]
 
     def object_type_name(self, instance):

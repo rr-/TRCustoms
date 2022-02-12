@@ -15,22 +15,17 @@ def make_audit_log(
     change_type: AuditLog.ChangeType,
     changes: list[str],
     change_author: User | None = None,
-) -> AuditLog | None:
+    is_action_required: bool = False,
+) -> None:
     info = get_registered_model_info(obj)
     object_id = obj.pk
     object_name = info.name_getter(obj)
     object_type = ContentType.objects.get_for_model(obj)
 
-    last_audit_log = (
-        AuditLog.objects.filter(object_id=object_id, object_type=object_type)
-        .order_by("-created")
-        .first()
-    )
-
     if not changes:
-        return last_audit_log
+        return
 
-    audit_log = AuditLog.objects.create(
+    AuditLog.objects.create(
         object_id=object_id,
         object_name=object_name,
         object_type=object_type,
@@ -43,16 +38,14 @@ def make_audit_log(
                 else None
             )
         ),
-        is_reviewed=False,
-        reviewer=None,
-        previous=last_audit_log,
+        is_action_required=is_action_required,
         changes=changes,
     )
 
-    return audit_log
 
-
-def track_model_creation(obj: models.Model, request: Request | None, **kwargs):
+def track_model_creation(
+    obj: models.Model, request: Request | None, **kwargs
+) -> None:
     kwargs = dict(changes=["Created"]) | kwargs
     make_audit_log(
         obj=obj,
@@ -75,7 +68,9 @@ def track_model_update(obj: models.Model, request: Request | None, **kwargs):
     )
 
 
-def track_model_deletion(obj: models.Model, request: Request | None, **kwargs):
+def track_model_deletion(
+    obj: models.Model, request: Request | None, **kwargs
+) -> None:
     kwargs = dict(changes=["Deleted"]) | kwargs
     make_audit_log(
         obj=obj,
@@ -83,3 +78,12 @@ def track_model_deletion(obj: models.Model, request: Request | None, **kwargs):
         change_type=AuditLog.ChangeType.DELETE,
         **kwargs,
     )
+
+
+def clear_audit_log_action_flags(obj: models.Model) -> None:
+    object_id = obj.pk
+    object_type = ContentType.objects.get_for_model(obj)
+
+    AuditLog.objects.filter(
+        object_id=object_id, object_type=object_type, is_action_required=True
+    ).update(is_action_required=False)

@@ -7,7 +7,6 @@ from trcustoms.serializers.users import UserNestedSerializer
 class AuditLogListingSerializer(serializers.ModelSerializer):
     object_type = serializers.SerializerMethodField(read_only=True)
     change_author = UserNestedSerializer(read_only=True)
-    reviewer = UserNestedSerializer(read_only=True)
 
     class Meta:
         model = AuditLog
@@ -19,9 +18,8 @@ class AuditLogListingSerializer(serializers.ModelSerializer):
             "object_type",
             "change_type",
             "change_author",
-            "is_reviewed",
-            "reviewer",
             "changes",
+            "is_action_required",
         ]
 
     def get_object_type(self, instance: AuditLog) -> str:
