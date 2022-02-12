@@ -1,11 +1,14 @@
 import "./TagsTable.css";
+import { useQueryClient } from "react-query";
 import { useQuery } from "react-query";
 import type { TagListing } from "src/services/tag.service";
 import type { TagSearchQuery } from "src/services/tag.service";
 import { TagService } from "src/services/tag.service";
+import { UserPermission } from "src/services/user.service";
 import type { DataTableColumn } from "src/shared/components/DataTable";
 import { DataTable } from "src/shared/components/DataTable";
 import { Loader } from "src/shared/components/Loader";
+import { PermissionGuard } from "src/shared/components/PermissionGuard";
 import { PushButton } from "src/shared/components/PushButton";
 import { TagLink } from "src/shared/components/links/TagLink";
 import { formatDate } from "src/shared/utils";
@@ -20,6 +23,7 @@ interface TagsTableDetailsProps {
 }
 
 const TagsTableDetails = ({ tag }: TagsTableDetailsProps) => {
+  const queryClient = useQueryClient();
   const result = useQuery<TagListing[], Error>(
     ["tag", TagService.getStats, tag.id],
     async () => TagService.getStats(+tag.id)
@@ -28,6 +32,13 @@ const TagsTableDetails = ({ tag }: TagsTableDetailsProps) => {
   if (result.isLoading || !result.data) {
     return <Loader />;
   }
+
+  const deleteTag = async () => {
+    if (window.confirm(`Really delete tag ${tag.name}?`)) {
+      await TagService.delete(tag.id);
+      queryClient.removeQueries("tags");
+    }
+  };
 
   return (
     <>
@@ -48,6 +59,11 @@ const TagsTableDetails = ({ tag }: TagsTableDetailsProps) => {
       ) : (
         <p>Not used with other tags.</p>
       )}
+      <PermissionGuard require={UserPermission.editTags}>
+        <PushButton disableTimeout={true} onClick={() => deleteTag()}>
+          Delete
+        </PushButton>
+      </PermissionGuard>
     </>
   );
 };

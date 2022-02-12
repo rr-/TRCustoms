@@ -14,6 +14,7 @@ enum UserPermission {
   reviewLevels = "review_levels",
   editReviews = "edit_reviews",
   reviewSnapshots = "review_snapshots",
+  editTags = "edit_tags",
 }
 
 interface UserNested {
