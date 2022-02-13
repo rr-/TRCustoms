@@ -34,11 +34,13 @@ const LevelsTable = ({
       itemElement: ({ item }) => (
         <>
           <Link className="LevelsTable--previewLink" to={`/levels/${item.id}`}>
-            <img
-              className="LevelsTable--previewImage"
-              src={item.cover.url}
-              alt={item.name}
-            />
+            {item.cover ? (
+              <img
+                className="LevelsTable--previewImage"
+                src={item.cover.url}
+                alt={item.name}
+              />
+            ) : null}
           </Link>
         </>
       ),

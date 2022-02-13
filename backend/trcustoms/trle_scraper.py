@@ -280,6 +280,8 @@ class TRLEScraper:
 
         download_url = f"https://www.trle.net/scadm/trle_dl.php?lid={level_id}"
         website_url = self.get_url_redirect(download_url)
+        if website_url.startswith("https://www.trle.net/levels/"):
+            website_url = None
 
         showcase_urls: list[str] = []
 

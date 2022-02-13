@@ -5,6 +5,7 @@ import { Form } from "formik";
 import { useContext } from "react";
 import { useCallback } from "react";
 import { useQueryClient } from "react-query";
+import type { UploadedFile } from "src/services/file.service";
 import { UploadType } from "src/services/file.service";
 import { GenreNested } from "src/services/genre.service";
 import type { ExternalLink } from "src/services/level.service";
@@ -76,7 +77,11 @@ const LevelForm = ({ level, onGoBack, onSubmit }: LevelFormProps) => {
     duration_id: level?.duration?.id,
     cover_id: level?.cover?.id,
     screenshot_ids: level
-      ? [...level.screenshots.map((screenshot) => screenshot.file.id)]
+      ? [
+          ...level.screenshots
+            .filter((screenshot) => screenshot.file)
+            .map((screenshot) => (screenshot.file as UploadedFile).id),
+        ]
       : [],
     file_id: null,
   };
@@ -354,9 +359,12 @@ const LevelForm = ({ level, onGoBack, onSubmit }: LevelFormProps) => {
                     fileIds={
                       level
                         ? [
-                            ...level.screenshots.map(
-                              (screenshot) => screenshot.file.id
-                            ),
+                            ...level.screenshots
+                              .filter((screenshot) => screenshot.file)
+                              .map(
+                                (screenshot) =>
+                                  (screenshot.file as UploadedFile).id
+                              ),
                           ]
                         : []
                     }

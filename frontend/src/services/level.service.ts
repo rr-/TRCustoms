@@ -14,7 +14,7 @@ import { getGenericSearchQuery } from "src/shared/utils";
 
 interface Screenshot {
   id: number;
-  file: UploadedFile;
+  file: UploadedFile | null;
 }
 
 interface LevelFile {
@@ -67,7 +67,7 @@ interface LevelListing {
   difficulty: LevelDifficulty;
   duration: LevelDuration;
   download_count: number;
-  cover: UploadedFile;
+  cover: UploadedFile | null;
   screenshots: Screenshot[];
   external_links: ExternalLink[];
   is_approved: boolean;

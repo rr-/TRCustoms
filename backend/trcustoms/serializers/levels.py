@@ -53,7 +53,9 @@ class LevelFileSerializer(serializers.ModelSerializer):
 
     def get_url(self, instance) -> str | None:
         if instance.file and instance.file.content:
-            return f"/api/level_files/{instance.id}/download"
+            return (
+                settings.HOST_SITE + f"/api/level_files/{instance.id}/download"
+            )
         return None
 
 

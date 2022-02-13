@@ -35,6 +35,7 @@ INSTALLED_APPS = [
     "rest_framework_simplejwt",
     "django_unused_media",
     "django_cleanup.apps.CleanupConfig",
+    "storages",
 ]
 
 MIDDLEWARE = [
@@ -201,7 +202,7 @@ CELERY_IMPORTS = ("trcustoms.tasks",)
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
-HOST_SITE = get_setting("HOST_SITE")
+HOST_SITE = get_setting("HOST_SITE").rstrip("/")
 FILE_UPLOAD_DIRECTORY_PERMISSIONS = 0o755
 FILE_UPLOAD_PERMISSIONS = 0o644
 
@@ -216,6 +217,19 @@ MAX_SHOWCASE_LINKS = 2
 MIN_AUTHORS = 1
 MAX_AUTHORS = 25
 MAX_TAG_LENGTH = 20
+
+AWS_ACCESS_KEY_ID = get_setting("AWS_ACCESS_KEY_ID")
+AWS_SECRET_ACCESS_KEY = get_setting("AWS_SECRET_ACCESS_KEY")
+AWS_STORAGE_BUCKET_NAME = get_setting("AWS_STORAGE_BUCKET_NAME")
+AWS_S3_CUSTOM_DOMAIN = f"{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com"
+AWS_S3_OBJECT_PARAMETERS = {"CacheControl": "max-age=86400"}
+AWS_MEDIA_LOCATION = "media"
+USE_AWS_STORAGE = get_setting("USE_AWS_STORAGE").lower() in {
+    "1",
+    "true",
+    "y",
+    "yes",
+}
 
 CSRF_TRUSTED_ORIGINS = [
     "http://localhost:8000",
