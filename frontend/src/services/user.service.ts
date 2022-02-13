@@ -37,6 +37,7 @@ interface UserListing extends UserNested {
   last_login: string;
   is_active: boolean;
   is_banned: boolean;
+  is_pending_activation: boolean;
   authored_level_count: number;
   reviewed_level_count: number;
   permissions: UserPermission[];

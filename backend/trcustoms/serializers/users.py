@@ -24,6 +24,7 @@ class UserListingSerializer(serializers.ModelSerializer):
     trle_author_id = serializers.ReadOnlyField()
     permissions = serializers.ReadOnlyField()
     is_active = serializers.ReadOnlyField()
+    is_pending_activation = serializers.ReadOnlyField()
     picture = UploadedFileNestedSerializer(read_only=True)
     authored_level_count = serializers.SerializerMethodField(read_only=True)
     reviewed_level_count = serializers.SerializerMethodField(read_only=True)
@@ -41,6 +42,7 @@ class UserListingSerializer(serializers.ModelSerializer):
             "last_login",
             "is_active",
             "is_banned",
+            "is_pending_activation",
             "authored_level_count",
             "reviewed_level_count",
             "picture",
@@ -97,17 +99,21 @@ class UserDetailsSerializer(UserListingSerializer):
     )
 
     def validate_username(self, value):
-        if (
-            user := User.objects.filter(username__iexact=value).first()
-        ) and user != self.instance:
-            raise serializers.ValidationError(
-                "Another account exists with this name."
-                if user.is_active
-                else (
-                    "An account with this name "
-                    "is currently awaiting activation."
+        user = User.objects.filter(username__iexact=value).first()
+        if user:
+            if user != self.instance:
+                raise serializers.ValidationError(
+                    "Another account exists with this name."
+                    if user.is_active
+                    else (
+                        "An account with this name "
+                        "is currently awaiting activation."
+                    )
                 )
-            )
+
+            if user.source == User.Source.trle and not user.is_active:
+                # don't let people change capitalization for acquired accounts
+                return user.username
 
         return value
 
@@ -135,31 +141,40 @@ class UserDetailsSerializer(UserListingSerializer):
 
     def validate(self, data):
         validated_data = super().validate(data)
+        self._raise_if_password_dont_match(validated_data)
+        if (
+            self.instance
+            and self.instance.source == User.Source.trle
+            and not self.instance.is_active
+        ):
+            validated_data["is_pending_activation"] = True
+        return validated_data
 
+    def _raise_if_password_dont_match(self, validated_data):
         # only validate the password if the user supplied something
         if not validated_data.get("password"):
-            return validated_data
+            return
 
         # admin can do whatever they want
         if UserPermission.EDIT_USERS in getattr(
             self.context["request"].user, "permissions", []
         ):
-            return validated_data
+            return
 
         # only compare if there is an old password
         if not self.instance:
-            return validated_data
+            return
 
         # only reject if the passwords are not the same
         if self.instance.check_password(validated_data.get("old_password")):
-            return validated_data
+            return
 
         # allow wrong password if this is about claming an old TRLE account
         if (
             not self.instance.is_active
             and self.instance.source == User.Source.trle
         ):
-            return validated_data
+            return
 
         raise serializers.ValidationError(
             {"old_password": "Password does not match."}
@@ -185,7 +200,9 @@ class UserDetailsSerializer(UserListingSerializer):
 
         if password:
             instance.set_password(password)
+        instance.is_pending_activation = True
         instance.is_active = False
+        instance.source = User.Source.trcustoms
         instance.save()
 
         return User.objects.with_counts().get(pk=instance.pk)

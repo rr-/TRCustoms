@@ -19,7 +19,7 @@ const UserUnbanPushButton = ({ user }: UserUnbanPushButtonProps) => {
     }
     showAlertOnError(async () => {
       await UserService.unban(user.id);
-      resetQueries(queryClient, ["users", "auditLogs"]);
+      resetQueries(queryClient, ["user", "users", "auditLogs"]);
     });
   };
 

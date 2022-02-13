@@ -135,12 +135,12 @@ const UserPage = () => {
                     </UserDeactivatePushButton>
                   </PermissionGuard>
                 </>
-              ) : (
+              ) : user.is_pending_activation ? (
                 <PermissionGuard require={UserPermission.editUsers}>
                   <UserActivatePushButton user={user} />
                   <UserDeactivatePushButton user={user} />
                 </PermissionGuard>
-              )}
+              ) : undefined}
             </>
           }
         >

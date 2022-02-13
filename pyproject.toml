@@ -28,6 +28,7 @@ disable = [
     "broad-except",  # this does more harm than good
     "unexpected-keyword-arg",  # badly implemented in decorators…
     "unsupported-binary-operation",  # fails to handle DRF permissions…
+    "protected-access", # _meta
     "fixme",  # my time is too precious to deal with everything at once
 ]
 

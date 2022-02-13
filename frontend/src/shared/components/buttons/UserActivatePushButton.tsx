@@ -19,7 +19,7 @@ const UserActivatePushButton = ({ user }: UserActivatePushButtonProps) => {
     }
     showAlertOnError(async () => {
       await UserService.activate(user.id);
-      resetQueries(queryClient, ["users", "auditLogs"]);
+      resetQueries(queryClient, ["user", "users", "auditLogs"]);
     });
   };
 
