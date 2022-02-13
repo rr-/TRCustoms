@@ -158,7 +158,9 @@ const LevelPage = () => {
               </PermissionGuard>
 
               <PermissionGuard require={UserPermission.editLevels}>
-                <LevelRejectPushButton level={level} />
+                {(level.is_approved || !level.rejection_reason) && (
+                  <LevelRejectPushButton level={level} />
+                )}
                 {!level.is_approved && <LevelApprovePushButton level={level} />}
               </PermissionGuard>
 
