@@ -59,6 +59,7 @@ class Level(DatesInfo):
 
     class Meta:
         ordering = ["-created"]
+        default_permissions = []
 
     def __str__(self) -> str:
         return f"{self.name} (id={self.pk})"

@@ -36,6 +36,9 @@ class AuditLog(DatesInfo):
 
     is_action_required = models.BooleanField(default=False)
 
+    class Meta:
+        default_permissions = []
+
     def __str__(self) -> str:
         return (
             f"{self.change_type.title()} of "

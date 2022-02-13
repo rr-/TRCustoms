@@ -17,6 +17,7 @@ class LevelScreenshot(DatesInfo):
 
     class Meta:
         ordering = ["position"]
+        default_permissions = []
 
     def __str__(self) -> str:
         return f"{self.level.name} (screenshot id={self.pk})"

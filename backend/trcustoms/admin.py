@@ -100,10 +100,15 @@ class LevelForm(forms.ModelForm):
 @admin.register(User)
 class UserAdmin(BaseUserAdmin):
     ordering = ["username"]
-    search_fields = ["username", "first_name", "last_name"]
+    search_fields = ["username", "first_name", "last_name", "email"]
     fieldsets = None
     fields = [
-        field.name for field in User._meta.fields if field.name not in ["id"]
+        *[
+            field.name
+            for field in User._meta.fields
+            if field.name not in ["id"]
+        ],
+        "user_permissions",
     ]
     readonly_fields = ["last_login", "date_joined"]
     list_display = [

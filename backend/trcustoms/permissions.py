@@ -16,7 +16,9 @@ def HasPermission(permission: UserPermission) -> BasePermission:
         def has_permission(self, request, view) -> bool:
             if not request.user:
                 return False
-            return permission in getattr(request.user, "permissions", [])
+            if request.user.is_staff:
+                return True
+            return permission in get_permissions(request.user)
 
         def has_object_permission(self, request, view, obj) -> bool:
             return self.has_permission(request, view)
@@ -38,3 +40,20 @@ class IsAccessingOwnResource(BasePermission):
         if isinstance(obj, LevelReview):
             return obj.author == request.user
         return False
+
+
+def get_permissions(user: User) -> set[UserPermission]:
+    perms = {
+        perm
+        for perm in UserPermission
+        if f"trcustoms.{perm.value}" in user.get_user_permissions()
+    }
+    if user.is_staff:
+        perms |= set(UserPermission)
+    if not user.is_anonymous:
+        perms |= {
+            UserPermission.LIST_USERS,
+            UserPermission.REVIEW_LEVELS,
+            UserPermission.UPLOAD_LEVELS,
+        }
+    return perms
