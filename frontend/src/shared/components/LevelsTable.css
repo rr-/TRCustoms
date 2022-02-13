@@ -22,7 +22,11 @@
   display: contents;
 }
 .LevelsTable .DataTable--cell[colspan] {
+  padding: calc(var(--levels-table-padding) * 0.5rem);
   grid-column: 1 / span 2;
+}
+.LevelsTable .DataTable--cell[colspan] > p {
+  margin: 0;
 }
 .LevelsTable .DataTable--cell {
   box-sizing: border-box;
