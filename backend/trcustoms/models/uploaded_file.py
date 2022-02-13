@@ -4,6 +4,9 @@ from pathlib import Path
 from django.db import models
 
 from trcustoms.models.util import DatesInfo
+from trcustoms.storage import get_user_upload_storage
+
+user_upload_storage = get_user_upload_storage()
 
 
 class UploadedFile(DatesInfo):
@@ -46,7 +49,9 @@ class UploadedFile(DatesInfo):
         choices=UploadType.choices,
         max_length=2,
     )
-    content = models.FileField(blank=True, null=True, upload_to=upload_to)
+    content = models.FileField(
+        blank=True, null=True, upload_to=upload_to, storage=user_upload_storage
+    )
     md5sum = models.CharField(max_length=36, blank=True, null=True)
     size = models.IntegerField()
 

@@ -9,6 +9,7 @@ import { Fragment } from "react";
 import { useState } from "react";
 import { useQuery } from "react-query";
 import { useParams } from "react-router-dom";
+import type { UploadedFile } from "src/services/file.service";
 import { ExternalLinkType } from "src/services/level.service";
 import type { LevelDetails } from "src/services/level.service";
 import { LevelService } from "src/services/level.service";
@@ -111,10 +112,12 @@ const LevelPage = () => {
         <SidebarBox
           header={
             <div className="LevelPage--cover">
-              <MediumThumbnail
-                displayMode={DisplayMode.Cover}
-                file={level.cover}
-              />
+              {level.cover ? (
+                <MediumThumbnail
+                  displayMode={DisplayMode.Cover}
+                  file={level.cover}
+                />
+              ) : null}
             </div>
           }
           actions={
@@ -341,7 +344,9 @@ const LevelPage = () => {
           <Section className="LevelPage--media">
             <MediumThumbnails
               displayMode={DisplayMode.Contain}
-              files={level.screenshots.map((screenshot) => screenshot.file)}
+              files={level.screenshots
+                .filter((screenshot) => !!screenshot.file)
+                .map((screenshot) => screenshot.file as UploadedFile)}
               links={showcaseLinks}
             />
           </Section>

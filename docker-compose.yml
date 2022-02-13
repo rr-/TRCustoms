@@ -7,6 +7,10 @@ x-backend-environment: &base-backend-environment
   - POSTGRES_DB=trcustoms
   - POSTGRES_USER=root
   - POSTGRES_PASSWORD=root
+  - AWS_ACCESS_KEY_ID
+  - AWS_SECRET_ACCESS_KEY
+  - AWS_STORAGE_BUCKET_NAME
+  - USE_AWS_STORAGE
 
 x-base-trcustoms: &base-trcustoms
   restart: unless-stopped
