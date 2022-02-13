@@ -2,14 +2,11 @@ import "./LevelPage.css";
 import { DownloadIcon } from "@heroicons/react/outline";
 import { GlobeAltIcon } from "@heroicons/react/outline";
 import { PencilIcon } from "@heroicons/react/outline";
-import { BadgeCheckIcon } from "@heroicons/react/outline";
-import { XCircleIcon } from "@heroicons/react/outline";
 import { AnnotationIcon } from "@heroicons/react/outline";
 import { useEffect } from "react";
 import { useContext } from "react";
 import { Fragment } from "react";
 import { useState } from "react";
-import { useQueryClient } from "react-query";
 import { useQuery } from "react-query";
 import { useParams } from "react-router-dom";
 import { ExternalLinkType } from "src/services/level.service";
@@ -30,6 +27,8 @@ import { ReviewsList } from "src/shared/components/ReviewsList";
 import { Section } from "src/shared/components/Section";
 import { SectionHeader } from "src/shared/components/Section";
 import { SidebarBox } from "src/shared/components/SidebarBox";
+import { LevelApprovePushButton } from "src/shared/components/buttons/LevelApprovePushButton";
+import { LevelRejectPushButton } from "src/shared/components/buttons/LevelRejectPushButton";
 import { EngineLink } from "src/shared/components/links/EngineLink";
 import { GenreLink } from "src/shared/components/links/GenreLink";
 import { TagLink } from "src/shared/components/links/TagLink";
@@ -41,8 +40,6 @@ import { DisplayMode } from "src/shared/types";
 import { formatFileSize } from "src/shared/utils";
 import { formatDate } from "src/shared/utils";
 import { EMPTY_INPUT_PLACEHOLDER } from "src/shared/utils";
-import { resetQueries } from "src/shared/utils";
-import { showAlertOnError } from "src/shared/utils";
 
 interface LevelPageParams {
   levelId: string;
@@ -52,7 +49,6 @@ const LevelPage = () => {
   const { user } = useContext(UserContext);
   const { setTitle } = useContext(TitleContext);
   const { levelId } = (useParams() as unknown) as LevelPageParams;
-  const queryClient = useQueryClient();
   const [reviewCount, setReviewCount] = useState<number | undefined>();
   const [reviewsSearchQuery, setReviewsSearchQuery] = useState<
     ReviewSearchQuery
@@ -79,31 +75,6 @@ const LevelPage = () => {
   if (result.isLoading || !result.data) {
     return <Loader />;
   }
-
-  const handleApproveButtonClick = async () => {
-    if (!window.confirm("Are you sure you want to approve this level?")) {
-      return;
-    }
-    showAlertOnError(async () => {
-      await LevelService.approve(+levelId);
-      result.refetch();
-      resetQueries(queryClient, ["level", "levels", "auditLogs"]);
-    });
-  };
-
-  const handleRejectButtonClick = async () => {
-    const reason = prompt(
-      "Please provide the reason for rejecting this level."
-    );
-    if (!reason) {
-      return;
-    }
-    showAlertOnError(async () => {
-      await LevelService.reject(+levelId, reason);
-      result.refetch();
-      resetQueries(queryClient, ["level", "levels", "auditLogs"]);
-    });
-  };
 
   const handleReviewCountClick = () => {
     document
@@ -187,23 +158,8 @@ const LevelPage = () => {
               </PermissionGuard>
 
               <PermissionGuard require={UserPermission.editLevels}>
-                {level.is_approved ? (
-                  <PushButton
-                    icon={<XCircleIcon className="icon" />}
-                    onClick={handleRejectButtonClick}
-                    tooltip="Hides this level from the level listing."
-                  >
-                    Reject
-                  </PushButton>
-                ) : (
-                  <PushButton
-                    icon={<BadgeCheckIcon className="icon" />}
-                    onClick={handleApproveButtonClick}
-                    tooltip="Shows this level from the level listing."
-                  >
-                    Approve
-                  </PushButton>
-                )}
+                <LevelRejectPushButton level={level} />
+                {!level.is_approved && <LevelApprovePushButton level={level} />}
               </PermissionGuard>
 
               {level.authors.every((author) => author.id !== user?.id) && (
