@@ -21,6 +21,7 @@ class LevelEngine(DatesInfo):
         constraints = [
             UniqueConstraint(Lower("name"), name="engine_name_unique"),
         ]
+        default_permissions = []
 
     def __str__(self) -> str:
         return f"{self.name} (id={self.pk})"

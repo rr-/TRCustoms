@@ -5,6 +5,7 @@ from django.db import transaction
 from rest_framework import serializers
 
 from trcustoms.models import UploadedFile, User, UserPermission
+from trcustoms.permissions import get_permissions
 from trcustoms.serializers.uploaded_files import UploadedFileNestedSerializer
 
 
@@ -22,7 +23,7 @@ class UserNestedSerializer(serializers.ModelSerializer):
 class UserListingSerializer(serializers.ModelSerializer):
     trle_reviewer_id = serializers.ReadOnlyField()
     trle_author_id = serializers.ReadOnlyField()
-    permissions = serializers.ReadOnlyField()
+    permissions = serializers.SerializerMethodField(read_only=True)
     is_active = serializers.ReadOnlyField()
     is_pending_activation = serializers.ReadOnlyField()
     picture = UploadedFileNestedSerializer(read_only=True)
@@ -76,6 +77,9 @@ class UserListingSerializer(serializers.ModelSerializer):
     bio = serializers.CharField(
         required=False, validators=[MaxLengthValidator(5000)], allow_blank=True
     )
+
+    def get_permissions(self, instance: User) -> list[str]:
+        return sorted(perm.value for perm in get_permissions(instance))
 
     def get_authored_level_count(self, instance: User) -> int:
         return instance.authored_level_count

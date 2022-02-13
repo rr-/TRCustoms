@@ -25,6 +25,7 @@ class LevelFile(DatesInfo):
                 "level", "version", name="level_file_version_unique"
             ),
         ]
+        default_permissions = []
 
     def __str__(self) -> str:
         return f"{self.level.name} (file id={self.pk})"

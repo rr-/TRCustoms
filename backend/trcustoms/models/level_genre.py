@@ -23,6 +23,7 @@ class LevelGenre(DatesInfo):
         constraints = [
             UniqueConstraint(Lower("name"), name="genre_name_unique"),
         ]
+        default_permissions = []
 
     def __str__(self) -> str:
         return f"{self.name} (id={self.pk})"

@@ -13,6 +13,7 @@ class ReviewTemplateQuestion(DatesInfo):
 
     class Meta:
         ordering = ["position"]
+        default_permissions = []
 
 
 class ReviewTemplateAnswer(DatesInfo):
@@ -33,3 +34,4 @@ class ReviewTemplateAnswer(DatesInfo):
 
     class Meta:
         ordering = ["question__position", "position"]
+        default_permissions = []

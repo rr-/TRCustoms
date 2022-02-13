@@ -13,6 +13,9 @@ class UploadedFile(DatesInfo):
         LEVEL_SCREENSHOT = ("ls", "Level screenshot")
         LEVEL_FILE = ("lf", "Level file")
 
+    class Meta:
+        default_permissions = []
+
     def get_upload_directory(self) -> str:
         match self.upload_type:
             case UploadedFile.UploadType.USER_PICTURE:

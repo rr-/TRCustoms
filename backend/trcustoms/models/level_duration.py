@@ -16,6 +16,7 @@ class LevelDuration(DatesInfo):
         constraints = [
             UniqueConstraint(Lower("name"), name="duration_name_unique"),
         ]
+        default_permissions = []
 
     def __str__(self) -> str:
         return f"{self.name} (id={self.pk})"

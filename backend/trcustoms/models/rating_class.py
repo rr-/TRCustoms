@@ -24,3 +24,4 @@ class RatingClass(models.Model):
     class Meta:
         verbose_name_plural = "Rating classes"
         ordering = ["position"]
+        default_permissions = []

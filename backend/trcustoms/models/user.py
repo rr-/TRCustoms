@@ -1,3 +1,5 @@
+from enum import Enum
+
 from django.contrib.auth.models import AbstractUser
 from django.contrib.auth.models import UserManager as BaseUserManager
 from django.db import models
@@ -8,15 +10,15 @@ from trcustoms.audit_logs import registry
 from trcustoms.models.uploaded_file import UploadedFile
 
 
-class UserPermission:
+class UserPermission(Enum):
+    EDIT_LEVELS = "edit_levels"
+    EDIT_REVIEWS = "edit_reviews"
+    EDIT_TAGS = "edit_tags"
     EDIT_USERS = "edit_users"
     LIST_USERS = "list_users"
-    UPLOAD_LEVELS = "upload_levels"
-    EDIT_LEVELS = "edit_levels"
-    REVIEW_LEVELS = "review_levels"
-    EDIT_REVIEWS = "edit_reviews"
     REVIEW_AUDIT_LOGS = "review_audit_logs"
-    EDIT_TAGS = "edit_tags"
+    REVIEW_LEVELS = "review_levels"
+    UPLOAD_LEVELS = "upload_levels"
 
 
 class UserManager(BaseUserManager):
@@ -41,6 +43,17 @@ class User(AbstractUser):
         constraints = [
             UniqueConstraint(Lower("username"), name="user_username_unique"),
         ]
+        default_permissions = []
+        permissions = [
+            (UserPermission.EDIT_LEVELS.value, "Can edit levels"),
+            (UserPermission.EDIT_REVIEWS.value, "Can edit reviews"),
+            (UserPermission.EDIT_TAGS.value, "Can edit tags"),
+            (UserPermission.EDIT_USERS.value, "Can edit users"),
+            (UserPermission.LIST_USERS.value, "Can list users"),
+            (UserPermission.REVIEW_AUDIT_LOGS.value, "Can review audit logs"),
+            (UserPermission.REVIEW_LEVELS.value, "Can review levels"),
+            (UserPermission.UPLOAD_LEVELS.value, "Can upload levels"),
+        ]
 
     class Source(models.TextChoices):
         trle = "trle", "trle.net"
@@ -59,20 +72,3 @@ class User(AbstractUser):
     is_pending_activation = models.BooleanField(default=False)
     is_banned = models.BooleanField(default=False)
     ban_reason = models.CharField(max_length=200, null=True, blank=True)
-
-    @property
-    def permissions(self) -> list[UserPermission]:
-        permissions = {
-            UserPermission.LIST_USERS,
-            UserPermission.REVIEW_LEVELS,
-            UserPermission.UPLOAD_LEVELS,
-        }
-        if self.is_staff:
-            permissions |= {
-                UserPermission.EDIT_TAGS,
-                UserPermission.EDIT_USERS,
-                UserPermission.EDIT_LEVELS,
-                UserPermission.EDIT_REVIEWS,
-                UserPermission.REVIEW_AUDIT_LOGS,
-            }
-        return sorted(permissions)

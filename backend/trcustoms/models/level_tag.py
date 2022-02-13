@@ -21,6 +21,7 @@ class LevelTag(DatesInfo):
         constraints = [
             UniqueConstraint(Lower("name"), name="tag_name_unique"),
         ]
+        default_permissions = []
 
     def __str__(self) -> str:
         return f"{self.name} (id={self.pk})"

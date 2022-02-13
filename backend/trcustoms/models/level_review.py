@@ -60,3 +60,4 @@ class LevelReview(DatesInfo):
                 "level", "author", name="review_level_author_unique"
             ),
         ]
+        default_permissions = []

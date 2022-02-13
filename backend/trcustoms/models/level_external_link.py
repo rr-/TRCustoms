@@ -28,6 +28,7 @@ class LevelExternalLink(DatesInfo):
                 "level", Lower("url"), name="level_external_link_unique"
             ),
         ]
+        default_permissions = []
 
     def __str__(self) -> str:
         return f"{self.url} (level_id={self.level.pk})"
