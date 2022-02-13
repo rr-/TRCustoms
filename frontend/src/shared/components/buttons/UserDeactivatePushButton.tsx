@@ -24,7 +24,7 @@ const UserDeactivatePushButton = ({
     }
     showAlertOnError(async () => {
       await UserService.deactivate(user.id, reason);
-      resetQueries(queryClient, ["users", "auditLogs"]);
+      resetQueries(queryClient, ["user", "users", "auditLogs"]);
     });
   };
 

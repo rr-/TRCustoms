@@ -103,15 +103,7 @@ class UserAdmin(BaseUserAdmin):
     search_fields = ["username", "first_name", "last_name"]
     fieldsets = None
     fields = [
-        "username",
-        "password",
-        "first_name",
-        "last_name",
-        "email",
-        "is_active",
-        "is_banned",
-        "is_staff",
-        "picture",
+        field.name for field in User._meta.fields if field.name not in ["id"]
     ]
     readonly_fields = ["last_login", "date_joined"]
     list_display = [

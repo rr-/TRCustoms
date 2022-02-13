@@ -86,6 +86,7 @@ def test_user_creation(
         "first_name": payload["first_name"],
         "last_name": payload["last_name"],
         "is_active": False,
+        "is_pending_activation": True,
         "is_banned": False,
         "bio": payload["bio"],
         "date_joined": any_datetime(allow_strings=True),
@@ -100,6 +101,7 @@ def test_user_creation(
 
     user = User.objects.get(id=data["id"])
     assert user.check_password(VALID_PASSWORD)
+    assert user.source == User.Source.trcustoms
 
 
 @pytest.mark.django_db
@@ -258,6 +260,7 @@ def test_user_creation_acquiring_trle_account(
         "first_name": "",
         "last_name": "",
         "is_active": False,
+        "is_pending_activation": True,
         "is_banned": False,
         "bio": "",
         "date_joined": any_datetime(allow_strings=True),
@@ -269,6 +272,10 @@ def test_user_creation_acquiring_trle_account(
         "trle_author_id": None,
         "trle_reviewer_id": None,
     }
+
+    user.refresh_from_db()
+    assert user.email == payload["email"]
+    assert user.source == User.Source.trle
 
 
 @pytest.mark.django_db
@@ -283,15 +290,19 @@ def test_user_creation_spoofing_privileges(
         "username": fake.person.username(),
         "password": VALID_PASSWORD,
         "is_active": True,
+        "is_pending_activation": False,
         "is_staff": True,
     }
     response = api_client.post("/api/users/", data=payload)
     data = response.json()
 
     assert response.status_code == status.HTTP_201_CREATED, data
+
+    user = User.objects.get(id=data["id"])
     assert not data["is_active"]
-    assert not User.objects.get(id=data["id"]).is_staff
-    assert not User.objects.get(id=data["id"]).is_active
+    assert not user.is_staff
+    assert not user.is_active
+    assert user.is_pending_activation
 
 
 @pytest.mark.django_db
@@ -389,6 +400,7 @@ def test_user_update_spoofing_privileges(auth_api_client: APIClient) -> None:
     payload = {
         "is_active": False,
         "is_staff": True,
+        "is_pending_activation": True,
     }
     user = auth_api_client.user
     response = auth_api_client.patch(f"/api/users/{user.id}/", data=payload)
@@ -399,6 +411,7 @@ def test_user_update_spoofing_privileges(auth_api_client: APIClient) -> None:
     user.refresh_from_db()
     assert user.is_active
     assert not user.is_staff
+    assert not user.is_pending_activation
 
 
 @pytest.mark.django_db

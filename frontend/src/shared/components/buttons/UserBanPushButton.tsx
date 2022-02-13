@@ -20,7 +20,7 @@ const UserBanPushButton = ({ user }: UserBanPushButtonProps) => {
     }
     showAlertOnError(async () => {
       await UserService.ban(user.id, reason);
-      resetQueries(queryClient, ["users", "auditLogs"]);
+      resetQueries(queryClient, ["user", "users", "auditLogs"]);
     });
   };
 
