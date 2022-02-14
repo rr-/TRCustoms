@@ -11,6 +11,7 @@ from pathlib import Path
 from typing import Any, TypeVar
 
 import yaml
+from django.conf import settings
 from django.core.files.base import ContentFile, File
 from django.core.management.base import BaseCommand
 from unidecode import unidecode
@@ -245,7 +246,7 @@ def process_level_images(level: Level, trle_level: TRLELevel) -> None:
 
 
 def process_level_files(level: Level, trle_level: TRLELevel) -> None:
-    with tempfile.TemporaryDirectory() as tmpdir:
+    with tempfile.TemporaryDirectory(dir=settings.CACHE_DIR) as tmpdir:
         path = Path(tmpdir) / "dummy.zip"
         with path.open("wb") as handle:
             TRLEScraper().get_bytes_parallel(
