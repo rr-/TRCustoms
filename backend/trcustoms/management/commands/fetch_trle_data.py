@@ -38,8 +38,10 @@ P = TypeVar("P")
 def get_md5sum(path: Path) -> str:
     md5 = hashlib.md5()
     with path.open("rb") as handle:
-        chunk = handle.read(8192)
-        if chunk:
+        while True:
+            chunk = handle.read(8192)
+            if not chunk:
+                break
             md5.update(chunk)
     return md5.hexdigest()
 
@@ -252,15 +254,17 @@ def process_level_files(level: Level, trle_level: TRLELevel) -> None:
         if path.stat().st_size:
             md5sum = get_md5sum(path)
             with path.open("rb") as handle:
-                uploaded_file, _created = UploadedFile.objects.get_or_create(
-                    md5sum=md5sum,
-                    defaults=dict(
+                uploaded_file = UploadedFile.objects.filter(
+                    md5sum=md5sum
+                ).first()
+                if not uploaded_file:
+                    uploaded_file = UploadedFile.objects.create(
+                        md5sum=md5sum,
                         upload_type=UploadedFile.UploadType.LEVEL_FILE,
                         content=File(handle, name=path.name),
-                    ),
-                )
+                    )
                 LevelFile.objects.update_or_create(
-                    level=level, defaults=dict(file=uploaded_file)
+                    level=level, file=uploaded_file
                 )
 
 
