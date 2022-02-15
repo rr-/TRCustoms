@@ -1,5 +1,4 @@
 import "./NavBar.css";
-import { CogIcon } from "@heroicons/react/outline";
 import { useContext } from "react";
 import type { LinkProps } from "react-router-dom";
 import { Link } from "react-router-dom";
@@ -7,6 +6,7 @@ import { NavLink } from "react-router-dom";
 import { useLocation } from "react-router-dom";
 import { useResolvedPath } from "react-router-dom";
 import { UserPermission } from "src/services/user.service";
+import { Logo } from "src/shared/components/Logo";
 import { PermissionGuard } from "src/shared/components/PermissionGuard";
 import { UserPicture } from "src/shared/components/UserPicture";
 import { UserContext } from "src/shared/contexts/UserContext";
@@ -45,7 +45,8 @@ const NavBar = () => {
             <div className="NavBar--left">
               <h1>
                 <Link to={"/"}>
-                  <CogIcon className="icon" /> TRCustoms
+                  <Logo />
+                  TRCustoms
                 </Link>
               </h1>
             </div>

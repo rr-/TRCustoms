@@ -75,3 +75,8 @@
   justify-content: flex-end;
   align-items: center;
 }
+
+.NavBar .Logo {
+  height: 3rem;
+  margin-right: 0.5rem;
+}
