@@ -3,6 +3,7 @@
     "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
     sans-serif;
   --font-size: 12pt;
+  --line-height: calc(var(--font-size) * 1.5);
 }
 
 body {
@@ -13,10 +14,11 @@ body {
   font-size: var(--font-size);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  line-height: calc(var(--font-size) * 1.5);
+  line-height: var(--line-height);
 }
 #root {
   text-align: center;
+  padding-left: calc(100vw - 100%);
 }
 
 .MainContainer {
@@ -24,7 +26,6 @@ body {
   margin: 0 auto;
   text-align: left;
   /* disable scrollbar jumping */
-  padding-left: calc(100vw - 100%);
 }
 
 a {

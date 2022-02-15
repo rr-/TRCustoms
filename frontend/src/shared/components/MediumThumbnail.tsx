@@ -137,7 +137,11 @@ const MediumThumbnail = ({ file, link, displayMode }: MediumThumbnailProps) => {
       );
     }
   }
-  return null;
+  return (
+    <div className={classNames.join(" ")}>
+      <div className="MediumThumbnail--thumb"></div>
+    </div>
+  );
 };
 
 export { MediumThumbnail };

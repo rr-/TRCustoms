@@ -92,7 +92,10 @@ const NavBar = () => {
             <nav className="NavBar NavBar--left">
               <ul className="TopNavBar--list">
                 <li className="TopNavBar--listItem">
-                  <LevelsNavLink to={"/"}>Levels</LevelsNavLink>
+                  <NavLink to={"/"}>Home</NavLink>
+                </li>
+                <li className="TopNavBar--listItem">
+                  <LevelsNavLink to={"/levels"}>Levels</LevelsNavLink>
                 </li>
                 <li className="TopNavBar--listItem">
                   <NavLink to={"/genres"}>Genres</NavLink>

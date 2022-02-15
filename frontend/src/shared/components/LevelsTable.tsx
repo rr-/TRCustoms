@@ -10,8 +10,8 @@ import { LevelService } from "src/services/level.service";
 import type { DataTableColumn } from "src/shared/components/DataTable";
 import { DataTable } from "src/shared/components/DataTable";
 import { LevelRating } from "src/shared/components/LevelRating";
+import { LevelAuthorsLink } from "src/shared/components/links/LevelAuthorsLink";
 import { LevelLink } from "src/shared/components/links/LevelLink";
-import { UserLink } from "src/shared/components/links/UserLink";
 import { formatDate } from "src/shared/utils";
 import { formatFileSize } from "src/shared/utils";
 import { EMPTY_INPUT_PLACEHOLDER } from "src/shared/utils";
@@ -53,18 +53,7 @@ const LevelsTable = ({
           <strong>
             <LevelLink level={item} />
           </strong>{" "}
-          by{" "}
-          {item.authors.length > 1 ? (
-            <span
-              title={item.authors.map((author) => author.username).join(", ")}
-            >
-              Multiple authors
-            </span>
-          ) : item.authors.length === 1 ? (
-            <UserLink user={item.authors[0]} />
-          ) : (
-            "Unknown"
-          )}
+          by <LevelAuthorsLink authors={item.authors} />
           <br />
           {showStatus && (
             <>

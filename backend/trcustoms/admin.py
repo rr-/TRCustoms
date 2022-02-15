@@ -29,6 +29,7 @@ from trcustoms.models import (
     UploadedFile,
     User,
 )
+from trcustoms.models.featured_levels import FeaturedLevel
 from trcustoms.ratings import get_review_score
 
 
@@ -357,3 +358,8 @@ class RatingClassAdmin(ReadOnlyAdminMixin, admin.ModelAdmin):
         "min_rating_average",
         "max_rating_average",
     ]
+
+
+@admin.register(FeaturedLevel)
+class FeaturedLevelAdmin(admin.ModelAdmin):
+    list_display = ["created", "level", "feature_type", "chosen_genre"]
