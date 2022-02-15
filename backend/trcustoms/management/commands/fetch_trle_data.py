@@ -222,12 +222,14 @@ def process_level_images(level: Level, trle_level: TRLELevel) -> None:
     image_urls = [trle_level.main_image_url] + trle_level.screenshot_urls
     for pos, image_url in enumerate(image_urls):
         image_content = TRLEScraper().get_bytes(image_url)
+        size = len(image_content)
         md5sum = hashlib.md5(image_content).hexdigest()
         uploaded_file, _created = UploadedFile.objects.get_or_create(
             md5sum=md5sum,
             defaults=dict(
                 upload_type=UploadedFile.UploadType.LEVEL_SCREENSHOT,
                 content=ContentFile(image_content, name=Path(image_url).name),
+                size=size,
             ),
         )
 
@@ -252,7 +254,8 @@ def process_level_files(level: Level, trle_level: TRLELevel) -> None:
             TRLEScraper().get_bytes_parallel(
                 trle_level.download_url, file=handle
             )
-        if path.stat().st_size:
+        size = path.stat().st_size
+        if size:
             md5sum = get_md5sum(path)
             with path.open("rb") as handle:
                 uploaded_file = UploadedFile.objects.filter(
@@ -261,6 +264,7 @@ def process_level_files(level: Level, trle_level: TRLELevel) -> None:
                 if not uploaded_file:
                     uploaded_file = UploadedFile.objects.create(
                         md5sum=md5sum,
+                        size=size,
                         upload_type=UploadedFile.UploadType.LEVEL_FILE,
                         content=File(handle, name=path.name),
                     )
