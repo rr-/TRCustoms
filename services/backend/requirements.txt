@@ -1,4 +1,5 @@
 Django==4.0.0
+django-extensions
 djangorestframework==3.12.4
 djangorestframework-simplejwt==5.0.0
 uWSGI==2.0.20
