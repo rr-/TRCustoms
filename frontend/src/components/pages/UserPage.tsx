@@ -191,7 +191,7 @@ const UserPage = () => {
         <Section className="UserPage--basicInfo">
           <SectionHeader>About</SectionHeader>
           {user.is_active && user.bio ? (
-            <Markdown children={user.bio} />
+            <Markdown>{user.bio}</Markdown>
           ) : (
             <p>This user prefers to keep an air of mystery around them.</p>
           )}

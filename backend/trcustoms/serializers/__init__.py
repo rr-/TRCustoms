@@ -1,4 +1,5 @@
 from .audit_logs import AuditLogListingSerializer
+from .featured_levels import FeaturedLevelListingSerializer
 from .level_difficulties import (
     LevelDifficultyListingSerializer,
     LevelDifficultyNestedSerializer,
@@ -48,6 +49,7 @@ from .users import (
 
 __all__ = [
     "AuditLogListingSerializer",
+    "FeaturedLevelListingSerializer",
     "LevelDetailsSerializer",
     "LevelDifficultyListingSerializer",
     "LevelDifficultyNestedSerializer",

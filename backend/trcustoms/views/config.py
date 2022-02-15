@@ -1,9 +1,11 @@
 from django.conf import settings
 from rest_framework import status, viewsets
+from rest_framework.decorators import action
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 
 from trcustoms.models import (
+    FeaturedLevel,
     LevelDifficulty,
     LevelDuration,
     LevelEngine,
@@ -12,6 +14,7 @@ from trcustoms.models import (
     ReviewTemplateQuestion,
 )
 from trcustoms.serializers import (
+    FeaturedLevelListingSerializer,
     LevelDifficultyListingSerializer,
     LevelDurationListingSerializer,
     LevelEngineListingSerializer,
@@ -62,6 +65,20 @@ class ConfigViewSet(viewsets.ViewSet):
                     "max_authors": settings.MAX_AUTHORS,
                     "max_tag_length": settings.MAX_TAG_LENGTH,
                 },
+            },
+            status.HTTP_200_OK,
+        )
+
+    @action(detail=False)
+    def featured_levels(self, request) -> Response:
+        return Response(
+            {
+                feature_type.value: FeaturedLevelListingSerializer(
+                    FeaturedLevel.objects.filter(feature_type=feature_type)
+                    .order_by("-created")
+                    .first()
+                ).data
+                for feature_type in FeaturedLevel.FeatureType
             },
             status.HTTP_200_OK,
         )

@@ -69,7 +69,7 @@ const ReviewView = ({ review, showLevels }: ReviewViewProps) => {
           </p>
         ) : null}
 
-        <Markdown children={review.text || "No review text is available."} />
+        <Markdown>{review.text || "No review text is available."}</Markdown>
       </div>
 
       <footer className="Review--footer">

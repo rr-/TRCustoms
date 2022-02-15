@@ -1,0 +1,57 @@
+.FeaturedLevelsView {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 0.5rem;
+}
+
+.FeaturedLevelView {
+  background: var(--levels-table-background-color);
+  padding: calc(var(--levels-table-padding) * 0.5rem);
+}
+
+.FeaturedLevelView--heading {
+  text-align: center;
+  margin: 0 0 0.5rem 0;
+}
+
+.FeaturedLevelView--levelLink {
+  padding: 0.5rem 0 0 0;
+  margin: 0;
+}
+
+.FeaturedLevelView--authorLink {
+  margin: 0;
+}
+
+.FeaturedLevelView--detailsWrapper {
+  position: relative;
+  padding-bottom: calc(var(--line-height) * 2);
+}
+
+.FeaturedLevelView--details {
+  background: var(--levels-table-background-color);
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+}
+
+.FeaturedLevelView--synopsis > p:first-child {
+  margin-top: 0.5rem;
+}
+.FeaturedLevelView--synopsis > p:last-child {
+  margin-bottom: 0;
+}
+
+.FeaturedLevelView--synopsis {
+  transition: max-height 300ms;
+  max-height: 0;
+
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  line-clamp: 4;
+  -webkit-box-orient: vertical;
+}
+.FeaturedLevelView:hover .FeaturedLevelView--synopsis {
+  max-height: 10rem;
+}

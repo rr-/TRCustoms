@@ -355,7 +355,7 @@ const LevelPage = () => {
         <Section className="LevelPage--basicInfo">
           <SectionHeader>About the game</SectionHeader>
           {level.description ? (
-            <Markdown children={level.description} />
+            <Markdown>{level.description}</Markdown>
           ) : (
             <p>This level has no description yet.</p>
           )}

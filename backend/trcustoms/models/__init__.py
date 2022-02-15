@@ -1,4 +1,5 @@
 from .audit_log import AuditLog
+from .featured_levels import FeaturedLevel
 from .level import Level
 from .level_difficulty import LevelDifficulty
 from .level_duration import LevelDuration
@@ -18,6 +19,7 @@ from .util import DatesInfo
 __all__ = [
     "AuditLog",
     "DatesInfo",
+    "FeaturedLevel",
     "Level",
     "LevelDifficulty",
     "LevelDuration",

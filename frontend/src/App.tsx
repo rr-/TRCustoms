@@ -3,6 +3,7 @@ import { Routes } from "react-router-dom";
 import { Route } from "react-router-dom";
 import { NavBar } from "src/components/NavBar";
 import { GenreListPage } from "src/components/pages/GenreListPage";
+import { HomePage } from "src/components/pages/HomePage";
 import { LevelEditPage } from "src/components/pages/LevelEditPage";
 import { LevelListPage } from "src/components/pages/LevelListPage";
 import { LevelPage } from "src/components/pages/LevelPage";
@@ -35,7 +36,7 @@ function App() {
           <NavBar />
           <main id="Content" className="MainContainer">
             <Routes>
-              <Route path="/" element={<LevelListPage />} />
+              <Route path="/" element={<HomePage />} />
               <Route path="/mod" element={<ModerationPage />} />
               <Route path="/levels/upload" element={<LevelUploadPage />} />
               <Route path="/levels" element={<LevelListPage />} />

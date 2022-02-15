@@ -131,7 +131,7 @@ const themes: Array<Theme> = [
       "navbar-secondary-active-tab-text-color": "var(--text-color)",
       "sidebar-background-color": "transparent",
       "sidebar-padding": "0",
-      "levels-table-background-color": "transparent",
+      "levels-table-background-color": "var(--background-color)",
       "levels-table-padding": "0",
       "reviews-table-background-color": "var(--sidebar-background-color)",
       "table-details-background-color": "var(--sidebar-background-color)",

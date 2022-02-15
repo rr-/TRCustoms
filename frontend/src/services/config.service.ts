@@ -1,9 +1,24 @@
 import { AxiosResponse } from "axios";
 import { EngineListing } from "src/services/engine.service";
+import { GenreNested } from "src/services/genre.service";
 import { GenreListing } from "src/services/genre.service";
+import { LevelListing } from "src/services/level.service";
 import { TagListing } from "src/services/tag.service";
 import { api } from "src/shared/api";
 import { API_URL } from "src/shared/constants";
+
+enum FeatureType {
+  LevelOfTheDay = "lod",
+  MonthlyHiddenGem = "gem",
+  BestInGenre = "big",
+}
+
+interface FeaturedLevel {
+  created: string;
+  feature_type: FeatureType;
+  level: LevelListing | null;
+  chosen_genre: GenreNested | null;
+}
 
 interface DurationListing {
   id: number;
@@ -50,6 +65,10 @@ interface Config {
   };
 }
 
+type FeaturedLevels = {
+  [K in FeatureType]: FeaturedLevel | null;
+};
+
 const getConfig = async (): Promise<Config> => {
   const response = (await api.get(`${API_URL}/config/`)) as AxiosResponse<
     Config
@@ -57,11 +76,21 @@ const getConfig = async (): Promise<Config> => {
   return response.data;
 };
 
+const getFeaturedLevels = async (): Promise<FeaturedLevels> => {
+  const response = (await api.get(
+    `${API_URL}/config/featured_levels`
+  )) as AxiosResponse<FeaturedLevels>;
+  return response.data;
+};
+
 const ConfigService = {
   getConfig,
+  getFeaturedLevels,
 };
 
 export type {
+  FeaturedLevel,
+  FeaturedLevels,
   DurationListing,
   DifficultyListing,
   ReviewTemplateAnswer,
@@ -69,4 +98,4 @@ export type {
   Config,
 };
 
-export { ConfigService };
+export { FeatureType, ConfigService };
