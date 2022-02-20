@@ -174,6 +174,7 @@ class UserViewSet(
                 changes=[f"Deactivated (reason: {reason})"],
             ):
                 user.is_active = False
+                user.is_pending_activation = True
                 user.ban_reason = reason
                 user.save()
 
