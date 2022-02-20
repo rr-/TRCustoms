@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useEffect } from "react";
 import { useContext } from "react";
 import { useQuery } from "react-query";
+import { useNavigate } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import type { LevelSearchQuery } from "src/services/level.service";
 import type { ReviewSearchQuery } from "src/services/review.service";
@@ -51,6 +52,7 @@ const getReviewSearchQuery = (userId: number): ReviewSearchQuery => ({
 });
 
 const UserPage = () => {
+  const navigate = useNavigate();
   const { setTitle } = useContext(TitleContext);
   const { userId } = (useParams() as unknown) as UserPageParams;
   const [levelSearchQuery, setLevelSearchQuery] = useState<LevelSearchQuery>(
@@ -81,6 +83,10 @@ const UserPage = () => {
   if (userResult.isLoading || !userResult.data) {
     return <Loader />;
   }
+
+  const handleUserRejection = () => {
+    navigate("/");
+  };
 
   const user = userResult.data;
 
@@ -138,7 +144,10 @@ const UserPage = () => {
               ) : user.is_pending_activation ? (
                 <PermissionGuard require={UserPermission.editUsers}>
                   <UserActivatePushButton user={user} />
-                  <UserDeactivatePushButton user={user} />
+                  <UserDeactivatePushButton
+                    onComplete={handleUserRejection}
+                    user={user}
+                  />
                 </PermissionGuard>
               ) : undefined}
             </>
