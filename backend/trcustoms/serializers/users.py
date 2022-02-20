@@ -38,7 +38,6 @@ class UserListingSerializer(serializers.ModelSerializer):
             "username",
             "first_name",
             "last_name",
-            "email",
             "bio",
             "date_joined",
             "last_login",
@@ -58,14 +57,6 @@ class UserListingSerializer(serializers.ModelSerializer):
         validators=[
             MinLengthValidator(3),
             MaxLengthValidator(26),
-        ],
-    )
-
-    email = serializers.EmailField(
-        required=True,
-        validators=[
-            MinLengthValidator(3),
-            MaxLengthValidator(64),
         ],
     )
 
@@ -89,10 +80,36 @@ class UserListingSerializer(serializers.ModelSerializer):
         return instance.reviewed_level_count
 
 
+class CustomEmailField(serializers.EmailField):
+    def __init__(self) -> None:
+        super().__init__(
+            required=True,
+            validators=[
+                MinLengthValidator(3),
+                MaxLengthValidator(64),
+            ],
+        )
+
+    def get_attribute(self, instance):
+        request = self.context.get("request")
+        if not request.user:
+            return ""
+        if (
+            not request.user.is_staff
+            and request.user.id != instance.id
+            and UserPermission.EDIT_USERS
+            not in getattr(request.user, "permissions", [])
+        ):
+            return ""
+        return instance.email
+
+
 class UserDetailsSerializer(UserListingSerializer):
     country = CountryNestedSerializer(read_only=True)
     old_password = serializers.CharField(write_only=True, required=False)
     password = serializers.CharField(write_only=True, required=True)
+
+    email = CustomEmailField()
 
     picture_id = serializers.PrimaryKeyRelatedField(
         write_only=True,
@@ -225,6 +242,7 @@ class UserDetailsSerializer(UserListingSerializer):
     class Meta:
         model = User
         fields = UserListingSerializer.Meta.fields + [
+            "email",
             "country",
             "country_code",
             "old_password",
