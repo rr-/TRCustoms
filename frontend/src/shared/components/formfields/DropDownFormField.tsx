@@ -12,6 +12,7 @@ interface DropDownOption {
 interface DropDownFormFieldProps extends GenericFormFieldProps {
   options: DropDownOption[];
   onChange?: () => void | undefined;
+  allowNull?: boolean | undefined;
   multiple?: boolean | undefined;
 }
 
@@ -20,6 +21,7 @@ const DropDownFormField = ({
   options,
   onChange,
   multiple,
+  allowNull,
   readonly,
   ...props
 }: DropDownFormFieldProps) => {
@@ -37,6 +39,10 @@ const DropDownFormField = ({
     onChange?.();
   };
 
+  if (allowNull === undefined) {
+    allowNull = false;
+  }
+
   return (
     <BaseFormField name={name} readonly={readonly} {...props}>
       <Field
@@ -50,7 +56,7 @@ const DropDownFormField = ({
         onChange={handleChange}
       >
         {!multiple && (
-          <option disabled value={"-"}>
+          <option disabled={!allowNull} value={"-"}>
             Select an option…
           </option>
         )}

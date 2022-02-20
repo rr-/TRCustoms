@@ -7,6 +7,11 @@ import { TagListing } from "src/services/tag.service";
 import { api } from "src/shared/api";
 import { API_URL } from "src/shared/constants";
 
+interface CountryListing {
+  code: string;
+  name: string;
+}
+
 enum FeatureType {
   LevelOfTheDay = "lod",
   MonthlyHiddenGem = "gem",
@@ -44,6 +49,7 @@ interface ReviewTemplateQuestion {
 }
 
 interface Config {
+  countries: CountryListing[];
   tags: TagListing[];
   genres: GenreListing[];
   engines: EngineListing[];
@@ -90,6 +96,7 @@ const ConfigService = {
 
 export type {
   FeaturedLevel,
+  CountryListing,
   FeaturedLevels,
   DurationListing,
   DifficultyListing,

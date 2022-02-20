@@ -1,9 +1,11 @@
+import csv
 import json
 from pathlib import Path
 
 from django.core.management.base import BaseCommand
 
 from trcustoms.models import (
+    Country,
     LevelDifficulty,
     LevelDuration,
     LevelEngine,
@@ -18,12 +20,19 @@ class Command(BaseCommand):
     help = "Populate the database with initial data."
 
     def handle(self, *args, **options):
+        self.create_countries()
         self.create_genres()
         self.create_engines()
         self.create_durations()
         self.create_difficulties()
         self.create_review_template()
         self.create_rating_classes()
+
+    def create_countries(self) -> None:
+        for item in self.read_csv("countries.csv"):
+            Country.objects.get_or_create(
+                code=item["Code"], defaults=dict(name=item["Name"])
+            )
 
     def create_genres(self) -> None:
         for item in self.read_json("genres.json"):
@@ -88,6 +97,11 @@ class Command(BaseCommand):
                         min_rating_count=item["min_rating_count"],
                     ),
                 )
+
+    def read_csv(self, name: str):
+        root_dir = Path(__file__).parent / "initial_data"
+        with (root_dir / name).open("r") as handle:
+            return list(csv.DictReader(handle))
 
     def read_json(self, name: str):
         root_dir = Path(__file__).parent / "initial_data"

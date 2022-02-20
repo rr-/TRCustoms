@@ -9,6 +9,7 @@ interface ConfigContextProviderProps {
 }
 
 const defaultConfig = {
+  countries: [],
   tags: [],
   genres: [],
   engines: [],
