@@ -8,18 +8,16 @@ from rest_framework_simplejwt.views import (
     TokenRefreshView,
 )
 
-from trcustoms.views import (
-    AuditLogViewSet,
-    ConfigViewSet,
-    LevelEngineViewSet,
-    LevelFileViewSet,
-    LevelGenreViewSet,
-    LevelReviewViewSet,
-    LevelTagViewSet,
-    LevelViewSet,
-    UploadViewSet,
-    UserViewSet,
-)
+from trcustoms.views.audit_logs import AuditLogViewSet
+from trcustoms.views.config import ConfigViewSet
+from trcustoms.views.level_engines import LevelEngineViewSet
+from trcustoms.views.level_files import LevelFileViewSet
+from trcustoms.views.level_genres import LevelGenreViewSet
+from trcustoms.views.level_reviews import LevelReviewViewSet
+from trcustoms.views.level_tags import LevelTagViewSet
+from trcustoms.views.levels import LevelViewSet
+from trcustoms.views.uploads import UploadViewSet
+from trcustoms.views.users import UserViewSet
 
 router = DefaultRouter()
 router.register(r"config", ConfigViewSet, basename="config")
