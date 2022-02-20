@@ -36,6 +36,7 @@ class UserFactory(factory.django.DjangoModelFactory):
     email = "jdoe@example.com"
     password = factory.PostGenerationMethodCall("set_password", "1234")
     source = "trcustoms"
+    is_email_confirmed = True
 
 
 @register

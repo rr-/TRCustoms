@@ -43,15 +43,17 @@ from .uploaded_files import (
 )
 from .users import (
     UserBanSerializer,
+    UserConfirmEmailSerializer,
     UserDetailsSerializer,
     UserListingSerializer,
+    UsernameSerializer,
     UserNestedSerializer,
 )
 
 __all__ = [
     "AuditLogListingSerializer",
-    "CountryNestedSerializer",
     "CountryListingSerializer",
+    "CountryNestedSerializer",
     "FeaturedLevelListingSerializer",
     "LevelDetailsSerializer",
     "LevelDifficultyListingSerializer",
@@ -77,7 +79,9 @@ __all__ = [
     "UploadedFileDetailsSerializer",
     "UploadedFileNestedSerializer",
     "UserBanSerializer",
+    "UserConfirmEmailSerializer",
     "UserDetailsSerializer",
     "UserListingSerializer",
     "UserNestedSerializer",
+    "UsernameSerializer",
 ]

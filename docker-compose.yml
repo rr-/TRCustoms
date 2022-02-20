@@ -11,6 +11,12 @@ x-backend-environment: &base-backend-environment
   - AWS_SECRET_ACCESS_KEY
   - AWS_STORAGE_BUCKET_NAME
   - USE_AWS_STORAGE
+  - EMAIL_HOST
+  - EMAIL_PORT
+  - EMAIL_HOST_USER
+  - EMAIL_HOST_PASSWORD
+  - EMAIL_USE_TLS
+  - EMAIL_USE_SSL
 
 x-base-trcustoms: &base-trcustoms
   restart: unless-stopped
@@ -34,6 +40,7 @@ x-base-trcustoms-backend: &base-trcustoms-backend
   depends_on:
     - trcustoms-redis
     - trcustoms-db
+    - trcustoms-mailhog
 
 services:
   trcustoms:
@@ -110,6 +117,16 @@ services:
         target: 8000
     depends_on:
       - trcustoms
+
+  trcustoms-mailhog:
+    image: mailhog/mailhog:v1.0.0
+    container_name: trcustoms_dev_mailhog
+    expose:
+      - 1025
+    networks:
+      - trcustoms
+    ports:
+      - '8025:8025'
 
 networks:
   trcustoms:

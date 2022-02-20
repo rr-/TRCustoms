@@ -10,7 +10,7 @@ def get_setting(name: str) -> str:
     Raises an error if the setting is not definied.
     """
     ret = os.environ.get(name)
-    if not ret:
+    if ret is None:
         raise RuntimeError(f"Missing configuration variable {name}")
     return ret
 
@@ -219,6 +219,13 @@ MAX_SHOWCASE_LINKS = 2
 MIN_AUTHORS = 1
 MAX_AUTHORS = 25
 MAX_TAG_LENGTH = 20
+
+EMAIL_HOST = get_setting("EMAIL_HOST")
+EMAIL_PORT = int(get_setting("EMAIL_PORT"))
+EMAIL_HOST_USER = get_setting("EMAIL_HOST_USER")
+EMAIL_HOST_PASSWORD = get_setting("EMAIL_HOST_PASSWORD")
+EMAIL_USE_TLS = get_setting("EMAIL_USE_TLS") == "1"
+EMAIL_USE_SSL = get_setting("EMAIL_USE_SSL") == "1"
 
 AWS_ACCESS_KEY_ID = get_setting("AWS_ACCESS_KEY_ID")
 AWS_SECRET_ACCESS_KEY = get_setting("AWS_SECRET_ACCESS_KEY")

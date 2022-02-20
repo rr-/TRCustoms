@@ -11,6 +11,7 @@ import { UserService } from "src/services/user.service";
 import { FormGrid } from "src/shared/components/FormGrid";
 import { FormGridButtons } from "src/shared/components/FormGrid";
 import { FormGridFieldSet } from "src/shared/components/FormGrid";
+import { UserResendActivationEmailPushButton } from "src/shared/components/buttons/UserResendActivationEmailPushButton";
 import { PasswordFormField } from "src/shared/components/formfields/PasswordFormField";
 import { TextFormField } from "src/shared/components/formfields/TextFormField";
 import { TitleContext } from "src/shared/contexts/TitleContext";
@@ -36,7 +37,19 @@ const LoginPage = () => {
           const axiosError = error as AxiosError;
           const data = axiosError.response?.data;
           if (axiosError.response?.status === 401) {
-            if (data.detail) {
+            if (data.code === "email_not_confirmed") {
+              setStatus({
+                error: (
+                  <>
+                    {makeSentence(data.detail)}
+                    <br />
+                    <UserResendActivationEmailPushButton
+                      username={values.username}
+                    />
+                  </>
+                ),
+              });
+            } else if (data.detail) {
               setStatus({ error: <>{makeSentence(data.detail)}</> });
             } else {
               setStatus({ error: <>Unknown error.</> });

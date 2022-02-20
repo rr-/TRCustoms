@@ -2,6 +2,7 @@ import "./App.css";
 import { Routes } from "react-router-dom";
 import { Route } from "react-router-dom";
 import { NavBar } from "src/components/NavBar";
+import { EmailConfirmationFinishPage } from "src/components/pages/EmailConfirmationFinishPage";
 import { GenreListPage } from "src/components/pages/GenreListPage";
 import { HomePage } from "src/components/pages/HomePage";
 import { LevelEditPage } from "src/components/pages/LevelEditPage";
@@ -60,6 +61,10 @@ function App() {
               <Route path="/settings" element={<SettingsPage />} />
               <Route path="/users/:userId" element={<UserPage />} />
               <Route path="/users/:userId/edit" element={<UserEditPage />} />
+              <Route
+                path="/email-confirmation-finish/:success"
+                element={<EmailConfirmationFinishPage />}
+              />
             </Routes>
           </main>
         </UserContextProvider>

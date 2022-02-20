@@ -1,4 +1,7 @@
+from django.conf import settings
+from django.db.models import Q
 from django.http import Http404
+from django.shortcuts import redirect
 from rest_framework import mixins, status, viewsets
 from rest_framework.decorators import action
 from rest_framework.generics import get_object_or_404
@@ -11,6 +14,7 @@ from trcustoms.audit_logs.utils import (
     track_model_deletion,
     track_model_update,
 )
+from trcustoms.mails import send_email_confirmation_mail
 from trcustoms.mixins import MultiSerializerMixin, PermissionsMixin
 from trcustoms.models import User
 from trcustoms.models.user import UserPermission
@@ -21,8 +25,10 @@ from trcustoms.permissions import (
 )
 from trcustoms.serializers import (
     UserBanSerializer,
+    UserConfirmEmailSerializer,
     UserDetailsSerializer,
     UserListingSerializer,
+    UsernameSerializer,
 )
 
 
@@ -51,6 +57,8 @@ class UserViewSet(
         "deactivate": [HasPermission(UserPermission.EDIT_USERS)],
         "ban": [HasPermission(UserPermission.EDIT_USERS)],
         "unban": [HasPermission(UserPermission.EDIT_USERS)],
+        "resend_activation_email": [AllowAny],
+        "confirm_email": [AllowAny],
     }
 
     ordering_fields = [
@@ -117,13 +125,49 @@ class UserViewSet(
         user = User.objects.filter(
             username__iexact=request.data.get("username")
         ).first()
-        track_model_creation(
-            user,
-            request=request,
-            change_author=user,
-            is_action_required=True,
-        )
+
+        send_email_confirmation_mail(user)
+
         return response
+
+    @action(detail=False, methods=["post"])
+    def resend_activation_email(self, request) -> Response:
+        serializer = UsernameSerializer(data=request.data)
+        if not serializer.is_valid():
+            return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
+        user = User.objects.filter(
+            Q(username=serializer.data["username"])
+            | Q(email=serializer.data["username"])
+        ).first()
+        send_email_confirmation_mail(user)
+        return Response({})
+
+    @action(detail=False, methods=["get"])
+    def confirm_email(self, request) -> Response:
+        serializer = UserConfirmEmailSerializer(data=request.GET)
+        if not serializer.is_valid():
+            return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
+        user = User.objects.filter(
+            Q(username=serializer.data["username"])
+            | Q(email=serializer.data["username"])
+        ).first()
+        if user.generate_email_token() == serializer.data["token"]:
+            user.is_email_confirmed = True
+            user.save()
+            success = True
+
+            track_model_creation(
+                user,
+                request=request,
+                change_author=user,
+                is_action_required=True,
+            )
+        else:
+            success = False
+
+        return redirect(
+            f"{settings.HOST_SITE}/email-confirmation-finish/{int(success)}"
+        )
 
     @action(detail=True, methods=["post"])
     def activate(self, request, pk: int) -> Response:
