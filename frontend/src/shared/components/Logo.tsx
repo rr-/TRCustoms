@@ -17,7 +17,7 @@ const Logo = () => {
         fill="none"
         stroke="currentColor"
         strokeMiterlimit="10"
-        strokeWidth="5.52px"
+        strokeWidth="10px"
       >
         <polyline points="221.06 31.88 268.89 5.66 392.4 111.19 434.95 226.8 439.01 280.8 423.41 327.47" />
         <polyline points="316.95 46.72 355.86 172.25 329.97 233.01 333.29 166.78 262.25 35.42 223.08 107.89 292.27 90.92" />

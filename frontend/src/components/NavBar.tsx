@@ -46,7 +46,7 @@ const NavBar = () => {
               <h1>
                 <Link to={"/"}>
                   <Logo />
-                  TRCustoms
+                  TRCustoms.org
                 </Link>
               </h1>
             </div>
