@@ -8,11 +8,13 @@ import { resetQueries } from "src/shared/utils";
 
 interface UserDeactivatePushButtonProps {
   user: UserBasic;
+  onComplete?: (() => void) | undefined;
   children?: React.ReactNode | undefined;
 }
 
 const UserDeactivatePushButton = ({
   user,
+  onComplete,
   children,
 }: UserDeactivatePushButtonProps) => {
   const queryClient = useQueryClient();
@@ -24,6 +26,7 @@ const UserDeactivatePushButton = ({
     }
     showAlertOnError(async () => {
       await UserService.deactivate(user.id, reason);
+      onComplete?.();
       resetQueries(queryClient, ["user", "users", "auditLogs"]);
     });
   };
