@@ -20,7 +20,9 @@
   padding: 0;
 }
 .TopNavBar h1 {
-  font-size: 2rem;
+  font-family: "Chakra Petch";
+  font-weight: normal;
+  font-size: 2.8rem;
 }
 .TopNavBar h1 a {
   text-decoration: none;
