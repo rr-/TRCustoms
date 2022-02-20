@@ -1,5 +1,7 @@
+import hashlib
 from enum import Enum
 
+from django.conf import settings
 from django.contrib.auth.models import AbstractUser
 from django.contrib.auth.models import UserManager as BaseUserManager
 from django.db import models
@@ -70,6 +72,7 @@ class User(AbstractUser):
     bio = models.TextField(max_length=5000, blank=True)
     source = models.CharField(max_length=10, choices=Source.choices)
 
+    is_email_confirmed = models.BooleanField(default=False)
     is_pending_activation = models.BooleanField(default=False)
     is_banned = models.BooleanField(default=False)
     ban_reason = models.CharField(max_length=200, null=True, blank=True)
@@ -77,3 +80,8 @@ class User(AbstractUser):
     country = models.ForeignKey(
         Country, null=True, blank=True, on_delete=models.SET_NULL
     )
+
+    def generate_email_token(self) -> str:
+        return hashlib.md5(
+            f"{settings.SECRET_KEY}:{self.id}:{self.email}".encode()
+        ).hexdigest()

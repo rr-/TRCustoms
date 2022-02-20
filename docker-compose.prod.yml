@@ -11,6 +11,12 @@ x-backend-environment: &base-backend-environment
   - AWS_SECRET_ACCESS_KEY
   - AWS_STORAGE_BUCKET_NAME
   - USE_AWS_STORAGE
+  - EMAIL_HOST
+  - EMAIL_PORT
+  - EMAIL_HOST_USER
+  - EMAIL_HOST_PASSWORD
+  - EMAIL_USE_TLS
+  - EMAIL_USE_SSL
 
 x-base-trcustoms: &base-trcustoms
   restart: always

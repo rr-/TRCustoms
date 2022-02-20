@@ -105,8 +105,8 @@ def test_user_creation(
     assert user.check_password(VALID_PASSWORD)
     assert user.source == User.Source.trcustoms
 
-    assert AuditLog.objects.count() == 1
-    assert AuditLog.objects.first().is_action_required
+    # create a log only after confirming the account
+    assert AuditLog.objects.count() == 0
 
 
 @pytest.mark.django_db

@@ -3,7 +3,6 @@ import { useCallback } from "react";
 import { useContext } from "react";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { Link } from "react-router-dom";
 import { AuthService } from "src/services/auth.service";
 import type { UserDetails } from "src/services/user.service";
 import { UserService } from "src/services/user.service";
@@ -40,9 +39,8 @@ const RegisterPage = () => {
 
       {isComplete ? (
         <>
-          Your account was created and it now needs to be activated by our
-          staff. Please have patience :) In the meantime, why don't you take a
-          look at <Link to={"/"}>some levels</Link>?
+          An email was sent to your email address. To continue, please check
+          your mailbox and click the confirmation link inside.
         </>
       ) : (
         <UserForm onSubmit={handleSubmit} />

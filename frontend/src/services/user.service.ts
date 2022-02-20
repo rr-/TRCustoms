@@ -186,6 +186,11 @@ const unban = async (userId: number): Promise<void> => {
   await api.post(`${API_URL}/users/${userId}/unban/`);
 };
 
+const resendActivationLink = async (username: string): Promise<void> => {
+  const data = { username };
+  await api.post(`${API_URL}/users/resend_activation_email/`, data);
+};
+
 const UserService = {
   register,
   update,
@@ -196,6 +201,7 @@ const UserService = {
   getCurrentUser,
   getUserById,
   getUserByUsername,
+  resendActivationLink,
   searchUsers,
 };
 

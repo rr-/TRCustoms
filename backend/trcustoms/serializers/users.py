@@ -253,3 +253,12 @@ class UserDetailsSerializer(UserListingSerializer):
 
 class UserBanSerializer(serializers.Serializer):
     reason = serializers.CharField(max_length=200)
+
+
+class UsernameSerializer(serializers.Serializer):
+    username = serializers.CharField(max_length=200)
+
+
+class UserConfirmEmailSerializer(serializers.Serializer):
+    username = serializers.CharField(max_length=200)
+    token = serializers.CharField(max_length=200)
