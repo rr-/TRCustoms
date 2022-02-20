@@ -4,8 +4,9 @@ from django.core.validators import MaxLengthValidator, MinLengthValidator
 from django.db import transaction
 from rest_framework import serializers
 
-from trcustoms.models import UploadedFile, User, UserPermission
+from trcustoms.models import Country, UploadedFile, User, UserPermission
 from trcustoms.permissions import get_permissions
+from trcustoms.serializers.countries import CountryNestedSerializer
 from trcustoms.serializers.uploaded_files import UploadedFileNestedSerializer
 
 
@@ -89,6 +90,7 @@ class UserListingSerializer(serializers.ModelSerializer):
 
 
 class UserDetailsSerializer(UserListingSerializer):
+    country = CountryNestedSerializer(read_only=True)
     old_password = serializers.CharField(write_only=True, required=False)
     password = serializers.CharField(write_only=True, required=True)
 
@@ -100,6 +102,15 @@ class UserDetailsSerializer(UserListingSerializer):
         queryset=UploadedFile.objects.filter(
             upload_type=UploadedFile.UploadType.USER_PICTURE
         ),
+    )
+
+    country_code = serializers.SlugRelatedField(
+        required=False,
+        allow_null=True,
+        write_only=True,
+        source="country",
+        slug_field="code",
+        queryset=Country.objects.all(),
     )
 
     def validate_username(self, value):
@@ -214,6 +225,8 @@ class UserDetailsSerializer(UserListingSerializer):
     class Meta:
         model = User
         fields = UserListingSerializer.Meta.fields + [
+            "country",
+            "country_code",
             "old_password",
             "password",
             "picture_id",

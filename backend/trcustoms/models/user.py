@@ -7,6 +7,7 @@ from django.db.models import Count, UniqueConstraint
 from django.db.models.functions import Lower
 
 from trcustoms.audit_logs import registry
+from trcustoms.models.country import Country
 from trcustoms.models.uploaded_file import UploadedFile
 
 
@@ -72,3 +73,7 @@ class User(AbstractUser):
     is_pending_activation = models.BooleanField(default=False)
     is_banned = models.BooleanField(default=False)
     ban_reason = models.CharField(max_length=200, null=True, blank=True)
+
+    country = models.ForeignKey(
+        Country, null=True, blank=True, on_delete=models.SET_NULL
+    )

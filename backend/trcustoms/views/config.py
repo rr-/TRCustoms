@@ -5,6 +5,7 @@ from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 
 from trcustoms.models import (
+    Country,
     FeaturedLevel,
     LevelDifficulty,
     LevelDuration,
@@ -14,6 +15,7 @@ from trcustoms.models import (
     ReviewTemplateQuestion,
 )
 from trcustoms.serializers import (
+    CountryListingSerializer,
     FeaturedLevelListingSerializer,
     LevelDifficultyListingSerializer,
     LevelDurationListingSerializer,
@@ -28,6 +30,7 @@ class ConfigViewSet(viewsets.ViewSet):
     permission_classes = [AllowAny]
 
     def list(self, request) -> Response:
+        countries = Country.objects.all()
         level_tags = LevelTag.objects.with_counts()
         level_genres = LevelGenre.objects.with_counts()
         level_engines = LevelEngine.objects.with_counts()
@@ -36,6 +39,9 @@ class ConfigViewSet(viewsets.ViewSet):
         review_questions = ReviewTemplateQuestion.objects.all()
         return Response(
             {
+                "countries": CountryListingSerializer(
+                    countries, many=True
+                ).data,
                 "tags": LevelTagListingSerializer(level_tags, many=True).data,
                 "genres": LevelGenreListingSerializer(
                     level_genres, many=True

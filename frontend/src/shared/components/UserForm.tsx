@@ -2,6 +2,7 @@ import { AxiosError } from "axios";
 import axios from "axios";
 import { Formik } from "formik";
 import { Form } from "formik";
+import { useContext } from "react";
 import { useCallback } from "react";
 import { UploadType } from "src/services/file.service";
 import type { UserDetails } from "src/services/user.service";
@@ -11,11 +12,13 @@ import { FormGridButtons } from "src/shared/components/FormGrid";
 import { FormGridFieldSet } from "src/shared/components/FormGrid";
 import { PicturePicker } from "src/shared/components/PicturePicker";
 import { BaseFormField } from "src/shared/components/formfields/BaseFormField";
+import { DropDownFormField } from "src/shared/components/formfields/DropDownFormField";
 import { EmailFormField } from "src/shared/components/formfields/EmailFormField";
 import { PasswordFormField } from "src/shared/components/formfields/PasswordFormField";
 import { TextAreaFormField } from "src/shared/components/formfields/TextAreaFormField";
 import { TextFormField } from "src/shared/components/formfields/TextFormField";
 import { UserLink } from "src/shared/components/links/UserLink";
+import { ConfigContext } from "src/shared/contexts/ConfigContext";
 import { DisplayMode } from "src/shared/types";
 import { filterFalsyObjectValues } from "src/shared/utils";
 import { makeSentence } from "src/shared/utils";
@@ -32,6 +35,8 @@ interface UserFormProps {
 }
 
 const UserForm = ({ user, onGoBack, onSubmit }: UserFormProps) => {
+  const { config } = useContext(ConfigContext);
+
   const initialValues = {
     username: user?.username || "",
     firstName: user?.first_name || "",
@@ -41,7 +46,8 @@ const UserForm = ({ user, onGoBack, onSubmit }: UserFormProps) => {
     password: "",
     password2: "",
     bio: user?.bio || "",
-    picture_id: user?.picture?.id || undefined,
+    pictureId: user?.picture?.id || undefined,
+    countryCode: user?.country?.code || undefined,
   };
 
   const handleSubmitError = useCallback(
@@ -61,7 +67,8 @@ const UserForm = ({ user, onGoBack, onSubmit }: UserFormProps) => {
           oldPassword: data?.old_password,
           password: data?.password,
           bio: data?.bio,
-          picture_id: data?.picture,
+          pictureId: data?.picture,
+          countryCode: data?.country_code,
         };
         if (Object.keys(filterFalsyObjectValues(errors)).length) {
           setErrors(errors);
@@ -88,7 +95,8 @@ const UserForm = ({ user, onGoBack, onSubmit }: UserFormProps) => {
           oldPassword: values.oldPassword || values.password,
           password: values.password,
           bio: values.bio,
-          picture_id: values.picture_id,
+          pictureId: values.pictureId,
+          countryCode: values.countryCode,
         };
 
         if (user?.id) {
@@ -154,6 +162,11 @@ const UserForm = ({ user, onGoBack, onSubmit }: UserFormProps) => {
     return errors;
   };
 
+  const countryOptions = config.countries.map((country) => ({
+    label: country.name,
+    value: country.code,
+  }));
+
   return (
     <Formik
       initialValues={initialValues}
@@ -199,11 +212,17 @@ const UserForm = ({ user, onGoBack, onSubmit }: UserFormProps) => {
                 <TextFormField label="First name" name="firstName" />
                 <TextFormField label="Last name" name="lastName" />
                 <TextAreaFormField label="Bio" name="bio" />
+                <DropDownFormField
+                  label="Country"
+                  name="countryCode"
+                  allowNull={true}
+                  options={countryOptions}
+                />
                 {user && (
                   <BaseFormField
                     required={false}
                     label="Picture"
-                    name="picture_id"
+                    name="pictureId"
                   >
                     <PicturePicker
                       displayMode={DisplayMode.Contain}
@@ -212,7 +231,7 @@ const UserForm = ({ user, onGoBack, onSubmit }: UserFormProps) => {
                       uploadType={UploadType.UserPicture}
                       fileIds={user?.picture ? [user?.picture.id] : []}
                       onChange={([fileId]) =>
-                        setFieldValue("picture_id", fileId || null)
+                        setFieldValue("pictureId", fileId || null)
                       }
                     />
                   </BaseFormField>

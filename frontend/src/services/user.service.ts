@@ -1,10 +1,13 @@
 import { AxiosResponse } from "axios";
+import type { CountryListing } from "src/services/config.service";
 import type { UploadedFile } from "src/services/file.service";
 import { api } from "src/shared/api";
 import { API_URL } from "src/shared/constants";
 import type { GenericSearchQuery } from "src/shared/types";
 import { GenericSearchResult } from "src/shared/types";
 import { getGenericSearchQuery } from "src/shared/utils";
+
+interface CountryNested extends CountryListing {}
 
 enum UserPermission {
   editUsers = "edit_users",
@@ -45,7 +48,9 @@ interface UserListing extends UserNested {
   trle_reviewer_id: number | null;
 }
 
-interface UserDetails extends UserListing {}
+interface UserDetails extends UserListing {
+  country?: CountryNested;
+}
 
 interface UserSearchQuery extends GenericSearchQuery {}
 interface UserSearchResult
@@ -83,7 +88,8 @@ interface UserCreatePayload {
   email: string;
   password: string;
   bio: string;
-  picture_id?: number | undefined;
+  pictureId?: number | undefined;
+  countryCode?: string | undefined;
 }
 
 interface UserUpdatePayload extends UserCreatePayload {
@@ -100,7 +106,8 @@ const update = async (
     oldPassword,
     password,
     bio,
-    picture_id,
+    pictureId,
+    countryCode,
   }: UserUpdatePayload
 ): Promise<UserDetails> => {
   const data: { [key: string]: any } = {
@@ -109,7 +116,8 @@ const update = async (
     last_name: lastName,
     email: email,
     bio: bio,
-    picture_id: picture_id,
+    picture_id: pictureId,
+    country_code: countryCode,
   };
   if (oldPassword) {
     data.old_password = oldPassword;
@@ -131,7 +139,8 @@ const register = async ({
   email,
   password,
   bio,
-  picture_id,
+  pictureId,
+  countryCode,
 }: UserCreatePayload): Promise<UserDetails> => {
   const data: { [key: string]: any } = {
     username: username,
@@ -140,7 +149,8 @@ const register = async ({
     email: email,
     password: password,
     bio: bio,
-    picture_id: picture_id,
+    picture_id: pictureId,
+    country_code: countryCode,
   };
   const response = (await api.post(`${API_URL}/users/`, data)) as AxiosResponse<
     UserDetails
