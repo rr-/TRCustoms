@@ -5,7 +5,7 @@ from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 
 from trcustoms.models import Level, LevelGenre
-from trcustoms.serializers import LevelGenreListingSerializer
+from trcustoms.serializers.level_genres import LevelGenreListingSerializer
 
 
 class LevelGenreViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):

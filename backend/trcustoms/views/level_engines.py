@@ -2,7 +2,7 @@ from rest_framework import mixins, viewsets
 from rest_framework.permissions import AllowAny
 
 from trcustoms.models import LevelEngine
-from trcustoms.serializers import LevelEngineListingSerializer
+from trcustoms.serializers.level_engines import LevelEngineListingSerializer
 
 
 class LevelEngineViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):

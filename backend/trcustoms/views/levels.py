@@ -22,7 +22,7 @@ from trcustoms.permissions import (
     HasPermission,
     IsAccessingOwnResource,
 )
-from trcustoms.serializers import (
+from trcustoms.serializers.levels import (
     LevelDetailsSerializer,
     LevelListingSerializer,
     LevelRejectionSerializer,

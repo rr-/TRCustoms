@@ -7,7 +7,7 @@ from rest_framework.response import Response
 
 from trcustoms.mixins import PermissionsMixin
 from trcustoms.models import UploadedFile
-from trcustoms.serializers import UploadedFileDetailsSerializer
+from trcustoms.serializers.uploaded_files import UploadedFileDetailsSerializer
 from trcustoms.utils import stream_file_field
 
 

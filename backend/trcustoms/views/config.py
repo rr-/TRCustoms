@@ -14,14 +14,20 @@ from trcustoms.models import (
     LevelTag,
     ReviewTemplateQuestion,
 )
-from trcustoms.serializers import (
-    CountryListingSerializer,
+from trcustoms.serializers.countries import CountryListingSerializer
+from trcustoms.serializers.featured_levels import (
     FeaturedLevelListingSerializer,
+)
+from trcustoms.serializers.level_difficulties import (
     LevelDifficultyListingSerializer,
+)
+from trcustoms.serializers.level_durations import (
     LevelDurationListingSerializer,
-    LevelEngineListingSerializer,
-    LevelGenreListingSerializer,
-    LevelTagListingSerializer,
+)
+from trcustoms.serializers.level_engines import LevelEngineListingSerializer
+from trcustoms.serializers.level_genres import LevelGenreListingSerializer
+from trcustoms.serializers.level_tags import LevelTagListingSerializer
+from trcustoms.serializers.review_templates import (
     ReviewTemplateQuestionSerializer,
 )
 

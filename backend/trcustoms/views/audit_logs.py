@@ -6,7 +6,7 @@ from trcustoms.mixins import PermissionsMixin
 from trcustoms.models import AuditLog, Level
 from trcustoms.models.user import UserPermission
 from trcustoms.permissions import AllowNone, HasPermission
-from trcustoms.serializers import AuditLogListingSerializer
+from trcustoms.serializers.audit_logs import AuditLogListingSerializer
 from trcustoms.utils import parse_bool, parse_id
 
 
