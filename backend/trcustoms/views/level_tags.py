@@ -13,7 +13,7 @@ from trcustoms.mixins import (
 from trcustoms.models import Level, LevelTag
 from trcustoms.models.user import UserPermission
 from trcustoms.permissions import AllowNone, HasPermission
-from trcustoms.serializers import (
+from trcustoms.serializers.level_tags import (
     LevelTagDetailsSerializer,
     LevelTagListingSerializer,
 )

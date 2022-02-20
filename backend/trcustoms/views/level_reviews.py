@@ -14,7 +14,7 @@ from trcustoms.permissions import (
     HasPermission,
     IsAccessingOwnResource,
 )
-from trcustoms.serializers import (
+from trcustoms.serializers.level_reviews import (
     LevelReviewDetailsSerializer,
     LevelReviewListingSerializer,
 )
