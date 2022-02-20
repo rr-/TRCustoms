@@ -25,13 +25,9 @@ interface Theme {
     "label-backgrounds": string;
     "label-background-color": string;
     "navbar-primary-background-color": string;
-    "navbar-primary-background-color-inside": string;
     "navbar-secondary-background-color": string;
-    "navbar-secondary-background-color-inside": string;
     "navbar-secondary-active-tab-background-color": string;
     "navbar-secondary-active-tab-text-color": string;
-    "navbar-primary-margin": string;
-    "navbar-secondary-margin": string;
     "sidebar-background-color": string;
     "sidebar-padding": string;
     "levels-table-background-color": string;
@@ -73,18 +69,13 @@ const themes: Array<Theme> = [
       "label-backgrounds": "0",
       "label-background-color": "var(--navbar-secondary-background-color)",
       "navbar-primary-background-color": "transparent",
-      "navbar-primary-background-color-inside": "transparent",
-      "navbar-secondary-background-color": "transparent",
-      "navbar-secondary-background-color-inside": "#171720",
-      "navbar-primary-margin": "0.5rem 0",
-      "navbar-secondary-margin": "0.5rem 0",
+      "navbar-secondary-background-color": "#171720",
       "navbar-secondary-active-tab-background-color": "#1c3160",
       "navbar-secondary-active-tab-text-color": "#d0e6ed",
-      "sidebar-background-color":
-        "var(--navbar-secondary-background-color-inside)",
+      "sidebar-background-color": "var(--navbar-secondary-background-color)",
       "sidebar-padding": "1",
       "levels-table-background-color":
-        "var(--navbar-secondary-background-color-inside)",
+        "var(--navbar-secondary-background-color)",
       "levels-table-padding": "1",
       "reviews-table-background-color": "var(--sidebar-background-color)",
       "table-details-background-color": "var(--sidebar-background-color)",
@@ -122,11 +113,7 @@ const themes: Array<Theme> = [
       "label-backgrounds": "0",
       "label-background-color": "var(--navbar-secondary-background-color)",
       "navbar-primary-background-color": "transparent",
-      "navbar-primary-background-color-inside": "transparent",
-      "navbar-secondary-background-color": "transparent",
-      "navbar-secondary-background-color-inside": "#EAEAEA",
-      "navbar-primary-margin": "0.5rem 0",
-      "navbar-secondary-margin": "0.5rem 0",
+      "navbar-secondary-background-color": "#EAEAEA",
       "navbar-secondary-active-tab-background-color": "#DDD",
       "navbar-secondary-active-tab-text-color": "var(--text-color)",
       "sidebar-background-color": "transparent",
@@ -140,7 +127,7 @@ const themes: Array<Theme> = [
       "text-color": "black",
       "link-color": "red",
       "link-highlight-background-color":
-        "var(--navbar-secondary-background-color-inside)",
+        "var(--navbar-secondary-background-color)",
       "link-highlight-text-color": "var(--text-color)",
       "link-text-decoration": "none",
       "outline-color": "var(--link-color)",
@@ -162,29 +149,25 @@ const themes: Array<Theme> = [
       "input-background-color": "floralwhite",
       "input-border-color": "var(--button-background-color)",
       "input-invalid-border-color": "red",
-      "button-background-color": "var(--navbar-primary-background-color)",
+      "button-background-color": "yellowgreen",
       "button-text-color": "var(--text-color)",
-      "button-hovered-background-color":
-        "var(--navbar-secondary-background-color)",
+      "button-hovered-background-color": "var(--label-background-color)",
       "button-hovered-text-color": "var(--text-color)",
       "button-text-decoration": "underline",
       "label-backgrounds": "1",
-      "label-background-color": "var(--navbar-secondary-background-color)",
-      "navbar-primary-background-color": "yellowgreen",
-      "navbar-primary-background-color-inside": "transparent",
-      "navbar-secondary-background-color": "#c8ec85",
-      "navbar-secondary-background-color-inside": "transparent",
-      "navbar-secondary-active-tab-background-color": "var(--background-color)",
+      "label-background-color": "#c8ec85",
+      "navbar-primary-background-color": "transparent",
+      "navbar-secondary-background-color": "yellowgreen",
+      "navbar-secondary-active-tab-background-color":
+        "var(--label-background-color)",
       "navbar-secondary-active-tab-text-color": "var(--text-color)",
-      "navbar-primary-margin": "0",
-      "navbar-secondary-margin": "0",
       "sidebar-background-color": "transparent",
       "sidebar-padding": "0",
       "levels-table-background-color": "var(--section-background-color)",
       "levels-table-padding": "1",
       "reviews-table-background-color": "var(--background-color)",
       "table-details-background-color": "var(--section-background-color)",
-      "section-background-color": "var(--navbar-secondary-background-color)",
+      "section-background-color": "var(--label-background-color)",
       "section-padding": "1",
       "text-color": "black",
       "link-color": "#1b5e60",

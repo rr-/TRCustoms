@@ -23,6 +23,8 @@
   font-family: "Chakra Petch";
   font-weight: normal;
   font-size: 2.8rem;
+  margin: 0;
+  padding: 0;
 }
 .TopNavBar h1 a {
   text-decoration: none;
@@ -32,26 +34,24 @@
 }
 
 .TopNavBar--primary {
-  background: var(--navbar-primary-background-color);
-  margin: var(--navbar-primary-margin);
+  margin: 0.5rem 0 0.25rem 0;
 }
 .TopNavBar--primary .NavBar {
   margin: 0 1rem 0 0.7rem;
-  height: 3rem;
+  height: 4rem;
 }
 .TopNavBar--primary .MainContainer {
-  background: var(--navbar-primary-background-color-inside);
+  background: var(--navbar-primary-background-color);
 }
 .TopNavBar--primary .TopNavBar--listItem {
   margin-left: 1rem;
 }
 
 .TopNavBar--secondary {
-  background: var(--navbar-secondary-background-color);
-  margin: var(--navbar-secondary-margin);
+  margin: 0 0 0.5rem 0;
 }
 .TopNavBar--secondary .MainContainer {
-  background: var(--navbar-secondary-background-color-inside);
+  background: var(--navbar-secondary-background-color);
 }
 .TopNavBar--secondary .TopNavBar--listItem a {
   padding: 0.3rem 1rem;
@@ -79,6 +79,6 @@
 }
 
 .NavBar .Logo {
-  height: 3rem;
-  margin-right: 0.5rem;
+  height: 4rem;
+  margin-right: 0.8rem;
 }
