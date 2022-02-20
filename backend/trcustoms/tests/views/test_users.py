@@ -82,7 +82,7 @@ def test_user_creation(
     assert response.status_code == status.HTTP_201_CREATED, data
     assert data == {
         "id": any_integer(),
-        "email": payload["email"],
+        "email": "",
         "username": payload["username"],
         "first_name": payload["first_name"],
         "last_name": payload["last_name"],
@@ -260,7 +260,7 @@ def test_user_creation_acquiring_trle_account(
     assert response.status_code == status.HTTP_201_CREATED, data
     assert data == {
         "id": any_integer(),
-        "email": payload["email"],
+        "email": "",
         "username": payload["username"],
         "first_name": "",
         "last_name": "",
@@ -523,7 +523,6 @@ def test_user_rejection(
     admin_api_client: APIClient,
     fake: Generic,
 ) -> None:
-    """Test that ."""
     payload = {
         "email": fake.person.email(),
         "username": fake.person.username(),
@@ -553,7 +552,6 @@ def test_user_deactivation(
     admin_api_client: APIClient,
     user_factory: UserFactory,
 ) -> None:
-    """Test that ."""
     user = user_factory(
         username="user_to_be_deactivated",
         is_pending_activation=False,
@@ -579,3 +577,61 @@ def test_user_deactivation(
     assert User.objects.get(username=user.username).is_pending_activation
     assert not User.objects.get(username=user.username).is_active
     assert not AuditLog.objects.first().is_action_required
+
+
+@pytest.mark.django_db
+def test_user_listing_does_not_show_emails(
+    auth_api_client: APIClient,
+    user_factory: UserFactory,
+) -> None:
+    user = user_factory(email="jdoe@example.com")
+
+    response = auth_api_client.get("/api/users/")
+    data = response.json()
+    assert response.status_code == status.HTTP_200_OK, data
+    assert len(data["results"]) == 1
+    assert "email" not in data["results"][0]
+    assert user.email not in response.content.decode()
+
+
+@pytest.mark.django_db
+def test_user_retrieval_does_not_show_emails(
+    auth_api_client: APIClient,
+    user_factory: UserFactory,
+) -> None:
+    user = user_factory(
+        username="test_hiding_emails", email="jdoe@example.com"
+    )
+
+    response = auth_api_client.get(f"/api/users/{user.id}/")
+    data = response.json()
+    assert user != auth_api_client.user
+    assert response.status_code == status.HTTP_200_OK, data
+    assert data["email"] == ""
+    assert user.email not in response.content.decode()
+
+
+@pytest.mark.django_db
+def test_user_retrieval_show_emails_to_admins(
+    admin_api_client: APIClient,
+    user_factory: UserFactory,
+) -> None:
+    user = user_factory(email="jdoe@example.com")
+
+    response = admin_api_client.get(f"/api/users/{user.id}/")
+    data = response.json()
+    assert response.status_code == status.HTTP_200_OK, data
+    assert data["email"] == user.email
+
+
+@pytest.mark.django_db
+def test_user_retrieval_show_emails_to_owners(
+    auth_api_client: APIClient,
+    user_factory: UserFactory,
+) -> None:
+    auth_api_client.user.email = "jdoe@example.com"
+    auth_api_client.user.save()
+    response = auth_api_client.get(f"/api/users/{auth_api_client.user.id}/")
+    data = response.json()
+    assert response.status_code == status.HTTP_200_OK, data
+    assert data["email"] == auth_api_client.user.email
