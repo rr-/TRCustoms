@@ -160,12 +160,14 @@ class UserViewSet(
                 user.set_unusable_password()
                 user.ban_reason = reason
                 user.save()
+            clear_audit_log_action_flags(obj=user)
         elif user.is_pending_activation:
             track_model_deletion(
                 obj=user,
                 request=request,
                 changes=[f"Rejected (reason: {reason})"],
             )
+            clear_audit_log_action_flags(obj=user)
             user.delete()
         else:
             with track_model_update(
@@ -177,8 +179,8 @@ class UserViewSet(
                 user.is_pending_activation = True
                 user.ban_reason = reason
                 user.save()
+            clear_audit_log_action_flags(obj=user)
 
-        clear_audit_log_action_flags(obj=user)
         return Response({})
 
     @action(detail=True, methods=["post"])
