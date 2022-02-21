@@ -260,5 +260,4 @@ class UsernameSerializer(serializers.Serializer):
 
 
 class UserConfirmEmailSerializer(serializers.Serializer):
-    username = serializers.CharField(max_length=200)
     token = serializers.CharField(max_length=200)

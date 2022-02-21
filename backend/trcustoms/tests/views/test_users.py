@@ -498,8 +498,8 @@ def test_user_email_activation(
     )
 
     response = admin_api_client.get(
-        "/api/users/confirm_email/",
-        data={"username": user.username, "token": user.generate_email_token()},
+        f"/api/users/{user.id}/confirm_email/",
+        data={"token": user.generate_email_token()},
     )
     assert response.status_code == status.HTTP_302_FOUND
 
@@ -526,8 +526,8 @@ def test_user_email_activation_invalid_token(
     )
 
     response = admin_api_client.get(
-        "/api/users/confirm_email/",
-        data={"username": user.username, "token": "bad"},
+        f"/api/users/{user.id}/confirm_email/",
+        data={"token": "bad"},
     )
     assert response.status_code == status.HTTP_302_FOUND
 
