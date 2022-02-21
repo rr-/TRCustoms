@@ -484,37 +484,86 @@ def test_login_success_case_insensitive(
 
 
 @pytest.mark.django_db
-def test_user_activation(
+def test_user_email_activation(
+    user_factory: UserFactory,
     admin_api_client: APIClient,
     fake: Generic,
 ) -> None:
-    """Test that ."""
-    payload = {
-        "email": fake.person.email(),
-        "username": fake.person.username(),
-        "password": VALID_PASSWORD,
-    }
-    response = admin_api_client.post("/api/users/", data=payload)
-    data = response.json()
-    user_id = data["id"]
+    user = user_factory(
+        email=fake.person.email(),
+        username=fake.person.username(),
+        is_pending_activation=True,
+        is_active=False,
+        is_email_confirmed=False,
+    )
 
-    assert User.objects.get(username=payload["username"]).is_pending_activation
-    assert not User.objects.get(username=payload["username"]).is_active
+    response = admin_api_client.get(
+        "/api/users/confirm_email/",
+        data={"username": user.username, "token": user.generate_email_token()},
+    )
+    assert response.status_code == status.HTTP_302_FOUND
+
+    user.refresh_from_db()
+    assert user.is_pending_activation
+    assert not user.is_active
+    assert user.is_email_confirmed
     assert AuditLog.objects.count() == 1
     assert AuditLog.objects.first().is_action_required
 
+
+@pytest.mark.django_db
+def test_user_email_activation_invalid_token(
+    user_factory: UserFactory,
+    admin_api_client: APIClient,
+    fake: Generic,
+) -> None:
+    user = user_factory(
+        email=fake.person.email(),
+        username=fake.person.username(),
+        is_pending_activation=True,
+        is_active=False,
+        is_email_confirmed=False,
+    )
+
+    response = admin_api_client.get(
+        "/api/users/confirm_email/",
+        data={"username": user.username, "token": "bad"},
+    )
+    assert response.status_code == status.HTTP_302_FOUND
+
+    user.refresh_from_db()
+    assert user.is_pending_activation
+    assert not user.is_active
+    assert not user.is_email_confirmed
+    assert AuditLog.objects.count() == 0
+
+
+@pytest.mark.django_db
+def test_user_activation(
+    user_factory: UserFactory,
+    admin_api_client: APIClient,
+    fake: Generic,
+) -> None:
+    user = user_factory(
+        email=fake.person.email(),
+        username=fake.person.username(),
+        is_pending_activation=True,
+        is_active=False,
+        is_email_confirmed=True,
+    )
+
     response = admin_api_client.post(
-        f"/api/users/{user_id}/activate/",
+        f"/api/users/{user.id}/activate/",
         data={"reason": "no reason"},
     )
     data = response.json()
     assert response.status_code == status.HTTP_200_OK, data
     assert data == {}
 
-    assert not User.objects.get(
-        username=payload["username"]
-    ).is_pending_activation
-    assert User.objects.get(username=payload["username"]).is_active
+    user.refresh_from_db()
+    assert not user.is_pending_activation
+    assert user.is_active
+    assert AuditLog.objects.count() == 1
     assert not AuditLog.objects.first().is_action_required
 
 
@@ -532,8 +581,7 @@ def test_user_rejection(
     data = response.json()
     user_id = data["id"]
 
-    assert AuditLog.objects.count() == 1
-    assert AuditLog.objects.first().is_action_required
+    assert AuditLog.objects.count() == 0
 
     response = admin_api_client.post(
         f"/api/users/{user_id}/deactivate/",
@@ -544,6 +592,7 @@ def test_user_rejection(
     assert data == {}
 
     assert not User.objects.filter(username=payload["username"]).exists()
+    assert AuditLog.objects.count() == 1
     assert not AuditLog.objects.first().is_action_required
 
 
