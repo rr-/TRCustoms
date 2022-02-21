@@ -142,15 +142,12 @@ class UserViewSet(
         send_email_confirmation_mail(user)
         return Response({})
 
-    @action(detail=False, methods=["get"])
-    def confirm_email(self, request) -> Response:
+    @action(detail=True, methods=["get"])
+    def confirm_email(self, request, pk: int) -> Response:
         serializer = UserConfirmEmailSerializer(data=request.GET)
         if not serializer.is_valid():
             return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
-        user = User.objects.filter(
-            Q(username=serializer.data["username"])
-            | Q(email=serializer.data["username"])
-        ).first()
+        user = self.get_object()
         if user.generate_email_token() == serializer.data["token"]:
             user.is_email_confirmed = True
             user.save()

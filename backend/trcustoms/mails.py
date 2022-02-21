@@ -13,8 +13,8 @@ def send_email_confirmation_mail(user: User) -> None:
         f"{PREFIX} Account activation",
         (
             "Please click this link to finish activation:\n"
-            f"{settings.HOST_SITE}/api/users/confirm_email"
-            f"?username={user.username}&token={token}"
+            f"{settings.HOST_SITE}/api/users/{user.id}/confirm_email"
+            f"?token={token}"
         ),
         FROM,
         [user.email],
