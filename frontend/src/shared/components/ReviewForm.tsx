@@ -142,6 +142,7 @@ const ReviewForm = ({ level, review, onGoBack, onSubmit }: ReviewFormProps) => {
 
   const handleSubmit = useCallback(
     async (values, { setSubmitting, setStatus, setErrors }) => {
+      setStatus({});
       try {
         const payload = {
           levelId: level.id,

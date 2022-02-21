@@ -26,6 +26,7 @@ const LoginPage = () => {
 
   const handleSubmit = useCallback(
     async (values, { setSubmitting, setStatus, setErrors }) => {
+      setStatus({});
       try {
         await AuthService.login(values.username, values.password);
         const user = await UserService.getCurrentUser();

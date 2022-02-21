@@ -178,6 +178,7 @@ const LevelForm = ({ level, onGoBack, onSubmit }: LevelFormProps) => {
 
   const handleSubmit = useCallback(
     async (values, { setSubmitting, setStatus, setErrors }) => {
+      setStatus({});
       try {
         const payload = {
           name: values.name,
