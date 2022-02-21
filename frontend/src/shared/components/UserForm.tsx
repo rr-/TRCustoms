@@ -86,6 +86,7 @@ const UserForm = ({ user, onGoBack, onSubmit }: UserFormProps) => {
 
   const handleSubmit = useCallback(
     async (values, { setSubmitting, setStatus, setErrors }) => {
+      setStatus({});
       try {
         const payload = {
           username: values.username,
