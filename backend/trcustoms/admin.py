@@ -120,6 +120,7 @@ class UserAdmin(BaseUserAdmin):
         "last_name",
         "is_active",
         "is_banned",
+        "is_email_confirmed",
         "is_staff",
     ]
     raw_id_fields = ["picture"]
