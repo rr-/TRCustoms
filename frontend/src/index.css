@@ -62,6 +62,9 @@ button {
   padding: 0.25rem 1rem;
   cursor: pointer;
 }
+button[disabled] {
+  opacity: 0.5;
+}
 button + button {
   margin-left: 1rem;
 }
