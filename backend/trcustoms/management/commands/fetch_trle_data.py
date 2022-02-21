@@ -268,9 +268,10 @@ def process_level_files(level: Level, trle_level: TRLELevel) -> None:
                         upload_type=UploadedFile.UploadType.LEVEL_FILE,
                         content=File(handle, name=path.name),
                     )
-                LevelFile.objects.update_or_create(
-                    level=level, file=uploaded_file
-                )
+                if not level.files.filter(file=uploaded_file).exists():
+                    LevelFile.objects.update_or_create(
+                        level=level, file=uploaded_file
+                    )
 
 
 def process_level(ctx: ScrapeContext, obj_id: int) -> None:
