@@ -2,6 +2,8 @@ import "./App.css";
 import { Routes } from "react-router-dom";
 import { Route } from "react-router-dom";
 import { NavBar } from "src/components/NavBar";
+import { ScrollToTop } from "src/components/ScrollToTop";
+import { ThemeManager } from "src/components/ThemeManager";
 import { EmailConfirmationFinishPage } from "src/components/pages/EmailConfirmationFinishPage";
 import { GenreListPage } from "src/components/pages/GenreListPage";
 import { HomePage } from "src/components/pages/HomePage";
@@ -21,11 +23,9 @@ import { TagListPage } from "src/components/pages/TagListPage";
 import { UserEditPage } from "src/components/pages/UserEditPage";
 import { UserListPage } from "src/components/pages/UserListPage";
 import { UserPage } from "src/components/pages/UserPage";
-import { ScrollToTop } from "src/shared/components/ScrollToTop";
-import { ThemeManager } from "src/shared/components/ThemeManager";
-import { ConfigContextProvider } from "src/shared/contexts/ConfigContext";
-import { TitleContextProvider } from "src/shared/contexts/TitleContext";
-import { UserContextProvider } from "src/shared/contexts/UserContext";
+import { ConfigContextProvider } from "src/contexts/ConfigContext";
+import { TitleContextProvider } from "src/contexts/TitleContext";
+import { UserContextProvider } from "src/contexts/UserContext";
 
 function App() {
   return (

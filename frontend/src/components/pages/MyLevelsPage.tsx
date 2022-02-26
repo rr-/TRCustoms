@@ -1,15 +1,15 @@
 import { useState } from "react";
 import { useContext } from "react";
 import { useEffect } from "react";
-import type { LevelSearchQuery } from "src/services/level.service";
-import { LevelsTable } from "src/shared/components/LevelsTable";
-import { QueryPersister } from "src/shared/components/QueryPersister";
-import { deserializeGenericSearchQuery } from "src/shared/components/QueryPersister";
-import { serializeGenericSearchQuery } from "src/shared/components/QueryPersister";
-import { TitleContext } from "src/shared/contexts/TitleContext";
-import { UserContext } from "src/shared/contexts/UserContext";
-import { filterFalsyObjectValues } from "src/shared/utils";
-import { getCurrentSearchParams } from "src/shared/utils";
+import { LevelsTable } from "src/components/LevelsTable";
+import { QueryPersister } from "src/components/QueryPersister";
+import { deserializeGenericSearchQuery } from "src/components/QueryPersister";
+import { serializeGenericSearchQuery } from "src/components/QueryPersister";
+import { TitleContext } from "src/contexts/TitleContext";
+import { UserContext } from "src/contexts/UserContext";
+import type { LevelSearchQuery } from "src/services/LevelService";
+import { filterFalsyObjectValues } from "src/utils";
+import { getCurrentSearchParams } from "src/utils";
 
 const defaultSearchQuery: LevelSearchQuery = {
   page: null,

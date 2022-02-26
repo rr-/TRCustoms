@@ -4,14 +4,14 @@ import { useEffect } from "react";
 import { useQuery } from "react-query";
 import { useNavigate } from "react-router-dom";
 import { useParams } from "react-router-dom";
-import type { LevelNested } from "src/services/level.service";
-import { LevelService } from "src/services/level.service";
-import type { ReviewDetails } from "src/services/review.service";
-import { ReviewService } from "src/services/review.service";
-import { Loader } from "src/shared/components/Loader";
-import { ReviewForm } from "src/shared/components/ReviewForm";
-import { TitleContext } from "src/shared/contexts/TitleContext";
-import { UserContext } from "src/shared/contexts/UserContext";
+import { Loader } from "src/components/Loader";
+import { ReviewForm } from "src/components/ReviewForm";
+import { TitleContext } from "src/contexts/TitleContext";
+import { UserContext } from "src/contexts/UserContext";
+import type { LevelNested } from "src/services/LevelService";
+import { LevelService } from "src/services/LevelService";
+import type { ReviewDetails } from "src/services/ReviewService";
+import { ReviewService } from "src/services/ReviewService";
 
 interface LevelReviewPageParams {
   levelId: string;

@@ -4,15 +4,15 @@ import { useContext } from "react";
 import { useEffect } from "react";
 import { useCallback } from "react";
 import { useState } from "react";
-import type { GenreSearchQuery } from "src/services/genre.service";
-import { GenresTable } from "src/shared/components/GenresTable";
-import { QueryPersister } from "src/shared/components/QueryPersister";
-import { deserializeGenericSearchQuery } from "src/shared/components/QueryPersister";
-import { serializeGenericSearchQuery } from "src/shared/components/QueryPersister";
-import { SearchBar } from "src/shared/components/SearchBar";
-import { TextFormField } from "src/shared/components/formfields/TextFormField";
-import { TitleContext } from "src/shared/contexts/TitleContext";
-import { getCurrentSearchParams } from "src/shared/utils";
+import { GenresTable } from "src/components/GenresTable";
+import { QueryPersister } from "src/components/QueryPersister";
+import { deserializeGenericSearchQuery } from "src/components/QueryPersister";
+import { serializeGenericSearchQuery } from "src/components/QueryPersister";
+import { SearchBar } from "src/components/SearchBar";
+import { TextFormField } from "src/components/formfields/TextFormField";
+import { TitleContext } from "src/contexts/TitleContext";
+import type { GenreSearchQuery } from "src/services/GenreService";
+import { getCurrentSearchParams } from "src/utils";
 
 const defaultSearchQuery: GenreSearchQuery = {
   page: null,

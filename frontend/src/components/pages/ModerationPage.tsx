@@ -4,18 +4,18 @@ import { useState } from "react";
 import { useCallback } from "react";
 import { useEffect } from "react";
 import { useContext } from "react";
-import type { AuditLogSearchQuery } from "src/services/auditLog.service";
-import { AuditLogTable } from "src/shared/components/AuditLogTable";
-import { InfoMessage } from "src/shared/components/InfoMessage";
-import { InfoMessageType } from "src/shared/components/InfoMessage";
-import { QueryPersister } from "src/shared/components/QueryPersister";
-import { deserializeGenericSearchQuery } from "src/shared/components/QueryPersister";
-import { serializeGenericSearchQuery } from "src/shared/components/QueryPersister";
-import { SearchBar } from "src/shared/components/SearchBar";
-import { SectionHeader } from "src/shared/components/Section";
-import { TextFormField } from "src/shared/components/formfields/TextFormField";
-import { TitleContext } from "src/shared/contexts/TitleContext";
-import { getCurrentSearchParams } from "src/shared/utils";
+import { AuditLogTable } from "src/components/AuditLogTable";
+import { InfoMessage } from "src/components/InfoMessage";
+import { InfoMessageType } from "src/components/InfoMessage";
+import { QueryPersister } from "src/components/QueryPersister";
+import { deserializeGenericSearchQuery } from "src/components/QueryPersister";
+import { serializeGenericSearchQuery } from "src/components/QueryPersister";
+import { SearchBar } from "src/components/SearchBar";
+import { SectionHeader } from "src/components/Section";
+import { TextFormField } from "src/components/formfields/TextFormField";
+import { TitleContext } from "src/contexts/TitleContext";
+import type { AuditLogSearchQuery } from "src/services/AuditLogService";
+import { getCurrentSearchParams } from "src/utils";
 
 const defaultSearchQuery: AuditLogSearchQuery = {
   isReviewed: false,

@@ -4,15 +4,15 @@ import { useEffect } from "react";
 import { useCallback } from "react";
 import { useState } from "react";
 import { useContext } from "react";
-import type { UserSearchQuery } from "src/services/user.service";
-import { QueryPersister } from "src/shared/components/QueryPersister";
-import { deserializeGenericSearchQuery } from "src/shared/components/QueryPersister";
-import { serializeGenericSearchQuery } from "src/shared/components/QueryPersister";
-import { SearchBar } from "src/shared/components/SearchBar";
-import { UsersTable } from "src/shared/components/UsersTable";
-import { TextFormField } from "src/shared/components/formfields/TextFormField";
-import { TitleContext } from "src/shared/contexts/TitleContext";
-import { getCurrentSearchParams } from "src/shared/utils";
+import { QueryPersister } from "src/components/QueryPersister";
+import { deserializeGenericSearchQuery } from "src/components/QueryPersister";
+import { serializeGenericSearchQuery } from "src/components/QueryPersister";
+import { SearchBar } from "src/components/SearchBar";
+import { UsersTable } from "src/components/UsersTable";
+import { TextFormField } from "src/components/formfields/TextFormField";
+import { TitleContext } from "src/contexts/TitleContext";
+import type { UserSearchQuery } from "src/services/UserService";
+import { getCurrentSearchParams } from "src/utils";
 
 const defaultSearchQuery: UserSearchQuery = {
   page: null,

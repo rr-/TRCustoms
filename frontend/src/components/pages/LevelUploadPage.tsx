@@ -3,9 +3,9 @@ import { useCallback } from "react";
 import { useEffect } from "react";
 import { useContext } from "react";
 import { Link } from "react-router-dom";
-import type { LevelDetails } from "src/services/level.service";
-import { LevelForm } from "src/shared/components/LevelForm";
-import { TitleContext } from "src/shared/contexts/TitleContext";
+import { LevelForm } from "src/components/LevelForm";
+import { TitleContext } from "src/contexts/TitleContext";
+import type { LevelDetails } from "src/services/LevelService";
 
 const LevelUploadPage = () => {
   const { setTitle } = useContext(TitleContext);

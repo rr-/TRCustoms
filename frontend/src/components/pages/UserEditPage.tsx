@@ -4,12 +4,12 @@ import { useEffect } from "react";
 import { useQuery } from "react-query";
 import { useNavigate } from "react-router-dom";
 import { useParams } from "react-router-dom";
-import { UserService } from "src/services/user.service";
-import type { UserDetails } from "src/services/user.service";
-import { Loader } from "src/shared/components/Loader";
-import { UserForm } from "src/shared/components/UserForm";
-import { TitleContext } from "src/shared/contexts/TitleContext";
-import { UserContext } from "src/shared/contexts/UserContext";
+import { Loader } from "src/components/Loader";
+import { UserForm } from "src/components/UserForm";
+import { TitleContext } from "src/contexts/TitleContext";
+import { UserContext } from "src/contexts/UserContext";
+import { UserService } from "src/services/UserService";
+import type { UserDetails } from "src/services/UserService";
 
 interface UserEditPageParams {
   userId: string;

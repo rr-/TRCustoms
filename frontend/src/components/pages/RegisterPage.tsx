@@ -3,12 +3,12 @@ import { useCallback } from "react";
 import { useContext } from "react";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { AuthService } from "src/services/auth.service";
-import type { UserDetails } from "src/services/user.service";
-import { UserService } from "src/services/user.service";
-import { UserForm } from "src/shared/components/UserForm";
-import { TitleContext } from "src/shared/contexts/TitleContext";
-import { UserContext } from "src/shared/contexts/UserContext";
+import { UserForm } from "src/components/UserForm";
+import { TitleContext } from "src/contexts/TitleContext";
+import { UserContext } from "src/contexts/UserContext";
+import { AuthService } from "src/services/AuthService";
+import type { UserDetails } from "src/services/UserService";
+import { UserService } from "src/services/UserService";
 
 const RegisterPage = () => {
   const navigate = useNavigate();

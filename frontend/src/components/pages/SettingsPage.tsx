@@ -1,11 +1,11 @@
 import "./SettingsPage.css";
 import { useEffect } from "react";
 import { useContext } from "react";
-import { Checkbox } from "src/shared/components/Checkbox";
-import { useInfiniteScroll } from "src/shared/components/DataTable";
-import { getAllThemes } from "src/shared/components/ThemeManager";
-import { useTheme } from "src/shared/components/ThemeManager";
-import { TitleContext } from "src/shared/contexts/TitleContext";
+import { Checkbox } from "src/components/Checkbox";
+import { useInfiniteScroll } from "src/components/DataTable";
+import { getAllThemes } from "src/components/ThemeManager";
+import { useTheme } from "src/components/ThemeManager";
+import { TitleContext } from "src/contexts/TitleContext";
 
 const SettingsPage = () => {
   const [, setTheme] = useTheme();

@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { useContext } from "react";
 import { Link } from "react-router-dom";
 import { useParams } from "react-router-dom";
-import { TitleContext } from "src/shared/contexts/TitleContext";
+import { TitleContext } from "src/contexts/TitleContext";
 
 interface UserPageParams {
   success: string;
