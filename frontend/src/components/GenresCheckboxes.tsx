@@ -2,12 +2,12 @@ import { sortBy } from "lodash";
 import { useState } from "react";
 import { useEffect } from "react";
 import { useContext } from "react";
+import { Checkbox } from "src/components/Checkbox";
 import { FilterCheckboxesHeader } from "src/components/FilterCheckboxesHeader";
-import type { GenreNested } from "src/services/genre.service";
-import type { LevelSearchQuery } from "src/services/level.service";
-import { Checkbox } from "src/shared/components/Checkbox";
-import { PushButton } from "src/shared/components/PushButton";
-import { ConfigContext } from "src/shared/contexts/ConfigContext";
+import { PushButton } from "src/components/PushButton";
+import { ConfigContext } from "src/contexts/ConfigContext";
+import type { GenreNested } from "src/services/GenreService";
+import type { LevelSearchQuery } from "src/services/LevelService";
 
 const MAX_VISIBLE_GENRES = 8;
 

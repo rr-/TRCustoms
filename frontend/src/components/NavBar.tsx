@@ -5,11 +5,11 @@ import { Link } from "react-router-dom";
 import { NavLink } from "react-router-dom";
 import { useLocation } from "react-router-dom";
 import { useResolvedPath } from "react-router-dom";
-import { UserPermission } from "src/services/user.service";
-import { Logo } from "src/shared/components/Logo";
-import { PermissionGuard } from "src/shared/components/PermissionGuard";
-import { UserPicture } from "src/shared/components/UserPicture";
-import { UserContext } from "src/shared/contexts/UserContext";
+import { Logo } from "src/components/Logo";
+import { PermissionGuard } from "src/components/PermissionGuard";
+import { UserPicture } from "src/components/UserPicture";
+import { UserContext } from "src/contexts/UserContext";
+import { UserPermission } from "src/services/UserService";
 
 const LevelsNavLink = ({ children, to, ...rest }: LinkProps) => {
   let location = useLocation();

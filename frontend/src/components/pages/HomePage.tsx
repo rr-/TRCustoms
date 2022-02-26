@@ -1,4 +1,4 @@
-import { FeaturedLevelsView } from "src/shared/components/FeaturedLevelsView";
+import { FeaturedLevelsView } from "src/components/FeaturedLevelsView";
 
 const HomePage = () => {
   return (

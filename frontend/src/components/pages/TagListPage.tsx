@@ -4,15 +4,15 @@ import { useEffect } from "react";
 import { useCallback } from "react";
 import { useState } from "react";
 import { useContext } from "react";
-import type { TagSearchQuery } from "src/services/tag.service";
-import { QueryPersister } from "src/shared/components/QueryPersister";
-import { deserializeGenericSearchQuery } from "src/shared/components/QueryPersister";
-import { serializeGenericSearchQuery } from "src/shared/components/QueryPersister";
-import { SearchBar } from "src/shared/components/SearchBar";
-import { TagsTable } from "src/shared/components/TagsTable";
-import { TextFormField } from "src/shared/components/formfields/TextFormField";
-import { TitleContext } from "src/shared/contexts/TitleContext";
-import { getCurrentSearchParams } from "src/shared/utils";
+import { QueryPersister } from "src/components/QueryPersister";
+import { deserializeGenericSearchQuery } from "src/components/QueryPersister";
+import { serializeGenericSearchQuery } from "src/components/QueryPersister";
+import { SearchBar } from "src/components/SearchBar";
+import { TagsTable } from "src/components/TagsTable";
+import { TextFormField } from "src/components/formfields/TextFormField";
+import { TitleContext } from "src/contexts/TitleContext";
+import type { TagSearchQuery } from "src/services/TagService";
+import { getCurrentSearchParams } from "src/utils";
 
 const defaultSearchQuery: TagSearchQuery = {
   page: null,

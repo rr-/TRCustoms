@@ -1,5 +1,5 @@
 import "./FilterCheckboxesHeader.css";
-import { PushButton } from "src/shared/components/PushButton";
+import { PushButton } from "src/components/PushButton";
 
 interface FilterCheckboxesHeaderProps {
   onClear: () => void;

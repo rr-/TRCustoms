@@ -4,11 +4,11 @@ import { useEffect } from "react";
 import { useQuery } from "react-query";
 import { useNavigate } from "react-router-dom";
 import { useParams } from "react-router-dom";
-import type { LevelDetails } from "src/services/level.service";
-import { LevelService } from "src/services/level.service";
-import { LevelForm } from "src/shared/components/LevelForm";
-import { Loader } from "src/shared/components/Loader";
-import { TitleContext } from "src/shared/contexts/TitleContext";
+import { LevelForm } from "src/components/LevelForm";
+import { Loader } from "src/components/Loader";
+import { TitleContext } from "src/contexts/TitleContext";
+import type { LevelDetails } from "src/services/LevelService";
+import { LevelService } from "src/services/LevelService";
 
 interface LevelEditPageParams {
   levelId: string;
