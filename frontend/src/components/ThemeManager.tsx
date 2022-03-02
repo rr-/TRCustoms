@@ -24,6 +24,10 @@ interface Theme {
     "button-text-decoration": string;
     "label-backgrounds": string;
     "label-background-color": string;
+    "tab-switch-active-background-color": string;
+    "tab-switch-inactive-background-color": string;
+    "tab-switch-active-text-color": string;
+    "tab-switch-inactive-text-color": string;
     "navbar-primary-background-color": string;
     "navbar-secondary-background-color": string;
     "navbar-secondary-active-tab-background-color": string;
@@ -45,12 +49,22 @@ interface Theme {
   };
 }
 
+const baseVariables = {
+  "tab-switch-active-background-color":
+    "var(--navbar-secondary-active-tab-background-color)",
+  "tab-switch-inactive-background-color": "var(--label-background-color)",
+  "tab-switch-active-text-color":
+    "var(--navbar-secondary-active-tab-text-color)",
+  "tab-switch-inactive-text-color": "var(--text-color)",
+};
+
 const themes: Array<Theme> = [
   {
     name: "Midnight ocean",
     primaryColor: "#20232e",
     secondaryColor: "#2196f3",
     cssVariables: {
+      ...baseVariables,
       "background-color": "#20232e",
       "failure-text-color": "tomato",
       "warning-text-color": "yellow",
@@ -95,6 +109,7 @@ const themes: Array<Theme> = [
     primaryColor: "white",
     secondaryColor: "red",
     cssVariables: {
+      ...baseVariables,
       "background-color": "white",
       "failure-text-color": "firebrick",
       "warning-text-color": "darkorange",
@@ -139,6 +154,7 @@ const themes: Array<Theme> = [
     primaryColor: "yellowgreen",
     secondaryColor: "lemonchiffon",
     cssVariables: {
+      ...baseVariables,
       "background-color": "lemonchiffon",
       "failure-text-color": "#f32d0a",
       "warning-text-color": "#9e921e",
