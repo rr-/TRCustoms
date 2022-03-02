@@ -1,0 +1,26 @@
+{% extends "email_base.html" %}
+
+{% block content %}
+<p>Hi {{username}},</p>
+
+<p>
+  Please click on the button below to complete your TRCustoms.org
+  registration.<br />
+</p>
+
+<a class="cta" href="{{link}}">Complete registration</a>
+
+<p>If you cannot click on the button, please use this link:</p>
+
+<code>{{link}}</code>
+
+<p>
+  Our team of moderators will soon activate your account after your
+  confirmation.
+</p>
+
+<p>
+  If you did not issue this registration, please ignore this email. The
+  registration will expire after 6 hours if it is not confirmed.
+</p>
+{% endblock %}
