@@ -10,11 +10,6 @@ def user_authentication_rule(user: User | None) -> None:
             detail="Invalid username or password.",
             code="invalid_credentials",
         )
-    if not user.is_active:
-        raise AuthenticationFailed(
-            detail="Your account is still awaiting activation.",
-            code="no_active_account",
-        )
     if not user.is_email_confirmed:
         raise AuthenticationFailed(
             detail=(
@@ -22,6 +17,11 @@ def user_authentication_rule(user: User | None) -> None:
                 "In case no message was sent, check the spam folder."
             ),
             code="email_not_confirmed",
+        )
+    if not user.is_active:
+        raise AuthenticationFailed(
+            detail="Your account is still awaiting activation.",
+            code="no_active_account",
         )
     if user.is_banned:
         raise AuthenticationFailed(
