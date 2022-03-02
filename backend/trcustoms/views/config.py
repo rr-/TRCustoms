@@ -36,7 +36,7 @@ class ConfigViewSet(viewsets.ViewSet):
     permission_classes = [AllowAny]
 
     def list(self, request) -> Response:
-        countries = Country.objects.all()
+        countries = Country.objects.order_by("name")
         level_tags = LevelTag.objects.with_counts()
         level_genres = LevelGenre.objects.with_counts()
         level_engines = LevelEngine.objects.with_counts()
