@@ -148,7 +148,10 @@ class UserViewSet(
         if not serializer.is_valid():
             return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
         user = self.get_object()
-        if user.generate_email_token() == serializer.data["token"]:
+
+        if user.is_email_confirmed:
+            success = True
+        elif user.generate_email_token() == serializer.data["token"]:
             user.is_email_confirmed = True
             user.save()
             success = True
