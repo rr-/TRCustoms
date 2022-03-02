@@ -1,0 +1,42 @@
+.TabSwitch--nav {
+  display: flex;
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+.TabSwitch--navItem {
+  margin: 0;
+  padding: 0;
+}
+.TabSwitch--navItemLink {
+  display: inline-block;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  background: var(--tab-switch-inactive-background-color);
+  color: var(--tab-switch-inactive-text-color);
+}
+.TabSwitch--navItem.active .TabSwitch--navItemLink {
+  background: var(--tab-switch-active-background-color);
+  color: var(--tab-switch-active-text-color);
+}
+
+.TabSwitch--content {
+  list-style-type: none;
+  margin: 0;
+  padding: 0.5rem;
+  background: var(--tab-switch-inactive-background-color);
+}
+.TabSwitch--contentItem {
+  margin: 0;
+  padding: 0;
+}
+.TabSwitch--contentItem:not(.active) {
+  display: none;
+}
+
+.TabSwitch--contentItem > *:first-child {
+  margin-top: 0;
+}
+.TabSwitch--contentItem > *:last-child {
+  margin-bottom: 0;
+}

@@ -1,5 +1,8 @@
 import "./TextAreaFormField.css";
+import { useFormikContext } from "formik";
 import { Field } from "formik";
+import { Markdown } from "src/components/Markdown";
+import { TabSwitch } from "src/components/TabSwitch";
 import { BaseFormField } from "src/components/formfields/BaseFormField";
 import type { GenericFormFieldProps } from "src/components/formfields/BaseFormField";
 
@@ -13,16 +16,32 @@ const TextAreaFormField = ({
   validate,
   ...props
 }: TextAreaFormFieldProps) => {
+  const { values } = useFormikContext();
   return (
     <BaseFormField name={name} readonly={readonly} {...props}>
-      <Field
-        validate={validate}
-        disabled={readonly}
-        className="TextAreaFormField--textarea"
-        as="textarea"
-        type="text"
-        name={name}
-      />
+      <div className="TextAreaFormField">
+        <TabSwitch
+          tabs={[
+            {
+              label: "Compose",
+              content: (
+                <Field
+                  validate={validate}
+                  disabled={readonly}
+                  className="TextAreaFormField--textarea"
+                  as="textarea"
+                  type="text"
+                  name={name}
+                />
+              ),
+            },
+            {
+              label: "Preview",
+              content: <Markdown>{(values as any)[name]}</Markdown>,
+            },
+          ]}
+        />
+      </div>
     </BaseFormField>
   );
 };
