@@ -1,5 +1,6 @@
 from django.conf import settings
-from django.core.mail import send_mail
+from django.core.mail import EmailMultiAlternatives
+from django.template.loader import get_template
 
 from trcustoms.models import User
 
@@ -7,16 +8,33 @@ FROM = "admin@trcustoms.org"
 PREFIX = "[TRCustoms]"
 
 
+def send_email(
+    template_name: str,
+    subject: str,
+    recipients: list[str],
+    context: dict[str, str],
+) -> None:
+    plaintext = get_template(f"{template_name}.txt")
+    htmly = get_template(f"{template_name}.html")
+
+    text_content = plaintext.render(context)
+    html_content = htmly.render(context)
+    msg = EmailMultiAlternatives(subject, text_content, FROM, recipients)
+    msg.attach_alternative(html_content, "text/html")
+    msg.send()
+
+
 def send_email_confirmation_mail(user: User) -> None:
     token = user.generate_email_token()
-    send_mail(
-        f"{PREFIX} Account activation",
-        (
-            "Please click this link to finish activation:\n"
-            f"{settings.HOST_SITE}/api/users/{user.id}/confirm_email"
-            f"?token={token}"
-        ),
-        FROM,
-        [user.email],
-        fail_silently=False,
+    link = (
+        f"{settings.HOST_SITE}/api/users/{user.id}/confirm_email?token={token}"
+    )
+    send_email(
+        template_name="email_confirmation",
+        subject=f"{PREFIX} Confirm your registration",
+        recipients=[user.email],
+        context={
+            "username": user.username,
+            "link": link,
+        },
     )

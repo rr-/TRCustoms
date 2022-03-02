@@ -1,0 +1,14 @@
+{% extends "email_base.txt" %}
+
+{% block content %}
+Hi {{username}},
+
+Please click on the link below to complete your TRCustoms.org registration.
+
+{{link}}
+
+Our team of moderators will soon activate your account after your confirmation.
+
+If you did not issue this registration, please ignore this email. The
+registration will expire after 6 hours if it is not confirmed.
+{% endblock %}
