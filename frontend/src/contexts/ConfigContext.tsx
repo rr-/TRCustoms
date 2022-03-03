@@ -16,6 +16,7 @@ const defaultConfig = {
   durations: [],
   difficulties: [],
   review_questions: [],
+  review_stats: [],
   limits: {
     min_tags: 0,
     max_tags: 0,
@@ -29,6 +30,8 @@ const defaultConfig = {
     max_authors: 0,
     max_tag_length: 0,
   },
+  total_levels: 0,
+  total_reviews: 0,
 };
 
 const ConfigContext = createContext<{

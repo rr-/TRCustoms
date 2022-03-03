@@ -160,7 +160,7 @@ const UserPage = () => {
             <dt>Last seen</dt>
             <dd>{formatDate(user.last_login) || "never"}</dd>
 
-            <div>
+            <div className="span">
               <hr />
             </div>
 

@@ -218,7 +218,7 @@ const LevelPage = () => {
               )}
             </dd>
 
-            <div>
+            <div className="span">
               <hr />
             </div>
 
@@ -244,7 +244,7 @@ const LevelPage = () => {
               </>
             )}
 
-            <div>
+            <div className="span">
               <hr />
             </div>
 
@@ -293,7 +293,7 @@ const LevelPage = () => {
               )}
             </dd>
 
-            <div>
+            <div className="span">
               <SectionHeader>Version history</SectionHeader>
             </div>
 
@@ -320,7 +320,9 @@ const LevelPage = () => {
                   </Fragment>
                 ))
             ) : (
-              <div>Downloads for this level are not available.</div>
+              <div className="span">
+                Downloads for this level are not available.
+              </div>
             )}
           </dl>
         </SidebarBox>

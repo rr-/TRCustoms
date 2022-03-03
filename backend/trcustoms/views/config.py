@@ -1,4 +1,5 @@
 from django.conf import settings
+from django.db.models import Count
 from rest_framework import status, viewsets
 from rest_framework.decorators import action
 from rest_framework.permissions import AllowAny
@@ -7,10 +8,12 @@ from rest_framework.response import Response
 from trcustoms.models import (
     Country,
     FeaturedLevel,
+    Level,
     LevelDifficulty,
     LevelDuration,
     LevelEngine,
     LevelGenre,
+    LevelReview,
     LevelTag,
     ReviewTemplateQuestion,
 )
@@ -77,6 +80,29 @@ class ConfigViewSet(viewsets.ViewSet):
                     "max_authors": settings.MAX_AUTHORS,
                     "max_tag_length": settings.MAX_TAG_LENGTH,
                 },
+                "total_levels": Level.objects.all().count(),
+                "total_reviews": LevelReview.objects.all().count(),
+                "review_stats": [
+                    {
+                        "rating_class": {
+                            "id": item["rating_class__id"],
+                            "position": item["rating_class__position"],
+                            "name": item["rating_class__name"],
+                        }
+                        if item["rating_class__id"]
+                        else None,
+                        "level_count": item["level_count"],
+                    }
+                    for item in Level.objects.all()
+                    .exclude(rating_class=None)
+                    .values(
+                        "rating_class__id",
+                        "rating_class__position",
+                        "rating_class__name",
+                    )
+                    .annotate(level_count=Count("rating_class"))
+                    .order_by("level_count")
+                ],
             },
             status.HTTP_200_OK,
         )
