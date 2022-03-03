@@ -1,0 +1,31 @@
+.DefinitionList {
+  display: grid;
+  grid-template-columns: minmax(30%, min-content) auto;
+  gap: 0 1rem;
+}
+
+.DefinitionItemGroup {
+  display: contents;
+}
+.DefinitionItemGroup > .DefinitionItem:first-of-type > * {
+  margin-top: 0.5rem;
+}
+.DefinitionItemGroup > .DefinitionItem:last-of-type > * {
+  margin-bottom: 0.5rem;
+}
+
+.DefinitionItem {
+  display: contents;
+}
+
+.DefinitionItem--term {
+  white-space: nowrap;
+  text-align: left;
+}
+.DefinitionItem--term:after {
+  content: ":";
+}
+.DefinitionItem--value {
+  margin: 0;
+  text-align: left;
+}

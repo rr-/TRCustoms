@@ -168,7 +168,10 @@ dl {
   grid-template-columns: minmax(30%, min-content) auto;
   gap: 0 1rem;
 }
-dl > div {
+dl > div.group {
+  display: contents;
+}
+dl > div.span {
   margin: 0;
   grid-column: 1 / span 2;
 }
