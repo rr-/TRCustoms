@@ -1,6 +1,7 @@
 from django.conf import settings
 from django.core.mail import EmailMultiAlternatives
 from django.template.loader import get_template
+from premailer import transform
 
 from trcustoms.models import User
 
@@ -15,10 +16,10 @@ def send_email(
     context: dict[str, str],
 ) -> None:
     plaintext = get_template(f"{template_name}.txt")
-    htmly = get_template(f"{template_name}.html")
+    html = get_template(f"{template_name}.html")
 
     text_content = plaintext.render(context)
-    html_content = htmly.render(context)
+    html_content = transform(html.render(context))
     msg = EmailMultiAlternatives(subject, text_content, FROM, recipients)
     msg.attach_alternative(html_content, "text/html")
     msg.send()
