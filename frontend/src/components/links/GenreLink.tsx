@@ -8,7 +8,7 @@ interface GenreLinkProps {
 
 const GenreLink = ({ genre, children }: GenreLinkProps) => {
   const { id, name } = genre;
-  return <Link to={`/?genres=${id}`}>{children || name}</Link>;
+  return <Link to={`/levels?genres=${id}`}>{children || name}</Link>;
 };
 
 export { GenreLink };
