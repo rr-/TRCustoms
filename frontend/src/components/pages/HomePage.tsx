@@ -2,6 +2,7 @@ import "./HomePage.css";
 import { sortBy } from "lodash";
 import { round } from "lodash";
 import { useContext } from "react";
+import { Link } from "react-router-dom";
 import { DefinitionItemGroup } from "src/components/DefinitionList";
 import { DefinitionItem } from "src/components/DefinitionList";
 import { DefinitionList } from "src/components/DefinitionList";
@@ -17,7 +18,9 @@ const LevelStats = () => {
 
   return (
     <DefinitionList>
-      <DefinitionItem term="Total levels">{config.total_levels}</DefinitionItem>
+      <DefinitionItem term={<Link to="/levels">Total levels</Link>}>
+        {config.total_levels}
+      </DefinitionItem>
 
       <DefinitionItemGroup>
         {sortBy(config.engines, (engine) => engine.name).map((engine) => (
