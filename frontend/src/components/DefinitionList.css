@@ -17,6 +17,10 @@
 .DefinitionItem {
   display: contents;
 }
+.DefinitionItem.span {
+  display: block;
+  grid-column: 1 / span 2;
+}
 
 .DefinitionItem--term {
   white-space: nowrap;

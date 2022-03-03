@@ -163,35 +163,6 @@ h3 {
   font-size: 1.2em;
 }
 
-dl {
-  display: grid;
-  grid-template-columns: minmax(30%, min-content) auto;
-  gap: 0 1rem;
-}
-dl > div.group {
-  display: contents;
-}
-dl > div.span {
-  margin: 0;
-  grid-column: 1 / span 2;
-}
-dl > div > hr {
-  margin: 0.5rem 0;
-  width: 100%;
-  background: transparent;
-}
-dl dt {
-  white-space: nowrap;
-  text-align: left;
-}
-dl dt:after {
-  content: ":";
-}
-dl dd {
-  margin: 0;
-  text-align: left;
-}
-
 hr {
   border: 0;
   height: 2px;

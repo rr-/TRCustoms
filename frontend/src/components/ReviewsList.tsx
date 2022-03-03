@@ -81,15 +81,19 @@ const ReviewView = ({ review, showLevels }: ReviewViewProps) => {
         </UserLink>
 
         <dl className="Review--userInfo">
-          <dt>Reviews</dt>
-          <dd className="Review--userInfoDefinition">
-            {review.author.reviewed_level_count}
-          </dd>
+          <div className="Review--userInfoTerm">
+            <dt>Reviews</dt>
+            <dd className="Review--userInfoDefinition">
+              {review.author.reviewed_level_count}
+            </dd>
+          </div>
 
-          <dt>Posted</dt>
-          <dd className="Review--userInfoDefinition">
-            {formatDate(review.created)}
-          </dd>
+          <div className="Review--userInfoTerm">
+            <dt>Posted</dt>
+            <dd className="Review--userInfoDefinition">
+              {formatDate(review.created)}
+            </dd>
+          </div>
         </dl>
 
         <PermissionGuard

@@ -69,6 +69,19 @@
   display: flex;
   flex-direction: row;
   flex: 1 1 0;
+  gap: 2rem;
+  white-space: nowrap;
+  text-align: left;
+}
+.Review--userInfoTerm {
+  display: flex;
+  gap: 0.5rem;
+}
+.Review--userInfo dd {
+  margin: 0;
+}
+.Review--userInfo dt:after {
+  content: ":";
 }
 .Review--userInfoDefinition {
   margin-right: 2rem;

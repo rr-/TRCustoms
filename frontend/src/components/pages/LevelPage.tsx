@@ -9,6 +9,9 @@ import { Fragment } from "react";
 import { useState } from "react";
 import { useQuery } from "react-query";
 import { useParams } from "react-router-dom";
+import { DefinitionItemGroup } from "src/components/DefinitionList";
+import { DefinitionItem } from "src/components/DefinitionList";
+import { DefinitionList } from "src/components/DefinitionList";
 import { InfoMessage } from "src/components/InfoMessage";
 import { InfoMessageType } from "src/components/InfoMessage";
 import { LevelRating } from "src/components/LevelRating";
@@ -180,151 +183,153 @@ const LevelPage = () => {
             </>
           }
         >
-          <dl className="LevelPage--basicInfo">
-            <dt>Author(s)</dt>
-            <dd>
-              {level.authors.length ? (
-                <ul className="LevelPage--basicInfoList">
-                  {level.authors.map((author) => (
-                    <li
-                      key={author.id}
-                      className="LevelPage--basicInfoListItem"
-                    >
-                      <UserLink user={author} />
-                    </li>
-                  ))}
-                </ul>
-              ) : (
-                EMPTY_INPUT_PLACEHOLDER
-              )}
-            </dd>
-            <dt>Rating</dt>
-            <dd>
-              <LevelRating ratingClass={level.rating_class} />
-            </dd>
+          <DefinitionList>
+            <DefinitionItemGroup>
+              <DefinitionItem term="Author(s)">
+                {level.authors.length ? (
+                  <ul className="LevelPage--basicInfoList">
+                    {level.authors.map((author) => (
+                      <li
+                        key={author.id}
+                        className="LevelPage--basicInfoListItem"
+                      >
+                        <UserLink user={author} />
+                      </li>
+                    ))}
+                  </ul>
+                ) : (
+                  EMPTY_INPUT_PLACEHOLDER
+                )}
+              </DefinitionItem>
 
-            <dt>Reviews</dt>
-            <dd>
-              {reviewCount !== undefined ? (
-                <PushButton
-                  isPlain={true}
-                  disableTimeout={true}
-                  onClick={handleReviewCountClick}
-                >
-                  {reviewCount}
-                </PushButton>
-              ) : (
-                <Loader inline={true} />
-              )}
-            </dd>
+              <DefinitionItem term="Rating">
+                <LevelRating ratingClass={level.rating_class} />
+              </DefinitionItem>
 
-            <div className="span">
-              <hr />
-            </div>
+              <DefinitionItem term="Reviews">
+                {reviewCount !== undefined ? (
+                  <PushButton
+                    isPlain={true}
+                    disableTimeout={true}
+                    onClick={handleReviewCountClick}
+                  >
+                    {reviewCount}
+                  </PushButton>
+                ) : (
+                  <Loader inline={true} />
+                )}
+              </DefinitionItem>
+            </DefinitionItemGroup>
 
-            <dt>Release date</dt>
-            <dd>{formatDate(level.created) || "unknown"}</dd>
+            <DefinitionItemGroup>
+              <DefinitionItem term="Release date">
+                {formatDate(level.created) || "unknown"}
+              </DefinitionItem>
 
-            <dt>Last updated</dt>
-            <dd>{formatDate(level.last_updated) || "never"}</dd>
+              <DefinitionItem term="Last updated">
+                {formatDate(level.last_updated) || "never"}
+              </DefinitionItem>
 
-            <dt>Downloads</dt>
-            <dd>{level.download_count}</dd>
+              <DefinitionItem term="Downloads">
+                {level.download_count}
+              </DefinitionItem>
 
-            {level.trle_id && (
-              <>
-                <dt>Links</dt>
-                <dd>
+              {level.trle_id && (
+                <DefinitionItem term="Links">
                   <a
                     href={`https://www.trle.net/sc/levelfeatures.php?lid=${level.trle_id}`}
                   >
                     TRLE.net
                   </a>
-                </dd>
-              </>
-            )}
-
-            <div className="span">
-              <hr />
-            </div>
-
-            <dt>Engine</dt>
-            <dd>
-              {level.engine ? (
-                <EngineLink engine={level.engine} />
-              ) : (
-                EMPTY_INPUT_PLACEHOLDER
+                </DefinitionItem>
               )}
-            </dd>
+            </DefinitionItemGroup>
 
-            <dt>Difficulty</dt>
-            <dd>{level.difficulty?.name || EMPTY_INPUT_PLACEHOLDER}</dd>
+            <DefinitionItemGroup>
+              <DefinitionItem term="Engine">
+                {level.engine ? (
+                  <EngineLink engine={level.engine} />
+                ) : (
+                  EMPTY_INPUT_PLACEHOLDER
+                )}
+              </DefinitionItem>
 
-            <dt>Duration</dt>
-            <dd>{level.duration?.name || EMPTY_INPUT_PLACEHOLDER}</dd>
+              <DefinitionItem term="Difficulty">
+                {level.difficulty?.name || EMPTY_INPUT_PLACEHOLDER}
+              </DefinitionItem>
 
-            <dt>Genres</dt>
-            <dd>
-              {level.genres.length ? (
-                <ul className="LevelPage--basicInfoList">
-                  {level.genres.map((genre) => (
-                    <li key={genre.id} className="LevelPage--basicInfoListItem">
-                      <GenreLink genre={genre} />
-                    </li>
-                  ))}
-                </ul>
-              ) : (
-                EMPTY_INPUT_PLACEHOLDER
-              )}
-            </dd>
+              <DefinitionItem term="Duration">
+                {level.duration?.name || EMPTY_INPUT_PLACEHOLDER}
+              </DefinitionItem>
 
-            <dt>Tags</dt>
-            <dd>
-              {level.tags.length ? (
-                <ul className="LevelPage--basicInfoList">
-                  {level.tags.map((tag) => (
-                    <li key={tag.id} className="LevelPage--basicInfoListItem">
-                      <TagLink tag={tag} />
-                    </li>
-                  ))}
-                </ul>
-              ) : (
-                EMPTY_INPUT_PLACEHOLDER
-              )}
-            </dd>
+              <DefinitionItem term="Genres">
+                {level.genres.length ? (
+                  <ul className="LevelPage--basicInfoList">
+                    {level.genres.map((genre) => (
+                      <li
+                        key={genre.id}
+                        className="LevelPage--basicInfoListItem"
+                      >
+                        <GenreLink genre={genre} />
+                      </li>
+                    ))}
+                  </ul>
+                ) : (
+                  EMPTY_INPUT_PLACEHOLDER
+                )}
+              </DefinitionItem>
 
-            <div className="span">
+              <DefinitionItem term="Tags">
+                {level.tags.length ? (
+                  <ul className="LevelPage--basicInfoList">
+                    {level.tags.map((tag) => (
+                      <li key={tag.id} className="LevelPage--basicInfoListItem">
+                        <TagLink tag={tag} />
+                      </li>
+                    ))}
+                  </ul>
+                ) : (
+                  EMPTY_INPUT_PLACEHOLDER
+                )}
+              </DefinitionItem>
+            </DefinitionItemGroup>
+
+            <DefinitionItem span={true}>
               <SectionHeader>Version history</SectionHeader>
-            </div>
+            </DefinitionItem>
 
             {level.files.length ? (
               level.files
                 .sort((a, b) => b.version - a.version)
                 .map((file) => (
-                  <Fragment key={file.id}>
-                    <dt className="LevelPage--fileTableTerm">
-                      {file.url ? (
-                        <PushButton isPlain={true} to={file.url}>
-                          Version {file.version}
-                        </PushButton>
-                      ) : (
-                        <PushButton
-                          isPlain={true}
-                          onClick={() => showFileGoneAlert()}
-                        >
-                          Version {file.version}
-                        </PushButton>
-                      )}
-                    </dt>
-                    <dd>{formatDate(file.created)}</dd>
-                  </Fragment>
+                  <DefinitionItem
+                    key={file.id}
+                    term={
+                      <span className="LevelPage--fileTableTerm">
+                        {file.url ? (
+                          <PushButton isPlain={true} to={file.url}>
+                            Version {file.version}
+                          </PushButton>
+                        ) : (
+                          <PushButton
+                            isPlain={true}
+                            onClick={() => showFileGoneAlert()}
+                          >
+                            Version {file.version}
+                          </PushButton>
+                        )}
+                      </span>
+                    }
+                  >
+                    {formatDate(file.created)}
+                  </DefinitionItem>
                 ))
             ) : (
-              <div className="span">
+              <DefinitionItem span={true}>
                 Downloads for this level are not available.
-              </div>
+              </DefinitionItem>
             )}
-          </dl>
+          </DefinitionList>
         </SidebarBox>
       </aside>
 

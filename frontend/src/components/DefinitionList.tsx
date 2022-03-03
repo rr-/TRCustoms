@@ -8,21 +8,22 @@ const DefinitionItemGroup = ({ children }: DefinitionItemGroupProps) => {
   return <div className="DefinitionItemGroup">{children}</div>;
 };
 interface DefinitionItemProps {
-  term: string;
+  span?: boolean | undefined;
+  term?: React.ReactNode | undefined;
   children: React.ReactNode;
 }
 
-const DefinitionItem = ({ term, children }: DefinitionItemProps) => {
+const DefinitionItem = ({ span, term, children }: DefinitionItemProps) => {
   return (
-    <div className="DefinitionItem">
-      <div className="DefinitionItem--term">{term}</div>
+    <div className={`DefinitionItem ${span ? "span" : ""}`}>
+      {term && <div className="DefinitionItem--term">{term}</div>}
       <div className="DefinitionItem--value">{children}</div>
     </div>
   );
 };
 
 interface DefinitionListProps {
-  children: React.ReactElement<typeof DefinitionItem>[];
+  children: React.ReactNode;
 }
 
 const DefinitionList = ({ children }: DefinitionListProps) => {
