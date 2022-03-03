@@ -8,7 +8,7 @@ interface EngineLinkProps {
 
 const EngineLink = ({ engine, children }: EngineLinkProps) => {
   const { id, name } = engine;
-  return <Link to={`/?engines=${id}`}>{children || name}</Link>;
+  return <Link to={`/levels?engines=${id}`}>{children || name}</Link>;
 };
 
 export { EngineLink };

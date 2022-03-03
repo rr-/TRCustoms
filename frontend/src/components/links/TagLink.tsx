@@ -8,7 +8,7 @@ interface TagLinkProps {
 
 const TagLink = ({ tag, children }: TagLinkProps) => {
   const { id, name } = tag;
-  return <Link to={`/?tags=${id}`}>{children || name}</Link>;
+  return <Link to={`/levels?tags=${id}`}>{children || name}</Link>;
 };
 
 export { TagLink };
