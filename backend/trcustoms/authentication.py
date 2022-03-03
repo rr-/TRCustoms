@@ -1,3 +1,4 @@
+from django.contrib.auth.backends import ModelBackend
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework_simplejwt.exceptions import AuthenticationFailed
 
@@ -36,3 +37,13 @@ class CustomAuthentication(JWTAuthentication):
         user = super().get_user(validated_token)
         user_authentication_rule(user)
         return user
+
+
+class CustomBackend(ModelBackend):
+    """A backend authentication that lets user perform authentication even when
+    they're not active so that user_authentication_rule can return meaningful
+    errors.
+    """
+
+    def user_can_authenticate(self, user):
+        return True

@@ -117,6 +117,8 @@ DATABASES = {
     }
 }
 
+AUTHENTICATION_BACKENDS = ["trcustoms.authentication.CustomBackend"]
+
 AUTH_USER_MODEL = "trcustoms.User"
 AUTH_PASSWORD_VALIDATORS = [
     {
