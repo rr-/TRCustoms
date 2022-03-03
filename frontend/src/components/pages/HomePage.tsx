@@ -9,6 +9,7 @@ import { FeaturedLevelsView } from "src/components/FeaturedLevelsView";
 import { Section } from "src/components/Section";
 import { SectionHeader } from "src/components/Section";
 import { SidebarBox } from "src/components/SidebarBox";
+import { EngineLink } from "src/components/links/EngineLink";
 import { ConfigContext } from "src/contexts/ConfigContext";
 
 const LevelStats = () => {
@@ -20,7 +21,7 @@ const LevelStats = () => {
 
       <DefinitionItemGroup>
         {sortBy(config.engines, (engine) => engine.name).map((engine) => (
-          <DefinitionItem term={engine.name}>
+          <DefinitionItem term={<EngineLink engine={engine} />}>
             {engine.level_count}
           </DefinitionItem>
         ))}
