@@ -6,6 +6,9 @@ import { useContext } from "react";
 import { useQuery } from "react-query";
 import { useNavigate } from "react-router-dom";
 import { useParams } from "react-router-dom";
+import { DefinitionItemGroup } from "src/components/DefinitionList";
+import { DefinitionItem } from "src/components/DefinitionList";
+import { DefinitionList } from "src/components/DefinitionList";
 import { LevelsTable } from "src/components/LevelsTable";
 import { Loader } from "src/components/Loader";
 import { Markdown } from "src/components/Markdown";
@@ -153,27 +156,28 @@ const UserPage = () => {
             </>
           }
         >
-          <dl>
-            <dt>Joined</dt>
-            <dd>{formatDate(user.date_joined) || "unknown"}</dd>
+          <DefinitionList>
+            <DefinitionItemGroup>
+              <DefinitionItem term="Joined">
+                {formatDate(user.date_joined) || "unknown"}
+              </DefinitionItem>
 
-            <dt>Last seen</dt>
-            <dd>{formatDate(user.last_login) || "never"}</dd>
+              <DefinitionItem term="Last seen">
+                {formatDate(user.last_login) || "never"}
+              </DefinitionItem>
+            </DefinitionItemGroup>
 
-            <div className="span">
-              <hr />
-            </div>
+            <DefinitionItemGroup>
+              <DefinitionItem term="Authored levels">
+                {user.authored_level_count}
+              </DefinitionItem>
 
-            <dt>Authored levels</dt>
-            <dd>{user.authored_level_count}</dd>
+              <DefinitionItem term="Reviewed levels">
+                {user.reviewed_level_count}
+              </DefinitionItem>
 
-            <dt>Reviewed levels</dt>
-            <dd>{user.reviewed_level_count}</dd>
-
-            {user.trle_reviewer_id || user.trle_author_id ? (
-              <>
-                <dt>Links</dt>
-                <dd>
+              {!!(user.trle_reviewer_id && user.trle_author_id) && (
+                <DefinitionItem term="Links">
                   {user.trle_reviewer_id && (
                     <a
                       href={`https://www.trle.net/sc/reviewerfeatures.php?rid=${user.trle_reviewer_id}`}
@@ -189,10 +193,10 @@ const UserPage = () => {
                       TRLE.net (author)
                     </a>
                   )}
-                </dd>
-              </>
-            ) : null}
-          </dl>
+                </DefinitionItem>
+              )}
+            </DefinitionItemGroup>
+          </DefinitionList>
         </SidebarBox>
       </aside>
 
