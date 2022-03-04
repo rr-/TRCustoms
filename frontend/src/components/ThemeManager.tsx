@@ -46,6 +46,9 @@ interface Theme {
     "link-highlight-text-color": string;
     "link-text-decoration": string;
     "outline-color": string;
+    "stats-positive-bar-color": string;
+    "stats-neutral-bar-color": string;
+    "stats-negative-bar-color": string;
   };
 }
 
@@ -101,6 +104,9 @@ const themes: Array<Theme> = [
       "link-highlight-text-color": "#d0e6ed",
       "link-text-decoration": "none",
       "outline-color": "var(--link-color)",
+      "stats-positive-bar-color": "#538f38",
+      "stats-neutral-bar-color": "#7b6032",
+      "stats-negative-bar-color": "#a62626",
     },
   },
 
@@ -146,6 +152,9 @@ const themes: Array<Theme> = [
       "link-highlight-text-color": "var(--text-color)",
       "link-text-decoration": "none",
       "outline-color": "var(--link-color)",
+      "stats-positive-bar-color": "red",
+      "stats-neutral-bar-color": "red",
+      "stats-negative-bar-color": "red",
     },
   },
 
@@ -192,6 +201,9 @@ const themes: Array<Theme> = [
       "link-highlight-text-color": "var(--text-color)",
       "link-text-decoration": "underline",
       "outline-color": "var(--text-color)",
+      "stats-positive-bar-color": "var(--positive-background-color)",
+      "stats-neutral-bar-color": "var(--neutral-background-color)",
+      "stats-negative-bar-color": "var(--negative-background-color)",
     },
   },
 ];
