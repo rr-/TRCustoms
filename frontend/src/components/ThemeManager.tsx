@@ -53,12 +53,15 @@ interface Theme {
 }
 
 const baseVariables = {
+  "input-border-color": "var(--button-background-color)",
+  "input-invalid-border-color": "red",
   "tab-switch-active-background-color":
     "var(--navbar-secondary-active-tab-background-color)",
   "tab-switch-inactive-background-color": "var(--label-background-color)",
   "tab-switch-active-text-color":
     "var(--navbar-secondary-active-tab-text-color)",
   "tab-switch-inactive-text-color": "var(--text-color)",
+  "navbar-primary-background-color": "transparent",
 };
 
 const themes: Array<Theme> = [
@@ -76,8 +79,6 @@ const themes: Array<Theme> = [
       "neutral-background-color": "#3c3c17",
       "negative-background-color": "#4d1f1f",
       "input-background-color": "#a8c7e0",
-      "input-border-color": "var(--button-background-color)",
-      "input-invalid-border-color": "red",
       "button-background-color": "#1e67a1",
       "button-text-color": "white",
       "button-hovered-background-color": "#2f7ab6",
@@ -85,7 +86,6 @@ const themes: Array<Theme> = [
       "button-text-decoration": "none",
       "label-backgrounds": "0",
       "label-background-color": "var(--navbar-secondary-background-color)",
-      "navbar-primary-background-color": "transparent",
       "navbar-secondary-background-color": "#171720",
       "navbar-secondary-active-tab-background-color": "#1c3160",
       "navbar-secondary-active-tab-text-color": "#d0e6ed",
@@ -124,8 +124,6 @@ const themes: Array<Theme> = [
       "neutral-background-color": "#efefd7",
       "negative-background-color": "#fed0d0",
       "input-background-color": "var(--background-color)",
-      "input-border-color": "var(--button-background-color)",
-      "input-invalid-border-color": "red",
       "button-background-color": "grey",
       "button-text-color": "white",
       "button-hovered-background-color": "silver",
@@ -133,7 +131,6 @@ const themes: Array<Theme> = [
       "button-text-decoration": "none",
       "label-backgrounds": "0",
       "label-background-color": "var(--navbar-secondary-background-color)",
-      "navbar-primary-background-color": "transparent",
       "navbar-secondary-background-color": "#EAEAEA",
       "navbar-secondary-active-tab-background-color": "#DDD",
       "navbar-secondary-active-tab-text-color": "var(--text-color)",
@@ -172,8 +169,6 @@ const themes: Array<Theme> = [
       "neutral-background-color": "#b1a338",
       "negative-background-color": "#f38561",
       "input-background-color": "floralwhite",
-      "input-border-color": "var(--button-background-color)",
-      "input-invalid-border-color": "red",
       "button-background-color": "yellowgreen",
       "button-text-color": "var(--text-color)",
       "button-hovered-background-color": "var(--label-background-color)",
@@ -181,7 +176,6 @@ const themes: Array<Theme> = [
       "button-text-decoration": "underline",
       "label-backgrounds": "1",
       "label-background-color": "#c8ec85",
-      "navbar-primary-background-color": "transparent",
       "navbar-secondary-background-color": "yellowgreen",
       "navbar-secondary-active-tab-background-color":
         "var(--label-background-color)",
