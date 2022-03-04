@@ -1,6 +1,7 @@
 import "./HomePage.css";
 import { sortBy } from "lodash";
 import { round } from "lodash";
+import { useState } from "react";
 import { useContext } from "react";
 import { Link } from "react-router-dom";
 import { DefinitionItemGroup } from "src/components/DefinitionList";
@@ -40,6 +41,7 @@ const LevelStats = () => {
 
 const ReviewStats = () => {
   const { config } = useContext(ConfigContext);
+  const [tooltip, setTooltip] = useState<string | undefined>();
 
   const maxLevelCount = Math.max(
     ...config.review_stats.map((item) => item.level_count)
@@ -51,16 +53,26 @@ const ReviewStats = () => {
     ...config.review_stats.map((item) => item.rating_class.position)
   );
 
+  const handleMouseEnter = (item: typeof config.review_stats[0]) => {
+    setTooltip(`${item.rating_class.name}: ${item.level_count}`);
+  };
+
+  const handleMouseLeave = (item: typeof config.review_stats[0]) => {
+    setTooltip(undefined);
+  };
+
   return (
     <div className="ReviewStats">
       <header className="ReviewStats--header"></header>
       <ul className="ReviewStats--list">
         {sortBy(config.review_stats, (item) => item.rating_class.position).map(
           (item) => (
-            <li key={item.rating_class.name} className="ReviewStats--listItem">
-              <div className="ReviewStats--tooltip">
-                {item.rating_class.name}: {item.level_count}
-              </div>
+            <li
+              key={item.rating_class.name}
+              className="ReviewStats--listItem"
+              onMouseEnter={() => handleMouseEnter(item)}
+              onMouseLeave={() => handleMouseLeave(item)}
+            >
               <div
                 data-rating-position={item.rating_class.position}
                 title={item.rating_class.name}
@@ -86,7 +98,9 @@ const ReviewStats = () => {
           )
         )}
       </ul>
-      <footer className="ReviewStats--footer">All level ratings</footer>
+      <footer className="ReviewStats--footer">
+        {tooltip || "All level ratings"}
+      </footer>
     </div>
   );
 };
