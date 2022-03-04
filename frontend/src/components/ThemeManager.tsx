@@ -152,9 +152,9 @@ const themes: Array<Theme> = [
       "link-highlight-text-color": "var(--text-color)",
       "link-text-decoration": "none",
       "outline-color": "var(--link-color)",
-      "stats-positive-bar-color": "red",
-      "stats-neutral-bar-color": "red",
-      "stats-negative-bar-color": "red",
+      "stats-positive-bar-color": "var(--link-color)",
+      "stats-neutral-bar-color": "var(--link-color)",
+      "stats-negative-bar-color": "var(--link-color)",
     },
   },
 
