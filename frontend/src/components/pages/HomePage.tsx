@@ -70,12 +70,14 @@ const ReviewStats = () => {
                 }}
               >
                 <div
-                  className="ReviewStats--indicatorFill"
+                  className={`ReviewStats--indicatorFill ${
+                    item.rating_class.position > 0 ? "positive" : "negative"
+                  }`}
                   style={{
                     opacity: `${
-                      ((item.rating_class.position - minRatingClassPosition) /
-                        (maxRatingClassPosition - minRatingClassPosition)) *
-                      100
+                      Math.abs(
+                        item.rating_class.position / maxRatingClassPosition
+                      ) * 100
                     }%`,
                   }}
                 />
