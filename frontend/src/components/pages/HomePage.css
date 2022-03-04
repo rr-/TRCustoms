@@ -59,3 +59,7 @@
 .ReviewStats--footer {
   text-align: center;
 }
+
+.ReviewStats--listItem:hover {
+  filter: brightness(130%);
+}
