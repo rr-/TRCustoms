@@ -24,7 +24,7 @@
   list-style-type: none;
   margin: 0;
   padding: 0.5rem;
-  background: var(--tab-switch-inactive-background-color);
+  background: var(--tab-switch-active-background-color);
 }
 .TabSwitch--contentItem {
   margin: 0;

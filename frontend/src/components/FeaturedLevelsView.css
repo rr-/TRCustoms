@@ -35,13 +35,6 @@
   width: 100%;
 }
 
-.FeaturedLevelView--synopsis > p:first-child {
-  margin-top: 0.5rem;
-}
-.FeaturedLevelView--synopsis > p:last-child {
-  margin-bottom: 0;
-}
-
 .FeaturedLevelView--synopsis {
   transition: max-height 300ms;
   max-height: 0;

@@ -14,6 +14,7 @@
 }
 
 .TextAreaFormField .TabSwitch--content {
+  min-width: 30rem;
   display: inline-block;
   overflow-y: auto;
 }

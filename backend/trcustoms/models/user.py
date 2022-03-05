@@ -17,6 +17,7 @@ class UserPermission(Enum):
     EDIT_LEVELS = "edit_levels"
     EDIT_REVIEWS = "edit_reviews"
     EDIT_TAGS = "edit_tags"
+    EDIT_NEWS = "edit_news"
     EDIT_USERS = "edit_users"
     LIST_USERS = "list_users"
     REVIEW_AUDIT_LOGS = "review_audit_logs"
@@ -51,6 +52,7 @@ class User(AbstractUser):
             (UserPermission.EDIT_LEVELS.value, "Can edit levels"),
             (UserPermission.EDIT_REVIEWS.value, "Can edit reviews"),
             (UserPermission.EDIT_TAGS.value, "Can edit tags"),
+            (UserPermission.EDIT_NEWS.value, "Can edit news"),
             (UserPermission.EDIT_USERS.value, "Can edit users"),
             (UserPermission.LIST_USERS.value, "Can list users"),
             (UserPermission.REVIEW_AUDIT_LOGS.value, "Can review audit logs"),

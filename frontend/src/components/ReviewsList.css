@@ -44,8 +44,8 @@
   padding: 1rem;
   display: flex;
   flex-direction: row;
-  text-align: center;
   white-space: nowrap;
+  justify-content: space-between;
   align-items: center;
   gap: 2rem;
 }
@@ -64,32 +64,8 @@
   max-height: 100%;
 }
 
-.Review--userInfo {
-  margin: 0;
+.Review--footerInfo {
   display: flex;
-  flex-direction: row;
-  flex: 1 1 0;
+  align-items: center;
   gap: 2rem;
-  white-space: nowrap;
-  text-align: left;
-}
-.Review--userInfoTerm {
-  display: flex;
-  gap: 0.5rem;
-}
-.Review--userInfo dd {
-  margin: 0;
-}
-.Review--userInfo dt:after {
-  content: ":";
-}
-.Review--userInfoDefinition {
-  margin-right: 2rem;
-}
-
-.Review--content p:last-of-type {
-  margin-bottom: 0;
-}
-.Review--content p:first-of-type {
-  margin-top: 0;
 }

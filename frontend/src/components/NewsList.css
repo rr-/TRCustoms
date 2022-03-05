@@ -1,0 +1,74 @@
+.News {
+  display: grid;
+  margin-bottom: 3rem;
+  grid-template-rows: auto auto auto;
+  background: var(--reviews-table-background-color);
+}
+
+.News--header {
+  background: var(--button-background-color);
+  color: var(--button-text-color);
+  padding: 0.5rem 1rem;
+}
+.News--header h3 {
+  margin: 0;
+}
+
+.News--content {
+  padding: 1rem;
+  border-bottom: 2px solid var(--button-background-color);
+}
+
+.News--footer {
+  padding: 1rem;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  white-space: nowrap;
+  gap: 2rem;
+}
+
+.News--footerInfo {
+  display: flex;
+  gap: 2rem;
+  flex-direction: row;
+  align-items: center;
+}
+
+.News--userLink {
+  display: flex;
+  max-width: 100%;
+  align-items: center;
+  gap: 0.5rem;
+  flex-basis: 0;
+}
+
+.News--userPic {
+  display: block;
+  width: 2rem;
+  max-height: 100%;
+}
+
+.News--userInfo {
+  margin: 0;
+  display: flex;
+  flex-direction: row;
+  flex: 1 1 0;
+  gap: 2rem;
+  white-space: nowrap;
+  text-align: left;
+}
+.News--userInfoTerm {
+  display: flex;
+  gap: 0.5rem;
+}
+.News--userInfo dd {
+  margin: 0;
+}
+.News--userInfo dt:after {
+  content: ":";
+}
+.News--userInfoDefinition {
+  margin-right: 2rem;
+}
