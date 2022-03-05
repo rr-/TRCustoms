@@ -6,7 +6,7 @@ from django.utils import timezone
 
 from trcustoms.celery import app, logger
 from trcustoms.common.models import RatingClass
-from trcustoms.genres.models import LevelGenre
+from trcustoms.genres.models import Genre
 from trcustoms.levels.models import FeaturedLevel, Level
 
 
@@ -157,9 +157,9 @@ def update_best_level_in_genre() -> FeaturedLevel | None:
     if last_featured_level:
         previous_genre = last_featured_level.chosen_genre
     else:
-        previous_genre = LevelGenre.objects.order_by("name").last()
+        previous_genre = Genre.objects.order_by("name").last()
 
-    genre_names = list(LevelGenre.objects.values_list("name", flat=True))
+    genre_names = list(Genre.objects.values_list("name", flat=True))
     visited_genre_names: set[str] = set()
     while True:
         genre_name = (genre_names + genre_names)[
@@ -167,7 +167,7 @@ def update_best_level_in_genre() -> FeaturedLevel | None:
         ]
         if genre_name in visited_genre_names:
             break
-        genre = LevelGenre.objects.get(name=genre_name)
+        genre = Genre.objects.get(name=genre_name)
         visited_genre_names.add(genre_name)
 
         levels = Level.objects.all()

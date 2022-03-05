@@ -11,11 +11,11 @@ from rest_framework_simplejwt.views import (
 from trcustoms.audit_logs.views import AuditLogViewSet
 from trcustoms.common.views import ConfigViewSet
 from trcustoms.engines.views import EngineViewSet
-from trcustoms.genres.views import LevelGenreViewSet
+from trcustoms.genres.views import GenreViewSet
 from trcustoms.levels.views import LevelFileViewSet, LevelViewSet
 from trcustoms.news.views import NewsViewSet
 from trcustoms.reviews.views import LevelReviewViewSet
-from trcustoms.tags.views import LevelTagViewSet
+from trcustoms.tags.views import TagViewSet
 from trcustoms.uploads.views import UploadViewSet
 from trcustoms.users.views import UserViewSet
 
@@ -26,8 +26,8 @@ router.register(r"news", NewsViewSet)
 router.register(r"uploads", UploadViewSet, basename="uploads")
 router.register(r"auditlogs", AuditLogViewSet, basename="auditlogs")
 router.register(r"levels", LevelViewSet)
-router.register(r"level_tags", LevelTagViewSet)
-router.register(r"level_genres", LevelGenreViewSet)
+router.register(r"level_tags", TagViewSet)
+router.register(r"level_genres", GenreViewSet)
 router.register(r"level_engines", EngineViewSet)
 router.register(r"level_files", LevelFileViewSet)
 router.register(r"reviews", LevelReviewViewSet)

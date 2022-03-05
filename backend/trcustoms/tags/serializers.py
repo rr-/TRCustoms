@@ -1,27 +1,27 @@
 from django.conf import settings
 from rest_framework import serializers
 
-from trcustoms.tags.models import LevelTag
+from trcustoms.tags.models import Tag
 
 
-class LevelTagNestedSerializer(serializers.ModelSerializer):
+class TagNestedSerializer(serializers.ModelSerializer):
     class Meta:
-        model = LevelTag
+        model = Tag
         fields = ["id", "name"]
 
 
-class LevelTagListingSerializer(serializers.ModelSerializer):
+class TagListingSerializer(serializers.ModelSerializer):
     level_count = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
-        model = LevelTag
+        model = Tag
         fields = ["id", "name", "level_count", "created", "last_updated"]
 
-    def get_level_count(self, instance: LevelTag) -> int:
+    def get_level_count(self, instance: Tag) -> int:
         return instance.level_count
 
 
-class LevelTagDetailsSerializer(LevelTagListingSerializer):
+class TagDetailsSerializer(TagListingSerializer):
     def validate_name(self, value):
         if len(value) > settings.MAX_TAG_LENGTH:
             raise serializers.ValidationError(
@@ -29,7 +29,7 @@ class LevelTagDetailsSerializer(LevelTagListingSerializer):
                 f"{settings.MAX_TAG_LENGTH} characters."
             )
         if (
-            LevelTag.objects.filter(name__iexact=value)
+            Tag.objects.filter(name__iexact=value)
             .exclude(id=self.instance.id if self.instance else None)
             .exists()
         ):
@@ -39,5 +39,5 @@ class LevelTagDetailsSerializer(LevelTagListingSerializer):
         return value
 
     class Meta:
-        model = LevelTag
+        model = Tag
         fields = ["id", "name", "created", "last_updated"]

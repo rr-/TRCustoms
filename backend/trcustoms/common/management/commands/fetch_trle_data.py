@@ -26,7 +26,7 @@ from trcustoms.levels.models import (
     LevelScreenshot,
 )
 from trcustoms.reviews.models import LevelReview
-from trcustoms.tags.models import LevelTag
+from trcustoms.tags.models import Tag
 from trcustoms.trle_scraper import TRLELevel, TRLEScraper, TRLEUser
 from trcustoms.uploads.models import UploadedFile
 from trcustoms.users.models import User
@@ -156,9 +156,7 @@ def process_level_basic_data(obj_id: int, trle_level: TRLELevel) -> Level:
         level.save()
 
     if trle_level.category:
-        tag, _created = LevelTag.objects.get_or_create(
-            name=trle_level.category
-        )
+        tag, _created = Tag.objects.get_or_create(name=trle_level.category)
         level.tags.add(tag)
 
     for user in User.objects.filter(trle_author_id__in=trle_level.author_ids):

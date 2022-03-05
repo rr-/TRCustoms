@@ -4,7 +4,7 @@ from rest_framework import status
 from rest_framework.test import APIClient
 
 from trcustoms.conftest import LevelFactory, TagFactory
-from trcustoms.tags.models import LevelTag
+from trcustoms.tags.models import Tag
 
 
 @pytest.mark.django_db
@@ -41,4 +41,4 @@ def test_tag_merging(
     assert not list(level1.tags.values_list("id", flat=True))
     assert list(level2.tags.values_list("id", flat=True)) == [tag2.id]
     assert list(level3.tags.values_list("id", flat=True)) == [tag2.id]
-    assert not LevelTag.objects.filter(name=tag1.name).exists()
+    assert not Tag.objects.filter(name=tag1.name).exists()

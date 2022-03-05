@@ -12,15 +12,15 @@ from trcustoms.mixins import (
     PermissionsMixin,
 )
 from trcustoms.permissions import AllowNone, HasPermission
-from trcustoms.tags.models import LevelTag
+from trcustoms.tags.models import Tag
 from trcustoms.tags.serializers import (
-    LevelTagDetailsSerializer,
-    LevelTagListingSerializer,
+    TagDetailsSerializer,
+    TagListingSerializer,
 )
 from trcustoms.users.models import UserPermission
 
 
-class LevelTagViewSet(
+class TagViewSet(
     AuditLogModelWatcherMixin,
     PermissionsMixin,
     MultiSerializerMixin,
@@ -30,7 +30,7 @@ class LevelTagViewSet(
     mixins.ListModelMixin,
     viewsets.GenericViewSet,
 ):
-    queryset = LevelTag.objects.with_counts()
+    queryset = Tag.objects.with_counts()
     search_fields = ["name"]
     ordering_fields = ["name", "level_count", "created", "last_updated"]
 
@@ -47,12 +47,12 @@ class LevelTagViewSet(
         "merge": [HasPermission(UserPermission.EDIT_TAGS)],
     }
 
-    serializer_class = LevelTagListingSerializer
+    serializer_class = TagListingSerializer
     serializer_class_by_action = {
-        "create": LevelTagDetailsSerializer,
-        "update": LevelTagDetailsSerializer,
-        "partial_update": LevelTagDetailsSerializer,
-        "merge": LevelTagDetailsSerializer,
+        "create": TagDetailsSerializer,
+        "update": TagDetailsSerializer,
+        "partial_update": TagDetailsSerializer,
+        "merge": TagDetailsSerializer,
     }
 
     @action(detail=False)
@@ -67,7 +67,7 @@ class LevelTagViewSet(
     @action(detail=True)
     def stats(self, request, pk) -> Response:
         tags = (
-            LevelTag.objects.exclude(id=pk)
+            Tag.objects.exclude(id=pk)
             .annotate(
                 level_count=Subquery(
                     Level.objects.filter(tags__id=pk)
@@ -82,9 +82,7 @@ class LevelTagViewSet(
             .exclude(level_count=None)
         )
 
-        return Response(
-            LevelTagListingSerializer(instance=tags, many=True).data
-        )
+        return Response(TagListingSerializer(instance=tags, many=True).data)
 
     @action(
         detail=True, methods=["post"], url_path=r"merge/(?P<target_pk>\d+)"
@@ -108,6 +106,6 @@ class LevelTagViewSet(
         )
         source_tag.delete()
         return Response(
-            LevelTagListingSerializer(instance=target_tag).data,
+            TagListingSerializer(instance=target_tag).data,
             status=status.HTTP_200_OK,
         )

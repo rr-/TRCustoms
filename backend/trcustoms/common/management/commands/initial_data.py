@@ -6,7 +6,7 @@ from django.core.management.base import BaseCommand
 
 from trcustoms.common.models import Country, RatingClass
 from trcustoms.engines.models import Engine
-from trcustoms.genres.models import LevelGenre
+from trcustoms.genres.models import Genre
 from trcustoms.levels.models import LevelDifficulty, LevelDuration
 from trcustoms.reviews.models import (
     ReviewTemplateAnswer,
@@ -34,7 +34,7 @@ class Command(BaseCommand):
 
     def create_genres(self) -> None:
         for item in self.read_json("genres.json"):
-            LevelGenre.objects.update_or_create(
+            Genre.objects.update_or_create(
                 name=item["name"],
                 defaults=dict(description=item["description"]),
             )

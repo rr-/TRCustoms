@@ -10,7 +10,7 @@ from rest_framework.test import APIClient
 from rest_framework_simplejwt.tokens import RefreshToken
 
 from trcustoms.engines.models import Engine
-from trcustoms.genres.models import LevelGenre
+from trcustoms.genres.models import Genre
 from trcustoms.levels.models import (
     Level,
     LevelDifficulty,
@@ -22,7 +22,7 @@ from trcustoms.reviews.models import (
     ReviewTemplateAnswer,
     ReviewTemplateQuestion,
 )
-from trcustoms.tags.models import LevelTag
+from trcustoms.tags.models import Tag
 from trcustoms.uploads.models import UploadedFile
 from trcustoms.users.models import User
 
@@ -70,7 +70,7 @@ class DifficultyFactory(factory.django.DjangoModelFactory):
 @register
 class GenreFactory(factory.django.DjangoModelFactory):
     class Meta:
-        model = LevelGenre
+        model = Genre
 
     name = factory.Sequence(lambda n: f"Genre {n}")
 
@@ -78,7 +78,7 @@ class GenreFactory(factory.django.DjangoModelFactory):
 @register
 class TagFactory(factory.django.DjangoModelFactory):
     class Meta:
-        model = LevelTag
+        model = Tag
 
     name = factory.Sequence(lambda n: f"Tag {n}")
 

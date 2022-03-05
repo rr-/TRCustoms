@@ -1,19 +1,19 @@
 from rest_framework import serializers
 
-from trcustoms.genres.models import LevelGenre
+from trcustoms.genres.models import Genre
 
 
-class LevelGenreNestedSerializer(serializers.ModelSerializer):
+class GenreNestedSerializer(serializers.ModelSerializer):
     class Meta:
-        model = LevelGenre
+        model = Genre
         fields = ["id", "name"]
 
 
-class LevelGenreListingSerializer(serializers.ModelSerializer):
+class GenreListingSerializer(serializers.ModelSerializer):
     level_count = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
-        model = LevelGenre
+        model = Genre
         fields = [
             "id",
             "name",
@@ -23,5 +23,5 @@ class LevelGenreListingSerializer(serializers.ModelSerializer):
             "last_updated",
         ]
 
-    def get_level_count(self, instance: LevelGenre) -> int:
+    def get_level_count(self, instance: Genre) -> int:
         return instance.level_count

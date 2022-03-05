@@ -6,14 +6,14 @@ from trcustoms.audit_logs import registry
 from trcustoms.common.models import DatesInfo
 
 
-class LevelTagManager(models.Manager):
+class TagManager(models.Manager):
     def with_counts(self):
         return self.annotate(level_count=Count("level"))
 
 
 @registry.register_model(name_getter=lambda instance: instance.name)
-class LevelTag(DatesInfo):
-    objects = LevelTagManager()
+class Tag(DatesInfo):
+    objects = TagManager()
     name = models.CharField(max_length=100)
 
     class Meta:

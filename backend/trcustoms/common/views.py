@@ -9,8 +9,8 @@ from trcustoms.common.models import Country
 from trcustoms.common.serializers import CountryListingSerializer
 from trcustoms.engines.models import Engine
 from trcustoms.engines.serializers import EngineListingSerializer
-from trcustoms.genres.models import LevelGenre
-from trcustoms.genres.serializers import LevelGenreListingSerializer
+from trcustoms.genres.models import Genre
+from trcustoms.genres.serializers import GenreListingSerializer
 from trcustoms.levels.models import (
     FeaturedLevel,
     Level,
@@ -24,8 +24,8 @@ from trcustoms.levels.serializers import (
 )
 from trcustoms.reviews.models import LevelReview, ReviewTemplateQuestion
 from trcustoms.reviews.serializers import ReviewTemplateQuestionSerializer
-from trcustoms.tags.models import LevelTag
-from trcustoms.tags.serializers import LevelTagListingSerializer
+from trcustoms.tags.models import Tag
+from trcustoms.tags.serializers import TagListingSerializer
 
 
 class ConfigViewSet(viewsets.ViewSet):
@@ -33,8 +33,8 @@ class ConfigViewSet(viewsets.ViewSet):
 
     def list(self, request) -> Response:
         countries = Country.objects.order_by("name")
-        level_tags = LevelTag.objects.with_counts()
-        level_genres = LevelGenre.objects.with_counts()
+        level_tags = Tag.objects.with_counts()
+        level_genres = Genre.objects.with_counts()
         level_engines = Engine.objects.with_counts()
         level_difficulties = LevelDifficulty.objects.all()
         level_durations = LevelDuration.objects.all()
@@ -44,10 +44,8 @@ class ConfigViewSet(viewsets.ViewSet):
                 "countries": CountryListingSerializer(
                     countries, many=True
                 ).data,
-                "tags": LevelTagListingSerializer(level_tags, many=True).data,
-                "genres": LevelGenreListingSerializer(
-                    level_genres, many=True
-                ).data,
+                "tags": TagListingSerializer(level_tags, many=True).data,
+                "genres": GenreListingSerializer(level_genres, many=True).data,
                 "engines": EngineListingSerializer(
                     level_engines, many=True
                 ).data,
