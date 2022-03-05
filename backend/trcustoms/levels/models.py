@@ -5,8 +5,8 @@ from django.db.models.functions import Lower
 from trcustoms.audit_logs import registry
 from trcustoms.common.models import DatesInfo, RatingClass
 from trcustoms.engines.models import Engine
-from trcustoms.genres.models import LevelGenre
-from trcustoms.tags.models import LevelTag
+from trcustoms.genres.models import Genre
+from trcustoms.tags.models import Tag
 from trcustoms.uploads.models import UploadedFile
 from trcustoms.users.models import User
 
@@ -48,8 +48,8 @@ class LevelDifficulty(DatesInfo):
 class Level(DatesInfo):
     name = models.CharField(max_length=100)
     description = models.TextField(max_length=5000, null=True, blank=True)
-    genres = models.ManyToManyField(LevelGenre)
-    tags = models.ManyToManyField(LevelTag)
+    genres = models.ManyToManyField(Genre)
+    tags = models.ManyToManyField(Tag)
     engine = models.ForeignKey(Engine, on_delete=models.PROTECT)
     uploader = models.ForeignKey(
         User,
@@ -180,7 +180,7 @@ class FeaturedLevel(DatesInfo):
     feature_type = models.CharField(choices=FeatureType.choices, max_length=3)
 
     chosen_genre = models.ForeignKey(
-        LevelGenre,
+        Genre,
         on_delete=models.CASCADE,
         related_name="+",
         null=True,

@@ -4,22 +4,22 @@ from rest_framework.decorators import action
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 
-from trcustoms.genres.models import LevelGenre
-from trcustoms.genres.serializers import LevelGenreListingSerializer
+from trcustoms.genres.models import Genre
+from trcustoms.genres.serializers import GenreListingSerializer
 from trcustoms.levels.models import Level
 
 
-class LevelGenreViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
+class GenreViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
     permission_classes = [AllowAny]
-    queryset = LevelGenre.objects.with_counts()
-    serializer_class = LevelGenreListingSerializer
+    queryset = Genre.objects.with_counts()
+    serializer_class = GenreListingSerializer
     search_fields = ["name"]
     ordering_fields = ["name", "level_count", "created", "last_updated"]
 
     @action(detail=True)
     def stats(self, request, pk) -> Response:
         genres = (
-            LevelGenre.objects.exclude(id=pk)
+            Genre.objects.exclude(id=pk)
             .annotate(
                 level_count=Subquery(
                     Level.objects.filter(genres__id=pk)
@@ -35,5 +35,5 @@ class LevelGenreViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
         )
 
         return Response(
-            LevelGenreListingSerializer(instance=genres, many=True).data
+            GenreListingSerializer(instance=genres, many=True).data
         )

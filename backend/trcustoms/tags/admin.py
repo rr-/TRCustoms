@@ -1,11 +1,11 @@
 from django.contrib import admin
 
 from trcustoms.audit_logs.mixins import AuditLogAdminMixin
-from trcustoms.tags.models import LevelTag
+from trcustoms.tags.models import Tag
 
 
-@admin.register(LevelTag)
-class LevelTagAdmin(AuditLogAdminMixin, admin.ModelAdmin):
+@admin.register(Tag)
+class TagAdmin(AuditLogAdminMixin, admin.ModelAdmin):
     ordering = ["name"]
     search_fields = ["name"]
     readonly_fields = ["created", "last_updated"]

@@ -1,11 +1,11 @@
 from django.contrib import admin
 
 from trcustoms.audit_logs.mixins import AuditLogAdminMixin
-from trcustoms.genres.models import LevelGenre
+from trcustoms.genres.models import Genre
 
 
-@admin.register(LevelGenre)
-class LevelGenreAdmin(AuditLogAdminMixin, admin.ModelAdmin):
+@admin.register(Genre)
+class GenreAdmin(AuditLogAdminMixin, admin.ModelAdmin):
     ordering = ["name"]
     search_fields = ["name"]
     readonly_fields = ["created", "last_updated"]

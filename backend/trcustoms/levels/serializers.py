@@ -6,8 +6,8 @@ from rest_framework import serializers
 from trcustoms.common.serializers import RatingClassNestedSerializer
 from trcustoms.engines.models import Engine
 from trcustoms.engines.serializers import EngineNestedSerializer
-from trcustoms.genres.models import LevelGenre
-from trcustoms.genres.serializers import LevelGenreNestedSerializer
+from trcustoms.genres.models import Genre
+from trcustoms.genres.serializers import GenreNestedSerializer
 from trcustoms.levels.models import (
     FeaturedLevel,
     Level,
@@ -17,8 +17,8 @@ from trcustoms.levels.models import (
     LevelFile,
     LevelScreenshot,
 )
-from trcustoms.tags.models import LevelTag
-from trcustoms.tags.serializers import LevelTagNestedSerializer
+from trcustoms.tags.models import Tag
+from trcustoms.tags.serializers import TagNestedSerializer
 from trcustoms.uploads.models import UploadedFile
 from trcustoms.uploads.serializers import UploadedFileNestedSerializer
 from trcustoms.users.models import User
@@ -114,20 +114,20 @@ class LevelListingSerializer(serializers.ModelSerializer):
         queryset=LevelDifficulty.objects.all(),
     )
 
-    genres = LevelGenreNestedSerializer(read_only=True, many=True)
+    genres = GenreNestedSerializer(read_only=True, many=True)
     genre_ids = serializers.PrimaryKeyRelatedField(
         write_only=True,
         many=True,
         source="genres",
-        queryset=LevelGenre.objects.all(),
+        queryset=Genre.objects.all(),
     )
 
-    tags = LevelTagNestedSerializer(read_only=True, many=True)
+    tags = TagNestedSerializer(read_only=True, many=True)
     tag_ids = serializers.PrimaryKeyRelatedField(
         write_only=True,
         many=True,
         source="tags",
-        queryset=LevelTag.objects.all(),
+        queryset=Tag.objects.all(),
     )
 
     authors = UserNestedSerializer(read_only=True, many=True)
@@ -360,7 +360,7 @@ class LevelRejectionSerializer(serializers.Serializer):
 
 class FeaturedLevelListingSerializer(serializers.ModelSerializer):
     level = LevelListingSerializer(read_only=True)
-    chosen_genre = LevelGenreNestedSerializer(read_only=True)
+    chosen_genre = GenreNestedSerializer(read_only=True)
 
     class Meta:
         model = FeaturedLevel
