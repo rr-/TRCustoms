@@ -23,6 +23,7 @@ from trcustoms.models import (
     LevelReview,
     LevelScreenshot,
     LevelTag,
+    News,
     RatingClass,
     ReviewTemplateAnswer,
     ReviewTemplateQuestion,
@@ -364,3 +365,8 @@ class RatingClassAdmin(ReadOnlyAdminMixin, admin.ModelAdmin):
 @admin.register(FeaturedLevel)
 class FeaturedLevelAdmin(admin.ModelAdmin):
     list_display = ["created", "level", "feature_type", "chosen_genre"]
+
+
+@admin.register(News)
+class NewsAdmin(admin.ModelAdmin):
+    list_display = ["created", "subject"]

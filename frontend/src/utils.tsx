@@ -205,12 +205,18 @@ const showAlertOnError = async (func: () => Promise<void>): Promise<void> => {
   }
 };
 
-const resetQueries = (queryClient: any, queryFilters: any) => {
+const resetQueries = (
+  queryClient: any,
+  queryFilters: any,
+  soft?: boolean | undefined
+) => {
   for (let queryFilter of queryFilters) {
-    queryClient
-      .getQueryCache()
-      .findAll(queryFilter)
-      .forEach((query: any) => query.setData(undefined));
+    if (!soft) {
+      queryClient
+        .getQueryCache()
+        .findAll(queryFilter)
+        .forEach((query: any) => query.setData(undefined));
+    }
     queryClient.invalidateQueries(queryFilter);
   }
 };

@@ -73,28 +73,18 @@ const ReviewView = ({ review, showLevels }: ReviewViewProps) => {
       </div>
 
       <footer className="Review--footer">
-        <UserLink className="Review--userLink" user={review.author}>
-          <>
-            <UserPicture className="Review--userPic" user={review.author} />
-            {review.author.username}
-          </>
-        </UserLink>
+        <div className="Review--footerInfo">
+          <UserLink className="Review--userLink" user={review.author}>
+            <>
+              <UserPicture className="Review--userPic" user={review.author} />
+              {review.author.username}
+            </>
+          </UserLink>
 
-        <dl className="Review--userInfo">
-          <div className="Review--userInfoTerm">
-            <dt>Reviews</dt>
-            <dd className="Review--userInfoDefinition">
-              {review.author.reviewed_level_count}
-            </dd>
-          </div>
+          <span>Reviews: {review.author.reviewed_level_count}</span>
 
-          <div className="Review--userInfoTerm">
-            <dt>Posted</dt>
-            <dd className="Review--userInfoDefinition">
-              {formatDate(review.created)}
-            </dd>
-          </div>
-        </dl>
+          <span>Posted: {formatDate(review.created)}</span>
+        </div>
 
         <PermissionGuard
           require={UserPermission.editReviews}

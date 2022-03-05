@@ -3,3 +3,10 @@
   height: 480px;
   border: 0;
 }
+
+.Markdown > *:first-child {
+  margin-top: 0;
+}
+.Markdown > *:last-child {
+  margin-bottom: 0;
+}

@@ -25,12 +25,14 @@ const transformLink = (link: any): any => {
 const Markdown = ({ children }: MarkdownProps) => {
   const rendered = useMemo(
     () => (
-      <ReactMarkdown
-        remarkPlugins={[remarkGfm]}
-        components={{ a: transformLink }}
-      >
-        {children}
-      </ReactMarkdown>
+      <div className="Markdown">
+        <ReactMarkdown
+          remarkPlugins={[remarkGfm]}
+          components={{ a: transformLink }}
+        >
+          {children}
+        </ReactMarkdown>
+      </div>
     ),
     [children]
   );

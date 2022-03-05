@@ -17,6 +17,8 @@ import { LoginPage } from "src/components/pages/LoginPage";
 import { LogoutPage } from "src/components/pages/LogoutPage";
 import { ModerationPage } from "src/components/pages/ModerationPage";
 import { MyLevelsPage } from "src/components/pages/MyLevelsPage";
+import { NewsCreatePage } from "src/components/pages/NewsCreatePage";
+import { NewsEditPage } from "src/components/pages/NewsEditPage";
 import { RegisterPage } from "src/components/pages/RegisterPage";
 import { SettingsPage } from "src/components/pages/SettingsPage";
 import { TagListPage } from "src/components/pages/TagListPage";
@@ -51,6 +53,8 @@ function App() {
                 path="/levels/:levelId/review/:reviewId/edit"
                 element={<LevelReviewEditPage />}
               />
+              <Route path="/news" element={<NewsCreatePage />} />
+              <Route path="/news/:newsId/edit" element={<NewsEditPage />} />
               <Route path="/levels/:levelId/edit" element={<LevelEditPage />} />
               <Route path="/tags" element={<TagListPage />} />
               <Route path="/genres" element={<GenreListPage />} />

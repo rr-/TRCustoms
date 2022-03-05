@@ -8,11 +8,15 @@ import { DefinitionItemGroup } from "src/components/DefinitionList";
 import { DefinitionItem } from "src/components/DefinitionList";
 import { DefinitionList } from "src/components/DefinitionList";
 import { FeaturedLevelsView } from "src/components/FeaturedLevelsView";
+import { NewsList } from "src/components/NewsList";
+import { PermissionGuard } from "src/components/PermissionGuard";
+import { PushButton } from "src/components/PushButton";
 import { Section } from "src/components/Section";
 import { SectionHeader } from "src/components/Section";
 import { SidebarBox } from "src/components/SidebarBox";
 import { EngineLink } from "src/components/links/EngineLink";
 import { ConfigContext } from "src/contexts/ConfigContext";
+import { UserPermission } from "src/services/UserService";
 
 const LevelStats = () => {
   const { config } = useContext(ConfigContext);
@@ -45,9 +49,6 @@ const ReviewStats = () => {
 
   const maxLevelCount = Math.max(
     ...config.review_stats.map((item) => item.level_count)
-  );
-  const minRatingClassPosition = Math.min(
-    ...config.review_stats.map((item) => item.rating_class.position)
   );
   const maxRatingClassPosition = Math.max(
     ...config.review_stats.map((item) => item.rating_class.position)
@@ -112,7 +113,13 @@ const HomePage = () => {
         <FeaturedLevelsView />
       </div>
       <aside className="HomePage--sidebar">
-        <SidebarBox>
+        <SidebarBox
+          actions={
+            <PermissionGuard require={UserPermission.editNews}>
+              <PushButton to={`/news`}>Add news</PushButton>
+            </PermissionGuard>
+          }
+        >
           <SectionHeader>Statistics</SectionHeader>
           <LevelStats />
           <ReviewStats />
@@ -121,7 +128,7 @@ const HomePage = () => {
       <div className="HomePage--main">
         <Section>
           <SectionHeader>News</SectionHeader>
-          Lorem Ipsum
+          <NewsList />
         </Section>
       </div>
     </div>

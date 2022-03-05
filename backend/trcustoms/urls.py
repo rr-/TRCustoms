@@ -16,12 +16,14 @@ from trcustoms.views.level_genres import LevelGenreViewSet
 from trcustoms.views.level_reviews import LevelReviewViewSet
 from trcustoms.views.level_tags import LevelTagViewSet
 from trcustoms.views.levels import LevelViewSet
+from trcustoms.views.news import NewsViewSet
 from trcustoms.views.uploads import UploadViewSet
 from trcustoms.views.users import UserViewSet
 
 router = DefaultRouter()
 router.register(r"config", ConfigViewSet, basename="config")
 router.register(r"users", UserViewSet)
+router.register(r"news", NewsViewSet)
 router.register(r"uploads", UploadViewSet, basename="uploads")
 router.register(r"auditlogs", AuditLogViewSet, basename="auditlogs")
 router.register(r"levels", LevelViewSet)

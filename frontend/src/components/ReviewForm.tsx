@@ -152,7 +152,8 @@ const ReviewForm = ({ level, review, onGoBack, onSubmit }: ReviewFormProps) => {
 
         if (review?.id) {
           let outReview = await ReviewService.update(review.id, payload);
-          resetQueries(queryClient, ["levels", "reviews", "auditLogs"]);
+          resetQueries(queryClient, ["levels", "reviews"], true);
+          resetQueries(queryClient, ["auditLogs"]);
           onSubmit?.(outReview);
 
           setStatus({
@@ -198,7 +199,7 @@ const ReviewForm = ({ level, review, onGoBack, onSubmit }: ReviewFormProps) => {
         status?.success ? (
           <div className="FormFieldSuccess">{status.success}</div>
         ) : (
-          <Form>
+          <Form className="ReviewForm">
             <FormGrid gridType={FormGridType.Column}>
               <FormGridFieldSet title="Review">
                 <TextAreaFormField

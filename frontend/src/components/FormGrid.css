@@ -45,6 +45,6 @@
   text-align: right;
 }
 .FormGrid.column .FormGridFieldSet--fields .FormField--label {
-  margin: 1rem 0 0 0;
+  margin: 1rem 0 0.5rem 0;
   padding-left: calc(var(--label-backgrounds) * 0.5rem);
 }

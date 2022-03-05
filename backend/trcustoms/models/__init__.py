@@ -11,6 +11,7 @@ from .level_genre import LevelGenre
 from .level_review import LevelReview
 from .level_screenshot import LevelScreenshot
 from .level_tag import LevelTag
+from .news import News
 from .rating_class import RatingClass
 from .review_template import ReviewTemplateAnswer, ReviewTemplateQuestion
 from .uploaded_file import UploadedFile
@@ -32,6 +33,7 @@ __all__ = [
     "LevelReview",
     "LevelScreenshot",
     "LevelTag",
+    "News",
     "RatingClass",
     "ReviewTemplateAnswer",
     "ReviewTemplateQuestion",
