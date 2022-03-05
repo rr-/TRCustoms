@@ -5,9 +5,9 @@ from django.contrib.contenttypes.models import ContentType
 from django.db import models
 from rest_framework.request import Request
 
+from trcustoms.audit_logs.models import AuditLog
 from trcustoms.audit_logs.registry import get_registered_model_info
-from trcustoms.models.audit_log import AuditLog
-from trcustoms.models.user import User
+from trcustoms.users.models import User
 
 
 def make_audit_log(

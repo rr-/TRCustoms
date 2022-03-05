@@ -1,6 +1,8 @@
 from rest_framework.permissions import BasePermission
 
-from trcustoms.models import Level, LevelReview, User, UserPermission
+from trcustoms.levels.models import Level
+from trcustoms.reviews.models import LevelReview
+from trcustoms.users.models import User, UserPermission
 
 
 class AllowNone(BasePermission):

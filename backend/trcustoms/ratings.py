@@ -3,12 +3,9 @@ from statistics import mean
 
 from django.db.models import F, Max, QuerySet, Sum
 
-from trcustoms.models import (
-    Level,
-    LevelReview,
-    RatingClass,
-    ReviewTemplateQuestion,
-)
+from trcustoms.common.models import RatingClass
+from trcustoms.levels.models import Level
+from trcustoms.reviews.models import LevelReview, ReviewTemplateQuestion
 
 
 @cache

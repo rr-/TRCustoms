@@ -57,7 +57,7 @@ const AuditLogTableObjectLink = ({
         </LevelLink>
       );
 
-    case AuditLogObjectType.LevelEngine:
+    case AuditLogObjectType.Engine:
       return (
         <EngineLink
           engine={{
