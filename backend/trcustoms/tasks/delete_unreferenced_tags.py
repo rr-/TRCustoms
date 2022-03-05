@@ -1,6 +1,6 @@
 from trcustoms.audit_logs.utils import track_model_deletion
 from trcustoms.celery import app, logger
-from trcustoms.models import LevelTag
+from trcustoms.tags.models import LevelTag
 from trcustoms.utils import check_model_references
 
 

@@ -1,5 +1,5 @@
 from trcustoms.celery import app, logger
-from trcustoms.models import UploadedFile
+from trcustoms.uploads.models import UploadedFile
 from trcustoms.utils import check_model_references
 
 

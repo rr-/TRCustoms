@@ -15,13 +15,13 @@ enum AuditLogChangeType {
 }
 
 enum AuditLogObjectType {
+  Engine = "engine",
   Level = "level",
-  LevelEngine = "levelengine",
-  LevelGenre = "levelgenre",
-  LevelTag = "leveltag",
-  LevelDuration = "levelduration",
   LevelDifficulty = "leveldifficulty",
+  LevelDuration = "levelduration",
+  LevelGenre = "levelgenre",
   LevelReview = "levelreview",
+  LevelTag = "leveltag",
   User = "user",
 }
 

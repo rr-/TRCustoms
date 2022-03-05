@@ -1,13 +1,9 @@
 from django.db.models import Count
 
 from trcustoms.celery import app, logger
-from trcustoms.models import (
-    Level,
-    LevelFile,
-    LevelScreenshot,
-    UploadedFile,
-    User,
-)
+from trcustoms.levels.models import Level, LevelFile, LevelScreenshot
+from trcustoms.uploads.models import UploadedFile
+from trcustoms.users.models import User
 from trcustoms.utils import check_model_references
 
 

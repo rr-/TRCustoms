@@ -3,7 +3,7 @@ from django.core.mail import EmailMultiAlternatives
 from django.template.loader import get_template
 from premailer import transform
 
-from trcustoms.models import User
+from trcustoms.users.models import User
 
 FROM = "admin@trcustoms.org"
 PREFIX = "[TRCustoms]"

@@ -24,7 +24,6 @@ TESTING = any(arg.endswith("test") for arg in sys.argv)
 ALLOWED_HOSTS = ["*"]
 
 INSTALLED_APPS = [
-    "trcustoms",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -36,6 +35,16 @@ INSTALLED_APPS = [
     "django_unused_media",
     "django_cleanup.apps.CleanupConfig",
     "storages",
+    "trcustoms.audit_logs",
+    "trcustoms.common",
+    "trcustoms.engines",
+    "trcustoms.genres",
+    "trcustoms.levels",
+    "trcustoms.news",
+    "trcustoms.reviews",
+    "trcustoms.tags",
+    "trcustoms.uploads",
+    "trcustoms.users",
 ]
 
 MIDDLEWARE = [
@@ -46,7 +55,7 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
-    "trcustoms.middleware.TimezoneMiddleware",
+    "trcustoms.common.middleware.TimezoneMiddleware",
 ]
 
 ROOT_URLCONF = "trcustoms.urls"
@@ -117,9 +126,9 @@ DATABASES = {
     }
 }
 
-AUTHENTICATION_BACKENDS = ["trcustoms.authentication.CustomBackend"]
+AUTHENTICATION_BACKENDS = ["trcustoms.users.authentication.CustomBackend"]
 
-AUTH_USER_MODEL = "trcustoms.User"
+AUTH_USER_MODEL = "users.User"
 AUTH_PASSWORD_VALIDATORS = [
     {
         "NAME": (
@@ -145,9 +154,9 @@ AUTH_PASSWORD_VALIDATORS = [
             "django.contrib.auth.password_validation.NumericPasswordValidator"
         )
     },
-    {"NAME": "trcustoms.validators.PasswordLetterValidator"},
-    {"NAME": "trcustoms.validators.PasswordDigitValidator"},
-    {"NAME": "trcustoms.validators.PasswordSpecialCharValidator"},
+    {"NAME": "trcustoms.users.validators.PasswordLetterValidator"},
+    {"NAME": "trcustoms.users.validators.PasswordDigitValidator"},
+    {"NAME": "trcustoms.users.validators.PasswordSpecialCharValidator"},
 ]
 
 REST_FRAMEWORK = {
@@ -159,15 +168,15 @@ REST_FRAMEWORK = {
         "rest_framework.permissions.IsAuthenticated",
     ],
     "DEFAULT_AUTHENTICATION_CLASSES": [
-        "trcustoms.authentication.CustomAuthentication",
+        "trcustoms.users.authentication.CustomAuthentication",
     ],
     "DEFAULT_THROTTLE_CLASSES": [
-        "trcustoms.throttling.UnsafeOperationsRateThrottle"
+        "trcustoms.common.throttling.UnsafeOperationsRateThrottle"
     ],
     "DEFAULT_THROTTLE_RATES": {
         "unsafe_operations": "10/min",
     },
-    "DEFAULT_PAGINATION_CLASS": "trcustoms.pagination.CustomPagination",
+    "DEFAULT_PAGINATION_CLASS": "trcustoms.common.pagination.CustomPagination",
     "ORDERING_PARAM": "sort",
     "PAGE_SIZE": 20,
 }
@@ -177,7 +186,7 @@ SIMPLE_JWT = {
     "ACCESS_TOKEN_LIFETIME": timedelta(hours=1),
     "REFRESH_TOKEN_LIFETIME": timedelta(days=365),
     "USER_AUTHENTICATION_RULE": (
-        "trcustoms.authentication.user_authentication_rule"
+        "trcustoms.users.authentication.user_authentication_rule"
     ),
 }
 

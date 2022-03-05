@@ -5,7 +5,9 @@ from django.db.models import Count, QuerySet
 from django.utils import timezone
 
 from trcustoms.celery import app, logger
-from trcustoms.models import FeaturedLevel, Level, LevelGenre, RatingClass
+from trcustoms.common.models import RatingClass
+from trcustoms.genres.models import LevelGenre
+from trcustoms.levels.models import FeaturedLevel, Level
 
 
 def feature_level(
