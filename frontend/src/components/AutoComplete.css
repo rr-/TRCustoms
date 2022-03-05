@@ -9,6 +9,7 @@
   overflow-y: auto;
   border: 2px solid var(--outline-color);
   background: var(--input-background-color);
+  color: var(--input-text-color);
   box-sizing: border-box;
   margin-top: -2px;
 }
