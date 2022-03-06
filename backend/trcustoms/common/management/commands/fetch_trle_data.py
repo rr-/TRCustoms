@@ -168,7 +168,7 @@ def process_level_basic_data(obj_id: int, trle_level: TRLELevel) -> Level:
     for url in trle_level.showcase_urls:
         external_links.append((url, LevelExternalLink.LinkType.SHOWCASE))
 
-    LevelExternalLink.objects.all().delete()
+    LevelExternalLink.objects.filter(level=level).delete()
     for i, (url, link_type) in enumerate(external_links):
         LevelExternalLink.objects.create(
             level=level,
