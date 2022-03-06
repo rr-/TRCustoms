@@ -7,6 +7,7 @@ import traceback
 from collections.abc import Callable, Iterable
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from dataclasses import dataclass
+from functools import cache
 from pathlib import Path
 from typing import Any, TypeVar
 
@@ -122,45 +123,73 @@ def process_author(ctx: ScrapeContext, obj_id: int) -> None:
         )
 
 
+@cache
+def map_difficulty(trle_difficulty: str) -> LevelDifficulty | None:
+    return LevelDifficulty.objects.filter(
+        name={
+            "easy": "Easy",
+            "medium": "Medium",
+            "challenging": "Hard",
+            "very challenging": "Very hard",
+            None: None,
+        }[trle_difficulty]
+    ).first()
+
+
+@cache
+def map_duration(trle_duration: str) -> LevelDuration | None:
+    return LevelDuration.objects.filter(
+        name={
+            "short": "Short",
+            "medium": "Medium",
+            "long": "Long",
+            "very long": "Very long",
+            None: None,
+        }[trle_duration]
+    ).first()
+
+
+@cache
+def map_engine(trle_engine: str) -> Engine:
+    engine, _created = Engine.objects.get_or_create(name=trle_engine)
+    return engine
+
+
+@cache
+def map_reviewer(trle_reviewer_id: int) -> User | None:
+    return User.objects.filter(trle_reviewer_id=trle_reviewer_id).first()
+
+
 def process_level_basic_data(obj_id: int, trle_level: TRLELevel) -> Level:
-    engine, _created = Engine.objects.get_or_create(name=trle_level.file_type)
-    level, _created = Level.objects.update_or_create(
+    level, _created = Level.objects.get_or_create(
         trle_id=obj_id,
+        is_approved=True,
         defaults=dict(
             name=trle_level.title,
             description=trle_level.synopsis,
-            difficulty=LevelDifficulty.objects.filter(
-                name={
-                    "easy": "Easy",
-                    "medium": "Medium",
-                    "challenging": "Hard",
-                    "very challenging": "Very hard",
-                    None: None,
-                }[trle_level.difficulty]
-            ).first(),
-            duration=LevelDuration.objects.filter(
-                name={
-                    "short": "Short",
-                    "medium": "Medium",
-                    "long": "Long",
-                    "very long": "Very long",
-                    None: None,
-                }[trle_level.duration]
-            ).first(),
-            engine=engine,
+            difficulty=map_difficulty(trle_level.difficulty),
+            duration=map_duration(trle_level.duration),
+            engine=map_engine(trle_level.file_type),
         ),
-        is_approved=True,
     )
     if level.created.date() != trle_level.release_date:
         level.created = trle_level.release_date
         level.save()
 
-    if trle_level.category:
+    if (
+        trle_level.category
+        and not level.tags.filter(name=trle_level.category).exists()
+    ):
         tag, _created = Tag.objects.get_or_create(name=trle_level.category)
         level.tags.add(tag)
 
-    for user in User.objects.filter(trle_author_id__in=trle_level.author_ids):
-        level.authors.add(user)
+    if sorted(
+        level.authors.values_list("trle_author_id", flat=True)
+    ) != sorted(trle_level.author_ids):
+        for user in User.objects.filter(
+            trle_author_id__in=trle_level.author_ids
+        ):
+            level.authors.add(user)
 
     external_links: list[str, LevelExternalLink.LinkType] = []
     if url := trle_level.website_url:
@@ -168,23 +197,24 @@ def process_level_basic_data(obj_id: int, trle_level: TRLELevel) -> Level:
     for url in trle_level.showcase_urls:
         external_links.append((url, LevelExternalLink.LinkType.SHOWCASE))
 
-    LevelExternalLink.objects.filter(level=level).delete()
-    for i, (url, link_type) in enumerate(external_links):
-        LevelExternalLink.objects.create(
-            level=level,
-            url=url,
-            position=i,
-            link_type=link_type,
-        )
+    if sorted(level.external_links.values_list("url", flat=True)) != sorted(
+        url for url, link_type in external_links
+    ):
+        LevelExternalLink.objects.filter(level=level).delete()
+        for i, (url, link_type) in enumerate(external_links):
+            LevelExternalLink.objects.create(
+                level=level,
+                url=url,
+                position=i,
+                link_type=link_type,
+            )
 
     return level
 
 
 def process_level_reviews(level: Level, trle_level: TRLELevel) -> None:
     for trle_review in trle_level.reviews:
-        reviewer = User.objects.filter(
-            trle_reviewer_id=trle_review.reviewer_id
-        ).first()
+        reviewer = map_reviewer(trle_review.reviewer_id)
         if not reviewer:
             logging.warning(
                 "Reviewer #%d not found. Fetch reviewers first",
@@ -197,7 +227,7 @@ def process_level_reviews(level: Level, trle_level: TRLELevel) -> None:
                 trle_level.level_id,
             )
         else:
-            review, _created = LevelReview.objects.update_or_create(
+            review, _created = LevelReview.objects.get_or_create(
                 level=level,
                 author=reviewer,
                 review_type=LevelReview.ReviewType.TRLE,
