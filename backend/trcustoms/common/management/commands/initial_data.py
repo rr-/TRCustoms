@@ -28,7 +28,7 @@ class Command(BaseCommand):
 
     def create_countries(self) -> None:
         for item in self.read_csv("countries.csv"):
-            Country.objects.get_or_create(
+            Country.objects.update_or_create(
                 code=item["Code"], defaults=dict(name=item["Name"])
             )
 
@@ -41,17 +41,19 @@ class Command(BaseCommand):
 
     def create_engines(self) -> None:
         for item in self.read_json("engines.json"):
-            Engine.objects.get_or_create(name=item["name"])
+            Engine.objects.update_or_create(
+                name=item["name"], defaults=dict(position=item["position"])
+            )
 
     def create_durations(self) -> None:
         for item in self.read_json("durations.json"):
-            LevelDuration.objects.get_or_create(
+            LevelDuration.objects.update_or_create(
                 name=item["name"], defaults=dict(position=item["position"])
             )
 
     def create_difficulties(self) -> None:
         for item in self.read_json("difficulties.json"):
-            LevelDifficulty.objects.get_or_create(
+            LevelDifficulty.objects.update_or_create(
                 name=item["name"], defaults=dict(position=item["position"])
             )
 

@@ -1,8 +1,8 @@
 [
-  { "name": "TR1" },
-  { "name": "TR2" },
-  { "name": "TR3" },
-  { "name": "TR4" },
-  { "name": "TR5" },
-  { "name": "TEN" }
+  { "position": 0, "name": "TR1" },
+  { "position": 1, "name": "TR2" },
+  { "position": 2, "name": "TR3" },
+  { "position": 3, "name": "TR4" },
+  { "position": 4, "name": "TR5" },
+  { "position": 5, "name": "TEN" }
 ]
