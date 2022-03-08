@@ -100,7 +100,7 @@ class TagViewSet(
         through_model_cls = Level.tags.through
         through_model_cls.objects.bulk_create(
             [
-                through_model_cls(level_id=level["id"], leveltag_id=target_pk)
+                through_model_cls(level_id=level["id"], tag_id=target_pk)
                 for level in levels
             ]
         )
