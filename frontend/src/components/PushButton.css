@@ -19,7 +19,7 @@
 }
 
 .PushButton--icon {
-  margin-right: 0.25rem;
+  margin-right: 0.5rem;
 }
 .PushButton--label {
   text-decoration: var(--button-text-decoration);
@@ -32,4 +32,9 @@
 .PushButton--disabled {
   opacity: 0.5;
   cursor: default;
+}
+
+.HomePage--sidebarExtra {
+  display: flex;
+  flex-direction: column;
 }
