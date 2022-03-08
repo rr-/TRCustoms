@@ -1,4 +1,4 @@
-Django==4.0.0
+Django==4.0.2
 django-extensions
 djangorestframework==3.12.4
 djangorestframework-simplejwt==5.0.0
