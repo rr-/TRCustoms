@@ -14,6 +14,7 @@ import { PushButton } from "src/components/PushButton";
 import { Section } from "src/components/Section";
 import { SectionHeader } from "src/components/Section";
 import { SidebarBox } from "src/components/SidebarBox";
+import { IconKofi } from "src/components/icons/IconKofi";
 import { EngineLink } from "src/components/links/EngineLink";
 import { ConfigContext } from "src/contexts/ConfigContext";
 import { UserPermission } from "src/services/UserService";
@@ -123,6 +124,13 @@ const HomePage = () => {
           <SectionHeader>Statistics</SectionHeader>
           <LevelStats />
           <ReviewStats />
+
+          <Section className="HomePage--sidebarExtra">
+            <SectionHeader>Extra</SectionHeader>
+            <PushButton icon={<IconKofi />} to="https://ko-fi.com/trcustomsorg">
+              Support us on Ko-fi
+            </PushButton>
+          </Section>
         </SidebarBox>
       </aside>
       <div className="HomePage--main">
