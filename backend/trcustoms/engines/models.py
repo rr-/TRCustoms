@@ -14,10 +14,11 @@ class EngineManager(models.Manager):
 @registry.register_model(name_getter=lambda instance: instance.name)
 class Engine(DatesInfo):
     objects = EngineManager()
+    position = models.IntegerField(default=1)
     name = models.CharField(max_length=100)
 
     class Meta:
-        ordering = ["name"]
+        ordering = ["position"]
         constraints = [
             UniqueConstraint(Lower("name"), name="engine_name_unique"),
         ]

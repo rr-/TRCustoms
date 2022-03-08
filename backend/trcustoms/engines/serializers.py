@@ -17,6 +17,7 @@ class EngineListingSerializer(serializers.ModelSerializer):
         fields = [
             "id",
             "name",
+            "position",
             "level_count",
             "created",
             "last_updated",
