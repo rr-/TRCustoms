@@ -18,8 +18,13 @@
   grid-area: main;
 }
 
-.LevelStats--engines > dt:first-child {
-  margin: 0.5rem 0;
+.LevelStats--engines > .DefinitionItem:first-of-type > * {
+  margin-top: 0 !important;
+}
+.LevelStats--engines .DefinitionItem--term:before {
+  content: "\25cf";
+  margin-left: 0.5rem;
+  margin-right: 0.5rem;
 }
 
 .ReviewStats--list {

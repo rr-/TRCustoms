@@ -12,6 +12,7 @@ interface EngineNested {
 }
 
 interface EngineListing extends EngineNested {
+  position: number;
   level_count: number;
   created: string;
   last_updated: string;
