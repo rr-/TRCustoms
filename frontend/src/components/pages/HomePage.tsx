@@ -27,9 +27,9 @@ const LevelStats = () => {
         {config.total_levels}
       </DefinitionItem>
 
-      <DefinitionItemGroup>
-        {sortBy(config.engines, (engine) => engine.name).map((engine) => (
-          <DefinitionItem term={<EngineLink engine={engine} />}>
+      <DefinitionItemGroup className="LevelStats--engines">
+        {sortBy(config.engines, (engine) => engine.position).map((engine) => (
+          <DefinitionItem key={engine.id} term={<EngineLink engine={engine} />}>
             {engine.level_count}
           </DefinitionItem>
         ))}

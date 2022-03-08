@@ -1,11 +1,17 @@
 import "./DefinitionList.css";
 
 interface DefinitionItemGroupProps {
+  className?: string | undefined;
   children: React.ReactNode;
 }
 
-const DefinitionItemGroup = ({ children }: DefinitionItemGroupProps) => {
-  return <div className="DefinitionItemGroup">{children}</div>;
+const DefinitionItemGroup = ({
+  className,
+  children,
+}: DefinitionItemGroupProps) => {
+  return (
+    <div className={`DefinitionItemGroup ${className || ""}`}>{children}</div>
+  );
 };
 interface DefinitionItemProps {
   span?: boolean | undefined;
