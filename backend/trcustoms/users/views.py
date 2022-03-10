@@ -122,12 +122,6 @@ class UserViewSet(
         else:
             response = super().create(request, *args, **kwargs)
 
-        user = User.objects.filter(
-            username__iexact=request.data.get("username")
-        ).first()
-
-        send_email_confirmation_mail(user)
-
         return response
 
     @action(detail=False, methods=["post"])
@@ -153,7 +147,13 @@ class UserViewSet(
         if not user:
             raise Http404("No user found with this username.")
         confirm_user_email(user, request)
-        return Response({})
+        return Response(
+            UserDetailsSerializer(
+                self.queryset.filter(id=user.id).get(),
+                context={"request": request},
+            ).data,
+            status.HTTP_200_OK,
+        )
 
     @action(detail=True, methods=["post"])
     def activate(self, request, pk: int) -> Response:
