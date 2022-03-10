@@ -1,12 +1,11 @@
-from django.conf import settings
 from django.db.models import Q
 from django.http import Http404
-from django.shortcuts import redirect
 from rest_framework import mixins, status, viewsets
 from rest_framework.decorators import action
 from rest_framework.generics import get_object_or_404
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
+from rest_framework_simplejwt.settings import api_settings as jwt_settings
 
 from trcustoms.mails import send_email_confirmation_mail
 from trcustoms.mixins import MultiSerializerMixin, PermissionsMixin
@@ -143,18 +142,18 @@ class UserViewSet(
         send_email_confirmation_mail(user)
         return Response({})
 
-    @action(detail=True, methods=["get"])
-    def confirm_email(self, request, pk: int) -> Response:
-        serializer = UserConfirmEmailSerializer(data=request.GET)
+    @action(detail=False, methods=["post"])
+    def confirm_email(self, request) -> Response:
+        serializer = UserConfirmEmailSerializer(data=request.data)
         if not serializer.is_valid():
             return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
-        user = self.get_object()
-
-        success = confirm_user_email(user, request, serializer.data["token"])
-
-        return redirect(
-            f"{settings.HOST_SITE}/email-confirmation-finish/{int(success)}"
-        )
+        token = serializer.validated_data["token"]
+        user_id = token[jwt_settings.USER_ID_CLAIM]
+        user = User.objects.filter(id=user_id).first()
+        if not user:
+            raise Http404("No user found with this username.")
+        confirm_user_email(user, request)
+        return Response({})
 
     @action(detail=True, methods=["post"])
     def activate(self, request, pk: int) -> Response:

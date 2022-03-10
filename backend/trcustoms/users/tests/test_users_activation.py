@@ -25,11 +25,11 @@ def test_user_email_activation(
         is_email_confirmed=False,
     )
 
-    response = admin_api_client.get(
-        f"/api/users/{user.id}/confirm_email/",
+    response = admin_api_client.post(
+        "/api/users/confirm_email/",
         data={"token": user.generate_email_token()},
     )
-    assert response.status_code == status.HTTP_302_FOUND
+    assert response.status_code == status.HTTP_200_OK, response.content
 
     user.refresh_from_db()
     assert user.is_pending_activation
@@ -53,11 +53,11 @@ def test_user_email_activation_invalid_token(
         is_email_confirmed=False,
     )
 
-    response = admin_api_client.get(
-        f"/api/users/{user.id}/confirm_email/",
+    response = admin_api_client.post(
+        "/api/users/confirm_email/",
         data={"token": "bad"},
     )
-    assert response.status_code == status.HTTP_302_FOUND
+    assert response.status_code == status.HTTP_400_BAD_REQUEST
 
     user.refresh_from_db()
     assert user.is_pending_activation

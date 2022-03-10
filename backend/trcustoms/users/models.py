@@ -1,16 +1,21 @@
-import hashlib
+from datetime import timedelta
 from enum import Enum
 
-from django.conf import settings
 from django.contrib.auth.models import AbstractUser
 from django.contrib.auth.models import UserManager as BaseUserManager
 from django.db import models
 from django.db.models import Count, UniqueConstraint
 from django.db.models.functions import Lower
+from rest_framework_simplejwt.tokens import Token
 
 from trcustoms.audit_logs import registry
 from trcustoms.common.models import Country
 from trcustoms.uploads.models import UploadedFile
+
+
+class ConfirmEmailToken(Token):
+    token_type = "access"
+    lifetime = timedelta(hours=6)
 
 
 class UserPermission(Enum):
@@ -67,7 +72,7 @@ class User(AbstractUser):
     trle_reviewer_id = models.IntegerField(
         max_length=32, blank=True, null=True
     )
-    trle_author_id = models.IntegerField(max_length=32, blank=True, null=True)
+    trle_author_id = models.IntegerField(blank=True, null=True)
 
     picture = models.ForeignKey(
         UploadedFile, blank=True, null=True, on_delete=models.SET_NULL
@@ -86,6 +91,4 @@ class User(AbstractUser):
     )
 
     def generate_email_token(self) -> str:
-        return hashlib.md5(
-            f"{settings.SECRET_KEY}:{self.id}:{self.email}".encode()
-        ).hexdigest()
+        return str(ConfirmEmailToken.for_user(self))

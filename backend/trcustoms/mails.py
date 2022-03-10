@@ -27,9 +27,7 @@ def send_email(
 
 def send_email_confirmation_mail(user: User) -> None:
     token = user.generate_email_token()
-    link = (
-        f"{settings.HOST_SITE}/api/users/{user.id}/confirm_email?token={token}"
-    )
+    link = f"{settings.HOST_SITE}/email-confirmation/{token}"
     send_email(
         template_name="email_confirmation",
         subject=f"{PREFIX} Confirm your registration",
