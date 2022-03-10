@@ -16,6 +16,8 @@ import { TextAreaFormField } from "src/components/formfields/TextAreaFormField";
 import { TextFormField } from "src/components/formfields/TextFormField";
 import { UserLink } from "src/components/links/UserLink";
 import { ConfigContext } from "src/contexts/ConfigContext";
+import { UserContext } from "src/contexts/UserContext";
+import { AuthService } from "src/services/AuthService";
 import { UploadType } from "src/services/FileService";
 import type { UserDetails } from "src/services/UserService";
 import { UserService } from "src/services/UserService";
@@ -36,6 +38,7 @@ interface UserFormProps {
 
 const UserForm = ({ user, onGoBack, onSubmit }: UserFormProps) => {
   const { config } = useContext(ConfigContext);
+  const { setUser } = useContext(UserContext);
 
   const initialValues = {
     username: user?.username || "",
@@ -105,15 +108,28 @@ const UserForm = ({ user, onGoBack, onSubmit }: UserFormProps) => {
 
           onSubmit?.(outUser, values.password);
 
-          setStatus({
-            success: (
-              <>
-                Profile information updated.{" "}
-                <UserLink user={outUser}>Click here</UserLink> to see the
-                changes.
-              </>
-            ),
-          });
+          if (user.email !== values.email) {
+            setUser(null);
+            AuthService.logout();
+            setStatus({
+              success: (
+                <>
+                  Profile information updated. You were logged out. Please check
+                  your mailbox and confirm your new e-mail address.
+                </>
+              ),
+            });
+          } else {
+            setStatus({
+              success: (
+                <>
+                  Profile information updated.{" "}
+                  <UserLink user={outUser}>Click here</UserLink> to see the
+                  changes.
+                </>
+              ),
+            });
+          }
         } else {
           let outUser = await UserService.register(payload);
           onSubmit?.(outUser, values.password);
@@ -186,7 +202,12 @@ const UserForm = ({ user, onGoBack, onSubmit }: UserFormProps) => {
                   label="Username"
                   name="username"
                 />
-                <EmailFormField required={true} label="E-mail" name="email" />
+                <EmailFormField
+                  required={true}
+                  label="E-mail"
+                  name="email"
+                  extraInformation="Changing the e-mail will require confirmation and cause you to log out."
+                />
                 {user && (
                   <PasswordFormField
                     label="Old password"

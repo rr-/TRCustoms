@@ -7,6 +7,7 @@ from rest_framework_simplejwt.exceptions import TokenError
 
 from trcustoms.common.models import Country
 from trcustoms.common.serializers import CountryNestedSerializer
+from trcustoms.mails import send_email_confirmation_mail
 from trcustoms.permissions import get_permissions
 from trcustoms.uploads.models import UploadedFile
 from trcustoms.uploads.serializers import UploadedFileNestedSerializer
@@ -218,12 +219,18 @@ class UserDetailsSerializer(UserListingSerializer):
     @transaction.atomic
     def update(self, instance, validated_data):
         password = validated_data.pop("password", None)
+        old_email = instance.email
 
         instance = super().update(instance, validated_data)
 
         if password:
             instance.set_password(password)
             instance.save()
+
+        if instance.email != old_email:
+            instance.is_email_confirmed = False
+            instance.save()
+            send_email_confirmation_mail(instance)
 
         return User.objects.with_counts().get(pk=instance.pk)
 
@@ -239,6 +246,8 @@ class UserDetailsSerializer(UserListingSerializer):
         instance.is_active = False
         instance.source = User.Source.trcustoms
         instance.save()
+
+        send_email_confirmation_mail(instance)
 
         return User.objects.with_counts().get(pk=instance.pk)
 

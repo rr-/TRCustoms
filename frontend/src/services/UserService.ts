@@ -192,9 +192,13 @@ const resendActivationLink = async (username: string): Promise<void> => {
   await api.post(`${API_URL}/users/resend_activation_email/`, data);
 };
 
-const confirmEmail = async (token: string): Promise<void> => {
+const confirmEmail = async (token: string): Promise<UserDetails> => {
   const data = { token };
-  await api.post(`${API_URL}/users/confirm_email/`, data);
+  const response = (await api.post(
+    `${API_URL}/users/confirm_email/`,
+    data
+  )) as AxiosResponse<UserDetails>;
+  return response.data;
 };
 
 const UserService = {
