@@ -31,6 +31,7 @@
 
 .News--footerInfo {
   display: flex;
+  flex-wrap: wrap;
   gap: 2rem;
   flex-direction: row;
   align-items: center;
