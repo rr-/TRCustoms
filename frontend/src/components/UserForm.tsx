@@ -138,7 +138,7 @@ const UserForm = ({ user, onGoBack, onSubmit }: UserFormProps) => {
         handleSubmitError(error, { setSubmitting, setStatus, setErrors });
       }
     },
-    [user, onSubmit, handleSubmitError]
+    [user, setUser, onSubmit, handleSubmitError]
   );
 
   const validate = (values: { [key: string]: any }) => {

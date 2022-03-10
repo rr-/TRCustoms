@@ -201,6 +201,19 @@ const confirmEmail = async (token: string): Promise<UserDetails> => {
   return response.data;
 };
 
+const requestPasswordReset = async (email: string): Promise<void> => {
+  const data = { email };
+  await api.post(`${API_URL}/users/request_password_reset/`, data);
+};
+
+const completePasswordReset = async (
+  password: string,
+  token: string
+): Promise<void> => {
+  const data = { password, token };
+  await api.post(`${API_URL}/users/complete_password_reset/`, data);
+};
+
 const UserService = {
   register,
   update,
@@ -209,6 +222,8 @@ const UserService = {
   ban,
   unban,
   confirmEmail,
+  requestPasswordReset,
+  completePasswordReset,
   getCurrentUser,
   getUserById,
   getUserByUsername,

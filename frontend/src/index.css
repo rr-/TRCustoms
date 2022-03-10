@@ -65,6 +65,7 @@ button {
 button[disabled] {
   opacity: 0.5;
 }
+button + a,
 button + button {
   margin-left: 1rem;
 }

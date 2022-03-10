@@ -14,7 +14,7 @@ const RegisterPage = () => {
   const navigate = useNavigate();
   const { setUser } = useContext(UserContext);
   const { setTitle } = useContext(TitleContext);
-  const [isComplete, setIsComplete] = useState<boolean>(false);
+  const [isComplete, setIsComplete] = useState(false);
 
   const handleSubmit = useCallback(
     async (user: UserDetails, password: string | null) => {

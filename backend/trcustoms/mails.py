@@ -37,3 +37,17 @@ def send_email_confirmation_mail(user: User) -> None:
             "link": link,
         },
     )
+
+
+def send_password_reset_mail(user: User) -> None:
+    token = user.generate_password_reset_token()
+    link = f"{settings.HOST_SITE}/password-reset/{token}"
+    send_email(
+        template_name="password_reset",
+        subject=f"{PREFIX} Password reset",
+        recipients=[user.email],
+        context={
+            "username": user.username,
+            "link": link,
+        },
+    )

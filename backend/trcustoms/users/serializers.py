@@ -11,7 +11,12 @@ from trcustoms.mails import send_email_confirmation_mail
 from trcustoms.permissions import get_permissions
 from trcustoms.uploads.models import UploadedFile
 from trcustoms.uploads.serializers import UploadedFileNestedSerializer
-from trcustoms.users.models import ConfirmEmailToken, User, UserPermission
+from trcustoms.users.models import (
+    ConfirmEmailToken,
+    PasswordResetToken,
+    User,
+    UserPermission,
+)
 
 
 class UserNestedSerializer(serializers.ModelSerializer):
@@ -276,8 +281,27 @@ class UserConfirmEmailSerializer(serializers.Serializer):
     token_class = ConfirmEmailToken
 
     def validate(self, attrs):
+        ret = super().validate(attrs)
         try:
             token = self.token_class(attrs["token"])
         except TokenError as ex:
             raise serializers.ValidationError(str(ex))
-        return {"token": token}
+        return {**ret, "token": token}
+
+
+class UserRequestPasswordResetSerializer(serializers.Serializer):
+    email = CustomEmailField()
+
+
+class UserCompletePasswordResetSerializer(serializers.Serializer):
+    password = serializers.CharField(write_only=True, required=True)
+    token = serializers.CharField()
+    token_class = PasswordResetToken
+
+    def validate(self, attrs):
+        ret = super().validate(attrs)
+        try:
+            token = self.token_class(attrs["token"])
+        except TokenError as ex:
+            raise serializers.ValidationError(str(ex))
+        return {**ret, "token": token}

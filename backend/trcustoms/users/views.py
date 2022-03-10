@@ -7,7 +7,10 @@ from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework_simplejwt.settings import api_settings as jwt_settings
 
-from trcustoms.mails import send_email_confirmation_mail
+from trcustoms.mails import (
+    send_email_confirmation_mail,
+    send_password_reset_mail,
+)
 from trcustoms.mixins import MultiSerializerMixin, PermissionsMixin
 from trcustoms.permissions import (
     AllowNone,
@@ -25,10 +28,12 @@ from trcustoms.users.logic import (
 from trcustoms.users.models import User, UserPermission
 from trcustoms.users.serializers import (
     UserBanSerializer,
+    UserCompletePasswordResetSerializer,
     UserConfirmEmailSerializer,
     UserDetailsSerializer,
     UserListingSerializer,
     UsernameSerializer,
+    UserRequestPasswordResetSerializer,
 )
 
 
@@ -59,6 +64,8 @@ class UserViewSet(
         "unban": [HasPermission(UserPermission.EDIT_USERS)],
         "resend_activation_email": [AllowAny],
         "confirm_email": [AllowAny],
+        "request_password_reset": [AllowAny],
+        "complete_password_reset": [AllowAny],
     }
 
     ordering_fields = [
@@ -145,7 +152,7 @@ class UserViewSet(
         user_id = token[jwt_settings.USER_ID_CLAIM]
         user = User.objects.filter(id=user_id).first()
         if not user:
-            raise Http404("No user found with this username.")
+            raise Http404("User not found.")
         confirm_user_email(user, request)
         return Response(
             UserDetailsSerializer(
@@ -190,4 +197,30 @@ class UserViewSet(
         user = self.get_object()
         reason = serializer.data["reason"]
         ban_user(user, request, reason)
+        return Response({})
+
+    @action(detail=False, methods=["post"])
+    def request_password_reset(self, request) -> Response:
+        serializer = UserRequestPasswordResetSerializer(data=request.data)
+        if not serializer.is_valid():
+            return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
+        user = User.objects.filter(
+            email=serializer.validated_data["email"]
+        ).first()
+        if user:
+            send_password_reset_mail(user)
+        return Response({})
+
+    @action(detail=False, methods=["post"])
+    def complete_password_reset(self, request) -> Response:
+        serializer = UserCompletePasswordResetSerializer(data=request.data)
+        if not serializer.is_valid():
+            return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
+        token = serializer.validated_data["token"]
+        user_id = token[jwt_settings.USER_ID_CLAIM]
+        user = User.objects.filter(id=user_id).first()
+        if not user:
+            raise Http404("User not found.")
+        user.set_password(serializer.validated_data["password"])
+        user.save()
         return Response({})
