@@ -127,7 +127,12 @@ const HomePage = () => {
 
           <Section className="HomePage--sidebarExtra">
             <SectionHeader>Extra</SectionHeader>
-            <PushButton icon={<IconKofi />} to="https://ko-fi.com/trcustomsorg">
+            <p>More features coming soon…</p>
+            <PushButton
+              className="HomePage--supportButton"
+              icon={<IconKofi />}
+              to="https://ko-fi.com/trcustomsorg"
+            >
               Support us on Ko-fi
             </PushButton>
           </Section>

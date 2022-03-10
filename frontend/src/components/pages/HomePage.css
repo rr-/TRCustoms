@@ -68,3 +68,8 @@
 .ReviewStats--listItem:hover {
   filter: brightness(130%);
 }
+
+.HomePage--supportButton {
+  width: 100%;
+  box-sizing: border-box;
+}

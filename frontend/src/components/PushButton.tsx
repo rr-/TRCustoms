@@ -4,6 +4,7 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 
 interface PushButtonProps {
+  className?: string | undefined;
   to?: string | null | undefined;
   disableTimeout?: boolean | undefined;
   disabled?: boolean | undefined;
@@ -15,6 +16,7 @@ interface PushButtonProps {
 }
 
 const PushButton = ({
+  className,
   to,
   disableTimeout,
   onClick,
@@ -52,6 +54,17 @@ const PushButton = ({
     }
   };
 
+  const classNames = [
+    "PushButton",
+    isPlain ? "PushButton--link" : "PushButton--button",
+  ];
+  if (disabled || isTimeoutActive) {
+    classNames.push("PushButton--disabled");
+  }
+  if (className) {
+    classNames.push(className);
+  }
+
   if (to?.includes("://")) {
     // handle external links
     return (
@@ -59,9 +72,7 @@ const PushButton = ({
         title={tooltip}
         rel="noopener noreferrer"
         target="_blank"
-        className={`PushButton ${
-          isPlain ? "PushButton--link" : "PushButton--button"
-        }`}
+        className={classNames.join(" ")}
         onClick={handleLinkClick}
         onAuxClick={handleLinkClick}
         href={to}
@@ -75,9 +86,7 @@ const PushButton = ({
   return (
     <Link
       title={tooltip}
-      className={`PushButton ${
-        isPlain ? "PushButton--link" : "PushButton--button"
-      } ${(disabled || isTimeoutActive) && "PushButton--disabled"}`}
+      className={classNames.join(" ")}
       onClick={handleLinkClick}
       onAuxClick={handleLinkClick}
       to={to || "#"}
