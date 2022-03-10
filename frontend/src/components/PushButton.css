@@ -33,8 +33,3 @@
   opacity: 0.5;
   cursor: default;
 }
-
-.HomePage--sidebarExtra {
-  display: flex;
-  flex-direction: column;
-}
