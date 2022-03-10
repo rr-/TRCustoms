@@ -239,6 +239,7 @@ export {
   extractNestedErrorText,
   getYoutubeVideoID,
   EMPTY_INPUT_PLACEHOLDER,
+  extractErrorMessage,
   showAlertOnError,
   resetQueries,
 };

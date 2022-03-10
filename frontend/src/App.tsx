@@ -4,7 +4,7 @@ import { Route } from "react-router-dom";
 import { NavBar } from "src/components/NavBar";
 import { ScrollToTop } from "src/components/ScrollToTop";
 import { ThemeManager } from "src/components/ThemeManager";
-import { EmailConfirmationFinishPage } from "src/components/pages/EmailConfirmationFinishPage";
+import { EmailConfirmationPage } from "src/components/pages/EmailConfirmationPage";
 import { GenreListPage } from "src/components/pages/GenreListPage";
 import { HomePage } from "src/components/pages/HomePage";
 import { LevelEditPage } from "src/components/pages/LevelEditPage";
@@ -66,8 +66,8 @@ function App() {
               <Route path="/users/:userId" element={<UserPage />} />
               <Route path="/users/:userId/edit" element={<UserEditPage />} />
               <Route
-                path="/email-confirmation-finish/:success"
-                element={<EmailConfirmationFinishPage />}
+                path="/email-confirmation/:token"
+                element={<EmailConfirmationPage />}
               />
             </Routes>
           </main>

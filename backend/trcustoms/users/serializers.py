@@ -3,13 +3,14 @@ from django.core.exceptions import ValidationError
 from django.core.validators import MaxLengthValidator, MinLengthValidator
 from django.db import transaction
 from rest_framework import serializers
+from rest_framework_simplejwt.exceptions import TokenError
 
 from trcustoms.common.models import Country
 from trcustoms.common.serializers import CountryNestedSerializer
 from trcustoms.permissions import get_permissions
 from trcustoms.uploads.models import UploadedFile
 from trcustoms.uploads.serializers import UploadedFileNestedSerializer
-from trcustoms.users.models import User, UserPermission
+from trcustoms.users.models import ConfirmEmailToken, User, UserPermission
 
 
 class UserNestedSerializer(serializers.ModelSerializer):
@@ -262,4 +263,12 @@ class UsernameSerializer(serializers.Serializer):
 
 
 class UserConfirmEmailSerializer(serializers.Serializer):
-    token = serializers.CharField(max_length=200)
+    token = serializers.CharField()
+    token_class = ConfirmEmailToken
+
+    def validate(self, attrs):
+        try:
+            token = self.token_class(attrs["token"])
+        except TokenError as ex:
+            raise serializers.ValidationError(str(ex))
+        return {"token": token}

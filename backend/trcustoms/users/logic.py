@@ -67,22 +67,16 @@ def ban_user(user: User, request: Request | None, reason: str) -> None:
     clear_audit_log_action_flags(obj=user)
 
 
-def confirm_user_email(
-    user: User, request: Request | None, token: str
-) -> bool:
+def confirm_user_email(user: User, request: Request | None) -> None:
     if user.is_email_confirmed:
-        return True
+        return
 
-    if user.generate_email_token() == token:
-        user.is_email_confirmed = True
-        user.save()
+    user.is_email_confirmed = True
+    user.save()
 
-        track_model_creation(
-            user,
-            request=request,
-            change_author=user,
-            is_action_required=True,
-        )
-        return True
-
-    return False
+    track_model_creation(
+        user,
+        request=request,
+        change_author=user,
+        is_action_required=True,
+    )
