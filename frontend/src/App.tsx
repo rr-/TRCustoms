@@ -19,6 +19,8 @@ import { ModerationPage } from "src/components/pages/ModerationPage";
 import { MyLevelsPage } from "src/components/pages/MyLevelsPage";
 import { NewsCreatePage } from "src/components/pages/NewsCreatePage";
 import { NewsEditPage } from "src/components/pages/NewsEditPage";
+import { PasswordResetFinishPage } from "src/components/pages/PasswordResetFinishPage";
+import { PasswordResetPage } from "src/components/pages/PasswordResetPage";
 import { RegisterPage } from "src/components/pages/RegisterPage";
 import { SettingsPage } from "src/components/pages/SettingsPage";
 import { TagListPage } from "src/components/pages/TagListPage";
@@ -62,6 +64,11 @@ function App() {
               <Route path="/login" element={<LoginPage />} />
               <Route path="/logout" element={<LogoutPage />} />
               <Route path="/register" element={<RegisterPage />} />
+              <Route path="/password-reset" element={<PasswordResetPage />} />
+              <Route
+                path="/password-reset/:token"
+                element={<PasswordResetFinishPage />}
+              />
               <Route path="/settings" element={<SettingsPage />} />
               <Route path="/users/:userId" element={<UserPage />} />
               <Route path="/users/:userId/edit" element={<UserEditPage />} />

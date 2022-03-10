@@ -5,6 +5,7 @@ import { Form } from "formik";
 import { useCallback } from "react";
 import { useContext } from "react";
 import { useEffect } from "react";
+import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { FormGrid } from "src/components/FormGrid";
 import { FormGridButtons } from "src/components/FormGrid";
@@ -97,6 +98,7 @@ const LoginPage = () => {
                 <button type="submit" disabled={isSubmitting}>
                   Log in
                 </button>
+                <Link to="/password-reset">Forgot password?</Link>
               </FormGridButtons>
             </FormGrid>
           </Form>

@@ -18,6 +18,11 @@ class ConfirmEmailToken(Token):
     lifetime = timedelta(hours=6)
 
 
+class PasswordResetToken(Token):
+    token_type = "password_reset"
+    lifetime = timedelta(hours=1)
+
+
 class UserPermission(Enum):
     EDIT_LEVELS = "edit_levels"
     EDIT_REVIEWS = "edit_reviews"
@@ -92,3 +97,6 @@ class User(AbstractUser):
 
     def generate_email_token(self) -> str:
         return str(ConfirmEmailToken.for_user(self))
+
+    def generate_password_reset_token(self) -> str:
+        return str(PasswordResetToken.for_user(self))
