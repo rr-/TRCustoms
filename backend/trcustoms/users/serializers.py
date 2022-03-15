@@ -152,7 +152,7 @@ class UserDetailsSerializer(UserListingSerializer):
                     )
                 )
 
-            if user.source == User.Source.trle and not user.is_active:
+            if user.is_placeholder:
                 # don't let people change capitalization for acquired accounts
                 return user.username
 
@@ -183,11 +183,7 @@ class UserDetailsSerializer(UserListingSerializer):
     def validate(self, data):
         validated_data = super().validate(data)
         self._raise_if_password_dont_match(validated_data)
-        if (
-            self.instance
-            and self.instance.source == User.Source.trle
-            and not self.instance.is_active
-        ):
+        if self.instance and self.instance.is_placeholder:
             validated_data["is_pending_activation"] = True
         return validated_data
 
@@ -210,11 +206,8 @@ class UserDetailsSerializer(UserListingSerializer):
         if self.instance.check_password(validated_data.get("old_password")):
             return
 
-        # allow wrong password if this is about claming an old TRLE account
-        if (
-            not self.instance.is_active
-            and self.instance.source == User.Source.trle
-        ):
+        # allow wrong password if this is about claming a placeholder account
+        if self.instance.is_placeholder:
             return
 
         raise serializers.ValidationError(

@@ -249,6 +249,8 @@ def test_user_creation_acquiring_trle_account(
     account.
     """
     user = user_factory(source=User.Source.trle, is_active=False)
+    user.set_unusable_password()
+    user.save()
     payload = {
         "email": fake.person.email(),
         "username": user.username,
