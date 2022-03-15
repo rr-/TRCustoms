@@ -1,3 +1,4 @@
+from collections.abc import Iterable
 from email.mime.image import MIMEImage
 from pathlib import Path
 
@@ -8,11 +9,25 @@ from django.template.loader import get_template
 from premailer import transform
 
 from trcustoms.levels.models import Level
+from trcustoms.reviews.models import LevelReview
 from trcustoms.users.models import User
 
 FROM = "admin@trcustoms.org"
 PREFIX = "[TRCustoms]"
 STATIC_DIR = Path(__file__).parent / "common" / "static"
+
+
+def get_level_authors(level: Level) -> Iterable[tuple[str, str]]:
+    for item in (
+        User.objects.filter(
+            Q(authored_levels=level) | Q(uploaded_levels=level)
+        )
+        .values("username", "email")
+        .distinct("email")
+    ):
+        username = item["username"]
+        email = item["email"]
+        yield username, email
 
 
 def send_mail(
@@ -141,15 +156,7 @@ def send_level_submitted_mail(level: Level) -> None:
 
 def send_level_approved_mail(level: Level) -> None:
     link = f"{settings.HOST_SITE}/levels/{level.id}"
-    for item in (
-        User.objects.filter(
-            Q(authored_levels=level) | Q(uploaded_levels=level)
-        )
-        .values("username", "email")
-        .distinct("email")
-    ):
-        username = item["username"]
-        email = item["email"]
+    for username, email in get_level_authors(level):
         send_mail(
             template_name="level_approval",
             subject=f"{PREFIX} Level approved",
@@ -177,3 +184,19 @@ def send_level_rejected_mail(level: Level, reason: str) -> None:
             "link": link,
         },
     )
+
+
+def send_review_submission_mail(review: LevelReview) -> None:
+    link = f"{settings.HOST_SITE}/levels/{review.level.id}"
+    for username, email in get_level_authors(review.level):
+        send_mail(
+            template_name="review_submission",
+            subject=f"{PREFIX} New review",
+            recipients=[email],
+            context={
+                "username": username,
+                "reviewer_username": review.author.username,
+                "level_name": review.level.name,
+                "link": link,
+            },
+        )

@@ -1,0 +1,11 @@
+{% extends "email_base.txt" %}
+
+{% block content %}
+Hi {{username}},
+
+{{reviewer_username}} has submitted a review for your level {{level_name}}.
+
+Click on the link below to go to the level page if you want to read it.
+
+{{link}}
+{% endblock %}

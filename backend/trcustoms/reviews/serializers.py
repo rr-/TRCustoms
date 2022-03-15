@@ -6,6 +6,7 @@ from rest_framework import serializers
 from trcustoms.common.serializers import RatingClassNestedSerializer
 from trcustoms.levels.models import Level
 from trcustoms.levels.serializers import LevelNestedSerializer
+from trcustoms.mails import send_review_submission_mail
 from trcustoms.reviews.models import (
     LevelReview,
     ReviewTemplateAnswer,
@@ -139,7 +140,9 @@ class LevelReviewDetailsSerializer(LevelReviewListingSerializer):
         def review_factory():
             return func(validated_data)
 
-        return self.handle_m2m(review_factory, validated_data)
+        review = self.handle_m2m(review_factory, validated_data)
+        send_review_submission_mail(review)
+        return review
 
     def update(self, instance, validated_data):
         func = super().update
