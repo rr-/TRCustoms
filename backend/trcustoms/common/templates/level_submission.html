@@ -1,0 +1,17 @@
+{% extends "email_base.html" %}
+
+{% block content %}
+<p>Hi {{username}},</p>
+
+<p>
+  {{level_name}} has been successfully submitted at TRCustoms.org!
+  <a href="{{link}}">Click here</a> to go to the level's page.
+</p>
+
+<p>Kindly wait until your level is approved by the Mod Team.</p>
+
+<p>
+  You can view the status of your level by clicking the "My Levels" button on
+  your profile to see a list of your submitted level(s).
+</p>
+{% endblock %}
