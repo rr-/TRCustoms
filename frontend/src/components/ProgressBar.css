@@ -12,5 +12,5 @@
 
 .ProgressBar--indicator {
   height: 100%;
-  background: var(--label-background-color);
+  background: var(--label-bg-color);
 }

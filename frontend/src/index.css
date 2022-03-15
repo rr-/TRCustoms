@@ -5,8 +5,8 @@
 }
 
 body {
-  background: var(--background-color);
-  color: var(--text-color);
+  background: var(--bg-color);
+  color: var(--fg-color);
   margin: 0;
   font-family: var(--font-family);
   font-size: var(--font-size);
@@ -35,7 +35,7 @@ a:focus-visible {
   isolation: isolate;
 }
 a:hover {
-  color: var(--text-color);
+  color: var(--fg-color);
   outline: 0;
 }
 
@@ -51,11 +51,11 @@ button {
   border: 2px solid var(--input-border-color);
   line-height: 1.5rem;
   padding: 0.25rem 0.5rem;
-  background: var(--input-background-color);
+  background: var(--input-bg-color);
   display: inline-block;
-  background: var(--button-background-color);
+  background: var(--button-bg-color);
   border: 2px solid var(--input-border-color);
-  color: var(--button-text-color);
+  color: var(--button-fg-color);
   font-family: var(--font-family);
   font-size: var(--font-size);
   text-decoration: var(--button-text-decoration);
@@ -70,8 +70,8 @@ button + button {
   margin-left: 1rem;
 }
 button:hover {
-  background: var(--button-hovered-background-color);
-  color: var(--button-hovered-text-color);
+  background: var(--button-hovered-bg-color);
+  color: var(--button-hovered-fg-color);
 }
 button:focus {
   outline: 0;
@@ -90,7 +90,7 @@ button.link:focus {
   isolation: isolate;
 }
 button.link:hover {
-  color: var(--text-color);
+  color: var(--fg-color);
 }
 
 input[type="radio"] {
@@ -115,8 +115,8 @@ input[type="radio"]:before {
   top: 0;
   left: 0;
   border: 2px solid var(--input-border-color);
-  background-color: var(--input-background-color);
-  color: var(--input-text-color);
+  background-color: var(--input-bg-color);
+  color: var(--input-fg-color);
   box-sizing: border-box;
 }
 input[type="radio"]:checked:before {
@@ -127,15 +127,15 @@ input[type="radio"]:checked:before {
   height: 100%;
   top: 0;
   left: 0;
-  border-color: var(--button-background-color);
-  background-color: var(--button-background-color);
+  border-color: var(--button-bg-color);
+  background-color: var(--button-bg-color);
 }
 input[type="radio"]:checked:after {
   content: "";
   display: block;
   width: 0.6rem;
   height: 0.6rem;
-  background: var(--button-text-color);
+  background: var(--button-fg-color);
   border-radius: 1rem;
   position: absolute;
 }
@@ -172,7 +172,7 @@ hr {
 }
 
 blockquote {
-  background: var(--blockquote-background-color);
+  background: var(--blockquote-bg-color);
   border-left: 0.5rem solid var(--blockquote-accent-color);
   padding: 0.5rem 0.5rem 0.5rem 1rem;
   margin: 1rem 0;

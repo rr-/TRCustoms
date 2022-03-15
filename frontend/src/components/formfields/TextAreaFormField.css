@@ -1,7 +1,7 @@
 .TextAreaFormField--textarea {
   border: 2px solid var(--input-border-color);
-  background: var(--input-background-color);
-  color: var(--input-text-color);
+  background: var(--input-bg-color);
+  color: var(--input-fg-color);
   padding: 0.5rem;
   font-family: var(--font-family);
   font-size: var(--font-size);
@@ -17,7 +17,7 @@
 .TextAreaFormField--preview {
   min-height: 15rem;
   padding: 0.5rem;
-  background: var(--reviews-table-background-color);
+  background: var(--reviews-table-bg-color);
 }
 
 .TextAreaFormField .TabSwitch--content {

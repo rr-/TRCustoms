@@ -1,6 +1,6 @@
 .TextInput--input {
   border: 2px solid var(--input-border-color);
-  background: var(--input-background-color);
+  background: var(--input-bg-color);
   line-height: 1.5rem;
   padding: 0.25rem 0.5rem;
   font-family: var(--font-family);

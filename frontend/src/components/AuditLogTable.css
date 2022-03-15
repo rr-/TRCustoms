@@ -1,5 +1,5 @@
 .AuditLogTable .DataTable--row td {
-  border-bottom: 1px solid var(--label-background-color);
+  border-bottom: 1px solid var(--label-bg-color);
 }
 .AuditLogTable--changeList {
   list-style-type: none;

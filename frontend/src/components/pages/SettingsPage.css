@@ -22,4 +22,8 @@
   border: 0.75rem solid;
   cursor: pointer;
   padding: 0;
+  border-top-color: var(--primary-color);
+  border-left-color: var(--primary-color);
+  border-right-color: var(--secondary-color);
+  border-bottom-color: var(--secondary-color);
 }

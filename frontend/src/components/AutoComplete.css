@@ -8,8 +8,8 @@
   min-width: 15rem;
   overflow-y: auto;
   border: 2px solid var(--outline-color);
-  background: var(--input-background-color);
-  color: var(--input-text-color);
+  background: var(--input-bg-color);
+  color: var(--input-fg-color);
   box-sizing: border-box;
   margin-top: -2px;
 }
@@ -30,8 +30,8 @@
 
 .AutoCompleteSuggestions--listItem.active,
 .AutoCompleteSuggestions--listItem:hover {
-  background: var(--button-background-color);
-  color: var(--button-text-color);
+  background: var(--button-bg-color);
+  color: var(--button-fg-color);
   cursor: pointer;
 }
 

@@ -8,8 +8,8 @@
   justify-content: center;
   align-items: center;
   width: 25rem;
-  background: var(--background-color);
-  border: 3px dashed var(--button-background-color);
+  background: var(--bg-color);
+  border: 3px dashed var(--button-bg-color);
   line-height: 140%;
   text-align: center;
   cursor: pointer;
@@ -29,7 +29,7 @@
 .FilePicker--fileInput:active + .FilePicker--dropArea,
 .FilePicker--fileInput:focus + .FilePicker--dropArea,
 .FilePicker--dropArea.active {
-  border-color: var(--text-color);
+  border-color: var(--fg-color);
 }
 
 .FilePicker--previews {
@@ -51,7 +51,7 @@
   width: 3px;
 }
 .FilePickerReorderTarget.active {
-  background: var(--text-color);
+  background: var(--fg-color);
 }
 .FilePickerReorderTarget--zone {
   position: absolute;

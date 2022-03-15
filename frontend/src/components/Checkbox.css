@@ -21,8 +21,8 @@
   top: 0;
   left: 0;
   border: 2px solid var(--input-border-color);
-  background-color: var(--input-background-color);
-  color: var(--input-text-color);
+  background-color: var(--input-bg-color);
+  color: var(--input-fg-color);
   box-sizing: border-box;
 }
 .Checkbox--input:checked:before {
@@ -33,15 +33,15 @@
   height: 100%;
   top: 0;
   left: 0;
-  border-color: var(--button-background-color);
-  background-color: var(--button-background-color);
+  border-color: var(--button-bg-color);
+  background-color: var(--button-bg-color);
 }
 .Checkbox--input:checked:after {
   content: "";
   display: block;
   width: 30%;
   height: 60%;
-  border: solid var(--button-text-color);
+  border: solid var(--button-fg-color);
   border-width: 0 2px 2px 0;
   transform: rotate(45deg);
   position: absolute;

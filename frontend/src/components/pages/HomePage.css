@@ -34,7 +34,7 @@
   padding: 0;
   justify-content: space-between;
   height: 5rem;
-  border-bottom: 2px solid var(--button-background-color);
+  border-bottom: 2px solid var(--button-bg-color);
 }
 .ReviewStats--listItem {
   display: flex;
