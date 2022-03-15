@@ -50,6 +50,8 @@ interface Theme {
     "stats-positive-bar-color": string;
     "stats-neutral-bar-color": string;
     "stats-negative-bar-color": string;
+    "blockquote-background-color": string;
+    "blockquote-accent-color": string;
   };
 }
 
@@ -109,6 +111,8 @@ const themes: Array<Theme> = [
       "stats-positive-bar-color": "#538f38",
       "stats-neutral-bar-color": "#7b6032",
       "stats-negative-bar-color": "#a62626",
+      "blockquote-background-color": "var(--background-color)",
+      "blockquote-accent-color": "var(--link-color)",
     },
   },
 
@@ -155,6 +159,8 @@ const themes: Array<Theme> = [
       "stats-positive-bar-color": "var(--link-color)",
       "stats-neutral-bar-color": "var(--link-color)",
       "stats-negative-bar-color": "var(--link-color)",
+      "blockquote-background-color": "var(--navbar-secondary-background-color)",
+      "blockquote-accent-color": "var(--button-background-color)",
     },
   },
 
@@ -203,6 +209,8 @@ const themes: Array<Theme> = [
       "stats-neutral-bar-color": "var(--neutral-background-color)",
       "stats-negative-bar-color": "var(--negative-background-color)",
       "tab-switch-active-background-color": "var(--button-background-color)",
+      "blockquote-background-color": "var(--section-background-color)",
+      "blockquote-accent-color": "var(--button-background-color)",
     },
   },
 ];

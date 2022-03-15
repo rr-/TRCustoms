@@ -170,3 +170,16 @@ hr {
   height: 2px;
   background: var(--input-border-color);
 }
+
+blockquote {
+  background: var(--blockquote-background-color);
+  border-left: 0.5rem solid var(--blockquote-accent-color);
+  padding: 0.5rem 0.5rem 0.5rem 1rem;
+  margin: 1rem 0;
+}
+blockquote > *:first-child {
+  margin-top: 0;
+}
+blockquote > *:last-child {
+  margin-bottom: 0;
+}
