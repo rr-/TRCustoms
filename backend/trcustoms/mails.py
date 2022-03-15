@@ -63,3 +63,14 @@ def send_password_reset_mail(user: User) -> None:
             "link": link,
         },
     )
+
+
+def send_welcome_mail(user: User) -> None:
+    send_email(
+        template_name="welcome",
+        subject=f"{PREFIX} Welcome to TRCustoms.org",
+        recipients=[user.email],
+        context={
+            "username": user.username,
+        },
+    )

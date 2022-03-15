@@ -6,11 +6,14 @@ from trcustoms.audit_logs.utils import (
     track_model_deletion,
     track_model_update,
 )
+from trcustoms.mails import send_welcome_mail
 from trcustoms.users.models import User
 
 
 def activate_user(user: User, request: Request | None) -> None:
     with track_model_update(obj=user, request=request, changes=["Activated"]):
+        if not user.is_active:
+            send_welcome_mail(user)
         user.is_active = True
         user.is_pending_activation = False
         user.ban_reason = None

@@ -1,0 +1,11 @@
+{% extends "email_base.txt" %}
+
+{% block content %}
+Hi {{username}},
+
+Welcome to TRCustoms.org! Thank you for your patience during the activation process.
+
+Now that your account is fully functional, you will be able to upload levels, write reviews, and much more. If you previously had a profile on trle.net, you will have access to that profile's content.
+
+We will be looking forward to your submissions!
+{% endblock %}
