@@ -9,7 +9,6 @@ import { useParams } from "react-router-dom";
 import { FormGrid } from "src/components/FormGrid";
 import { FormGridButtons } from "src/components/FormGrid";
 import { FormGridFieldSet } from "src/components/FormGrid";
-import { EmailFormField } from "src/components/formfields/EmailFormField";
 import { PasswordFormField } from "src/components/formfields/PasswordFormField";
 import { TitleContext } from "src/contexts/TitleContext";
 import { UserService } from "src/services/UserService";
@@ -39,7 +38,7 @@ const PasswordResetFinishPage = () => {
         setStatus({ error: <>Unknown error.</> });
       }
     },
-    [setIsComplete]
+    [setIsComplete, token]
   );
 
   useEffect(() => {
