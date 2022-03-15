@@ -95,6 +95,10 @@ class User(AbstractUser):
         Country, null=True, blank=True, on_delete=models.SET_NULL
     )
 
+    @property
+    def is_placeholder(self) -> bool:
+        return not self.has_usable_password() and not self.is_active
+
     def generate_email_token(self) -> str:
         return str(ConfirmEmailToken.for_user(self))
 

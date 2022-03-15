@@ -18,6 +18,20 @@ def activate_user(user: User, request: Request | None) -> None:
     clear_audit_log_action_flags(obj=user)
 
 
+def wipe_user(user: User) -> None:
+    user.is_pending_activation = False
+    user.email = ""
+    user.first_name = ""
+    user.last_name = ""
+    user.is_staff = False
+    user.is_superuser = False
+    user.bio = ""
+    user.picture = None
+    user.country = None
+    user.set_unusable_password()
+    user.save()
+
+
 def reject_user(user: User, request: Request | None, reason: str) -> None:
     track_model_deletion(
         obj=user,
@@ -25,7 +39,15 @@ def reject_user(user: User, request: Request | None, reason: str) -> None:
         changes=[f"Rejected (reason: {reason})"],
     )
     clear_audit_log_action_flags(obj=user)
-    user.delete()
+    if (
+        user.authored_levels.exists()
+        or user.authored_news.exists()
+        or user.reviewed_levels.exists()
+        or user.uploaded_levels.exists()
+    ):
+        wipe_user(user)
+    else:
+        user.delete()
 
 
 def deactivate_user(user: User, request: Request | None, reason: str) -> None:
@@ -36,16 +58,8 @@ def deactivate_user(user: User, request: Request | None, reason: str) -> None:
     ):
         user.is_active = False
         user.ban_reason = reason
-        if user.source == User.Source.trle:
-            user.is_pending_activation = False
-            user.email = ""
-            user.first_name = ""
-            user.last_name = ""
-            user.set_unusable_password()
-            user.save()
-        else:
-            user.is_pending_activation = True
-            user.save()
+        user.is_pending_activation = True
+        user.save()
     clear_audit_log_action_flags(obj=user)
 
 

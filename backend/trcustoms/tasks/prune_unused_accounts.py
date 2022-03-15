@@ -3,7 +3,7 @@ from datetime import timedelta
 from django.utils import timezone
 
 from trcustoms.celery import app, logger
-from trcustoms.users.logic import deactivate_user, reject_user
+from trcustoms.users.logic import reject_user
 from trcustoms.users.models import User
 from trcustoms.utils import check_model_references
 
@@ -28,12 +28,4 @@ def prune_unused_accounts() -> None:
 
         assert not check_model_references(user)
 
-        if (
-            user.authored_levels.exists()
-            or user.authored_news.exists()
-            or user.reviewed_levels.exists()
-            or user.uploaded_levels.exists()
-        ):
-            deactivate_user(user, None, "Email not activated")
-        else:
-            reject_user(user, None, "Email not activated")
+        reject_user(user, None, "Email not activated")

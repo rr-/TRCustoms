@@ -92,6 +92,7 @@ def process_reviewer(ctx: ScrapeContext, obj_id: int) -> None:
         )
         if created:
             user.is_active = False
+            user.set_unusable_password()
             user.save()
 
 
@@ -116,6 +117,7 @@ def process_author(ctx: ScrapeContext, obj_id: int) -> None:
         )
         if created:
             user.is_active = False
+            user.set_unusable_password()
             user.save()
 
         user.authored_levels.set(
