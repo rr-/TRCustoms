@@ -34,7 +34,7 @@
   padding: 0;
   justify-content: space-between;
   height: 5rem;
-  border-bottom: 2px solid var(--button-bg-color);
+  border-bottom: 2px solid var(--section-border-color);
 }
 .ReviewStats--listItem {
   display: flex;
@@ -66,7 +66,7 @@
 }
 
 .ReviewStats--listItem:hover {
-  filter: brightness(130%);
+  filter: var(--stats-hover-filter);
 }
 
 .HomePage--supportButton {

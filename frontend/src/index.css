@@ -173,7 +173,7 @@ hr {
 
 blockquote {
   background: var(--blockquote-bg-color);
-  border-left: 0.5rem solid var(--blockquote-accent-color);
+  border-left: 0.5rem solid var(--blockquote-border-color);
   padding: 0.5rem 0.5rem 0.5rem 1rem;
   margin: 1rem 0;
 }

@@ -2,16 +2,16 @@
   display: grid;
   margin-bottom: 3rem;
   grid-template-rows: auto auto auto;
-  background: var(--reviews-table-bg-color);
+  background: var(--reviews-bg-color);
 }
 .Review.positive .Review--badge {
-  background-color: var(--positive-bg-color);
+  background-color: var(--reviews-positive-bg-color);
 }
 .Review.neutral .Review--badge {
-  background-color: var(--neutral-bg-color);
+  background-color: var(--reviews-neutral-bg-color);
 }
 .Review.negative .Review--badge {
-  background-color: var(--negative-bg-color);
+  background-color: var(--reviews-negative-bg-color);
 }
 
 .Review--content {
@@ -19,13 +19,13 @@
   border-bottom: 2px solid;
 }
 .Review.positive .Review--content {
-  border-bottom-color: var(--positive-bg-color);
+  border-bottom-color: var(--reviews-positive-bg-color);
 }
 .Review.neutral .Review--content {
-  border-bottom-color: var(--neutral-bg-color);
+  border-bottom-color: var(--reviews-neutral-bg-color);
 }
 .Review.negative .Review--content {
-  border-bottom-color: var(--negative-bg-color);
+  border-bottom-color: var(--reviews-negative-bg-color);
 }
 
 .Review--badge {

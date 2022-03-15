@@ -3,7 +3,8 @@
   margin: 0 0 1rem 0;
 }
 .InfoMessage--aside {
-  background: var(--button-bg-color);
+  background: var(--message-accent-bg-color);
+  color: var(--message-accent-fg-color);
   padding: 0.5rem 1rem;
   display: flex;
   align-items: center;
@@ -12,6 +13,6 @@
 .InfoMessage--text {
   display: flex;
   align-items: center;
-  background: var(--label-bg-color);
+  background: var(--message-bg-color);
   padding: 0.5rem 1rem;
 }
