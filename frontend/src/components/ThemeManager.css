@@ -5,6 +5,7 @@
   --tab-switch-inactive-bg-color: var(--label-bg-color);
   --tab-switch-active-fg-color: var(--navbar-active-tab-fg-color);
   --tab-switch-inactive-fg-color: var(--fg-color);
+  --news-bg-color: var(--reviews-table-bg-color);
 }
 
 [data-theme="midnight_ocean"] {
@@ -118,12 +119,12 @@
   --navbar-active-tab-fg-color: var(--fg-color);
   --sidebar-bg-color: transparent;
   --sidebar-padding: 0;
-  --levels-table-bg-color: var(--section-bg-color);
+  --levels-table-bg-color: var(--label-bg-color);
   --levels-table-padding: 1;
-  --reviews-table-bg-color: var(--bg-color);
-  --table-details-bg-color: var(--section-bg-color);
-  --section-bg-color: var(--label-bg-color);
-  --section-padding: 1;
+  --reviews-table-bg-color: var(--label-bg-color);
+  --table-details-bg-color: var(--label-bg-color);
+  --section-bg-color: transparent;
+  --section-padding: 0;
   --link-color: #1b5e60;
   --link-highlight-bg-color: var(--button-hovered-bg-color);
   --link-highlight-fg-color: var(--fg-color);
