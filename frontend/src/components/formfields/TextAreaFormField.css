@@ -14,6 +14,12 @@
   vertical-align: top;
 }
 
+.TextAreaFormField--preview {
+  min-height: 15rem;
+  padding: 0.5rem;
+  background: var(--reviews-table-background-color);
+}
+
 .TextAreaFormField .TabSwitch--content {
   min-width: 30rem;
   display: inline-block;

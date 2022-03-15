@@ -37,7 +37,11 @@ const TextAreaFormField = ({
             },
             {
               label: "Preview",
-              content: <Markdown>{(values as any)[name]}</Markdown>,
+              content: (
+                <div className="TextAreaFormField--preview">
+                  <Markdown>{(values as any)[name]}</Markdown>
+                </div>
+              ),
             },
           ]}
         />
