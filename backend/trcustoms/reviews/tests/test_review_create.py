@@ -1,4 +1,5 @@
 import pytest
+from django.core import mail
 from rest_framework import status
 from rest_framework.test import APIClient
 
@@ -75,6 +76,8 @@ def test_review_creation_success(
         "answers": [answers[0].id, answers[2].id],
         "rating_class": None,
     }
+    assert len(mail.outbox) == 1
+    assert mail.outbox[0].subject == "[TRCustoms] New review"
 
 
 @pytest.mark.django_db
