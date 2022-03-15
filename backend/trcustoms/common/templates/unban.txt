@@ -1,0 +1,8 @@
+{% extends "email_base.txt" %}
+
+{% block content %}
+Hi {{username}},
+
+The ban on your account has been lifted and your login privilege has been
+reinstated at TRCustoms.org.
+{% endblock %}
