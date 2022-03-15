@@ -30,12 +30,7 @@ const SettingsPage = () => {
             >
               <span
                 className="SettingsPage--label"
-                style={{
-                  borderTopColor: theme.primaryColor,
-                  borderLeftColor: theme.primaryColor,
-                  borderRightColor: theme.secondaryColor,
-                  borderBottomColor: theme.secondaryColor,
-                }}
+                data-theme={theme.stub}
               ></span>
               {theme.name}
             </button>

@@ -35,7 +35,7 @@
   display: contents;
 }
 .FormGridFieldSet--fields .FormField--label {
-  background: var(--label-background-color);
+  background: var(--label-bg-color);
   border: 2px solid transparent;
   display: inline-block;
   padding: 0.25rem 0.5rem 0.25rem 1.5rem;

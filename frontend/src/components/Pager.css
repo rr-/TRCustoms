@@ -26,8 +26,8 @@
 }
 
 .Pager li.active {
-  background: var(--link-highlight-background-color);
+  background: var(--link-highlight-bg-color);
 }
 .Pager li.active .Pager--button {
-  color: var(--link-highlight-text-color);
+  color: var(--link-highlight-fg-color);
 }

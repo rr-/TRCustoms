@@ -12,19 +12,19 @@
   display: inline-block;
   padding: 0.5rem 1rem;
   cursor: pointer;
-  background: var(--tab-switch-inactive-background-color);
-  color: var(--tab-switch-inactive-text-color);
+  background: var(--tab-switch-inactive-bg-color);
+  color: var(--tab-switch-inactive-fg-color);
 }
 .TabSwitch--navItem.active .TabSwitch--navItemLink {
-  background: var(--tab-switch-active-background-color);
-  color: var(--tab-switch-active-text-color);
+  background: var(--tab-switch-active-bg-color);
+  color: var(--tab-switch-active-fg-color);
 }
 
 .TabSwitch--content {
   list-style-type: none;
   margin: 0;
   padding: 0.5rem;
-  background: var(--tab-switch-active-background-color);
+  background: var(--tab-switch-active-bg-color);
 }
 .TabSwitch--contentItem {
   margin: 0;

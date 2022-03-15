@@ -40,9 +40,6 @@
   margin: 0 1rem 0 0.7rem;
   height: 4rem;
 }
-.TopNavBar--primary .MainContainer {
-  background: var(--navbar-primary-background-color);
-}
 .TopNavBar--primary .TopNavBar--listItem {
   margin-left: 1rem;
 }
@@ -51,15 +48,15 @@
   margin: 0 0 0.5rem 0;
 }
 .TopNavBar--secondary .MainContainer {
-  background: var(--navbar-secondary-background-color);
+  background: var(--navbar-bg-color);
 }
 .TopNavBar--secondary .TopNavBar--listItem a {
   padding: 0.3rem 1rem;
   display: inline-block;
 }
 .TopNavBar--secondary .TopNavBar--listItem a.active {
-  background: var(--navbar-secondary-active-tab-background-color);
-  color: var(--navbar-secondary-active-tab-text-color);
+  background: var(--navbar-active-tab-bg-color);
+  color: var(--navbar-active-tab-fg-color);
 }
 
 .NavBar {

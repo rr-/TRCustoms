@@ -1,9 +1,9 @@
 .LevelRating.positive {
-  color: var(--success-text-color);
+  color: var(--success-fg-color);
 }
 .LevelRating.neutral {
-  color: var(--warning-text-color);
+  color: var(--warning-fg-color);
 }
 .LevelRating.negative {
-  color: var(--failure-text-color);
+  color: var(--failure-fg-color);
 }

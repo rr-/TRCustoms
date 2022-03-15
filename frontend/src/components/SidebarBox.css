@@ -1,6 +1,6 @@
 .SidebarBox {
   padding: calc(var(--sidebar-padding) * 1rem);
-  background: var(--sidebar-background-color);
+  background: var(--sidebar-bg-color);
 }
 .SidebarBox--header {
   margin-bottom: 1rem;

@@ -5,8 +5,8 @@
 
 .ExternalLinksFormField--input {
   border: 2px solid var(--input-border-color);
-  background: var(--input-background-color);
-  colro: var(--input-text-color);
+  background: var(--input-bg-color);
+  colro: var(--input-fg-color);
   line-height: 1.5rem;
   padding: 0.25rem 0.5rem;
   font-family: var(--font-family);
@@ -24,8 +24,8 @@
 
 .ExternalLinksFormField--select {
   border: 2px solid var(--input-border-color);
-  background: var(--input-background-color);
-  color: var(--input-text-color);
+  background: var(--input-bg-color);
+  color: var(--input-fg-color);
   font-family: var(--font-family);
   font-size: var(--font-size);
   padding: 0.25rem 0.5rem;

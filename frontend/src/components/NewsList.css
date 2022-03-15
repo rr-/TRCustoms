@@ -2,12 +2,12 @@
   display: grid;
   margin-bottom: 3rem;
   grid-template-rows: auto auto auto;
-  background: var(--reviews-table-background-color);
+  background: var(--reviews-table-bg-color);
 }
 
 .News--header {
-  background: var(--button-background-color);
-  color: var(--button-text-color);
+  background: var(--button-bg-color);
+  color: var(--button-fg-color);
   padding: 0.5rem 1rem;
 }
 .News--header h3 {
@@ -16,7 +16,7 @@
 
 .News--content {
   padding: 1rem;
-  border-bottom: 2px solid var(--button-background-color);
+  border-bottom: 2px solid var(--button-bg-color);
 }
 
 .News--footer {

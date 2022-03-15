@@ -30,7 +30,7 @@
 }
 .LevelsTable .DataTable--cell {
   box-sizing: border-box;
-  background: var(--levels-table-background-color);
+  background: var(--levels-table-bg-color);
   padding: 0;
 }
 .LevelsTable--image {
@@ -70,13 +70,13 @@
   height: 100%;
 }
 .LevelsTable--statusApproved {
-  color: var(--success-text-color);
+  color: var(--success-fg-color);
 }
 .LevelsTable--statusPending {
-  color: var(--warning-text-color);
+  color: var(--warning-fg-color);
 }
 .LevelsTable--statusRejected {
-  color: var(--failure-text-color);
+  color: var(--failure-fg-color);
 }
 .LevelsTable--authorList {
   display: inline;
