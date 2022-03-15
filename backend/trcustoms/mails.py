@@ -108,3 +108,14 @@ def send_ban_mail(user: User, reason: str) -> None:
             "reason": reason,
         },
     )
+
+
+def send_unban_mail(user: User) -> None:
+    if not user.email:
+        return
+    send_email(
+        template_name="unban",
+        subject=f"{PREFIX} Account unbanned",
+        recipients=[user.email],
+        context={"username": user.username},
+    )
