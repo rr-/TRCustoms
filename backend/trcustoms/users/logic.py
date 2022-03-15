@@ -6,7 +6,7 @@ from trcustoms.audit_logs.utils import (
     track_model_deletion,
     track_model_update,
 )
-from trcustoms.mails import send_welcome_mail
+from trcustoms.mails import send_registration_rejection_mail, send_welcome_mail
 from trcustoms.users.models import User
 
 
@@ -36,6 +36,9 @@ def wipe_user(user: User) -> None:
 
 
 def reject_user(user: User, request: Request | None, reason: str) -> None:
+    if user.is_email_confirmed:
+        send_registration_rejection_mail(user, reason)
+
     track_model_deletion(
         obj=user,
         request=request,
