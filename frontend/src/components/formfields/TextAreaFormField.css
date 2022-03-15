@@ -17,7 +17,7 @@
 .TextAreaFormField--preview {
   min-height: 15rem;
   padding: 0.5rem;
-  background: var(--reviews-table-bg-color);
+  background: var(--reviews-bg-color);
 }
 
 .TextAreaFormField .TabSwitch--content {

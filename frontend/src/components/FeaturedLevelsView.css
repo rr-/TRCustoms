@@ -6,7 +6,7 @@
 
 .FeaturedLevelView {
   background: var(--levels-table-bg-color);
-  padding: calc(var(--levels-table-padding) * 0.5rem);
+  padding: 0.5rem;
 }
 
 .FeaturedLevelView--heading {

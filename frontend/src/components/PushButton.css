@@ -33,3 +33,7 @@
   opacity: 0.5;
   cursor: default;
 }
+
+.PushButton--link {
+  color: var(--button-link-color);
+}

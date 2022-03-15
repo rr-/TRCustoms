@@ -22,7 +22,7 @@
   display: contents;
 }
 .LevelsTable .DataTable--cell[colspan] {
-  padding: calc(var(--levels-table-padding) * 0.5rem);
+  padding: 0.5rem;
   grid-column: 1 / span 2;
 }
 .LevelsTable .DataTable--cell[colspan] > p {
@@ -38,11 +38,11 @@
 }
 
 .DataTable .LevelsTable--image {
-  padding: calc(var(--levels-table-padding) * 0.5rem) !important;
+  padding: 0.5rem !important;
   padding-right: 1rem !important;
 }
 .DataTable .LevelsTable--details {
-  padding: calc(var(--levels-table-padding) * 0.5rem) !important;
+  padding: 0.5rem !important;
   padding-left: 0 !important;
 }
 .LevelsTable--image,

@@ -2,7 +2,7 @@
   display: grid;
   margin-bottom: 3rem;
   grid-template-rows: auto auto auto;
-  background: var(--reviews-table-bg-color);
+  background: var(--news-bg-color);
 }
 
 .News--header {
@@ -16,7 +16,7 @@
 
 .News--content {
   padding: 1rem;
-  border-bottom: 2px solid var(--button-bg-color);
+  border-bottom: 2px solid var(--section-border-color);
 }
 
 .News--footer {

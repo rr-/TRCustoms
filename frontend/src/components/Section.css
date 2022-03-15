@@ -1,7 +1,5 @@
 .Section {
   margin: 0 0 2rem 0;
-  background: var(--section-bg-color);
-  padding: calc(var(--section-padding) * 1rem);
 }
 .Section > *:last-child {
   margin-bottom: 0;
@@ -9,7 +7,7 @@
 
 .SectionHeader {
   margin: 2rem 0 0.5rem 0;
-  border-bottom: 2px solid var(--button-bg-color);
+  border-bottom: 2px solid var(--section-border-color);
 }
 .SectionHeader + p {
   margin-top: 0.5rem;
