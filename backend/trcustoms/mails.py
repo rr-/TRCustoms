@@ -160,3 +160,20 @@ def send_level_approved_mail(level: Level) -> None:
                 "link": link,
             },
         )
+
+
+def send_level_rejected_mail(level: Level, reason: str) -> None:
+    if not level.uploader or not level.uploader.email:
+        return
+    link = f"{settings.HOST_SITE}/levels/{level.id}"
+    send_mail(
+        template_name="level_rejection",
+        subject=f"{PREFIX} Level rejected",
+        recipients=[level.uploader.email],
+        context={
+            "username": level.uploader.username,
+            "level_name": level.name,
+            "reason": reason,
+            "link": link,
+        },
+    )
