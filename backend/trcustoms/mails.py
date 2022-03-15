@@ -74,3 +74,15 @@ def send_welcome_mail(user: User) -> None:
             "username": user.username,
         },
     )
+
+
+def send_registration_rejection_mail(user: User, reason: str) -> None:
+    send_email(
+        template_name="registration_rejection",
+        subject=f"{PREFIX} Registration rejected",
+        recipients=[user.email],
+        context={
+            "username": user.username,
+            "reason": reason,
+        },
+    )

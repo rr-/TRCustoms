@@ -1,0 +1,9 @@
+{% extends "email_base.txt" %}
+
+{% block content %}
+Hi there,
+
+Apologies, but your recent registration at TRCustoms.org has been rejected.
+
+Reason: {{reason}}
+{% endblock %}
