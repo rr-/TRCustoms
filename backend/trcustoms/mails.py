@@ -200,3 +200,19 @@ def send_review_submission_mail(review: LevelReview) -> None:
                 "link": link,
             },
         )
+
+
+def send_review_update_mail(review: LevelReview) -> None:
+    link = f"{settings.HOST_SITE}/levels/{review.level.id}"
+    for username, email in get_level_authors(review.level):
+        send_mail(
+            template_name="review_update",
+            subject=f"{PREFIX} Review edited",
+            recipients=[email],
+            context={
+                "username": username,
+                "reviewer_username": review.author.username,
+                "level_name": review.level.name,
+                "link": link,
+            },
+        )

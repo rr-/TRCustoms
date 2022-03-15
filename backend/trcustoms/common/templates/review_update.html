@@ -1,0 +1,12 @@
+{% extends "email_base.html" %}
+
+{% block content %}
+<p>Hi {{username}},</p>
+
+<p>The review submitted for {{level_name}} on TRCustoms.org has been edited.</p>
+
+<p>
+  <a href="{{link}}">Click here</a> to go to the level page if you want to read
+  it.
+</p>
+{% endblock %}
