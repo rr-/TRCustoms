@@ -1,0 +1,10 @@
+{% extends "email_base.txt" %}
+
+{% block content %}
+Hi {{username}},
+
+Congratulations!
+
+{{level_name}} has been approved and is now available for public download on TRCustoms.org.
+
+{% endblock %}
