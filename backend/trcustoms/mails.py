@@ -3,6 +3,7 @@ from pathlib import Path
 
 from django.conf import settings
 from django.core.mail import EmailMultiAlternatives
+from django.db.models import Q
 from django.template.loader import get_template
 from premailer import transform
 
@@ -136,3 +137,26 @@ def send_level_submitted_mail(level: Level) -> None:
             "link": link,
         },
     )
+
+
+def send_level_approved_mail(level: Level) -> None:
+    link = f"{settings.HOST_SITE}/levels/{level.id}"
+    for item in (
+        User.objects.filter(
+            Q(authored_levels=level) | Q(uploaded_levels=level)
+        )
+        .values("username", "email")
+        .distinct("email")
+    ):
+        username = item["username"]
+        email = item["email"]
+        send_mail(
+            template_name="level_approval",
+            subject=f"{PREFIX} Level approved",
+            recipients=[email],
+            context={
+                "username": username,
+                "level_name": level.name,
+                "link": link,
+            },
+        )

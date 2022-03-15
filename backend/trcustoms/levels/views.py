@@ -10,11 +10,8 @@ from rest_framework.generics import get_object_or_404
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 
-from trcustoms.audit_logs.utils import (
-    clear_audit_log_action_flags,
-    track_model_creation,
-    track_model_update,
-)
+from trcustoms.audit_logs.utils import track_model_creation
+from trcustoms.levels.logic import approve_level, reject_level
 from trcustoms.levels.models import Level, LevelFile
 from trcustoms.levels.serializers import (
     LevelDetailsSerializer,
@@ -168,13 +165,7 @@ class LevelViewSet(
     @action(detail=True, methods=["post"])
     def approve(self, request, pk: int) -> Response:
         level = self.get_object()
-        with track_model_update(
-            obj=level, request=request, changes=["Approved"]
-        ):
-            level.is_approved = True
-            level.rejection_reason = None
-            level.save()
-        clear_audit_log_action_flags(obj=level)
+        approve_level(level, request)
         return Response({})
 
     @action(detail=True, methods=["post"])
@@ -184,15 +175,7 @@ class LevelViewSet(
             return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
         level = self.get_object()
         reason = serializer.data["reason"]
-        with track_model_update(
-            obj=level,
-            request=request,
-            changes=[f"Rejected (reason: {reason})"],
-        ):
-            level.is_approved = False
-            level.rejection_reason = reason
-            level.save()
-        clear_audit_log_action_flags(obj=level)
+        reject_level(level, request, reason)
         return Response({})
 
     def perform_create(self, serializer: serializers.Serializer) -> None:
