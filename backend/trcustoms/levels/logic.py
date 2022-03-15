@@ -5,7 +5,7 @@ from trcustoms.audit_logs.utils import (
     track_model_update,
 )
 from trcustoms.levels.models import Level
-from trcustoms.mails import send_level_approved_mail
+from trcustoms.mails import send_level_approved_mail, send_level_rejected_mail
 
 
 def approve_level(level: Level, request: Request | None) -> None:
@@ -24,6 +24,8 @@ def reject_level(level: Level, request: Request | None, reason: str) -> None:
         request=request,
         changes=[f"Rejected (reason: {reason})"],
     ):
+        if level.is_approved:
+            send_level_rejected_mail(level, reason)
         level.is_approved = False
         level.rejection_reason = reason
         level.save()
