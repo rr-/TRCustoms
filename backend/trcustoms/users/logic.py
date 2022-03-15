@@ -6,7 +6,11 @@ from trcustoms.audit_logs.utils import (
     track_model_deletion,
     track_model_update,
 )
-from trcustoms.mails import send_registration_rejection_mail, send_welcome_mail
+from trcustoms.mails import (
+    send_ban_mail,
+    send_registration_rejection_mail,
+    send_welcome_mail,
+)
 from trcustoms.users.models import User
 
 
@@ -81,6 +85,8 @@ def ban_user(user: User, request: Request | None, reason: str) -> None:
     with track_model_update(
         obj=user, request=request, changes=[f"Banned (reason: {reason})"]
     ):
+        if not user.is_banned:
+            send_ban_mail(user, reason)
         user.is_banned = True
         user.ban_reason = reason
         user.save()
