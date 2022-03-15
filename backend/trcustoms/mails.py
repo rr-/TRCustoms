@@ -1,3 +1,6 @@
+from email.mime.image import MIMEImage
+from pathlib import Path
+
 from django.conf import settings
 from django.core.mail import EmailMultiAlternatives
 from django.template.loader import get_template
@@ -7,6 +10,7 @@ from trcustoms.users.models import User
 
 FROM = "admin@trcustoms.org"
 PREFIX = "[TRCustoms]"
+STATIC_DIR = Path(__file__).parent / "common" / "static"
 
 
 def send_email(
@@ -18,10 +22,18 @@ def send_email(
     plaintext = get_template(f"{template_name}.txt")
     html = get_template(f"{template_name}.html")
 
+    logo_attachment_id = 100
+
+    context.update(logo_url=f"cid:{logo_attachment_id}")
+
+    msg_img = MIMEImage((STATIC_DIR / "mail_logo.png").read_bytes())
+    msg_img.add_header("Content-ID", f"<{logo_attachment_id}>")
+
     text_content = plaintext.render(context)
     html_content = transform(html.render(context))
     msg = EmailMultiAlternatives(subject, text_content, FROM, recipients)
     msg.attach_alternative(html_content, "text/html")
+    msg.attach(msg_img)
     msg.send()
 
 
