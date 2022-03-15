@@ -1,4 +1,5 @@
 import pytest
+from django.core import mail
 from rest_framework import status
 from rest_framework.test import APIClient
 
@@ -69,6 +70,7 @@ def test_level_partial_update_success(
         level.files.values_list("file__id", flat=True)
     )
     assert out_level.last_file == level.last_file
+    assert len(mail.outbox) == 0
 
 
 @pytest.mark.django_db

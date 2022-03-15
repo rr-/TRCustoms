@@ -74,9 +74,7 @@ class User(AbstractUser):
         trle = "trle", "trle.net"
         trcustoms = "trcustoms", "trcustoms"
 
-    trle_reviewer_id = models.IntegerField(
-        max_length=32, blank=True, null=True
-    )
+    trle_reviewer_id = models.IntegerField(blank=True, null=True)
     trle_author_id = models.IntegerField(blank=True, null=True)
 
     picture = models.ForeignKey(

@@ -1,4 +1,5 @@
 import pytest
+from django.core import mail
 from rest_framework import status
 from rest_framework.test import APIClient
 
@@ -126,3 +127,5 @@ def test_level_creation_success(
         level.external_links.all()[1].link_type
         == LevelExternalLink.LinkType.MAIN
     )
+    assert len(mail.outbox) == 1
+    assert mail.outbox[0].subject == "[TRCustoms] Level submitted"

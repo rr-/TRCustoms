@@ -6,6 +6,7 @@ from django.core.mail import EmailMultiAlternatives
 from django.template.loader import get_template
 from premailer import transform
 
+from trcustoms.levels.models import Level
 from trcustoms.users.models import User
 
 FROM = "admin@trcustoms.org"
@@ -13,7 +14,7 @@ PREFIX = "[TRCustoms]"
 STATIC_DIR = Path(__file__).parent / "common" / "static"
 
 
-def send_email(
+def send_mail(
     template_name: str,
     subject: str,
     recipients: list[str],
@@ -42,7 +43,7 @@ def send_email_confirmation_mail(user: User) -> None:
         return
     token = user.generate_email_token()
     link = f"{settings.HOST_SITE}/email-confirmation/{token}"
-    send_email(
+    send_mail(
         template_name="email_confirmation",
         subject=f"{PREFIX} Confirm your registration",
         recipients=[user.email],
@@ -58,7 +59,7 @@ def send_password_reset_mail(user: User) -> None:
         return
     token = user.generate_password_reset_token()
     link = f"{settings.HOST_SITE}/password-reset/{token}"
-    send_email(
+    send_mail(
         template_name="password_reset",
         subject=f"{PREFIX} Password reset",
         recipients=[user.email],
@@ -72,7 +73,7 @@ def send_password_reset_mail(user: User) -> None:
 def send_welcome_mail(user: User) -> None:
     if not user.email:
         return
-    send_email(
+    send_mail(
         template_name="welcome",
         subject=f"{PREFIX} Welcome to TRCustoms.org",
         recipients=[user.email],
@@ -85,7 +86,7 @@ def send_welcome_mail(user: User) -> None:
 def send_registration_rejection_mail(user: User, reason: str) -> None:
     if not user.email:
         return
-    send_email(
+    send_mail(
         template_name="registration_rejection",
         subject=f"{PREFIX} Registration rejected",
         recipients=[user.email],
@@ -99,7 +100,7 @@ def send_registration_rejection_mail(user: User, reason: str) -> None:
 def send_ban_mail(user: User, reason: str) -> None:
     if not user.email:
         return
-    send_email(
+    send_mail(
         template_name="ban",
         subject=f"{PREFIX} Account banned",
         recipients=[user.email],
@@ -113,9 +114,25 @@ def send_ban_mail(user: User, reason: str) -> None:
 def send_unban_mail(user: User) -> None:
     if not user.email:
         return
-    send_email(
+    send_mail(
         template_name="unban",
         subject=f"{PREFIX} Account unbanned",
         recipients=[user.email],
         context={"username": user.username},
+    )
+
+
+def send_level_submitted_mail(level: Level) -> None:
+    if not level.uploader or not level.uploader.email:
+        return
+    link = f"{settings.HOST_SITE}/levels/{level.id}"
+    send_mail(
+        template_name="level_submission",
+        subject=f"{PREFIX} Level submitted",
+        recipients=[level.uploader.email],
+        context={
+            "username": level.uploader.username,
+            "level_name": level.name,
+            "link": link,
+        },
     )
