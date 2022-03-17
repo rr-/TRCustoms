@@ -1,12 +1,15 @@
 .PushButton--button {
   text-align: center;
-  display: inline-block;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
   background: var(--button-bg-color);
   border: 2px solid var(--input-border-color);
   color: var(--button-fg-color);
   font-size: var(--font-size);
   line-height: 1rem;
-  padding: 0.5rem 1rem;
+  padding: 0 1rem;
+  height: 2rem;
   cursor: pointer;
 }
 .PushButton--button:hover {
@@ -20,6 +23,11 @@
 
 .PushButton--icon {
   margin-right: 0.5rem;
+}
+.PushButton--icon .icon {
+  width: 1.6em;
+  height: 1.6em;
+  margin: 0;
 }
 .PushButton--label {
   text-decoration: var(--button-text-decoration);
