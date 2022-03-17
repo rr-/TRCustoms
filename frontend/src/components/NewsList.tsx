@@ -73,7 +73,7 @@ const NewsList = () => {
 
   return (
     <DataList
-      queryName="news"
+      queryName="newsList"
       searchQuery={searchQuery}
       onSearchQueryChange={setSearchQuery}
       searchFunc={NewsService.searchNews}
