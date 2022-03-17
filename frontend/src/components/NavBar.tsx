@@ -109,6 +109,9 @@ const NavBar = () => {
                     <NavLink to={"/users"}>Users</NavLink>
                   </li>
                 </PermissionGuard>
+                <li className="TopNavBar--listItem">
+                  <NavLink to={"/about"}>About</NavLink>
+                </li>
               </ul>
             </nav>
             <div className="NavBar NavBar--right">

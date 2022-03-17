@@ -4,9 +4,12 @@ import { Formik } from "formik";
 import { Form } from "formik";
 import { useContext } from "react";
 import { useCallback } from "react";
+import { Link } from "react-router-dom";
 import { FormGrid } from "src/components/FormGrid";
 import { FormGridButtons } from "src/components/FormGrid";
 import { FormGridFieldSet } from "src/components/FormGrid";
+import { InfoMessage } from "src/components/InfoMessage";
+import { InfoMessageType } from "src/components/InfoMessage";
 import { PicturePicker } from "src/components/PicturePicker";
 import { BaseFormField } from "src/components/formfields/BaseFormField";
 import { DropDownFormField } from "src/components/formfields/DropDownFormField";
@@ -261,6 +264,12 @@ const UserForm = ({ user, onGoBack, onSubmit }: UserFormProps) => {
               </FormGridFieldSet>
 
               <FormGridButtons status={status}>
+                <InfoMessage type={InfoMessageType.Info}>
+                  <span>
+                    By registering, you agree to abide by the website's{" "}
+                    <Link to="/about/terms">Terms and Conditions</Link>.
+                  </span>
+                </InfoMessage>
                 <button type="submit" disabled={isSubmitting}>
                   {user ? "Update profile" : "Register"}
                 </button>

@@ -4,6 +4,7 @@ import { Route } from "react-router-dom";
 import { NavBar } from "src/components/NavBar";
 import { ScrollToTop } from "src/components/ScrollToTop";
 import { ThemeManager } from "src/components/ThemeManager";
+import { AboutPage } from "src/components/pages/AboutPage";
 import { EmailConfirmationPage } from "src/components/pages/EmailConfirmationPage";
 import { GenreListPage } from "src/components/pages/GenreListPage";
 import { HomePage } from "src/components/pages/HomePage";
@@ -24,6 +25,7 @@ import { PasswordResetPage } from "src/components/pages/PasswordResetPage";
 import { RegisterPage } from "src/components/pages/RegisterPage";
 import { SettingsPage } from "src/components/pages/SettingsPage";
 import { TagListPage } from "src/components/pages/TagListPage";
+import { TermsAndConditionsPage } from "src/components/pages/TermsAndConditionsPage";
 import { UserEditPage } from "src/components/pages/UserEditPage";
 import { UserListPage } from "src/components/pages/UserListPage";
 import { UserPage } from "src/components/pages/UserPage";
@@ -76,6 +78,8 @@ function App() {
                 path="/email-confirmation/:token"
                 element={<EmailConfirmationPage />}
               />
+              <Route path="/about" element={<AboutPage />} />
+              <Route path="/about/terms" element={<TermsAndConditionsPage />} />
             </Routes>
           </main>
         </UserContextProvider>
