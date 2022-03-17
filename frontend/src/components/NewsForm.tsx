@@ -80,7 +80,7 @@ const NewsForm = ({ news, onGoBack, onSubmit }: NewsFormProps) => {
 
         if (news?.id) {
           let outNews = await NewsService.update(news.id, payload);
-          resetQueries(queryClient, ["news"], true);
+          resetQueries(queryClient, ["newsList"]);
           onSubmit?.(outNews);
 
           setStatus({
@@ -92,7 +92,7 @@ const NewsForm = ({ news, onGoBack, onSubmit }: NewsFormProps) => {
           });
         } else {
           let outNews = await NewsService.create(payload);
-          resetQueries(queryClient, ["news"]);
+          resetQueries(queryClient, ["newsList"]);
           onSubmit?.(outNews);
 
           setStatus({
