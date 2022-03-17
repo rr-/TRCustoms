@@ -5,7 +5,6 @@ from django.utils import timezone
 from trcustoms.celery import app, logger
 from trcustoms.users.logic import reject_user
 from trcustoms.users.models import User
-from trcustoms.utils import check_model_references
 
 
 @app.task
@@ -25,7 +24,5 @@ def prune_unused_accounts() -> None:
         date_joined__lte=timezone.now() - timedelta(hours=6),
     ).iterator():
         logger.info("%s: deleting inactive user", user.id)
-
-        assert not check_model_references(user)
 
         reject_user(user, None, "Email not activated")
