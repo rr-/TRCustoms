@@ -89,7 +89,8 @@
   --stats-hover-filter: brightness(0%);
   --blockquote-bg-color: var(--bg-color);
   --blockquote-border-color: var(--button-bg-color);
-  --message-accent-fg-color: var(--fg-color);
+  --message-accent-fg-color: var(--button-fg-color);
+  --message-bg-color: var(--label-bg-color);
 }
 
 [data-theme="lettuce"] {
