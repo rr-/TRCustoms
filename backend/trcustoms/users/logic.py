@@ -28,6 +28,9 @@ def activate_user(user: User, request: Request | None) -> None:
 
 def wipe_user(user: User) -> None:
     user.is_pending_activation = False
+    user.is_email_confirmed = False
+    user.is_banned = False
+    user.ban_reason = None
     user.email = ""
     user.first_name = ""
     user.last_name = ""
