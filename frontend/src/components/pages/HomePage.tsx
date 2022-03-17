@@ -129,11 +129,11 @@ const HomePage = () => {
           <ReviewStats />
 
           <Section>
-            <SectionHeader>Extra</SectionHeader>
-            <p>More features coming soon…</p>
+            <SectionHeader>External links</SectionHeader>
 
             <div className="HomePageExtraButtons">
               <PushButton
+                isPlain={true}
                 className="HomePage--supportButton"
                 icon={<IconDiscord />}
                 to="https://discord.gg/qxpHsYKeKz"
@@ -142,6 +142,7 @@ const HomePage = () => {
               </PushButton>
 
               <PushButton
+                isPlain={true}
                 className="HomePage--supportButton"
                 icon={<IconTwitter />}
                 to="https://twitter.com/trcustomsorg"
@@ -150,6 +151,7 @@ const HomePage = () => {
               </PushButton>
 
               <PushButton
+                isPlain={true}
                 className="HomePage--supportButton"
                 icon={<IconKofi />}
                 to="https://ko-fi.com/trcustomsorg"
@@ -158,6 +160,7 @@ const HomePage = () => {
               </PushButton>
 
               <PushButton
+                isPlain={true}
                 className="HomePage--supportButton"
                 icon={<IconGitHub />}
                 to="https://github.com/rr-/trcustoms/issues"
