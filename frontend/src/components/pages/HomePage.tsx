@@ -14,7 +14,10 @@ import { PushButton } from "src/components/PushButton";
 import { Section } from "src/components/Section";
 import { SectionHeader } from "src/components/Section";
 import { SidebarBox } from "src/components/SidebarBox";
+import { IconDiscord } from "src/components/icons/IconDiscord";
+import { IconGitHub } from "src/components/icons/IconGitHub";
 import { IconKofi } from "src/components/icons/IconKofi";
+import { IconTwitter } from "src/components/icons/IconTwitter";
 import { EngineLink } from "src/components/links/EngineLink";
 import { ConfigContext } from "src/contexts/ConfigContext";
 import { UserPermission } from "src/services/UserService";
@@ -125,16 +128,43 @@ const HomePage = () => {
           <LevelStats />
           <ReviewStats />
 
-          <Section className="HomePage--sidebarExtra">
+          <Section>
             <SectionHeader>Extra</SectionHeader>
             <p>More features coming soon…</p>
-            <PushButton
-              className="HomePage--supportButton"
-              icon={<IconKofi />}
-              to="https://ko-fi.com/trcustomsorg"
-            >
-              Support us on Ko-fi
-            </PushButton>
+
+            <div className="HomePageExtraButtons">
+              <PushButton
+                className="HomePage--supportButton"
+                icon={<IconDiscord />}
+                to="https://discord.gg/qxpHsYKeKz"
+              >
+                Join our Discord
+              </PushButton>
+
+              <PushButton
+                className="HomePage--supportButton"
+                icon={<IconTwitter />}
+                to="https://twitter.com/trcustomsorg"
+              >
+                Follow us on Twitter
+              </PushButton>
+
+              <PushButton
+                className="HomePage--supportButton"
+                icon={<IconKofi />}
+                to="https://ko-fi.com/trcustomsorg"
+              >
+                Support us on Ko-fi
+              </PushButton>
+
+              <PushButton
+                className="HomePage--supportButton"
+                icon={<IconGitHub />}
+                to="https://github.com/rr-/trcustoms/issues"
+              >
+                Report a bug
+              </PushButton>
+            </div>
           </Section>
         </SidebarBox>
       </aside>
