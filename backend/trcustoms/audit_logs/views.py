@@ -1,6 +1,5 @@
 from rest_framework import mixins, viewsets
 from rest_framework.generics import get_object_or_404
-from rest_framework.permissions import AllowAny
 
 from trcustoms.audit_logs.models import AuditLog
 from trcustoms.audit_logs.serializers import AuditLogListingSerializer
@@ -18,7 +17,7 @@ class AuditLogViewSet(
 
     permission_classes = [AllowNone]
     permission_classes_by_action = {
-        "list": [AllowAny],
+        "list": [HasPermission(UserPermission.REVIEW_AUDIT_LOGS)],
         "approve": [HasPermission(UserPermission.REVIEW_AUDIT_LOGS)],
     }
     search_fields = [
