@@ -1,41 +1,37 @@
 .NestedLegalese--wrapper {
   display: flex;
-  gap: 5rem;
+  gap: 1rem;
 }
 
 .NestedLegalese--toc {
   white-space: nowrap;
 }
 
-.NestedLegalese--content .LegaleseItem[data-nesting="0"] > ol > li::marker,
-.NestedLegalese--content
-  .LegaleseItem[data-nesting="1"]
-  > .LegaleseItem--title {
-  font-size: calc(var(--font-size) * 1.3);
-  font-weight: bold;
+.LegaleseItem {
+  display: flex;
+  gap: 0.5rem;
 }
-
-.NestedLegalese--content .LegaleseItem--list {
-  margin: 1rem 0 0 0;
-  padding: 0 1.5rem;
-}
-
-.NestedLegalese--content ul .LegaleseItem {
-  margin: 0 0 0.25rem 0;
-}
-.NestedLegalese--content ul p {
-  margin: 0.25rem 0;
-}
-
-.NestedLegalese--content .LegaleseItem[data-nesting="0"] > .LegaleseItem--list {
+.LegaleseItem p {
   margin: 0;
+}
+.LegaleseItem--body {
+  flex: 1;
+}
+.LegaleseItem--body > *:first-child {
+  margin-top: 0;
+}
+.LegaleseItem--body > *:last-child {
+  margin-bottom: 0;
+}
+
+.LegaleseItem--listItem {
+  margin: 0.5rem 0;
+}
+.LegaleseItem--list {
+  list-style: none;
+  margin: 0.5rem 0;
   padding: 0;
 }
-
-.NestedLegalese--content .LegaleseItem {
-  margin: 0 0 1rem 0;
-}
-
-.NestedLegalese--content .LegaleseItem[data-nesting="1"] {
-  margin: 0 0 5rem 0;
+.LegaleseItem[data-nesting="1"] {
+  margin-bottom: 2rem;
 }
