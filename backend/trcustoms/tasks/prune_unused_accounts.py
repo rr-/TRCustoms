@@ -18,11 +18,15 @@ def prune_unused_accounts() -> None:
       removing authorship information.
     - Doesn't matter if the account came from TRLE or TRC.
     """
-    for user in User.objects.filter(
-        is_active=False,
-        is_email_confirmed=False,
-        date_joined__lte=timezone.now() - timedelta(hours=6),
-    ).iterator():
+    for user in (
+        User.objects.filter(
+            is_active=False,
+            is_email_confirmed=False,
+            date_joined__lte=timezone.now() - timedelta(hours=6),
+        )
+        .exclude(email="")
+        .iterator()
+    ):
         logger.info("%s: deleting inactive user", user.id)
 
         reject_user(user, None, "Email not activated")
