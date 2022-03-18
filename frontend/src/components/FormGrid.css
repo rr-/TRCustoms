@@ -11,8 +11,14 @@
   grid-column: 1 / span 2;
 }
 .FormGrid.grid .FormGridButtons--status,
+.FormGrid.grid .FormGridButtons--extra,
 .FormGrid.grid .FormGridButtons--buttons {
   grid-column: 2;
+}
+
+.FormGridButtons--buttons {
+  display: flex;
+  gap: 0.5rem;
 }
 
 .FormGrid.column .FormGridButtons {
@@ -47,4 +53,8 @@
 .FormGrid.column .FormGridFieldSet--fields .FormField--label {
   margin: 1rem 0 0.5rem 0;
   padding-left: 0.5rem;
+}
+
+.FormGrid.grid .FormGridButtons--extra .InfoMessage {
+  margin: 0;
 }

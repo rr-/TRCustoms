@@ -89,15 +89,17 @@ const TagsTableDetails = ({ tag }: TagsTableDetailsProps) => {
         <p>Not used with other tags.</p>
       )}
       <PermissionGuard require={UserPermission.editTags}>
-        <PushButton disableTimeout={true} onClick={() => mergeTag()}>
-          Merge
-        </PushButton>
-        <PushButton disableTimeout={true} onClick={() => renameTag()}>
-          Rename
-        </PushButton>
-        <PushButton disableTimeout={true} onClick={() => deleteTag()}>
-          Delete
-        </PushButton>
+        <div className="FormGridButtons--buttons">
+          <PushButton disableTimeout={true} onClick={() => mergeTag()}>
+            Merge
+          </PushButton>
+          <PushButton disableTimeout={true} onClick={() => renameTag()}>
+            Rename
+          </PushButton>
+          <PushButton disableTimeout={true} onClick={() => deleteTag()}>
+            Delete
+          </PushButton>
+        </div>
       </PermissionGuard>
     </>
   );

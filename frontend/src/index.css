@@ -68,10 +68,6 @@ button {
 button[disabled] {
   opacity: 0.5;
 }
-button + a,
-button + button {
-  margin-left: 1rem;
-}
 button:hover {
   background: var(--button-hovered-bg-color);
   color: var(--button-hovered-fg-color);
