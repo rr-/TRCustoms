@@ -19,6 +19,7 @@ interface FormGridButtonsProps {
         error?: React.ReactElement | undefined;
       }
     | undefined;
+  extra?: React.ReactNode | undefined;
   children: React.ReactNode;
 }
 
@@ -33,20 +34,29 @@ const FormGrid = ({ gridType, children }: FormGridProps) => {
   return <div className={classNames.join(" ")}>{children}</div>;
 };
 
-const FormGridButtons = ({ status, children }: FormGridButtonsProps) => {
+const FormGridButtons = ({ status, extra, children }: FormGridButtonsProps) => {
   const { errors, touched } = useFormikContext();
+  const anyFormikErrors =
+    intersection(Object.keys(errors), Object.keys(touched)).length > 0;
   return (
     <div className="FormGridButtons">
-      <div className="FormGridButtons--status">
-        {intersection(Object.keys(errors), Object.keys(touched)).length > 0 && (
-          <div className="FormFieldError">Please review the errors above.</div>
-        )}
+      {(status?.success || status?.error || anyFormikErrors) && (
+        <div className="FormGridButtons--status">
+          {anyFormikErrors && (
+            <div className="FormFieldError">
+              Please review the errors above.
+            </div>
+          )}
 
-        {status?.success && (
-          <div className="FormFieldSuccess">{status.success}</div>
-        )}
-        {status?.error && <div className="FormFieldError">{status.error}</div>}
-      </div>
+          {status?.success && (
+            <div className="FormFieldSuccess">{status.success}</div>
+          )}
+          {status?.error && (
+            <div className="FormFieldError">{status.error}</div>
+          )}
+        </div>
+      )}
+      {extra && <div className="FormGridButtons--extra">{extra}</div>}
       <div className="FormGridButtons--buttons">{children}</div>
     </div>
   );

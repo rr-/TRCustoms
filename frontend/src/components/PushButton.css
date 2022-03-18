@@ -33,10 +33,6 @@
   text-decoration: var(--button-text-decoration);
 }
 
-.PushButton + .PushButton {
-  margin-left: 1rem;
-}
-
 .PushButton--disabled {
   opacity: 0.5;
   cursor: default;

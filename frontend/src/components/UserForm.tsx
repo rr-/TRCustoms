@@ -263,16 +263,20 @@ const UserForm = ({ user, onGoBack, onSubmit }: UserFormProps) => {
                 )}
               </FormGridFieldSet>
 
-              <FormGridButtons status={status}>
-                <InfoMessage type={InfoMessageType.Info}>
-                  <span>
-                    By registering, you agree to abide by the website's{" "}
-                    <Link target="_blank" to="/about/terms">
-                      Terms and Conditions
-                    </Link>
-                    .
-                  </span>
-                </InfoMessage>
+              <FormGridButtons
+                status={status}
+                extra={
+                  <InfoMessage type={InfoMessageType.Info}>
+                    <span>
+                      By registering, you agree to abide by the website's{" "}
+                      <Link target="_blank" to="/about/terms">
+                        Terms and Conditions
+                      </Link>
+                      .
+                    </span>
+                  </InfoMessage>
+                }
+              >
                 <button type="submit" disabled={isSubmitting}>
                   {user ? "Update profile" : "Register"}
                 </button>
