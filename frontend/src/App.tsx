@@ -20,6 +20,7 @@ import { ModerationPage } from "src/components/pages/ModerationPage";
 import { MyLevelsPage } from "src/components/pages/MyLevelsPage";
 import { NewsCreatePage } from "src/components/pages/NewsCreatePage";
 import { NewsEditPage } from "src/components/pages/NewsEditPage";
+import { NotFoundPage } from "src/components/pages/NotFoundPage";
 import { PasswordResetFinishPage } from "src/components/pages/PasswordResetFinishPage";
 import { PasswordResetPage } from "src/components/pages/PasswordResetPage";
 import { RegisterPage } from "src/components/pages/RegisterPage";
@@ -80,6 +81,7 @@ function App() {
               />
               <Route path="/about" element={<AboutPage />} />
               <Route path="/about/terms" element={<TermsAndConditionsPage />} />
+              <Route path="*" element={<NotFoundPage />} />
             </Routes>
           </main>
         </UserContextProvider>
