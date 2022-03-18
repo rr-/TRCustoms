@@ -55,8 +55,8 @@ const PasswordResetFinishPage = () => {
     } = {
       password: [validatePassword, validateRequired],
       password2: [
+        (source) => validatePassword2(source, values.password),
         validatePassword,
-        (source) => validatePassword2(source, values.password2),
         validateRequired,
       ],
     };
@@ -66,8 +66,8 @@ const PasswordResetFinishPage = () => {
         const error = validator(values[field]);
         if (error) {
           errors[field] = makeSentence(error);
+          break;
         }
-        break;
       }
     }
 
