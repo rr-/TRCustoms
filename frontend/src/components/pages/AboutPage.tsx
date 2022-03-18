@@ -55,8 +55,13 @@ const About: LegaleseEntry = {
 
     {
       title: "Contact Us",
-      description:
-        "If you have any questions or inquiries, please do not hesitate to contact the site administrator at admin@trcustoms.org.",
+      description: (
+        <>
+          If you have any questions or inquiries, please do not hesitate to
+          contact the site administrator at{" "}
+          <a href="mailto:admin@trcustoms.org">admin@trcustoms.org</a>.
+        </>
+      ),
     },
   ],
 };
