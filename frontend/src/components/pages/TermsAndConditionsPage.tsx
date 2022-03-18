@@ -221,8 +221,7 @@ const TOS: LegaleseEntry = {
 const TermsAndConditionsPage = () => {
   return (
     <div className="TermsAndConditionsPage">
-      <h1>Terms and Conditions</h1>
-      <NestedLegalese entry={TOS} />
+      <NestedLegalese title="Terms and Conditions" entry={TOS} />
     </div>
   );
 };
