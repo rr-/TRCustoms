@@ -157,8 +157,8 @@ const UserForm = ({ user, onGoBack, onSubmit }: UserFormProps) => {
       oldPassword: [],
       password: [validatePassword],
       password2: [
+        (source) => validatePassword2(source, values.password),
         validatePassword,
-        (source) => validatePassword2(source, values.password2),
       ],
     };
 
@@ -174,8 +174,8 @@ const UserForm = ({ user, onGoBack, onSubmit }: UserFormProps) => {
         const error = validator(values[field]);
         if (error) {
           errors[field] = makeSentence(error);
+          break;
         }
-        break;
       }
     }
 
