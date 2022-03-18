@@ -267,7 +267,10 @@ const UserForm = ({ user, onGoBack, onSubmit }: UserFormProps) => {
                 <InfoMessage type={InfoMessageType.Info}>
                   <span>
                     By registering, you agree to abide by the website's{" "}
-                    <Link to="/about/terms">Terms and Conditions</Link>.
+                    <Link target="_blank" to="/about/terms">
+                      Terms and Conditions
+                    </Link>
+                    .
                   </span>
                 </InfoMessage>
                 <button type="submit" disabled={isSubmitting}>
