@@ -21,7 +21,8 @@ enum AuditLogObjectType {
   LevelDuration = "levelduration",
   LevelGenre = "levelgenre",
   LevelReview = "levelreview",
-  LevelTag = "leveltag",
+  Tag = "tag",
+  News = "news",
   User = "user",
 }
 
@@ -42,7 +43,9 @@ interface AuditLogList extends PagedResponse<AuditLogListing> {}
 
 interface AuditLogSearchQuery extends GenericSearchQuery {
   level?: number | undefined;
-  isReviewed?: boolean | undefined;
+  isActionRequired?: boolean | undefined;
+  userSearch?: string | undefined;
+  objectSearch?: string | undefined;
 }
 
 interface AuditLogSearchResult
@@ -54,10 +57,12 @@ const searchAuditLogs = async (
   const params = filterFalsyObjectValues({
     ...getGenericSearchQuery(searchQuery),
     level: searchQuery.level || null,
-    is_reviewed:
-      searchQuery.isReviewed === true
+    user_search: searchQuery.userSearch || null,
+    object_search: searchQuery.objectSearch || null,
+    is_action_required:
+      searchQuery.isActionRequired === true
         ? "1"
-        : searchQuery.isReviewed === false
+        : searchQuery.isActionRequired === false
         ? "0"
         : false,
   });

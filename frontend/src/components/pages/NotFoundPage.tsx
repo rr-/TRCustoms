@@ -35,7 +35,7 @@ const NotFoundPage = () => {
   const image = images[Math.floor(Math.random() * images.length)];
   return (
     <div className="NotFoundPage">
-      <img src={image.image} />
+      <img alt="404 error" src={image.image} />
       {image.text}
     </div>
   );

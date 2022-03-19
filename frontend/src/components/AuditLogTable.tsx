@@ -81,7 +81,7 @@ const AuditLogTableObjectLink = ({
         </GenreLink>
       );
 
-    case AuditLogObjectType.LevelTag:
+    case AuditLogObjectType.Tag:
       return (
         <TagLink
           tag={{
@@ -110,6 +110,9 @@ const AuditLogTableObjectLink = ({
 
     case AuditLogObjectType.LevelDifficulty:
       return <>{`Difficulty ${auditLog.object_name}`}</>;
+
+    case AuditLogObjectType.News:
+      return <>{`News #${auditLog.object_id}`}</>;
 
     default:
       return <>{`${auditLog.object_type} #${auditLog.object_id}`}</>;
