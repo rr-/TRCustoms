@@ -1,7 +1,10 @@
 import "./NotFoundPage.css";
 
 const images = [
-  { image: "/404.1.png", text: <>ERROR 404</> },
+  {
+    image: "/404.1.png",
+    text: <>I'm Error 404 and I'll see you in your nightmares.</>,
+  },
   {
     image: "/404.2.png",
     text: (
@@ -21,7 +24,7 @@ const images = [
       </>
     ),
   },
-  { image: "/404.4.png", text: <>Unexpected Error!</> },
+  { image: "/404.4.png", text: <>Error 404!!</> },
   {
     image: "/404.5.png",
     text: <>I don't count Error 404 your average child's tea party.</>,
