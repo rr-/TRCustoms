@@ -1,13 +1,64 @@
+from collections.abc import Iterable
+
+from django.db.models import Q
 from rest_framework import mixins, viewsets
-from rest_framework.generics import get_object_or_404
 
 from trcustoms.audit_logs.models import AuditLog
 from trcustoms.audit_logs.serializers import AuditLogListingSerializer
-from trcustoms.levels.models import Level
 from trcustoms.mixins import PermissionsMixin
 from trcustoms.permissions import AllowNone, HasPermission
 from trcustoms.users.models import UserPermission
 from trcustoms.utils import parse_bool, parse_id
+
+
+def split_terms(search: str) -> Iterable[str]:
+    for term in search.split():
+        if term:
+            yield term
+
+
+def filter_queryset_state(qs, state):
+    model_name, text = state.split("_", maxsplit=1)
+    qs = qs.filter(object_type__model=model_name, changes__icontains=text)
+    return qs
+
+
+def filter_queryset_search(qs, search: str | None):
+    if not search:
+        return qs
+    for term in split_terms(search):
+        if ":" in term:
+            command, rest = term.split(":", maxsplit=1)
+            match command:
+                case "state":
+                    qs = filter_queryset_state(qs, rest)
+        else:
+            qs = qs.filter(changes__icontains=term)
+    return qs
+
+
+def filter_queryset_user_search(qs, search: str | None):
+    if not search:
+        return qs
+    for term in split_terms(search):
+        qs = qs.filter(
+            Q(change_author__username__icontains=term)
+            | Q(change_author__first_name__icontains=term)
+            | Q(change_author__last_name__icontains=term)
+        )
+    return qs
+
+
+def filter_queryset_object_search(qs, search: str | None):
+    if not search:
+        return qs
+    for term in split_terms(search):
+        qs = qs.filter(
+            Q(object_type__model__icontains=term)
+            | Q(object_name__icontains=term)
+            | Q(object_id=parse_id(term))
+        )
+    return qs
 
 
 class AuditLogViewSet(
@@ -20,32 +71,27 @@ class AuditLogViewSet(
         "list": [HasPermission(UserPermission.REVIEW_AUDIT_LOGS)],
         "approve": [HasPermission(UserPermission.REVIEW_AUDIT_LOGS)],
     }
-    search_fields = [
-        "object_name",
-        "change_author__username",
-        "change_author__first_name",
-        "change_author__last_name",
-    ]
 
     def get_queryset(self):
-        queryset = AuditLog.objects.all()
+        qs = AuditLog.objects.all()
 
-        disable_paging = self.request.query_params.get("disable_paging")
-        self.paginator.disable_paging = False
-
-        if level := parse_id(self.request.query_params.get("level")):
-            level = get_object_or_404(Level, id=level)
-            queryset = AuditLog.objects.filter_for_model(level)
-            if disable_paging:
-                self.paginator.disable_paging = True
+        qs = filter_queryset_search(
+            qs, self.request.query_params.get("search")
+        )
+        qs = filter_queryset_user_search(
+            qs, self.request.query_params.get("user_search")
+        )
+        qs = filter_queryset_object_search(
+            qs, self.request.query_params.get("object_search")
+        )
 
         if (
-            is_reviewed := parse_bool(
-                self.request.query_params.get("is_reviewed")
+            is_action_required := parse_bool(
+                self.request.query_params.get("is_action_required")
             )
         ) is not None:
-            queryset = queryset.filter(is_reviewed=is_reviewed)
+            qs = qs.filter(is_action_required=is_action_required)
 
-        queryset = queryset.prefetch_related("change_author", "object_type")
+        qs = qs.prefetch_related("change_author", "object_type")
 
-        return queryset
+        return qs

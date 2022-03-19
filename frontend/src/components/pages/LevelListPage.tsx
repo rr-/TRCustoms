@@ -1,5 +1,4 @@
 import "./LevelListPage.css";
-import { SearchIcon } from "@heroicons/react/outline";
 import { Formik } from "formik";
 import { Form } from "formik";
 import { useEffect } from "react";
@@ -19,7 +18,9 @@ import { SidebarBox } from "src/components/SidebarBox";
 import { TagsCheckboxes } from "src/components/TagsCheckboxes";
 import { CheckboxFormField } from "src/components/formfields/CheckboxFormField";
 import { DropDownFormField } from "src/components/formfields/DropDownFormField";
+import { SubmitButton } from "src/components/formfields/SubmitButton";
 import { TextFormField } from "src/components/formfields/TextFormField";
+import { IconSearch } from "src/components/icons/IconSearch";
 import { TitleContext } from "src/contexts/TitleContext";
 import type { LevelSearchQuery } from "src/services/LevelService";
 import { UserPermission } from "src/services/UserService";
@@ -149,71 +150,74 @@ const LevelListPage = () => {
               />
             </div>
 
-            <SidebarBox id="LevelListPage--sidebar">
-              <SectionHeader className="LevelListPage--sidebarHeader">
-                Search filter
-                <PushButton
-                  isPlain={true}
-                  disableTimeout={true}
-                  onClick={handleClear}
-                >
-                  (reset)
-                </PushButton>
-              </SectionHeader>
+            <div id="LevelListPage--sidebar">
+              <SidebarBox>
+                <SectionHeader className="LevelListPage--sidebarHeader">
+                  Search filter
+                  <PushButton
+                    isPlain={true}
+                    disableTimeout={true}
+                    onClick={handleClear}
+                  >
+                    (reset)
+                  </PushButton>
+                </SectionHeader>
 
-              <PermissionGuard require={UserPermission.editLevels}>
+                <PermissionGuard require={UserPermission.editLevels}>
+                  <div className="LevelListPage--sidebarSection">
+                    <CheckboxFormField
+                      onChange={() => {
+                        submitForm();
+                      }}
+                      label="Approved"
+                      name="isApproved"
+                    />
+                  </div>
+                </PermissionGuard>
+
                 <div className="LevelListPage--sidebarSection">
-                  <CheckboxFormField
+                  <DropDownFormField
                     onChange={() => {
                       submitForm();
                     }}
-                    label="Approved"
-                    name="isApproved"
+                    label="Sort"
+                    name="sort"
+                    options={sortOptions}
                   />
                 </div>
-              </PermissionGuard>
 
-              <div className="LevelListPage--sidebarSection">
-                <DropDownFormField
-                  onChange={() => {
-                    submitForm();
-                  }}
-                  label="Sort"
-                  name="sort"
-                  options={sortOptions}
-                />
-              </div>
-
-              <div className="LevelListPage--sidebarSection LevelListPage--searchBar">
-                <TextFormField label="Search level/author" name="search" />
-                <div className="FormField">
-                  <button type="submit">
-                    <SearchIcon className="Icon" />
-                  </button>
+                <div className="LevelListPage--sidebarSection LevelListPage--searchBar">
+                  <TextFormField label="Search level/author" name="search" />
+                  <div className="FormField">
+                    <SubmitButton
+                      onClick={submitForm}
+                      icon={<IconSearch />}
+                    ></SubmitButton>
+                  </div>
                 </div>
-              </div>
 
-              <div className="LevelListPage--sidebarSection">
-                <EnginesCheckboxes
-                  searchQuery={searchQuery}
-                  onSearchQueryChange={setSearchQuery}
-                />
-              </div>
+                <div className="LevelListPage--sidebarSection">
+                  <EnginesCheckboxes
+                    searchQuery={searchQuery}
+                    onSearchQueryChange={setSearchQuery}
+                  />
+                </div>
 
-              <div className="LevelListPage--sidebarSection">
-                <GenresCheckboxes
-                  searchQuery={searchQuery}
-                  onSearchQueryChange={setSearchQuery}
-                />
-              </div>
+                <div className="LevelListPage--sidebarSection">
+                  <GenresCheckboxes
+                    searchQuery={searchQuery}
+                    onSearchQueryChange={setSearchQuery}
+                  />
+                </div>
 
-              <div className="LevelListPage--sidebarSection">
-                <TagsCheckboxes
-                  searchQuery={searchQuery}
-                  onSearchQueryChange={setSearchQuery}
-                />
-              </div>
-            </SidebarBox>
+                <div className="LevelListPage--sidebarSection">
+                  <TagsCheckboxes
+                    searchQuery={searchQuery}
+                    onSearchQueryChange={setSearchQuery}
+                  />
+                </div>
+              </SidebarBox>
+            </div>
           </Form>
         )}
       </Formik>

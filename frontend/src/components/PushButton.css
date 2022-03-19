@@ -1,6 +1,7 @@
 .PushButton--button {
   text-align: center;
   display: inline-flex;
+  gap: 0.5rem;
   justify-content: center;
   align-items: center;
   background: var(--button-bg-color);
@@ -21,10 +22,8 @@
   border-color: var(--outline-color);
 }
 
-.PushButton--icon {
-  margin-right: 0.5rem;
-}
-.PushButton--icon .icon {
+.PushButton--icon .icon,
+.PushButton--icon .Icon {
   width: 1.6em;
   height: 1.6em;
   margin: 0;
@@ -39,5 +38,7 @@
 }
 
 .PushButton--link {
+  display: inline-flex;
+  gap: 0.5rem;
   color: var(--button-link-color);
 }

@@ -38,13 +38,6 @@
 .LevelListPage--searchBar .TextFormField--input {
   min-width: 0;
 }
-.LevelListPage--searchBar button {
-  display: flex;
-}
-.LevelListPage--searchBar .Icon {
-  width: 1.5rem;
-  height: 1.5rem;
-}
 
 .LevelListPage--sidebarHeader {
   display: flex;

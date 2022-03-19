@@ -8,10 +8,11 @@ interface PushButtonProps {
   to?: string | null | undefined;
   disableTimeout?: boolean | undefined;
   disabled?: boolean | undefined;
+  isSubmit?: boolean | undefined;
   isPlain?: boolean | undefined;
   onClick?: (() => void) | undefined;
   icon?: React.ReactNode | undefined;
-  children: React.ReactNode | string;
+  children?: React.ReactNode | string | undefined;
   tooltip?: string | undefined;
 }
 
@@ -20,6 +21,7 @@ const PushButton = ({
   to,
   disableTimeout,
   onClick,
+  isSubmit,
   isPlain,
   icon,
   children,
@@ -78,7 +80,7 @@ const PushButton = ({
         href={to}
       >
         {icon && <span className="PushButton--icon">{icon}</span>}
-        <span className="PushButton--label">{children}</span>
+        {children && <span className="PushButton--label">{children}</span>}
       </a>
     );
   }
@@ -89,10 +91,12 @@ const PushButton = ({
       className={classNames.join(" ")}
       onClick={handleLinkClick}
       onAuxClick={handleLinkClick}
+      type={isSubmit ? "submit" : undefined}
+      role={isSubmit ? "submit" : "button"}
       to={to || "#"}
     >
       {icon && <span className="PushButton--icon">{icon}</span>}
-      <span className="PushButton--label">{children}</span>
+      {children && <span className="PushButton--label">{children}</span>}
     </Link>
   );
 };

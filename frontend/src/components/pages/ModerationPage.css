@@ -1,0 +1,31 @@
+.ModerationPage--container {
+  display: grid;
+  grid-template-areas: "disclaimer disclaimer" "sidebar results";
+  grid-template-columns: min-content 6fr;
+  grid-template-rows: min-content 1fr;
+  gap: 1rem;
+  align-items: flex-start;
+}
+
+.ModerationPage--disclaimer {
+  grid-area: disclaimer;
+}
+
+.ModerationPage--sidebar {
+  grid-area: sidebar;
+  white-space: nowrap;
+}
+
+.ModerationPage--results {
+  width: 100%;
+  grid-area: results;
+}
+
+.ModerationPage--sidebarHeader {
+  display: flex;
+  justify-content: space-between;
+}
+.ModerationPage--sidebarHeader .PushButton {
+  font-size: 1rem;
+  font-weight: normal;
+}
