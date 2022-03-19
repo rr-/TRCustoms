@@ -194,7 +194,11 @@ class LevelDetailsSerializer(LevelListingSerializer):
         write_only=True,
         source="cover",
         queryset=UploadedFile.objects.filter(
-            upload_type=UploadedFile.UploadType.LEVEL_COVER
+            upload_type__in=[
+                # allow legacy dupes between covers and screenshots
+                UploadedFile.UploadType.LEVEL_COVER,
+                UploadedFile.UploadType.LEVEL_SCREENSHOT,
+            ]
         ),
     )
 
@@ -203,7 +207,11 @@ class LevelDetailsSerializer(LevelListingSerializer):
         many=True,
         source="screenshots",
         queryset=UploadedFile.objects.filter(
-            upload_type=UploadedFile.UploadType.LEVEL_SCREENSHOT
+            upload_type__in=[
+                # allow legacy dupes between covers and screenshots
+                UploadedFile.UploadType.LEVEL_COVER,
+                UploadedFile.UploadType.LEVEL_SCREENSHOT,
+            ],
         ),
     )
 
