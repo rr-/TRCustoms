@@ -2,6 +2,7 @@ from django.contrib.auth.password_validation import validate_password
 from django.core.exceptions import ValidationError
 from django.core.validators import MaxLengthValidator, MinLengthValidator
 from django.db import transaction
+from django.utils import timezone
 from rest_framework import serializers
 from rest_framework_simplejwt.exceptions import TokenError
 
@@ -218,6 +219,7 @@ class UserDetailsSerializer(UserListingSerializer):
     def update(self, instance, validated_data):
         password = validated_data.pop("password", None)
         old_email = instance.email
+        is_acquiring = self.instance.is_placeholder
 
         instance = super().update(instance, validated_data)
 
@@ -229,6 +231,10 @@ class UserDetailsSerializer(UserListingSerializer):
             instance.is_email_confirmed = False
             instance.save()
             send_email_confirmation_mail(instance)
+
+        if is_acquiring:
+            instance.date_joined = timezone.now()
+            instance.save()
 
         return User.objects.with_counts().get(pk=instance.pk)
 

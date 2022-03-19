@@ -1,3 +1,5 @@
+from datetime import datetime
+
 import pytest
 from mimesis import Generic
 from rest_framework import status
@@ -249,6 +251,7 @@ def test_user_creation_acquiring_trle_account(
     account.
     """
     user = user_factory(source=User.Source.trle, is_active=False)
+    user.date_joined = datetime(1990, 1, 1)
     user.set_unusable_password()
     user.save()
     payload = {
@@ -284,6 +287,7 @@ def test_user_creation_acquiring_trle_account(
     user.refresh_from_db()
     assert user.email == payload["email"]
     assert user.source == User.Source.trle
+    assert user.date_joined != datetime(1990, 1, 1)
 
 
 @pytest.mark.django_db
