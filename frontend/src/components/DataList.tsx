@@ -149,6 +149,10 @@ const InfiniteDataList = <TItem extends {}, TQuery extends GenericSearchQuery>({
 
   return (
     <div className={`DataTable ${className}`}>
+      {result.data?.pages?.[0]?.total_count === 0 && (
+        <p>There are no results to show.</p>
+      )}
+
       {result.data?.pages?.map((result, i) => (
         <div key={`body${i}`}>
           {result.results.map((item) => (
