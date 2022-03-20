@@ -38,7 +38,7 @@ const StateSearches: StateSearchSection[] = [
     title: "User States",
     searchList: [
       { title: "Created", search: "state:user_created" },
-      { title: "Approved", search: "state:user_approved" },
+      { title: "Activated", search: "state:user_activated" },
       { title: "Rejected", search: "state:user_rejected" },
       { title: "Banned", search: "state:user_banned" },
     ],
