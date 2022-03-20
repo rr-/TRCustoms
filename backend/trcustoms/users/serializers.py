@@ -65,7 +65,7 @@ class UserListingSerializer(serializers.ModelSerializer):
     username = serializers.CharField(
         required=True,
         validators=[
-            MinLengthValidator(3),
+            MinLengthValidator(2),
             MaxLengthValidator(26),
         ],
     )

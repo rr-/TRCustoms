@@ -66,8 +66,10 @@ class ScrapeContext:
 
 
 def get_trle_user_username(trle_user: TRLEUser) -> str:
-    return unidecode(trle_user.nickname or trle_user.full_name).replace(
-        " ", "_"
+    return (
+        unidecode(trle_user.nickname or trle_user.full_name)
+        .replace(" ", "")
+        .replace("/", "")
     )
 
 
