@@ -76,7 +76,7 @@ const validateUserName = (username: string): string | null => {
     return "Username must be at least 2 characters long";
   } else if (username.length > 26) {
     return "Username must be at most 26 characters long";
-  } else if (!/^[A-Z0-9!@#$%^&*()_+={}\[\]:";',.-]+$/i.test(username)) {
+  } else if (!/^[A-Z0-9!@#$%^&*()_+={}[\]:";',.-]+$/i.test(username)) {
     return "Username can only contain alphanumeric letters and the following special characters: ! @ # $ % ^ & * ( ) _ - + = { } [ ] : \" ; ' , .";
   }
   return null;
