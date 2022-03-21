@@ -29,4 +29,4 @@ def prune_unused_accounts() -> None:
     ):
         logger.info("%s: deleting inactive user", user.id)
 
-        reject_user(user, None, "Email not activated")
+        reject_user(user, None, "Unconfirmed email")
