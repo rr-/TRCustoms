@@ -18,6 +18,7 @@ from trcustoms.users.models import (
     User,
     UserPermission,
 )
+from trcustoms.users.validators import UsernameValidator
 
 
 class UserNestedSerializer(serializers.ModelSerializer):
@@ -65,6 +66,7 @@ class UserListingSerializer(serializers.ModelSerializer):
     username = serializers.CharField(
         required=True,
         validators=[
+            UsernameValidator(),
             MinLengthValidator(2),
             MaxLengthValidator(26),
         ],
