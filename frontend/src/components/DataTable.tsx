@@ -1,19 +1,22 @@
 import "./DataTable.css";
-import { Fragment } from "react";
 import { useRef } from "react";
+import { Fragment } from "react";
 import { useState } from "react";
-import { useEffect } from "react";
 import { useQuery } from "react-query";
 import { useInfiniteQuery } from "react-query";
 import { Loader } from "src/components/Loader";
 import { Pager } from "src/components/Pager";
 import { SortLink } from "src/components/SortLink";
 import { DISABLE_PAGING } from "src/constants";
+import { useInfiniteScroll } from "src/contexts/InfiniteScroll";
 import type { GenericSearchResult } from "src/types";
 import type { GenericSearchQuery } from "src/types";
 import { createLocalStorageStateHook } from "use-local-storage-state";
 
-const useInfiniteScroll = createLocalStorageStateHook("infiniteScroll", false);
+const useEnableInfiniteScroll = createLocalStorageStateHook(
+  "infiniteScroll",
+  false
+);
 
 interface DataTableColumn<TItem> {
   name: string;
@@ -85,7 +88,6 @@ const DataTableHeader = <TItem extends {}, TQuery extends GenericSearchQuery>({
 const DataTableBody = <TItem extends {}, TQuery extends GenericSearchQuery>({
   className,
   result,
-  lastRowRef,
   itemKey,
   columns,
   detailsElement,
@@ -95,7 +97,6 @@ const DataTableBody = <TItem extends {}, TQuery extends GenericSearchQuery>({
     data?: GenericSearchResult<TQuery, TItem> | null | undefined;
     error?: Error | null | undefined;
   };
-  lastRowRef?: any | undefined;
 } & DataTableProps<TItem, TQuery>) => {
   const [activeRow, setActiveRow] = useState<string | null>(null);
 
@@ -126,7 +127,7 @@ const DataTableBody = <TItem extends {}, TQuery extends GenericSearchQuery>({
         const key = itemKey(item);
         return (
           <Fragment key={key}>
-            <tr className="DataTable--row" ref={lastRowRef}>
+            <tr className="DataTable--row">
               {columns.map((column) => (
                 <td
                   className={`DataTable--cell ${
@@ -225,7 +226,6 @@ const InfiniteDataTable = <TItem extends {}, TQuery extends GenericSearchQuery>(
 ) => {
   const { className, queryName, searchQuery, searchFunc } = props;
 
-  const [loadingElement, setLoadingElement] = useState(null);
   const result = useInfiniteQuery<
     GenericSearchResult<TQuery, TItem> | null,
     Error
@@ -258,29 +258,11 @@ const InfiniteDataTable = <TItem extends {}, TQuery extends GenericSearchQuery>(
     }
   );
 
-  const observer = useRef(
-    new IntersectionObserver((entries) => {
-      const first = entries[0];
-      if (first.isIntersecting) {
-        result.fetchNextPage();
-      }
-    })
+  const infiniteScrollRef = useRef(null);
+  useInfiniteScroll(
+    { element: infiniteScrollRef, fetch: () => result.fetchNextPage() },
+    [result]
   );
-
-  useEffect(() => {
-    const currentElement = loadingElement;
-    const currentObserver = observer.current;
-
-    if (currentElement) {
-      currentObserver.observe(currentElement);
-    }
-
-    return () => {
-      if (currentElement) {
-        currentObserver.unobserve(currentElement);
-      }
-    };
-  }, [loadingElement]);
 
   return (
     <table className={`DataTable ${className}`}>
@@ -289,7 +271,6 @@ const InfiniteDataTable = <TItem extends {}, TQuery extends GenericSearchQuery>(
       {result.data?.pages?.map((result, i) => (
         <Fragment key={`body${i}`}>
           <DataTableBody
-            lastRowRef={setLoadingElement}
             result={{ isLoading: false, data: result, error: undefined }}
             {...props}
           />
@@ -299,6 +280,8 @@ const InfiniteDataTable = <TItem extends {}, TQuery extends GenericSearchQuery>(
       <tfoot>
         <tr>
           <td colSpan={100}>
+            <span ref={infiniteScrollRef} />
+
             <div>
               <span
                 style={{
@@ -323,7 +306,7 @@ const InfiniteDataTable = <TItem extends {}, TQuery extends GenericSearchQuery>(
 const DataTable = <TItem extends {}, TQuery extends GenericSearchQuery>(
   props: DataTableProps<TItem, TQuery>
 ) => {
-  const [enableInfiniteScroll] = useInfiniteScroll();
+  const [enableInfiniteScroll] = useEnableInfiniteScroll();
   if (enableInfiniteScroll) {
     return <InfiniteDataTable {...props} />;
   }
@@ -331,4 +314,9 @@ const DataTable = <TItem extends {}, TQuery extends GenericSearchQuery>(
 };
 
 export type { DataTableColumn };
-export { useInfiniteScroll, PagedDataTable, InfiniteDataTable, DataTable };
+export {
+  useEnableInfiniteScroll,
+  PagedDataTable,
+  InfiniteDataTable,
+  DataTable,
+};
