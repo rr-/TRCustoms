@@ -1,5 +1,6 @@
 import "./GenresFormField.css";
 import { InformationCircleIcon } from "@heroicons/react/outline";
+import { useFormikContext } from "formik";
 import { Field } from "formik";
 import { useContext } from "react";
 import { BaseFormField } from "src/components/formfields/BaseFormField";
@@ -21,9 +22,22 @@ const GenresFormField = ({
   ...props
 }: GenresFormFieldProps) => {
   const { config } = useContext(ConfigContext);
+  const { setFieldTouched } = useFormikContext();
   const genreMap: { [genreId: string]: GenreListing } = Object.fromEntries(
     config.genres.map(({ id, ...rest }) => [id, { id, ...rest }])
   );
+
+  const handleChange = (
+    event: React.ChangeEvent<HTMLInputElement>,
+    genre: GenreListing
+  ) => {
+    setFieldTouched(name);
+    onChange(
+      event.target.checked
+        ? [...value, genre]
+        : [...value.filter((g) => g.id !== genre.id)]
+    );
+  };
 
   return (
     <BaseFormField name={name} readonly={readonly} {...props}>
@@ -35,11 +49,7 @@ const GenresFormField = ({
                 disabled={readonly}
                 type="checkbox"
                 onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
-                  onChange(
-                    event.target.checked
-                      ? [...value, genre]
-                      : [...value.filter((g) => g.id !== genre.id)]
-                  )
+                  handleChange(event, genre)
                 }
                 checked={value.map((g) => g.id).includes(genre.id)}
               />
