@@ -4,8 +4,7 @@ import { BadgeCheckIcon } from "@heroicons/react/outline";
 import { XCircleIcon } from "@heroicons/react/outline";
 import { DownloadIcon } from "@heroicons/react/outline";
 import { Link } from "react-router-dom";
-import type { DataTableColumn } from "src/components/DataTable";
-import { DataTable } from "src/components/DataTable";
+import { DataList } from "src/components/DataList";
 import { LevelRating } from "src/components/LevelRating";
 import { LevelAuthorsLink } from "src/components/links/LevelAuthorsLink";
 import { LevelLink } from "src/components/links/LevelLink";
@@ -22,98 +21,97 @@ interface LevelsTableProps {
   onSearchQueryChange?: ((searchQuery: LevelSearchQuery) => void) | undefined;
 }
 
+interface LevelViewProps {
+  showStatus?: boolean | undefined;
+  level: LevelListing;
+}
+
+const LevelView = ({ showStatus, level }: LevelViewProps) => {
+  return (
+    <article className="LevelView">
+      <Link className="LevelView--coverLink" to={`/levels/${level.id}`}>
+        {level.cover ? (
+          <img
+            className="LevelView--coverImage"
+            src={level.cover.url}
+            alt={level.name}
+          />
+        ) : null}
+      </Link>
+
+      <div className="LevelView--details">
+        <strong>
+          <LevelLink level={level} />
+        </strong>{" "}
+        by <LevelAuthorsLink authors={level.authors} />
+        <br />
+        {showStatus && (
+          <>
+            {level.is_approved ? (
+              <span className="LevelView--statusApproved">
+                <BadgeCheckIcon className="icon" /> Approved!
+              </span>
+            ) : level.rejection_reason ? (
+              <span className="LevelView--statusRejected">
+                <XCircleIcon className="icon" /> Rejected
+              </span>
+            ) : (
+              <span className="LevelView--statusPending">
+                <ClockIcon className="icon" /> Pending approval
+              </span>
+            )}
+            <br />
+          </>
+        )}
+        <small>
+          Reviews: <LevelRating ratingClass={level.rating_class} />
+          <br />
+          Genres:{" "}
+          {level.genres.map((tag) => tag.name).join(", ") ||
+            EMPTY_INPUT_PLACEHOLDER}
+          <br />
+          Engine: {level.engine.name}
+          <br />
+          Published: {formatDate(level.created)}
+          <br />
+          Last update: {formatDate(level.last_file?.created || level.created)}
+        </small>
+        <br />
+        Download:{" "}
+        {level.last_file?.url ? (
+          <>
+            <Link target="_blank" to={level.last_file.url}>
+              <strong>
+                <DownloadIcon className="icon" />(
+                {formatFileSize(level.last_file?.size)})
+              </strong>
+            </Link>{" "}
+            ({level.download_count} downloads)
+          </>
+        ) : (
+          <>No download available</>
+        )}
+      </div>
+    </article>
+  );
+};
+
 const LevelsTable = ({
   showStatus,
   searchQuery,
   onSearchQueryChange,
 }: LevelsTableProps) => {
-  const columns: DataTableColumn<LevelListing>[] = [
-    {
-      name: "image",
-      label: "Image",
-      itemElement: ({ item }) => (
-        <>
-          <Link className="LevelsTable--previewLink" to={`/levels/${item.id}`}>
-            {item.cover ? (
-              <img
-                className="LevelsTable--previewImage"
-                src={item.cover.url}
-                alt={item.name}
-              />
-            ) : null}
-          </Link>
-        </>
-      ),
-    },
-    {
-      name: "details",
-      label: "Details",
-      itemElement: ({ item }) => (
-        <>
-          <strong>
-            <LevelLink level={item} />
-          </strong>{" "}
-          by <LevelAuthorsLink authors={item.authors} />
-          <br />
-          {showStatus && (
-            <>
-              {item.is_approved ? (
-                <span className="LevelsTable--statusApproved">
-                  <BadgeCheckIcon className="icon" /> Approved!
-                </span>
-              ) : item.rejection_reason ? (
-                <span className="LevelsTable--statusRejected">
-                  <XCircleIcon className="icon" /> Rejected
-                </span>
-              ) : (
-                <span className="LevelsTable--statusPending">
-                  <ClockIcon className="icon" /> Pending approval
-                </span>
-              )}
-              <br />
-            </>
-          )}
-          <small>
-            Reviews: <LevelRating ratingClass={item.rating_class} />
-            <br />
-            Genres:{" "}
-            {item.genres.map((tag) => tag.name).join(", ") ||
-              EMPTY_INPUT_PLACEHOLDER}
-            <br />
-            Engine: {item.engine.name}
-            <br />
-            Published: {formatDate(item.created)}
-            <br />
-            Last update: {formatDate(item.last_file?.created || item.created)}
-          </small>
-          <br />
-          Download:{" "}
-          {item.last_file?.url ? (
-            <>
-              <Link target="_blank" to={item.last_file.url}>
-                <strong>
-                  <DownloadIcon className="icon" />(
-                  {formatFileSize(item.last_file?.size)})
-                </strong>
-              </Link>{" "}
-              ({item.download_count} downloads)
-            </>
-          ) : (
-            <>No download available</>
-          )}
-        </>
-      ),
-    },
-  ];
-
   const itemKey = (level: LevelListing) => `${level.id}`;
+  const itemView = (level: LevelListing) => (
+    <LevelView showStatus={showStatus} level={level} />
+  );
 
   return (
-    <DataTable
+    <DataList
       className="LevelsTable"
       queryName="levels"
-      columns={columns}
       itemKey={itemKey}
+      itemView={itemView}
       searchQuery={searchQuery}
       searchFunc={LevelService.searchLevels}
       onSearchQueryChange={onSearchQueryChange}

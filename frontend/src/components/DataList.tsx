@@ -129,13 +129,13 @@ const InfiniteDataList = <TItem extends {}, TQuery extends GenericSearchQuery>({
   }, [onResultCountChange, result]);
 
   return (
-    <div className={`DataTable ${className}`}>
+    <div className={`DataList ${className}`}>
       {result.data?.pages?.[0]?.total_count === 0 && (
         <p>There are no results to show.</p>
       )}
 
       {result.data?.pages?.map((result, i) => (
-        <div key={`body${i}`}>
+        <div key={`body${i}`} className="DataList--page">
           {result.results.map((item) => (
             <Fragment key={itemKey(item)}>{itemView(item)}</Fragment>
           ))}
