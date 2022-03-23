@@ -72,6 +72,7 @@ class Level(DatesInfo):
         UploadedFile, blank=True, null=True, on_delete=models.SET_NULL
     )
 
+    is_pending_approval = models.BooleanField(default=True)
     is_approved = models.BooleanField(default=False)
     rejection_reason = models.CharField(max_length=200, null=True, blank=True)
 

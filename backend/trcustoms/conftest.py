@@ -106,6 +106,8 @@ class LevelFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = Level
 
+    is_pending_approval = False
+    is_approved = True
     name = factory.Faker("sentence")
     description = factory.Faker("text")
     engine = factory.SubFactory(EngineFactory)

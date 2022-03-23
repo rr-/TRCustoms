@@ -12,6 +12,7 @@ def approve_level(level: Level, request: Request | None) -> None:
     with track_model_update(obj=level, request=request, changes=["Approved"]):
         if not level.is_approved:
             send_level_approved_mail(level)
+        level.is_pending_approval = False
         level.is_approved = True
         level.rejection_reason = None
         level.save()
@@ -24,8 +25,9 @@ def reject_level(level: Level, request: Request | None, reason: str) -> None:
         request=request,
         changes=[f"Rejected (reason: {reason})"],
     ):
-        if reason != level.rejection_reason:
+        if level.is_approved or reason != level.rejection_reason:
             send_level_rejected_mail(level, reason)
+        level.is_pending_approval = False
         level.is_approved = False
         level.rejection_reason = reason
         level.save()
