@@ -5,10 +5,11 @@ import { useState } from "react";
 import { useEffect } from "react";
 import { useInfiniteQuery } from "react-query";
 import { useQuery } from "react-query";
-import { useInfiniteScroll } from "src/components/DataTable";
+import { useEnableInfiniteScroll } from "src/components/DataTable";
 import { Loader } from "src/components/Loader";
 import { Pager } from "src/components/Pager";
 import { DISABLE_PAGING } from "src/constants";
+import { useInfiniteScroll } from "src/contexts/InfiniteScroll";
 import type { GenericSearchResult } from "src/types";
 import type { GenericSearchQuery } from "src/types";
 
@@ -83,13 +84,10 @@ const InfiniteDataList = <TItem extends {}, TQuery extends GenericSearchQuery>({
   searchQuery,
   searchFunc,
   onResultCountChange,
-  onSearchQueryChange,
   itemKey,
   itemView,
   queryName,
 }: DataListProps<TItem, TQuery>) => {
-  const [loadingElement, setLoadingElement] = useState<any>(null);
-
   const result = useInfiniteQuery<GenericSearchResult<TQuery, TItem>, Error>(
     [queryName, searchQuery],
     async ({ pageParam }) => {
@@ -119,33 +117,17 @@ const InfiniteDataList = <TItem extends {}, TQuery extends GenericSearchQuery>({
     }
   );
 
-  if (result.data?.pages?.[0]?.total_count !== undefined) {
-    onResultCountChange?.(result.data?.pages?.[0].total_count);
-  }
-
-  const observer = useRef(
-    new IntersectionObserver((entries) => {
-      const first = entries[0];
-      if (first.isIntersecting) {
-        result.fetchNextPage();
-      }
-    })
+  const infiniteScrollRef = useRef(null);
+  useInfiniteScroll(
+    { element: infiniteScrollRef, fetch: () => result.fetchNextPage() },
+    [result]
   );
 
   useEffect(() => {
-    const currentElement = loadingElement;
-    const currentObserver = observer.current;
-
-    if (currentElement) {
-      currentObserver.observe(currentElement);
+    if (result.data?.pages?.[0]?.total_count !== undefined) {
+      onResultCountChange?.(result.data?.pages?.[0].total_count);
     }
-
-    return () => {
-      if (currentElement) {
-        currentObserver.unobserve(currentElement);
-      }
-    };
-  }, [loadingElement]);
+  }, [onResultCountChange, result]);
 
   return (
     <div className={`DataTable ${className}`}>
@@ -158,9 +140,10 @@ const InfiniteDataList = <TItem extends {}, TQuery extends GenericSearchQuery>({
           {result.results.map((item) => (
             <Fragment key={itemKey(item)}>{itemView(item)}</Fragment>
           ))}
-          <span ref={setLoadingElement} />
         </div>
       ))}
+
+      <span ref={infiniteScrollRef} />
 
       {(result.isFetching || result.isFetchingNextPage) && <Loader />}
     </div>
@@ -170,7 +153,7 @@ const InfiniteDataList = <TItem extends {}, TQuery extends GenericSearchQuery>({
 const DataList = <TItem extends {}, TQuery extends GenericSearchQuery>(
   props: DataListProps<TItem, TQuery>
 ) => {
-  const [enableInfiniteScroll] = useInfiniteScroll();
+  const [enableInfiniteScroll] = useEnableInfiniteScroll();
   if (enableInfiniteScroll) {
     return <InfiniteDataList {...props} />;
   }

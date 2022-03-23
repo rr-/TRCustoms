@@ -2,7 +2,7 @@ import "./SettingsPage.css";
 import { useEffect } from "react";
 import { useContext } from "react";
 import { Checkbox } from "src/components/Checkbox";
-import { useInfiniteScroll } from "src/components/DataTable";
+import { useEnableInfiniteScroll } from "src/components/DataTable";
 import { getAllThemes } from "src/components/ThemeManager";
 import { useTheme } from "src/components/ThemeManager";
 import { TitleContext } from "src/contexts/TitleContext";
@@ -10,7 +10,10 @@ import { TitleContext } from "src/contexts/TitleContext";
 const SettingsPage = () => {
   const [, setTheme] = useTheme();
   const { setTitle } = useContext(TitleContext);
-  const [enableInfiniteScroll, setEnableInfiniteScroll] = useInfiniteScroll();
+  const [
+    enableInfiniteScroll,
+    setEnableInfiniteScroll,
+  ] = useEnableInfiniteScroll();
 
   useEffect(() => {
     setTitle("Settings");
