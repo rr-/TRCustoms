@@ -71,7 +71,7 @@ const UserEditPage = () => {
   const { userId } = (useParams() as unknown) as UserEditPageParams;
 
   return (
-    <PageGuard require={UserPermission.editUsers} owningUserIds={[userId]}>
+    <PageGuard require={UserPermission.editUsers} owningUserIds={[+userId]}>
       <UserEditPageView userId={userId} />
     </PageGuard>
   );

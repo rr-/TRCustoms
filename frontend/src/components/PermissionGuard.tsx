@@ -22,7 +22,7 @@ interface PermissionGuardProps extends CommonGuardProps {
 interface PageGuardProps {
   require: string;
   children: React.ReactNode;
-  owningUserIds?: string[] | undefined;
+  owningUserIds?: number[] | undefined;
 }
 
 interface UserGuardProps extends CommonGuardProps {
