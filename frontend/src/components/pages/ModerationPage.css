@@ -20,12 +20,3 @@
   width: 100%;
   grid-area: results;
 }
-
-.ModerationPage--sidebarHeader {
-  display: flex;
-  justify-content: space-between;
-}
-.ModerationPage--sidebarHeader .PushButton {
-  font-size: 1rem;
-  font-weight: normal;
-}

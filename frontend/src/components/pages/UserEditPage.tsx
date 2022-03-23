@@ -5,21 +5,26 @@ import { useQuery } from "react-query";
 import { useNavigate } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import { Loader } from "src/components/Loader";
+import { PageGuard } from "src/components/PermissionGuard";
 import { UserForm } from "src/components/UserForm";
 import { TitleContext } from "src/contexts/TitleContext";
 import { UserContext } from "src/contexts/UserContext";
 import { UserService } from "src/services/UserService";
 import type { UserDetails } from "src/services/UserService";
+import { UserPermission } from "src/services/UserService";
 
 interface UserEditPageParams {
   userId: string;
 }
 
-const UserEditPage = () => {
+interface UserEditViewProps {
+  userId: string;
+}
+
+const UserEditPageView = ({ userId }: UserEditViewProps) => {
   const userContext = useContext(UserContext);
   const navigate = useNavigate();
   const { setTitle } = useContext(TitleContext);
-  const { userId } = (useParams() as unknown) as UserEditPageParams;
 
   const result = useQuery<UserDetails, Error>(
     ["user", UserService.getUserById, userId],
@@ -59,6 +64,16 @@ const UserEditPage = () => {
 
       <UserForm onGoBack={handleBack} onSubmit={handleSubmit} user={user} />
     </div>
+  );
+};
+
+const UserEditPage = () => {
+  const { userId } = (useParams() as unknown) as UserEditPageParams;
+
+  return (
+    <PageGuard require={UserPermission.editUsers} owningUserIds={[userId]}>
+      <UserEditPageView userId={userId} />
+    </PageGuard>
   );
 };
 

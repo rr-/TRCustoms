@@ -1,4 +1,4 @@
-#LevelListPage--container {
+.LevelListPage {
   display: grid;
   grid-template-areas: "sidebar results";
   grid-template-columns: min-content 6fr;
@@ -6,44 +6,19 @@
   gap: 1rem;
   align-items: flex-start;
 }
-#LevelListPage--sidebar {
+.LevelListPage--sidebar {
   grid-area: sidebar;
   white-space: nowrap;
 }
-#LevelListPage--sidebar p {
+.LevelListPage--sidebar p {
   margin: 0.5rem 0 0.25rem 0;
 }
-#LevelListPage--sidebar .TextInput--input {
+.LevelListPage--sidebar .TextInput--input {
   min-width: unset;
   max-width: 10rem;
   margin: 0 0 0.5rem 0;
 }
-#LevelListPage--results {
+.LevelListPage--results {
   width: 100%;
   grid-area: results;
-}
-
-.LevelListPage--sidebarSection {
-  margin-bottom: 0.5rem;
-}
-
-.LevelListPage--sidebarSection .TextFormField--input {
-  width: 100%;
-}
-
-.LevelListPage--searchBar {
-  display: flex;
-  align-items: flex-end;
-}
-.LevelListPage--searchBar .TextFormField--input {
-  min-width: 0;
-}
-
-.LevelListPage--sidebarHeader {
-  display: flex;
-  justify-content: space-between;
-}
-.LevelListPage--sidebarHeader .PushButton {
-  font-size: 1rem;
-  font-weight: normal;
 }

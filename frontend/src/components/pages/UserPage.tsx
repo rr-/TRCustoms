@@ -14,6 +14,7 @@ import { Loader } from "src/components/Loader";
 import { Markdown } from "src/components/Markdown";
 import { PermissionGuard } from "src/components/PermissionGuard";
 import { LoggedInUserGuard } from "src/components/PermissionGuard";
+import { PageGuard } from "src/components/PermissionGuard";
 import { PushButton } from "src/components/PushButton";
 import { ReviewsList } from "src/components/ReviewsList";
 import { Section } from "src/components/Section";
@@ -54,10 +55,13 @@ const getReviewSearchQuery = (userId: number): ReviewSearchQuery => ({
   search: "",
 });
 
-const UserPage = () => {
+interface UserPageViewProps {
+  userId: string;
+}
+
+const UserPageView = ({ userId }: UserPageViewProps) => {
   const navigate = useNavigate();
   const { setTitle } = useContext(TitleContext);
-  const { userId } = (useParams() as unknown) as UserPageParams;
   const [levelSearchQuery, setLevelSearchQuery] = useState<LevelSearchQuery>(
     getLevelSearchQuery(+userId)
   );
@@ -228,6 +232,15 @@ const UserPage = () => {
         </Section>
       </div>
     </div>
+  );
+};
+
+const UserPage = () => {
+  const { userId } = (useParams() as unknown) as UserPageParams;
+  return (
+    <PageGuard require={UserPermission.listUsers} owningUserIds={[userId]}>
+      <UserPageView userId={userId} />
+    </PageGuard>
   );
 };
 

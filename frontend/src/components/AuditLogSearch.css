@@ -1,0 +1,8 @@
+.AuditLogSearch--sidebarHeader {
+  display: flex;
+  justify-content: space-between;
+}
+.AuditLogSearch--sidebarHeader .PushButton {
+  font-size: 1rem;
+  font-weight: normal;
+}
