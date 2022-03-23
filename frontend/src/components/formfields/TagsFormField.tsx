@@ -1,3 +1,4 @@
+import { useFormikContext } from "formik";
 import { useState } from "react";
 import { useCallback } from "react";
 import { useContext } from "react";
@@ -22,6 +23,7 @@ const TagsFormField = ({
   ...props
 }: TagsFormFieldProps) => {
   const { config, refetchConfig } = useContext(ConfigContext);
+  const { setFieldTouched } = useFormikContext();
   const [suggestions, setSuggestions] = useState<TagNested[]>([]);
 
   const handleSearchTrigger = useCallback(
@@ -42,11 +44,13 @@ const TagsFormField = ({
   );
 
   const handleResultApply = useCallback(
-    (tag: TagNested) =>
+    (tag: TagNested) => {
+      setFieldTouched(name);
       onChange(
         value.map((t) => t.id).includes(tag.id) ? value : [...value, tag]
-      ),
-    [onChange, value]
+      );
+    },
+    [setFieldTouched, onChange, name, value]
   );
 
   const handleNewResultApply = useCallback(
@@ -54,16 +58,20 @@ const TagsFormField = ({
       if (value.map((t) => t.name).includes(text)) {
         return;
       }
+      setFieldTouched(name);
       const tag = await TagService.create({ name: text });
       onChange([...value, tag]);
       await refetchConfig();
     },
-    [onChange, refetchConfig, value]
+    [setFieldTouched, onChange, refetchConfig, name, value]
   );
 
   const removeTag = useCallback(
-    (tag: TagNested) => onChange(value.filter((t) => t.id !== tag.id)),
-    [onChange, value]
+    (tag: TagNested) => {
+      setFieldTouched(name);
+      onChange(value.filter((t) => t.id !== tag.id));
+    },
+    [setFieldTouched, onChange, name, value]
   );
 
   return (

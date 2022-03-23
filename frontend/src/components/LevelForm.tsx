@@ -248,8 +248,8 @@ const LevelForm = ({ level, onGoBack, onSubmit }: LevelFormProps) => {
         const error = validator(values[field]);
         if (error) {
           errors[field] = makeSentence(error);
+          break;
         }
-        break;
       }
     }
 
@@ -263,7 +263,7 @@ const LevelForm = ({ level, onGoBack, onSubmit }: LevelFormProps) => {
       validate={validate}
       onSubmit={handleSubmit}
     >
-      {({ isSubmitting, values, setFieldValue, status }) =>
+      {({ isSubmitting, values, setFieldTouched, setFieldValue, status }) =>
         !level && status?.success ? (
           <div className="FormFieldSuccess">{status.success}</div>
         ) : (
@@ -341,9 +341,10 @@ const LevelForm = ({ level, onGoBack, onSubmit }: LevelFormProps) => {
                     allowClear={true}
                     uploadType={UploadType.LevelCover}
                     fileIds={level?.cover ? [level?.cover.id] : []}
-                    onChange={([fileId]) =>
-                      setFieldValue("cover_id", fileId || null)
-                    }
+                    onChange={([fileId]) => {
+                      setFieldTouched("cover_id");
+                      setFieldValue("cover_id", fileId || null);
+                    }}
                   />
                 </BaseFormField>
 
@@ -369,9 +370,10 @@ const LevelForm = ({ level, onGoBack, onSubmit }: LevelFormProps) => {
                           ]
                         : []
                     }
-                    onChange={(fileIds) =>
-                      setFieldValue("screenshot_ids", fileIds)
-                    }
+                    onChange={(fileIds) => {
+                      setFieldTouched("screenshot_ids");
+                      setFieldValue("screenshot_ids", fileIds);
+                    }}
                   />
                 </BaseFormField>
 
