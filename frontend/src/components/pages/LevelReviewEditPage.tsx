@@ -5,25 +5,31 @@ import { useQuery } from "react-query";
 import { useNavigate } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import { Loader } from "src/components/Loader";
+import { PageGuard } from "src/components/PermissionGuard";
 import { ReviewForm } from "src/components/ReviewForm";
 import { TitleContext } from "src/contexts/TitleContext";
 import type { LevelNested } from "src/services/LevelService";
 import { LevelService } from "src/services/LevelService";
 import type { ReviewDetails } from "src/services/ReviewService";
 import { ReviewService } from "src/services/ReviewService";
+import { UserPermission } from "src/services/UserService";
 
 interface LevelReviewEditPageParams {
   levelId: string;
   reviewId: string;
 }
 
-const LevelReviewEditPage = () => {
+interface LevelReviewEditPageViewProps {
+  levelId: string;
+  reviewId: string;
+}
+
+const LevelReviewEditPageView = ({
+  levelId,
+  reviewId,
+}: LevelReviewEditPageViewProps) => {
   const navigate = useNavigate();
   const { setTitle } = useContext(TitleContext);
-  const {
-    levelId,
-    reviewId,
-  } = (useParams() as unknown) as LevelReviewEditPageParams;
 
   const levelResult = useQuery<LevelNested, Error>(
     ["level", LevelService.getLevelById, levelId],
@@ -70,6 +76,18 @@ const LevelReviewEditPage = () => {
 
       <ReviewForm onGoBack={handleGoBack} review={review} level={level} />
     </div>
+  );
+};
+
+const LevelReviewEditPage = () => {
+  const {
+    levelId,
+    reviewId,
+  } = (useParams() as unknown) as LevelReviewEditPageParams;
+  return (
+    <PageGuard require={UserPermission.editReviews}>
+      <LevelReviewEditPageView levelId={levelId} reviewId={reviewId} />
+    </PageGuard>
   );
 };
 

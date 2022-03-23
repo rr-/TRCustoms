@@ -1,7 +1,6 @@
 import "./DataList.css";
 import { useRef } from "react";
 import { Fragment } from "react";
-import { useState } from "react";
 import { useEffect } from "react";
 import { useInfiniteQuery } from "react-query";
 import { useQuery } from "react-query";

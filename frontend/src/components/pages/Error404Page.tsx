@@ -1,4 +1,4 @@
-import "./NotFoundPage.css";
+import "./ErrorPage.css";
 
 const images = [
   {
@@ -31,14 +31,14 @@ const images = [
   },
 ];
 
-const NotFoundPage = () => {
+const Error404Page = () => {
   const image = images[Math.floor(Math.random() * images.length)];
   return (
-    <div className="NotFoundPage">
+    <div className="ErrorPage">
       <img alt="404 error" src={image.image} />
       {image.text}
     </div>
   );
 };
 
-export { NotFoundPage };
+export { Error404Page };

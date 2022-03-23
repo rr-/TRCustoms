@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { useContext } from "react";
 import { useState } from "react";
+import { Error403Page } from "src/components/pages/Error403Page";
 import { UserContext } from "src/contexts/UserContext";
 import type { UserNested } from "src/services/UserService";
 
@@ -16,6 +17,12 @@ interface GenericGuardProps extends CommonGuardProps {
 interface PermissionGuardProps extends CommonGuardProps {
   require: string;
   owningUsers?: UserNested[] | undefined;
+}
+
+interface PageGuardProps {
+  require: string;
+  children: React.ReactNode;
+  owningUserIds?: string[] | undefined;
 }
 
 interface UserGuardProps extends CommonGuardProps {
@@ -59,4 +66,21 @@ const LoggedInUserGuard = ({ user, ...props }: UserGuardProps) => {
   return <GenericGuard {...props} isShown={isShown} />;
 };
 
-export { PermissionGuard, LoggedInUserGuard };
+const PageGuard = ({ require, owningUserIds, children }: PageGuardProps) => {
+  const { user } = useContext(UserContext);
+  const [isShown, setIsShown] = useState<boolean>(false);
+
+  useEffect(() => {
+    setIsShown(
+      user?.permissions?.includes(require) || owningUserIds?.includes(user?.id)
+    );
+  }, [user, owningUserIds, require]);
+
+  return (
+    <GenericGuard alternative={<Error403Page />} isShown={isShown}>
+      {children}
+    </GenericGuard>
+  );
+};
+
+export { PermissionGuard, LoggedInUserGuard, PageGuard };

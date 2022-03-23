@@ -4,10 +4,12 @@ import { useEffect } from "react";
 import { useContext } from "react";
 import { Link } from "react-router-dom";
 import { LevelForm } from "src/components/LevelForm";
+import { PageGuard } from "src/components/PermissionGuard";
 import { TitleContext } from "src/contexts/TitleContext";
 import type { LevelDetails } from "src/services/LevelService";
+import { UserPermission } from "src/services/UserService";
 
-const LevelUploadPage = () => {
+const LevelUploadPageView = () => {
   const { setTitle } = useContext(TitleContext);
   const [isComplete, setIsComplete] = useState(false);
 
@@ -36,6 +38,14 @@ const LevelUploadPage = () => {
         <LevelForm onSubmit={handleSubmit} />
       )}
     </div>
+  );
+};
+
+const LevelUploadPage = () => {
+  return (
+    <PageGuard require={UserPermission.uploadLevels}>
+      <LevelUploadPageView />
+    </PageGuard>
   );
 };
 

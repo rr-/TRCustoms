@@ -6,6 +6,8 @@ import { ScrollToTop } from "src/components/ScrollToTop";
 import { ThemeManager } from "src/components/ThemeManager";
 import { AboutPage } from "src/components/pages/AboutPage";
 import { EmailConfirmationPage } from "src/components/pages/EmailConfirmationPage";
+import { Error403Page } from "src/components/pages/Error403Page";
+import { Error404Page } from "src/components/pages/Error404Page";
 import { GenreListPage } from "src/components/pages/GenreListPage";
 import { HomePage } from "src/components/pages/HomePage";
 import { LevelEditPage } from "src/components/pages/LevelEditPage";
@@ -20,7 +22,6 @@ import { ModerationPage } from "src/components/pages/ModerationPage";
 import { MyLevelsPage } from "src/components/pages/MyLevelsPage";
 import { NewsCreatePage } from "src/components/pages/NewsCreatePage";
 import { NewsEditPage } from "src/components/pages/NewsEditPage";
-import { NotFoundPage } from "src/components/pages/NotFoundPage";
 import { PasswordResetFinishPage } from "src/components/pages/PasswordResetFinishPage";
 import { PasswordResetPage } from "src/components/pages/PasswordResetPage";
 import { RegisterPage } from "src/components/pages/RegisterPage";
@@ -81,7 +82,9 @@ function App() {
               />
               <Route path="/about" element={<AboutPage />} />
               <Route path="/about/terms" element={<TermsAndConditionsPage />} />
-              <Route path="*" element={<NotFoundPage />} />
+              <Route path="/403" element={<Error403Page />} />
+              <Route path="/404" element={<Error404Page />} />
+              <Route path="*" element={<Error404Page />} />
             </Routes>
           </main>
         </UserContextProvider>
