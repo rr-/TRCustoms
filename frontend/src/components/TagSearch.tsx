@@ -3,8 +3,11 @@ import { Form } from "formik";
 import { useEffect } from "react";
 import { useCallback } from "react";
 import { useState } from "react";
+import { PushButton } from "src/components/PushButton";
 import { SearchBar } from "src/components/SearchBar";
+import { SubmitButton } from "src/components/formfields/SubmitButton";
 import { TextFormField } from "src/components/formfields/TextFormField";
+import { IconSearch } from "src/components/icons/IconSearch";
 import type { TagSearchQuery } from "src/services/TagService";
 
 const defaultSearchQuery: TagSearchQuery = {
@@ -33,7 +36,6 @@ const TagSearch = ({ searchQuery, onSearchQueryChange }: TagSearchProps) => {
   );
 
   const handleSubmit = useCallback(
-    // push changes to query on Formik submit
     async (values: any) => {
       onSearchQueryChange({
         ...searchQuery,
@@ -44,11 +46,8 @@ const TagSearch = ({ searchQuery, onSearchQueryChange }: TagSearchProps) => {
     [searchQuery, onSearchQueryChange]
   );
 
-  const handleReset = useCallback(
-    async (resetForm) => {
-      onSearchQueryChange(defaultSearchQuery);
-      resetForm();
-    },
+  const handleClear = useCallback(
+    () => onSearchQueryChange(defaultSearchQuery),
     [onSearchQueryChange]
   );
 
@@ -58,19 +57,21 @@ const TagSearch = ({ searchQuery, onSearchQueryChange }: TagSearchProps) => {
       initialValues={formikValues}
       onSubmit={handleSubmit}
     >
-      {({ resetForm }: { resetForm: any }) => (
+      {({ submitForm, resetForm }) => (
         <Form className="TagListPage--container">
           <SearchBar>
             <TextFormField label="Search" name="search" />
 
             <div className="FormField">
-              <button type="submit">Search</button>
+              <SubmitButton onClick={() => submitForm()} icon={<IconSearch />}>
+                Search
+              </SubmitButton>
             </div>
 
             <div className="FormField">
-              <button onClick={handleReset.bind(null, resetForm)} type="reset">
+              <PushButton disableTimeout={true} onClick={handleClear}>
                 Reset
-              </button>
+              </PushButton>
             </div>
           </SearchBar>
         </Form>

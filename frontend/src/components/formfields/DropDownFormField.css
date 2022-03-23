@@ -1,20 +1,7 @@
-.DropDownFormField--select {
-  border: 2px solid var(--input-border-color);
-  background: var(--input-bg-color);
-  color: var(--input-fg-color);
-  font-family: var(--font-family);
-  font-size: var(--font-size);
-  padding: 0.25rem 0.5rem;
-  line-height: 1.5rem;
-  min-height: 1.5rem;
-  min-width: calc(15rem - 0.5rem - 0.5rem - 2px);
-  box-sizing: content-box;
+.DropDownFormField--select.Input {
+  width: 15rem;
   vertical-align: top;
 }
 .DropDownFormField--select[multiple] {
   min-height: 5rem;
-}
-.DropDownFormField--select:focus {
-  outline: 0;
-  border-color: var(--outline-color);
 }

@@ -1,4 +1,3 @@
-import "./TextFormField.css";
 import { Field } from "formik";
 import { BaseFormField } from "src/components/formfields/BaseFormField";
 import type { GenericFormFieldProps } from "src/components/formfields/BaseFormField";
@@ -17,7 +16,7 @@ const TextFormField = ({
     <BaseFormField name={name} readonly={readonly} {...props}>
       <Field
         disabled={readonly}
-        className="TextFormField--input"
+        className="TextFormField--input Input"
         type={type || "text"}
         name={name}
       />

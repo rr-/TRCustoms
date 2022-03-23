@@ -51,7 +51,7 @@ const DropDownFormField = ({
         disabled={readonly}
         placeholder="Select a value…"
         multiple={multiple}
-        className="DropDownFormField--select"
+        className="DropDownFormField--select Input"
         defaultValue={"-"}
         onChange={handleChange}
       >
