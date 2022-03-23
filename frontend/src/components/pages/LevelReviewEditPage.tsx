@@ -19,15 +19,11 @@ interface LevelReviewEditPageParams {
   reviewId: string;
 }
 
-interface LevelReviewEditPageViewProps {
-  levelId: string;
-  reviewId: string;
-}
-
-const LevelReviewEditPageView = ({
-  levelId,
-  reviewId,
-}: LevelReviewEditPageViewProps) => {
+const LevelReviewEditPage = () => {
+  const {
+    levelId,
+    reviewId,
+  } = (useParams() as unknown) as LevelReviewEditPageParams;
   const navigate = useNavigate();
   const { setTitle } = useContext(TitleContext);
 
@@ -71,22 +67,15 @@ const LevelReviewEditPageView = ({
   const review = reviewResult.data;
 
   return (
-    <div id="LevelReviewEditPage">
-      <h1>Reviewing {level.name}</h1>
+    <PageGuard
+      require={UserPermission.editReviews}
+      owningUserIds={[review.author.id]}
+    >
+      <div id="LevelReviewEditPage">
+        <h1>Reviewing {level.name}</h1>
 
-      <ReviewForm onGoBack={handleGoBack} review={review} level={level} />
-    </div>
-  );
-};
-
-const LevelReviewEditPage = () => {
-  const {
-    levelId,
-    reviewId,
-  } = (useParams() as unknown) as LevelReviewEditPageParams;
-  return (
-    <PageGuard require={UserPermission.editReviews}>
-      <LevelReviewEditPageView levelId={levelId} reviewId={reviewId} />
+        <ReviewForm onGoBack={handleGoBack} review={review} level={level} />
+      </div>
     </PageGuard>
   );
 };

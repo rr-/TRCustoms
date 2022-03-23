@@ -238,7 +238,7 @@ const UserPageView = ({ userId }: UserPageViewProps) => {
 const UserPage = () => {
   const { userId } = (useParams() as unknown) as UserPageParams;
   return (
-    <PageGuard require={UserPermission.listUsers} owningUserIds={[userId]}>
+    <PageGuard require={UserPermission.listUsers} owningUserIds={[+userId]}>
       <UserPageView userId={userId} />
     </PageGuard>
   );
