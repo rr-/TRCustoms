@@ -1,5 +1,3 @@
-import "./TextInput.css";
-
 interface TextInputProps {
   type?: string | undefined;
   maxLength?: number | undefined;
@@ -13,7 +11,11 @@ interface TextInputProps {
 
 const TextInput = ({ type, ...props }: TextInputProps) => {
   return (
-    <input className="TextInput--input" type={type || "text"} {...props} />
+    <input
+      className="TextInput--input Input"
+      type={type || "text"}
+      {...props}
+    />
   );
 };
 

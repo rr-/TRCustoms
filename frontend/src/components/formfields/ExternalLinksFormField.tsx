@@ -88,7 +88,7 @@ const ExternalLinksFormField = ({
     <BaseFormField name={name} readonly={readonly} {...props}>
       <div className="ExternalLinksFormField--entry">
         <input
-          className="ExternalLinksFormField--input"
+          className="ExternalLinksFormField--input Input"
           type="url"
           value={textInput}
           onChange={handleTextInputChange}
@@ -97,7 +97,7 @@ const ExternalLinksFormField = ({
         />
 
         <select
-          className="ExternalLinksFormField--select"
+          className="ExternalLinksFormField--select Input"
           value={linkType}
           onChange={handleSelectChange}
         >

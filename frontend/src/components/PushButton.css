@@ -10,7 +10,8 @@
   font-size: var(--font-size);
   line-height: 1rem;
   padding: 0 1rem;
-  height: 2rem;
+  height: calc(2rem + 4px);
+  box-sizing: border-box;
   cursor: pointer;
 }
 .PushButton--button:hover {

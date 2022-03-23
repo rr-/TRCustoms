@@ -8,29 +8,31 @@ import { SearchBar } from "src/components/SearchBar";
 import { SubmitButton } from "src/components/formfields/SubmitButton";
 import { TextFormField } from "src/components/formfields/TextFormField";
 import { IconSearch } from "src/components/icons/IconSearch";
-import type { GenreSearchQuery } from "src/services/GenreService";
+import type { UserSearchQuery } from "src/services/UserService";
 
-const defaultSearchQuery: GenreSearchQuery = {
+const defaultSearchQuery: UserSearchQuery = {
   page: null,
-  sort: "name",
+  sort: "-date_joined",
   search: null,
 };
 
-const convertSearchQueryToFormikValues = (searchQuery: GenreSearchQuery) => {
+const convertSearchQueryToFormikValues = (searchQuery: UserSearchQuery) => {
   return { search: searchQuery.search || "" };
 };
 
-interface GenreSearchProps {
-  searchQuery: GenreSearchQuery;
-  onSearchQueryChange: (searchQuery: GenreSearchQuery) => void;
+interface UserSearchProps {
+  searchQuery: UserSearchQuery;
+  onSearchQueryChange: (searchQuery: UserSearchQuery) => void;
 }
 
-const GenreSearch = ({
-  searchQuery,
-  onSearchQueryChange,
-}: GenreSearchProps) => {
+const UserSearch = ({ searchQuery, onSearchQueryChange }: UserSearchProps) => {
   const [formikValues, setFormikValues] = useState<any>(
     convertSearchQueryToFormikValues(searchQuery)
+  );
+
+  useEffect(
+    () => setFormikValues(convertSearchQueryToFormikValues(searchQuery)),
+    [searchQuery]
   );
 
   const handleSubmit = useCallback(
@@ -49,20 +51,15 @@ const GenreSearch = ({
     [onSearchQueryChange]
   );
 
-  useEffect(
-    () => setFormikValues(convertSearchQueryToFormikValues(searchQuery)),
-    [searchQuery]
-  );
-
   return (
     <Formik
       enableReinitialize={true}
       initialValues={formikValues}
       onSubmit={handleSubmit}
     >
-      {({ submitForm }) => (
-        <Form className="GenreSearch">
-          <SearchBar>
+      {({ submitForm, resetForm }) => (
+        <Form id="UserListPage--container">
+          <SearchBar id="UserListPage--search">
             <TextFormField label="Search" name="search" />
 
             <div className="FormField">
@@ -83,4 +80,4 @@ const GenreSearch = ({
   );
 };
 
-export { defaultSearchQuery, GenreSearch };
+export { defaultSearchQuery, UserSearch };

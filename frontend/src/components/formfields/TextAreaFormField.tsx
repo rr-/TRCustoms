@@ -28,7 +28,7 @@ const TextAreaFormField = ({
                 <Field
                   validate={validate}
                   disabled={readonly}
-                  className="TextAreaFormField--textarea"
+                  className="TextAreaFormField--textarea Input"
                   as="textarea"
                   type="text"
                   name={name}
