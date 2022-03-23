@@ -1,6 +1,7 @@
 import { AxiosResponse } from "axios";
 import { api } from "src/api";
 import { API_URL } from "src/constants";
+import { AuthService } from "src/services/AuthService";
 import type { CountryListing } from "src/services/ConfigService";
 import type { UploadedFile } from "src/services/FileService";
 import type { GenericSearchQuery } from "src/types";
@@ -58,6 +59,9 @@ interface UserSearchResult
   extends GenericSearchResult<UserSearchQuery, UserListing> {}
 
 const getCurrentUser = async (): Promise<UserDetails | null> => {
+  if (!AuthService.getAccessToken()) {
+    return null;
+  }
   try {
     const response = (await api.get(`${API_URL}/users/me/`)) as AxiosResponse<
       UserDetails
