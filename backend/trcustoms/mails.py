@@ -18,10 +18,12 @@ STATIC_DIR = Path(__file__).parent / "common" / "static"
 
 
 def get_level_authors(level: Level) -> Iterable[tuple[str, str]]:
+    q_obj = Q(uploaded_levels=level)
+    if not level.is_pending_approval:
+        q_obj |= Q(authored_levels=level)
+
     for item in (
-        User.objects.filter(
-            Q(authored_levels=level) | Q(uploaded_levels=level)
-        )
+        User.objects.filter(q_obj)
         .values("username", "email")
         .distinct("email")
     ):
@@ -170,20 +172,19 @@ def send_level_approved_mail(level: Level) -> None:
 
 
 def send_level_rejected_mail(level: Level, reason: str) -> None:
-    if not level.uploader or not level.uploader.email:
-        return
-    link = f"{settings.HOST_SITE}/levels/{level.id}"
-    send_mail(
-        template_name="level_rejection",
-        subject=f"{PREFIX} Level rejected",
-        recipients=[level.uploader.email],
-        context={
-            "username": level.uploader.username,
-            "level_name": level.name,
-            "reason": reason,
-            "link": link,
-        },
-    )
+    for username, email in get_level_authors(level):
+        link = f"{settings.HOST_SITE}/levels/{level.id}"
+        send_mail(
+            template_name="level_rejection",
+            subject=f"{PREFIX} Level rejected",
+            recipients=[email],
+            context={
+                "username": username,
+                "level_name": level.name,
+                "reason": reason,
+                "link": link,
+            },
+        )
 
 
 def send_review_submission_mail(review: LevelReview) -> None:
