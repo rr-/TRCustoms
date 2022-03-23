@@ -1,5 +1,8 @@
+import { useContext } from "react";
+import { useEffect } from "react";
 import type { LegaleseEntry } from "src/components/NestedLegalese";
 import { NestedLegalese } from "src/components/NestedLegalese";
+import { TitleContext } from "src/contexts/TitleContext";
 
 const TOS: LegaleseEntry = {
   children: [
@@ -219,6 +222,12 @@ const TOS: LegaleseEntry = {
 };
 
 const TermsAndConditionsPage = () => {
+  const { setTitle } = useContext(TitleContext);
+
+  useEffect(() => {
+    setTitle("Terms and Conditions");
+  }, [setTitle]);
+
   return (
     <div className="TermsAndConditionsPage">
       <NestedLegalese title="Terms and Conditions" entry={TOS} />

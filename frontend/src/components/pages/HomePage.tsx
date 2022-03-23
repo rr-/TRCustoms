@@ -3,6 +3,7 @@ import { sortBy } from "lodash";
 import { round } from "lodash";
 import { useState } from "react";
 import { useContext } from "react";
+import { useEffect } from "react";
 import { Link } from "react-router-dom";
 import { DefinitionItemGroup } from "src/components/DefinitionList";
 import { DefinitionItem } from "src/components/DefinitionList";
@@ -20,6 +21,7 @@ import { IconKofi } from "src/components/icons/IconKofi";
 import { IconTwitter } from "src/components/icons/IconTwitter";
 import { EngineLink } from "src/components/links/EngineLink";
 import { ConfigContext } from "src/contexts/ConfigContext";
+import { TitleContext } from "src/contexts/TitleContext";
 import { UserPermission } from "src/services/UserService";
 
 const LevelStats = () => {
@@ -111,6 +113,12 @@ const ReviewStats = () => {
 };
 
 const HomePage = () => {
+  const { setTitle } = useContext(TitleContext);
+
+  useEffect(() => {
+    setTitle("");
+  }, [setTitle]);
+
   return (
     <div className="HomePage">
       <div className="HomePage--featuredLevels">

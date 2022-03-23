@@ -1,4 +1,7 @@
 import "./ErrorPage.css";
+import { useContext } from "react";
+import { useEffect } from "react";
+import { TitleContext } from "src/contexts/TitleContext";
 
 const images = [
   {
@@ -32,6 +35,12 @@ const images = [
 ];
 
 const Error404Page = () => {
+  const { setTitle } = useContext(TitleContext);
+
+  useEffect(() => {
+    setTitle("404");
+  }, [setTitle]);
+
   const image = images[Math.floor(Math.random() * images.length)];
   return (
     <div className="ErrorPage">
