@@ -1,5 +1,6 @@
 import pytest
 from django.core import mail
+from django.db.models import QuerySet
 from rest_framework import status
 from rest_framework.test import APIClient
 
@@ -67,3 +68,41 @@ def test_review_update_success(
     }
     assert len(mail.outbox) == 1
     assert mail.outbox[0].subject == "[TRCustoms] Review edited"
+
+
+@pytest.mark.django_db
+def test_review_update_rating_classes(
+    any_integer,
+    any_datetime,
+    review_rating_classes: QuerySet,
+    user_factory: UserFactory,
+    level_factory: LevelFactory,
+    review_factory: ReviewFactory,
+    review_template_question_factory: ReviewTemplateQuestionFactory,
+    review_template_answer_factory: ReviewTemplateAnswerFactory,
+    auth_api_client: APIClient,
+) -> None:
+    level = level_factory(authors=[user_factory(username="example")])
+    review = review_factory(level=level, author=auth_api_client.user)
+
+    question = review_template_question_factory()
+    answers = [
+        review_template_answer_factory(question=question, points=0),
+        review_template_answer_factory(question=question, points=10),
+    ]
+    review.answers.set([answers[0]])
+
+    assert review.rating_class.name == "Negative"
+
+    auth_api_client.patch(
+        f"/api/reviews/{review.id}/",
+        format="json",
+        data={
+            "level_id": level.id,
+            "text": "test",
+            "answer_ids": [answers[1].id],
+        },
+    )
+
+    review.refresh_from_db()
+    assert review.rating_class.name == "Positive"

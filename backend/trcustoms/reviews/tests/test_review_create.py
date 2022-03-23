@@ -1,5 +1,6 @@
 import pytest
 from django.core import mail
+from django.db.models import QuerySet
 from rest_framework import status
 from rest_framework.test import APIClient
 
@@ -10,6 +11,7 @@ from trcustoms.conftest import (
     ReviewTemplateQuestionFactory,
     UserFactory,
 )
+from trcustoms.reviews.models import LevelReview
 
 
 @pytest.mark.django_db
@@ -78,6 +80,43 @@ def test_review_creation_success(
     }
     assert len(mail.outbox) == 1
     assert mail.outbox[0].subject == "[TRCustoms] New review"
+
+
+@pytest.mark.django_db
+def test_review_creation_rating_classes(
+    any_integer,
+    any_datetime,
+    review_rating_classes: QuerySet,
+    user_factory: UserFactory,
+    level_factory: LevelFactory,
+    review_template_question_factory: ReviewTemplateQuestionFactory,
+    review_template_answer_factory: ReviewTemplateAnswerFactory,
+    auth_api_client: APIClient,
+) -> None:
+    level = level_factory(authors=[user_factory(username="example")])
+
+    question = review_template_question_factory()
+    answers = [
+        review_template_answer_factory(question=question, points=0),
+        review_template_answer_factory(question=question, points=10),
+    ]
+
+    response = auth_api_client.post(
+        "/api/reviews/",
+        format="json",
+        data={
+            "level_id": level.id,
+            "text": "test",
+            "answer_ids": [answers[1].id],
+        },
+    )
+    data = response.json()
+    review = LevelReview.objects.get(pk=data["id"])
+
+    assert review.answers.count() == 1
+    assert review.answers.first().points == 10
+    assert review.rating_class is not None
+    assert review.rating_class.name == "Positive"
 
 
 @pytest.mark.django_db

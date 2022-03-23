@@ -7,7 +7,7 @@ from trcustoms.signals import disable_signals
 
 
 @receiver(post_save, sender=LevelReview)
-@receiver(m2m_changed, sender=LevelReview)
+@receiver(m2m_changed, sender=LevelReview.answers.through)
 def update_review_rating_class(sender, instance, **kwargs):
     with disable_signals():
         instance.rating_class = get_review_rating_class(instance)

@@ -4,11 +4,13 @@ from typing import Any
 import dateutil.parser
 import factory
 import pytest
+from django.db.models import QuerySet
 from mimesis import Generic
 from pytest_factoryboy import register
 from rest_framework.test import APIClient
 from rest_framework_simplejwt.tokens import RefreshToken
 
+from trcustoms.common.models import RatingClass
 from trcustoms.engines.models import Engine
 from trcustoms.genres.models import Genre
 from trcustoms.levels.models import (
@@ -16,6 +18,11 @@ from trcustoms.levels.models import (
     LevelDifficulty,
     LevelDuration,
     LevelScreenshot,
+)
+from trcustoms.ratings import (
+    get_max_review_score,
+    get_rating_class,
+    get_rating_classes,
 )
 from trcustoms.reviews.models import (
     LevelReview,
@@ -157,6 +164,12 @@ class ReviewFactory(factory.django.DjangoModelFactory):
     level = factory.SubFactory(LevelFactory)
 
 
+@register
+class RatingClassFactory(factory.django.DjangoModelFactory):
+    class Meta:
+        model = RatingClass
+
+
 @pytest.fixture(name="fake", scope="session")
 def fixture_fake() -> Generic:
     return Generic()
@@ -211,3 +224,33 @@ def fixture_any_datetime() -> object:
             return isinstance(other, datetime)
 
     return AnyDatetime
+
+
+@pytest.fixture(name="review_rating_classes")
+def fixture_review_rating_classes(
+    rating_class_factory: RatingClassFactory,
+) -> QuerySet:
+    rating_class_factory(
+        target=RatingClass.Target.REVIEW,
+        position=0,
+        min_rating_count=1,
+        min_rating_average=None,
+        max_rating_average=0.5,
+        name="Negative",
+    )
+    rating_class_factory(
+        target=RatingClass.Target.REVIEW,
+        position=0,
+        min_rating_count=1,
+        min_rating_average=0.5,
+        max_rating_average=None,
+        name="Positive",
+    )
+    return RatingClass.objects.all()
+
+
+@pytest.fixture(name="clear_caches", autouse=True)
+def fixture_clear_caches() -> None:
+    get_max_review_score.cache_clear()
+    get_rating_classes.cache_clear()
+    get_rating_class.cache_clear()
