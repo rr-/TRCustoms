@@ -3,6 +3,8 @@ import { useCallback } from "react";
 import { useContext } from "react";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { InfoMessageType } from "src/components/InfoMessage";
+import { InfoMessage } from "src/components/InfoMessage";
 import { UserForm } from "src/components/UserForm";
 import { TitleContext } from "src/contexts/TitleContext";
 import { UserContext } from "src/contexts/UserContext";
@@ -37,6 +39,13 @@ const RegisterPage = () => {
     <div className="RegisterForm">
       <h1>Register</h1>
 
+      <InfoMessage type={InfoMessageType.Info}>
+        <span>
+          If you already have a user profile on trle.net, you can claim it by
+          registering with the same username.
+          <br /> This also allows you to freely edit your previous submissions.
+        </span>
+      </InfoMessage>
       {isComplete ? (
         <>
           An email was sent to your email address. To continue, please check
