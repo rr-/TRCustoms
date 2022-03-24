@@ -54,8 +54,11 @@ def get_permissions(user: User) -> set[UserPermission]:
         perms |= set(UserPermission)
     if not user.is_anonymous:
         perms |= {
-            UserPermission.LIST_USERS,
+            UserPermission.LIST_USERS,  # autocomplete
             UserPermission.REVIEW_LEVELS,
             UserPermission.UPLOAD_LEVELS,
         }
+    perms |= {
+        UserPermission.VIEW_USERS,
+    }
     return perms

@@ -30,6 +30,7 @@ class UserPermission(Enum):
     EDIT_NEWS = "edit_news"
     EDIT_USERS = "edit_users"
     LIST_USERS = "list_users"
+    VIEW_USERS = "view_users"
     REVIEW_AUDIT_LOGS = "review_audit_logs"
     REVIEW_LEVELS = "review_levels"
     UPLOAD_LEVELS = "upload_levels"
@@ -65,6 +66,7 @@ class User(AbstractUser):
             (UserPermission.EDIT_NEWS.value, "Can edit news"),
             (UserPermission.EDIT_USERS.value, "Can edit users"),
             (UserPermission.LIST_USERS.value, "Can list users"),
+            (UserPermission.VIEW_USERS.value, "Can view users"),
             (UserPermission.REVIEW_AUDIT_LOGS.value, "Can review audit logs"),
             (UserPermission.REVIEW_LEVELS.value, "Can review levels"),
             (UserPermission.UPLOAD_LEVELS.value, "Can upload levels"),

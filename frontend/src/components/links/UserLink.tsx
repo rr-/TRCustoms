@@ -16,7 +16,7 @@ const UserLink = ({ user, className, children }: UserLinkProps) => {
   const fallback = <span className={className}>{children}</span>;
 
   return (
-    <PermissionGuard require={UserPermission.listUsers} alternative={fallback}>
+    <PermissionGuard require={UserPermission.viewUsers} alternative={fallback}>
       {id ? (
         <Link className={className} to={`/users/${id}`}>
           {children}
