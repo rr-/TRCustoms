@@ -11,8 +11,8 @@ MAX_SIZE_MAP = {
 
 CONTENT_TYPE_MAP = {
     UploadedFile.UploadType.USER_PICTURE: ["image/jpeg", "image/png"],
-    UploadedFile.UploadType.LEVEL_COVER: ["image/jpeg"],
-    UploadedFile.UploadType.LEVEL_SCREENSHOT: ["image/jpeg"],
+    UploadedFile.UploadType.LEVEL_COVER: ["image/jpeg", "image/png"],
+    UploadedFile.UploadType.LEVEL_SCREENSHOT: ["image/jpeg", "image/png"],
     UploadedFile.UploadType.LEVEL_FILE: [
         "application/zip",
         "application/zip-compressed",
