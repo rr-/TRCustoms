@@ -2,6 +2,7 @@ import "./ExternalLinksFormField.css";
 import { XIcon } from "@heroicons/react/outline";
 import { ChevronDownIcon } from "@heroicons/react/outline";
 import { ChevronUpIcon } from "@heroicons/react/outline";
+import { useFormikContext } from "formik";
 import { useState } from "react";
 import { PushButton } from "src/components/PushButton";
 import type { GenericFormFieldProps } from "src/components/formfields/BaseFormField";
@@ -23,6 +24,7 @@ const ExternalLinksFormField = ({
   setValue,
   ...props
 }: ExternalLinksFormFieldProps) => {
+  const { setFieldTouched } = useFormikContext();
   const [linkType, setLinkType] = useState(ExternalLinkType.Showcase);
   const [textInput, setTextInput] = useState("");
   const [textInputIsValid, setTextInputIsValid] = useState(false);
@@ -35,12 +37,36 @@ const ExternalLinksFormField = ({
         .map((link) => link.url.toLowerCase())
         .includes(textInput.toLowerCase())
     ) {
+      setFieldTouched(name);
       setValue([
         ...value,
         { url: textInput, position: value.length, link_type: linkType },
       ]);
       setTextInput("");
     }
+  };
+
+  const removeLink = (link: ExternalLink) => {
+    setFieldTouched(name);
+    setValue(value.filter((l) => l.url !== link.url));
+  };
+
+  const moveLinkUp = (link: ExternalLink) => {
+    const newValue = [...value];
+    const idx = value.findIndex((v) => v.url === link.url);
+    newValue.splice(idx, 1);
+    newValue.splice(idx - 1, 0, link);
+    setFieldTouched(name);
+    setValue(newValue);
+  };
+
+  const moveLinkDown = (link: ExternalLink) => {
+    const newValue = [...value];
+    const idx = value.findIndex((v) => v.url === link.url);
+    newValue.splice(idx, 1);
+    newValue.splice(idx + 1, 0, link);
+    setFieldTouched(name);
+    setValue(newValue);
   };
 
   const handleTextInputChange = (
@@ -65,23 +91,15 @@ const ExternalLinksFormField = ({
   };
 
   const handleRemoveButtonClick = (link: ExternalLink) => {
-    setValue(value.filter((l) => l.url !== link.url));
+    removeLink(link);
   };
 
   const handleMoveUpButtonClick = (link: ExternalLink) => {
-    const newValue = [...value];
-    const idx = value.findIndex((v) => v.url === link.url);
-    newValue.splice(idx, 1);
-    newValue.splice(idx - 1, 0, link);
-    setValue(newValue);
+    moveLinkUp(link);
   };
 
   const handleMoveDownButtonClick = (link: ExternalLink) => {
-    const newValue = [...value];
-    const idx = value.findIndex((v) => v.url === link.url);
-    newValue.splice(idx, 1);
-    newValue.splice(idx + 1, 0, link);
-    setValue(newValue);
+    moveLinkDown(link);
   };
 
   return (
