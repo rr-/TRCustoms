@@ -148,6 +148,9 @@ const filterFalsyObjectValues = <T extends any>(source: {
 };
 
 const pluralize = (noun: string, count: number) => {
+  if (noun === "media") {
+    return "media";
+  }
   return count === 1 ? noun : `${noun}s`;
 };
 
