@@ -9,7 +9,7 @@ interface SidebarBoxProps {
 
 const SidebarBox = ({ id, header, actions, children }: SidebarBoxProps) => {
   return (
-    <div id={id || undefined} className="SidebarBox">
+    <div id={id || undefined} className="SidebarBox ChildMarginClear">
       {header && <div className="SidebarBox--header">{header}</div>}
       {actions && <div className="SidebarBox--actions">{actions}</div>}
       {children}

@@ -1,14 +1,10 @@
 .ModerationPage--container {
   display: grid;
-  grid-template-areas: "disclaimer disclaimer" "sidebar results";
+  grid-template-areas: "sidebar results";
   grid-template-columns: min-content 6fr;
   grid-template-rows: min-content 1fr;
   gap: 1rem;
   align-items: flex-start;
-}
-
-.ModerationPage--disclaimer {
-  grid-area: disclaimer;
 }
 
 .ModerationPage--sidebar {

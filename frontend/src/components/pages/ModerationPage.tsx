@@ -10,11 +10,13 @@ import { AuditLogTable } from "src/components/AuditLogTable";
 import { InfoMessage } from "src/components/InfoMessage";
 import { InfoMessageType } from "src/components/InfoMessage";
 import { PageGuard } from "src/components/PermissionGuard";
+import { PushButton } from "src/components/PushButton";
 import { QueryPersister } from "src/components/QueryPersister";
 import { deserializeGenericSearchQuery } from "src/components/QueryPersister";
 import { serializeGenericSearchQuery } from "src/components/QueryPersister";
 import { SectionHeader } from "src/components/Section";
 import { SidebarBox } from "src/components/SidebarBox";
+import { UserPage } from "src/components/pages/UserPage";
 import { TitleContext } from "src/contexts/TitleContext";
 import type { AuditLogSearchQuery } from "src/services/AuditLogService";
 import { UserPermission } from "src/services/UserService";
@@ -57,17 +59,14 @@ const ModerationPageView = () => {
         setSearchQuery={setSearchQuery}
       />
       <div className="ModerationPage--container">
-        <div className="ModerationPage--disclaimer">
-          <InfoMessage type={InfoMessageType.Info}>
-            The log contains recent changes made by all users. All these changes
-            are already live.
-            <br />
-            New levels and users can be approved on their individual pages.
-          </InfoMessage>
-        </div>
-
         <div className="ModerationPage--sidebar">
-          <SidebarBox>
+          <SidebarBox
+            actions={
+              <PushButton to={"/users"} disableTimeout={true}>
+                Users
+              </PushButton>
+            }
+          >
             <AuditLogSearch
               searchQuery={searchQuery}
               onSearchQueryChange={setSearchQuery}
@@ -76,6 +75,13 @@ const ModerationPageView = () => {
         </div>
 
         <div className="ModerationPage--results ChildMarginClear">
+          <InfoMessage type={InfoMessageType.Info}>
+            The log contains recent changes made by all users. All these changes
+            are already live.
+            <br />
+            New levels and users can be approved on their individual pages.
+          </InfoMessage>
+
           <SectionHeader>Recent actions</SectionHeader>
           <AuditLogTable
             showObjects={true}

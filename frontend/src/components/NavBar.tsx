@@ -104,11 +104,6 @@ const NavBar = () => {
                 <li className="TopNavBar--listItem">
                   <NavLink to={"/tags"}>Tags</NavLink>
                 </li>
-                <PermissionGuard require={UserPermission.listUsers}>
-                  <li className="TopNavBar--listItem">
-                    <NavLink to={"/users"}>Users</NavLink>
-                  </li>
-                </PermissionGuard>
                 <li className="TopNavBar--listItem">
                   <NavLink to={"/about"}>About</NavLink>
                 </li>
