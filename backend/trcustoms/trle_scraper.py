@@ -57,7 +57,7 @@ def get_inner_html(node) -> str:
 
 
 def get_text(node) -> str:
-    return strip_tags(get_outer_html(node)).strip()
+    return html.unescape(strip_tags(get_outer_html(node)).strip())
 
 
 def unescape(text: str | None) -> str:

@@ -179,6 +179,12 @@ def process_level_basic_data(obj_id: int, trle_level: TRLELevel) -> Level:
     if level.created.date() != trle_level.release_date:
         level.created = trle_level.release_date
         level.save()
+    if level.name != trle_level.title:
+        level.name = trle_level.title
+        level.save()
+    if level.description != trle_level.synopsis:
+        level.description = trle_level.synopsis
+        level.save()
 
     if (
         trle_level.category
