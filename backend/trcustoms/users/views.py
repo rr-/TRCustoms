@@ -49,8 +49,11 @@ class UserViewSet(
     permission_classes = [AllowNone]
     permission_classes_by_action = {
         "create": [AllowAny],
-        "retrieve": [IsAuthenticated],
-        "list": [IsAuthenticated],
+        "me": [IsAuthenticated],
+        "retrieve": [
+            HasPermission(UserPermission.VIEW_USERS) | IsAccessingOwnResource
+        ],
+        "list": [HasPermission(UserPermission.LIST_USERS)],
         "by_username": [AllowAny],
         "update": [
             HasPermission(UserPermission.EDIT_USERS) | IsAccessingOwnResource
@@ -107,7 +110,7 @@ class UserViewSet(
         serializer = self.get_serializer(user)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
-    @action(detail=False, permission_classes=[IsAuthenticated])
+    @action(detail=False)
     def me(self, request, *args, **kwargs):
         user = self.queryset.filter(id=self.request.user.id).first()
         serializer = self.get_serializer(user)

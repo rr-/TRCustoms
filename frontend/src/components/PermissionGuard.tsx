@@ -4,6 +4,7 @@ import { useState } from "react";
 import { Error403Page } from "src/components/pages/Error403Page";
 import { UserContext } from "src/contexts/UserContext";
 import type { UserNested } from "src/services/UserService";
+import { UserPermission } from "src/services/UserService";
 
 interface CommonGuardProps {
   alternative?: React.ReactNode | undefined;
@@ -15,12 +16,12 @@ interface GenericGuardProps extends CommonGuardProps {
 }
 
 interface PermissionGuardProps extends CommonGuardProps {
-  require: string;
+  require: UserPermission | string;
   owningUsers?: UserNested[] | undefined;
 }
 
 interface PageGuardProps {
-  require: string;
+  require: UserPermission | string;
   children: React.ReactNode;
   owningUserIds?: number[] | undefined;
 }
@@ -28,6 +29,8 @@ interface PageGuardProps {
 interface UserGuardProps extends CommonGuardProps {
   user?: UserNested | undefined;
 }
+
+const anonymousPermissions = [UserPermission.viewUsers];
 
 const GenericGuard = ({
   isShown,
@@ -47,7 +50,8 @@ const PermissionGuard = ({
 
   useEffect(() => {
     setIsShown(
-      user?.permissions?.includes(require) ||
+      anonymousPermissions.some((r) => r === require) ||
+        user?.permissions?.includes(require) ||
         (owningUsers && owningUsers.map((u) => u.id).includes(user?.id))
     );
   }, [user, owningUsers, require]);
@@ -72,7 +76,9 @@ const PageGuard = ({ require, owningUserIds, children }: PageGuardProps) => {
 
   useEffect(() => {
     setIsShown(
-      user?.permissions?.includes(require) || owningUserIds?.includes(user?.id)
+      anonymousPermissions.some((r) => r === require) ||
+        user?.permissions?.includes(require) ||
+        owningUserIds?.includes(user?.id)
     );
   }, [user, owningUserIds, require]);
 
