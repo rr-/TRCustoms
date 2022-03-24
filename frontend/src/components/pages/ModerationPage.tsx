@@ -16,7 +16,6 @@ import { deserializeGenericSearchQuery } from "src/components/QueryPersister";
 import { serializeGenericSearchQuery } from "src/components/QueryPersister";
 import { SectionHeader } from "src/components/Section";
 import { SidebarBox } from "src/components/SidebarBox";
-import { UserPage } from "src/components/pages/UserPage";
 import { TitleContext } from "src/contexts/TitleContext";
 import type { AuditLogSearchQuery } from "src/services/AuditLogService";
 import { UserPermission } from "src/services/UserService";
