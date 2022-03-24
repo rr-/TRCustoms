@@ -2,6 +2,7 @@ import { AxiosError } from "axios";
 import axios from "axios";
 import { Formik } from "formik";
 import { Form } from "formik";
+import { useRef } from "react";
 import { useContext } from "react";
 import { useCallback } from "react";
 import { useQueryClient } from "react-query";
@@ -62,6 +63,7 @@ const validateRange = <T extends Object>(
 };
 
 const LevelForm = ({ level, onGoBack, onSubmit }: LevelFormProps) => {
+  const formikRef = useRef<any>();
   const { user } = useContext(UserContext);
   const queryClient = useQueryClient();
   const { config } = useContext(ConfigContext);
@@ -253,11 +255,37 @@ const LevelForm = ({ level, onGoBack, onSubmit }: LevelFormProps) => {
       }
     }
 
+    {
+      // special case: multi-field validation
+      const error = validateRange(
+        [
+          ...values.screenshot_ids,
+          ...values.external_links?.filter(
+            (link: ExternalLink) => link.link_type === ExternalLinkType.Showcase
+          ),
+        ],
+        "media",
+        config.limits.min_screenshots,
+        config.limits.max_screenshots
+      );
+      if (error) {
+        if (!errors.screenshot_ids) {
+          errors.screenshot_ids = makeSentence(error);
+          formikRef.current?.setFieldTouched("screenshot_ids", true, false);
+        }
+        if (!errors.external_links) {
+          errors.external_links = makeSentence(error);
+          formikRef.current?.setFieldTouched("external_links", true, false);
+        }
+      }
+    }
+
     return errors;
   };
 
   return (
     <Formik
+      innerRef={formikRef}
       initialValues={initialValues}
       enableReinitialize={true}
       validate={validate}
