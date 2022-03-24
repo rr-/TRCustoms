@@ -1,9 +1,9 @@
 .SidebarBox {
   padding: calc(var(--sidebar-padding) * 1rem);
   background: var(--sidebar-bg-color);
-}
-.SidebarBox--header {
-  margin-bottom: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
 }
 .SidebarBox--actions {
   display: flex;
@@ -12,11 +12,4 @@
 }
 .SidebarBox--actions > .PushButton {
   flex-grow: 1;
-}
-.SidebarBox--actions:empty + *,
-.SidebarBox > :first-child {
-  margin-top: 0;
-}
-.SidebarBox > :last-child {
-  margin-bottom: 0;
 }
