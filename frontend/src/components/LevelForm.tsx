@@ -99,13 +99,13 @@ const LevelForm = ({ level, onGoBack, onSubmit }: LevelFormProps) => {
     return (
       validateRange(
         value.filter((link) => link.link_type === ExternalLinkType.Showcase),
-        "showcase link",
+        "YouTube link",
         config.limits.min_showcase_links,
         config.limits.max_showcase_links
       ) ||
       validateRange(
         value.filter((link) => link.link_type === ExternalLinkType.Main),
-        "main link",
+        "website link",
         0,
         1
       )
