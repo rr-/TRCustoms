@@ -56,7 +56,7 @@ const DropDownFormField = ({
         onChange={handleChange}
       >
         {!multiple && (
-          <option disabled={!allowNull} value={"-"}>
+          <option disabled={!allowNull} value={""}>
             Select an option…
           </option>
         )}
