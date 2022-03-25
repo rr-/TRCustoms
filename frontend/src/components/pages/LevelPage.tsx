@@ -3,7 +3,6 @@ import { DownloadIcon } from "@heroicons/react/outline";
 import { GlobeAltIcon } from "@heroicons/react/outline";
 import { PencilIcon } from "@heroicons/react/outline";
 import { AnnotationIcon } from "@heroicons/react/outline";
-import { sortBy } from "lodash";
 import { useEffect } from "react";
 import { useContext } from "react";
 import { Fragment } from "react";
@@ -88,10 +87,6 @@ const LevelPage = () => {
   };
 
   const level = result.data;
-  const downloadableFiles = sortBy(
-    level.files.filter((file) => !!file.url),
-    (file) => -file.version
-  );
   const mainLink =
     level.external_links.filter(
       (link) => link.link_type === ExternalLinkType.Main
@@ -129,21 +124,14 @@ const LevelPage = () => {
           }
           actions={
             <>
-              {downloadableFiles.length > 0 ? (
+              {level.last_file?.url && (
                 <PushButton
-                  to={downloadableFiles[0].url}
+                  to={level.last_file.url}
                   icon={<DownloadIcon className="icon" />}
                 >
-                  Download ({formatFileSize(downloadableFiles[0].size)})
+                  Download ({formatFileSize(level.last_file.size)})
                 </PushButton>
-              ) : level.files.length > 0 ? (
-                <PushButton
-                  onClick={() => showFileGoneAlert()}
-                  icon={<DownloadIcon className="icon" />}
-                >
-                  Download
-                </PushButton>
-              ) : null}
+              )}
               {mainLink && (
                 <PushButton
                   to={mainLink}
