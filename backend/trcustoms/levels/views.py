@@ -19,7 +19,8 @@ from trcustoms.levels.serializers import (
     LevelRejectionSerializer,
 )
 from trcustoms.mixins import (
-    AuditLogModelWatcherMixin,
+    AuditLogModelWatcherDestroyMixin,
+    AuditLogModelWatcherUpdateMixin,
     MultiSerializerMixin,
     PermissionsMixin,
 )
@@ -33,7 +34,8 @@ from trcustoms.utils import parse_bool, parse_ids, slugify, stream_file_field
 
 
 class LevelViewSet(
-    AuditLogModelWatcherMixin,
+    AuditLogModelWatcherUpdateMixin,
+    AuditLogModelWatcherDestroyMixin,
     PermissionsMixin,
     MultiSerializerMixin,
     mixins.RetrieveModelMixin,
