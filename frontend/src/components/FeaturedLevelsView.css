@@ -48,3 +48,7 @@
 .FeaturedLevelView:hover .FeaturedLevelView--synopsis {
   max-height: 10rem;
 }
+
+.FeaturedLevelView--coverImage {
+  width: 100%;
+}
