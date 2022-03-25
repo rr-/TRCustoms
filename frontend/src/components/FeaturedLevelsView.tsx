@@ -2,14 +2,12 @@ import "./FeaturedLevelsView.css";
 import { useQuery } from "react-query";
 import { Loader } from "src/components/Loader";
 import { Markdown } from "src/components/Markdown";
-import { MediumThumbnail } from "src/components/MediumThumbnail";
 import { LevelAuthorsLink } from "src/components/links/LevelAuthorsLink";
 import { LevelLink } from "src/components/links/LevelLink";
 import type { FeaturedLevels } from "src/services/ConfigService";
 import type { FeaturedLevel } from "src/services/ConfigService";
 import { FeatureType } from "src/services/ConfigService";
 import { ConfigService } from "src/services/ConfigService";
-import { DisplayMode } from "src/types";
 
 interface FeaturedLevelViewProps {
   featuredLevel: FeaturedLevel | null;
@@ -40,10 +38,15 @@ const FeaturedLevelView = ({
   return (
     <div className="FeaturedLevelView">
       <h2 className="FeaturedLevelView--heading">{heading}</h2>
-      <MediumThumbnail
-        displayMode={DisplayMode.Cover}
-        file={level?.cover || undefined}
-      />
+      {level?.cover && (
+        <LevelLink level={level}>
+          <img
+            className="FeaturedLevelView--coverImage"
+            src={level.cover.url}
+            alt={level.name}
+          />
+        </LevelLink>
+      )}
       <div className="FeaturedLevelView--detailsWrapper">
         <div className="FeaturedLevelView--details">
           <h2 className="FeaturedLevelView--levelLink">
