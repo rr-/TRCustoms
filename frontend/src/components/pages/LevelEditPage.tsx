@@ -10,17 +10,15 @@ import { PageGuard } from "src/components/PermissionGuard";
 import { TitleContext } from "src/contexts/TitleContext";
 import type { LevelDetails } from "src/services/LevelService";
 import { LevelService } from "src/services/LevelService";
+import { getLevelOwningUserIds } from "src/services/LevelService";
 import { UserPermission } from "src/services/UserService";
 
 interface LevelEditPageParams {
   levelId: string;
 }
 
-interface LevelEditPageViewProps {
-  levelId: string;
-}
-
-const LevelEditPageView = ({ levelId }: LevelEditPageViewProps) => {
+const LevelEditPage = () => {
+  const { levelId } = (useParams() as unknown) as LevelEditPageParams;
   const navigate = useNavigate();
   const { setTitle } = useContext(TitleContext);
 
@@ -46,21 +44,18 @@ const LevelEditPageView = ({ levelId }: LevelEditPageViewProps) => {
   }
 
   const level = result.data;
+  const owningUserIds = getLevelOwningUserIds(level);
 
   return (
-    <div id="LevelEditPage">
-      <h1>Editing {level.name}</h1>
+    <PageGuard
+      require={UserPermission.editLevels}
+      owningUserIds={owningUserIds}
+    >
+      <div id="LevelEditPage">
+        <h1>Editing {level.name}</h1>
 
-      <LevelForm onGoBack={handleGoBack} level={level} />
-    </div>
-  );
-};
-
-const LevelEditPage = () => {
-  const { levelId } = (useParams() as unknown) as LevelEditPageParams;
-  return (
-    <PageGuard require={UserPermission.editLevels}>
-      <LevelEditPageView levelId={levelId} />
+        <LevelForm onGoBack={handleGoBack} level={level} />
+      </div>
     </PageGuard>
   );
 };

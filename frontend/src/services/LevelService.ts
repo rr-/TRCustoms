@@ -188,6 +188,14 @@ const formatLinkType = (linkType: ExternalLinkType): string => {
   }
 };
 
+const getLevelOwningUserIds = (level: LevelListing): number[] => {
+  const ret = [...level.authors.map((author) => author.id)];
+  if (level.uploader?.id) {
+    ret.push(level.uploader.id);
+  }
+  return ret;
+};
+
 export type {
   ExternalLink,
   LevelDetails,
@@ -202,4 +210,9 @@ export type {
   ScreenshotList,
 };
 
-export { ExternalLinkType, LevelService, formatLinkType };
+export {
+  ExternalLinkType,
+  LevelService,
+  formatLinkType,
+  getLevelOwningUserIds,
+};
