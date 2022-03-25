@@ -10,3 +10,88 @@
   font-size: 4rem;
   aspect-ratio: calc(4 / 3);
 }
+
+.MediumThumbnail {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  color: black;
+}
+.MediumThumbnail--overlay {
+  position: absolute;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  pointer-events: none;
+  filter: drop-shadow(0 0 2px rgba(255, 255, 255, 0.7));
+}
+.MediumThumbnail:hover .MediumThumbnail--overlay {
+  filter: drop-shadow(0 0 4px rgba(255, 255, 255, 0.5))
+    drop-shadow(0 0 2px rgba(255, 255, 255, 0.5));
+}
+
+.MediumThumbnail img {
+  display: block;
+}
+
+.MediumThumbnail--thumb {
+  display: block;
+  width: 100%;
+  height: 100%;
+  aspect-ratio: calc(4 / 3);
+  object-fit: contain;
+  cursor: pointer;
+}
+.MediumThumbnail.cover .MediumThumbnail--thumb {
+  object-fit: cover;
+}
+.MediumThumbnail.contain .MediumThumbnail--thumb {
+  object-fit: contain;
+}
+.MediumThumbnail--thumb:hover {
+  opacity: 0.9;
+}
+
+.MediumThumbnailModal {
+  z-index: 99;
+  position: fixed;
+  display: flex;
+  justify-content: center;
+  visibility: hidden;
+  padding: 2rem;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.8);
+  transition: opacity 300ms, visibility 300ms;
+  opacity: 0;
+  cursor: pointer;
+  font-size: 5rem;
+}
+.MediumThumbnailModal.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+.MediumThumbnailModal img {
+  flex-grow: 0;
+  object-fit: contain;
+}
+
+.MediumThumbnailModal .PushButton--link {
+  display: flex;
+  align-items: center;
+  color: silver;
+}
+.MediumThumbnailModal .PushButton--link:hover {
+  color: white;
+}
+.MediumThumbnailModal .PushButton--link.hidden {
+  visibility: hidden;
+}

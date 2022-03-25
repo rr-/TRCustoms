@@ -23,6 +23,9 @@
   margin-top: 0;
 }
 
+.LevelPage--cover .MediumThumbnails {
+  grid-template-columns: 1fr;
+}
 .LevelPage .MediumThumbnail--thumb {
   width: 100%;
 }
