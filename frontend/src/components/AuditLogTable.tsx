@@ -178,7 +178,7 @@ const AuditLogTable = ({
       ),
     },
     {
-      name: "requires_action",
+      name: "requiresAction",
       label: "",
       itemElement: ({ item }) =>
         item.is_action_required ? (
