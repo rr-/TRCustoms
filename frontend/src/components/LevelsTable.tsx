@@ -6,6 +6,7 @@ import { DownloadIcon } from "@heroicons/react/outline";
 import { Link } from "react-router-dom";
 import { DataList } from "src/components/DataList";
 import { LevelRating } from "src/components/LevelRating";
+import { PushButton } from "src/components/PushButton";
 import { LevelAuthorsLink } from "src/components/links/LevelAuthorsLink";
 import { LevelLink } from "src/components/links/LevelLink";
 import type { LevelListing } from "src/services/LevelService";
@@ -80,12 +81,16 @@ const LevelView = ({ showStatus, level }: LevelViewProps) => {
         Download:{" "}
         {level.last_file?.url ? (
           <>
-            <Link target="_blank" to={level.last_file.url}>
+            <PushButton
+              isPlain={true}
+              disableTimeout={true}
+              to={level.last_file.url}
+            >
               <strong>
                 <DownloadIcon className="icon" />(
                 {formatFileSize(level.last_file?.size)})
               </strong>
-            </Link>{" "}
+            </PushButton>{" "}
             ({level.download_count} downloads)
           </>
         ) : (
