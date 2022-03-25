@@ -62,7 +62,7 @@ const ModerationPageView = () => {
           <SidebarBox
             actions={
               <PushButton to={"/users"} disableTimeout={true}>
-                Users
+                User list
               </PushButton>
             }
           >
