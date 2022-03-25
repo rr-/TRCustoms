@@ -12,7 +12,7 @@ const SidebarBox = ({ id, header, actions, children }: SidebarBoxProps) => {
     <div id={id || undefined} className="SidebarBox ChildMarginClear">
       {header && <div className="SidebarBox--header">{header}</div>}
       {actions && <div className="SidebarBox--actions">{actions}</div>}
-      {children}
+      <div className="ChildMarginClear">{children}</div>
     </div>
   );
 };
