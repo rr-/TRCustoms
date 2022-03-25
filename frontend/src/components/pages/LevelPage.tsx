@@ -17,7 +17,6 @@ import { InfoMessageType } from "src/components/InfoMessage";
 import { LevelRating } from "src/components/LevelRating";
 import { Loader } from "src/components/Loader";
 import { Markdown } from "src/components/Markdown";
-import { MediumThumbnail } from "src/components/MediumThumbnail";
 import { MediumThumbnails } from "src/components/MediumThumbnails";
 import { PermissionGuard } from "src/components/PermissionGuard";
 import { PushButton } from "src/components/PushButton";
@@ -115,9 +114,10 @@ const LevelPage = () => {
           header={
             <div className="LevelPage--cover">
               {level.cover ? (
-                <MediumThumbnail
+                <MediumThumbnails
                   displayMode={DisplayMode.Cover}
-                  file={level.cover}
+                  files={[level.cover]}
+                  links={[]}
                 />
               ) : null}
             </div>
