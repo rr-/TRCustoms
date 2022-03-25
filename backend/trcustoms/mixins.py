@@ -67,16 +67,28 @@ class MultiSerializerMixin:
         return super().get_serializer_class()
 
 
-class AuditLogModelWatcherMixin:
+class AuditLogModelWatcherCreateMixin:
     def perform_create(self, serializer: serializers.Serializer) -> None:
         super().perform_create(serializer)
         track_model_creation(serializer.instance, request=self.request)
 
+
+class AuditLogModelWatcherUpdateMixin:
     def perform_update(self, serializer: serializers.Serializer) -> None:
         instance = self.get_object()
         with track_model_update(instance, request=self.request):
             super().perform_update(serializer)
 
+
+class AuditLogModelWatcherDestroyMixin:
     def perform_destroy(self, instance) -> None:
         track_model_deletion(instance, request=self.request)
         super().perform_destroy(instance)
+
+
+class AuditLogModelWatcherMixin(
+    AuditLogModelWatcherCreateMixin,
+    AuditLogModelWatcherUpdateMixin,
+    AuditLogModelWatcherDestroyMixin,
+):
+    pass
