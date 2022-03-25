@@ -1,5 +1,4 @@
 import "./ReviewForm.css";
-import { InformationCircleIcon } from "@heroicons/react/outline";
 import { AxiosError } from "axios";
 import axios from "axios";
 import { Field } from "formik";
@@ -14,6 +13,8 @@ import { FormGrid } from "src/components/FormGrid";
 import { FormGridType } from "src/components/FormGrid";
 import { FormGridButtons } from "src/components/FormGrid";
 import { FormGridFieldSet } from "src/components/FormGrid";
+import { InfoMessage } from "src/components/InfoMessage";
+import { InfoMessageType } from "src/components/InfoMessage";
 import { Loader } from "src/components/Loader";
 import { BaseFormField } from "src/components/formfields/BaseFormField";
 import { TextAreaFormField } from "src/components/formfields/TextAreaFormField";
@@ -202,6 +203,13 @@ const ReviewForm = ({ level, review, onGoBack, onSubmit }: ReviewFormProps) => {
           <Form className="ReviewForm">
             <FormGrid gridType={FormGridType.Column}>
               <FormGridFieldSet title="Review">
+                <InfoMessage type={InfoMessageType.Info}>
+                  Remember to stay respectful and constructive as it is
+                  appreciated.
+                  <br />
+                  Use of excessive profanity may cause the review to be removed.
+                </InfoMessage>
+
                 <TextAreaFormField
                   validate={validateRequired}
                   required={true}
@@ -211,11 +219,10 @@ const ReviewForm = ({ level, review, onGoBack, onSubmit }: ReviewFormProps) => {
               </FormGridFieldSet>
 
               <FormGridFieldSet title="Questionnaire">
-                <p className="ReviewForm--questionnaireDisclaimer">
-                  <InformationCircleIcon className="icon" /> The results of this
-                  questionnaire will aggregate a hidden score that contributes
-                  to the average rating.
-                </p>
+                <InfoMessage type={InfoMessageType.Info}>
+                  The results of this questionnaire will aggregate a hidden
+                  score that contributes to the average rating.
+                </InfoMessage>
 
                 {config.review_questions.map((templateQuestion) => (
                   <ReviewQuestionFormField
