@@ -3,6 +3,7 @@ import { DownloadIcon } from "@heroicons/react/outline";
 import { GlobeAltIcon } from "@heroicons/react/outline";
 import { PencilIcon } from "@heroicons/react/outline";
 import { AnnotationIcon } from "@heroicons/react/outline";
+import { sortBy } from "lodash";
 import { useEffect } from "react";
 import { useContext } from "react";
 import { Fragment } from "react";
@@ -87,7 +88,10 @@ const LevelPage = () => {
   };
 
   const level = result.data;
-  const downloadableFiles = level.files.filter((file) => !!file.url);
+  const downloadableFiles = sortBy(
+    level.files.filter((file) => !!file.url),
+    (file) => -file.version
+  );
   const mainLink =
     level.external_links.filter(
       (link) => link.link_type === ExternalLinkType.Main
