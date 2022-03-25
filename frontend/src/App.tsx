@@ -18,6 +18,7 @@ import { LevelReviewPage } from "src/components/pages/LevelReviewPage";
 import { LevelUploadPage } from "src/components/pages/LevelUploadPage";
 import { LoginPage } from "src/components/pages/LoginPage";
 import { LogoutPage } from "src/components/pages/LogoutPage";
+import { ModerationGuidelinesPage } from "src/components/pages/ModerationGuidelinesPage";
 import { ModerationPage } from "src/components/pages/ModerationPage";
 import { MyLevelsPage } from "src/components/pages/MyLevelsPage";
 import { NewsCreatePage } from "src/components/pages/NewsCreatePage";
@@ -47,6 +48,10 @@ function App() {
             <Routes>
               <Route path="/" element={<HomePage />} />
               <Route path="/mod" element={<ModerationPage />} />
+              <Route
+                path="/mod/how-to"
+                element={<ModerationGuidelinesPage />}
+              />
               <Route path="/levels/upload" element={<LevelUploadPage />} />
               <Route path="/levels" element={<LevelListPage />} />
               <Route path="/my-levels" element={<MyLevelsPage />} />
