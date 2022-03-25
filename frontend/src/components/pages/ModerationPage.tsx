@@ -61,9 +61,14 @@ const ModerationPageView = () => {
         <div className="ModerationPage--sidebar">
           <SidebarBox
             actions={
-              <PushButton to={"/users"} disableTimeout={true}>
-                User list
-              </PushButton>
+              <>
+                <PushButton to={"/mod/how-to"} disableTimeout={true}>
+                  Moderating guidelines
+                </PushButton>
+                <PushButton to={"/users"} disableTimeout={true}>
+                  User list
+                </PushButton>
+              </>
             }
           >
             <AuditLogSearch
