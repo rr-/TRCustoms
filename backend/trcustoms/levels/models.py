@@ -175,6 +175,9 @@ class FeaturedLevel(DatesInfo):
         LEVEL_OF_THE_DAY = ("lod", "Level of the day")
         BEST_IN_GENRE = ("big", "Best in genre")
 
+    class Meta:
+        default_permissions = []
+
     level = models.ForeignKey(
         Level, on_delete=models.CASCADE, related_name="+"
     )
