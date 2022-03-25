@@ -19,6 +19,9 @@ class Country(models.Model):
     name = models.CharField(max_length=64)
     code = models.CharField(max_length=64)
 
+    class Meta:
+        default_permissions = []
+
 
 class RatingClass(models.Model):
     class Target(models.TextChoices):
