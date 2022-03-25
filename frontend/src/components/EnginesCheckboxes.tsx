@@ -1,4 +1,3 @@
-import { sortBy } from "lodash";
 import { useContext } from "react";
 import { Checkbox } from "src/components/Checkbox";
 import { FilterCheckboxesHeader } from "src/components/FilterCheckboxesHeader";
@@ -16,7 +15,7 @@ const EnginesCheckboxes = ({
   onSearchQueryChange,
 }: EnginesCheckboxesProps) => {
   const { config } = useContext(ConfigContext);
-  const visibleEngines = sortBy(config.engines, (engine) => engine.name);
+  const visibleEngines = config.engines;
 
   const handleChange = (
     event: React.ChangeEvent<HTMLInputElement>,

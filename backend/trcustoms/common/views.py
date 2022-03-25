@@ -35,7 +35,7 @@ class ConfigViewSet(viewsets.ViewSet):
         countries = Country.objects.order_by("name")
         level_tags = Tag.objects.with_counts()
         level_genres = Genre.objects.with_counts()
-        level_engines = Engine.objects.with_counts()
+        level_engines = Engine.objects.with_counts().order_by("position")
         level_difficulties = LevelDifficulty.objects.all()
         level_durations = LevelDuration.objects.all()
         review_questions = ReviewTemplateQuestion.objects.all()
