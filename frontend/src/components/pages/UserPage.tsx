@@ -163,11 +163,15 @@ const UserPageView = ({ userId }: UserPageViewProps) => {
           <DefinitionList>
             <DefinitionItemGroup>
               <DefinitionItem term="Joined">
-                {formatDate(user.date_joined) || "unknown"}
+                {formatDate(user.date_joined) || "Unknown"}
               </DefinitionItem>
 
               <DefinitionItem term="Last seen">
-                {formatDate(user.last_login) || "never"}
+                {formatDate(user.last_login) || "Never"}
+              </DefinitionItem>
+
+              <DefinitionItem term="Country">
+                {user.country?.name || "Unknown"}
               </DefinitionItem>
             </DefinitionItemGroup>
 
