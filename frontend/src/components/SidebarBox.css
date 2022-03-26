@@ -10,6 +10,9 @@
   flex-direction: column;
   gap: 0.5rem;
 }
+.SidebarBox--actions:empty {
+  display: none;
+}
 .SidebarBox--actions > .PushButton {
   flex-grow: 1;
 }
