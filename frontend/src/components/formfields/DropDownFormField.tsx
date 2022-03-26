@@ -52,7 +52,7 @@ const DropDownFormField = ({
         placeholder="Select a value…"
         multiple={multiple}
         className="DropDownFormField--select Input"
-        defaultValue={"-"}
+        defaultValue={""}
         onChange={handleChange}
       >
         {!multiple && (
