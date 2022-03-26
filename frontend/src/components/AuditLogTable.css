@@ -15,7 +15,11 @@
 
 .AuditLogTable--created,
 .AuditLogTable--author,
-.AuditLogTable--object,
+.AuditLogTable--object {
+  white-space: nowrap;
+}
+
 .AuditLogTable--requiresAction {
+  float: right;
   white-space: nowrap;
 }
