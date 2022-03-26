@@ -62,10 +62,9 @@ const ModerationGuidelinesPage = () => {
 
       <SectionHeader>Reviews</SectionHeader>
       <p>
-        Reviews should only be edited to remove profanity directed at an author
-        or reviewer in the text. Simply replace the text in question with . If
-        the review is a troll review, contact the site admin so that the review
-        can be removed.
+        If the review contains profanity directed at an author or reviewer, or
+        if it is a troll review, contact the site admin so that the review can
+        be removed.
       </p>
 
       <SectionHeader>Tags</SectionHeader>
