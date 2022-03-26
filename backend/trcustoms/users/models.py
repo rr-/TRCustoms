@@ -24,16 +24,17 @@ class PasswordResetToken(Token):
 
 
 class UserPermission(Enum):
+    DELETE_LEVELS = "delete_levels"
     EDIT_LEVELS = "edit_levels"
+    EDIT_NEWS = "edit_news"
     EDIT_REVIEWS = "edit_reviews"
     EDIT_TAGS = "edit_tags"
-    EDIT_NEWS = "edit_news"
     EDIT_USERS = "edit_users"
     LIST_USERS = "list_users"
-    VIEW_USERS = "view_users"
     REVIEW_AUDIT_LOGS = "review_audit_logs"
     REVIEW_LEVELS = "review_levels"
     UPLOAD_LEVELS = "upload_levels"
+    VIEW_USERS = "view_users"
 
 
 class UserManager(BaseUserManager):

@@ -17,6 +17,7 @@ enum UserPermission {
   uploadLevels = "upload_levels",
   editLevels = "edit_levels",
   reviewLevels = "review_levels",
+  deleteLevels = "delete_levels",
   editReviews = "edit_reviews",
   editNews = "edit_news",
   reviewAuditLogs = "review_audit_logs",
