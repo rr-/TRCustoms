@@ -25,6 +25,7 @@ class PasswordResetToken(Token):
 
 class UserPermission(Enum):
     DELETE_LEVELS = "delete_levels"
+    DELETE_REVIEWS = "delete_reviews"
     EDIT_LEVELS = "edit_levels"
     EDIT_NEWS = "edit_news"
     EDIT_REVIEWS = "edit_reviews"

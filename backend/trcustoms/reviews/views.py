@@ -29,6 +29,7 @@ class LevelReviewViewSet(
     mixins.RetrieveModelMixin,
     mixins.CreateModelMixin,
     mixins.UpdateModelMixin,
+    mixins.DestroyModelMixin,
     viewsets.GenericViewSet,
 ):
     permission_classes = [AllowNone]
@@ -36,6 +37,7 @@ class LevelReviewViewSet(
         "retrieve": [AllowAny],
         "list": [AllowAny],
         "create": [IsAuthenticated],
+        "destroy": [HasPermission(UserPermission.DELETE_REVIEWS)],
         "update": [
             HasPermission(UserPermission.EDIT_REVIEWS) | IsAccessingOwnResource
         ],
