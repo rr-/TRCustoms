@@ -23,31 +23,6 @@
   margin-top: 0;
 }
 
-.LevelPage--cover .MediumThumbnails {
-  grid-template-columns: 1fr;
-}
-.LevelPage .MediumThumbnail--thumb {
-  width: 100%;
-}
-
-.LevelPage--fileTableTerm:after {
-  content: unset;
-}
-
-.LevelPage--basicInfoList {
-  display: inline;
-  margin: 0;
-  padding: 0;
-}
-.LevelPage--basicInfoListItem {
-  display: inline;
-  padding: 0;
-  margin: 0;
-}
-.LevelPage--basicInfoListItem:not(:last-child):after {
-  content: ", ";
-}
-
 .LevelPage--headerWrapper {
   margin: 0;
   font-size: 2.5rem;
