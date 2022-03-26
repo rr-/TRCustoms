@@ -51,7 +51,7 @@ const LevelEditPage = () => {
       require={UserPermission.editLevels}
       owningUserIds={owningUserIds}
     >
-      <div id="LevelEditPage">
+      <div className="LevelEditPage">
         <h1>Editing {level.name}</h1>
 
         <LevelForm onGoBack={handleGoBack} level={level} />

@@ -33,7 +33,7 @@ const UserListPageView = () => {
   }, [setTitle]);
 
   return (
-    <div id="UserListPage">
+    <div className="UserListPage">
       <QueryPersister
         serializeSearchQuery={serializeSearchQuery}
         deserializeSearchQuery={deserializeSearchQuery}
@@ -45,12 +45,10 @@ const UserListPageView = () => {
         onSearchQueryChange={setSearchQuery}
       />
 
-      <div id="UserListPage--results">
-        <UsersTable
-          searchQuery={searchQuery}
-          onSearchQueryChange={setSearchQuery}
-        />
-      </div>
+      <UsersTable
+        searchQuery={searchQuery}
+        onSearchQueryChange={setSearchQuery}
+      />
     </div>
   );
 };

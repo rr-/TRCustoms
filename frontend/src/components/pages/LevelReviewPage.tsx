@@ -58,7 +58,7 @@ const LevelReviewPage = () => {
   const review = reviewResult.data;
 
   return (
-    <div id="LevelReviewPage">
+    <div className="LevelReviewPage">
       <h1>Reviewing {level.name}</h1>
 
       <ReviewForm onGoBack={handleGoBack} review={review} level={level} />

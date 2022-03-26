@@ -44,7 +44,7 @@ const NewsEditPageView = ({ newsId }: NewsEditPageViewProps) => {
   const news = result.data;
 
   return (
-    <div id="NewsEditPage">
+    <div className="NewsEditPage">
       <h1>Editing {news.subject || "news"}</h1>
       <NewsForm onGoBack={handleGoBack} news={news} />
     </div>

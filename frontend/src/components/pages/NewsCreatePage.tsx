@@ -18,9 +18,8 @@ const NewsCreatePageView = () => {
   useEffect(() => setTitle("News"), [setTitle]);
 
   return (
-    <div id="NewsCreatePage">
+    <div className="NewsCreatePage">
       <h1>Creating news</h1>
-
       <NewsForm onGoBack={handleGoBack} news={null} />
     </div>
   );

@@ -55,7 +55,7 @@ const MyLevelsPage = () => {
     });
 
   return (
-    <div id="MyLevelsPage">
+    <div className="MyLevelsPage">
       <QueryPersister
         serializeSearchQuery={serializeSearchQuery}
         deserializeSearchQuery={deserializeSearchQuery}
@@ -63,13 +63,11 @@ const MyLevelsPage = () => {
         setSearchQuery={setSearchQuery}
       />
 
-      <div id="MyLevelsPage--results">
-        <LevelsTable
-          showStatus={true}
-          searchQuery={searchQuery}
-          onSearchQueryChange={setSearchQuery}
-        />
-      </div>
+      <LevelsTable
+        showStatus={true}
+        searchQuery={searchQuery}
+        onSearchQueryChange={setSearchQuery}
+      />
     </div>
   );
 };

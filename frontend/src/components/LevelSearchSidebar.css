@@ -1,0 +1,24 @@
+.LevelSearchSidebar--sidebarHeader {
+  display: flex;
+  justify-content: space-between;
+}
+.LevelSearchSidebar--sidebarHeader .PushButton {
+  font-size: 1rem;
+  font-weight: normal;
+}
+
+.LevelSearchSidebar--sidebarSection {
+  margin-bottom: 0.5rem;
+}
+
+.LevelSearchSidebar--sidebarSection .TextFormField--input {
+  width: 100%;
+}
+
+.LevelSearchSidebar--searchBar {
+  display: flex;
+  align-items: flex-end;
+}
+.LevelSearchSidebar--searchBar .TextFormField--input {
+  min-width: 0;
+}
