@@ -114,14 +114,15 @@ const formatDateTime = (input: string | null): string => {
     return EMPTY_INPUT_PLACEHOLDER;
   }
   const date = new Date(input);
-  return date.toLocaleString("en-GB", {
-    day: "numeric",
-    year: "numeric",
-    month: "short",
-    hour: "numeric",
-    minute: "numeric",
-    second: "numeric",
-  });
+  return date
+    .toLocaleString("en-GB", {
+      day: "numeric",
+      year: "numeric",
+      month: "short",
+      hour: "numeric",
+      minute: "numeric",
+    })
+    .replace(/,/, "");
 };
 
 const formatFileSize = (input: number | null): string => {

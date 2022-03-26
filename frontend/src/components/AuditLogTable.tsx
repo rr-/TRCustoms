@@ -14,7 +14,7 @@ import type { AuditLogListing } from "src/services/AuditLogService";
 import { AuditLogObjectType } from "src/services/AuditLogService";
 import type { AuditLogSearchResult } from "src/services/AuditLogService";
 import type { AuditLogSearchQuery } from "src/services/AuditLogService";
-import { formatDate } from "src/utils";
+import { formatDateTime } from "src/utils";
 import { EMPTY_INPUT_PLACEHOLDER } from "src/utils";
 
 interface AuditLogTableProps {
@@ -141,7 +141,7 @@ const AuditLogTable = ({
     {
       name: "created",
       label: "Created",
-      itemElement: ({ item }) => formatDate(item.created),
+      itemElement: ({ item }) => formatDateTime(item.created),
     },
     {
       name: "author",
