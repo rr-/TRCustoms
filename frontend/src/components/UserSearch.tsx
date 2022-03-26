@@ -58,8 +58,8 @@ const UserSearch = ({ searchQuery, onSearchQueryChange }: UserSearchProps) => {
       onSubmit={handleSubmit}
     >
       {({ submitForm, resetForm }) => (
-        <Form id="UserListPage--container">
-          <SearchBar id="UserListPage--search">
+        <Form>
+          <SearchBar>
             <TextFormField label="Search" name="search" />
 
             <div className="FormField">

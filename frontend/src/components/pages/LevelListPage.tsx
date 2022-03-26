@@ -2,13 +2,12 @@ import "./LevelListPage.css";
 import { useEffect } from "react";
 import { useState } from "react";
 import { useContext } from "react";
-import { defaultSearchQuery } from "src/components/LevelSearch";
-import { LevelSearch } from "src/components/LevelSearch";
+import { defaultSearchQuery } from "src/components/LevelSearchSidebar";
+import { LevelSearchSidebar } from "src/components/LevelSearchSidebar";
 import { LevelsTable } from "src/components/LevelsTable";
 import { QueryPersister } from "src/components/QueryPersister";
 import { deserializeGenericSearchQuery } from "src/components/QueryPersister";
 import { serializeGenericSearchQuery } from "src/components/QueryPersister";
-import { SidebarBox } from "src/components/SidebarBox";
 import { TitleContext } from "src/contexts/TitleContext";
 import type { LevelSearchQuery } from "src/services/LevelService";
 import { filterFalsyObjectValues } from "src/utils";
@@ -60,12 +59,10 @@ const LevelListPage = () => {
         setSearchQuery={setSearchQuery}
       />
       <div className="LevelListPage--sidebar">
-        <SidebarBox>
-          <LevelSearch
-            searchQuery={searchQuery}
-            onSearchQueryChange={setSearchQuery}
-          />
-        </SidebarBox>
+        <LevelSearchSidebar
+          searchQuery={searchQuery}
+          onSearchQueryChange={setSearchQuery}
+        />
       </div>
 
       <div className="LevelListPage--results">

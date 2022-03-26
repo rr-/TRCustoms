@@ -71,7 +71,7 @@ const LevelReviewEditPage = () => {
       require={UserPermission.editReviews}
       owningUserIds={[review.author.id]}
     >
-      <div id="LevelReviewEditPage">
+      <div className="LevelReviewEditPage">
         <h1>Reviewing {level.name}</h1>
 
         <ReviewForm onGoBack={handleGoBack} review={review} level={level} />

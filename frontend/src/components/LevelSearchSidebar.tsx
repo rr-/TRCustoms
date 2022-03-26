@@ -1,4 +1,4 @@
-import "./LevelSearch.css";
+import "./LevelSearchSidebar.css";
 import { Formik } from "formik";
 import { Form } from "formik";
 import { useEffect } from "react";
@@ -9,6 +9,7 @@ import { GenresCheckboxes } from "src/components/GenresCheckboxes";
 import { PermissionGuard } from "src/components/PermissionGuard";
 import { PushButton } from "src/components/PushButton";
 import { SectionHeader } from "src/components/Section";
+import { SidebarBox } from "src/components/SidebarBox";
 import { TagsCheckboxes } from "src/components/TagsCheckboxes";
 import { CheckboxFormField } from "src/components/formfields/CheckboxFormField";
 import { DropDownFormField } from "src/components/formfields/DropDownFormField";
@@ -58,7 +59,7 @@ interface LevelSearchProps {
   onSearchQueryChange: (searchQuery: LevelSearchQuery) => void;
 }
 
-const LevelSearch = ({
+const LevelSearchSidebar = ({
   searchQuery,
   onSearchQueryChange,
 }: LevelSearchProps) => {
@@ -94,81 +95,83 @@ const LevelSearch = ({
   );
 
   return (
-    <Formik
-      enableReinitialize={true}
-      initialValues={formikValues}
-      onSubmit={handleSubmit}
-    >
-      {({ submitForm, resetForm }) => (
-        <Form className="LevelSearch ChildMarginClear">
-          <SectionHeader className="LevelSearch--sidebarHeader">
-            Search filter
-            <PushButton
-              isPlain={true}
-              disableTimeout={true}
-              onClick={handleClear}
-            >
-              (reset)
-            </PushButton>
-          </SectionHeader>
+    <SidebarBox>
+      <Formik
+        enableReinitialize={true}
+        initialValues={formikValues}
+        onSubmit={handleSubmit}
+      >
+        {({ submitForm, resetForm }) => (
+          <Form className="LevelSearchSidebar ChildMarginClear">
+            <SectionHeader className="LevelSearchSidebar--sidebarHeader">
+              Search filter
+              <PushButton
+                isPlain={true}
+                disableTimeout={true}
+                onClick={handleClear}
+              >
+                (reset)
+              </PushButton>
+            </SectionHeader>
 
-          <PermissionGuard require={UserPermission.editLevels}>
-            <div className="LevelSearch--sidebarSection">
-              <CheckboxFormField
+            <PermissionGuard require={UserPermission.editLevels}>
+              <div className="LevelSearchSidebar--sidebarSection">
+                <CheckboxFormField
+                  onChange={() => {
+                    submitForm();
+                  }}
+                  label="Approved"
+                  name="isApproved"
+                />
+              </div>
+            </PermissionGuard>
+
+            <div className="LevelSearchSidebar--sidebarSection">
+              <DropDownFormField
                 onChange={() => {
                   submitForm();
                 }}
-                label="Approved"
-                name="isApproved"
+                label="Sort"
+                name="sort"
+                options={sortOptions}
               />
             </div>
-          </PermissionGuard>
 
-          <div className="LevelSearch--sidebarSection">
-            <DropDownFormField
-              onChange={() => {
-                submitForm();
-              }}
-              label="Sort"
-              name="sort"
-              options={sortOptions}
-            />
-          </div>
-
-          <div className="LevelSearch--sidebarSection LevelSearch--searchBar">
-            <TextFormField label="Search level/author" name="search" />
-            <div className="FormField">
-              <SubmitButton
-                onClick={submitForm}
-                icon={<IconSearch />}
-              ></SubmitButton>
+            <div className="LevelSearchSidebar--sidebarSection LevelSearchSidebar--searchBar">
+              <TextFormField label="Search level/author" name="search" />
+              <div className="FormField">
+                <SubmitButton
+                  onClick={submitForm}
+                  icon={<IconSearch />}
+                ></SubmitButton>
+              </div>
             </div>
-          </div>
 
-          <div className="LevelSearch--sidebarSection">
-            <EnginesCheckboxes
-              searchQuery={searchQuery}
-              onSearchQueryChange={onSearchQueryChange}
-            />
-          </div>
+            <div className="LevelSearchSidebar--sidebarSection">
+              <EnginesCheckboxes
+                searchQuery={searchQuery}
+                onSearchQueryChange={onSearchQueryChange}
+              />
+            </div>
 
-          <div className="LevelSearch--sidebarSection">
-            <GenresCheckboxes
-              searchQuery={searchQuery}
-              onSearchQueryChange={onSearchQueryChange}
-            />
-          </div>
+            <div className="LevelSearchSidebar--sidebarSection">
+              <GenresCheckboxes
+                searchQuery={searchQuery}
+                onSearchQueryChange={onSearchQueryChange}
+              />
+            </div>
 
-          <div className="LevelSearch--sidebarSection">
-            <TagsCheckboxes
-              searchQuery={searchQuery}
-              onSearchQueryChange={onSearchQueryChange}
-            />
-          </div>
-        </Form>
-      )}
-    </Formik>
+            <div className="LevelSearchSidebar--sidebarSection">
+              <TagsCheckboxes
+                searchQuery={searchQuery}
+                onSearchQueryChange={onSearchQueryChange}
+              />
+            </div>
+          </Form>
+        )}
+      </Formik>
+    </SidebarBox>
   );
 };
 
-export { defaultSearchQuery, LevelSearch };
+export { defaultSearchQuery, LevelSearchSidebar };
