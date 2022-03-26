@@ -1,58 +1,32 @@
 import "./LevelPage.css";
-import { DownloadIcon } from "@heroicons/react/outline";
-import { GlobeAltIcon } from "@heroicons/react/outline";
-import { PencilIcon } from "@heroicons/react/outline";
-import { AnnotationIcon } from "@heroicons/react/outline";
 import { useEffect } from "react";
 import { useContext } from "react";
-import { Fragment } from "react";
 import { useState } from "react";
 import { useQuery } from "react-query";
-import { useNavigate } from "react-router-dom";
 import { useParams } from "react-router-dom";
-import { DefinitionItemGroup } from "src/components/DefinitionList";
-import { DefinitionItem } from "src/components/DefinitionList";
-import { DefinitionList } from "src/components/DefinitionList";
 import { InfoMessage } from "src/components/InfoMessage";
 import { InfoMessageType } from "src/components/InfoMessage";
-import { LevelRating } from "src/components/LevelRating";
+import { LevelSidebar } from "src/components/LevelSidebar";
 import { Loader } from "src/components/Loader";
 import { Markdown } from "src/components/Markdown";
 import { MediumThumbnails } from "src/components/MediumThumbnails";
-import { PermissionGuard } from "src/components/PermissionGuard";
-import { PushButton } from "src/components/PushButton";
 import { ReviewsList } from "src/components/ReviewsList";
 import { Section } from "src/components/Section";
 import { SectionHeader } from "src/components/Section";
-import { SidebarBox } from "src/components/SidebarBox";
-import { LevelApprovePushButton } from "src/components/buttons/LevelApprovePushButton";
-import { LevelDeletePushButton } from "src/components/buttons/LevelDeletePushButton";
-import { LevelRejectPushButton } from "src/components/buttons/LevelRejectPushButton";
-import { EngineLink } from "src/components/links/EngineLink";
-import { GenreLink } from "src/components/links/GenreLink";
-import { TagLink } from "src/components/links/TagLink";
-import { UserLink } from "src/components/links/UserLink";
 import { DISABLE_PAGING } from "src/constants";
 import { TitleContext } from "src/contexts/TitleContext";
-import { UserContext } from "src/contexts/UserContext";
 import type { UploadedFile } from "src/services/FileService";
 import { ExternalLinkType } from "src/services/LevelService";
 import type { LevelDetails } from "src/services/LevelService";
 import { LevelService } from "src/services/LevelService";
 import type { ReviewSearchQuery } from "src/services/ReviewService";
-import { UserPermission } from "src/services/UserService";
 import { DisplayMode } from "src/types";
-import { formatFileSize } from "src/utils";
-import { formatDate } from "src/utils";
-import { EMPTY_INPUT_PLACEHOLDER } from "src/utils";
 
 interface LevelPageParams {
   levelId: string;
 }
 
 const LevelPage = () => {
-  const navigate = useNavigate();
-  const { user } = useContext(UserContext);
   const { setTitle } = useContext(TitleContext);
   const { levelId } = (useParams() as unknown) as LevelPageParams;
   const [reviewCount, setReviewCount] = useState<number | undefined>();
@@ -82,27 +56,11 @@ const LevelPage = () => {
     return <Loader />;
   }
 
-  const handleReviewCountClick = () => {
-    document
-      .getElementsByClassName("ReviewsList")[0]
-      .scrollIntoView({ behavior: "smooth" });
-  };
-
   const level = result.data;
-  const mainLink =
-    level.external_links.filter(
-      (link) => link.link_type === ExternalLinkType.Main
-    )[0]?.url || null;
+
   const showcaseLinks = level.external_links
     .filter((link) => link.link_type === ExternalLinkType.Showcase)
     .map((link) => link.url);
-
-  const handleDelete = () => {
-    navigate("/");
-  };
-
-  const showFileGoneAlert = () =>
-    alert("This file is no longer available on our website.");
 
   return (
     <div className="LevelPage">
@@ -117,226 +75,7 @@ const LevelPage = () => {
       </header>
 
       <aside className="LevelPage--sidebar">
-        <SidebarBox
-          header={
-            <div className="LevelPage--cover">
-              {level.cover ? (
-                <MediumThumbnails
-                  displayMode={DisplayMode.Cover}
-                  files={[level.cover]}
-                  links={[]}
-                />
-              ) : null}
-            </div>
-          }
-          actions={
-            <>
-              {level.last_file?.url && (
-                <PushButton
-                  to={level.last_file.url}
-                  icon={<DownloadIcon className="icon" />}
-                >
-                  Download ({formatFileSize(level.last_file.size)})
-                </PushButton>
-              )}
-              {mainLink && (
-                <PushButton
-                  to={mainLink}
-                  icon={<GlobeAltIcon className="icon" />}
-                >
-                  Website
-                </PushButton>
-              )}
-              <PermissionGuard
-                require={UserPermission.editLevels}
-                owningUsers={[
-                  ...level.authors,
-                  ...(level.uploader ? [level.uploader] : []),
-                ]}
-              >
-                <PushButton
-                  icon={<PencilIcon className="icon" />}
-                  to={`/levels/${levelId}/edit`}
-                >
-                  Edit
-                </PushButton>
-              </PermissionGuard>
-
-              <PermissionGuard require={UserPermission.editLevels}>
-                {(level.is_approved || !level.rejection_reason) && (
-                  <LevelRejectPushButton level={level} />
-                )}
-                {!level.is_approved && <LevelApprovePushButton level={level} />}
-              </PermissionGuard>
-
-              <PermissionGuard require={UserPermission.deleteLevels}>
-                <LevelDeletePushButton
-                  level={level}
-                  onComplete={handleDelete}
-                />
-              </PermissionGuard>
-
-              {level.authors.every((author) => author.id !== user?.id) && (
-                <PermissionGuard require={UserPermission.reviewLevels}>
-                  <PushButton
-                    icon={<AnnotationIcon className="icon" />}
-                    to={`/levels/${levelId}/review`}
-                  >
-                    Review
-                  </PushButton>
-                </PermissionGuard>
-              )}
-            </>
-          }
-        >
-          <DefinitionList>
-            <DefinitionItemGroup>
-              <DefinitionItem term="Author(s)">
-                {level.authors.length ? (
-                  <ul className="LevelPage--basicInfoList">
-                    {level.authors.map((author) => (
-                      <li
-                        key={author.id}
-                        className="LevelPage--basicInfoListItem"
-                      >
-                        <UserLink user={author} />
-                      </li>
-                    ))}
-                  </ul>
-                ) : (
-                  EMPTY_INPUT_PLACEHOLDER
-                )}
-              </DefinitionItem>
-
-              <DefinitionItem term="Rating">
-                <LevelRating ratingClass={level.rating_class} />
-              </DefinitionItem>
-
-              <DefinitionItem term="Reviews">
-                {reviewCount !== undefined ? (
-                  <PushButton
-                    isPlain={true}
-                    disableTimeout={true}
-                    onClick={handleReviewCountClick}
-                  >
-                    {reviewCount}
-                  </PushButton>
-                ) : (
-                  <Loader inline={true} />
-                )}
-              </DefinitionItem>
-            </DefinitionItemGroup>
-
-            <DefinitionItemGroup>
-              <DefinitionItem term="Release date">
-                {formatDate(level.created) || "unknown"}
-              </DefinitionItem>
-
-              <DefinitionItem term="Last updated">
-                {formatDate(level.last_updated) || "never"}
-              </DefinitionItem>
-
-              <DefinitionItem term="Downloads">
-                {level.download_count}
-              </DefinitionItem>
-
-              {level.trle_id && (
-                <DefinitionItem term="Links">
-                  <a
-                    href={`https://www.trle.net/sc/levelfeatures.php?lid=${level.trle_id}`}
-                  >
-                    TRLE.net
-                  </a>
-                </DefinitionItem>
-              )}
-            </DefinitionItemGroup>
-
-            <DefinitionItemGroup>
-              <DefinitionItem term="Engine">
-                {level.engine ? (
-                  <EngineLink engine={level.engine} />
-                ) : (
-                  EMPTY_INPUT_PLACEHOLDER
-                )}
-              </DefinitionItem>
-
-              <DefinitionItem term="Difficulty">
-                {level.difficulty?.name || EMPTY_INPUT_PLACEHOLDER}
-              </DefinitionItem>
-
-              <DefinitionItem term="Duration">
-                {level.duration?.name || EMPTY_INPUT_PLACEHOLDER}
-              </DefinitionItem>
-
-              <DefinitionItem term="Genres">
-                {level.genres.length ? (
-                  <ul className="LevelPage--basicInfoList">
-                    {level.genres.map((genre) => (
-                      <li
-                        key={genre.id}
-                        className="LevelPage--basicInfoListItem"
-                      >
-                        <GenreLink genre={genre} />
-                      </li>
-                    ))}
-                  </ul>
-                ) : (
-                  EMPTY_INPUT_PLACEHOLDER
-                )}
-              </DefinitionItem>
-
-              <DefinitionItem term="Tags">
-                {level.tags.length ? (
-                  <ul className="LevelPage--basicInfoList">
-                    {level.tags.map((tag) => (
-                      <li key={tag.id} className="LevelPage--basicInfoListItem">
-                        <TagLink tag={tag} />
-                      </li>
-                    ))}
-                  </ul>
-                ) : (
-                  EMPTY_INPUT_PLACEHOLDER
-                )}
-              </DefinitionItem>
-            </DefinitionItemGroup>
-
-            <DefinitionItem span={true}>
-              <SectionHeader>Version history</SectionHeader>
-            </DefinitionItem>
-
-            {level.files.length ? (
-              level.files
-                .sort((a, b) => b.version - a.version)
-                .map((file) => (
-                  <DefinitionItem
-                    key={file.id}
-                    term={
-                      <span className="LevelPage--fileTableTerm">
-                        {file.url ? (
-                          <PushButton isPlain={true} to={file.url}>
-                            Version {file.version}
-                          </PushButton>
-                        ) : (
-                          <PushButton
-                            isPlain={true}
-                            onClick={() => showFileGoneAlert()}
-                          >
-                            Version {file.version}
-                          </PushButton>
-                        )}
-                      </span>
-                    }
-                  >
-                    {formatDate(file.created)}
-                  </DefinitionItem>
-                ))
-            ) : (
-              <DefinitionItem span={true}>
-                Downloads for this level are not available.
-              </DefinitionItem>
-            )}
-          </DefinitionList>
-        </SidebarBox>
+        <LevelSidebar level={level} reviewCount={reviewCount} />
       </aside>
 
       <div className="LevelPage--main">
