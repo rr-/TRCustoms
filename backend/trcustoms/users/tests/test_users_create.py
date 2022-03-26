@@ -98,7 +98,12 @@ def test_user_creation(
         "reviewed_level_count": 0,
         "picture": None,
         "country": None,
-        "permissions": ["list_users", "review_levels", "upload_levels"],
+        "permissions": [
+            "list_users",
+            "review_levels",
+            "upload_levels",
+            "view_users",
+        ],
         "trle_author_id": None,
         "trle_reviewer_id": None,
     }
@@ -279,7 +284,12 @@ def test_user_creation_acquiring_trle_account(
         "reviewed_level_count": 0,
         "picture": None,
         "country": None,
-        "permissions": ["list_users", "review_levels", "upload_levels"],
+        "permissions": [
+            "list_users",
+            "review_levels",
+            "upload_levels",
+            "view_users",
+        ],
         "trle_author_id": None,
         "trle_reviewer_id": None,
     }
