@@ -1,7 +1,7 @@
 import "./Pills.css";
-import { XIcon } from "@heroicons/react/outline";
 import { Key } from "react";
 import { PushButton } from "src/components/PushButton";
+import { IconX } from "src/components/icons";
 
 interface PillsProps<TItem> {
   source: TItem[];
@@ -24,7 +24,7 @@ const Pills = <TItem extends Object>({
             <li key={getKey(item)} className="Pills--listItem">
               {getText(item)}{" "}
               <PushButton isPlain={true} onClick={() => onRemove(item)}>
-                <XIcon className="icon" />
+                <IconX />
               </PushButton>
             </li>
           ))}

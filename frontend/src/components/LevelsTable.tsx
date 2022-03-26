@@ -1,12 +1,12 @@
 import "./LevelsTable.css";
-import { ClockIcon } from "@heroicons/react/outline";
-import { BadgeCheckIcon } from "@heroicons/react/outline";
-import { XCircleIcon } from "@heroicons/react/outline";
-import { DownloadIcon } from "@heroicons/react/outline";
 import { Link } from "react-router-dom";
 import { DataList } from "src/components/DataList";
 import { LevelRating } from "src/components/LevelRating";
 import { PushButton } from "src/components/PushButton";
+import { IconClock } from "src/components/icons";
+import { IconBadgeCheck } from "src/components/icons";
+import { IconXCircle } from "src/components/icons";
+import { IconDownload } from "src/components/icons";
 import { LevelAuthorsLink } from "src/components/links/LevelAuthorsLink";
 import { LevelLink } from "src/components/links/LevelLink";
 import type { LevelListing } from "src/services/LevelService";
@@ -50,15 +50,15 @@ const LevelView = ({ showStatus, level }: LevelViewProps) => {
           <>
             {level.is_approved ? (
               <span className="LevelView--statusApproved">
-                <BadgeCheckIcon className="icon" /> Approved!
+                <IconBadgeCheck /> Approved!
               </span>
             ) : level.rejection_reason ? (
               <span className="LevelView--statusRejected">
-                <XCircleIcon className="icon" /> Rejected
+                <IconXCircle /> Rejected
               </span>
             ) : (
               <span className="LevelView--statusPending">
-                <ClockIcon className="icon" /> Pending approval
+                <IconClock /> Pending approval
               </span>
             )}
             <br />
@@ -87,8 +87,7 @@ const LevelView = ({ showStatus, level }: LevelViewProps) => {
               to={level.last_file.url}
             >
               <strong>
-                <DownloadIcon className="icon" />(
-                {formatFileSize(level.last_file?.size)})
+                <IconDownload />({formatFileSize(level.last_file?.size)})
               </strong>
             </PushButton>{" "}
             ({level.download_count} downloads)

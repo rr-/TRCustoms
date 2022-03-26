@@ -7,7 +7,7 @@ import { PushButton } from "src/components/PushButton";
 import { SearchBar } from "src/components/SearchBar";
 import { SubmitButton } from "src/components/formfields/SubmitButton";
 import { TextFormField } from "src/components/formfields/TextFormField";
-import { IconSearch } from "src/components/icons/IconSearch";
+import { IconSearch } from "src/components/icons";
 import type { GenreSearchQuery } from "src/services/GenreService";
 
 const defaultSearchQuery: GenreSearchQuery = {

@@ -9,7 +9,7 @@ import { PushButton } from "src/components/PushButton";
 import { SectionHeader } from "src/components/Section";
 import { SubmitButton } from "src/components/formfields/SubmitButton";
 import { TextFormField } from "src/components/formfields/TextFormField";
-import { IconSearch } from "src/components/icons/IconSearch";
+import { IconSearch } from "src/components/icons";
 import type { AuditLogSearchQuery } from "src/services/AuditLogService";
 
 interface StateSearch {

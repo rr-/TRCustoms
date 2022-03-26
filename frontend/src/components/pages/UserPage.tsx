@@ -1,5 +1,4 @@
 import "./UserPage.css";
-import { PencilIcon } from "@heroicons/react/outline";
 import { useState } from "react";
 import { useEffect } from "react";
 import { useContext } from "react";
@@ -25,6 +24,7 @@ import { UserActivatePushButton } from "src/components/buttons/UserActivatePushB
 import { UserBanPushButton } from "src/components/buttons/UserBanPushButton";
 import { UserDeactivatePushButton } from "src/components/buttons/UserDeactivatePushButton";
 import { UserUnbanPushButton } from "src/components/buttons/UserUnbanPushButton";
+import { IconPencil } from "src/components/icons";
 import { TitleContext } from "src/contexts/TitleContext";
 import type { LevelSearchQuery } from "src/services/LevelService";
 import type { ReviewSearchQuery } from "src/services/ReviewService";
@@ -131,7 +131,7 @@ const UserPageView = ({ userId }: UserPageViewProps) => {
                     owningUsers={[user]}
                   >
                     <PushButton
-                      icon={<PencilIcon className="icon" />}
+                      icon={<IconPencil />}
                       to={`/users/${user.id}/edit`}
                     >
                       Edit profile

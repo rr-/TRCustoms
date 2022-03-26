@@ -2,8 +2,8 @@ import "./ModerationGuidelinesPage.css";
 import { useEffect } from "react";
 import { useContext } from "react";
 import { SectionHeader } from "src/components/Section";
-import { IconCheck } from "src/components/icons/IconCheck";
-import { IconReject } from "src/components/icons/IconReject";
+import { IconCheck } from "src/components/icons";
+import { IconReject } from "src/components/icons";
 import { TitleContext } from "src/contexts/TitleContext";
 
 const ModerationGuidelinesPage = () => {

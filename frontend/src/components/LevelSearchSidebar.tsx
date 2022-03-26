@@ -15,7 +15,7 @@ import { CheckboxFormField } from "src/components/formfields/CheckboxFormField";
 import { DropDownFormField } from "src/components/formfields/DropDownFormField";
 import { SubmitButton } from "src/components/formfields/SubmitButton";
 import { TextFormField } from "src/components/formfields/TextFormField";
-import { IconSearch } from "src/components/icons/IconSearch";
+import { IconSearch } from "src/components/icons";
 import type { LevelSearchQuery } from "src/services/LevelService";
 import { UserPermission } from "src/services/UserService";
 

@@ -1,6 +1,6 @@
-import { CheckIcon } from "@heroicons/react/outline";
 import { useQueryClient } from "react-query";
 import { PushButton } from "src/components/PushButton";
+import { IconCheck } from "src/components/icons";
 import { UserService } from "src/services/UserService";
 import type { UserBasic } from "src/services/UserService";
 import { showAlertOnError } from "src/utils";
@@ -24,10 +24,7 @@ const UserActivatePushButton = ({ user }: UserActivatePushButtonProps) => {
   };
 
   return (
-    <PushButton
-      icon={<CheckIcon className="icon" />}
-      onClick={handleActivateButtonClick}
-    >
+    <PushButton icon={<IconCheck />} onClick={handleActivateButtonClick}>
       Activate
     </PushButton>
   );

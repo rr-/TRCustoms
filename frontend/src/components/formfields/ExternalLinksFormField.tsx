@@ -1,12 +1,12 @@
 import "./ExternalLinksFormField.css";
-import { XIcon } from "@heroicons/react/outline";
-import { ChevronDownIcon } from "@heroicons/react/outline";
-import { ChevronUpIcon } from "@heroicons/react/outline";
 import { useFormikContext } from "formik";
 import { useState } from "react";
 import { PushButton } from "src/components/PushButton";
 import type { GenericFormFieldProps } from "src/components/formfields/BaseFormField";
 import { BaseFormField } from "src/components/formfields/BaseFormField";
+import { IconX } from "src/components/icons";
+import { IconChevronDown } from "src/components/icons";
+import { IconChevronUp } from "src/components/icons";
 import { KEY_RETURN } from "src/constants";
 import { formatLinkType } from "src/services/LevelService";
 import type { ExternalLink } from "src/services/LevelService";
@@ -143,7 +143,7 @@ const ExternalLinksFormField = ({
                   isPlain={true}
                   onClick={() => handleRemoveButtonClick(link)}
                 >
-                  <XIcon className="icon" />
+                  <IconX />
                 </PushButton>
 
                 <PushButton
@@ -152,7 +152,7 @@ const ExternalLinksFormField = ({
                   isPlain={true}
                   onClick={() => handleMoveUpButtonClick(link)}
                 >
-                  <ChevronUpIcon className="icon" />
+                  <IconChevronUp />
                 </PushButton>
 
                 <PushButton
@@ -161,7 +161,7 @@ const ExternalLinksFormField = ({
                   isPlain={true}
                   onClick={() => handleMoveDownButtonClick(link)}
                 >
-                  <ChevronDownIcon className="icon" />
+                  <IconChevronDown />
                 </PushButton>
               </td>
             </tr>
