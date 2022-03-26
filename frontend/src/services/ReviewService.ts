@@ -109,12 +109,17 @@ const create = async (payload: ReviewCreatePayload): Promise<ReviewDetails> => {
   return response.data;
 };
 
+const deleteReview = async (reviewId: number): Promise<void> => {
+  await api.delete(`${API_URL}/reviews/${reviewId}/`);
+};
+
 const ReviewService = {
   searchReviews,
   getReviewById,
   getReviewByAuthorAndLevelIds,
   create,
   update,
+  delete: deleteReview,
 };
 
 export type {

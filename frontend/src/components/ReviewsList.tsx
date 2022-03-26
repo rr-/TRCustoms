@@ -2,8 +2,9 @@ import "./ReviewsList.css";
 import { DataList } from "src/components/DataList";
 import { Markdown } from "src/components/Markdown";
 import { PermissionGuard } from "src/components/PermissionGuard";
-import { PushButton } from "src/components/PushButton";
 import { UserPicture } from "src/components/UserPicture";
+import { ReviewDeletePushButton } from "src/components/buttons/ReviewDeletePushButton";
+import { ReviewEditPushButton } from "src/components/buttons/ReviewEditPushButton";
 import { IconThumbUp } from "src/components/icons";
 import { IconThumbDown } from "src/components/icons";
 import { IconDotsCircleHorizontal } from "src/components/icons";
@@ -86,16 +87,18 @@ const ReviewView = ({ review, showLevels }: ReviewViewProps) => {
           <span>Posted: {formatDate(review.created)}</span>
         </div>
 
-        <PermissionGuard
-          require={UserPermission.editReviews}
-          owningUsers={[review.author]}
-        >
-          <PushButton
-            to={`/levels/${review.level.id}/review/${review.id}/edit`}
+        <div className="Review--buttons">
+          <PermissionGuard
+            require={UserPermission.editReviews}
+            owningUsers={[review.author]}
           >
-            Edit review
-          </PushButton>
-        </PermissionGuard>
+            <ReviewEditPushButton review={review} />
+          </PermissionGuard>
+
+          <PermissionGuard require={UserPermission.deleteReviews}>
+            <ReviewDeletePushButton review={review} />
+          </PermissionGuard>
+        </div>
       </footer>
     </div>
   );

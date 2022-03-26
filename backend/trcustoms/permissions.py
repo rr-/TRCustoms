@@ -57,6 +57,7 @@ def get_permissions(user: User) -> set[UserPermission]:
     if user.is_staff:
         perms |= set(UserPermission) - {
             UserPermission.DELETE_LEVELS,
+            UserPermission.DELETE_REVIEWS,
             UserPermission.EDIT_REVIEWS,
         }
 
