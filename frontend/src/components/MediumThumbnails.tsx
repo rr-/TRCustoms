@@ -28,10 +28,18 @@ const MediumThumbnailModal = ({
   canNavigateRight,
   onClose,
 }: MediumThumbnailModalProps) => {
+  const handleModalClick = (event: React.MouseEvent) => {
+    if (event.target === event.currentTarget) {
+      onClose();
+      event.stopPropagation();
+      event.preventDefault();
+    }
+  };
+
   return (
     <span
       className={`MediumThumbnailModal ${file ? "active" : ""}`}
-      onClick={onClose}
+      onMouseDown={handleModalClick}
     >
       {file && (
         <>
@@ -44,7 +52,11 @@ const MediumThumbnailModal = ({
             <IconChevronLeft />
           </PushButton>
 
-          <img alt="Full resolution" src={file.url} />
+          <img
+            onMouseDown={handleModalClick}
+            alt="Full resolution"
+            src={file.url}
+          />
 
           <PushButton
             className={canNavigateRight ? "visible" : "hidden"}
