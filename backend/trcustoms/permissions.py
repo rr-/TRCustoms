@@ -50,15 +50,22 @@ def get_permissions(user: User) -> set[UserPermission]:
         for perm in UserPermission
         if f"trcustoms.{perm.value}" in user.get_user_permissions()
     }
-    if user.is_staff:
+
+    if user.is_superuser:
         perms |= set(UserPermission)
+
+    if user.is_staff:
+        perms |= set(UserPermission) - {UserPermission.DELETE_LEVELS}
+
     if not user.is_anonymous:
         perms |= {
             UserPermission.LIST_USERS,  # autocomplete
             UserPermission.REVIEW_LEVELS,
             UserPermission.UPLOAD_LEVELS,
         }
+
     perms |= {
         UserPermission.VIEW_USERS,
     }
+
     return perms
