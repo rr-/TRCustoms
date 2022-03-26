@@ -1,6 +1,6 @@
-import { BanIcon } from "@heroicons/react/outline";
 import { useQueryClient } from "react-query";
 import { PushButton } from "src/components/PushButton";
+import { IconBan } from "src/components/icons";
 import { UserService } from "src/services/UserService";
 import type { UserBasic } from "src/services/UserService";
 import { showAlertOnError } from "src/utils";
@@ -32,10 +32,7 @@ const UserDeactivatePushButton = ({
   };
 
   return (
-    <PushButton
-      icon={<BanIcon className="icon" />}
-      onClick={handleDeactivateButtonClick}
-    >
+    <PushButton icon={<IconBan />} onClick={handleDeactivateButtonClick}>
       {children || "Reject activation"}
     </PushButton>
   );

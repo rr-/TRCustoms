@@ -1,9 +1,9 @@
 import "./AuditLogTable.css";
-import { ExclamationIcon } from "@heroicons/react/outline";
 import { useQuery } from "react-query";
 import type { DataTableColumn } from "src/components/DataTable";
 import { DataTable } from "src/components/DataTable";
 import { Loader } from "src/components/Loader";
+import { IconExclamation } from "src/components/icons";
 import { EngineLink } from "src/components/links/EngineLink";
 import { GenreLink } from "src/components/links/GenreLink";
 import { LevelLink } from "src/components/links/LevelLink";
@@ -183,7 +183,7 @@ const AuditLogTable = ({
       itemElement: ({ item }) =>
         item.is_action_required ? (
           <>
-            <ExclamationIcon className="icon" /> Requires action
+            <IconExclamation /> Requires action
           </>
         ) : (
           ""

@@ -1,10 +1,10 @@
 import "./GenresFormField.css";
-import { InformationCircleIcon } from "@heroicons/react/outline";
 import { useFormikContext } from "formik";
 import { Field } from "formik";
 import { useContext } from "react";
 import { BaseFormField } from "src/components/formfields/BaseFormField";
 import type { GenericFormFieldProps } from "src/components/formfields/BaseFormField";
+import { IconInformationCircle } from "src/components/icons";
 import { ConfigContext } from "src/contexts/ConfigContext";
 import { GenreNested } from "src/services/GenreService";
 import { GenreListing } from "src/services/GenreService";
@@ -55,7 +55,7 @@ const GenresFormField = ({
               />
               <span className="GenresFormField--labelText">{genre.name}</span>{" "}
               <span title={genre.description}>
-                <InformationCircleIcon className="icon" />
+                <IconInformationCircle />
               </span>
             </label>
           </div>

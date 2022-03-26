@@ -1,6 +1,6 @@
 import "./InfoMessage.css";
-import { InformationCircleIcon } from "@heroicons/react/outline";
-import { ExclamationIcon } from "@heroicons/react/outline";
+import { IconInformationCircle } from "src/components/icons";
+import { IconExclamation } from "src/components/icons";
 
 enum InfoMessageType {
   Info,
@@ -19,9 +19,9 @@ interface InfoMessageIconProps {
 const InfoMessageIcon = ({ type }: InfoMessageIconProps) => {
   switch (type) {
     case InfoMessageType.Info:
-      return <InformationCircleIcon className="icon" />;
+      return <IconInformationCircle />;
     case InfoMessageType.Warning:
-      return <ExclamationIcon className="icon" />;
+      return <IconExclamation />;
   }
 };
 

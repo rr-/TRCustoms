@@ -1,12 +1,12 @@
 import "./ReviewsList.css";
-import { ThumbUpIcon } from "@heroicons/react/outline";
-import { ThumbDownIcon } from "@heroicons/react/outline";
-import { DotsCircleHorizontalIcon } from "@heroicons/react/outline";
 import { DataList } from "src/components/DataList";
 import { Markdown } from "src/components/Markdown";
 import { PermissionGuard } from "src/components/PermissionGuard";
 import { PushButton } from "src/components/PushButton";
 import { UserPicture } from "src/components/UserPicture";
+import { IconThumbUp } from "src/components/icons";
+import { IconThumbDown } from "src/components/icons";
+import { IconDotsCircleHorizontal } from "src/components/icons";
 import { LevelLink } from "src/components/links/LevelLink";
 import { UserLink } from "src/components/links/UserLink";
 import type { ReviewListing } from "src/services/ReviewService";
@@ -36,7 +36,7 @@ const ReviewView = ({ review, showLevels }: ReviewViewProps) => {
     classNames.push("positive");
     badge = (
       <>
-        <ThumbUpIcon className="icon" />
+        <IconThumbUp />
         Positive
       </>
     );
@@ -44,7 +44,7 @@ const ReviewView = ({ review, showLevels }: ReviewViewProps) => {
     classNames.push("negative");
     badge = (
       <>
-        <ThumbDownIcon className="icon" />
+        <IconThumbDown />
         Negative
       </>
     );
@@ -52,7 +52,7 @@ const ReviewView = ({ review, showLevels }: ReviewViewProps) => {
     classNames.push("neutral");
     badge = (
       <>
-        <DotsCircleHorizontalIcon className="icon" />
+        <IconDotsCircleHorizontal />
         Neutral
       </>
     );

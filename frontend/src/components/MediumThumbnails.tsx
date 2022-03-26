@@ -1,11 +1,11 @@
 import "./MediumThumbnails.css";
-import { ChevronLeftIcon } from "@heroicons/react/outline";
-import { ChevronRightIcon } from "@heroicons/react/outline";
-import { PlayIcon } from "@heroicons/react/outline";
 import { useCallback } from "react";
 import { useEffect } from "react";
 import { useState } from "react";
 import { PushButton } from "src/components/PushButton";
+import { IconChevronLeft } from "src/components/icons";
+import { IconChevronRight } from "src/components/icons";
+import { IconPlay } from "src/components/icons";
 import { KEY_ESCAPE } from "src/constants";
 import { KEY_LEFT } from "src/constants";
 import { KEY_RIGHT } from "src/constants";
@@ -41,7 +41,7 @@ const MediumThumbnailModal = ({
             disableTimeout={true}
             onClick={() => onNavigate(file, -1)}
           >
-            <ChevronLeftIcon className="icon" />
+            <IconChevronLeft />
           </PushButton>
 
           <img alt="Full resolution" src={file.url} />
@@ -52,7 +52,7 @@ const MediumThumbnailModal = ({
             disableTimeout={true}
             onClick={() => onNavigate(file, +1)}
           >
-            <ChevronRightIcon className="icon" />
+            <IconChevronRight />
           </PushButton>
         </>
       )}
@@ -112,7 +112,7 @@ const MediumThumbnail = ({
             src={thumbnailUrl}
           />
           <span className="MediumThumbnail--overlay">
-            <PlayIcon className="icon" />
+            <IconPlay />
           </span>
         </a>
       );

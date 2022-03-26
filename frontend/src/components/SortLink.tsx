@@ -1,6 +1,6 @@
 import "./SortLink.css";
-import { SortDescendingIcon } from "@heroicons/react/solid";
-import { SortAscendingIcon } from "@heroicons/react/solid";
+import { IconSortDescending } from "src/components/icons";
+import { IconSortAscending } from "src/components/icons";
 
 enum SortLinkStatus {
   Inactive = 1,
@@ -43,11 +43,7 @@ const SortLink = ({
     >
       {children}
       <span className="SortLink--indicator">
-        {descending ? (
-          <SortDescendingIcon className="icon" />
-        ) : (
-          <SortAscendingIcon className="icon" />
-        )}
+        {descending ? <IconSortDescending /> : <IconSortAscending />}
       </span>
     </button>
   );

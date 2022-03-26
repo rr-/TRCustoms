@@ -1,8 +1,4 @@
 import "./LevelSidebar.css";
-import { DownloadIcon } from "@heroicons/react/outline";
-import { GlobeAltIcon } from "@heroicons/react/outline";
-import { PencilIcon } from "@heroicons/react/outline";
-import { AnnotationIcon } from "@heroicons/react/outline";
 import { useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { DefinitionItemGroup } from "src/components/DefinitionList";
@@ -18,6 +14,10 @@ import { SidebarBox } from "src/components/SidebarBox";
 import { LevelApprovePushButton } from "src/components/buttons/LevelApprovePushButton";
 import { LevelDeletePushButton } from "src/components/buttons/LevelDeletePushButton";
 import { LevelRejectPushButton } from "src/components/buttons/LevelRejectPushButton";
+import { IconDownload } from "src/components/icons";
+import { IconGlobe } from "src/components/icons";
+import { IconPencil } from "src/components/icons";
+import { IconAnnotation } from "src/components/icons";
 import { EngineLink } from "src/components/links/EngineLink";
 import { GenreLink } from "src/components/links/GenreLink";
 import { TagLink } from "src/components/links/TagLink";
@@ -75,18 +75,12 @@ const LevelSidebar = ({ level, reviewCount }: LevelSidebarProps) => {
         actions={
           <>
             {level.last_file?.url && (
-              <PushButton
-                to={level.last_file.url}
-                icon={<DownloadIcon className="icon" />}
-              >
+              <PushButton to={level.last_file.url} icon={<IconDownload />}>
                 Download ({formatFileSize(level.last_file.size)})
               </PushButton>
             )}
             {mainLink && (
-              <PushButton
-                to={mainLink}
-                icon={<GlobeAltIcon className="icon" />}
-              >
+              <PushButton to={mainLink} icon={<IconGlobe />}>
                 Website
               </PushButton>
             )}
@@ -97,10 +91,7 @@ const LevelSidebar = ({ level, reviewCount }: LevelSidebarProps) => {
                 ...(level.uploader ? [level.uploader] : []),
               ]}
             >
-              <PushButton
-                icon={<PencilIcon className="icon" />}
-                to={`/levels/${level.id}/edit`}
-              >
+              <PushButton icon={<IconPencil />} to={`/levels/${level.id}/edit`}>
                 Edit
               </PushButton>
             </PermissionGuard>
@@ -119,7 +110,7 @@ const LevelSidebar = ({ level, reviewCount }: LevelSidebarProps) => {
             {level.authors.every((author) => author.id !== user?.id) && (
               <PermissionGuard require={UserPermission.reviewLevels}>
                 <PushButton
-                  icon={<AnnotationIcon className="icon" />}
+                  icon={<IconAnnotation />}
                   to={`/levels/${level.id}/review`}
                 >
                   Review

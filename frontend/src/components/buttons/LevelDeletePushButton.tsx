@@ -1,6 +1,6 @@
 import { useQueryClient } from "react-query";
 import { PushButton } from "src/components/PushButton";
-import { IconTrash } from "src/components/icons/IconTrash";
+import { IconTrash } from "src/components/icons";
 import type { LevelNested } from "src/services/LevelService";
 import { LevelService } from "src/services/LevelService";
 import { showAlertOnError } from "src/utils";
