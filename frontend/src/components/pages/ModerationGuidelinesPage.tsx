@@ -1,12 +1,14 @@
 import "./ModerationGuidelinesPage.css";
 import { useEffect } from "react";
 import { useContext } from "react";
+import { PageGuard } from "src/components/PermissionGuard";
 import { SectionHeader } from "src/components/Section";
 import { IconCheck } from "src/components/icons";
 import { IconReject } from "src/components/icons";
 import { TitleContext } from "src/contexts/TitleContext";
+import { UserPermission } from "src/services/UserService";
 
-const ModerationGuidelinesPage = () => {
+const ModerationGuidelinesPageView = () => {
   const { setTitle } = useContext(TitleContext);
 
   useEffect(() => {
@@ -101,6 +103,14 @@ const ModerationGuidelinesPage = () => {
         Repeated offenders and trolls must be banned with a reason provided.
       </p>
     </div>
+  );
+};
+
+const ModerationGuidelinesPage = () => {
+  return (
+    <PageGuard require={UserPermission.reviewAuditLogs}>
+      <ModerationGuidelinesPageView />
+    </PageGuard>
   );
 };
 
