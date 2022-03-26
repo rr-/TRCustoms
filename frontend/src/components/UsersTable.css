@@ -1,12 +1,14 @@
 .UsersTable--username {
-  width: 30%;
+  width: 24%;
 }
-.UsersTable--first-name,
-.UsersTable--last-name {
-  width: 20%;
+.UsersTable--firstName,
+.UsersTable--lastName {
+  width: 18%;
 }
 .UsersTable--created,
+.UsersTable--lastLogin,
 .UsersTable--updated,
-.UsersTable--authored-level-count {
+.UsersTable--authoredLevelCount {
   width: 10%;
+  white-space: nowrap;
 }

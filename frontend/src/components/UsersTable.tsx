@@ -22,18 +22,16 @@ const UsersTable = ({ searchQuery, onSearchQueryChange }: UsersTableProps) => {
       itemElement: ({ item }) => <UserLink user={item} />,
     },
     {
-      name: "first-name",
+      name: "firstName",
       sortKey: "first_name",
       label: "First name",
-      itemElement: ({ item }) =>
-        (item.is_active && item.first_name) || EMPTY_INPUT_PLACEHOLDER,
+      itemElement: ({ item }) => item.first_name || EMPTY_INPUT_PLACEHOLDER,
     },
     {
-      name: "last-name",
+      name: "lastName",
       sortKey: "last_name",
       label: "Last name",
-      itemElement: ({ item }) =>
-        (item.is_active && item.last_name) || EMPTY_INPUT_PLACEHOLDER,
+      itemElement: ({ item }) => item.last_name || EMPTY_INPUT_PLACEHOLDER,
     },
     {
       name: "created",
@@ -42,19 +40,19 @@ const UsersTable = ({ searchQuery, onSearchQueryChange }: UsersTableProps) => {
       itemElement: ({ item }) => formatDate(item.date_joined),
     },
     {
-      name: "last-login",
+      name: "lastLogin",
       sortKey: "last_login",
       label: "Last login",
       itemElement: ({ item }) => formatDate(item.last_login),
     },
     {
-      name: "authored-level-count",
+      name: "authoredLevelCount",
       sortKey: "authored_level_count",
       label: "Authored levels",
       itemElement: ({ item }) => `${item.authored_level_count}`,
     },
     {
-      name: "reviewed-level-count",
+      name: "reviewedLevelCount",
       sortKey: "reviewed_level_count",
       label: "Reviewed levels",
       itemElement: ({ item }) => `${item.reviewed_level_count}`,
