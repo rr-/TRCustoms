@@ -41,6 +41,7 @@ class LevelViewSet(
     mixins.RetrieveModelMixin,
     mixins.UpdateModelMixin,
     mixins.CreateModelMixin,
+    mixins.DestroyModelMixin,
     mixins.ListModelMixin,
     viewsets.GenericViewSet,
 ):
@@ -55,6 +56,7 @@ class LevelViewSet(
         "partial_update": [
             HasPermission(UserPermission.EDIT_LEVELS) | IsAccessingOwnResource
         ],
+        "destroy": [HasPermission(UserPermission.DELETE_LEVELS)],
         "approve": [HasPermission(UserPermission.EDIT_LEVELS)],
         "reject": [HasPermission(UserPermission.EDIT_LEVELS)],
     }

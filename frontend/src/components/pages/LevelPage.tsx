@@ -8,6 +8,7 @@ import { useContext } from "react";
 import { Fragment } from "react";
 import { useState } from "react";
 import { useQuery } from "react-query";
+import { useNavigate } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import { DefinitionItemGroup } from "src/components/DefinitionList";
 import { DefinitionItem } from "src/components/DefinitionList";
@@ -25,6 +26,7 @@ import { Section } from "src/components/Section";
 import { SectionHeader } from "src/components/Section";
 import { SidebarBox } from "src/components/SidebarBox";
 import { LevelApprovePushButton } from "src/components/buttons/LevelApprovePushButton";
+import { LevelDeletePushButton } from "src/components/buttons/LevelDeletePushButton";
 import { LevelRejectPushButton } from "src/components/buttons/LevelRejectPushButton";
 import { EngineLink } from "src/components/links/EngineLink";
 import { GenreLink } from "src/components/links/GenreLink";
@@ -49,6 +51,7 @@ interface LevelPageParams {
 }
 
 const LevelPage = () => {
+  const navigate = useNavigate();
   const { user } = useContext(UserContext);
   const { setTitle } = useContext(TitleContext);
   const { levelId } = (useParams() as unknown) as LevelPageParams;
@@ -93,6 +96,10 @@ const LevelPage = () => {
   const showcaseLinks = level.external_links
     .filter((link) => link.link_type === ExternalLinkType.Showcase)
     .map((link) => link.url);
+
+  const handleDelete = () => {
+    navigate("/");
+  };
 
   const showFileGoneAlert = () =>
     alert("This file is no longer available on our website.");
@@ -160,6 +167,13 @@ const LevelPage = () => {
                   <LevelRejectPushButton level={level} />
                 )}
                 {!level.is_approved && <LevelApprovePushButton level={level} />}
+              </PermissionGuard>
+
+              <PermissionGuard require={UserPermission.deleteLevels}>
+                <LevelDeletePushButton
+                  level={level}
+                  onComplete={handleDelete}
+                />
               </PermissionGuard>
 
               {level.authors.every((author) => author.id !== user?.id) && (

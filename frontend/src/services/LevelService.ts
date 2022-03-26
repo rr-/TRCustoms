@@ -170,6 +170,10 @@ const reject = async (levelId: number, reason: string): Promise<void> => {
   await api.post(`${API_URL}/levels/${levelId}/reject/`, data);
 };
 
+const deleteLevel = async (levelId: number): Promise<void> => {
+  await api.delete(`${API_URL}/levels/${levelId}/`);
+};
+
 const LevelService = {
   searchLevels,
   getLevelById,
@@ -177,6 +181,7 @@ const LevelService = {
   create,
   approve,
   reject,
+  delete: deleteLevel,
 };
 
 const formatLinkType = (linkType: ExternalLinkType): string => {
