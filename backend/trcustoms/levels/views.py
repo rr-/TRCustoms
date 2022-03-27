@@ -10,7 +10,11 @@ from rest_framework.generics import get_object_or_404
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 
-from trcustoms.audit_logs.utils import track_model_creation
+from trcustoms.audit_logs.utils import (
+    clear_audit_log_action_flags,
+    track_model_creation,
+    track_model_deletion,
+)
 from trcustoms.levels.logic import approve_level, reject_level
 from trcustoms.levels.models import Level, LevelFile
 from trcustoms.levels.serializers import (
@@ -19,7 +23,6 @@ from trcustoms.levels.serializers import (
     LevelRejectionSerializer,
 )
 from trcustoms.mixins import (
-    AuditLogModelWatcherDestroyMixin,
     AuditLogModelWatcherUpdateMixin,
     MultiSerializerMixin,
     PermissionsMixin,
@@ -35,7 +38,6 @@ from trcustoms.utils import parse_bool, parse_ids, slugify, stream_file_field
 
 class LevelViewSet(
     AuditLogModelWatcherUpdateMixin,
-    AuditLogModelWatcherDestroyMixin,
     PermissionsMixin,
     MultiSerializerMixin,
     mixins.RetrieveModelMixin,
@@ -187,6 +189,11 @@ class LevelViewSet(
         track_model_creation(
             serializer.instance, request=self.request, is_action_required=True
         )
+
+    def perform_destroy(self, instance) -> None:
+        clear_audit_log_action_flags(obj=instance)
+        track_model_deletion(instance, request=self.request)
+        super().perform_destroy(instance)
 
 
 class LevelFileViewSet(viewsets.GenericViewSet):
