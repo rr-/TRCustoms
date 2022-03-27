@@ -36,10 +36,23 @@ const MediumThumbnailModal = ({
     }
   };
 
+  useEffect(() => {
+    document.body.classList.toggle("modal-open", !!file);
+  }, [file]);
+
+  const handleWheel = (event: React.WheelEvent) => {
+    event.stopPropagation();
+    event.preventDefault();
+    if (file) {
+      onNavigate(file, event.deltaY > 0 ? +1 : -1);
+    }
+  };
+
   return (
     <span
       className={`MediumThumbnailModal ${file ? "active" : ""}`}
       onMouseDown={handleModalClick}
+      onWheel={handleWheel}
     >
       {file && (
         <>
