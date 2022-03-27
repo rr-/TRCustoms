@@ -43,7 +43,7 @@ interface AuditLogList extends PagedResponse<AuditLogListing> {}
 
 interface AuditLogSearchQuery extends GenericSearchQuery {
   level?: number | undefined;
-  isActionRequired?: boolean | undefined;
+  isActionRequired?: boolean | null;
   userSearch?: string | undefined;
   objectSearch?: string | undefined;
 }

@@ -18,7 +18,6 @@ import { formatDateTime } from "src/utils";
 import { EMPTY_INPUT_PLACEHOLDER } from "src/utils";
 
 interface AuditLogTableProps {
-  showObjects: boolean;
   searchQuery: AuditLogSearchQuery;
   onSearchQueryChange?:
     | ((searchQuery: AuditLogSearchQuery) => void)
@@ -120,7 +119,6 @@ const AuditLogTableObjectLink = ({
 };
 
 const AuditLogTable = ({
-  showObjects,
   searchQuery,
   onSearchQueryChange,
 }: AuditLogTableProps) => {
@@ -153,17 +151,13 @@ const AuditLogTable = ({
           EMPTY_INPUT_PLACEHOLDER
         ),
     },
-    ...(showObjects
-      ? [
-          {
-            name: "object",
-            label: "Object",
-            itemElement: ({ item }: { item: AuditLogListing }) => (
-              <AuditLogTableObjectLink auditLog={item} />
-            ),
-          },
-        ]
-      : []),
+    {
+      name: "object",
+      label: "Object",
+      itemElement: ({ item }: { item: AuditLogListing }) => (
+        <AuditLogTableObjectLink auditLog={item} />
+      ),
+    },
     {
       name: "changes",
       label: "Changes",
