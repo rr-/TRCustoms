@@ -20,10 +20,12 @@ def approve_level(level: Level, request: Request | None) -> None:
 
 
 def reject_level(level: Level, request: Request | None, reason: str) -> None:
+    clear_audit_log_action_flags(obj=level)
     with track_model_update(
         obj=level,
         request=request,
         changes=[f"Rejected (reason: {reason})"],
+        is_action_required=True,
     ):
         if level.is_approved or reason != level.rejection_reason:
             send_level_rejected_mail(level, reason)
@@ -31,4 +33,3 @@ def reject_level(level: Level, request: Request | None, reason: str) -> None:
         level.is_approved = False
         level.rejection_reason = reason
         level.save()
-    clear_audit_log_action_flags(obj=level)
