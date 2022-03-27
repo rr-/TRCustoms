@@ -97,9 +97,7 @@ const LevelSidebar = ({ level, reviewCount }: LevelSidebarProps) => {
             </PermissionGuard>
 
             <PermissionGuard require={UserPermission.editLevels}>
-              {(level.is_approved || !level.rejection_reason) && (
-                <LevelRejectPushButton level={level} />
-              )}
+              <LevelRejectPushButton level={level} />
               {!level.is_approved && <LevelApprovePushButton level={level} />}
             </PermissionGuard>
 
