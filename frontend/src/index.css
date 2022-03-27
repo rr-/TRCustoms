@@ -17,6 +17,9 @@ body {
   -moz-osx-font-smoothing: grayscale;
   line-height: var(--line-height);
 }
+body.modal-open {
+  overflow: hidden;
+}
 #root {
   text-align: center;
   padding-left: calc(100vw - 100%);
