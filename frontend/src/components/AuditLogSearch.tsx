@@ -7,6 +7,7 @@ import { useEffect } from "react";
 import { Checkbox } from "src/components/Checkbox";
 import { PushButton } from "src/components/PushButton";
 import { SectionHeader } from "src/components/Section";
+import { CheckboxFormField } from "src/components/formfields/CheckboxFormField";
 import { SubmitButton } from "src/components/formfields/SubmitButton";
 import { TextFormField } from "src/components/formfields/TextFormField";
 import { IconSearch } from "src/components/icons";
@@ -129,7 +130,7 @@ const StateSearches: StateSearchSection[] = [
 ];
 
 const defaultSearchQuery: AuditLogSearchQuery = {
-  isActionRequired: undefined,
+  isActionRequired: null,
   page: null,
   sort: "-created",
 };
@@ -138,6 +139,7 @@ const convertSearchQueryToFormikValues = (searchQuery: AuditLogSearchQuery) => {
   return {
     userSearch: searchQuery.userSearch || "",
     objectSearch: searchQuery.objectSearch || "",
+    isActionRequired: searchQuery.isActionRequired,
   };
 };
 
@@ -167,6 +169,7 @@ const AuditLogSearch = ({
         page: null,
         userSearch: values.userSearch || null,
         objectSearch: values.objectSearch || null,
+        isActionRequired: values.isActionRequired,
       });
     },
     [searchQuery, onSearchQueryChange]
@@ -230,6 +233,14 @@ const AuditLogSearch = ({
           </SectionHeader>
 
           <div className="AuditLogSearch--sidebarSection">
+            <CheckboxFormField
+              onChange={() => {
+                submitForm();
+              }}
+              label="Action required"
+              name="isActionRequired"
+            />
+
             <TextFormField label="Search user" name="userSearch" />
             <TextFormField label="Search object" name="objectSearch" />
             <div className="FormField">

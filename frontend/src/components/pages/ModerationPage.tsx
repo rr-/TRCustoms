@@ -26,6 +26,7 @@ const deserializeSearchQuery = (qp: {
   [key: string]: string;
 }): AuditLogSearchQuery => ({
   ...deserializeGenericSearchQuery(qp, defaultSearchQuery),
+  isActionRequired: qp.action_required === "1" ? true : null,
   userSearch: qp.user,
   objectSearch: qp.obj,
 });
@@ -37,6 +38,7 @@ const serializeSearchQuery = (
     ...serializeGenericSearchQuery(searchQuery, defaultSearchQuery),
     user: searchQuery.userSearch,
     obj: searchQuery.objectSearch,
+    action_required: searchQuery.isActionRequired === true ? "1" : null,
   });
 
 const ModerationPageView = () => {
@@ -88,7 +90,6 @@ const ModerationPageView = () => {
 
           <SectionHeader>Recent actions</SectionHeader>
           <AuditLogTable
-            showObjects={true}
             searchQuery={searchQuery}
             onSearchQueryChange={setSearchQuery}
           />
