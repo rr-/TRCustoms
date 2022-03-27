@@ -92,6 +92,9 @@
 .MediumThumbnailModal .PushButton--link:hover {
   color: white;
 }
+.MediumThumbnailModal .PushButton--link.disabled {
+  opacity: 0.1;
+}
 .MediumThumbnailModal .PushButton--link.hidden {
-  visibility: hidden;
+  opacity: 0;
 }

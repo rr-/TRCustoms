@@ -44,7 +44,9 @@ const MediumThumbnailModal = ({
       {file && (
         <>
           <PushButton
-            className={canNavigateLeft ? "visible" : "hidden"}
+            className={
+              canNavigateLeft ? "" : canNavigateRight ? "disabled" : "hidden"
+            }
             isPlain={true}
             disableTimeout={true}
             onClick={() => onNavigate(file, -1)}
@@ -59,7 +61,9 @@ const MediumThumbnailModal = ({
           />
 
           <PushButton
-            className={canNavigateRight ? "visible" : "hidden"}
+            className={
+              canNavigateRight ? "" : canNavigateLeft ? "disabled" : "hidden"
+            }
             isPlain={true}
             disableTimeout={true}
             onClick={() => onNavigate(file, +1)}
@@ -172,11 +176,17 @@ const MediumThumbnails = ({
 
   const handleNavigate = useCallback(
     (file: UploadedFile, direction: number) => {
+      if (
+        (direction === +1 && !canNavigateRight) ||
+        (direction === -1 && !canNavigateLeft)
+      ) {
+        return;
+      }
       const curIndex = files.indexOf(file);
       const newIndex = (curIndex + direction + files.length) % files.length;
       setActiveFile(files[newIndex]);
     },
-    [files]
+    [files, canNavigateLeft, canNavigateRight]
   );
 
   const handleKeypress = useCallback(
@@ -184,14 +194,14 @@ const MediumThumbnails = ({
       if (activeFile !== undefined) {
         if (event.keyCode === KEY_ESCAPE) {
           handleClose();
-        } else if (canNavigateLeft && event.keyCode === KEY_LEFT) {
+        } else if (event.keyCode === KEY_LEFT) {
           handleNavigate(activeFile, -1);
-        } else if (canNavigateRight && event.keyCode === KEY_RIGHT) {
+        } else if (event.keyCode === KEY_RIGHT) {
           handleNavigate(activeFile, +1);
         }
       }
     },
-    [handleClose, handleNavigate, canNavigateLeft, canNavigateRight, activeFile]
+    [handleClose, handleNavigate, activeFile]
   );
 
   const handleLoad = () => {
