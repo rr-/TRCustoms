@@ -59,6 +59,7 @@ def get_permissions(user: User) -> set[UserPermission]:
             UserPermission.DELETE_LEVELS,
             UserPermission.DELETE_REVIEWS,
             UserPermission.EDIT_REVIEWS,
+            UserPermission.EDIT_NEWS,
         }
 
     if not user.is_anonymous:
