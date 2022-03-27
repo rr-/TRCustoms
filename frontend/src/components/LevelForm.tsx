@@ -414,11 +414,16 @@ const LevelForm = ({ level, onGoBack, onSubmit }: LevelFormProps) => {
                 />
               </FormGridFieldSet>
 
-              <FormGridFieldSet title="File">
+              <FormGridFieldSet
+                title={level?.id ? "File version update" : "File"}
+              >
                 <BaseFormField
                   required={true}
                   label="Level file"
                   name="file_id"
+                  extraInformation={
+                    level ? "Leave empty to keep the current file version." : ""
+                  }
                 >
                   <FilePicker
                     allowMultiple={false}
