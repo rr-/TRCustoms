@@ -166,10 +166,6 @@ const UserPageView = ({ userId }: UserPageViewProps) => {
                 {formatDate(user.date_joined) || "Unknown"}
               </DefinitionItem>
 
-              <DefinitionItem term="Last seen">
-                {formatDate(user.last_login) || "Never"}
-              </DefinitionItem>
-
               <DefinitionItem term="Country">
                 {user.country?.name || "Unknown"}
               </DefinitionItem>
