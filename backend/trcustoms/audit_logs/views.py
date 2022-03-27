@@ -28,10 +28,11 @@ def filter_queryset_search(qs, search: str | None):
         return qs
     for term in split_terms(search):
         if ":" in term:
-            command, rest = term.split(":", maxsplit=1)
-            match command:
-                case "state":
-                    qs = filter_queryset_state(qs, rest)
+            model_name, changes = term.split(":", maxsplit=1)
+            q_obj = Q(pk=None)
+            for change in changes.split(","):
+                q_obj |= Q(changes__icontains=change)
+            qs = qs.filter(object_type__model=model_name).filter(q_obj)
         else:
             qs = qs.filter(changes__icontains=term)
     return qs
