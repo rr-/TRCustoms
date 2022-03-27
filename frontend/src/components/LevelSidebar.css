@@ -4,6 +4,7 @@
 
 .LevelSidebar .MediumThumbnail--thumb {
   width: 100%;
+  aspect-ratio: 4 / 3;
 }
 
 .LevelSidebar--basicInfoList {
