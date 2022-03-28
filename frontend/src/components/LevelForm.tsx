@@ -418,7 +418,7 @@ const LevelForm = ({ level, onGoBack, onSubmit }: LevelFormProps) => {
                 title={level?.id ? "File version update" : "File"}
               >
                 <BaseFormField
-                  required={true}
+                  required={!level?.id}
                   label="Level file"
                   name="file_id"
                   extraInformation={
