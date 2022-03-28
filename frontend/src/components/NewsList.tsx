@@ -54,10 +54,7 @@ const NewsView = ({ news }: NewsViewProps) => {
         </div>
 
         <div className="News--footerButtons">
-          <PermissionGuard
-            require={UserPermission.editNews}
-            owningUsers={news.authors}
-          >
+          <PermissionGuard require={UserPermission.editNews}>
             <PushButton to={`/news/${news.id}/edit`}>Edit news</PushButton>
           </PermissionGuard>
         </div>
