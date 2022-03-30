@@ -9,7 +9,7 @@ const TOS: LegaleseEntry = {
     {
       title: "Overture",
       description:
-        "If you would like to submit an inquiry relating to the operations of TRCustoms.org, please contact the website administrator via email provided in the About page.",
+        "In this document, the term TRCustoms.org is interchangably used to reference to the website and the website owner(s). If you would like to submit an inquiry relating to the operations of TRCustoms.org, please contact the website administrator via email provided in the About page.",
     },
 
     {
@@ -97,7 +97,7 @@ const TOS: LegaleseEntry = {
             },
             {
               description:
-                "TRCustoms.org reserves the right to monitor all content and to remove any of which that go against the Terms and Conditions.",
+                "TRCustoms.org reserves the right to monitor all content on its platform and remove any of it that is deemed inappropriate with or without providing reason.",
             },
             {
               description:
