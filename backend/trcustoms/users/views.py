@@ -179,6 +179,11 @@ class UserViewSet(
         user = self.get_object()
         reason = serializer.data["reason"]
 
+        if user.is_superuser:
+            return Response(
+                "Cannot deactivate a superuser", status.HTTP_400_BAD_REQUEST
+            )
+
         if user.is_pending_activation:
             reject_user(user, request, reason)
         else:

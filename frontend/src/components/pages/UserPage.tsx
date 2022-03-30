@@ -143,18 +143,22 @@ const UserPageView = ({ userId }: UserPageViewProps) => {
                     ) : (
                       !user.is_superuser && <UserBanPushButton user={user} />
                     )}
-                    <UserDeactivatePushButton user={user}>
-                      Deactivate
-                    </UserDeactivatePushButton>
+                    {!user.is_superuser && (
+                      <UserDeactivatePushButton user={user}>
+                        Deactivate
+                      </UserDeactivatePushButton>
+                    )}
                   </PermissionGuard>
                 </>
               ) : user.is_pending_activation ? (
                 <PermissionGuard require={UserPermission.editUsers}>
                   <UserActivatePushButton user={user} />
-                  <UserDeactivatePushButton
-                    onComplete={handleUserRejection}
-                    user={user}
-                  />
+                  {!user.is_superuser && (
+                    <UserDeactivatePushButton
+                      onComplete={handleUserRejection}
+                      user={user}
+                    />
+                  )}
                 </PermissionGuard>
               ) : undefined}
             </>
