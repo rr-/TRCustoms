@@ -20,7 +20,7 @@ const ModerationGuidelinesPageView = () => {
       <h1>Moderating Guidelines</h1>
       <SectionHeader>Introduction</SectionHeader>
       <p>
-        As a moderator, you have the ability to give and revoke access to
+        As a moderator, you have the ability to grant and revoke access to
         certain parts of the website. Additionally, you may edit certain pages
         that go against the Terms and Conditions. This document aims to guide
         you on how you can help manage the website.
@@ -28,10 +28,10 @@ const ModerationGuidelinesPageView = () => {
 
       <SectionHeader>Moderate Tab</SectionHeader>
       <p>
-        You can also access the "Moderate" tab from the navigation bar. It
-        includes all action logs of new additions or changes in the website.
+        The "Moderate" tab can be accessed from the navigation bar, it includes
+        logs of actions ( such as new additions or changes) done on the website.
         Some of these logs will be labelled "Requires action", which means a
-        moderator has to approve or reject this change or addition. You may also
+        moderator has to approve or reject this change or addition. You may
         search for specific action logs using the search filter, which also has
         a button to a list with all users.
       </p>
@@ -47,9 +47,9 @@ const ModerationGuidelinesPageView = () => {
 
       <SectionHeader>Profiles</SectionHeader>
       <p>
-        User profiles that contain anything that goes against the Terms and
-        Conditions must edited immediately to omit the information. Contact the
-        administrator about the incident.
+        User profiles that have content that goes against the Terms and
+        Conditions must be edited immediately, and the content in question must
+        be removed. Contact the administrator about the incident.
       </p>
 
       <SectionHeader>Levels</SectionHeader>
