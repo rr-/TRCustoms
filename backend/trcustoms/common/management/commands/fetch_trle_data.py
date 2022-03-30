@@ -3,6 +3,7 @@ import hashlib
 import logging
 import sys
 import tempfile
+import threading
 import traceback
 from collections.abc import Callable, Iterable
 from concurrent.futures import ThreadPoolExecutor, as_completed
@@ -33,6 +34,7 @@ from trcustoms.uploads.models import UploadedFile
 from trcustoms.users.models import User
 from trcustoms.utils import id_range, unbounded_range
 
+lock = threading.RLock()
 logger = logging.getLogger(__name__)
 P = TypeVar("P")
 
@@ -290,24 +292,26 @@ def process_level_files(level: Level, trle_level: TRLELevel) -> None:
             TRLEScraper().get_bytes_parallel(
                 trle_level.download_url, file=handle
             )
-        size = path.stat().st_size
-        if size:
-            md5sum = get_md5sum(path)
-            with path.open("rb") as handle:
-                uploaded_file = UploadedFile.objects.filter(
-                    md5sum=md5sum
-                ).first()
-                if not uploaded_file:
-                    uploaded_file = UploadedFile.objects.create(
-                        md5sum=md5sum,
-                        size=size,
-                        upload_type=UploadedFile.UploadType.LEVEL_FILE,
-                        content=File(handle, name=path.name),
-                    )
-                if not level.files.filter(file=uploaded_file).exists():
-                    LevelFile.objects.update_or_create(
-                        level=level, file=uploaded_file
-                    )
+
+        with lock:
+            size = path.stat().st_size
+            if size:
+                md5sum = get_md5sum(path)
+                with path.open("rb") as handle:
+                    uploaded_file = UploadedFile.objects.filter(
+                        md5sum=md5sum
+                    ).first()
+                    if not uploaded_file:
+                        uploaded_file = UploadedFile.objects.create(
+                            md5sum=md5sum,
+                            size=size,
+                            upload_type=UploadedFile.UploadType.LEVEL_FILE,
+                            content=File(handle, name=path.name),
+                        )
+                    if not level.files.filter(file=uploaded_file).exists():
+                        LevelFile.objects.update_or_create(
+                            level=level, file=uploaded_file
+                        )
 
 
 def process_level(ctx: ScrapeContext, obj_id: int) -> None:
