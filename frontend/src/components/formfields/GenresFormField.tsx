@@ -2,6 +2,7 @@ import "./GenresFormField.css";
 import { useFormikContext } from "formik";
 import { Field } from "formik";
 import { useContext } from "react";
+import { Checkbox } from "src/components/Checkbox";
 import { BaseFormField } from "src/components/formfields/BaseFormField";
 import type { GenericFormFieldProps } from "src/components/formfields/BaseFormField";
 import { IconInformationCircle } from "src/components/icons";
@@ -45,15 +46,14 @@ const GenresFormField = ({
         {Object.values(genreMap).map((genre) => (
           <div key={genre.id}>
             <label className="GenresFormField--label">
-              <Field
+              <Checkbox
+                label={genre.name}
                 disabled={readonly}
-                type="checkbox"
                 onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
                   handleChange(event, genre)
                 }
                 checked={value.map((g) => g.id).includes(genre.id)}
               />
-              <span className="GenresFormField--labelText">{genre.name}</span>{" "}
               <span title={genre.description}>
                 <IconInformationCircle />
               </span>
