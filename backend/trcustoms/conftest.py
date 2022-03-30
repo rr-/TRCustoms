@@ -128,6 +128,12 @@ class LevelFactory(factory.django.DjangoModelFactory):
             self.authors.set(extracted)
 
     @factory.post_generation
+    def reviews(self, create, extracted, **kwargs):
+        # pylint: disable=no-member
+        if create and extracted:
+            self.reviews.set(extracted)
+
+    @factory.post_generation
     def genres(self, create, extracted, **kwargs):
         # pylint: disable=no-member
         if create and extracted:

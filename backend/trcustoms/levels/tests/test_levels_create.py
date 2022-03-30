@@ -8,6 +8,8 @@ from trcustoms.conftest import (
     DurationFactory,
     EngineFactory,
     GenreFactory,
+    LevelFactory,
+    ReviewFactory,
     TagFactory,
     UploadedFileFactory,
     UserFactory,
@@ -129,3 +131,25 @@ def test_level_creation_success(
     )
     assert len(mail.outbox) == 1
     assert mail.outbox[0].subject == "[TRCustoms] Level submitted"
+
+
+@pytest.mark.django_db
+def test_level_creation_updates_authored_level_count(
+    level_factory: LevelFactory,
+    user_factory: UserFactory,
+) -> None:
+    user = user_factory()
+    level_factory(authors=[user])
+    assert user.authored_levels.count() == 1
+
+
+@pytest.mark.django_db
+def test_level_creation_updates_reviewed_level_count(
+    level_factory: LevelFactory,
+    review_factory: ReviewFactory,
+    user_factory: UserFactory,
+) -> None:
+    user = user_factory()
+    review = review_factory(author=user)
+    level_factory(reviews=[review])
+    assert user.reviewed_levels.count() == 1
