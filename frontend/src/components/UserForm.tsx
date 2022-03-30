@@ -162,9 +162,7 @@ const UserForm = ({ user, onGoBack, onSubmit }: UserFormProps) => {
       ],
     };
 
-    if (user) {
-      validatorMap.oldPassword.push(validatePassword);
-    } else {
+    if (!user) {
       validatorMap.password.splice(0, 0, validateRequired);
       validatorMap.password2.splice(0, 0, validateRequired);
     }

@@ -188,12 +188,6 @@ class UserDetailsSerializer(UserListingSerializer):
         if not validated_data.get("password"):
             return
 
-        # admin can do whatever they want
-        if UserPermission.EDIT_USERS in getattr(
-            self.context["request"].user, "permissions", []
-        ):
-            return
-
         # only compare if there is an old password
         if not self.instance:
             return
