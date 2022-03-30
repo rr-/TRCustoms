@@ -106,9 +106,19 @@ def confirm_user_email(user: User, request: Request | None) -> None:
     user.is_email_confirmed = True
     user.save()
 
-    track_model_creation(
-        user,
-        request=request,
-        change_author=user,
-        is_action_required=True,
-    )
+    if not user.is_active:
+        track_model_creation(
+            obj=user,
+            request=request,
+            change_author=user,
+            is_action_required=True,
+        )
+    else:
+        with track_model_update(
+            obj=user,
+            request=request,
+            change_author=user,
+            is_action_required=False,
+            changes=["Confirmed email"],
+        ):
+            pass
