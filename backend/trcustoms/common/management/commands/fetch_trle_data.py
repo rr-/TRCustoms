@@ -28,6 +28,7 @@ from trcustoms.levels.models import (
     LevelScreenshot,
 )
 from trcustoms.reviews.models import LevelReview
+from trcustoms.signals import disable_signals
 from trcustoms.tags.models import Tag
 from trcustoms.trle_scraper import TRLELevel, TRLEScraper, TRLEUser
 from trcustoms.uploads.models import UploadedFile
@@ -294,24 +295,30 @@ def process_level_files(level: Level, trle_level: TRLELevel) -> None:
             )
 
         with lock:
-            size = path.stat().st_size
-            if size:
+            with disable_signals():
+                size = path.stat().st_size
+                if not size:
+                    return
                 md5sum = get_md5sum(path)
-                with path.open("rb") as handle:
-                    uploaded_file = UploadedFile.objects.filter(
-                        md5sum=md5sum
-                    ).first()
-                    if not uploaded_file:
+                uploaded_file = UploadedFile.objects.filter(
+                    md5sum=md5sum
+                ).first()
+                if not uploaded_file:
+                    with path.open("rb") as handle:
                         uploaded_file = UploadedFile.objects.create(
                             md5sum=md5sum,
                             size=size,
                             upload_type=UploadedFile.UploadType.LEVEL_FILE,
                             content=File(handle, name=path.name),
                         )
-                    if not level.files.filter(file=uploaded_file).exists():
-                        LevelFile.objects.update_or_create(
-                            level=level, file=uploaded_file
-                        )
+                if not level.files.filter(file=uploaded_file).exists():
+                    LevelFile.objects.update_or_create(
+                        level=level,
+                        file=uploaded_file,
+                        defaults=dict(
+                            version=1,
+                        ),
+                    )
 
 
 def process_level(ctx: ScrapeContext, obj_id: int) -> None:
