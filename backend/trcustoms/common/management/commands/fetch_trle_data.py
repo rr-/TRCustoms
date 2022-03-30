@@ -268,7 +268,7 @@ def process_level_images(
         with tempfile.TemporaryDirectory(dir=settings.CACHE_DIR) as tmpdir:
             path = Path(tmpdir) / "dummy.dat"
             with path.open("wb") as handle:
-                ctx.scraper.get_file(trle_level.download_url, file=handle)
+                ctx.scraper.get_file(image_url, file=handle)
             image_content = path.read_bytes()
 
             size = len(image_content)
