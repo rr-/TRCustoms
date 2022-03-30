@@ -141,7 +141,7 @@ const UserPageView = ({ userId }: UserPageViewProps) => {
                     {user.is_banned ? (
                       <UserUnbanPushButton user={user} />
                     ) : (
-                      <UserBanPushButton user={user} />
+                      !user.is_superuser && <UserBanPushButton user={user} />
                     )}
                     <UserDeactivatePushButton user={user}>
                       Deactivate

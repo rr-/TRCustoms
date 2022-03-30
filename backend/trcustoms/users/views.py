@@ -198,6 +198,10 @@ class UserViewSet(
         if not serializer.is_valid():
             return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
         user = self.get_object()
+        if user.is_superuser:
+            return Response(
+                "Cannot ban a superuser", status.HTTP_400_BAD_REQUEST
+            )
         reason = serializer.data["reason"]
         ban_user(user, request, reason)
         return Response({})

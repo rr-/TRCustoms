@@ -185,6 +185,9 @@ const extractErrorMessage = (error: unknown) => {
     return error;
   }
   const axiosError = error as AxiosError;
+  if (isString(axiosError.response?.data)) {
+    return axiosError.response?.data;
+  }
   if (axiosError.response?.data.detail) {
     return axiosError.response?.data.detail;
   }
