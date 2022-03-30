@@ -1,9 +1,10 @@
 import "./Checkbox.css";
 
 interface CheckboxProps {
-  label: string;
+  label: string | React.ReactNode;
   onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void | undefined;
   checked: boolean;
+  disabled?: boolean | undefined;
 }
 
 const Checkbox = ({ label, ...props }: CheckboxProps) => {

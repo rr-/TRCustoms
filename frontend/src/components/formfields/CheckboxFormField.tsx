@@ -1,5 +1,6 @@
 import { Field } from "formik";
 import { useFormikContext } from "formik";
+import { Checkbox } from "src/components/Checkbox";
 import { BaseFormField } from "src/components/formfields/BaseFormField";
 import type { GenericFormFieldProps } from "src/components/formfields/BaseFormField";
 
@@ -27,14 +28,12 @@ const CheckboxFormField = ({
   return (
     <BaseFormField name={name} readonly={readonly} {...props}>
       <label className="Checkbox--label">
-        <Field
+        <Checkbox
           disabled={readonly}
-          type="checkbox"
-          className="Checkbox--input"
+          label={label}
           onChange={handleChange}
           checked={values[name]}
         />
-        {label}
       </label>
     </BaseFormField>
   );
