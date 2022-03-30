@@ -109,6 +109,8 @@ class CustomEmailField(serializers.EmailField):
 
 
 class UserDetailsSerializer(UserListingSerializer):
+    is_superuser = serializers.ReadOnlyField()
+    is_staff = serializers.ReadOnlyField()
     country = CountryNestedSerializer(read_only=True)
     old_password = serializers.CharField(write_only=True, required=False)
     password = serializers.CharField(write_only=True, required=True)
@@ -258,6 +260,8 @@ class UserDetailsSerializer(UserListingSerializer):
             "old_password",
             "password",
             "picture_id",
+            "is_staff",
+            "is_superuser",
         ]
 
 

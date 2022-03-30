@@ -55,6 +55,8 @@ interface UserListing extends UserNested {
 
 interface UserDetails extends UserListing {
   country?: CountryNested;
+  is_staff: boolean;
+  is_superuser: boolean;
 }
 
 interface UserSearchQuery extends GenericSearchQuery {}
