@@ -101,8 +101,7 @@ class CustomEmailField(serializers.EmailField):
         if (
             not request.user.is_staff
             and request.user.id != instance.id
-            and UserPermission.EDIT_USERS
-            not in getattr(request.user, "permissions", [])
+            and UserPermission.EDIT_USERS not in get_permissions(request.user)
         ):
             return ""
         return instance.email

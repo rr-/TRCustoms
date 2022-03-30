@@ -7,12 +7,14 @@ from trcustoms.mails import (
     send_review_submission_mail,
     send_review_update_mail,
 )
+from trcustoms.permissions import get_permissions
 from trcustoms.reviews.models import (
     LevelReview,
     ReviewTemplateAnswer,
     ReviewTemplateQuestion,
 )
 from trcustoms.uploads.serializers import UploadedFileNestedSerializer
+from trcustoms.users.models import UserPermission
 from trcustoms.users.serializers import UserNestedSerializer
 
 
@@ -67,6 +69,24 @@ class LevelReviewDetailsSerializer(LevelReviewListingSerializer):
             "answer_ids",
             "level_id",
         ]
+
+    def to_representation(self, obj):
+        ret = super().to_representation(obj)
+
+        request = self.context["request"]
+        if (
+            not request.user
+            or not obj.author
+            or (
+                request.user.id != obj.author.id
+                and UserPermission.EDIT_REVIEWS
+                not in get_permissions(request.user)
+            )
+        ):
+            ret.pop("answers", None)
+            ret.pop("answer_ids", None)
+
+        return ret
 
     def validate(self, data):
         validated_data = super().validate(data)
