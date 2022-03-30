@@ -18,3 +18,4 @@ unidecode
 boto3
 django-storages
 premailer
+tqdm

@@ -16,28 +16,9 @@ import lxml.html
 import requests
 import urllib3
 
-from trcustoms.cache import file_cache
 from trcustoms.markdown import html_to_markdown
 
 logger = logging.getLogger(__name__)
-
-
-@file_cache("trle_scraper", "get")
-def get(url: str, headers: dict[str, str] | None = None) -> requests.Response:
-    return requests.get(
-        url,
-        timeout=30,
-        verify=False,
-        allow_redirects=True,
-        headers=headers,
-    )
-
-
-@file_cache("trle_scraper", "head")
-def head(url: str, allow_redirects: bool) -> requests.Response:
-    return requests.head(
-        url, timeout=30, verify=False, allow_redirects=allow_redirects
-    )
 
 
 def strip_tags(value: str) -> str:
@@ -135,15 +116,14 @@ class TRLELevel:
 
 
 class TRLEScraper:
-    def __init__(self, disable_cache: bool = False) -> None:
-        self.disable_cache = disable_cache
+    def __init__(self) -> None:
         urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
+        self.session = requests.Session()
 
     def fetch_reviewer(self, reviewer_id: int) -> TRLEReviewer | None:
-        response = self.safe_get(
+        doc = self.get_document(
             f"https://www.trle.net/sc/reviewerfeatures.php?rid={reviewer_id}",
         )
-        doc = get_document_from_response(response)
 
         level_ids = [
             int(match.group(0))
@@ -189,10 +169,9 @@ class TRLEScraper:
         )
 
     def fetch_author(self, author_id: int) -> TRLEAuthor | None:
-        response = self.safe_get(
+        doc = self.get_document(
             f"https://trle.net/sc/authorfeatures.php?aid={author_id}",
         )
-        doc = get_document_from_response(response)
 
         level_ids = [
             int(match.group(0))
@@ -238,10 +217,9 @@ class TRLEScraper:
         )
 
     def fetch_level(self, level_id: int) -> TRLELevel | None:
-        response = self.safe_get(
+        doc = self.get_document(
             f"https://trle.net/sc/levelfeatures.php?lid={level_id}"
         )
-        doc = get_document_from_response(response)
 
         author_ids = [
             int(match.group(0))
@@ -280,7 +258,9 @@ class TRLEScraper:
 
         download_url = f"https://www.trle.net/scadm/trle_dl.php?lid={level_id}"
         website_url = self.get_url_redirect(download_url)
-        if website_url.startswith("https://www.trle.net/sc/levelsfeatures"):
+        if website_url is not None and website_url.startswith(
+            "https://www.trle.net/sc/levelsfeatures"
+        ):
             website_url = None
 
         showcase_urls: list[str] = []
@@ -331,18 +311,17 @@ class TRLEScraper:
         self, level_id: int
     ) -> TRLELevelWalkthrough | None:
         try:
-            response = self.safe_get(
+            content = self.get_raw_document(
                 f"https://www.trle.net/walk/{level_id}.htm"
             )
         except requests.exceptions.RequestException:
             return None
-        return TRLELevelWalkthrough(level_id=level_id, content=response.text)
+        return TRLELevelWalkthrough(level_id=level_id, content=content)
 
     def fetch_level_reviews(self, level_id: int) -> Iterable[TRLELevelReview]:
-        response = self.safe_get(
+        doc = self.get_document(
             f"https://trle.net/sc/reviews.php?lid={level_id}"
         )
-        doc = get_document_from_response(response)
 
         for row_node in doc.cssselect(
             ".FindTable tr:not(:first-child):not(:last-child)"
@@ -397,8 +376,7 @@ class TRLEScraper:
             )
 
     def fetch_all_author_ids(self) -> Iterable[int]:
-        response = self.safe_get("https://www.trle.net/sc/bGalleryWorld.php")
-        doc = get_document_from_response(response)
+        doc = self.get_document("https://www.trle.net/sc/bGalleryWorld.php")
 
         country_urls: set[str] = set()
         for node in doc.cssselect("a[href*='bGalleryCountry.php']"):
@@ -406,62 +384,34 @@ class TRLEScraper:
             country_urls.add(country_url)
 
         for country_url in country_urls:
-            response = self.safe_get(country_url)
-            doc = get_document_from_response(response)
+            doc = self.get_document(country_url)
             for node in doc.cssselect("a[href*='authorfeatures']"):
                 if match := re.search(r"\d+", node.get("href")):
                     author_id = int(match.group(0))
                     yield author_id
 
     def fetch_all_level_ids(self) -> Iterable[int]:
-        response = self.safe_get("https://www.trle.net/rPost.php")
-        doc = get_document_from_response(response)
+        doc = self.get_document("https://www.trle.net/rPost.php")
         for node in doc.cssselect("[name='lid'] option"):
             if value := node.get("value"):
                 level_id = int(value)
                 yield level_id
 
     def fetch_all_reviewer_ids(self) -> Iterable[int]:
-        response = self.safe_get("https://www.trle.net/rPost.php")
-        doc = get_document_from_response(response)
+        doc = self.get_document("https://www.trle.net/rPost.php")
         for node in doc.cssselect("[name='rid'] option"):
             if value := node.get("value"):
                 reviewer_id = int(value)
                 yield reviewer_id
 
-    def safe_get(
-        self, url: str, headers: dict[str, str] | None = None
-    ) -> requests.Response:
-        if headers:
-            logger.debug("GET %s (headers=%s)", url, headers)
-        else:
-            logger.debug("GET %s", url)
-        response = get(url, disable_cache=self.disable_cache, headers=headers)
-        try:
-            response.raise_for_status()
-        except Exception:
-            get.delete_cache(url)
-            raise
-        return response
+    def get_document(self, url: str) -> lxml.html.HtmlElement:
+        return get_document_from_response(self._get(url))
 
-    def safe_head(
-        self, url: str, allow_redirects: bool = True
-    ) -> requests.Response:
-        logger.debug("HEAD %s", url)
-        response = head(
-            url,
-            disable_cache=self.disable_cache,
-            allow_redirects=allow_redirects,
-        )
-        try:
-            response.raise_for_status()
-        except Exception:
-            head.delete_cache(url)
-            raise
-        return response
+    def get_raw_document(self, url: str) -> str:
+        return self._get(url).text
 
     def get_size(self, url) -> int | None:
-        response = self.safe_head(url)
+        response = self._head(url)
         match header := response.headers["Content-Length"]:
             case str(size):
                 return int(size)
@@ -471,17 +421,44 @@ class TRLEScraper:
                 raise ValueError(f"unknown value: {header}")
 
     def is_url_download(self, url) -> bool:
-        response = self.safe_head(url)
+        response = self._head(url)
         return response.headers["Content-Type"].startswith("application/")
 
     def get_url_redirect(self, url) -> str | None:
-        response = self.safe_head(url, allow_redirects=False)
+        response = self._head(url, allow_redirects=False)
         return response.headers.get("Location")
 
-    def get_bytes(self, url: str) -> bytes:
-        return self.safe_get(url).content
+    def _head(
+        self,
+        url: str,
+        allow_redirects: bool = True,
+        headers: dict[str, str] | None = None,
+    ) -> requests.Response:
+        logger.debug("HEAD %s %s", url, headers)
+        return self.session.head(
+            url,
+            timeout=30,
+            verify=False,
+            allow_redirects=allow_redirects,
+            headers=headers,
+        )
 
-    def get_bytes_parallel(self, url: str, file: IO[bytes]) -> bytes | None:
+    def _get(
+        self,
+        url: str,
+        allow_redirects: bool = True,
+        headers: dict[str, str] | None = None,
+    ) -> requests.Response:
+        logger.debug("GET %s %s", url, headers)
+        return self.session.get(
+            url,
+            timeout=30,
+            verify=False,
+            allow_redirects=allow_redirects,
+            headers=headers,
+        )
+
+    def get_file(self, url: str, file: IO[bytes]) -> bytes | None:
         if not self.is_url_download(url):
             return None
 
@@ -496,7 +473,9 @@ class TRLEScraper:
                 start = chunk
                 end = chunk + chunk_size - 1
                 headers = {"Range": f"bytes={start}-{end}"}
-                response = self.safe_get(url, headers=headers)
+                response = self._get(
+                    url, allow_redirects=True, headers=headers
+                )
                 path = tmpdir / f"{chunk}.dat"
                 with path.open("wb") as handle:
                     for part in response.iter_content(1024):
