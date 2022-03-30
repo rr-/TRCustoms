@@ -15,6 +15,8 @@ def update_review_rating_class(sender, instance, **kwargs):
         level = instance.level
         level.rating_class = get_level_rating_class(level)
         level.save(update_fields=["rating_class"])
+        author = instance.author
+        author.update_reviewed_level_count()
 
 
 @receiver(post_delete, sender=LevelReview)
@@ -22,3 +24,5 @@ def update_review_level_rating_class(sender, instance, **kwargs):
     level = instance.level
     level.rating_class = get_level_rating_class(level)
     level.save(update_fields=["rating_class"])
+    author = instance.author
+    author.update_reviewed_level_count()

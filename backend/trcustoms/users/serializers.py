@@ -39,8 +39,6 @@ class UserListingSerializer(serializers.ModelSerializer):
     is_active = serializers.ReadOnlyField()
     is_pending_activation = serializers.ReadOnlyField()
     picture = UploadedFileNestedSerializer(read_only=True)
-    authored_level_count = serializers.SerializerMethodField(read_only=True)
-    reviewed_level_count = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
         model = User
@@ -84,12 +82,6 @@ class UserListingSerializer(serializers.ModelSerializer):
 
     def get_permissions(self, instance: User) -> list[str]:
         return sorted(perm.value for perm in get_permissions(instance))
-
-    def get_authored_level_count(self, instance: User) -> int:
-        return instance.authored_level_count
-
-    def get_reviewed_level_count(self, instance: User) -> int:
-        return instance.reviewed_level_count
 
 
 class CustomEmailField(serializers.EmailField):
@@ -238,7 +230,7 @@ class UserDetailsSerializer(UserListingSerializer):
             instance.date_joined = timezone.now()
             instance.save()
 
-        return User.objects.with_counts().get(pk=instance.pk)
+        return instance
 
     @transaction.atomic
     def create(self, validated_data):
@@ -255,7 +247,7 @@ class UserDetailsSerializer(UserListingSerializer):
 
         send_email_confirmation_mail(instance)
 
-        return User.objects.with_counts().get(pk=instance.pk)
+        return instance
 
     class Meta:
         model = User

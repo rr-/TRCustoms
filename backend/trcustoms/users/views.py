@@ -86,7 +86,7 @@ class UserViewSet(
         "last_name",
     ]
 
-    queryset = User.objects.with_counts()
+    queryset = User.objects.all()
     serializer_class = UserListingSerializer
     serializer_class_by_action = {
         "retrieve": UserDetailsSerializer,

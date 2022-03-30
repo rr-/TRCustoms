@@ -1,7 +1,12 @@
-from django.db.models.signals import post_save, pre_save
+from django.db.models.signals import (
+    m2m_changed,
+    post_delete,
+    post_save,
+    pre_save,
+)
 from django.dispatch import receiver
 
-from trcustoms.levels.models import LevelFile
+from trcustoms.levels.models import Level, LevelFile
 
 
 @receiver(pre_save, sender=LevelFile)
@@ -33,3 +38,20 @@ def update_level_last_file(sender, instance, **kwargs):
     if last_file != level.last_file:
         level.last_file = last_file
         level.save()
+
+
+@receiver(post_save, sender=Level)
+@receiver(m2m_changed, sender=Level.authors.through)
+def update_review_rating_class(sender, instance, **kwargs):
+    for author in instance.authors.iterator():
+        author.update_authored_level_count()
+    for review in instance.reviews.iterator():
+        review.author.update_reviewed_level_count()
+
+
+@receiver(post_delete, sender=Level)
+def update_review_level_rating_class(sender, instance, **kwargs):
+    for author in instance.authors.iterator():
+        author.update_authored_level_count()
+    for review in instance.reviews.iterator():
+        review.author.update_reviewed_level_count()
