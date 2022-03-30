@@ -1,5 +1,6 @@
 import argparse
 import hashlib
+import io
 import logging
 import sys
 import tempfile
@@ -16,6 +17,7 @@ import yaml
 from django.conf import settings
 from django.core.files.base import ContentFile, File
 from django.core.management.base import BaseCommand
+from tqdm import tqdm
 from unidecode import unidecode
 
 from trcustoms.engines.models import Engine
@@ -60,6 +62,7 @@ def repr_obj(obj: Any) -> str:
 @dataclass
 class ScrapeContext:
     scraper: TRLEScraper
+    show_progress: bool
     no_basic_data: bool
     no_reviews: bool
     no_images: bool
@@ -257,68 +260,74 @@ def process_level_reviews(level: Level, trle_level: TRLELevel) -> None:
                 review.save()
 
 
-def process_level_images(level: Level, trle_level: TRLELevel) -> None:
+def process_level_images(
+    ctx: ScrapeContext, level: Level, trle_level: TRLELevel
+) -> None:
     image_urls = [trle_level.main_image_url] + trle_level.screenshot_urls
     for pos, image_url in enumerate(image_urls):
-        image_content = TRLEScraper().get_bytes(image_url)
-        size = len(image_content)
-        md5sum = hashlib.md5(image_content).hexdigest()
-        uploaded_file, _created = UploadedFile.objects.get_or_create(
-            md5sum=md5sum,
-            defaults=dict(
-                upload_type=UploadedFile.UploadType.LEVEL_SCREENSHOT,
-                content=ContentFile(image_content, name=Path(image_url).name),
-                size=size,
-            ),
-        )
+        with tempfile.TemporaryDirectory(dir=settings.CACHE_DIR) as tmpdir:
+            path = Path(tmpdir) / "dummy.dat"
+            with path.open("wb") as handle:
+                ctx.scraper.get_file(trle_level.download_url, file=handle)
+            image_content = path.read_bytes()
 
-        if pos == 0:
-            if level.cover != uploaded_file:
-                level.cover = uploaded_file
-                level.save(update_fields=["cover"])
-        else:
-            LevelScreenshot.objects.update_or_create(
-                level=level,
-                position=pos,
+            size = len(image_content)
+            md5sum = hashlib.md5(image_content).hexdigest()
+            uploaded_file, _created = UploadedFile.objects.get_or_create(
+                md5sum=md5sum,
                 defaults=dict(
-                    file=uploaded_file,
+                    upload_type=UploadedFile.UploadType.LEVEL_SCREENSHOT,
+                    content=ContentFile(
+                        image_content, name=Path(image_url).name
+                    ),
+                    size=size,
                 ),
             )
 
+            if pos == 0:
+                if level.cover != uploaded_file:
+                    level.cover = uploaded_file
+                    level.save(update_fields=["cover"])
+            else:
+                LevelScreenshot.objects.update_or_create(
+                    level=level,
+                    position=pos,
+                    defaults=dict(
+                        file=uploaded_file,
+                    ),
+                )
 
-def process_level_files(level: Level, trle_level: TRLELevel) -> None:
+
+def process_level_files(
+    ctx: ScrapeContext, level: Level, trle_level: TRLELevel
+) -> None:
     with tempfile.TemporaryDirectory(dir=settings.CACHE_DIR) as tmpdir:
         path = Path(tmpdir) / "dummy.zip"
         with path.open("wb") as handle:
-            TRLEScraper().get_bytes_parallel(
-                trle_level.download_url, file=handle
-            )
+            ctx.scraper.get_file(trle_level.download_url, file=handle)
 
-        with lock:
-            with disable_signals():
-                size = path.stat().st_size
-                if not size:
-                    return
-                md5sum = get_md5sum(path)
-                uploaded_file = UploadedFile.objects.filter(
-                    md5sum=md5sum
-                ).first()
-                if not uploaded_file:
-                    with path.open("rb") as handle:
-                        uploaded_file = UploadedFile.objects.create(
-                            md5sum=md5sum,
-                            size=size,
-                            upload_type=UploadedFile.UploadType.LEVEL_FILE,
-                            content=File(handle, name=path.name),
-                        )
-                if not level.files.filter(file=uploaded_file).exists():
-                    LevelFile.objects.update_or_create(
-                        level=level,
-                        file=uploaded_file,
-                        defaults=dict(
-                            version=1,
-                        ),
+        with lock, disable_signals():
+            size = path.stat().st_size
+            if not size:
+                return
+            md5sum = get_md5sum(path)
+            uploaded_file = UploadedFile.objects.filter(md5sum=md5sum).first()
+            if not uploaded_file:
+                with path.open("rb") as handle:
+                    uploaded_file = UploadedFile.objects.create(
+                        md5sum=md5sum,
+                        size=size,
+                        upload_type=UploadedFile.UploadType.LEVEL_FILE,
+                        content=File(handle, name=path.name),
                     )
+            if not level.files.filter(file=uploaded_file).exists():
+                LevelFile.objects.update_or_create(
+                    level=level,
+                    file=uploaded_file,
+                    defaults=dict(
+                        version=1,
+                    ),
+                )
 
 
 def process_level(ctx: ScrapeContext, obj_id: int) -> None:
@@ -339,9 +348,9 @@ def process_level(ctx: ScrapeContext, obj_id: int) -> None:
     if not ctx.no_reviews:
         process_level_reviews(level, trle_level)
     if not ctx.no_images:
-        process_level_images(level, trle_level)
+        process_level_images(ctx, level, trle_level)
     if not ctx.no_files:
-        process_level_files(level, trle_level)
+        process_level_files(ctx, level, trle_level)
 
 
 def run_in_parallel(
@@ -349,7 +358,10 @@ def run_in_parallel(
     obj_ids: list[int],
     worker: Callable[[ScrapeContext, int], None],
 ) -> None:
-    with ThreadPoolExecutor(max_workers=ctx.num_workers) as executor:
+    with tqdm(
+        range(len(obj_ids)),
+        file=sys.stderr if ctx.show_progress else io.StringIO(),
+    ) as progress, ThreadPoolExecutor(max_workers=ctx.num_workers) as executor:
         future_to_obj_id = {
             executor.submit(worker, ctx, obj_id): obj_id for obj_id in obj_ids
         }
@@ -363,6 +375,7 @@ def run_in_parallel(
                     file=sys.stderr,
                 )
                 print(traceback.format_exc(), file=sys.stderr)
+            progress.update()
 
 
 def handle_reviewers(ctx: ScrapeContext, reviewer_ids: list[int]) -> None:
@@ -413,6 +426,12 @@ class Command(BaseCommand):
             help="Reduce output verbosity",
         )
         parser.add_argument(
+            "-p",
+            "--progress",
+            action="store_true",
+            help="Show progress",
+        )
+        parser.add_argument(
             "--no-basic-data",
             action="store_true",
             help="Disable fetching basic information",
@@ -432,11 +451,6 @@ class Command(BaseCommand):
             action="store_true",
             help="Disable downloading level files",
         )
-        parser.add_argument(
-            "--no-cache",
-            action="store_true",
-            help="Disable cache",
-        )
 
         parser.add_argument(
             "--num-workers",
@@ -447,7 +461,8 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         ctx = ScrapeContext(
-            scraper=TRLEScraper(disable_cache=options["no_cache"]),
+            scraper=TRLEScraper(),
+            show_progress=options["progress"],
             no_basic_data=options["no_basic_data"],
             no_reviews=options["no_reviews"],
             no_images=options["no_images"],
@@ -455,6 +470,9 @@ class Command(BaseCommand):
             num_workers=options["num_workers"],
             quiet=options["quiet"],
         )
+
+        if ctx.show_progress:
+            logging.disable(logging.WARNING)
 
         def get_common_obj_ids(
             opt_name: str, all_obj_ids_cb: Callable[[], Iterable[int]]
@@ -469,17 +487,17 @@ class Command(BaseCommand):
                 if any(num in r for r in ranges):
                     yield num
 
-        if obj_ids := get_common_obj_ids(
-            "reviewers", ctx.scraper.fetch_all_reviewer_ids
+        if obj_ids := sorted(
+            get_common_obj_ids("reviewers", ctx.scraper.fetch_all_reviewer_ids)
         ):
-            handle_reviewers(ctx, sorted(obj_ids))
+            handle_reviewers(ctx, obj_ids)
 
-        if obj_ids := get_common_obj_ids(
-            "authors", ctx.scraper.fetch_all_author_ids
+        if obj_ids := sorted(
+            get_common_obj_ids("authors", ctx.scraper.fetch_all_author_ids)
         ):
-            handle_authors(ctx, sorted(obj_ids))
+            handle_authors(ctx, obj_ids)
 
-        if obj_ids := get_common_obj_ids(
-            "levels", ctx.scraper.fetch_all_level_ids
+        if obj_ids := sorted(
+            get_common_obj_ids("levels", ctx.scraper.fetch_all_level_ids)
         ):
-            handle_levels(ctx, sorted(obj_ids))
+            handle_levels(ctx, obj_ids)
