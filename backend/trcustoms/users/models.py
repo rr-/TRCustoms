@@ -4,7 +4,7 @@ from enum import Enum
 from django.contrib.auth.models import AbstractUser
 from django.contrib.auth.models import UserManager as BaseUserManager
 from django.db import models
-from django.db.models import Count, UniqueConstraint
+from django.db.models import UniqueConstraint
 from django.db.models.functions import Lower
 from rest_framework_simplejwt.tokens import Token
 
@@ -39,12 +39,6 @@ class UserPermission(Enum):
 
 
 class UserManager(BaseUserManager):
-    def with_counts(self):
-        return self.annotate(
-            authored_level_count=Count("authored_levels", distinct=True),
-            reviewed_level_count=Count("reviewed_levels", distinct=True),
-        )
-
     def get_by_natural_key(self, username: str) -> AbstractUser:
         case_insensitive_username_field = (
             f"{self.model.USERNAME_FIELD}__iexact"
@@ -97,6 +91,9 @@ class User(AbstractUser):
         Country, null=True, blank=True, on_delete=models.SET_NULL
     )
 
+    authored_level_count = models.PositiveIntegerField(default=0)
+    reviewed_level_count = models.PositiveIntegerField(default=0)
+
     @property
     def is_placeholder(self) -> bool:
         return not self.has_usable_password() and not self.is_active
@@ -106,3 +103,15 @@ class User(AbstractUser):
 
     def generate_password_reset_token(self) -> str:
         return str(PasswordResetToken.for_user(self))
+
+    def update_reviewed_level_count(self) -> None:
+        self.reviewed_level_count = self.reviewed_levels.filter(
+            level__is_approved=True
+        ).count()
+        self.save()
+
+    def update_authored_level_count(self) -> None:
+        self.authored_level_count = self.authored_levels.filter(
+            is_approved=True
+        ).count()
+        self.save()
