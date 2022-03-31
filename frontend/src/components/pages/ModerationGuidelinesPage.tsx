@@ -1,4 +1,3 @@
-import "./ModerationGuidelinesPage.css";
 import { useEffect } from "react";
 import { useContext } from "react";
 import { PageGuard } from "src/components/PermissionGuard";
@@ -80,7 +79,7 @@ const ModerationGuidelinesPageView = () => {
         more general. For example:
       </p>
 
-      <ul className="ModerationGuidelinesPage--exampleList">
+      <ul>
         <li>
           Southern America <IconReject />
         </li>
@@ -89,7 +88,7 @@ const ModerationGuidelinesPageView = () => {
         </li>
       </ul>
 
-      <ul className="ModerationGuidelinesPage--exampleList">
+      <ul>
         <li>
           3 Endings <IconReject />
         </li>
@@ -97,6 +96,28 @@ const ModerationGuidelinesPageView = () => {
           Multiple Endings <IconCheck />
         </li>
       </ul>
+
+      <SectionHeader>Prohibited Content</SectionHeader>
+      <p>
+        Prohibited content is defined as content that should be IMMEDIATELY
+        removed on sight. If you don't have the capability to remove this
+        content, contact the administrator. Examples:
+      </p>
+
+      <ol>
+        <li>Realistic-looking gore</li>
+        <li>Nudity</li>
+        <li>Sexual acts</li>
+        <li>Explicit hardcore pornography</li>
+        <li>Explicit sexualization of minors</li>
+      </ol>
+
+      <p>
+        Points 1, 2, and 3 are allowed in levels, but cannot be displayed to the
+        public on the level page. If they are present on the level page, the
+        level must be rejected and the reason provided must mention the
+        inclusion of appropriate tags (such as: Nudity, Gore, Sexual Acts).
+      </p>
 
       <SectionHeader>Banning Members</SectionHeader>
       <p>
