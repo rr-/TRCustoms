@@ -2,6 +2,7 @@ from collections.abc import Iterable
 
 from django.db.models import Q
 from rest_framework import mixins, viewsets
+from rest_framework.exceptions import ValidationError
 
 from trcustoms.audit_logs.models import AuditLog
 from trcustoms.audit_logs.serializers import AuditLogListingSerializer
@@ -17,10 +18,28 @@ def split_terms(search: str) -> Iterable[str]:
             yield term
 
 
-def filter_queryset_state(qs, state):
-    model_name, text = state.split("_", maxsplit=1)
-    qs = qs.filter(object_type__model=model_name, changes__icontains=text)
-    return qs
+def filter_queryset_state(qs, states: str | None):
+    q_obj = Q(pk=None)
+    for state in states.split(","):
+        match state:
+            case (
+                "activated"
+                | "approved"
+                | "created"
+                | "deleted"
+                | "merged"
+                | "rejected"
+                | "updated"
+            ):
+                q_obj |= Q(changes__regex=rf"\y{state.title()}\y")
+            case "banned":
+                q_obj |= Q(changes__regex=r"\yBanned\y")
+                q_obj |= Q(changes__regex=r"\yUnbanned\y")
+            case "confirmed_email":
+                q_obj |= Q(changes__iregex=r"\yConfirmed email\y")
+            case _:
+                raise ValidationError({"detail": f"Unknown state: {state}"})
+    return qs.filter(q_obj)
 
 
 def filter_queryset_search(qs, search: str | None):
@@ -29,10 +48,8 @@ def filter_queryset_search(qs, search: str | None):
     for term in split_terms(search):
         if ":" in term:
             model_name, changes = term.split(":", maxsplit=1)
-            q_obj = Q(pk=None)
-            for change in changes.split(","):
-                q_obj |= Q(changes__icontains=change)
-            qs = qs.filter(object_type__model=model_name).filter(q_obj)
+            qs = qs.filter(object_type__model=model_name)
+            qs = filter_queryset_state(qs, changes)
         else:
             qs = qs.filter(changes__icontains=term)
     return qs

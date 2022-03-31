@@ -40,8 +40,10 @@ class AuditLog(DatesInfo):
         default_permissions = []
 
     def __str__(self) -> str:
-        return (
+        ret = (
             f"{self.change_type.title()} of "
-            f"{self.object_type.model.title()} #{self.object_id} "
-            f"by {self.change_author.username}"
+            f"{self.object_type.model.title()} #{self.object_id}"
         )
+        if self.change_author:
+            ret += f" by {self.change_author.username}"
+        return ret
