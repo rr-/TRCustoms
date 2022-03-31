@@ -15,7 +15,7 @@ import type { AuditLogSearchQuery } from "src/services/AuditLogService";
 
 interface StateSearchSectionItem {
   title: string;
-  searchChanges: string;
+  searchState: string;
 }
 
 interface StateSearchSection {
@@ -94,37 +94,39 @@ const StateSearches: StateSearchSection[] = [
     title: "User States",
     searchModel: "user",
     searchList: [
-      { title: "Created", searchChanges: "created" },
-      { title: "Activated", searchChanges: "activated" },
-      { title: "Rejected", searchChanges: "rejected" },
-      { title: "Banned", searchChanges: "banned" },
+      { title: "Created", searchState: "created" },
+      { title: "Activated", searchState: "activated" },
+      { title: "Rejected", searchState: "rejected" },
+      { title: "Banned", searchState: "banned" },
+      { title: "Confirmed email", searchState: "confirmed_email" },
     ],
   },
   {
     title: "Level States",
     searchModel: "level",
     searchList: [
-      { title: "Created", searchChanges: "created" },
-      { title: "Updated", searchChanges: "updated" },
-      { title: "Approved", searchChanges: "approved" },
-      { title: "Rejected", searchChanges: "rejected" },
+      { title: "Created", searchState: "created" },
+      { title: "Updated", searchState: "updated" },
+      { title: "Approved", searchState: "approved" },
+      { title: "Rejected", searchState: "rejected" },
+      { title: "Deleted", searchState: "deleted" },
     ],
   },
   {
     title: "Review States",
     searchModel: "levelreview",
     searchList: [
-      { title: "Posted", searchChanges: "created" },
-      { title: "Updated", searchChanges: "updated" },
+      { title: "Posted", searchState: "created" },
+      { title: "Updated", searchState: "updated" },
     ],
   },
   {
     title: "Tag States",
     searchModel: "tag",
     searchList: [
-      { title: "Created", searchChanges: "created" },
-      { title: "Deleted", searchChanges: "deleted" },
-      { title: "Merged", searchChanges: "merged" },
+      { title: "Created", searchState: "created" },
+      { title: "Deleted", searchState: "deleted" },
+      { title: "Merged", searchState: "merged" },
     ],
   },
 ];
@@ -192,12 +194,12 @@ const AuditLogSearch = ({
       ? addSearchTerm(
           searchQuery.search,
           section.searchModel,
-          sectionItem.searchChanges
+          sectionItem.searchState
         )
       : deleteSearchTerm(
           searchQuery.search,
           section.searchModel,
-          sectionItem.searchChanges
+          sectionItem.searchState
         );
     onSearchQueryChange({ ...searchQuery, search: newSearch });
   };
@@ -209,7 +211,7 @@ const AuditLogSearch = ({
     return isSearchTermPresent(
       searchQuery.search,
       section.searchModel,
-      sectionItem.searchChanges
+      sectionItem.searchState
     );
   };
 
