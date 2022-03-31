@@ -422,7 +422,10 @@ class TRLEScraper:
 
     def is_url_download(self, url) -> bool:
         response = self._head(url)
-        return response.headers["Content-Type"].startswith("application/")
+        content_type = response.headers["Content-Type"]
+        return content_type.startswith(
+            "application/"
+        ) or content_type.startswith("image/")
 
     def get_url_redirect(self, url) -> str | None:
         response = self._head(url, allow_redirects=False)
