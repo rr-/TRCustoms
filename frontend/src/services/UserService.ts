@@ -12,6 +12,7 @@ interface CountryNested extends CountryListing {}
 
 enum UserPermission {
   editUsers = "edit_users",
+  manageUsers = "manage_users",
   listUsers = "list_users",
   viewUsers = "view_users",
   uploadLevels = "upload_levels",

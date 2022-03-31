@@ -137,7 +137,7 @@ const UserPageView = ({ userId }: UserPageViewProps) => {
                       Edit profile
                     </PushButton>
                   </PermissionGuard>
-                  <PermissionGuard require={UserPermission.editUsers}>
+                  <PermissionGuard require={UserPermission.manageUsers}>
                     {user.is_banned ? (
                       <UserUnbanPushButton user={user} />
                     ) : (
@@ -151,7 +151,7 @@ const UserPageView = ({ userId }: UserPageViewProps) => {
                   </PermissionGuard>
                 </>
               ) : user.is_pending_activation ? (
-                <PermissionGuard require={UserPermission.editUsers}>
+                <PermissionGuard require={UserPermission.manageUsers}>
                   <UserActivatePushButton user={user} />
                   {!user.is_superuser && (
                     <UserDeactivatePushButton
