@@ -61,10 +61,10 @@ class UserViewSet(
         "partial_update": [
             HasPermission(UserPermission.EDIT_USERS) | IsAccessingOwnResource
         ],
-        "activate": [HasPermission(UserPermission.EDIT_USERS)],
-        "deactivate": [HasPermission(UserPermission.EDIT_USERS)],
-        "ban": [HasPermission(UserPermission.EDIT_USERS)],
-        "unban": [HasPermission(UserPermission.EDIT_USERS)],
+        "activate": [HasPermission(UserPermission.MANAGE_USERS)],
+        "deactivate": [HasPermission(UserPermission.MANAGE_USERS)],
+        "ban": [HasPermission(UserPermission.MANAGE_USERS)],
+        "unban": [HasPermission(UserPermission.MANAGE_USERS)],
         "resend_activation_email": [AllowAny],
         "confirm_email": [AllowAny],
         "request_password_reset": [AllowAny],

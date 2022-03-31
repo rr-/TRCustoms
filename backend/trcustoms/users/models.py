@@ -31,6 +31,7 @@ class UserPermission(Enum):
     EDIT_REVIEWS = "edit_reviews"
     EDIT_TAGS = "edit_tags"
     EDIT_USERS = "edit_users"
+    MANAGE_USERS = "manage_users"
     LIST_USERS = "list_users"
     REVIEW_AUDIT_LOGS = "review_audit_logs"
     REVIEW_LEVELS = "review_levels"
@@ -56,11 +57,14 @@ class User(AbstractUser):
         ]
         default_permissions = []
         permissions = [
+            (UserPermission.DELETE_LEVELS.value, "Can delete levels"),
+            (UserPermission.DELETE_REVIEWS.value, "Can delete reviews"),
             (UserPermission.EDIT_LEVELS.value, "Can edit levels"),
             (UserPermission.EDIT_REVIEWS.value, "Can edit reviews"),
             (UserPermission.EDIT_TAGS.value, "Can edit tags"),
             (UserPermission.EDIT_NEWS.value, "Can edit news"),
             (UserPermission.EDIT_USERS.value, "Can edit users"),
+            (UserPermission.MANAGE_USERS.value, "Can manage users"),
             (UserPermission.LIST_USERS.value, "Can list users"),
             (UserPermission.VIEW_USERS.value, "Can view users"),
             (UserPermission.REVIEW_AUDIT_LOGS.value, "Can review audit logs"),

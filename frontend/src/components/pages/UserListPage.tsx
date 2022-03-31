@@ -55,7 +55,7 @@ const UserListPageView = () => {
 
 const UserListPage = () => {
   return (
-    <PageGuard require={UserPermission.editUsers}>
+    <PageGuard require={UserPermission.manageUsers}>
       <UserListPageView />
     </PageGuard>
   );
