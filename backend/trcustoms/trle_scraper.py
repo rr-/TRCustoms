@@ -262,6 +262,8 @@ class TRLEScraper:
             "https://www.trle.net/sc/levelsfeatures"
         ):
             website_url = None
+        if website_url.endswith(".zip"):
+            website_url = None
 
         showcase_urls: list[str] = []
 
