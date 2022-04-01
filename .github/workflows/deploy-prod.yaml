@@ -1,11 +1,11 @@
-name: Deploy
+name: Deploy production
 on:
   push:
     branches:
       - main
 jobs:
   build:
-    name: Build
+    name: Build production
     runs-on: ubuntu-latest
     steps:
       - uses: appleboy/ssh-action@master
@@ -14,4 +14,4 @@ jobs:
           username: ${{ secrets.USERNAME }}
           password: ${{ secrets.PASSWORD }}
           port: ${{ secrets.PORT }}
-          script: srv/website/update
+          script: ~/update-prod
