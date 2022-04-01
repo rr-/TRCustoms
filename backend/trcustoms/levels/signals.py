@@ -24,12 +24,12 @@ def update_level_version(sender, instance, **kwargs):
 
 @receiver(post_save, sender=LevelFile)
 def update_level_download_count(sender, instance, **kwargs):
-    instance.update_download_count()
+    instance.level.update_download_count()
 
 
 @receiver(post_save, sender=LevelFile)
 def update_level_last_file(sender, instance, **kwargs):
-    instance.update_last_file()
+    instance.level.update_last_file()
 
 
 @receiver(post_save, sender=Level)
