@@ -6,9 +6,11 @@ A website dedicated to custom levels for classic Tomb Raider games.
 
 - Docker
 - Python3.10
-- Django (no REST)
+- Django
+- Django Rest Framework
 - PostgreSQL
 - React
+- React Hooks
 
 ## Working with the project
 
@@ -28,7 +30,7 @@ docker-compose up
 Create a super user:
 
 ```
-docker-compose run --rm app manage createsuperuser
+docker-compose run --rm trcustoms manage createsuperuser
 ```
 
 To go to the website, visit `http://localhost:8000/`.
@@ -37,19 +39,19 @@ To log in to Django admin, visit `http://localhost:8000/admin/`.
 #### Running tests
 
 ```
-docker-compose run --rm app tests
+docker-compose run --rm trcustoms tests
 ```
 
 #### Running Bash shell
 
 ```
-docker-compose run --rm app shell
+docker-compose run --rm trcustoms shell
 ```
 
 #### Running Django shell
 
 ```
-docker-compose run --rm app manage shell
+docker-compose run --rm trcustoms manage shell
 ```
 
 #### Running the production environment
