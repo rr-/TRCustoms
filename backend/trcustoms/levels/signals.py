@@ -24,20 +24,12 @@ def update_level_version(sender, instance, **kwargs):
 
 @receiver(post_save, sender=LevelFile)
 def update_level_download_count(sender, instance, **kwargs):
-    level = instance.level
-    level.download_count = max(
-        level.files.values_list("download_count", flat=True)
-    )
-    level.save()
+    instance.update_download_count()
 
 
 @receiver(post_save, sender=LevelFile)
 def update_level_last_file(sender, instance, **kwargs):
-    level = instance.level
-    last_file = level.files.order_by("-version").first()
-    if last_file != level.last_file:
-        level.last_file = last_file
-        level.save()
+    instance.update_last_file()
 
 
 @receiver(post_save, sender=Level)

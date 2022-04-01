@@ -97,6 +97,20 @@ class Level(DatesInfo):
     def __str__(self) -> str:
         return f"{self.name} (id={self.pk})"
 
+    def update_download_count(self) -> None:
+        download_count = max(
+            self.files.values_list("download_count", flat=True)
+        )
+        if download_count != self.download_count:
+            self.download_count = download_count
+            self.save()
+
+    def update_last_file(self) -> None:
+        last_file = self.files.order_by("-version").first()
+        if last_file != self.last_file:
+            self.last_file = last_file
+            self.save()
+
 
 class LevelScreenshot(DatesInfo):
     level = models.ForeignKey(

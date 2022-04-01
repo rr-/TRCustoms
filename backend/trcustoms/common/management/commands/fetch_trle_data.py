@@ -246,8 +246,8 @@ def process_level_reviews(level: Level, trle_level: TRLELevel) -> None:
             review, _created = LevelReview.objects.get_or_create(
                 level=level,
                 author=reviewer,
-                review_type=LevelReview.ReviewType.TRLE,
                 defaults=dict(
+                    review_type=LevelReview.ReviewType.TRLE,
                     trle_rating_gameplay=trle_review.rating_gameplay,
                     trle_rating_enemies=trle_review.rating_enemies,
                     trle_rating_atmosphere=trle_review.rating_atmosphere,
@@ -328,6 +328,7 @@ def process_level_files(
                         version=1,
                     ),
                 )
+                level.update_last_file()
 
 
 def process_level(ctx: ScrapeContext, obj_id: int) -> None:
