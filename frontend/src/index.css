@@ -99,12 +99,12 @@ input[type="radio"] {
   width: 20px;
   height: 20px;
   vertical-align: text-top;
-  visibility: hidden;
   border: 0;
   margin: 0 0.5rem 0 0;
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  appearance: none;
 }
 input[type="radio"]:not(:checked):before {
   content: "";
@@ -119,7 +119,6 @@ input[type="radio"]:not(:checked):before {
   background-color: var(--bg-color);
   color: var(--input-fg-color);
   box-sizing: border-box;
-  visibility: visible;
 }
 input[type="radio"]:checked:before {
   content: "";
@@ -132,11 +131,9 @@ input[type="radio"]:checked:before {
   left: 0;
   border-color: var(--button-bg-color);
   background-color: var(--button-bg-color);
-  visibility: visible;
 }
 input[type="radio"]:checked:after {
   content: "";
-  visibility: visible;
   display: block;
   width: 12px;
   height: 12px;

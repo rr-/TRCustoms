@@ -1,6 +1,5 @@
 import "./GenresFormField.css";
 import { useFormikContext } from "formik";
-import { Field } from "formik";
 import { useContext } from "react";
 import { Checkbox } from "src/components/Checkbox";
 import { BaseFormField } from "src/components/formfields/BaseFormField";

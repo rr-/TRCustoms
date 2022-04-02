@@ -1,4 +1,3 @@
-import { Field } from "formik";
 import { useFormikContext } from "formik";
 import { Checkbox } from "src/components/Checkbox";
 import { BaseFormField } from "src/components/formfields/BaseFormField";
