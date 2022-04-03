@@ -27,6 +27,9 @@ x-base-trcustoms-backend: &base-trcustoms-backend
   build:
     context: .
     dockerfile: ./services/backend/Dockerfile
+    args:
+      - BUILD_DATE=${BUILD_DATE}
+      - BUILD_VERSION=${BUILD_VERSION}
   volumes:
     - ./backend/trcustoms/:/app/trcustoms/
     - ./backend/volumes/cache/:/app/cache/
@@ -64,6 +67,9 @@ services:
     build:
       context: .
       dockerfile: ./services/frontend/Dockerfile
+      args:
+        - BUILD_DATE=${BUILD_DATE}
+        - BUILD_VERSION=${BUILD_VERSION}
     volumes:
       - ./frontend/public/:/app/public/
       - ./frontend/src/:/app/src/
