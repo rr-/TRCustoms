@@ -1,6 +1,7 @@
 import { AxiosResponse } from "axios";
 import { api } from "src/api";
 import { API_URL } from "src/constants";
+import { StorageService } from "src/services/StorageService";
 
 interface AccessTokenResponse {
   access: string;
@@ -22,16 +23,16 @@ const login = async (username: string, password: string) => {
     `${API_URL}/auth/token/`,
     data
   )) as AxiosResponse<AccessTokenResponse>;
-  localStorage.setItem("accessToken", response.data.access);
-  localStorage.setItem("refreshToken", response.data.refresh);
+  StorageService.setItem("accessToken", response.data.access);
+  StorageService.setItem("refreshToken", response.data.refresh);
 };
 
 const getAccessToken = (): string | null => {
-  return localStorage.getItem("accessToken");
+  return StorageService.getItem("accessToken");
 };
 
 const getRefreshToken = (): string | null => {
-  return localStorage.getItem("refreshToken");
+  return StorageService.getItem("refreshToken");
 };
 
 const getNewAccessToken = async (): Promise<string> => {
@@ -44,13 +45,13 @@ const getNewAccessToken = async (): Promise<string> => {
     `${API_URL}/auth/token/refresh/`,
     data
   )) as AxiosResponse<RefreshTokenResponse>;
-  localStorage.setItem("accessToken", response.data.access);
+  StorageService.setItem("accessToken", response.data.access);
   return response.data.access;
 };
 
 const logout = () => {
-  localStorage.removeItem("accessToken");
-  localStorage.removeItem("refreshToken");
+  StorageService.removeItem("accessToken");
+  StorageService.removeItem("refreshToken");
 };
 
 const AuthService = {

@@ -4,11 +4,11 @@ import { Fragment } from "react";
 import { useEffect } from "react";
 import { useInfiniteQuery } from "react-query";
 import { useQuery } from "react-query";
-import { useEnableInfiniteScroll } from "src/components/DataTable";
 import { Loader } from "src/components/Loader";
 import { Pager } from "src/components/Pager";
 import { DISABLE_PAGING } from "src/constants";
 import { useInfiniteScroll } from "src/contexts/InfiniteScroll";
+import { useSettings } from "src/contexts/SettingsContext";
 import type { GenericSearchResult } from "src/types";
 import type { GenericSearchQuery } from "src/types";
 
@@ -152,8 +152,8 @@ const InfiniteDataList = <TItem extends {}, TQuery extends GenericSearchQuery>({
 const DataList = <TItem extends {}, TQuery extends GenericSearchQuery>(
   props: DataListProps<TItem, TQuery>
 ) => {
-  const [enableInfiniteScroll] = useEnableInfiniteScroll();
-  if (enableInfiniteScroll) {
+  const { infiniteScroll } = useSettings();
+  if (infiniteScroll) {
     return <InfiniteDataList {...props} />;
   }
   return <PagedDataList {...props} />;

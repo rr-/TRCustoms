@@ -1,9 +1,10 @@
 import "./App.css";
+import "./themes.css";
+import { useEffect } from "react";
 import { Routes } from "react-router-dom";
 import { Route } from "react-router-dom";
 import { NavBar } from "src/components/NavBar";
 import { ScrollToTop } from "src/components/ScrollToTop";
-import { ThemeManager } from "src/components/ThemeManager";
 import { AboutPage } from "src/components/pages/AboutPage";
 import { EmailConfirmationPage } from "src/components/pages/EmailConfirmationPage";
 import { Error403Page } from "src/components/pages/Error403Page";
@@ -33,15 +34,21 @@ import { UserEditPage } from "src/components/pages/UserEditPage";
 import { UserListPage } from "src/components/pages/UserListPage";
 import { UserPage } from "src/components/pages/UserPage";
 import { ConfigContextProvider } from "src/contexts/ConfigContext";
+import { useSettings } from "src/contexts/SettingsContext";
 import { TitleContextProvider } from "src/contexts/TitleContext";
 import { UserContextProvider } from "src/contexts/UserContext";
 
 function App() {
+  const { theme } = useSettings();
+
+  useEffect(() => {
+    document.documentElement.dataset.theme = theme.stub;
+  }, [theme]);
+
   return (
     <TitleContextProvider>
       <ConfigContextProvider>
         <UserContextProvider>
-          <ThemeManager />
           <ScrollToTop />
           <NavBar />
           <main id="Content" className="MainContainer">
