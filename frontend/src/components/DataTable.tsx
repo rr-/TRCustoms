@@ -9,14 +9,9 @@ import { Pager } from "src/components/Pager";
 import { SortLink } from "src/components/SortLink";
 import { DISABLE_PAGING } from "src/constants";
 import { useInfiniteScroll } from "src/contexts/InfiniteScroll";
+import { useSettings } from "src/contexts/SettingsContext";
 import type { GenericSearchResult } from "src/types";
 import type { GenericSearchQuery } from "src/types";
-import { createLocalStorageStateHook } from "use-local-storage-state";
-
-const useEnableInfiniteScroll = createLocalStorageStateHook(
-  "infiniteScroll",
-  false
-);
 
 interface DataTableColumn<TItem> {
   name: string;
@@ -306,17 +301,12 @@ const InfiniteDataTable = <TItem extends {}, TQuery extends GenericSearchQuery>(
 const DataTable = <TItem extends {}, TQuery extends GenericSearchQuery>(
   props: DataTableProps<TItem, TQuery>
 ) => {
-  const [enableInfiniteScroll] = useEnableInfiniteScroll();
-  if (enableInfiniteScroll) {
+  const { infiniteScroll } = useSettings();
+  if (infiniteScroll) {
     return <InfiniteDataTable {...props} />;
   }
   return <PagedDataTable {...props} />;
 };
 
 export type { DataTableColumn };
-export {
-  useEnableInfiniteScroll,
-  PagedDataTable,
-  InfiniteDataTable,
-  DataTable,
-};
+export { PagedDataTable, InfiniteDataTable, DataTable };

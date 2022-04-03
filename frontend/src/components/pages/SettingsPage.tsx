@@ -2,18 +2,17 @@ import "./SettingsPage.css";
 import { useEffect } from "react";
 import { useContext } from "react";
 import { Checkbox } from "src/components/Checkbox";
-import { useEnableInfiniteScroll } from "src/components/DataTable";
-import { getAllThemes } from "src/components/ThemeManager";
-import { useTheme } from "src/components/ThemeManager";
+import { useSettings } from "src/contexts/SettingsContext";
 import { TitleContext } from "src/contexts/TitleContext";
 
 const SettingsPage = () => {
-  const [, setTheme] = useTheme();
+  const {
+    infiniteScroll,
+    setInfiniteScroll,
+    getAllThemes,
+    setTheme,
+  } = useSettings();
   const { setTitle } = useContext(TitleContext);
-  const [
-    enableInfiniteScroll,
-    setEnableInfiniteScroll,
-  ] = useEnableInfiniteScroll();
 
   useEffect(() => {
     setTitle("Settings");
@@ -29,7 +28,7 @@ const SettingsPage = () => {
               type="button"
               title={theme.name}
               className="link SettingsPage--switch"
-              onClick={() => setTheme(theme.name)}
+              onClick={() => setTheme(theme)}
             >
               <span
                 className="SettingsPage--label"
@@ -45,8 +44,8 @@ const SettingsPage = () => {
 
       <Checkbox
         label="Enable infinite scroll"
-        onChange={(e) => setEnableInfiniteScroll(e.target.checked)}
-        checked={enableInfiniteScroll}
+        onChange={(e) => setInfiniteScroll(e.target.checked)}
+        checked={infiniteScroll}
       />
     </div>
   );
