@@ -9,8 +9,23 @@ const About: LegaleseEntry = {
   children: [
     {
       title: "What is TRCustoms.org?",
-      description:
-        "TRCustoms.org is a website that hosts custom Tomb Raider games created by the Tomb Raider Level Editor. Users can upload levels, review them, and more! Since our official launch on 2 April 2022, our aim was and will always be to preserve the amazing productions of the TRLE community so that nothing is lost to history.",
+      description: (
+        <>
+          TRCustoms.org is a website that hosts custom Tomb Raider games created
+          by the Tomb Raider Level Editor. Users can upload levels, review them,
+          and more! Since our official launch on 2 April 2022, our aim was and
+          will always be to preserve the amazing productions of the TRLE
+          community so that nothing is lost to history.
+          <br />
+          The website currently runs on version{" "}
+          <a
+            href={`https://github.com/rr-/trcustoms/commit/${process.env.REACT_APP_BUILD_VERSION}`}
+          >
+            {process.env.REACT_APP_BUILD_VERSION}
+          </a>{" "}
+          built on {process.env.REACT_APP_BUILD_DATE}.
+        </>
+      ),
     },
 
     {
