@@ -1,6 +1,5 @@
 import "./HomePage.css";
 import { sortBy } from "lodash";
-import { round } from "lodash";
 import { useState } from "react";
 import { useContext } from "react";
 import { useEffect } from "react";
@@ -23,6 +22,7 @@ import { EngineLink } from "src/components/links/EngineLink";
 import { ConfigContext } from "src/contexts/ConfigContext";
 import { TitleContext } from "src/contexts/TitleContext";
 import { UserPermission } from "src/services/UserService";
+import { reprBigNumber } from "src/utils/string";
 
 const LevelStats = () => {
   const { config } = useContext(ConfigContext);
@@ -42,8 +42,8 @@ const LevelStats = () => {
       </DefinitionItemGroup>
 
       <DefinitionItem term="Reviews">
-        {config.total_reviews} (
-        {round(config.total_reviews / config.total_levels, 2)}/level)
+        {reprBigNumber(config.total_reviews)} (
+        {reprBigNumber(config.total_reviews / config.total_levels)} per level)
       </DefinitionItem>
     </DefinitionList>
   );
