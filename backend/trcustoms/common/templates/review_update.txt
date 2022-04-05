@@ -3,9 +3,9 @@
 {% block content %}
 Hi {{username}},
 
-The review submitted for {{level_name}} on TRCustoms.org has been edited.
+{{reviewer_username}}'s review for {{level_name}} has been edited.
 
-Click on the link below to go to the level page if you want to read it.
+Click on the link below to go to the level page if you want to view the changes.
 
 {{link}}
 {% endblock %}
