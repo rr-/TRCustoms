@@ -1,5 +1,5 @@
 from django.conf import settings
-from django.db.models import Count
+from django.db.models import Count, Sum
 from rest_framework import status, viewsets
 from rest_framework.decorators import action
 from rest_framework.permissions import AllowAny
@@ -73,6 +73,11 @@ class ConfigViewSet(viewsets.ViewSet):
                 },
                 "total_levels": Level.objects.all().count(),
                 "total_reviews": LevelReview.objects.all().count(),
+                "total_downloads": (
+                    Level.objects.all()
+                    .aggregate(total_download_count=Sum("download_count"))
+                    .get("total_download_count")
+                ),
                 "review_stats": [
                     {
                         "rating_class": {
