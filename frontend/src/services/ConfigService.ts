@@ -79,6 +79,7 @@ interface Config {
   };
   total_levels: number;
   total_reviews: number;
+  total_downloads: number;
 }
 
 type FeaturedLevels = {

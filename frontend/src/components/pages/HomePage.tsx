@@ -41,6 +41,11 @@ const LevelStats = () => {
         ))}
       </DefinitionItemGroup>
 
+      <DefinitionItem term="Downloads">
+        {reprBigNumber(config.total_downloads)} (
+        {reprBigNumber(config.total_downloads / config.total_levels)} per level)
+      </DefinitionItem>
+
       <DefinitionItem term="Reviews">
         {reprBigNumber(config.total_reviews)} (
         {reprBigNumber(config.total_reviews / config.total_levels)} per level)

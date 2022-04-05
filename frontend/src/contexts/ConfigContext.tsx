@@ -32,6 +32,7 @@ const defaultConfig = {
   },
   total_levels: 0,
   total_reviews: 0,
+  total_downloads: 0,
 };
 
 const ConfigContext = createContext<{
