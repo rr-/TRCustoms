@@ -55,7 +55,9 @@ const TagsFormField = ({
 
   const handleNewResultApply = useCallback(
     async (text: string) => {
-      if (value.map((t) => t.name).includes(text)) {
+      text = text.trim();
+      text = text[0].toUpperCase() + text.substr(1);
+      if (value.map((t) => t.name.toLowerCase()).includes(text.toLowerCase())) {
         return;
       }
       setFieldTouched(name);
