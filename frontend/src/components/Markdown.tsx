@@ -1,6 +1,7 @@
 import "./Markdown.css";
 import { useMemo } from "react";
 import ReactMarkdown from "react-markdown";
+import remarkBreaks from "remark-breaks";
 import remarkGfm from "remark-gfm";
 import { getYoutubeVideoID } from "src/utils";
 
@@ -27,7 +28,7 @@ const Markdown = ({ children }: MarkdownProps) => {
     () => (
       <div className="Markdown">
         <ReactMarkdown
-          remarkPlugins={[remarkGfm]}
+          remarkPlugins={[remarkGfm, remarkBreaks]}
           components={{ a: transformLink }}
         >
           {children}
