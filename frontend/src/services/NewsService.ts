@@ -5,8 +5,8 @@ import type { UploadedFile } from "src/services/FileService";
 import type { UserNested } from "src/services/UserService";
 import type { GenericSearchQuery } from "src/types";
 import { GenericSearchResult } from "src/types";
-import { filterFalsyObjectValues } from "src/utils";
-import { getGenericSearchQuery } from "src/utils";
+import { filterFalsyObjectValues } from "src/utils/misc";
+import { getGenericSearchQuery } from "src/utils/misc";
 
 interface NewsAuthor extends UserNested {
   picture: UploadedFile | null;

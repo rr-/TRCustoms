@@ -11,7 +11,7 @@ import { KEY_LEFT } from "src/constants";
 import { KEY_RIGHT } from "src/constants";
 import type { UploadedFile } from "src/services/FileService";
 import { DisplayMode } from "src/types";
-import { getYoutubeVideoID } from "src/utils";
+import { getYoutubeVideoID } from "src/utils/misc";
 
 interface MediumThumbnailModalProps {
   file?: UploadedFile | undefined;

@@ -8,7 +8,7 @@ import { GenreLink } from "src/components/links/GenreLink";
 import type { GenreListing } from "src/services/GenreService";
 import type { GenreSearchQuery } from "src/services/GenreService";
 import { GenreService } from "src/services/GenreService";
-import { formatDate } from "src/utils";
+import { formatDate } from "src/utils/string";
 
 interface GenresTableProps {
   searchQuery: GenreSearchQuery;

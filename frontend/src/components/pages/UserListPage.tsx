@@ -11,7 +11,7 @@ import { UsersTable } from "src/components/UsersTable";
 import { TitleContext } from "src/contexts/TitleContext";
 import type { UserSearchQuery } from "src/services/UserService";
 import { UserPermission } from "src/services/UserService";
-import { getCurrentSearchParams } from "src/utils";
+import { getCurrentSearchParams } from "src/utils/misc";
 
 const deserializeSearchQuery = (qp: {
   [key: string]: string;

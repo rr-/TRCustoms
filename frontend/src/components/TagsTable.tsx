@@ -11,9 +11,9 @@ import type { TagListing } from "src/services/TagService";
 import type { TagSearchQuery } from "src/services/TagService";
 import { TagService } from "src/services/TagService";
 import { UserPermission } from "src/services/UserService";
-import { formatDate } from "src/utils";
-import { showAlertOnError } from "src/utils";
-import { resetQueries } from "src/utils";
+import { showAlertOnError } from "src/utils/misc";
+import { resetQueries } from "src/utils/misc";
+import { formatDate } from "src/utils/string";
 
 interface TagsTableProps {
   searchQuery: TagSearchQuery;

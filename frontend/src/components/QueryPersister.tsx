@@ -3,8 +3,8 @@ import { useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import type { GenericSearchQuery } from "src/types";
-import { filterFalsyObjectValues } from "src/utils";
-import { getCurrentSearchParams } from "src/utils";
+import { filterFalsyObjectValues } from "src/utils/misc";
+import { getCurrentSearchParams } from "src/utils/misc";
 
 const deserializeGenericSearchQuery = (
   qp: { [key: string]: string },

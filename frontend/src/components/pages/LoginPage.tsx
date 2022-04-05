@@ -17,8 +17,8 @@ import { TitleContext } from "src/contexts/TitleContext";
 import { UserContext } from "src/contexts/UserContext";
 import { AuthService } from "src/services/AuthService";
 import { UserService } from "src/services/UserService";
-import { makeSentence } from "src/utils";
-import { filterFalsyObjectValues } from "src/utils";
+import { filterFalsyObjectValues } from "src/utils/misc";
+import { makeSentence } from "src/utils/string";
 
 const LoginPage = () => {
   const navigate = useNavigate();

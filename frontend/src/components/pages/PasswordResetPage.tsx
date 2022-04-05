@@ -10,9 +10,9 @@ import { FormGridFieldSet } from "src/components/FormGrid";
 import { EmailFormField } from "src/components/formfields/EmailFormField";
 import { TitleContext } from "src/contexts/TitleContext";
 import { UserService } from "src/services/UserService";
-import { validateEmail } from "src/utils";
-import { validateRequired } from "src/utils";
-import { makeSentence } from "src/utils";
+import { makeSentence } from "src/utils/string";
+import { validateEmail } from "src/utils/validation";
+import { validateRequired } from "src/utils/validation";
 
 const PasswordResetPage = () => {
   const { setTitle } = useContext(TitleContext);

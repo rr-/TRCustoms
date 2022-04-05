@@ -7,7 +7,7 @@ import { Loader } from "src/components/Loader";
 import { TitleContext } from "src/contexts/TitleContext";
 import { UserService } from "src/services/UserService";
 import { UserDetails } from "src/services/UserService";
-import { extractErrorMessage } from "src/utils";
+import { extractErrorMessage } from "src/utils/misc";
 
 interface UserPageParams {
   token: string;

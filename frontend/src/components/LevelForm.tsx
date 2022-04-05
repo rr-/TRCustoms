@@ -34,12 +34,12 @@ import { LevelService } from "src/services/LevelService";
 import { TagNested } from "src/services/TagService";
 import type { UserNested } from "src/services/UserService";
 import { DisplayMode } from "src/types";
-import { filterFalsyObjectValues } from "src/utils";
-import { makeSentence } from "src/utils";
-import { validateRequired } from "src/utils";
-import { extractNestedErrorText } from "src/utils";
-import { pluralize } from "src/utils";
-import { resetQueries } from "src/utils";
+import { filterFalsyObjectValues } from "src/utils/misc";
+import { extractNestedErrorText } from "src/utils/misc";
+import { resetQueries } from "src/utils/misc";
+import { makeSentence } from "src/utils/string";
+import { pluralize } from "src/utils/string";
+import { validateRequired } from "src/utils/validation";
 
 interface LevelFormProps {
   level?: LevelDetails | undefined;

@@ -12,7 +12,7 @@ import { PushButton } from "src/components/PushButton";
 import type { UploadedFile } from "src/services/FileService";
 import { FileService } from "src/services/FileService";
 import { UploadType } from "src/services/FileService";
-import { formatFileSize } from "src/utils";
+import { formatFileSize } from "src/utils/string";
 
 interface FilePickerPreviewProps {
   uploadedFile: UploadedFile;

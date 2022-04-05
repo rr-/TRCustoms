@@ -5,8 +5,8 @@ import { UserLink } from "src/components/links/UserLink";
 import type { UserListing } from "src/services/UserService";
 import type { UserSearchQuery } from "src/services/UserService";
 import { UserService } from "src/services/UserService";
-import { formatDate } from "src/utils";
-import { EMPTY_INPUT_PLACEHOLDER } from "src/utils";
+import { formatDate } from "src/utils/string";
+import { EMPTY_INPUT_PLACEHOLDER } from "src/utils/string";
 
 interface UsersTableProps {
   searchQuery: UserSearchQuery;

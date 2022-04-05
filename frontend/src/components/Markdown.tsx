@@ -3,7 +3,7 @@ import { useMemo } from "react";
 import ReactMarkdown from "react-markdown";
 import remarkBreaks from "remark-breaks";
 import remarkGfm from "remark-gfm";
-import { getYoutubeVideoID } from "src/utils";
+import { getYoutubeVideoID } from "src/utils/misc";
 
 interface MarkdownProps {
   children: string;

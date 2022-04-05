@@ -6,7 +6,7 @@ import type { CountryListing } from "src/services/ConfigService";
 import type { UploadedFile } from "src/services/FileService";
 import type { GenericSearchQuery } from "src/types";
 import { GenericSearchResult } from "src/types";
-import { getGenericSearchQuery } from "src/utils";
+import { getGenericSearchQuery } from "src/utils/misc";
 
 interface CountryNested extends CountryListing {}
 

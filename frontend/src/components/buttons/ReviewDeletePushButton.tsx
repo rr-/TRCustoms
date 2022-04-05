@@ -3,8 +3,8 @@ import { PushButton } from "src/components/PushButton";
 import { IconTrash } from "src/components/icons";
 import { ReviewService } from "src/services/ReviewService";
 import type { ReviewListing } from "src/services/ReviewService";
-import { resetQueries } from "src/utils";
-import { showAlertOnError } from "src/utils";
+import { resetQueries } from "src/utils/misc";
+import { showAlertOnError } from "src/utils/misc";
 
 interface ReviewDeletePushButtonProps {
   review: ReviewListing;
