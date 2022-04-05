@@ -12,10 +12,10 @@ import { FormGridFieldSet } from "src/components/FormGrid";
 import { PasswordFormField } from "src/components/formfields/PasswordFormField";
 import { TitleContext } from "src/contexts/TitleContext";
 import { UserService } from "src/services/UserService";
-import { validatePassword } from "src/utils";
-import { validatePassword2 } from "src/utils";
-import { validateRequired } from "src/utils";
-import { makeSentence } from "src/utils";
+import { makeSentence } from "src/utils/string";
+import { validatePassword } from "src/utils/validation";
+import { validatePassword2 } from "src/utils/validation";
+import { validateRequired } from "src/utils/validation";
 
 interface PasswordResetFinishPageParams {
   token: string;

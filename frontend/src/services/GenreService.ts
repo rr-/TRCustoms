@@ -3,7 +3,7 @@ import { api } from "src/api";
 import { API_URL } from "src/constants";
 import type { GenericSearchQuery } from "src/types";
 import { GenericSearchResult } from "src/types";
-import { getGenericSearchQuery } from "src/utils";
+import { getGenericSearchQuery } from "src/utils/misc";
 
 interface GenreNested {
   id: number;

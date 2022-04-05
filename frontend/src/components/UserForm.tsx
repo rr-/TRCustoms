@@ -25,13 +25,13 @@ import { UploadType } from "src/services/FileService";
 import type { UserDetails } from "src/services/UserService";
 import { UserService } from "src/services/UserService";
 import { DisplayMode } from "src/types";
-import { filterFalsyObjectValues } from "src/utils";
-import { makeSentence } from "src/utils";
-import { validateUserName } from "src/utils";
-import { validateRequired } from "src/utils";
-import { validatePassword } from "src/utils";
-import { validatePassword2 } from "src/utils";
-import { validateEmail } from "src/utils";
+import { filterFalsyObjectValues } from "src/utils/misc";
+import { makeSentence } from "src/utils/string";
+import { validateUserName } from "src/utils/validation";
+import { validateRequired } from "src/utils/validation";
+import { validatePassword } from "src/utils/validation";
+import { validatePassword2 } from "src/utils/validation";
+import { validateEmail } from "src/utils/validation";
 
 interface UserFormProps {
   user?: UserDetails | undefined;

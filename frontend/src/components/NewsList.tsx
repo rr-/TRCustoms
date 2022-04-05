@@ -10,7 +10,7 @@ import type { NewsListing } from "src/services/NewsService";
 import { NewsService } from "src/services/NewsService";
 import type { NewsSearchQuery } from "src/services/NewsService";
 import { UserPermission } from "src/services/UserService";
-import { formatDate } from "src/utils";
+import { formatDate } from "src/utils/string";
 
 const getNewsSearchQuery = (): NewsSearchQuery => ({
   page: null,

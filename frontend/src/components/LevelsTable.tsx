@@ -12,9 +12,9 @@ import { LevelLink } from "src/components/links/LevelLink";
 import type { LevelListing } from "src/services/LevelService";
 import type { LevelSearchQuery } from "src/services/LevelService";
 import { LevelService } from "src/services/LevelService";
-import { formatDate } from "src/utils";
-import { formatFileSize } from "src/utils";
-import { EMPTY_INPUT_PLACEHOLDER } from "src/utils";
+import { formatDate } from "src/utils/string";
+import { formatFileSize } from "src/utils/string";
+import { EMPTY_INPUT_PLACEHOLDER } from "src/utils/string";
 
 interface LevelsTableProps {
   showStatus?: boolean | undefined;

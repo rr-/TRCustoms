@@ -3,8 +3,8 @@ import { PushButton } from "src/components/PushButton";
 import { IconBan } from "src/components/icons";
 import { UserService } from "src/services/UserService";
 import type { UserBasic } from "src/services/UserService";
-import { showAlertOnError } from "src/utils";
-import { resetQueries } from "src/utils";
+import { showAlertOnError } from "src/utils/misc";
+import { resetQueries } from "src/utils/misc";
 
 interface UserBanPushButtonProps {
   user: UserBasic;

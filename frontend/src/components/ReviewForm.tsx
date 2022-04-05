@@ -25,11 +25,11 @@ import type { ReviewTemplateAnswer } from "src/services/ConfigService";
 import type { LevelNested } from "src/services/LevelService";
 import type { ReviewDetails } from "src/services/ReviewService";
 import { ReviewService } from "src/services/ReviewService";
-import { filterFalsyObjectValues } from "src/utils";
-import { makeSentence } from "src/utils";
-import { validateRequired } from "src/utils";
-import { extractNestedErrorText } from "src/utils";
-import { resetQueries } from "src/utils";
+import { filterFalsyObjectValues } from "src/utils/misc";
+import { extractNestedErrorText } from "src/utils/misc";
+import { resetQueries } from "src/utils/misc";
+import { makeSentence } from "src/utils/string";
+import { validateRequired } from "src/utils/validation";
 
 interface ReviewFormProps {
   level: LevelNested;

@@ -19,8 +19,8 @@ import { SidebarBox } from "src/components/SidebarBox";
 import { TitleContext } from "src/contexts/TitleContext";
 import type { AuditLogSearchQuery } from "src/services/AuditLogService";
 import { UserPermission } from "src/services/UserService";
-import { filterFalsyObjectValues } from "src/utils";
-import { getCurrentSearchParams } from "src/utils";
+import { filterFalsyObjectValues } from "src/utils/misc";
+import { getCurrentSearchParams } from "src/utils/misc";
 
 const deserializeSearchQuery = (qp: {
   [key: string]: string;

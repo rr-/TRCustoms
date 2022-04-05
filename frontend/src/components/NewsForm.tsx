@@ -19,10 +19,10 @@ import { UserContext } from "src/contexts/UserContext";
 import type { NewsDetails } from "src/services/NewsService";
 import { NewsService } from "src/services/NewsService";
 import type { UserNested } from "src/services/UserService";
-import { filterFalsyObjectValues } from "src/utils";
-import { makeSentence } from "src/utils";
-import { validateRequired } from "src/utils";
-import { resetQueries } from "src/utils";
+import { filterFalsyObjectValues } from "src/utils/misc";
+import { resetQueries } from "src/utils/misc";
+import { makeSentence } from "src/utils/string";
+import { validateRequired } from "src/utils/validation";
 
 interface NewsFormProps {
   news?: NewsDetails | null | undefined;

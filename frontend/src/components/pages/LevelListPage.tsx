@@ -10,8 +10,8 @@ import { deserializeGenericSearchQuery } from "src/components/QueryPersister";
 import { serializeGenericSearchQuery } from "src/components/QueryPersister";
 import { TitleContext } from "src/contexts/TitleContext";
 import type { LevelSearchQuery } from "src/services/LevelService";
-import { filterFalsyObjectValues } from "src/utils";
-import { getCurrentSearchParams } from "src/utils";
+import { filterFalsyObjectValues } from "src/utils/misc";
+import { getCurrentSearchParams } from "src/utils/misc";
 
 const deserializeSearchQuery = (qp: {
   [key: string]: string;

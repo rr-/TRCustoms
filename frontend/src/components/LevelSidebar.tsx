@@ -27,9 +27,9 @@ import { ExternalLinkType } from "src/services/LevelService";
 import type { LevelDetails } from "src/services/LevelService";
 import { UserPermission } from "src/services/UserService";
 import { DisplayMode } from "src/types";
-import { formatFileSize } from "src/utils";
-import { formatDate } from "src/utils";
-import { EMPTY_INPUT_PLACEHOLDER } from "src/utils";
+import { formatFileSize } from "src/utils/string";
+import { formatDate } from "src/utils/string";
+import { EMPTY_INPUT_PLACEHOLDER } from "src/utils/string";
 
 interface LevelSidebarProps {
   level: LevelDetails;

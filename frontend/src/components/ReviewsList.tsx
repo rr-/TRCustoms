@@ -14,7 +14,7 @@ import type { ReviewListing } from "src/services/ReviewService";
 import { ReviewService } from "src/services/ReviewService";
 import type { ReviewSearchQuery } from "src/services/ReviewService";
 import { UserPermission } from "src/services/UserService";
-import { formatDate } from "src/utils";
+import { formatDate } from "src/utils/string";
 
 interface ReviewsListProps {
   showLevels: boolean;

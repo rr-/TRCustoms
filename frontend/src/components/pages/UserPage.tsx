@@ -31,7 +31,7 @@ import type { ReviewSearchQuery } from "src/services/ReviewService";
 import type { UserDetails } from "src/services/UserService";
 import { UserPermission } from "src/services/UserService";
 import { UserService } from "src/services/UserService";
-import { formatDate } from "src/utils";
+import { formatDate } from "src/utils/string";
 
 interface UserPageParams {
   userId: string;

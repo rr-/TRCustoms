@@ -9,7 +9,7 @@ import { TagSearch } from "src/components/TagSearch";
 import { TagsTable } from "src/components/TagsTable";
 import { TitleContext } from "src/contexts/TitleContext";
 import type { TagSearchQuery } from "src/services/TagService";
-import { getCurrentSearchParams } from "src/utils";
+import { getCurrentSearchParams } from "src/utils/misc";
 
 const deserializeSearchQuery = (qp: {
   [key: string]: string;
