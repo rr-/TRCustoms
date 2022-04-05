@@ -48,8 +48,11 @@ const RegisterPage = () => {
       </InfoMessage>
       {isComplete ? (
         <>
-          An email was sent to your email address. To continue, please check
-          your mailbox and click the confirmation link inside.
+          An email was sent to your mailbox with a confirmation link. Without
+          confirmation, your registration will be cancelled after 6 hours.
+          <br />
+          If you cannot find the email in your Inbox, please check your
+          Spam/Junk folder.
         </>
       ) : (
         <UserForm onSubmit={handleSubmit} />
