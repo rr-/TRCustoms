@@ -117,6 +117,8 @@ class LevelViewSet(
                     | "-name"
                     | "created"
                     | "-created"
+                    | "last_updated"
+                    | "-last_updated"
                     | "download_count"
                     | "-download_count"
                 ):

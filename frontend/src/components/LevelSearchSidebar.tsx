@@ -24,6 +24,7 @@ const sortOptions = [
   { label: "By engine", value: "engine" },
   { label: "Newest first", value: "-created" },
   { label: "Oldest first", value: "created" },
+  { label: "Last updated", value: "-last_updated" },
   { label: "Best rated", value: "-rating" },
   { label: "Worst rated", value: "rating" },
   { label: "Most downloaded", value: "-download_count" },
