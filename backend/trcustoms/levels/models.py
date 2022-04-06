@@ -103,7 +103,7 @@ class Level(DatesInfo):
         )
         if download_count != self.download_count:
             self.download_count = download_count
-            self.save()
+            self.save(update_fields=["download_count"])
 
     def update_last_file(self) -> None:
         last_file = self.files.order_by("-version").first()
