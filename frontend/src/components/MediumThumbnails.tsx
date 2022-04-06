@@ -118,6 +118,7 @@ const MediumThumbnail = ({
         <img
           alt="Thumbnail"
           className="MediumThumbnail--thumb"
+          role="link"
           tabIndex={1}
           src={file.url}
           onClick={() => onActivate(file)}
