@@ -63,7 +63,7 @@ const ReviewView = ({ review, showLevels }: ReviewViewProps) => {
     <div className={classNames.join(" ")}>
       <div className="Review--badge">{badge}</div>
 
-      <div className="Review--content">
+      <div className="Review--content ChildMarginClear">
         {showLevels ? (
           <p className="ReviewsList--level">
             Review on <LevelLink level={review.level} />

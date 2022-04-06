@@ -113,7 +113,7 @@ const Pager = <TCollection extends {}>({
   const pagerLinkProps = { onPageChange, firstPage, lastPage };
 
   return (
-    <div className={`Pager ${className}`}>
+    <div className={`Pager ${className || ""}`}>
       <ul>
         <li>
           <PagerLink {...pagerLinkProps} page={firstPage}>

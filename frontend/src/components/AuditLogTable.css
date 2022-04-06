@@ -14,12 +14,24 @@
 }
 
 .AuditLogTable--created,
-.AuditLogTable--author,
-.AuditLogTable--object {
+.AuditLogTable--author {
   white-space: nowrap;
+  width: 10%;
 }
 
+.AuditLogTable--object {
+  width: 40%;
+}
+.AuditLogTable--changes {
+  width: 40%;
+}
+
+.AuditLogTable--changesWrapper {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0 0.5rem;
+}
 .AuditLogTable--requiresAction {
-  float: right;
   white-space: nowrap;
 }

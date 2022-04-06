@@ -38,96 +38,82 @@ const NavBar = () => {
   const { user } = useContext(UserContext);
 
   return (
-    <div className="TopNavBar">
-      <div className="TopNavBar--primary">
-        <div className="MainContainer">
-          <div className="NavBar">
-            <div className="NavBar--left">
-              <h1>
-                <Link to={"/"}>
-                  <Logo />
-                  TRCustoms.org
-                </Link>
-              </h1>
-            </div>
+    <div className="NavBar">
+      <nav className="MainContainer">
+        <div className="NavBar--primary">
+          <h1>
+            <Link to={"/"}>
+              <Logo />
+              TRCustoms.org
+            </Link>
+          </h1>
+          <ul className="NavBar--list NavBar--grow">
+            {user ? (
+              <>
+                <li className="NavBar--listItem">
+                  <Link
+                    className="NavBar--userPicLink"
+                    to={`/users/${user.id}`}
+                  >
+                    <UserPicture className="NavBar--userPic" user={user} />
+                    {user.username}
+                  </Link>
+                </li>
+                <li className="NavBar--listItem">
+                  <Link to={"/logout"}>Log out</Link>
+                </li>
+              </>
+            ) : (
+              <>
+                <li className="NavBar--listItem">Not logged in.</li>
+                <li className="NavBar--listItem">
+                  <Link to={"/login"}>Log in</Link>
+                </li>
+                <li className="NavBar--listItem">
+                  <Link to={"/register"}>Register</Link>
+                </li>
+              </>
+            )}
+          </ul>
+        </div>
+      </nav>
 
-            <nav className="NavBar--right">
-              <ul className="TopNavBar--list">
-                {user ? (
-                  <>
-                    <li className="TopNavBar--listItem">
-                      <Link
-                        className="TopNavBar--primary--userPicLink"
-                        to={`/users/${user.id}`}
-                      >
-                        <UserPicture
-                          className="TopNavBar--primary--userPic"
-                          user={user}
-                        />
-                        {user.username}
-                      </Link>
-                    </li>
-                    <li className="TopNavBar--listItem">
-                      <Link to={"/logout"}>Log out</Link>
-                    </li>
-                  </>
-                ) : (
-                  <>
-                    <li className="TopNavBar--listItem">Not logged in.</li>
-                    <li className="TopNavBar--listItem">
-                      <Link to={"/login"}>Log in</Link>
-                    </li>
-                    <li className="TopNavBar--listItem">
-                      <Link to={"/register"}>Register</Link>
-                    </li>
-                  </>
-                )}
-              </ul>
-            </nav>
-          </div>
-        </div>
-      </div>
-      <div className="TopNavBar--secondary">
-        <div className="MainContainer">
-          <div className="NavBar">
-            <nav className="NavBar NavBar--left">
-              <ul className="TopNavBar--list">
-                <li className="TopNavBar--listItem">
-                  <NavLink to={"/"}>Home</NavLink>
-                </li>
-                <li className="TopNavBar--listItem">
-                  <LevelsNavLink to={"/levels"}>Levels</LevelsNavLink>
-                </li>
-                <li className="TopNavBar--listItem">
-                  <NavLink to={"/genres"}>Genres</NavLink>
-                </li>
-                <li className="TopNavBar--listItem">
-                  <NavLink to={"/tags"}>Tags</NavLink>
-                </li>
-                <li className="TopNavBar--listItem">
-                  <NavLink to={"/about"}>About</NavLink>
-                </li>
-              </ul>
-            </nav>
-            <div className="NavBar NavBar--right">
-              <ul className="TopNavBar--list">
-                <PermissionGuard require={UserPermission.uploadLevels}>
-                  <li className="TopNavBar--listItem">
-                    <NavLink to={"/levels/upload"}>Upload level</NavLink>
-                  </li>
-                </PermissionGuard>
-                <PermissionGuard require={UserPermission.editLevels}>
-                  <li className="TopNavBar--listItem">
-                    <NavLink to={"/mod"}>Moderate</NavLink>
-                  </li>
-                </PermissionGuard>
-                <li className="TopNavBar--listItem">
-                  <NavLink to={"/settings"}>Settings</NavLink>
-                </li>
-              </ul>
-            </div>
-          </div>
-        </div>
+      <div className="NavBar--secondary">
+        <nav className="MainContainer">
+          <ul className="NavBar--list">
+            <li className="NavBar--listItem">
+              <NavLink to={"/"}>Home</NavLink>
+            </li>
+            <li className="NavBar--listItem">
+              <LevelsNavLink to={"/levels"}>Levels</LevelsNavLink>
+            </li>
+            <li className="NavBar--listItem">
+              <NavLink to={"/genres"}>Genres</NavLink>
+            </li>
+            <li className="NavBar--listItem">
+              <NavLink to={"/tags"}>Tags</NavLink>
+            </li>
+            <li className="NavBar--listItem">
+              <NavLink to={"/about"}>About</NavLink>
+            </li>
+
+            <li className="NavBar--listItem NavBar--grow" />
+
+            <PermissionGuard require={UserPermission.uploadLevels}>
+              <li className="NavBar--listItem">
+                <NavLink to={"/levels/upload"}>Upload level</NavLink>
+              </li>
+            </PermissionGuard>
+            <PermissionGuard require={UserPermission.editLevels}>
+              <li className="NavBar--listItem">
+                <NavLink to={"/mod"}>Moderate</NavLink>
+              </li>
+            </PermissionGuard>
+            <li className="NavBar--listItem">
+              <NavLink to={"/settings"}>Settings</NavLink>
+            </li>
+          </ul>
+        </nav>
       </div>
     </div>
   );

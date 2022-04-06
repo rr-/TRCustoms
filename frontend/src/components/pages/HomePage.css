@@ -7,6 +7,17 @@
   grid-template-columns: min-content 4fr;
   grid-template-rows: min-content 1fr;
 }
+
+@media (max-device-width: 800px) {
+  .HomePage {
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      "sidebar"
+      "featured"
+      "main";
+  }
+}
+
 .HomePage--featuredLevels {
   grid-area: featured;
 }

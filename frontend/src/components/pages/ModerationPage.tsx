@@ -59,41 +59,39 @@ const ModerationPageView = () => {
         searchQuery={searchQuery}
         setSearchQuery={setSearchQuery}
       />
-      <div className="ModerationPage--container">
-        <div className="ModerationPage--sidebar">
-          <SidebarBox
-            actions={
-              <>
-                <PushButton to={"/mod/how-to"} disableTimeout={true}>
-                  Moderating guidelines
-                </PushButton>
-                <PushButton to={"/users"} disableTimeout={true}>
-                  User list
-                </PushButton>
-              </>
-            }
-          >
-            <AuditLogSearch
-              searchQuery={searchQuery}
-              onSearchQueryChange={setSearchQuery}
-            />
-          </SidebarBox>
-        </div>
-
-        <div className="ModerationPage--results ChildMarginClear">
-          <InfoMessage type={InfoMessageType.Info}>
-            The log contains recent changes made by all users. All these changes
-            are already live.
-            <br />
-            New levels and users can be approved on their individual pages.
-          </InfoMessage>
-
-          <SectionHeader>Recent actions</SectionHeader>
-          <AuditLogTable
+      <div className="ModerationPage--sidebar">
+        <SidebarBox
+          actions={
+            <>
+              <PushButton to={"/mod/how-to"} disableTimeout={true}>
+                Moderating guidelines
+              </PushButton>
+              <PushButton to={"/users"} disableTimeout={true}>
+                User list
+              </PushButton>
+            </>
+          }
+        >
+          <AuditLogSearch
             searchQuery={searchQuery}
             onSearchQueryChange={setSearchQuery}
           />
-        </div>
+        </SidebarBox>
+      </div>
+
+      <div className="ModerationPage--results ChildMarginClear">
+        <InfoMessage type={InfoMessageType.Info}>
+          The log contains recent changes made by all users. All these changes
+          are already live.
+          <br />
+          New levels and users can be approved on their individual pages.
+        </InfoMessage>
+
+        <SectionHeader>Recent actions</SectionHeader>
+        <AuditLogTable
+          searchQuery={searchQuery}
+          onSearchQueryChange={setSearchQuery}
+        />
       </div>
     </div>
   );
