@@ -1,12 +1,12 @@
 # The first stage
 # Build React static files
 
+FROM node:14-bullseye as build
+
 ARG BUILD_VERSION
 ARG BUILD_DATE
 ENV REACT_APP_BUILD_VERSION=${BUILD_VERSION}
 ENV REACT_APP_BUILD_DATE=${BUILD_DATE}
-
-FROM node:14-bullseye as build
 
 WORKDIR /app/frontend/
 COPY ./frontend/package.json ./
