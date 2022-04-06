@@ -3,6 +3,12 @@
   gap: 1rem;
 }
 
+@media (max-device-width: 1280px) {
+  .NestedLegalese--wrapper {
+    flex-wrap: wrap;
+  }
+}
+
 .NestedLegalese--toc {
   white-space: nowrap;
 }

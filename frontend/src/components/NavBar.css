@@ -1,81 +1,91 @@
-.TopNavBar--primary--userPic {
-  max-width: 2rem;
-  max-height: 2rem;
-  margin-right: 0.5rem;
-  vertical-align: middle;
-}
-.TopNavBar--list {
+.NavBar--list {
   margin: 0;
   padding: 0;
   list-style-type: none;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
 }
-.TopNavBar--listItem {
-  display: inline;
+.NavBar--listItem {
+  display: inline-block;
   margin: 0;
   padding: 0;
 }
-.TopNavBar h1,
-.TopNavBar p {
+
+@media (max-device-width: 1280px) {
+  .NavBar--secondary .NavBar--grow {
+    flex-grow: 0;
+  }
+  .NavBar--secondary .NavBar--list {
+    justify-content: center;
+  }
+}
+
+.NavBar--nav {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+}
+.NavBar--grow {
+  flex-grow: 1;
+}
+
+.NavBar h1,
+.NavBar p {
   margin: 0;
   padding: 0;
 }
-.TopNavBar h1 {
+.NavBar h1 {
   font-family: "Chakra Petch";
   font-weight: normal;
-  font-size: 2.8rem;
+  font-size: calc(min(2.8rem, 10vmin));
   margin: 0;
   padding: 0;
 }
-.TopNavBar h1 a {
+.NavBar h1 a {
   text-decoration: none;
   display: flex;
   gap: 0.25rem;
   align-items: center;
 }
 
-.TopNavBar--primary {
+.NavBar--primary {
   margin: 0.5rem 0 0.25rem 0;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  justify-content: space-between;
 }
-.TopNavBar--primary .NavBar {
-  margin: 0 1rem 0 0.7rem;
-  height: 4rem;
-}
-.TopNavBar--primary .TopNavBar--listItem {
-  margin-left: 1rem;
+.NavBar--primary .NavBar--list {
+  margin: 0 1rem;
+  gap: 0.5rem 1rem;
+  justify-content: flex-end;
 }
 
-.TopNavBar--secondary {
-  margin: 0 0 0.5rem 0;
-}
-.TopNavBar--secondary .MainContainer {
+.NavBar--secondary .MainContainer {
   background: var(--navbar-bg-color);
 }
-.TopNavBar--secondary .TopNavBar--listItem a {
+.NavBar--secondary .NavBar--listItem a {
   padding: 0.3rem 1rem;
   display: inline-block;
 }
-.TopNavBar--secondary .TopNavBar--listItem a.active {
+.NavBar--secondary .NavBar--listItem a.active {
   background: var(--navbar-active-tab-bg-color);
   color: var(--navbar-active-tab-fg-color);
 }
 
-.NavBar {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-.NavBar--left {
-  display: flex;
-  justify-content: flex-start;
-  align-items: center;
-}
-.NavBar--right {
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
-}
-
 .NavBar .Logo {
   height: 4rem;
-  margin-right: 0.8rem;
+  margin: 0 0.8rem 0 0.7rem;
+}
+
+.NavBar--userPicLink {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.NavBar--userPic {
+  max-width: 2rem;
+  max-height: 2rem;
 }

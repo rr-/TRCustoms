@@ -6,21 +6,28 @@
   padding: 0.5rem;
   background: var(--levels-table-bg-color);
   display: flex;
-  align-items: stretch;
   gap: 0.75rem;
-  height: 100%;
   margin-bottom: 1rem;
+}
+@media (max-device-width: 500px) {
+  .LevelView {
+    flex-direction: column;
+  }
 }
 
 .LevelView--coverLink {
   width: 15.5rem;
-  overflow: hidden;
   display: block;
-  max-height: 100%;
   position: relative;
 }
 .LevelView--coverLink:hover {
   opacity: 0.9;
+}
+@media (max-device-width: 500px) {
+  .LevelView--coverLink {
+    width: unset;
+    aspect-ratio: 4/3;
+  }
 }
 
 .LevelView--coverImage {

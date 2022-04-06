@@ -162,20 +162,14 @@ const AuditLogTable = ({
       name: "changes",
       label: "Changes",
       itemElement: ({ item }) => (
-        <>
-          <ul className="AuditLogTable--changeList">
-            {item.changes.map((change, i) => (
-              <li key={i} className="AuditLogTable--changeListItem">
-                {change}
-              </li>
-            ))}
-          </ul>
+        <span className="AuditLogTable--changesWrapper">
+          {item.changes.join(" ")}
           {item.is_action_required && (
             <span className="AuditLogTable--requiresAction">
               <IconExclamation /> Requires action
             </span>
           )}
-        </>
+        </span>
       ),
     },
   ];

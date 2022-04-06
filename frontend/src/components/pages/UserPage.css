@@ -7,6 +7,15 @@
   grid-template-rows: min-content min-content 1fr;
   gap: 1.5rem;
 }
+@media (max-device-width: 1280px) {
+  .UserPage {
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      "header"
+      "sidebar"
+      "main";
+  }
+}
 
 .UserPage--header {
   grid-area: header;

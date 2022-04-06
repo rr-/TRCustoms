@@ -10,7 +10,7 @@ html {
 body {
   background: var(--bg-color);
   color: var(--fg-color);
-  margin: 0;
+  margin: 0 1rem 1rem 1rem;
   font-family: var(--font-family);
   font-size: var(--font-size);
   -webkit-font-smoothing: antialiased;
@@ -20,9 +20,12 @@ body {
 body.modal-open {
   overflow: hidden;
 }
-#root {
-  text-align: center;
-  padding-left: calc(100vw - 100%);
+
+@media (min-device-width: 1280px) {
+  #root {
+    text-align: center;
+    padding-left: calc(100vw - 100%);
+  }
 }
 
 .MainContainer {
