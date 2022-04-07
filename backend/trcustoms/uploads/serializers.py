@@ -1,12 +1,28 @@
+import re
+
 from rest_framework import serializers
 
 from trcustoms.uploads.models import UploadedFile
 
+KILOBYTE = 1024
+MEGABYTE = KILOBYTE * 1024
+GIGABYTE = MEGABYTE * 1024
+
 MAX_SIZE_MAP = {
-    UploadedFile.UploadType.USER_PICTURE: 300 * 1024,  # 300 KB
-    UploadedFile.UploadType.LEVEL_COVER: 1024 * 1024,  # 1 MB
-    UploadedFile.UploadType.LEVEL_SCREENSHOT: 1024 * 1024,  # 1 MB
-    UploadedFile.UploadType.LEVEL_FILE: 1024 * 1024 * 1024,  # 1 GB
+    UploadedFile.UploadType.USER_PICTURE: [
+        (r".*", 300 * KILOBYTE),
+    ],
+    UploadedFile.UploadType.LEVEL_COVER: [
+        (r"image/png", 10 * MEGABYTE),
+        (r".*", MEGABYTE),
+    ],
+    UploadedFile.UploadType.LEVEL_SCREENSHOT: [
+        (r"image/png", 10 * MEGABYTE),
+        (r".*", MEGABYTE),
+    ],
+    UploadedFile.UploadType.LEVEL_FILE: [
+        (r".*", GIGABYTE),
+    ],
 }
 
 CONTENT_TYPE_MAP = {
@@ -66,7 +82,7 @@ class UploadedFileDetailsSerializer(serializers.ModelSerializer):
 
     def validate(self, data):
         try:
-            max_file_size = MAX_SIZE_MAP[data["upload_type"]]
+            max_size_map = MAX_SIZE_MAP[data["upload_type"]]
             allowed_content_types = CONTENT_TYPE_MAP[data["upload_type"]]
         except KeyError:
             raise serializers.ValidationError(
@@ -77,6 +93,12 @@ class UploadedFileDetailsSerializer(serializers.ModelSerializer):
                     )
                 }
             ) from None
+
+        for content_type, max_file_size in max_size_map:
+            if re.match(content_type, data["content"].content_type.lower()):
+                break
+        else:
+            max_file_size = 0
 
         if not data.get("content"):
             raise serializers.ValidationError({"content": "Missing file."})
@@ -96,7 +118,8 @@ class UploadedFileDetailsSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError(
                 {
                     "content": (
-                        f"Maximum allowed size: {max_file_size/1024:.02f} KB"
+                        "Maximum allowed size for this file: "
+                        f"{max_file_size/1024:.02f} KB"
                     )
                 }
             )
