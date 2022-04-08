@@ -260,6 +260,13 @@ const FilePicker = ({
   );
 
   const UploadEvents = {
+    onClick: (event: React.MouseEvent) => {
+      if (isUploading) {
+        event.preventDefault();
+        event.stopPropagation();
+      }
+    },
+
     onDragEnter: (event: React.DragEvent) => {
       if (isUploading) {
         return;
@@ -332,6 +339,7 @@ const FilePicker = ({
       <label
         htmlFor={elementId}
         className={`FilePicker--dropArea ${dragCounter ? "active" : ""}`}
+        onClick={(event) => UploadEvents.onClick(event)}
         onDragEnter={(event) => UploadEvents.onDragEnter(event)}
         onDragLeave={(event) => UploadEvents.onDragLeave(event)}
         onDragOver={(event) => UploadEvents.onDragOver(event)}
