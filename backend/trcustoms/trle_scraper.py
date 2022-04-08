@@ -32,7 +32,31 @@ def get_outer_html(node) -> str:
 def get_inner_html(node) -> str:
     ret = get_outer_html(node)
     ret = ret.strip()
+
+    # condense <br/> followed by a bullet
+    ret = re.sub(r"<br/?>\s*-", "\n-", ret, flags=re.M)
+
+    # expand raw <br/>
+    ret = re.sub(r"<br/?>", "\n", ret)
+
+    # strip HTML tags
     ret = re.sub(r"^<[^>]+>|<\/[^>]+>$", "", ret)
+
+    # fix carriage returns
+    ret = ret.replace("\r\n", "\n")
+    ret = ret.replace("\r", "\n")
+
+    # fix whitespace around line breaks
+    ret = re.sub(r" +\n", "\n", ret, flags=re.M)
+    ret = re.sub(r"\n +", "\n", ret, flags=re.M)
+
+    # merge lines that are not separated by a blank line
+    ret = re.sub(r"(?<!\n)\n(?![-\n])", " ", ret, flags=re.M)
+
+    # condense spaces
+    ret = re.sub("  +", " ", ret)
+    ret = re.sub(r"\n\n\n+", r"\n\n", ret, flags=re.M)
+
     ret = ret.strip()
     return ret
 
