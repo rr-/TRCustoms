@@ -264,7 +264,7 @@ def fixture_clear_caches() -> None:
     get_rating_class.cache_clear()
 
 
-@pytest.fixture(name="clear_caches", autouse=True, scope="session")
+@pytest.fixture(name="use_tmp_media_dir", autouse=True, scope="session")
 def fixture_use_tmp_media_dir() -> None:
     with override_settings(MEDIA_ROOT=tempfile.gettempdir()):
         yield
