@@ -3,35 +3,21 @@ import { useState } from "react";
 import { useEffect } from "react";
 import { useContext } from "react";
 import { useQuery } from "react-query";
-import { useNavigate } from "react-router-dom";
 import { useParams } from "react-router-dom";
-import { DefinitionItemGroup } from "src/components/DefinitionList";
-import { DefinitionItem } from "src/components/DefinitionList";
-import { DefinitionList } from "src/components/DefinitionList";
 import { LevelsTable } from "src/components/LevelsTable";
 import { Loader } from "src/components/Loader";
 import { Markdown } from "src/components/Markdown";
-import { PermissionGuard } from "src/components/PermissionGuard";
-import { LoggedInUserGuard } from "src/components/PermissionGuard";
 import { PageGuard } from "src/components/PermissionGuard";
-import { PushButton } from "src/components/PushButton";
 import { ReviewsList } from "src/components/ReviewsList";
 import { Section } from "src/components/Section";
 import { SectionHeader } from "src/components/Section";
-import { SidebarBox } from "src/components/SidebarBox";
-import { UserPicture } from "src/components/UserPicture";
-import { UserActivatePushButton } from "src/components/buttons/UserActivatePushButton";
-import { UserBanPushButton } from "src/components/buttons/UserBanPushButton";
-import { UserDeactivatePushButton } from "src/components/buttons/UserDeactivatePushButton";
-import { UserUnbanPushButton } from "src/components/buttons/UserUnbanPushButton";
-import { IconPencil } from "src/components/icons";
+import { UserSidebar } from "src/components/UserSidebar";
 import { TitleContext } from "src/contexts/TitleContext";
 import type { LevelSearchQuery } from "src/services/LevelService";
 import type { ReviewSearchQuery } from "src/services/ReviewService";
 import type { UserDetails } from "src/services/UserService";
 import { UserPermission } from "src/services/UserService";
 import { UserService } from "src/services/UserService";
-import { formatDate } from "src/utils/string";
 
 interface UserPageParams {
   userId: string;
@@ -60,7 +46,6 @@ interface UserPageViewProps {
 }
 
 const UserPageView = ({ userId }: UserPageViewProps) => {
-  const navigate = useNavigate();
   const { setTitle } = useContext(TitleContext);
   const [levelSearchQuery, setLevelSearchQuery] = useState<LevelSearchQuery>(
     getLevelSearchQuery(+userId)
@@ -91,10 +76,6 @@ const UserPageView = ({ userId }: UserPageViewProps) => {
     return <Loader />;
   }
 
-  const handleUserRejection = () => {
-    navigate("/");
-  };
-
   const user = userResult.data;
 
   return (
@@ -111,101 +92,7 @@ const UserPageView = ({ userId }: UserPageViewProps) => {
       </header>
 
       <aside className="UserPage--sidebar">
-        <SidebarBox
-          header={
-            <div className="UserPage--picture">
-              <UserPicture user={user} />
-            </div>
-          }
-          actions={
-            <>
-              <PermissionGuard require={UserPermission.uploadLevels}>
-                <LoggedInUserGuard user={user}>
-                  <PushButton to={"/my-levels"}>My levels</PushButton>
-                </LoggedInUserGuard>
-              </PermissionGuard>
-              {user.is_active ? (
-                <>
-                  <PermissionGuard
-                    require={UserPermission.editUsers}
-                    owningUsers={[user]}
-                  >
-                    <PushButton
-                      icon={<IconPencil />}
-                      to={`/users/${user.id}/edit`}
-                    >
-                      Edit profile
-                    </PushButton>
-                  </PermissionGuard>
-                  <PermissionGuard require={UserPermission.manageUsers}>
-                    {user.is_banned ? (
-                      <UserUnbanPushButton user={user} />
-                    ) : (
-                      !user.is_superuser && <UserBanPushButton user={user} />
-                    )}
-                    {!user.is_superuser && (
-                      <UserDeactivatePushButton user={user}>
-                        Deactivate
-                      </UserDeactivatePushButton>
-                    )}
-                  </PermissionGuard>
-                </>
-              ) : user.is_pending_activation ? (
-                <PermissionGuard require={UserPermission.manageUsers}>
-                  <UserActivatePushButton user={user} />
-                  {!user.is_superuser && (
-                    <UserDeactivatePushButton
-                      onComplete={handleUserRejection}
-                      user={user}
-                    />
-                  )}
-                </PermissionGuard>
-              ) : undefined}
-            </>
-          }
-        >
-          <DefinitionList>
-            <DefinitionItemGroup>
-              <DefinitionItem term="Joined">
-                {formatDate(user.date_joined) || "Unknown"}
-              </DefinitionItem>
-
-              <DefinitionItem term="Country">
-                {user.country?.name || "Unknown"}
-              </DefinitionItem>
-            </DefinitionItemGroup>
-
-            <DefinitionItemGroup>
-              <DefinitionItem term="Authored levels">
-                {user.authored_level_count}
-              </DefinitionItem>
-
-              <DefinitionItem term="Reviewed levels">
-                {user.reviewed_level_count}
-              </DefinitionItem>
-
-              {!!(user.trle_reviewer_id && user.trle_author_id) && (
-                <DefinitionItem term="Links">
-                  {user.trle_reviewer_id && (
-                    <a
-                      href={`https://www.trle.net/sc/reviewerfeatures.php?rid=${user.trle_reviewer_id}`}
-                    >
-                      TRLE.net (reviewer)
-                    </a>
-                  )}
-                  <br />
-                  {user.trle_author_id && (
-                    <a
-                      href={`https://www.trle.net/sc/authorfeatures.php?aid=${user.trle_author_id}`}
-                    >
-                      TRLE.net (author)
-                    </a>
-                  )}
-                </DefinitionItem>
-              )}
-            </DefinitionItemGroup>
-          </DefinitionList>
-        </SidebarBox>
+        <UserSidebar user={user} />
       </aside>
 
       <div className="UserPage--main">
