@@ -21,7 +21,7 @@ import { LoginPage } from "src/components/pages/LoginPage";
 import { LogoutPage } from "src/components/pages/LogoutPage";
 import { ModerationGuidelinesPage } from "src/components/pages/ModerationGuidelinesPage";
 import { ModerationPage } from "src/components/pages/ModerationPage";
-import { MyLevelsPage } from "src/components/pages/MyLevelsPage";
+import { MySubmissionsPage } from "src/components/pages/MySubmissionsPage";
 import { NewsCreatePage } from "src/components/pages/NewsCreatePage";
 import { NewsEditPage } from "src/components/pages/NewsEditPage";
 import { PasswordResetFinishPage } from "src/components/pages/PasswordResetFinishPage";
@@ -61,7 +61,7 @@ function App() {
               />
               <Route path="/levels/upload" element={<LevelUploadPage />} />
               <Route path="/levels" element={<LevelListPage />} />
-              <Route path="/my-levels" element={<MyLevelsPage />} />
+              <Route path="/my-submissions" element={<MySubmissionsPage />} />
               <Route path="/levels/:levelId" element={<LevelPage />} />
               <Route
                 path="/levels/:levelId/review"

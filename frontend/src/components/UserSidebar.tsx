@@ -38,7 +38,7 @@ const UserSidebar = ({ user }: UserSidebarProps) => {
         <>
           <PermissionGuard require={UserPermission.uploadLevels}>
             <LoggedInUserGuard user={user}>
-              <PushButton to={"/my-levels"}>My levels</PushButton>
+              <PushButton to={"/my-submissions"}>My submissions</PushButton>
             </LoggedInUserGuard>
           </PermissionGuard>
           {user.is_active ? (
