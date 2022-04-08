@@ -19,3 +19,4 @@ boto3
 django-storages
 premailer
 tqdm
+numpy
