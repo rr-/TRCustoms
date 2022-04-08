@@ -38,9 +38,9 @@ const NavBar = () => {
   const { user } = useContext(UserContext);
 
   return (
-    <div className="NavBar">
-      <nav className="MainContainer">
-        <div className="NavBar--primary">
+    <div className="MainContainer">
+      <div className="NavBar">
+        <nav className="NavBar--primary">
           <h1>
             <Link to={"/"}>
               <Logo />
@@ -75,11 +75,9 @@ const NavBar = () => {
               </>
             )}
           </ul>
-        </div>
-      </nav>
+        </nav>
 
-      <div className="NavBar--secondary">
-        <nav className="MainContainer">
+        <nav className="NavBar--secondary">
           <ul className="NavBar--list">
             <li className="NavBar--listItem">
               <NavLink to={"/"}>Home</NavLink>
