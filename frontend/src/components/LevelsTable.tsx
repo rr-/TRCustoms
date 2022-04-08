@@ -15,6 +15,7 @@ import { LevelService } from "src/services/LevelService";
 import { formatDate } from "src/utils/string";
 import { formatFileSize } from "src/utils/string";
 import { EMPTY_INPUT_PLACEHOLDER } from "src/utils/string";
+import { pluralize } from "src/utils/string";
 
 interface LevelsTableProps {
   showStatus?: boolean | undefined;
@@ -65,7 +66,8 @@ const LevelView = ({ showStatus, level }: LevelViewProps) => {
           </>
         )}
         <small>
-          Reviews: <LevelRating ratingClass={level.rating_class} />
+          Reviews: <LevelRating ratingClass={level.rating_class} /> (
+          {level.review_count} {pluralize("review", level.review_count)})
           <br />
           Genres:{" "}
           {level.genres.map((tag) => tag.name).join(", ") ||
