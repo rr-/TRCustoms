@@ -27,9 +27,11 @@ def test_level_deletion_updates_authored_level_count(
 ) -> None:
     user = user_factory()
     level = level_factory(authors=[user])
+    user.refresh_from_db()
+    assert user.authored_level_count == 1
     admin_api_client.delete(f"/api/levels/{level.id}/")
     user.refresh_from_db()
-    assert user.authored_levels.count() == 0
+    assert user.authored_level_count == 0
 
 
 @pytest.mark.django_db
@@ -42,6 +44,8 @@ def test_level_deletion_updates_reviewed_level_count(
     user = user_factory()
     review = review_factory(author=user)
     level = level_factory(reviews=[review])
+    user.refresh_from_db()
+    assert user.reviewed_level_count == 1
     admin_api_client.delete(f"/api/levels/{level.id}/")
     user.refresh_from_db()
-    assert user.reviewed_levels.count() == 0
+    assert user.reviewed_level_count == 0
