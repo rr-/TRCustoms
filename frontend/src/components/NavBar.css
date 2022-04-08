@@ -63,7 +63,7 @@
   justify-content: flex-end;
 }
 
-.NavBar--secondary .MainContainer {
+.NavBar--secondary {
   background: var(--navbar-bg-color);
 }
 .NavBar--secondary .NavBar--listItem a {
