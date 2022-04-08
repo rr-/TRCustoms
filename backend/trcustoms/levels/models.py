@@ -1,5 +1,5 @@
 from django.db import models
-from django.db.models import UniqueConstraint
+from django.db.models import Count, UniqueConstraint
 from django.db.models.functions import Lower
 
 from trcustoms.audit_logs import registry
@@ -44,8 +44,14 @@ class LevelDifficulty(DatesInfo):
         return f"{self.name} (id={self.pk})"
 
 
+class LevelQuerySet(models.QuerySet):
+    def with_review_count(self):
+        return self.annotate(review_count=Count("reviews"))
+
+
 @registry.register_model(name_getter=lambda instance: instance.name)
 class Level(DatesInfo):
+    objects = LevelQuerySet.as_manager()
     name = models.CharField(max_length=100)
     description = models.TextField(max_length=5000, null=True, blank=True)
     genres = models.ManyToManyField(Genre)
