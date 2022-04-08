@@ -22,7 +22,7 @@ const defaultSearchQuery: LevelSearchQuery = {
   isApproved: null,
 };
 
-const MyLevelsPage = () => {
+const MySubmissionsPage = () => {
   const { user } = useContext(UserContext);
   const { setTitle } = useContext(TitleContext);
 
@@ -41,7 +41,7 @@ const MyLevelsPage = () => {
   );
 
   useEffect(() => {
-    setTitle("My levels");
+    setTitle("My submissions");
   }, [setTitle]);
 
   const serializeSearchQuery = (
@@ -55,7 +55,7 @@ const MyLevelsPage = () => {
     });
 
   return (
-    <div className="MyLevelsPage">
+    <div className="MySubmissionsPage">
       <QueryPersister
         serializeSearchQuery={serializeSearchQuery}
         deserializeSearchQuery={deserializeSearchQuery}
@@ -72,4 +72,4 @@ const MyLevelsPage = () => {
   );
 };
 
-export { MyLevelsPage };
+export { MySubmissionsPage };
