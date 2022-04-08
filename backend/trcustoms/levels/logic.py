@@ -10,10 +10,11 @@ from trcustoms.mails import send_level_approved_mail, send_level_rejected_mail
 
 def approve_level(level: Level, request: Request | None) -> None:
     with track_model_update(obj=level, request=request, changes=["Approved"]):
-        if not level.is_approved:
-            send_level_approved_mail(level)
+        send_mail = not level.is_approved
         level.is_pending_approval = False
         level.is_approved = True
+        if send_mail:
+            send_level_approved_mail(level)
         level.rejection_reason = None
         level.save()
     clear_audit_log_action_flags(obj=level)
