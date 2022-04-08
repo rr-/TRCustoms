@@ -205,26 +205,38 @@ const FilePicker = ({
     [setErrorMessage, setCurrentFileIds, onChange, currentFileIds]
   );
 
-  const addFile = useCallback(
-    (file) => {
+  const addFiles = useCallback(
+    (files: File[]) => {
       setErrorMessage(null);
-      const handleUploadProgress = (progressEvent: ProgressEvent) => {
-        setPercentCompleted(
-          (progressEvent.loaded * 100.0) / progressEvent.total
-        );
-      };
 
       const run = async () => {
         try {
-          const uploadedFile = await FileService.uploadFile(
-            file,
-            uploadType,
-            handleUploadProgress
-          );
+          const uploadedFiles = [];
+
+          for (let file of files) {
+            const handleUploadProgress = (progressEvent: ProgressEvent) => {
+              setPercentCompleted(
+                ((uploadedFiles.length +
+                  progressEvent.loaded / progressEvent.total) *
+                  100) /
+                  files.length
+              );
+            };
+
+            const uploadedFile = await FileService.uploadFile(
+              file,
+              uploadType,
+              handleUploadProgress
+            );
+
+            uploadedFiles.push(uploadedFile);
+          }
+
           const newFileIds = [
             ...(allowMultiple ? currentFileIds : []),
-            uploadedFile.id,
+            ...uploadedFiles.map((uploadedFile) => uploadedFile.id),
           ];
+
           setPercentCompleted(null);
           setCurrentFileIds(newFileIds);
           onChange?.(newFileIds);
@@ -281,7 +293,7 @@ const FilePicker = ({
       if (!allowMultiple && event.dataTransfer.files.length > 1) {
         window.alert("Cannot select multiple files.");
       }
-      addFile(event.dataTransfer.files[0]);
+      addFiles([...event.dataTransfer.files]);
     },
 
     onFileChange: (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -292,12 +304,7 @@ const FilePicker = ({
       if (!input.files) {
         return;
       }
-      for (let file of input.files) {
-        addFile(file);
-        if (!allowMultiple) {
-          break;
-        }
-      }
+      addFiles(allowMultiple ? [...input.files] : [input.files[0]]);
     },
   };
 
