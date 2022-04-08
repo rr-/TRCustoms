@@ -68,13 +68,12 @@ class LevelAdmin(AuditLogAdminMixin, admin.ModelAdmin):
     search_fields = [
         "name",
         "description",
-        "authors__name",
-        "authors__user__username",
-        "authors__user__first_name",
-        "authors__user__last_name",
-        "uploader_user__username",
-        "uploader_user__first_name",
-        "uploader_user__last_name",
+        "authors__username",
+        "authors__first_name",
+        "authors__last_name",
+        "uploader__username",
+        "uploader__first_name",
+        "uploader__last_name",
     ]
     list_display = [
         "id",
