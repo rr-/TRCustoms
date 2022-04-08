@@ -1,3 +1,4 @@
+import tempfile
 from datetime import datetime
 from typing import Any
 
@@ -5,6 +6,7 @@ import dateutil.parser
 import factory
 import pytest
 from django.db.models import QuerySet
+from django.test import override_settings
 from mimesis import Generic
 from pytest_factoryboy import register
 from rest_framework.test import APIClient
@@ -260,3 +262,9 @@ def fixture_clear_caches() -> None:
     get_max_review_score.cache_clear()
     get_rating_classes.cache_clear()
     get_rating_class.cache_clear()
+
+
+@pytest.fixture(name="clear_caches", autouse=True, scope="session")
+def fixture_use_tmp_media_dir() -> None:
+    with override_settings(MEDIA_ROOT=tempfile.gettempdir()):
+        yield

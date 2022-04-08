@@ -2,11 +2,8 @@ import re
 
 from rest_framework import serializers
 
+from trcustoms.uploads.consts import GIGABYTE, KILOBYTE, MEGABYTE
 from trcustoms.uploads.models import UploadedFile
-
-KILOBYTE = 1024
-MEGABYTE = KILOBYTE * 1024
-GIGABYTE = MEGABYTE * 1024
 
 MAX_SIZE_MAP = {
     UploadedFile.UploadType.USER_PICTURE: [
