@@ -289,7 +289,9 @@ class LevelDetailsSerializer(LevelListingSerializer):
         genres = validated_data.pop("genres", None)
         authors = validated_data.pop("authors", None)
 
-        if "uploader" not in validated_data:
+        if "uploader" not in validated_data and (
+            not self.instance or not self.instance.uploader
+        ):
             validated_data["uploader"] = self.context["request"].user
 
         level = level_factory()

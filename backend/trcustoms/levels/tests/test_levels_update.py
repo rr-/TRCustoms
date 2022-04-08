@@ -157,10 +157,7 @@ def test_level_update_updates_authored_level_count(
 ) -> None:
     user1 = user_factory(username="u1")
     user2 = user_factory(username="u2")
-    level = level_factory(
-        authors=[user1],
-        genres=[genre_factory()],
-    )
+    level = level_factory(authors=[user1], genres=[genre_factory()])
     for _ in range(3):
         screenshot_factory(level=level)
 
@@ -182,3 +179,31 @@ def test_level_update_updates_authored_level_count(
     user2.refresh_from_db()
     assert user1.authored_level_count == 0
     assert user2.authored_level_count == 1
+
+
+@pytest.mark.django_db
+def test_level_update_keeps_uploader_user(
+    level_factory: LevelFactory,
+    user_factory: UserFactory,
+    genre_factory: GenreFactory,
+    screenshot_factory: ScreenshotFactory,
+    admin_api_client: APIClient,
+) -> None:
+    user = user_factory(username="uploader")
+    level = level_factory(
+        uploader=user, genres=[genre_factory()], authors=[user_factory()]
+    )
+    for _ in range(3):
+        screenshot_factory(level=level)
+
+    response = admin_api_client.patch(
+        f"/api/levels/{level.id}/", format="json", data={"name": "new title"}
+    )
+
+    data = response.json()
+    assert response.status_code == status.HTTP_200_OK, data
+
+    level.refresh_from_db()
+    assert level.name == "new title"
+    assert level.uploader == user
+    assert level.uploader != admin_api_client.user

@@ -131,6 +131,7 @@ def test_level_creation_success(
     )
     assert len(mail.outbox) == 1
     assert mail.outbox[0].subject == "[TRCustoms] Level submitted"
+    assert level.uploader == auth_api_client.user
 
 
 @pytest.mark.django_db
