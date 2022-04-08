@@ -145,3 +145,40 @@ def test_level_update_success(
     ]
     assert list(level.files.values_list("file__id", flat=True)) == [file.id]
     assert level.last_file.file.id == file.id
+
+
+@pytest.mark.django_db
+def test_level_update_updates_authored_level_count(
+    level_factory: LevelFactory,
+    user_factory: UserFactory,
+    genre_factory: GenreFactory,
+    screenshot_factory: ScreenshotFactory,
+    admin_api_client: APIClient,
+) -> None:
+    user1 = user_factory(username="u1")
+    user2 = user_factory(username="u2")
+    level = level_factory(
+        authors=[user1],
+        genres=[genre_factory()],
+    )
+    for _ in range(3):
+        screenshot_factory(level=level)
+
+    user1.refresh_from_db()
+    user2.refresh_from_db()
+    assert user1.authored_level_count == 1
+    assert user2.authored_level_count == 0
+
+    response = admin_api_client.patch(
+        f"/api/levels/{level.id}/",
+        format="json",
+        data={"author_ids": [user2.id]},
+    )
+
+    data = response.json()
+    assert response.status_code == status.HTTP_200_OK, data
+
+    user1.refresh_from_db()
+    user2.refresh_from_db()
+    assert user1.authored_level_count == 0
+    assert user2.authored_level_count == 1

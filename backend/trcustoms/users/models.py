@@ -112,10 +112,10 @@ class User(AbstractUser):
         self.reviewed_level_count = self.reviewed_levels.filter(
             level__is_approved=True
         ).count()
-        self.save()
+        self.save(update_fields=["reviewed_level_count"])
 
     def update_authored_level_count(self) -> None:
         self.authored_level_count = self.authored_levels.filter(
             is_approved=True
         ).count()
-        self.save()
+        self.save(update_fields=["authored_level_count"])

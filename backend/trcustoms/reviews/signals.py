@@ -11,7 +11,7 @@ from trcustoms.signals import disable_signals
 def update_review_rating_class(sender, instance, **kwargs):
     with disable_signals():
         instance.rating_class = get_review_rating_class(instance)
-        instance.save()
+        instance.save(update_fields=["rating_class"])
         level = instance.level
         level.rating_class = get_level_rating_class(level)
         level.save(update_fields=["rating_class"])
