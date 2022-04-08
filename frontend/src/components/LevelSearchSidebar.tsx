@@ -25,6 +25,7 @@ const sortOptions = [
   { label: "Newest first", value: "-created" },
   { label: "Oldest first", value: "created" },
   { label: "Last updated", value: "-last_updated" },
+  { label: "Least reviewed", value: "review_count" },
   { label: "Best rated", value: "-rating" },
   { label: "Worst rated", value: "rating" },
   { label: "Most downloaded", value: "-download_count" },

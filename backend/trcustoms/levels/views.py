@@ -119,10 +119,14 @@ class LevelViewSet(
                     | "-created"
                     | "last_updated"
                     | "-last_updated"
+                    | "review_count"
+                    | "-review_count"
                     | "download_count"
                     | "-download_count"
                 ):
-                    queryset = queryset.order_by(sort_style)
+                    queryset = queryset.with_review_count().order_by(
+                        sort_style
+                    )
                 case "engine":
                     queryset = queryset.order_by("engine__name")
                 case "-engine":
