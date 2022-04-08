@@ -1,6 +1,6 @@
 .NestedLegalese--wrapper {
   display: flex;
-  gap: 1rem;
+  gap: 0.5rem 2rem;
 }
 
 @media (max-device-width: 1280px) {
@@ -11,6 +11,7 @@
 
 .NestedLegalese--toc {
   white-space: nowrap;
+  flex-grow: 1;
 }
 
 .LegaleseItem {
@@ -40,4 +41,8 @@
 }
 .LegaleseItem[data-nesting="1"] {
   margin-bottom: 2rem;
+}
+
+.LegaleseItem--number:empty {
+  display: none;
 }
