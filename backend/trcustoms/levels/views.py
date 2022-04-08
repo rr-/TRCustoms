@@ -64,7 +64,7 @@ class LevelViewSet(
     }
 
     queryset = (
-        Level.objects.all()
+        Level.objects.with_review_count()
         .prefetch_related(
             "engine",
             "authors",
@@ -124,9 +124,7 @@ class LevelViewSet(
                     | "download_count"
                     | "-download_count"
                 ):
-                    queryset = queryset.with_review_count().order_by(
-                        sort_style
-                    )
+                    queryset = queryset.order_by(sort_style)
                 case "engine":
                     queryset = queryset.order_by("engine__name")
                 case "-engine":
