@@ -135,13 +135,13 @@ def test_level_creation_success(
 
 
 @pytest.mark.django_db
-def test_level_creation_updates_authored_level_count(
-    level_factory: LevelFactory,
-    user_factory: UserFactory,
+def test_level_creation_does_not_update_authored_level_count(
+    level_factory: LevelFactory, user_factory: UserFactory
 ) -> None:
     user = user_factory()
-    level_factory(authors=[user])
-    assert user.authored_levels.count() == 1
+    level_factory(authors=[user], is_approved=False)
+    user.refresh_from_db()
+    assert user.authored_level_count == 0
 
 
 @pytest.mark.django_db
@@ -151,6 +151,30 @@ def test_level_creation_updates_reviewed_level_count(
     user_factory: UserFactory,
 ) -> None:
     user = user_factory()
-    review = review_factory(author=user)
-    level_factory(reviews=[review])
-    assert user.reviewed_levels.count() == 1
+    level = level_factory(is_approved=False)
+    review_factory(author=user, level=level)
+    user.refresh_from_db()
+    assert user.reviewed_level_count == 0
+
+
+@pytest.mark.django_db
+def test_approved_level_creation_does_not_update_authored_level_count(
+    level_factory: LevelFactory, user_factory: UserFactory
+) -> None:
+    user = user_factory()
+    level_factory(authors=[user], is_approved=True)
+    user.refresh_from_db()
+    assert user.authored_level_count == 1
+
+
+@pytest.mark.django_db
+def test_approved_level_creation_updates_reviewed_level_count(
+    level_factory: LevelFactory,
+    review_factory: ReviewFactory,
+    user_factory: UserFactory,
+) -> None:
+    user = user_factory()
+    level = level_factory(is_approved=True)
+    review_factory(author=user, level=level)
+    user.refresh_from_db()
+    assert user.reviewed_level_count == 1
