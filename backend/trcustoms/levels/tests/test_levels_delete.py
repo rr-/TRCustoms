@@ -42,8 +42,8 @@ def test_level_deletion_updates_reviewed_level_count(
     admin_api_client: APIClient,
 ) -> None:
     user = user_factory()
-    review = review_factory(author=user)
-    level = level_factory(reviews=[review])
+    level = level_factory()
+    review_factory(level=level)
     user.refresh_from_db()
     assert user.reviewed_level_count == 1
     admin_api_client.delete(f"/api/levels/{level.id}/")

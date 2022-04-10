@@ -34,6 +34,12 @@ def update_level_last_file(sender, instance, **kwargs):
     instance.level.update_last_file()
 
 
+@receiver(post_save, sender=Level)
+def update_level_author_info_on_level_change(sender, instance, **kwargs):
+    for author in instance.authors.iterator():
+        author.update_authored_level_count()
+
+
 @receiver(m2m_changed, sender=Level.authors.through)
 def update_level_author_info_on_authors_change(
     sender, instance, pk_set, **kwargs
