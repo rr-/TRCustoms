@@ -80,6 +80,8 @@
 .MediumThumbnailModal img {
   flex-grow: 0;
   object-fit: contain;
+  max-width: calc(100vw - 4rem * 2 - 2rem * 2);
+  max-height: calc(100vh - 2rem * 2);
 }
 
 .MediumThumbnailModal .PushButton--link {
@@ -95,4 +97,26 @@
 }
 .MediumThumbnailModal .PushButton--link.hidden {
   opacity: 0;
+}
+
+@media (max-device-width: 800px) {
+  .MediumThumbnailModal img {
+    max-width: 100vw;
+    max-height: 100vh;
+  }
+  .MediumThumbnailModal .PushButton--link {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    color: black;
+  }
+  .MediumThumbnailModal .PushButton--link:hover {
+    color: black;
+  }
+  .MediumThumbnailModal .PushButton--link:first-child {
+    left: 0;
+  }
+  .MediumThumbnailModal .PushButton--link:last-child {
+    right: 0;
+  }
 }
