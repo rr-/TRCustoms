@@ -22,7 +22,7 @@ def schedule_image_conversion_if_needed(uploaded_file: UploadedFile) -> None:
     if uploaded_file.size <= RECOMMENDED_SIZE:
         return
 
-    convert_image.delay(uploaded_file.id)
+    convert_image.apply_async((uploaded_file.id,), countdown=30)
 
 
 class UploadViewSet(PermissionsMixin, viewsets.GenericViewSet):
