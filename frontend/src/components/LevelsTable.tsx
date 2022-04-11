@@ -66,7 +66,7 @@ const LevelView = ({ showStatus, level }: LevelViewProps) => {
           </>
         )}
         <small>
-          Reviews: <LevelRating ratingClass={level.rating_class} /> (
+          Rating: <LevelRating ratingClass={level.rating_class} /> (
           {level.review_count} {pluralize("review", level.review_count)})
           <br />
           Genres:{" "}
