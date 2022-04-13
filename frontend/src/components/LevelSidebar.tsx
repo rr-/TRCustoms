@@ -232,41 +232,43 @@ const LevelSidebar = ({ level, reviewCount }: LevelSidebarProps) => {
             </DefinitionItem>
           </DefinitionItemGroup>
 
-          <DefinitionItem span={true}>
-            <SectionHeader>Version history</SectionHeader>
-          </DefinitionItem>
-
-          {level.files.length ? (
-            level.files
-              .sort((a, b) => b.version - a.version)
-              .map((file) => (
-                <DefinitionItem
-                  key={file.id}
-                  term={
-                    <span className="LevelSidebar--fileTableTerm">
-                      {file.url ? (
-                        <PushButton isPlain={true} to={file.url}>
-                          Version {file.version}
-                        </PushButton>
-                      ) : (
-                        <PushButton
-                          isPlain={true}
-                          onClick={() => showFileGoneAlert()}
-                        >
-                          Version {file.version}
-                        </PushButton>
-                      )}
-                    </span>
-                  }
-                >
-                  {formatDate(file.created)}
-                </DefinitionItem>
-              ))
-          ) : (
+          <DefinitionItemGroup>
             <DefinitionItem span={true}>
-              Downloads for this level are not available.
+              <SectionHeader>Version history</SectionHeader>
             </DefinitionItem>
-          )}
+
+            {level.files.length ? (
+              level.files
+                .sort((a, b) => b.version - a.version)
+                .map((file) => (
+                  <DefinitionItem
+                    key={file.id}
+                    term={
+                      <span className="LevelSidebar--fileTableTerm">
+                        {file.url ? (
+                          <PushButton isPlain={true} to={file.url}>
+                            Version {file.version}
+                          </PushButton>
+                        ) : (
+                          <PushButton
+                            isPlain={true}
+                            onClick={() => showFileGoneAlert()}
+                          >
+                            Version {file.version}
+                          </PushButton>
+                        )}
+                      </span>
+                    }
+                  >
+                    {formatDate(file.created)}
+                  </DefinitionItem>
+                ))
+            ) : (
+              <DefinitionItem span={true}>
+                Downloads for this level are not available.
+              </DefinitionItem>
+            )}
+          </DefinitionItemGroup>
         </DefinitionList>
       </SidebarBox>
     </div>

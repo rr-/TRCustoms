@@ -7,11 +7,17 @@
 .DefinitionItemGroup {
   display: contents;
 }
-.DefinitionItemGroup > .DefinitionItem:first-of-type > * {
-  margin-top: 0.5rem;
+.DefinitionItemGroup:not(:first-child) > .DefinitionItem:first-of-type > * {
+  margin-top: 1rem;
 }
-.DefinitionItemGroup > .DefinitionItem:last-of-type > * {
+.DefinitionItemGroup:not(:last-child) > .DefinitionItem:last-of-type > * {
   margin-bottom: 0.5rem;
+}
+.DefinitionItemGroup:first-child .SectionHeader {
+  margin: 0.5rem 0;
+}
+.DefinitionItemGroup .SectionHeader {
+  margin: 1.5rem 0 0.5rem 0;
 }
 
 .DefinitionItem {

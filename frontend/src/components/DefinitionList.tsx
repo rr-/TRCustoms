@@ -10,7 +10,9 @@ const DefinitionItemGroup = ({
   children,
 }: DefinitionItemGroupProps) => {
   return (
-    <div className={`DefinitionItemGroup ${className || ""}`}>{children}</div>
+    <div className={`DefinitionItemGroup ChildMarginClear ${className || ""}`}>
+      {children}
+    </div>
   );
 };
 interface DefinitionItemProps {

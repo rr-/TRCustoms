@@ -5,6 +5,7 @@ import { DefinitionList } from "src/components/DefinitionList";
 import { PermissionGuard } from "src/components/PermissionGuard";
 import { LoggedInUserGuard } from "src/components/PermissionGuard";
 import { PushButton } from "src/components/PushButton";
+import { SectionHeader } from "src/components/Section";
 import { SidebarBox } from "src/components/SidebarBox";
 import { UserPicture } from "src/components/UserPicture";
 import { UserActivatePushButton } from "src/components/buttons/UserActivatePushButton";
@@ -80,22 +81,16 @@ const UserSidebar = ({ user }: UserSidebarProps) => {
     >
       <DefinitionList>
         <DefinitionItemGroup>
+          <DefinitionItem span={true}>
+            <SectionHeader>User info</SectionHeader>
+          </DefinitionItem>
+
           <DefinitionItem term="Joined">
             {formatDate(user.date_joined) || "Unknown"}
           </DefinitionItem>
 
           <DefinitionItem term="Country">
             {user.country?.name || "Unknown"}
-          </DefinitionItem>
-        </DefinitionItemGroup>
-
-        <DefinitionItemGroup>
-          <DefinitionItem term="Authored levels">
-            {user.authored_level_count}
-          </DefinitionItem>
-
-          <DefinitionItem term="Reviewed levels">
-            {user.reviewed_level_count}
           </DefinitionItem>
 
           {!!(user.trle_reviewer_id && user.trle_author_id) && (
@@ -117,6 +112,20 @@ const UserSidebar = ({ user }: UserSidebarProps) => {
               )}
             </DefinitionItem>
           )}
+        </DefinitionItemGroup>
+
+        <DefinitionItemGroup>
+          <DefinitionItem span={true}>
+            <SectionHeader>User submissions</SectionHeader>
+          </DefinitionItem>
+
+          <DefinitionItem term="Levels authored">
+            {user.authored_level_count}
+          </DefinitionItem>
+
+          <DefinitionItem term="Reviews posted">
+            {user.reviewed_level_count}
+          </DefinitionItem>
         </DefinitionItemGroup>
       </DefinitionList>
     </SidebarBox>

@@ -106,7 +106,7 @@ const UserPageView = ({ userId }: UserPageViewProps) => {
         </Section>
 
         <Section className="UserPage--authoredLevels">
-          <SectionHeader>Authored levels</SectionHeader>
+          <SectionHeader>Levels authored</SectionHeader>
           <LevelsTable
             searchQuery={levelSearchQuery}
             onSearchQueryChange={setLevelSearchQuery}
@@ -114,7 +114,7 @@ const UserPageView = ({ userId }: UserPageViewProps) => {
         </Section>
 
         <Section className="UserPage--reviewedLevels">
-          <SectionHeader>Reviews</SectionHeader>
+          <SectionHeader>Reviews posted</SectionHeader>
           <ReviewsList
             showLevels={true}
             searchQuery={reviewSearchQuery}
