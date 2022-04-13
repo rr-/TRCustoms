@@ -82,9 +82,9 @@ const ReviewView = ({ review, showLevels }: ReviewViewProps) => {
             </>
           </UserLink>
 
-          <span>Reviews: {review.author.reviewed_level_count}</span>
+          <span>Reviews posted: {review.author.reviewed_level_count}</span>
 
-          <span>Posted: {formatDate(review.created)}</span>
+          <span>Posted on: {formatDate(review.created)}</span>
         </div>
 
         <div className="Review--buttons">

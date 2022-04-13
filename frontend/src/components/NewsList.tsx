@@ -50,7 +50,7 @@ const NewsView = ({ news }: NewsViewProps) => {
             </UserLink>
           ))}
 
-          <span>Posted: {formatDate(news.created)}</span>
+          <span>Posted on: {formatDate(news.created)}</span>
         </div>
 
         <div className="News--footerButtons">
