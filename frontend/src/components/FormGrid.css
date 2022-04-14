@@ -28,7 +28,9 @@
 .FormGrid.grid .FormGridFieldSet {
   display: contents;
 }
-.FormGrid.grid .FormGridFieldSet--title {
+.FormGrid.grid .FormGridFieldSet--title,
+.FormGrid.grid .FormGridFieldSet--header,
+.FormGrid.grid .FormGridFieldSet--footer {
   grid-column: 1 / span 2;
 }
 .FormGridFieldSet--title {

@@ -25,6 +25,8 @@ interface FormGridButtonsProps {
 
 interface FormGridFieldSetProps {
   title?: React.ReactElement | string | undefined;
+  header?: React.ReactElement | string | undefined;
+  footer?: React.ReactElement | string | undefined;
   children: React.ReactNode;
 }
 
@@ -62,11 +64,18 @@ const FormGridButtons = ({ status, extra, children }: FormGridButtonsProps) => {
   );
 };
 
-const FormGridFieldSet = ({ title, children }: FormGridFieldSetProps) => {
+const FormGridFieldSet = ({
+  title,
+  header,
+  footer,
+  children,
+}: FormGridFieldSetProps) => {
   return (
     <div className="FormGridFieldSet">
       {title && <h2 className="FormGridFieldSet--title">{title}</h2>}
+      {header && <div className="FormGridFieldSet--header">{header}</div>}
       <div className="FormGridFieldSet--fields">{children}</div>
+      {footer && <div className="FormGridFieldSet--header">{footer}</div>}
     </div>
   );
 };
