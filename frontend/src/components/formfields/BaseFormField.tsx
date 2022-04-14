@@ -4,7 +4,7 @@ import { FormFieldError } from "src/components/formfields/FormFieldError";
 interface GenericFormFieldProps {
   name: string;
   label?: string | undefined;
-  extraInformation?: string | undefined;
+  extraInformation?: React.ReactNode | string | undefined;
   required?: boolean | undefined;
   readonly?: boolean | undefined;
 }

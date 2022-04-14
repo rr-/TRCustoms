@@ -10,6 +10,8 @@ import { FilePicker } from "src/components/FilePicker";
 import { FormGrid } from "src/components/FormGrid";
 import { FormGridButtons } from "src/components/FormGrid";
 import { FormGridFieldSet } from "src/components/FormGrid";
+import { InfoMessage } from "src/components/InfoMessage";
+import { InfoMessageType } from "src/components/InfoMessage";
 import { PicturePicker } from "src/components/PicturePicker";
 import { BaseFormField } from "src/components/formfields/BaseFormField";
 import { DifficultyFormField } from "src/components/formfields/DifficultyFormField";
@@ -60,6 +62,16 @@ const validateRange = <T extends Object>(
     return `At most ${maxCount} ${pluralize(noun, maxCount)} can be added`;
   }
   return null;
+};
+
+const UploadDisclaimer = () => {
+  return (
+    <InfoMessage type={InfoMessageType.Info}>
+      Before uploading, ensure that your level has been tested properly.
+      <br />
+      Don't use uncompressed formats like AVI or WAV files unless you have to.
+    </InfoMessage>
+  );
 };
 
 const LevelForm = ({ level, onGoBack, onSubmit }: LevelFormProps) => {
@@ -416,13 +428,16 @@ const LevelForm = ({ level, onGoBack, onSubmit }: LevelFormProps) => {
 
               <FormGridFieldSet
                 title={level?.id ? "File version update" : "File"}
+                header={<UploadDisclaimer />}
               >
                 <BaseFormField
                   required={!level?.id}
                   label="Level file"
                   name="file_id"
                   extraInformation={
-                    level ? "Leave empty to keep the current file version." : ""
+                    level
+                      ? "Leave empty to keep the current file version."
+                      : undefined
                   }
                 >
                   <FilePicker
