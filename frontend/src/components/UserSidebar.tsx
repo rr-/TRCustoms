@@ -12,6 +12,7 @@ import { UserActivatePushButton } from "src/components/buttons/UserActivatePushB
 import { UserBanPushButton } from "src/components/buttons/UserBanPushButton";
 import { UserDeactivatePushButton } from "src/components/buttons/UserDeactivatePushButton";
 import { UserUnbanPushButton } from "src/components/buttons/UserUnbanPushButton";
+import { IconGlobe } from "src/components/icons";
 import { IconPencil } from "src/components/icons";
 import type { UserDetails } from "src/services/UserService";
 import { UserPermission } from "src/services/UserService";
@@ -37,6 +38,11 @@ const UserSidebar = ({ user }: UserSidebarProps) => {
       }
       actions={
         <>
+          {user.website_url && (
+            <PushButton to={user.website_url} icon={<IconGlobe />}>
+              Website
+            </PushButton>
+          )}
           <PermissionGuard require={UserPermission.uploadLevels}>
             <LoggedInUserGuard user={user}>
               <PushButton to={"/my-submissions"}>My submissions</PushButton>

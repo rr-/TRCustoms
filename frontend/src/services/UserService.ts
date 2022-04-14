@@ -55,6 +55,7 @@ interface UserListing extends UserNested {
 }
 
 interface UserDetails extends UserListing {
+  website_url: string;
   country?: CountryNested;
   is_staff: boolean;
   is_superuser: boolean;
@@ -101,6 +102,7 @@ interface UserCreatePayload {
   bio: string;
   pictureId?: number | undefined;
   countryCode?: string | undefined;
+  websiteUrl: string;
 }
 
 interface UserUpdatePayload extends UserCreatePayload {
@@ -119,6 +121,7 @@ const update = async (
     bio,
     pictureId,
     countryCode,
+    websiteUrl,
   }: UserUpdatePayload
 ): Promise<UserDetails> => {
   const data: { [key: string]: any } = {
@@ -129,6 +132,7 @@ const update = async (
     bio: bio,
     picture_id: pictureId,
     country_code: countryCode,
+    website_url: websiteUrl,
   };
   if (oldPassword) {
     data.old_password = oldPassword;
@@ -152,6 +156,7 @@ const register = async ({
   bio,
   pictureId,
   countryCode,
+  websiteUrl,
 }: UserCreatePayload): Promise<UserDetails> => {
   const data: { [key: string]: any } = {
     username: username,
@@ -162,6 +167,7 @@ const register = async ({
     bio: bio,
     picture_id: pictureId,
     country_code: countryCode,
+    website_url: websiteUrl,
   };
   const response = (await api.post(`${API_URL}/users/`, data)) as AxiosResponse<
     UserDetails

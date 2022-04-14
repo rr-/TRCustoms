@@ -98,6 +98,7 @@ def test_user_creation(
         "reviewed_level_count": 0,
         "picture": None,
         "country": None,
+        "website_url": None,
         "permissions": [
             "list_users",
             "review_levels",
@@ -286,6 +287,7 @@ def test_user_creation_acquiring_trle_account(
         "reviewed_level_count": 0,
         "picture": None,
         "country": None,
+        "website_url": None,
         "permissions": [
             "list_users",
             "review_levels",
