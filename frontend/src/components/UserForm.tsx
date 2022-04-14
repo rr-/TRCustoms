@@ -69,6 +69,7 @@ const UserForm = ({ user, onGoBack, onSubmit }: UserFormProps) => {
     pictureId: user?.picture?.id || undefined,
     countryCode: user?.country?.code || undefined,
     websiteUrl: user?.website_url || "",
+    donationUrl: user?.donation_url || "",
   };
 
   const handleSubmitError = useCallback(
@@ -91,6 +92,7 @@ const UserForm = ({ user, onGoBack, onSubmit }: UserFormProps) => {
           pictureId: data?.picture,
           countryCode: data?.country_code,
           websiteUrl: data?.website_url,
+          donationUrl: data?.donation_url,
         };
         if (Object.keys(filterFalsyObjectValues(errors)).length) {
           setErrors(errors);
@@ -121,6 +123,7 @@ const UserForm = ({ user, onGoBack, onSubmit }: UserFormProps) => {
           pictureId: values.pictureId,
           countryCode: values.countryCode,
           websiteUrl: values.websiteUrl,
+          donationUrl: values.donationUrl,
         };
 
         if (user?.id) {
@@ -252,6 +255,7 @@ const UserForm = ({ user, onGoBack, onSubmit }: UserFormProps) => {
                 <TextFormField label="First name" name="firstName" />
                 <TextFormField label="Last name" name="lastName" />
                 <TextFormField label="Website URL" name="websiteUrl" />
+                <TextFormField label="Donation URL" name="donationUrl" />
                 <TextAreaFormField label="Bio" name="bio" />
                 <DropDownFormField
                   label="Country"
