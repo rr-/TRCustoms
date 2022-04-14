@@ -13,6 +13,7 @@ import { MediumThumbnails } from "src/components/MediumThumbnails";
 import { ReviewsList } from "src/components/ReviewsList";
 import { Section } from "src/components/Section";
 import { SectionHeader } from "src/components/Section";
+import { SmartWrap } from "src/components/SmartWrap";
 import { DISABLE_PAGING } from "src/constants";
 import { TitleContext } from "src/contexts/TitleContext";
 import type { UploadedFile } from "src/services/FileService";
@@ -66,11 +67,7 @@ const LevelPage = () => {
     <div className="LevelPage">
       <header className="LevelPage--header">
         <h1 className="LevelPage--headerWrapper">
-          {level.name.split(/(\s*[:-]\s*)/).map((word, i) => (
-            <span key={i} className="LevelPage--headerPart">
-              {word}
-            </span>
-          ))}
+          <SmartWrap text={level.name} />
         </h1>
       </header>
 

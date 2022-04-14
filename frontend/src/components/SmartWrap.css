@@ -1,0 +1,7 @@
+.SmartWrap {
+  display: flex;
+  flex-wrap: wrap;
+}
+.SmartWrap--part {
+  white-space: pre-wrap;
+}
