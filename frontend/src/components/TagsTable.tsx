@@ -1,18 +1,18 @@
 import "./TagsTable.css";
-import { useQueryClient } from "react-query";
 import { useQuery } from "react-query";
 import type { DataTableColumn } from "src/components/DataTable";
 import { DataTable } from "src/components/DataTable";
 import { Loader } from "src/components/Loader";
 import { PermissionGuard } from "src/components/PermissionGuard";
 import { PushButton } from "src/components/PushButton";
+import { TagDeletePushButton } from "src/components/buttons/TagDeletePushButton";
+import { TagMergePushButton } from "src/components/buttons/TagMergePushButton";
+import { TagRenamePushButton } from "src/components/buttons/TagRenamePushButton";
 import { TagLink } from "src/components/links/TagLink";
 import type { TagListing } from "src/services/TagService";
 import type { TagSearchQuery } from "src/services/TagService";
 import { TagService } from "src/services/TagService";
 import { UserPermission } from "src/services/UserService";
-import { showAlertOnError } from "src/utils/misc";
-import { resetQueries } from "src/utils/misc";
 import { formatDate } from "src/utils/string";
 
 interface TagsTableProps {
@@ -25,7 +25,6 @@ interface TagsTableDetailsProps {
 }
 
 const TagsTableDetails = ({ tag }: TagsTableDetailsProps) => {
-  const queryClient = useQueryClient();
   const result = useQuery<TagListing[], Error>(
     ["tag", TagService.getStats, tag.id],
     async () => TagService.getStats(+tag.id)
@@ -34,40 +33,6 @@ const TagsTableDetails = ({ tag }: TagsTableDetailsProps) => {
   if (result.isLoading || !result.data) {
     return <Loader />;
   }
-
-  const mergeTag = async () => {
-    let newTagName = window.prompt(
-      `Enter name of the tag to merge ${tag.name} with:`
-    );
-    if (!newTagName) {
-      return;
-    }
-    showAlertOnError(async () => {
-      const targetTag = await TagService.getByName(newTagName as string);
-      await TagService.merge(tag.id, targetTag.id);
-      resetQueries(queryClient, ["tags", "auditLogs"]);
-    });
-  };
-
-  const renameTag = async () => {
-    let newTagName = window.prompt(`Enter new name for ${tag.name}:`);
-    if (!newTagName) {
-      return;
-    }
-    showAlertOnError(async () => {
-      await TagService.update(tag.id, { name: newTagName as string });
-      resetQueries(queryClient, ["tags", "auditLogs"]);
-    });
-  };
-
-  const deleteTag = async () => {
-    if (window.confirm(`Really delete tag ${tag.name}?`)) {
-      showAlertOnError(async () => {
-        await TagService.delete(tag.id);
-        resetQueries(queryClient, ["tags", "auditLogs"]);
-      });
-    }
-  };
 
   return (
     <>
@@ -90,15 +55,9 @@ const TagsTableDetails = ({ tag }: TagsTableDetailsProps) => {
       )}
       <PermissionGuard require={UserPermission.editTags}>
         <div className="FormGridButtons--buttons">
-          <PushButton disableTimeout={true} onClick={() => mergeTag()}>
-            Merge
-          </PushButton>
-          <PushButton disableTimeout={true} onClick={() => renameTag()}>
-            Rename
-          </PushButton>
-          <PushButton disableTimeout={true} onClick={() => deleteTag()}>
-            Delete
-          </PushButton>
+          <TagMergePushButton tag={tag} />
+          <TagRenamePushButton tag={tag} />
+          <TagDeletePushButton tag={tag} />
         </div>
       </PermissionGuard>
     </>

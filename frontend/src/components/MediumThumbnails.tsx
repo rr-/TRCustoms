@@ -6,6 +6,7 @@ import { PushButton } from "src/components/PushButton";
 import { IconChevronLeft } from "src/components/icons";
 import { IconChevronRight } from "src/components/icons";
 import { IconPlay } from "src/components/icons";
+import { Dim } from "src/components/modals/Dim";
 import { KEY_ESCAPE } from "src/constants";
 import { KEY_LEFT } from "src/constants";
 import { KEY_RIGHT } from "src/constants";
@@ -28,7 +29,7 @@ const MediumThumbnailModal = ({
   canNavigateRight,
   onClose,
 }: MediumThumbnailModalProps) => {
-  const handleModalClick = (event: React.MouseEvent) => {
+  const handleDimClick = (event: React.MouseEvent) => {
     if (event.target === event.currentTarget) {
       onClose();
       event.stopPropagation();
@@ -36,11 +37,7 @@ const MediumThumbnailModal = ({
     }
   };
 
-  useEffect(() => {
-    document.body.classList.toggle("modal-open", !!file);
-  }, [file]);
-
-  const handleWheel = (event: React.WheelEvent) => {
+  const handleDimWheel = (event: React.WheelEvent) => {
     event.stopPropagation();
     event.preventDefault();
     if (file) {
@@ -49,10 +46,11 @@ const MediumThumbnailModal = ({
   };
 
   return (
-    <span
-      className={`MediumThumbnailModal ${file ? "active" : ""}`}
-      onMouseDown={handleModalClick}
-      onWheel={handleWheel}
+    <Dim
+      isActive={!!file}
+      className="MediumThumbnailModal"
+      onMouseDown={handleDimClick}
+      onWheel={handleDimWheel}
     >
       {file && (
         <>
@@ -68,7 +66,7 @@ const MediumThumbnailModal = ({
           </PushButton>
 
           <img
-            onMouseDown={handleModalClick}
+            onMouseDown={handleDimClick}
             alt="Full resolution"
             src={file.url}
           />
@@ -85,7 +83,7 @@ const MediumThumbnailModal = ({
           </PushButton>
         </>
       )}
-    </span>
+    </Dim>
   );
 };
 

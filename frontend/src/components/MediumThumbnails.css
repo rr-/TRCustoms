@@ -56,25 +56,9 @@
 }
 
 .MediumThumbnailModal {
-  z-index: 99;
-  position: fixed;
-  display: flex;
-  justify-content: center;
-  visibility: hidden;
-  padding: 2rem;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(0, 0, 0, 0.8);
-  transition: opacity 300ms, visibility 300ms;
-  opacity: 0;
+  align-items: stretch !important;
   cursor: pointer;
   font-size: 5rem;
-}
-.MediumThumbnailModal.active {
-  opacity: 1;
-  visibility: visible;
 }
 
 .MediumThumbnailModal img {

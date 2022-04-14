@@ -1,22 +1,17 @@
 import { useState } from "react";
 import { useQueryClient } from "react-query";
 import { PushButton } from "src/components/PushButton";
-import { IconTrash } from "src/components/icons";
 import { ConfirmModal } from "src/components/modals/ConfirmModal";
-import { ReviewService } from "src/services/ReviewService";
-import type { ReviewListing } from "src/services/ReviewService";
-import { resetQueries } from "src/utils/misc";
+import type { TagListing } from "src/services/TagService";
+import { TagService } from "src/services/TagService";
 import { showAlertOnError } from "src/utils/misc";
+import { resetQueries } from "src/utils/misc";
 
-interface ReviewDeletePushButtonProps {
-  review: ReviewListing;
-  onComplete?: (() => void) | undefined;
+interface TagDeletePushButtonProps {
+  tag: TagListing;
 }
 
-const ReviewDeletePushButton = ({
-  review,
-  onComplete,
-}: ReviewDeletePushButtonProps) => {
+const TagDeletePushButton = ({ tag }: TagDeletePushButtonProps) => {
   const [isModalActive, setIsModalActive] = useState(false);
   const queryClient = useQueryClient();
 
@@ -26,9 +21,8 @@ const ReviewDeletePushButton = ({
 
   const handleModalConfirm = () => {
     showAlertOnError(async () => {
-      await ReviewService.delete(review.id);
-      onComplete?.();
-      resetQueries(queryClient, ["reviews"]);
+      await TagService.delete(tag.id);
+      resetQueries(queryClient, ["tags", "auditLogs"]);
     });
   };
 
@@ -39,14 +33,14 @@ const ReviewDeletePushButton = ({
         onIsActiveChange={setIsModalActive}
         onConfirm={handleModalConfirm}
       >
-        Are you sure you want to delete this review?
+        Are you sure you want to delete tag {tag.name}?
       </ConfirmModal>
 
-      <PushButton icon={<IconTrash />} onClick={handleButtonClick}>
-        Delete review
+      <PushButton disableTimeout={true} onClick={handleButtonClick}>
+        Delete
       </PushButton>
     </>
   );
 };
 
-export { ReviewDeletePushButton };
+export { TagDeletePushButton };
