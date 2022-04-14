@@ -36,9 +36,4 @@
   margin: 0;
   font-size: 2.5rem;
   line-height: 2.5rem;
-  display: flex;
-  flex-wrap: wrap;
-}
-.LevelPage--headerPart {
-  white-space: pre;
 }
