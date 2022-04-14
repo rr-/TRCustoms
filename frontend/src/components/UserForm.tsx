@@ -31,6 +31,7 @@ import { validateUserName } from "src/utils/validation";
 import { validateRequired } from "src/utils/validation";
 import { validatePassword } from "src/utils/validation";
 import { validatePassword2 } from "src/utils/validation";
+import { validateURL } from "src/utils/validation";
 import { validateEmail } from "src/utils/validation";
 
 const RegistrationDisclaimer = () => {
@@ -175,6 +176,8 @@ const UserForm = ({ user, onGoBack, onSubmit }: UserFormProps) => {
       username: [validateRequired, validateUserName],
       email: [validateRequired, validateEmail],
       oldPassword: [],
+      websiteUrl: [validateURL],
+      donationUrl: [validateURL],
       password: [validatePassword],
       password2: [
         (source) => validatePassword2(source, values.password),
@@ -254,8 +257,8 @@ const UserForm = ({ user, onGoBack, onSubmit }: UserFormProps) => {
               <FormGridFieldSet title="Extra information">
                 <TextFormField label="First name" name="firstName" />
                 <TextFormField label="Last name" name="lastName" />
-                <TextFormField label="Website URL" name="websiteUrl" />
-                <TextFormField label="Donation URL" name="donationUrl" />
+                <TextFormField label="Website link" name="websiteUrl" />
+                <TextFormField label="Donation link" name="donationUrl" />
                 <TextAreaFormField label="Bio" name="bio" />
                 <DropDownFormField
                   label="Country"

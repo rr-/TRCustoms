@@ -1,3 +1,36 @@
+const getURLRegexp = () => {
+  const ul = "\u00a1-\uffff";
+  const ipv4 =
+    "(?:25[0-5]|2[0-4]\\d|[0-1]?\\d?\\d)(?:\\.(?:25[0-5]|2[0-4]\\d|[0-1]?\\d?\\d)){3}";
+  const ipv6 = "\\[[0-9a-f:.]+\\]";
+  const hostname =
+    "[a-z" + ul + "0-9](?:[a-z" + ul + "0-9-]{0,61}[a-z" + ul + "0-9])?";
+  const domain = "(?:\\.(?!-)[a-z" + ul + "0-9-]{1,63}(?<!-))*";
+  const tld = "\\.(?!-)(?:[a-z" + ul + "-]{2,63}|xn--[a-z0-9]{1,59})(?<!-)\\.?";
+  const host = "(" + hostname + domain + tld + "|localhost)";
+
+  const schemes = ["http", "https", "ftp", "ftps"];
+  return new RegExp(
+    "^(?:" +
+      schemes.join("|") +
+      ")://" +
+      "(?:[^\\s:@/]+(?::[^\\s:@/]*)?@)?" +
+      "(?:" +
+      ipv4 +
+      "|" +
+      ipv6 +
+      "|" +
+      host +
+      ")" +
+      "(?::\\d{2,5})?" +
+      "(?:[/?#][^\\s]*)?" +
+      "$",
+    "i"
+  );
+};
+
+const URLRegex = getURLRegexp();
+
 const validateRequired = (value: any): string | null => {
   if (
     value === "" ||
@@ -19,6 +52,17 @@ const validateEmail = (email: string): string | null => {
     return "Email must be at most 64 characters long";
   } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(email)) {
     return "This address appears to be invalid";
+  }
+  return null;
+};
+
+const validateURL = (url: string): string | null => {
+  if (!url) {
+    return null;
+  }
+
+  if (!url.match(URLRegex)) {
+    return 'Enter a valid URL, like "https://example.com/"';
   }
   return null;
 };
@@ -63,4 +107,5 @@ export {
   validatePassword,
   validatePassword2,
   validateUserName,
+  validateURL,
 };
