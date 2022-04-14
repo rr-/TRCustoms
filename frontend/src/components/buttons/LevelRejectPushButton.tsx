@@ -1,6 +1,8 @@
+import { useState } from "react";
 import { useQueryClient } from "react-query";
 import { PushButton } from "src/components/PushButton";
 import { IconXCircle } from "src/components/icons";
+import { PromptModal } from "src/components/modals/PromptModal";
 import type { LevelNested } from "src/services/LevelService";
 import { LevelService } from "src/services/LevelService";
 import { resetQueries } from "src/utils/misc";
@@ -11,15 +13,14 @@ interface LevelRejectPushButtonProps {
 }
 
 const LevelRejectPushButton = ({ level }: LevelRejectPushButtonProps) => {
+  const [isModalActive, setIsModalActive] = useState(false);
   const queryClient = useQueryClient();
 
-  const handleRejectButtonClick = async () => {
-    const reason = prompt(
-      "Please provide the reason for rejecting this level."
-    );
-    if (!reason) {
-      return;
-    }
+  const handleButtonClick = () => {
+    setIsModalActive(true);
+  };
+
+  const handleModalConfirm = (reason: string) => {
     showAlertOnError(async () => {
       await LevelService.reject(level.id, reason);
       resetQueries(queryClient, ["level", "levels", "auditLogs"]);
@@ -27,13 +28,25 @@ const LevelRejectPushButton = ({ level }: LevelRejectPushButtonProps) => {
   };
 
   return (
-    <PushButton
-      icon={<IconXCircle />}
-      onClick={handleRejectButtonClick}
-      tooltip="Hides this level from the level listing."
-    >
-      Reject
-    </PushButton>
+    <>
+      <PromptModal
+        isActive={isModalActive}
+        onIsActiveChange={setIsModalActive}
+        onConfirm={handleModalConfirm}
+        label="Reason"
+      >
+        Please provide the reason for rejecting this level.
+      </PromptModal>
+
+      <PushButton
+        icon={<IconXCircle />}
+        onClick={handleButtonClick}
+        disableTimeout={true}
+        tooltip="Hides this level from the level listing."
+      >
+        Reject
+      </PushButton>
+    </>
   );
 };
 

@@ -1,6 +1,8 @@
+import { useState } from "react";
 import { useQueryClient } from "react-query";
 import { PushButton } from "src/components/PushButton";
 import { IconCheck } from "src/components/icons";
+import { ConfirmModal } from "src/components/modals/ConfirmModal";
 import { UserService } from "src/services/UserService";
 import type { UserBasic } from "src/services/UserService";
 import { showAlertOnError } from "src/utils/misc";
@@ -11,12 +13,14 @@ interface UserUnbanPushButtonProps {
 }
 
 const UserUnbanPushButton = ({ user }: UserUnbanPushButtonProps) => {
+  const [isModalActive, setIsModalActive] = useState(false);
   const queryClient = useQueryClient();
 
-  const handleUnbanButtonClick = () => {
-    if (!window.confirm("Are you sure you want to unban this user?")) {
-      return;
-    }
+  const handleButtonClick = () => {
+    setIsModalActive(true);
+  };
+
+  const handleModalConfirm = () => {
     showAlertOnError(async () => {
       await UserService.unban(user.id);
       resetQueries(queryClient, ["user", "users", "auditLogs"]);
@@ -24,9 +28,19 @@ const UserUnbanPushButton = ({ user }: UserUnbanPushButtonProps) => {
   };
 
   return (
-    <PushButton icon={<IconCheck />} onClick={handleUnbanButtonClick}>
-      Unban
-    </PushButton>
+    <>
+      <ConfirmModal
+        isActive={isModalActive}
+        onIsActiveChange={setIsModalActive}
+        onConfirm={handleModalConfirm}
+      >
+        Are you sure you want to unban user {user.username}?
+      </ConfirmModal>
+
+      <PushButton icon={<IconCheck />} onClick={handleButtonClick}>
+        Unban
+      </PushButton>
+    </>
   );
 };
 

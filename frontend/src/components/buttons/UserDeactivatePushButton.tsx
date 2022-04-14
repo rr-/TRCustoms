@@ -1,6 +1,8 @@
+import { useState } from "react";
 import { useQueryClient } from "react-query";
 import { PushButton } from "src/components/PushButton";
 import { IconBan } from "src/components/icons";
+import { PromptModal } from "src/components/modals/PromptModal";
 import { UserService } from "src/services/UserService";
 import type { UserBasic } from "src/services/UserService";
 import { showAlertOnError } from "src/utils/misc";
@@ -17,13 +19,14 @@ const UserDeactivatePushButton = ({
   onComplete,
   children,
 }: UserDeactivatePushButtonProps) => {
+  const [isModalActive, setIsModalActive] = useState(false);
   const queryClient = useQueryClient();
 
-  const handleDeactivateButtonClick = () => {
-    const reason = prompt("Please provide the reason for rejecting this user.");
-    if (!reason) {
-      return;
-    }
+  const handleButtonClick = () => {
+    setIsModalActive(true);
+  };
+
+  const handleModalConfirm = (reason: string) => {
     showAlertOnError(async () => {
       await UserService.deactivate(user.id, reason);
       onComplete?.();
@@ -32,9 +35,20 @@ const UserDeactivatePushButton = ({
   };
 
   return (
-    <PushButton icon={<IconBan />} onClick={handleDeactivateButtonClick}>
-      {children || "Reject activation"}
-    </PushButton>
+    <>
+      <PromptModal
+        isActive={isModalActive}
+        onIsActiveChange={setIsModalActive}
+        onConfirm={handleModalConfirm}
+        label="Reason"
+      >
+        Please provide the reason for rejecting this user.
+      </PromptModal>
+
+      <PushButton icon={<IconBan />} onClick={handleButtonClick}>
+        {children || "Reject activation"}
+      </PushButton>
+    </>
   );
 };
 

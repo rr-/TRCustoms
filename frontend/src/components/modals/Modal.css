@@ -1,0 +1,20 @@
+.Modal--body {
+  background: var(--bg-color);
+  color: var(--fg-color);
+  padding: 1rem;
+}
+
+.Modal--closeButton {
+  float: right;
+  margin-top: -0.5rem;
+  margin-left: 2rem;
+}
+
+.Modal--form {
+  margin-top: 1rem;
+}
+.Modal--buttons {
+  margin-top: 1rem;
+  display: flex;
+  gap: 0.5rem;
+}

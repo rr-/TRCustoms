@@ -16,17 +16,14 @@ class PermissionsMixinProtocol(Protocol):
     @property
     def permission_classes_by_action(self) -> dict[str, list[BasePermission]]:
         """A map of action to list of permissions."""
-        ...
 
     @property
     def permission_classes(self) -> list[BasePermission]:
         """Fallback default list of permissions."""
-        ...
 
     @property
     def action(self) -> str:
         """Current request action."""
-        ...
 
 
 if not TYPE_CHECKING:

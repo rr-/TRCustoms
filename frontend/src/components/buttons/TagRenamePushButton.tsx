@@ -1,18 +1,17 @@
 import { useState } from "react";
 import { useQueryClient } from "react-query";
 import { PushButton } from "src/components/PushButton";
-import { IconBan } from "src/components/icons";
 import { PromptModal } from "src/components/modals/PromptModal";
-import { UserService } from "src/services/UserService";
-import type { UserBasic } from "src/services/UserService";
+import type { TagListing } from "src/services/TagService";
+import { TagService } from "src/services/TagService";
 import { showAlertOnError } from "src/utils/misc";
 import { resetQueries } from "src/utils/misc";
 
-interface UserBanPushButtonProps {
-  user: UserBasic;
+interface TagRenamePushButtonProps {
+  tag: TagListing;
 }
 
-const UserBanPushButton = ({ user }: UserBanPushButtonProps) => {
+const TagRenamePushButton = ({ tag }: TagRenamePushButtonProps) => {
   const [isModalActive, setIsModalActive] = useState(false);
   const queryClient = useQueryClient();
 
@@ -20,10 +19,10 @@ const UserBanPushButton = ({ user }: UserBanPushButtonProps) => {
     setIsModalActive(true);
   };
 
-  const handleModalConfirm = (reason: string) => {
+  const handleModalConfirm = (newTagName: string) => {
     showAlertOnError(async () => {
-      await UserService.ban(user.id, reason);
-      resetQueries(queryClient, ["user", "users", "auditLogs"]);
+      await TagService.update(tag.id, { name: newTagName });
+      resetQueries(queryClient, ["tags", "auditLogs"]);
     });
   };
 
@@ -33,16 +32,16 @@ const UserBanPushButton = ({ user }: UserBanPushButtonProps) => {
         isActive={isModalActive}
         onIsActiveChange={setIsModalActive}
         onConfirm={handleModalConfirm}
-        label="Reason"
+        label="Tag name"
       >
-        Please provide the reason for banning this user.
+        Enter new name for {tag.name}.
       </PromptModal>
 
-      <PushButton icon={<IconBan />} onClick={handleButtonClick}>
-        Ban
+      <PushButton disableTimeout={true} onClick={handleButtonClick}>
+        Rename
       </PushButton>
     </>
   );
 };
 
-export { UserBanPushButton };
+export { TagRenamePushButton };

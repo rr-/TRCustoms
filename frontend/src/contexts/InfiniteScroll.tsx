@@ -28,19 +28,23 @@ const useInfiniteScroll = (
     loader.current = fetch;
   }, [fetch]);
 
-  useEffect(() => {
-    const currentElement = element?.current;
-    const currentObserver = observer.current;
+  useEffect(
+    () => {
+      const currentElement = element?.current;
+      const currentObserver = observer.current;
 
-    if (currentElement) {
-      currentObserver.observe(currentElement);
-    }
-    return () => {
       if (currentElement) {
-        currentObserver.unobserve(currentElement);
+        currentObserver.observe(currentElement);
       }
-    };
-  }, [element, ...(dependencies || [])]);
+      return () => {
+        if (currentElement) {
+          currentObserver.unobserve(currentElement);
+        }
+      };
+    },
+    // eslint-disable-next-line
+    [element, ...(dependencies || [])]
+  );
 };
 
 export { useInfiniteScroll };

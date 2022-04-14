@@ -1,0 +1,20 @@
+.Dim {
+  z-index: 99;
+  position: fixed;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  visibility: hidden;
+  padding: 2rem;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.8);
+  transition: opacity 300ms, visibility 300ms;
+  opacity: 0;
+}
+.Dim.active {
+  opacity: 1;
+  visibility: visible;
+}
