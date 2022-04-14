@@ -176,6 +176,15 @@ class UserDetailsSerializer(UserListingSerializer):
             raise serializers.ValidationError(list(ex.messages))
         return value
 
+    def validate_donation_url(self, value):
+        if not value:
+            return value
+        if "paypal.com" not in value and "ko-fi.com" not in value:
+            raise serializers.ValidationError(
+                "Currently, only Paypal and Ko-Fi links are allowed."
+            )
+        return value
+
     def validate(self, data):
         validated_data = super().validate(data)
         self._raise_if_password_dont_match(validated_data)
@@ -251,6 +260,7 @@ class UserDetailsSerializer(UserListingSerializer):
             "country",
             "country_code",
             "website_url",
+            "donation_url",
             "old_password",
             "password",
             "picture_id",

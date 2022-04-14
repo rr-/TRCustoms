@@ -99,6 +99,7 @@ def test_user_creation(
         "picture": None,
         "country": None,
         "website_url": None,
+        "donation_url": None,
         "permissions": [
             "list_users",
             "review_levels",
@@ -288,6 +289,7 @@ def test_user_creation_acquiring_trle_account(
         "picture": None,
         "country": None,
         "website_url": None,
+        "donation_url": None,
         "permissions": [
             "list_users",
             "review_levels",

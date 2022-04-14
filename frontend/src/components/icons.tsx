@@ -13,6 +13,7 @@ export * from "src/components/icons/IconDownload";
 export * from "src/components/icons/IconExclamation";
 export * from "src/components/icons/IconGitHub";
 export * from "src/components/icons/IconGlobe";
+export * from "src/components/icons/IconHeart";
 export * from "src/components/icons/IconInformationCircle";
 export * from "src/components/icons/IconKofi";
 export * from "src/components/icons/IconPencil";
