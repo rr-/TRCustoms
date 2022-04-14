@@ -250,6 +250,7 @@ class UserDetailsSerializer(UserListingSerializer):
             "email",
             "country",
             "country_code",
+            "website_url",
             "old_password",
             "password",
             "picture_id",

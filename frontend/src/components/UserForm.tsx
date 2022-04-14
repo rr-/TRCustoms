@@ -54,6 +54,7 @@ const UserForm = ({ user, onGoBack, onSubmit }: UserFormProps) => {
     bio: user?.bio || "",
     pictureId: user?.picture?.id || undefined,
     countryCode: user?.country?.code || undefined,
+    websiteUrl: user?.website_url || "",
   };
 
   const handleSubmitError = useCallback(
@@ -75,6 +76,7 @@ const UserForm = ({ user, onGoBack, onSubmit }: UserFormProps) => {
           bio: data?.bio,
           pictureId: data?.picture,
           countryCode: data?.country_code,
+          websiteUrl: data?.website_url,
         };
         if (Object.keys(filterFalsyObjectValues(errors)).length) {
           setErrors(errors);
@@ -104,6 +106,7 @@ const UserForm = ({ user, onGoBack, onSubmit }: UserFormProps) => {
           bio: values.bio,
           pictureId: values.pictureId,
           countryCode: values.countryCode,
+          websiteUrl: values.websiteUrl,
         };
 
         if (user?.id) {
@@ -234,6 +237,7 @@ const UserForm = ({ user, onGoBack, onSubmit }: UserFormProps) => {
               <FormGridFieldSet title="Extra information">
                 <TextFormField label="First name" name="firstName" />
                 <TextFormField label="Last name" name="lastName" />
+                <TextFormField label="Website URL" name="websiteUrl" />
                 <TextAreaFormField label="Bio" name="bio" />
                 <DropDownFormField
                   label="Country"
