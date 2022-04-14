@@ -15,9 +15,7 @@ const reprBigNumber = (num: number): string => {
 const titleCase = (input: string): string => {
   let sentences = input.split(/\. /);
   return sentences
-    .map(
-      (sentence) => sentence[0].toUpperCase() + sentence.substr(1).toLowerCase()
-    )
+    .map((sentence) => sentence[0].toUpperCase() + sentence.substr(1))
     .join(". ");
 };
 

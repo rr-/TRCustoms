@@ -11,6 +11,7 @@ import { KEY_RETURN } from "src/constants";
 import { formatLinkType } from "src/services/LevelService";
 import type { ExternalLink } from "src/services/LevelService";
 import { ExternalLinkType } from "src/services/LevelService";
+import { validateURL } from "src/utils/validation";
 
 interface ExternalLinksFormFieldProps extends GenericFormFieldProps {
   value: ExternalLink[];
@@ -107,7 +108,6 @@ const ExternalLinksFormField = ({
       <div className="ExternalLinksFormField--entry">
         <input
           className="ExternalLinksFormField--input Input"
-          type="url"
           value={textInput}
           onChange={handleTextInputChange}
           onKeyDown={handleTextInputKeyDown}
@@ -130,6 +130,8 @@ const ExternalLinksFormField = ({
           Add
         </PushButton>
       </div>
+
+      <div className="FormFieldError">{validateURL(textInput)}</div>
 
       <table className="ExternalLinksFormField--table">
         <tbody>
