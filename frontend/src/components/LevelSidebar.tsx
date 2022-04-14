@@ -154,6 +154,10 @@ const LevelSidebar = ({ level, reviewCount }: LevelSidebarProps) => {
                 <Loader inline={true} />
               )}
             </DefinitionItem>
+
+            <DefinitionItem term="Downloads">
+              {level.download_count}
+            </DefinitionItem>
           </DefinitionItemGroup>
 
           <DefinitionItemGroup>
@@ -163,10 +167,6 @@ const LevelSidebar = ({ level, reviewCount }: LevelSidebarProps) => {
 
             <DefinitionItem term="Last updated">
               {formatDate(level.last_updated) || "never"}
-            </DefinitionItem>
-
-            <DefinitionItem term="Downloads">
-              {level.download_count}
             </DefinitionItem>
 
             {level.trle_id && (
