@@ -33,6 +33,20 @@ import { validatePassword } from "src/utils/validation";
 import { validatePassword2 } from "src/utils/validation";
 import { validateEmail } from "src/utils/validation";
 
+const RegistrationDisclaimer = () => {
+  return (
+    <InfoMessage type={InfoMessageType.Info}>
+      <span>
+        By registering, you agree to abide by the website's{" "}
+        <Link target="_blank" to="/about/terms">
+          Terms and Conditions
+        </Link>
+        .
+      </span>
+    </InfoMessage>
+  );
+};
+
 interface UserFormProps {
   user?: UserDetails | undefined;
   onGoBack?: (() => void) | undefined;
@@ -267,17 +281,7 @@ const UserForm = ({ user, onGoBack, onSubmit }: UserFormProps) => {
 
               <FormGridButtons
                 status={status}
-                extra={
-                  <InfoMessage type={InfoMessageType.Info}>
-                    <span>
-                      By registering, you agree to abide by the website's{" "}
-                      <Link target="_blank" to="/about/terms">
-                        Terms and Conditions
-                      </Link>
-                      .
-                    </span>
-                  </InfoMessage>
-                }
+                extra={!user?.id ? <RegistrationDisclaimer /> : undefined}
               >
                 <button type="submit" disabled={isSubmitting}>
                   {user ? "Update profile" : "Register"}
