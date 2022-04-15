@@ -86,6 +86,7 @@ LOGGING = {
     },
     "handlers": {
         "console": {
+            "filters": None,
             "class": "logging.StreamHandler",
         },
         "sql_console": {
@@ -97,6 +98,10 @@ LOGGING = {
     "loggers": {
         "trcustoms": {
             "level": "DEBUG",
+            "handlers": ["console"],
+        },
+        "django": {
+            "level": "INFO",
             "handlers": ["console"],
         },
         "django.db.backends": {
