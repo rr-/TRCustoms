@@ -104,8 +104,8 @@ class Level(DatesInfo):
         return f"{self.name} (id={self.pk})"
 
     def update_download_count(self) -> None:
-        download_count = max(
-            self.files.values_list("download_count", flat=True)
+        download_count = sum(
+            list(self.files.values_list("download_count", flat=True)) + [0]
         )
         if download_count != self.download_count:
             self.download_count = download_count
