@@ -5,8 +5,8 @@ const getURLRegexp = () => {
   const ipv6 = "\\[[0-9a-f:.]+\\]";
   const hostname =
     "[a-z" + ul + "0-9](?:[a-z" + ul + "0-9-]{0,61}[a-z" + ul + "0-9])?";
-  const domain = "(?:\\.(?!-)[a-z" + ul + "0-9-]{1,63}(?<!-))*";
-  const tld = "\\.(?!-)(?:[a-z" + ul + "-]{2,63}|xn--[a-z0-9]{1,59})(?<!-)\\.?";
+  const domain = "(?:\\.(?!-)[a-z" + ul + "0-9-]{1,63})*";
+  const tld = "\\.(?!-)(?:[a-z" + ul + "-]{2,63}|xn--[a-z0-9]{1,59})\\.?";
   const host = "(" + hostname + domain + tld + "|localhost)";
 
   const schemes = ["http", "https", "ftp", "ftps"];
