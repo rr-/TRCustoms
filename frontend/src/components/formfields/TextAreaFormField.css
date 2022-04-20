@@ -1,23 +1,37 @@
-.TextAreaFormField--textarea.Input {
+.TextAreaFormField .TabSwitch--content {
+  min-width: 50rem;
+  display: inline-block;
+  overflow-y: auto;
+}
+
+.TextArea--buttonStrip {
+  background: var(--label-bg-color);
+  border: 2px solid var(--input-border-color);
+  border-bottom: 0;
+  padding: 0.5rem;
+  display: flex;
+  gap: 1.5rem;
+}
+
+.TextArea--buttonStripGroup {
+  display: flex;
+  gap: 1rem;
+}
+
+.TextArea .Input {
   padding: 0.5rem;
   line-height: calc(var(--font-size) * 1.3);
   width: 100%;
   height: 100%;
-  min-width: 30rem;
-  min-height: 15rem;
+  min-width: 50rem;
+  min-height: 25rem;
   height: unset;
   box-sizing: border-box;
   vertical-align: top;
 }
 
-.TextAreaFormField--preview {
-  min-height: 15rem;
+.TextAreaPreview {
+  min-height: 25rem;
   padding: 0.5rem;
   background: var(--reviews-bg-color);
-}
-
-.TextAreaFormField .TabSwitch--content {
-  min-width: 30rem;
-  display: inline-block;
-  overflow-y: auto;
 }
