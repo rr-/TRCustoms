@@ -11,6 +11,7 @@ import { BaseFormField } from "src/components/formfields/BaseFormField";
 import type { GenericFormFieldProps } from "src/components/formfields/BaseFormField";
 import { IconMarkdownItalic } from "src/components/icons";
 import { IconMarkdownCode } from "src/components/icons";
+import { IconMarkdownStrikeThrough } from "src/components/icons";
 import { IconMarkdownQuote } from "src/components/icons";
 import { IconMarkdownUnorderedList } from "src/components/icons";
 import { IconMarkdownOrderedList } from "src/components/icons";
@@ -575,6 +576,17 @@ const MarkdownItalicButton = ({ ...props }: MarkdownButtonProps) => {
   );
 };
 
+const MarkdownStrikeThroughButton = ({ ...props }: MarkdownButtonProps) => {
+  return (
+    <MarkdownBaseButton
+      icon={<IconMarkdownStrikeThrough />}
+      tooltip="Add striked-through text"
+      style={{ prefix: "~~", suffix: "~~" }}
+      {...props}
+    />
+  );
+};
+
 const MarkdownQuoteButton = ({ ...props }: MarkdownButtonProps) => {
   return (
     <MarkdownBaseButton
@@ -698,6 +710,7 @@ const MarkdownButtonStrip = ({ textarea }: MarkdownButtonStripProps) => {
         <MarkdownHeaderButton {...buttonProps} />
         <MarkdownBoldButton {...buttonProps} />
         <MarkdownItalicButton {...buttonProps} />
+        <MarkdownStrikeThroughButton {...buttonProps} />
       </div>
 
       <div className="TextArea--buttonStripGroup">
