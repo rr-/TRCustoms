@@ -24,6 +24,7 @@ export * from "src/components/icons/IconMarkdownItalic";
 export * from "src/components/icons/IconMarkdownLink";
 export * from "src/components/icons/IconMarkdownOrderedList";
 export * from "src/components/icons/IconMarkdownQuote";
+export * from "src/components/icons/IconMarkdownStrikeThrough";
 export * from "src/components/icons/IconMarkdownUnorderedList";
 export * from "src/components/icons/IconPencil";
 export * from "src/components/icons/IconPlay";
