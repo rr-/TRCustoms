@@ -11,7 +11,11 @@ from trcustoms.mails import (
     send_email_confirmation_mail,
     send_password_reset_mail,
 )
-from trcustoms.mixins import MultiSerializerMixin, PermissionsMixin
+from trcustoms.mixins import (
+    AuditLogModelWatcherUpdateMixin,
+    MultiSerializerMixin,
+    PermissionsMixin,
+)
 from trcustoms.permissions import (
     AllowNone,
     HasPermission,
@@ -38,6 +42,7 @@ from trcustoms.users.serializers import (
 
 
 class UserViewSet(
+    AuditLogModelWatcherUpdateMixin,
     PermissionsMixin,
     MultiSerializerMixin,
     mixins.ListModelMixin,
