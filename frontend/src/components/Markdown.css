@@ -14,3 +14,21 @@
 .Markdown img {
   max-width: 100%;
 }
+
+.Markdown table {
+  border-collapse: collapse;
+}
+
+.Markdown table td,
+.Markdown table th {
+  padding: 0.25rem 1rem;
+}
+
+.Markdown table td:first-child,
+.Markdown table th:first-child {
+  padding-left: 0;
+}
+
+.Markdown table thead th {
+  border-bottom: 1px solid var(--fg-color);
+}
