@@ -1,7 +1,7 @@
 import { AnnotationIcon } from "@heroicons/react/outline";
 
 const IconAnnotation = () => {
-  return <AnnotationIcon className="icon" />;
+  return <AnnotationIcon className="Icon" />;
 };
 
 export { IconAnnotation };

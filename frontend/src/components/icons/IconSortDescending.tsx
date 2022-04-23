@@ -1,7 +1,7 @@
 import { SortDescendingIcon } from "@heroicons/react/outline";
 
 const IconSortDescending = () => {
-  return <SortDescendingIcon className="icon" />;
+  return <SortDescendingIcon className="Icon" />;
 };
 
 export { IconSortDescending };
