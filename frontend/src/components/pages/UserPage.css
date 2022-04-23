@@ -22,7 +22,6 @@
 }
 .UserPage--sidebar {
   grid-area: sidebar;
-  white-space: nowrap;
 }
 .UserPage--main {
   width: 100%;
