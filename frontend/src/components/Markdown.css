@@ -10,3 +10,7 @@
 .Markdown > *:last-child {
   margin-bottom: 0;
 }
+
+.Markdown img {
+  max-width: 100%;
+}
