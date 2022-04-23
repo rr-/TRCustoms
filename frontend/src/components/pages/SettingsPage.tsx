@@ -2,16 +2,12 @@ import "./SettingsPage.css";
 import { useEffect } from "react";
 import { useContext } from "react";
 import { Checkbox } from "src/components/Checkbox";
+import { ThemeSwitcher } from "src/components/ThemeSwitcher";
 import { useSettings } from "src/contexts/SettingsContext";
 import { TitleContext } from "src/contexts/TitleContext";
 
 const SettingsPage = () => {
-  const {
-    infiniteScroll,
-    setInfiniteScroll,
-    getAllThemes,
-    setTheme,
-  } = useSettings();
+  const { infiniteScroll, setInfiniteScroll } = useSettings();
   const { setTitle } = useContext(TitleContext);
 
   useEffect(() => {
@@ -21,24 +17,7 @@ const SettingsPage = () => {
   return (
     <div className="SettingsPage">
       <h2>Active theme</h2>
-      <ul className="SettingsPage--list">
-        {getAllThemes().map((theme) => (
-          <li key={theme.name} className="SettingsPage--listItem">
-            <button
-              type="button"
-              title={theme.name}
-              className="link SettingsPage--switch"
-              onClick={() => setTheme(theme)}
-            >
-              <span
-                className="SettingsPage--label"
-                data-theme={theme.stub}
-              ></span>
-              {theme.name}
-            </button>
-          </li>
-        ))}
-      </ul>
+      <ThemeSwitcher />
 
       <h2>Other settings</h2>
 
