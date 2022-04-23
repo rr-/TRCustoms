@@ -55,7 +55,7 @@ class Level(DatesInfo):
     name = models.CharField(max_length=100)
     description = models.TextField(max_length=5000, null=True, blank=True)
     genres = models.ManyToManyField(Genre)
-    tags = models.ManyToManyField(Tag)
+    tags = models.ManyToManyField(Tag, blank=True)
     engine = models.ForeignKey(Engine, on_delete=models.PROTECT)
     uploader = models.ForeignKey(
         User,
