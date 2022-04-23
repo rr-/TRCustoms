@@ -1,7 +1,7 @@
 import { ChevronUpIcon } from "@heroicons/react/outline";
 
 const IconChevronUp = () => {
-  return <ChevronUpIcon className="icon" />;
+  return <ChevronUpIcon className="Icon" />;
 };
 
 export { IconChevronUp };

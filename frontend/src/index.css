@@ -140,7 +140,7 @@ label {
   display: inline-block;
 }
 
-svg.icon {
+svg.Icon {
   width: 1.25em;
   height: 1.25em;
   vertical-align: middle;
@@ -160,6 +160,11 @@ hr {
   border: 0;
   height: 2px;
   background: var(--input-border-color);
+}
+
+pre {
+  background: var(--blockquote-bg-color);
+  padding: 0.5rem;
 }
 
 blockquote {

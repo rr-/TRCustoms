@@ -30,6 +30,7 @@ import { RegisterPage } from "src/components/pages/RegisterPage";
 import { SettingsPage } from "src/components/pages/SettingsPage";
 import { TagListPage } from "src/components/pages/TagListPage";
 import { TermsAndConditionsPage } from "src/components/pages/TermsAndConditionsPage";
+import { TextFormattingGuidelinesPage } from "src/components/pages/TextFormattingGuidelinesPage";
 import { UserEditPage } from "src/components/pages/UserEditPage";
 import { UserListPage } from "src/components/pages/UserListPage";
 import { UserPage } from "src/components/pages/UserPage";
@@ -91,6 +92,10 @@ function App() {
               <Route
                 path="/email-confirmation/:token"
                 element={<EmailConfirmationPage />}
+              />
+              <Route
+                path="/text-formatting-guide"
+                element={<TextFormattingGuidelinesPage />}
               />
               <Route path="/about" element={<AboutPage />} />
               <Route path="/about/terms" element={<TermsAndConditionsPage />} />

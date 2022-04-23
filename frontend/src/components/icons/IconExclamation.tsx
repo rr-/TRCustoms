@@ -1,7 +1,7 @@
 import { ExclamationIcon } from "@heroicons/react/outline";
 
 const IconExclamation = () => {
-  return <ExclamationIcon className="icon" />;
+  return <ExclamationIcon className="Icon" />;
 };
 
 export { IconExclamation };

@@ -1,0 +1,19 @@
+.TextFormattingGuidelinesPage--sections {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0 1rem;
+  align-items: flex-start;
+}
+
+.TextFormattingGuidelinesPage--section {
+  display: contents;
+}
+
+.TextFormattingGuidelinesPage--sectionHeader {
+  margin: 0 0 0.5rem 0;
+  grid-column: 1 / span 2;
+}
+
+.TextFormattingGuidelinesPage--code {
+  margin: 0 0 3rem 0;
+}

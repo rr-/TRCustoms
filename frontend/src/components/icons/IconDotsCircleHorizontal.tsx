@@ -1,7 +1,7 @@
 import { DotsCircleHorizontalIcon } from "@heroicons/react/outline";
 
 const IconDotsCircleHorizontal = () => {
-  return <DotsCircleHorizontalIcon className="icon" />;
+  return <DotsCircleHorizontalIcon className="Icon" />;
 };
 
 export { IconDotsCircleHorizontal };

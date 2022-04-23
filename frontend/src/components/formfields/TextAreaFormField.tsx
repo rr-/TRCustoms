@@ -10,6 +10,7 @@ import { TabSwitch } from "src/components/TabSwitch";
 import { BaseFormField } from "src/components/formfields/BaseFormField";
 import type { GenericFormFieldProps } from "src/components/formfields/BaseFormField";
 import { IconMarkdownItalic } from "src/components/icons";
+import { IconHelp } from "src/components/icons";
 import { IconMarkdownCode } from "src/components/icons";
 import { IconMarkdownStrikeThrough } from "src/components/icons";
 import { IconMarkdownQuote } from "src/components/icons";
@@ -533,9 +534,8 @@ const MarkdownBaseButton = ({
       isPlain={true}
       onClick={handleClick}
       tooltip={tooltip}
-    >
-      {icon}
-    </PushButton>
+      icon={icon}
+    />
   );
 };
 
@@ -726,6 +726,16 @@ const MarkdownButtonStrip = ({ textarea }: MarkdownButtonStripProps) => {
       <div className="TextArea--buttonStripGroup">
         <MarkdownLinkButton {...buttonProps} />
         <MarkdownImageButton {...buttonProps} />
+      </div>
+
+      <div className="TextArea--buttonStripGroup">
+        <PushButton
+          disableTimeout={true}
+          isPlain={true}
+          icon={<IconHelp />}
+          to="/text-formatting-guide"
+          forceNewWindow={true}
+        />
       </div>
     </div>
   );

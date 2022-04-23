@@ -13,6 +13,7 @@ interface PushButtonProps {
   icon?: React.ReactNode | undefined;
   children?: React.ReactNode | string | undefined;
   tooltip?: string | undefined;
+  forceNewWindow?: boolean | undefined;
 }
 
 const PushButton = ({
@@ -25,6 +26,7 @@ const PushButton = ({
   children,
   disabled,
   tooltip,
+  forceNewWindow,
 }: PushButtonProps) => {
   const [timer, setTimer] = useState<number | null>(null);
   const [isTimeoutActive, setIsTimeoutActive] = useState(false);
@@ -65,7 +67,7 @@ const PushButton = ({
     classNames.push(className);
   }
 
-  if (to?.includes("://")) {
+  if (to?.includes("://") || (to && forceNewWindow)) {
     // handle external links
     return (
       <a

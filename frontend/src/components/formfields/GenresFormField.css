@@ -5,7 +5,7 @@
   background: var(--label-bg-color);
   border: 2px solid var(--input-border-color);
 }
-.GenresFormField .icon {
+.GenresFormField .Icon {
   color: var(--input-border-color);
   margin-left: 1rem;
   float: right;
