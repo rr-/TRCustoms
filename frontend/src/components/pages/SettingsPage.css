@@ -1,29 +1,8 @@
 .SettingsPage {
   margin: 0 0.5rem;
 }
-.SettingsPage--list {
-  padding: 0;
-  list-style-type: none;
-  margin: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
-}
 .SettingsPage--switch {
   display: flex;
   align-items: center;
   gap: 0.75rem;
-}
-.SettingsPage--label {
-  display: inline-block;
-  width: 1.5rem;
-  height: 1.5rem;
-  box-sizing: border-box;
-  border: 0.75rem solid;
-  cursor: pointer;
-  padding: 0;
-  border-top-color: var(--primary-color);
-  border-left-color: var(--primary-color);
-  border-right-color: var(--secondary-color);
-  border-bottom-color: var(--secondary-color);
 }

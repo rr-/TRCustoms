@@ -82,21 +82,6 @@ button:focus {
   border-color: var(--outline-color);
 }
 
-button.link {
-  background: unset;
-  border: unset;
-  padding: unset;
-  color: var(--link-color);
-  line-height: calc(var(--font-size) * 1.5);
-}
-button.link:focus {
-  outline: 2px solid var(--outline-color);
-  isolation: isolate;
-}
-button.link:hover {
-  color: var(--fg-color);
-}
-
 input[type="radio"] {
   position: relative;
   cursor: pointer;
