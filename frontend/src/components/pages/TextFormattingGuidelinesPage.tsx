@@ -66,11 +66,11 @@ Text after line.
   },
   {
     title: "Tables",
-    text: `| Object Info | Level 1 | Level 2 | Level 3 |
+    text: `| Level | Secrets | Enemies | Pickups |
 | ----- | ----- | ----- | ----- |
-| Secrets | 5 | 2 | 3 |
-| Enemies | 23 | 33 | 8 |
-| Pickups | 28 | 14 | 19 |
+| Level 1 | 5 | 23 | 28 |
+| Level 2 | 2 | 33 | 14 |
+| Level 3 | 3 | 8 | 19 |
 `,
   },
   {
