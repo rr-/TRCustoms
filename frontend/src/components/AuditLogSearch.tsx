@@ -95,6 +95,7 @@ const StateSearches: StateSearchSection[] = [
     searchModel: "user",
     searchList: [
       { title: "Created", searchState: "created" },
+      { title: "Updated", searchState: "updated" },
       { title: "Activated", searchState: "activated" },
       { title: "Rejected", searchState: "rejected" },
       { title: "Banned", searchState: "banned" },
