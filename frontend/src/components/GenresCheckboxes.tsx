@@ -7,19 +7,15 @@ import { FilterCheckboxesHeader } from "src/components/FilterCheckboxesHeader";
 import { PushButton } from "src/components/PushButton";
 import { ConfigContext } from "src/contexts/ConfigContext";
 import type { GenreNested } from "src/services/GenreService";
-import type { LevelSearchQuery } from "src/services/LevelService";
 
 const MAX_VISIBLE_GENRES = 8;
 
 interface GenresCheckboxesProps {
-  searchQuery: LevelSearchQuery;
-  onSearchQueryChange: (searchQuery: LevelSearchQuery) => any;
+  value: number[];
+  onChange: (value: number[]) => any;
 }
 
-const GenresCheckboxes = ({
-  searchQuery,
-  onSearchQueryChange,
-}: GenresCheckboxesProps) => {
+const GenresCheckboxes = ({ value, onChange }: GenresCheckboxesProps) => {
   const { config } = useContext(ConfigContext);
   const [isExpanded, setIsExpanded] = useState(false);
   const [visibleGenres, setVisibleGenres] = useState<GenreNested[]>([]);
@@ -28,12 +24,10 @@ const GenresCheckboxes = ({
     setVisibleGenres(
       sortBy(config.genres, (genre) => genre.name).filter(
         (genre, i) =>
-          isExpanded ||
-          i < MAX_VISIBLE_GENRES ||
-          searchQuery.genres.includes(genre.id)
+          isExpanded || i < MAX_VISIBLE_GENRES || value.includes(genre.id)
       )
     );
-  }, [isExpanded, setVisibleGenres, config, searchQuery.genres]);
+  }, [isExpanded, setVisibleGenres, config, value]);
 
   const handleExpandButtonClick = () => {
     setIsExpanded((value) => !value);
@@ -43,16 +37,15 @@ const GenresCheckboxes = ({
     event: React.ChangeEvent<HTMLInputElement>,
     genre: GenreNested
   ) => {
-    onSearchQueryChange({
-      ...searchQuery,
-      genres: event.target.checked
-        ? [...searchQuery.genres, genre.id]
-        : searchQuery.genres.filter((genreId) => genreId !== genre.id),
-    });
+    onChange(
+      event.target.checked
+        ? [...value, genre.id]
+        : value.filter((genreId) => genreId !== genre.id)
+    );
   };
 
   const handleClear = () => {
-    onSearchQueryChange({ ...searchQuery, genres: [] });
+    onChange([]);
   };
 
   return (
@@ -64,7 +57,7 @@ const GenresCheckboxes = ({
         <div key={genre.id}>
           <Checkbox
             label={genre.name}
-            checked={searchQuery.genres.includes(genre.id)}
+            checked={value.includes(genre.id)}
             onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
               handleChange(event, genre)
             }

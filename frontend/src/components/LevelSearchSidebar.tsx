@@ -71,7 +71,7 @@ const LevelSearchSidebar = ({
 
   const handleSubmit = useCallback(
     // push changes to query on Formik submit
-    async (values: any) => {
+    (values: any) => {
       onSearchQueryChange({
         ...searchQuery,
         page: null,
@@ -81,6 +81,39 @@ const LevelSearchSidebar = ({
         genres: values.genres,
         engines: values.engines,
         isApproved: values.isApproved,
+      });
+    },
+    [searchQuery, onSearchQueryChange]
+  );
+
+  const handleEnginesChange = useCallback(
+    (values: number[]) => {
+      onSearchQueryChange({
+        ...searchQuery,
+        page: null,
+        engines: values,
+      });
+    },
+    [searchQuery, onSearchQueryChange]
+  );
+
+  const handleGenresChange = useCallback(
+    (values: number[]) => {
+      onSearchQueryChange({
+        ...searchQuery,
+        page: null,
+        genres: values,
+      });
+    },
+    [searchQuery, onSearchQueryChange]
+  );
+
+  const handleTagsChange = useCallback(
+    (values: number[]) => {
+      onSearchQueryChange({
+        ...searchQuery,
+        page: null,
+        tags: values,
       });
     },
     [searchQuery, onSearchQueryChange]
@@ -151,22 +184,22 @@ const LevelSearchSidebar = ({
 
             <div className="LevelSearchSidebar--sidebarSection">
               <EnginesCheckboxes
-                searchQuery={searchQuery}
-                onSearchQueryChange={onSearchQueryChange}
+                value={searchQuery.engines}
+                onChange={handleEnginesChange}
               />
             </div>
 
             <div className="LevelSearchSidebar--sidebarSection">
               <GenresCheckboxes
-                searchQuery={searchQuery}
-                onSearchQueryChange={onSearchQueryChange}
+                value={searchQuery.genres}
+                onChange={handleGenresChange}
               />
             </div>
 
             <div className="LevelSearchSidebar--sidebarSection">
               <TagsCheckboxes
-                searchQuery={searchQuery}
-                onSearchQueryChange={onSearchQueryChange}
+                value={searchQuery.tags}
+                onChange={handleTagsChange}
               />
             </div>
           </Form>
