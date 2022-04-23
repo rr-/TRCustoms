@@ -8,21 +8,17 @@ import { PushButton } from "src/components/PushButton";
 import { TextInput } from "src/components/TextInput";
 import { KEY_RETURN } from "src/constants";
 import { ConfigContext } from "src/contexts/ConfigContext";
-import type { LevelSearchQuery } from "src/services/LevelService";
 import type { TagNested } from "src/services/TagService";
 
 const MAX_VISIBLE_TAGS = 12;
 const MAX_TAGS_FILTER = 10;
 
 interface TagsCheckboxesProps {
-  searchQuery: LevelSearchQuery;
-  onSearchQueryChange: (searchQuery: LevelSearchQuery) => any;
+  value: number[];
+  onChange: (value: number[]) => any;
 }
 
-const TagsCheckboxes = ({
-  searchQuery,
-  onSearchQueryChange,
-}: TagsCheckboxesProps) => {
+const TagsCheckboxes = ({ value, onChange }: TagsCheckboxesProps) => {
   const { config } = useContext(ConfigContext);
   const [searchFilter, setSearchFilter] = useState("");
   const [filteredTags, setFilteredTags] = useState<TagNested[]>([]);
@@ -33,18 +29,18 @@ const TagsCheckboxes = ({
       sortBy(config.tags, (tag) => tag.name).filter(
         (tag, i) =>
           tag.name.toLowerCase().includes(searchFilter.toLowerCase()) ||
-          searchQuery.tags.includes(tag.id)
+          value.includes(tag.id)
       )
     );
-  }, [searchFilter, setFilteredTags, config, searchQuery.tags]);
+  }, [searchFilter, setFilteredTags, config, value]);
 
   useEffect(() => {
     setVisibleTags(
       filteredTags.filter(
-        (tag, i) => i < MAX_VISIBLE_TAGS || searchQuery.tags.includes(tag.id)
+        (tag, i) => i < MAX_VISIBLE_TAGS || value.includes(tag.id)
       )
     );
-  }, [setVisibleTags, filteredTags, searchQuery.tags]);
+  }, [setVisibleTags, filteredTags, value]);
 
   const handleSearchInputChange = (
     event: React.ChangeEvent<HTMLInputElement>
@@ -64,18 +60,17 @@ const TagsCheckboxes = ({
     event: React.ChangeEvent<HTMLInputElement>,
     tag: TagNested
   ) => {
-    onSearchQueryChange({
-      ...searchQuery,
-      tags: event.target.checked
-        ? searchQuery.tags.length < MAX_TAGS_FILTER
-          ? [...searchQuery.tags, tag.id]
-          : searchQuery.tags
-        : searchQuery.tags.filter((tagId) => tagId !== tag.id),
-    });
+    onChange(
+      event.target.checked
+        ? value.length < MAX_TAGS_FILTER
+          ? [...value, tag.id]
+          : value
+        : value.filter((tagId) => tagId !== tag.id)
+    );
   };
 
   const handleClear = () => {
-    onSearchQueryChange({ ...searchQuery, tags: [] });
+    onChange([]);
   };
 
   return (
@@ -95,13 +90,11 @@ const TagsCheckboxes = ({
             onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
               handleTagChange(event, tag)
             }
-            checked={searchQuery.tags.includes(tag.id)}
+            checked={value.includes(tag.id)}
           />
         </div>
       ))}
-      {searchQuery.tags.length === MAX_TAGS_FILTER && (
-        <p>Maximum tag filter reached.</p>
-      )}
+      {value.length === MAX_TAGS_FILTER && <p>Maximum tag filter reached.</p>}
       {filteredTags.length > MAX_VISIBLE_TAGS && (
         <p>({filteredTags.length - MAX_VISIBLE_TAGS} tag(s) hidden)</p>
       )}
