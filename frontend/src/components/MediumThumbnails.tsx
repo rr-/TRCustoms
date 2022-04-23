@@ -45,6 +45,13 @@ const MediumThumbnailModal = ({
     }
   };
 
+  const handleImageMouseDown = (event: React.MouseEvent) => {
+    if (event.button === 0) {
+      event.preventDefault();
+      handleDimClick(event);
+    }
+  };
+
   return (
     <Dim
       isActive={!!file}
@@ -66,7 +73,7 @@ const MediumThumbnailModal = ({
           </PushButton>
 
           <img
-            onMouseDown={handleDimClick}
+            onMouseDown={handleImageMouseDown}
             alt="Full resolution"
             src={file.url}
           />
