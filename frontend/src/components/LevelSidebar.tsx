@@ -46,8 +46,8 @@ const LevelSidebar = ({ level, reviewCount }: LevelSidebarProps) => {
 
   const handleReviewCountClick = () => {
     document
-      .getElementsByClassName("ReviewsList")[0]
-      .scrollIntoView({ behavior: "smooth" });
+      .querySelector(".LevelPage--reviews")
+      ?.scrollIntoView({ behavior: "smooth" });
   };
 
   const showFileGoneAlert = () =>
