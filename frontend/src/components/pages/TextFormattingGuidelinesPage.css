@@ -17,5 +17,12 @@
 }
 
 .TextFormattingGuidelinesPage--code {
+  white-space: pre-wrap;
   margin: 0;
+}
+
+@media (max-device-width: 800px) {
+  .TextFormattingGuidelinesPage--section {
+    grid-template-columns: 1fr;
+  }
 }
