@@ -10,12 +10,12 @@
   border-bottom: 0;
   padding: 0.5rem;
   display: flex;
-  gap: 1.5rem;
+  gap: 2rem;
 }
 
 .TextArea--buttonStripGroup {
   display: flex;
-  gap: 1rem;
+  gap: 0.75rem;
 }
 
 .TextArea .Input {

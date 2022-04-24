@@ -32,3 +32,22 @@
 .Markdown table thead th {
   border-bottom: 1px solid var(--fg-color);
 }
+
+.Markdown--color.pickup {
+  color: forestgreen;
+}
+.Markdown--color.trap {
+  color: deeppink;
+}
+.Markdown--color.enemy {
+  color: red;
+}
+.Markdown--color.secret {
+  color: darkgoldenrod;
+}
+.Markdown--color.object {
+  color: royalblue;
+}
+[data-theme="midnight_ocean"] .Markdown--color.secret {
+  color: goldenrod;
+}

@@ -10,6 +10,11 @@ import { TabSwitch } from "src/components/TabSwitch";
 import { BaseFormField } from "src/components/formfields/BaseFormField";
 import type { GenericFormFieldProps } from "src/components/formfields/BaseFormField";
 import { IconMarkdownItalic } from "src/components/icons";
+import { IconMarkdownColorSecret } from "src/components/icons";
+import { IconMarkdownColorPickup } from "src/components/icons";
+import { IconMarkdownColorObject } from "src/components/icons";
+import { IconMarkdownColorEnemy } from "src/components/icons";
+import { IconMarkdownColorTrap } from "src/components/icons";
 import { IconHelp } from "src/components/icons";
 import { IconMarkdownCode } from "src/components/icons";
 import { IconMarkdownStrikeThrough } from "src/components/icons";
@@ -668,6 +673,76 @@ const MarkdownOrderedListButton = ({ ...props }: MarkdownButtonProps) => {
   );
 };
 
+const MarkdownColorSecretButton = ({ ...props }: MarkdownButtonProps) => {
+  return (
+    <MarkdownBaseButton
+      icon={<IconMarkdownColorSecret />}
+      tooltip="Add a secret"
+      style={{
+        prefix: "[s]",
+        suffix: "[/s]",
+      }}
+      {...props}
+    />
+  );
+};
+
+const MarkdownColorPickupButton = ({ ...props }: MarkdownButtonProps) => {
+  return (
+    <MarkdownBaseButton
+      icon={<IconMarkdownColorPickup />}
+      tooltip="Add a pickup"
+      style={{
+        prefix: "[p]",
+        suffix: "[/p]",
+      }}
+      {...props}
+    />
+  );
+};
+
+const MarkdownColorObjectButton = ({ ...props }: MarkdownButtonProps) => {
+  return (
+    <MarkdownBaseButton
+      icon={<IconMarkdownColorObject />}
+      tooltip="Add an interactible"
+      style={{
+        prefix: "[o]",
+        suffix: "[/o]",
+      }}
+      {...props}
+    />
+  );
+};
+
+const MarkdownColorEnemyButton = ({ ...props }: MarkdownButtonProps) => {
+  return (
+    <MarkdownBaseButton
+      icon={<IconMarkdownColorEnemy />}
+      tooltip="Add an enemy"
+      style={{
+        prefix: "[e]",
+        suffix: "[/e]",
+      }}
+      {...props}
+    />
+  );
+};
+
+const MarkdownColorTrapButton = ({ ...props }: MarkdownButtonProps) => {
+  return (
+    <MarkdownBaseButton
+      icon={<IconMarkdownColorTrap />}
+      tooltip="Add a trap"
+      style={{
+        prefix: "[t]",
+        suffix: "[/t]",
+      }}
+      {...props}
+    />
+  );
+};
+
 const applyStyle = (
   field: HTMLTextAreaElement,
   stylesToApply: MarkdownInputStyle
@@ -726,6 +801,14 @@ const MarkdownButtonStrip = ({ textarea }: MarkdownButtonStripProps) => {
       <div className="TextArea--buttonStripGroup">
         <MarkdownLinkButton {...buttonProps} />
         <MarkdownImageButton {...buttonProps} />
+      </div>
+
+      <div className="TextArea--buttonStripGroup">
+        <MarkdownColorSecretButton {...buttonProps} />
+        <MarkdownColorPickupButton {...buttonProps} />
+        <MarkdownColorObjectButton {...buttonProps} />
+        <MarkdownColorEnemyButton {...buttonProps} />
+        <MarkdownColorTrapButton {...buttonProps} />
       </div>
 
       <div className="TextArea--buttonStripGroup">
