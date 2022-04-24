@@ -1,19 +1,21 @@
-.TextFormattingGuidelinesPage--sections {
+.TextFormattingGuidelinesPage--section {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 0 1rem;
-  align-items: flex-start;
-}
-
-.TextFormattingGuidelinesPage--section {
-  display: contents;
+  gap: 1rem;
+  background: var(--article-bg-color);
+  padding: 1rem;
+  margin-bottom: 3rem;
 }
 
 .TextFormattingGuidelinesPage--sectionHeader {
+  margin: 0 0 1rem 0;
+}
+
+.TextFormattingGuidelinesPage--exampleHeader {
+  display: block;
   margin: 0 0 0.5rem 0;
-  grid-column: 1 / span 2;
 }
 
 .TextFormattingGuidelinesPage--code {
-  margin: 0 0 3rem 0;
+  margin: 0;
 }
