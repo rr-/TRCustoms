@@ -17,12 +17,12 @@ const sections = [
     text: `**Bold text**
 _italicized text_
 ~Strikethrough text~
-Text coloring
-[p]Blue for Pickups[/p]
-[s]Gold for Secrets[/s]
-[t]Orange for Traps[/t]
-[e]Red for Enemies[/e]
-[o]Green for Objects of Interest or Interactibles[/o]
+
+[p]Pickups[/p]
+[s]Secrets[/s]
+[t]Traps[/t]
+[e]Enemies[/e]
+[o]Objects of Interest or Interactibles[/o]
 `,
   },
   {
