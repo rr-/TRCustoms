@@ -102,14 +102,18 @@ const TextFormattingGuidelinesPage = () => {
               key={section.title}
               className="TextFormattingGuidelinesPage--section"
             >
-              <div>
-                <strong>Syntax</strong>
+              <div className="ChildMarginClear">
+                <h3 className="TextFormattingGuidelinesPage--exampleHeader">
+                  Syntax
+                </h3>
                 <pre className="TextFormattingGuidelinesPage--code">
                   <code>{section.text}</code>
                 </pre>
               </div>
-              <div>
-                <strong>Result</strong>
+              <div className="ChildMarginClear">
+                <h3 className="TextFormattingGuidelinesPage--exampleHeader">
+                  Result
+                </h3>
                 <Markdown>{section.text}</Markdown>
               </div>
             </article>

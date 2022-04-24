@@ -6,15 +6,16 @@
   --tab-switch-inactive-bg-color: var(--label-bg-color);
   --tab-switch-active-fg-color: var(--navbar-active-tab-fg-color);
   --tab-switch-inactive-fg-color: var(--fg-color);
-  --news-bg-color: var(--reviews-bg-color);
+  --article-bg-color: var(--label-bg-color);
+  --news-bg-color: var(--article-bg-color);
   --section-border-color: var(--button-bg-color);
   --button-link-color: var(--link-color);
   --message-bg-color: var(--blockquote-bg-color);
   --message-accent-bg-color: var(--blockquote-border-color);
   --message-accent-fg-color: var(--fg-color);
-  --levels-table-bg-color: var(--label-bg-color);
-  --reviews-bg-color: var(--label-bg-color);
-  --table-details-bg-color: var(--label-bg-color);
+  --levels-table-bg-color: var(--article-bg-color);
+  --reviews-bg-color: var(--article-bg-color);
+  --table-details-bg-color: var(--article-bg-color);
 }
 
 [data-theme="midnight_ocean"] {
@@ -90,7 +91,7 @@
   --blockquote-bg-color: var(--bg-color);
   --blockquote-border-color: var(--button-bg-color);
   --message-accent-fg-color: var(--button-fg-color);
-  --message-bg-color: var(--label-bg-color);
+  --message-bg-color: var(--article-bg-color);
 }
 
 [data-theme="lettuce"] {
