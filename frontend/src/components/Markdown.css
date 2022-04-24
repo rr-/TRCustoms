@@ -4,11 +4,8 @@
   border: 0;
 }
 
-.Markdown > *:first-child {
-  margin-top: 0;
-}
-.Markdown > *:last-child {
-  margin-bottom: 0;
+.Markdown {
+  word-break: break-word;
 }
 
 .Markdown img {
