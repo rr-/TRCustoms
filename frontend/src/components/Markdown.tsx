@@ -53,7 +53,7 @@ const transformLink = (link: any): any => {
 const Markdown = ({ children }: MarkdownProps) => {
   const rendered = useMemo(
     () => (
-      <div className="Markdown">
+      <div className="Markdown ChildMarginClear">
         <ReactMarkdown
           remarkPlugins={[remarkGfm, remarkBreaks, remarkTRCustomColors]}
           components={{ a: transformLink }}
