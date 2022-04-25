@@ -92,10 +92,13 @@ LOGGING = {
         "sql_console": {
             "class": "logging.StreamHandler",
             "filters": ["require_debug_true"],
-            "level": "DEBUG",
         },
     },
     "loggers": {
+        "celery": {
+            "level": "INFO",
+            "handlers": ["console"],
+        },
         "trcustoms": {
             "level": "DEBUG",
             "handlers": ["console"],
