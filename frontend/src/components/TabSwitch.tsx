@@ -39,18 +39,18 @@ const TabSwitch = ({ tabs }: TabSwitchProps) => {
           ))}
         </ul>
       </nav>
-      <ul className="TabSwitch--content">
+      <div className="TabSwitch--content">
         {tabs.map((tab, i) => (
-          <li
+          <div
             className={`TabSwitch--contentItem ${
               i === activeTab ? "active" : ""
             }`}
             key={i}
           >
             {tab.content}
-          </li>
+          </div>
         ))}
-      </ul>
+      </div>
     </div>
   );
 };

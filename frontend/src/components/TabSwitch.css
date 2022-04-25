@@ -21,14 +21,8 @@
 }
 
 .TabSwitch--content {
-  list-style-type: none;
-  margin: 0;
   padding: 0.5rem;
   background: var(--tab-switch-active-bg-color);
-}
-.TabSwitch--contentItem {
-  margin: 0;
-  padding: 0;
 }
 .TabSwitch--contentItem:not(.active) {
   display: none;
