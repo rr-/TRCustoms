@@ -57,6 +57,9 @@ const getYoutubeVideoID = (url: string): string | null => {
 };
 
 const extractErrorMessage = (error: unknown) => {
+  if (!error) {
+    return null;
+  }
   if (!axios.isAxiosError(error)) {
     return error;
   }
@@ -86,7 +89,10 @@ const showAlertOnError = async (func: () => Promise<void>): Promise<void> => {
   try {
     await func();
   } catch (error) {
-    alert(extractErrorMessage(error));
+    const message = extractErrorMessage(error);
+    if (message) {
+      alert(message);
+    }
   }
 };
 

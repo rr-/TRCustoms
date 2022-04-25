@@ -7,6 +7,7 @@ enum UploadType {
   LevelCover = "lb",
   LevelScreenshot = "ls",
   LevelFile = "lf",
+  Attachment = "at",
 }
 
 interface UploadedFile {

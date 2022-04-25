@@ -15,6 +15,7 @@ class UploadedFile(DatesInfo):
         LEVEL_COVER = ("lb", "Level cover image")
         LEVEL_SCREENSHOT = ("ls", "Level screenshot")
         LEVEL_FILE = ("lf", "Level file")
+        ATTACHMENT = ("at", "Post attachment")
 
     class Meta:
         default_permissions = []
@@ -29,6 +30,8 @@ class UploadedFile(DatesInfo):
                 return "level_images"
             case UploadedFile.UploadType.LEVEL_FILE:
                 return "levels"
+            case UploadedFile.UploadType.ATTACHMENT:
+                return "attachments"
             case _:
                 raise ValueError("unknown upload type")
 

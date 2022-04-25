@@ -1,7 +1,6 @@
 .MarkdownButtonStrip {
   background: var(--label-bg-color);
-  border: 2px solid var(--input-border-color);
-  border-bottom: 0;
+  border-bottom: 2px solid var(--input-border-color);
   padding: 0.5rem;
   display: flex;
   gap: 2rem;
