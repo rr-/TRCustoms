@@ -2,9 +2,9 @@
   vertical-align: top;
 }
 
-.FilePicker--dropArea {
+.FilePicker .FileUploader--dropArea {
   display: flex;
-  min-height: 5rem;
+  min-height: 6rem;
   justify-content: center;
   align-items: center;
   width: 25rem;
@@ -17,18 +17,14 @@
   word-wrap: break-word;
 }
 
-.FilePicker--fileInput {
-  display: none;
-}
-
-.FilePicker--fileInput:disabled + .FilePicker--dropArea {
+.FilePicker .FileUploader--input:disabled + .FileUploader--dropArea {
   cursor: default;
   opacity: 0.5;
 }
 
-.FilePicker--fileInput:active + .FilePicker--dropArea,
-.FilePicker--fileInput:focus + .FilePicker--dropArea,
-.FilePicker--dropArea.active {
+.FilePicker .FileUploader--input:active + .FileUploader--dropArea,
+.FilePicker .FileUploader--input:focus + .FileUploader--dropArea,
+.FilePicker .FileUploader--dropArea.active {
   border-color: var(--fg-color);
 }
 

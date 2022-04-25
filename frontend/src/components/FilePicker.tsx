@@ -1,13 +1,10 @@
 import "./FilePicker.css";
-import { AxiosError } from "axios";
-import axios from "axios";
-import { uniqueId } from "lodash";
-import { Fragment } from "react";
 import { useCallback } from "react";
+import { Fragment } from "react";
 import { useEffect } from "react";
 import { useState } from "react";
+import { FileUploader } from "src/components/FileUploader";
 import { Loader } from "src/components/Loader";
-import { ProgressBar } from "src/components/ProgressBar";
 import { PushButton } from "src/components/PushButton";
 import type { UploadedFile } from "src/services/FileService";
 import { FileService } from "src/services/FileService";
@@ -148,8 +145,8 @@ const FilePickerPreviewWrapper = ({
 };
 
 interface FilePickerProps {
-  label?: React.ReactNode | undefined;
   uploadType: UploadType;
+  label?: React.ReactNode | undefined;
   fileIds?: number[] | undefined;
   onError?: ((error: any) => void) | undefined;
   onChange?: ((fileIds: number[]) => void) | undefined;
@@ -175,25 +172,7 @@ const FilePicker = ({
   const [reorderTargetPosition, setReorderTargetPosition] = useState<
     number | null
   >(null);
-  const [percentCompleted, setPercentCompleted] = useState<number | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
-  const [dragCounter, setDragCounter] = useState(0);
-  const [elementId] = useState(uniqueId("pictureDropper-"));
-
-  const isUploading = percentCompleted !== null;
-
-  const handleError = useCallback(
-    (error) => {
-      if (axios.isAxiosError(error)) {
-        const axiosError = error as AxiosError;
-        setErrorMessage(axiosError.response?.data.content);
-      } else {
-        setErrorMessage("Unknown error.");
-      }
-      onError?.(error);
-    },
-    [onError]
-  );
 
   const clearFile = useCallback(
     (fileId) => {
@@ -204,116 +183,6 @@ const FilePicker = ({
     },
     [setErrorMessage, setCurrentFileIds, onChange, currentFileIds]
   );
-
-  const addFiles = useCallback(
-    (files: File[]) => {
-      setErrorMessage(null);
-
-      const run = async () => {
-        try {
-          const uploadedFiles = [];
-
-          for (let file of files) {
-            const handleUploadProgress = (progressEvent: ProgressEvent) => {
-              setPercentCompleted(
-                ((uploadedFiles.length +
-                  progressEvent.loaded / progressEvent.total) *
-                  100) /
-                  files.length
-              );
-            };
-
-            const uploadedFile = await FileService.uploadFile(
-              file,
-              uploadType,
-              handleUploadProgress
-            );
-
-            uploadedFiles.push(uploadedFile);
-          }
-
-          const newFileIds = [
-            ...(allowMultiple ? currentFileIds : []),
-            ...uploadedFiles.map((uploadedFile) => uploadedFile.id),
-          ];
-
-          setPercentCompleted(null);
-          setCurrentFileIds(newFileIds);
-          onChange?.(newFileIds);
-        } catch (error) {
-          setPercentCompleted(null);
-          handleError(error);
-        }
-      };
-      run();
-    },
-    [
-      setErrorMessage,
-      handleError,
-      uploadType,
-      setCurrentFileIds,
-      setPercentCompleted,
-      onChange,
-      currentFileIds,
-      allowMultiple,
-    ]
-  );
-
-  const UploadEvents = {
-    onClick: (event: React.MouseEvent) => {
-      if (isUploading) {
-        event.preventDefault();
-        event.stopPropagation();
-      }
-    },
-
-    onDragEnter: (event: React.DragEvent) => {
-      if (isUploading) {
-        return;
-      }
-      setDragCounter((dragCounter) => dragCounter + 1);
-    },
-
-    onDragLeave: (event: React.DragEvent) => {
-      if (isUploading) {
-        return;
-      }
-      setDragCounter((dragCounter) => Math.max(0, dragCounter - 1));
-    },
-
-    onDragOver: (event: React.DragEvent) => {
-      if (isUploading) {
-        return;
-      }
-      event.preventDefault();
-    },
-
-    onDrop: (event: React.DragEvent) => {
-      event.preventDefault();
-      if (isUploading) {
-        return;
-      }
-      setDragCounter(0);
-      if (!event.dataTransfer.files.length) {
-        window.alert("Only files are supported.");
-      }
-      if (!allowMultiple && event.dataTransfer.files.length > 1) {
-        window.alert("Cannot select multiple files.");
-      }
-      addFiles([...event.dataTransfer.files]);
-    },
-
-    onFileChange: (event: React.ChangeEvent<HTMLInputElement>) => {
-      if (isUploading) {
-        return;
-      }
-      const input = event.currentTarget as HTMLInputElement;
-      if (!input.files) {
-        return;
-      }
-      addFiles(allowMultiple ? [...input.files] : [input.files[0]]);
-    },
-  };
 
   const reorderFiles = (oldIndex: number, newIndex: number) => {
     if (oldIndex === newIndex) {
@@ -327,39 +196,34 @@ const FilePicker = ({
     onChange?.(newFileIds);
   };
 
+  const handleUploadError = useCallback(
+    (error: any) => {
+      setErrorMessage(error);
+    },
+    [setErrorMessage]
+  );
+
+  const handleUploadFinish = useCallback(
+    (uploadedFiles: UploadedFile[]) => {
+      const newFileIds = [
+        ...(allowMultiple ? currentFileIds : []),
+        ...uploadedFiles.map((uploadedFile) => uploadedFile.id),
+      ];
+      setCurrentFileIds(newFileIds);
+      onChange?.(newFileIds);
+    },
+    [allowMultiple, onChange, currentFileIds]
+  );
+
   return (
     <div className="FilePicker">
-      <input
-        multiple={allowMultiple}
-        className="FilePicker--fileInput"
-        id={elementId}
-        type="file"
-        onChange={(event) => UploadEvents.onFileChange(event)}
+      <FileUploader
+        uploadType={uploadType}
+        allowMultiple={allowMultiple}
+        onUploadFinish={handleUploadFinish}
+        onUploadError={handleUploadError}
+        label={label}
       />
-      <label
-        htmlFor={elementId}
-        className={`FilePicker--dropArea ${dragCounter ? "active" : ""}`}
-        onClick={(event) => UploadEvents.onClick(event)}
-        onDragEnter={(event) => UploadEvents.onDragEnter(event)}
-        onDragLeave={(event) => UploadEvents.onDragLeave(event)}
-        onDragOver={(event) => UploadEvents.onDragOver(event)}
-        onDrop={(event) => UploadEvents.onDrop(event)}
-      >
-        {isUploading ? (
-          <>
-            <ProgressBar
-              title="Uploading…"
-              percentCompleted={percentCompleted}
-            />
-          </>
-        ) : label ? (
-          label
-        ) : allowMultiple ? (
-          <>Drop files here, or click on this box.</>
-        ) : (
-          <>Drop a file here, or click on this box.</>
-        )}
-      </label>
       <div className="FilePicker--previews">
         {currentFileIds.length > 1 ? (
           <FilePickerReorderTarget
