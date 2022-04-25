@@ -20,6 +20,7 @@ CACHE_DIR = BASE_DIR / "cache"
 
 SECRET_KEY = get_setting("SECRET_KEY")
 DEBUG = get_setting("DEBUG").lower() in {"1", "true"}
+DEBUG_SQL = get_setting("DEBUG_SQL").lower() in {"1", "true"}
 TESTING = any(arg.endswith("test") for arg in sys.argv)
 ALLOWED_HOSTS = ["*"]
 
@@ -108,7 +109,7 @@ LOGGING = {
             "handlers": ["console"],
         },
         "django.db.backends": {
-            "level": "DEBUG",
+            "level": "DEBUG" if DEBUG_SQL else "INFO",
             "handlers": ["sql_console"],
         },
     },
