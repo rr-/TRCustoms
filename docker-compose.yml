@@ -3,6 +3,7 @@ version: '3.7'
 x-backend-environment: &base-backend-environment
   - SECRET_KEY=${SECRET_KEY}
   - DEBUG=${DEBUG}
+  - DEBUG_SQL=${DEBUG_SQL}
   - HOST_SITE=${HOST_SITE}
   - POSTGRES_DB=trcustoms
   - POSTGRES_USER=root
