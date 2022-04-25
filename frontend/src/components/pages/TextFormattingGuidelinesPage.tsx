@@ -1,7 +1,7 @@
 import "./TextFormattingGuidelinesPage.css";
 import { useContext } from "react";
 import { useEffect } from "react";
-import { Markdown } from "src/components/Markdown";
+import { Markdown } from "src/components/markdown/Markdown";
 import { TitleContext } from "src/contexts/TitleContext";
 
 const sections = [

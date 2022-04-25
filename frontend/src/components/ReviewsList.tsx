@@ -1,6 +1,5 @@
 import "./ReviewsList.css";
 import { DataList } from "src/components/DataList";
-import { Markdown } from "src/components/Markdown";
 import { PermissionGuard } from "src/components/PermissionGuard";
 import { UserPicture } from "src/components/UserPicture";
 import { ReviewDeletePushButton } from "src/components/buttons/ReviewDeletePushButton";
@@ -10,6 +9,7 @@ import { IconThumbDown } from "src/components/icons";
 import { IconDotsCircleHorizontal } from "src/components/icons";
 import { LevelLink } from "src/components/links/LevelLink";
 import { UserLink } from "src/components/links/UserLink";
+import { Markdown } from "src/components/markdown/Markdown";
 import type { ReviewListing } from "src/services/ReviewService";
 import { ReviewService } from "src/services/ReviewService";
 import type { ReviewSearchQuery } from "src/services/ReviewService";

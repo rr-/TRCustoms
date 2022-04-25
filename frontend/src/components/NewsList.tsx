@@ -1,11 +1,11 @@
 import "./NewsList.css";
 import { useState } from "react";
 import { DataList } from "src/components/DataList";
-import { Markdown } from "src/components/Markdown";
 import { PermissionGuard } from "src/components/PermissionGuard";
 import { PushButton } from "src/components/PushButton";
 import { UserPicture } from "src/components/UserPicture";
 import { UserLink } from "src/components/links/UserLink";
+import { Markdown } from "src/components/markdown/Markdown";
 import type { NewsListing } from "src/services/NewsService";
 import { NewsService } from "src/services/NewsService";
 import type { NewsSearchQuery } from "src/services/NewsService";
