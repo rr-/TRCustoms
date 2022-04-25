@@ -1,8 +1,7 @@
 import "./FileUploader.css";
-import { AxiosError } from "axios";
-import axios from "axios";
 import { uniqueId } from "lodash";
 import { useState } from "react";
+import { useEffect } from "react";
 import { useCallback } from "react";
 import { ProgressBar } from "src/components/ProgressBar";
 import type { UploadedFile } from "src/services/FileService";
@@ -12,17 +11,21 @@ import { UploadType } from "src/services/FileService";
 interface FileUploaderProps {
   uploadType: UploadType;
   allowMultiple?: boolean | undefined;
-  onUploadError?: ((error: any) => void) | undefined;
+  disableProgressbar?: boolean | undefined;
   onUploadFinish?: ((uploadedFiles: UploadedFile[]) => void) | undefined;
+  onUploadError?: ((error: any) => void) | undefined;
+  onUploadPercentChange?: ((percent: number | null) => void) | undefined;
   label?: React.ReactNode | undefined;
 }
 
 const FileUploader = ({
   uploadType,
   allowMultiple,
+  disableProgressbar,
   label,
   onUploadFinish,
   onUploadError,
+  onUploadPercentChange,
 }: FileUploaderProps) => {
   const [percentCompleted, setPercentCompleted] = useState<number | null>(null);
   const [elementId] = useState(uniqueId("FileUploader-"));
@@ -31,13 +34,7 @@ const FileUploader = ({
 
   const handleError = useCallback(
     (error) => {
-      console.error(error);
-      if (axios.isAxiosError(error)) {
-        const axiosError = error as AxiosError;
-        onUploadError?.(axiosError.response?.data.content);
-      } else {
-        onUploadError?.("Unknown error.");
-      }
+      onUploadError?.(error);
     },
     [onUploadError]
   );
@@ -87,9 +84,12 @@ const FileUploader = ({
     ]
   );
 
+  useEffect(() => {
+    onUploadPercentChange?.(percentCompleted);
+  }, [percentCompleted, onUploadPercentChange]);
+
   const UploadEvents = {
     onClick: (event: React.MouseEvent) => {
-      console.log(event);
       if (isUploading) {
         event.preventDefault();
         event.stopPropagation();
@@ -97,7 +97,6 @@ const FileUploader = ({
     },
 
     onDragEnter: (event: React.DragEvent) => {
-      console.log(event);
       if (isUploading) {
         return;
       }
@@ -105,7 +104,6 @@ const FileUploader = ({
     },
 
     onDragLeave: (event: React.DragEvent) => {
-      console.log(event);
       if (isUploading) {
         return;
       }
@@ -113,7 +111,6 @@ const FileUploader = ({
     },
 
     onDragOver: (event: React.DragEvent) => {
-      console.log(event);
       if (isUploading) {
         return;
       }
@@ -121,7 +118,6 @@ const FileUploader = ({
     },
 
     onDrop: (event: React.DragEvent) => {
-      console.log(event);
       event.preventDefault();
       if (isUploading) {
         return;
@@ -166,7 +162,7 @@ const FileUploader = ({
         onDragOver={(event) => UploadEvents.onDragOver(event)}
         onDrop={(event) => UploadEvents.onDrop(event)}
       >
-        {isUploading ? (
+        {isUploading && !disableProgressbar ? (
           <>
             <ProgressBar
               title="Uploading…"

@@ -10,7 +10,10 @@ from trcustoms.utils import check_model_references
 @app.task
 def merge_duplicate_files() -> None:
     for result in (
-        UploadedFile.objects.values("md5sum", "upload_type")
+        UploadedFile.objects.exclude(
+            upload_type=UploadedFile.UploadType.ATTACHMENT
+        )
+        .values("md5sum", "upload_type")
         .annotate(dupe_count=Count("md5sum"))
         .filter(dupe_count__gt=1)
     ):

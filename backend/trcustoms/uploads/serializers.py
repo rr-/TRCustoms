@@ -7,18 +7,21 @@ from trcustoms.uploads.models import UploadedFile
 
 MAX_SIZE_MAP = {
     UploadedFile.UploadType.USER_PICTURE: [
-        (r".*", 300 * KILOBYTE),
+        (".*", 300 * KILOBYTE),
     ],
     UploadedFile.UploadType.LEVEL_COVER: [
-        (r"image/png", 10 * MEGABYTE),
-        (r".*", MEGABYTE),
+        ("image/png", 10 * MEGABYTE),
+        (".*", MEGABYTE),
     ],
     UploadedFile.UploadType.LEVEL_SCREENSHOT: [
-        (r"image/png", 10 * MEGABYTE),
-        (r".*", MEGABYTE),
+        ("image/png", 10 * MEGABYTE),
+        (".*", MEGABYTE),
     ],
     UploadedFile.UploadType.LEVEL_FILE: [
-        (r".*", GIGABYTE),
+        (".*", GIGABYTE),
+    ],
+    UploadedFile.UploadType.ATTACHMENT: [
+        (".*", 0.5 * MEGABYTE),
     ],
 }
 
@@ -27,6 +30,13 @@ CONTENT_TYPE_MAP = {
     UploadedFile.UploadType.LEVEL_COVER: ["image/jpeg", "image/png"],
     UploadedFile.UploadType.LEVEL_SCREENSHOT: ["image/jpeg", "image/png"],
     UploadedFile.UploadType.LEVEL_FILE: [
+        "application/zip",
+        "application/zip-compressed",
+        "application/x-zip-compressed",
+    ],
+    UploadedFile.UploadType.ATTACHMENT: [
+        "image/png",
+        "image/jpeg",
         "application/zip",
         "application/zip-compressed",
         "application/x-zip-compressed",

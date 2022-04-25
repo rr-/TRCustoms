@@ -1,0 +1,38 @@
+.MarkdownAttachmentStrip {
+  background: var(--input-bg-color);
+  border-top: 2px solid var(--label-bg-color);
+  position: relative;
+}
+
+.MarkdownAttachmentStrip .FileUploader--dropArea {
+  padding: 0.25rem 0.5rem;
+  display: block;
+  cursor: pointer;
+}
+
+.MarkdownAttachmentStrip
+  .FileUploader--input:disabled
+  + .FileUploader--dropArea {
+  cursor: default;
+  opacity: 0.5;
+}
+
+.MarkdownAttachmentStrip .FileUploader--input:active + .FileUploader--dropArea,
+.MarkdownAttachmentStrip .FileUploader--input:focus + .FileUploader--dropArea,
+.MarkdownAttachmentStrip .FileUploader--dropArea.active {
+  background: var(--bg-color);
+}
+
+.MarkdownAttachmentStrip--progressIndicator {
+  position: absolute;
+  z-index: 50;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  background: var(--label-bg-color);
+}
+
+.MarkdownAttachmentStrip--label {
+  position: relative;
+  z-index: 60;
+}

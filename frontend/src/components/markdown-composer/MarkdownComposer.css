@@ -1,3 +1,6 @@
+.MarkdownComposer {
+  border: 2px solid var(--input-border-color);
+}
 .MarkdownComposer .Input {
   padding: 0.5rem;
   line-height: calc(var(--font-size) * 1.3);
@@ -8,4 +11,5 @@
   height: unset;
   box-sizing: border-box;
   vertical-align: top;
+  border: 0;
 }

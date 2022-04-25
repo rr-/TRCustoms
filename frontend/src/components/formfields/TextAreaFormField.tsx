@@ -8,15 +8,21 @@ import { MarkdownComposer } from "src/components/markdown-composer/MarkdownCompo
 import { Markdown } from "src/components/markdown/Markdown";
 
 interface TextAreaFormFieldProps extends GenericFormFieldProps {
+  allowAttachments?: boolean | undefined;
   validate?: (value: string) => string | null;
 }
 
 const TextAreaFormField = ({
   name,
   readonly,
+  allowAttachments,
   validate,
   ...props
 }: TextAreaFormFieldProps) => {
+  if (allowAttachments === undefined) {
+    allowAttachments = true;
+  }
+
   const { values } = useFormikContext();
   return (
     <BaseFormField name={name} readonly={readonly} {...props}>
@@ -30,6 +36,7 @@ const TextAreaFormField = ({
                   name={name}
                   validate={validate}
                   readOnly={readonly}
+                  allowAttachments={allowAttachments}
                   component={MarkdownComposer}
                 />
               ),
