@@ -1,0 +1,21 @@
+.MarkdownButtonStrip {
+  background: var(--label-bg-color);
+  border: 2px solid var(--input-border-color);
+  border-bottom: 0;
+  padding: 0.5rem;
+  display: flex;
+  gap: 2rem;
+}
+
+.MarkdownButtonStrip--group {
+  display: flex;
+  gap: 0.75rem;
+}
+
+.MarkdownButtonStrip--group:last-of-type {
+  margin-left: auto;
+}
+.MarkdownButtonStrip--group .PushButton--icon .Icon {
+  width: 1.4em;
+  height: 1.4em;
+}

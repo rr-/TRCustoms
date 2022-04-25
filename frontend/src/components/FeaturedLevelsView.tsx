@@ -1,9 +1,9 @@
 import "./FeaturedLevelsView.css";
 import { useQuery } from "react-query";
 import { Loader } from "src/components/Loader";
-import { Markdown } from "src/components/Markdown";
 import { LevelAuthorsLink } from "src/components/links/LevelAuthorsLink";
 import { LevelLink } from "src/components/links/LevelLink";
+import { Markdown } from "src/components/markdown/Markdown";
 import type { FeaturedLevels } from "src/services/ConfigService";
 import type { FeaturedLevel } from "src/services/ConfigService";
 import { FeatureType } from "src/services/ConfigService";
