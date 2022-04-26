@@ -15,10 +15,20 @@ const MarkdownAttachmentStrip = ({
 }: MarkdownAttachmentStripProps) => {
   const [percentCompleted, setPercentCompleted] = useState<number | null>(null);
   const handleUploadFinish = (uploadedFiles: UploadedFile[]) => {
-    applyStyle(textarea, {
-      prefix: "![",
-      suffix: `](${uploadedFiles[0].url})`,
-    });
+    const isImage = uploadedFiles[0].url.match(/\.(jpg|png|gif)$/i);
+    applyStyle(
+      textarea,
+      isImage
+        ? {
+            prefix: "![",
+            suffix: `](${uploadedFiles[0].url})`,
+          }
+        : {
+            prefix: "[",
+            suffix: `download](${uploadedFiles[0].url})`,
+            replaceNext: "download",
+          }
+    );
   };
 
   const handleUploadError = (error: Error | null) => {
