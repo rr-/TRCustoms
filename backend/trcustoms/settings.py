@@ -263,7 +263,7 @@ USE_AWS_STORAGE = get_setting("USE_AWS_STORAGE").lower() in {
 CSRF_TRUSTED_ORIGINS = [
     "http://localhost:8000",
     "https://trcustoms.org",
-    "https://trcustoms.wind.garden",
+    "https://staging.trcustoms.org",
 ]
 
 
