@@ -1,6 +1,9 @@
 .MarkdownAttachmentStrip {
   background: var(--input-bg-color);
-  border-top: 2px solid var(--label-bg-color);
+  color: var(--input-fg-color);
+  font-size: calc(var(--font-size) * 0.9);
+  line-height: calc(var(--font-size) * 0.9 * 1.25);
+  border-top: 2px solid var(--input-border-color);
   position: relative;
 }
 
