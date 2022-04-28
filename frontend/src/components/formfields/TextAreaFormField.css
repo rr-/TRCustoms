@@ -7,16 +7,17 @@
 }
 
 .TextAreaFormField--preview {
-  background: var(--article-bg-color);
   flex-grow: 1;
 }
 
 .TextAreaFormField--previewHeader {
   padding: 0.5rem;
+  background: var(--article-bg-color);
   border-bottom: 2px solid var(--input-border-color);
 }
 
 .TextAreaFormField--previewBody {
+  background: var(--article-bg-color);
   padding: 0.5rem;
 }
 
