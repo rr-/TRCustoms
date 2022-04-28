@@ -6,27 +6,25 @@ import { BaseFormField } from "src/components/formfields/BaseFormField";
 import type { GenericFormFieldProps } from "src/components/formfields/BaseFormField";
 import { MarkdownComposer } from "src/components/markdown-composer/MarkdownComposer";
 import { Markdown } from "src/components/markdown/Markdown";
+import { useSettings } from "src/contexts/SettingsContext";
+import { MarkdownPreviewMode } from "src/contexts/SettingsContext";
 
 interface TextAreaFormFieldProps extends GenericFormFieldProps {
   allowAttachments?: boolean | undefined;
   validate?: (value: string) => string | null;
 }
 
-const TextAreaFormField = ({
+const TextAreaFormFieldTabbed = ({
   name,
   readonly,
   allowAttachments,
   validate,
   ...props
 }: TextAreaFormFieldProps) => {
-  if (allowAttachments === undefined) {
-    allowAttachments = true;
-  }
-
   const { values } = useFormikContext();
   return (
     <BaseFormField name={name} readonly={readonly} {...props}>
-      <div className="TextAreaFormField">
+      <div className="TextAreaFormField tabbed">
         <TabSwitch
           tabs={[
             {
@@ -45,7 +43,12 @@ const TextAreaFormField = ({
               label: "Preview",
               content: (
                 <div className="TextAreaFormField--preview">
-                  <Markdown>{(values as any)[name]}</Markdown>
+                  <div className="TextAreaFormField--previewHeader">
+                    Preview
+                  </div>
+                  <div className="TextAreaFormField--previewBody">
+                    <Markdown>{(values as any)[name]}</Markdown>
+                  </div>
                 </div>
               ),
             },
@@ -53,6 +56,51 @@ const TextAreaFormField = ({
         />
       </div>
     </BaseFormField>
+  );
+};
+
+const TextAreaFormFieldSide = ({
+  name,
+  readonly,
+  allowAttachments,
+  validate,
+  ...props
+}: TextAreaFormFieldProps) => {
+  const { values } = useFormikContext();
+  return (
+    <BaseFormField name={name} readonly={readonly} {...props}>
+      <div className="TextAreaFormField sideBySide">
+        <Field
+          name={name}
+          validate={validate}
+          readOnly={readonly}
+          allowAttachments={allowAttachments}
+          component={MarkdownComposer}
+        />
+        <div className="TextAreaFormField--preview">
+          <div className="TextAreaFormField--previewHeader">Preview</div>
+          <div className="TextAreaFormField--previewBody">
+            <Markdown>{(values as any)[name]}</Markdown>
+          </div>
+        </div>
+      </div>
+    </BaseFormField>
+  );
+};
+
+const TextAreaFormField = ({
+  allowAttachments,
+  ...props
+}: TextAreaFormFieldProps) => {
+  if (allowAttachments === undefined) {
+    allowAttachments = true;
+  }
+
+  const { markdownPreviewMode } = useSettings();
+  return markdownPreviewMode === MarkdownPreviewMode.Tabbed ? (
+    <TextAreaFormFieldTabbed allowAttachments={allowAttachments} {...props} />
+  ) : (
+    <TextAreaFormFieldSide allowAttachments={allowAttachments} {...props} />
   );
 };
 
