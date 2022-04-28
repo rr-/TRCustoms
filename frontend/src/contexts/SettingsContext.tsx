@@ -6,6 +6,11 @@ interface Theme {
   stub: string;
 }
 
+enum MarkdownPreviewMode {
+  Tabbed = "tab",
+  SideBySide = "side",
+}
+
 const themes: Theme[] = [
   {
     name: "Midnight ocean",
@@ -23,17 +28,19 @@ const themes: Theme[] = [
 
 interface SettingsState {
   theme: Theme;
-  infiniteScroll: boolean;
-
   getAllThemes: () => Theme[];
   setTheme: (theme: Theme) => void;
+
+  infiniteScroll: boolean;
   setInfiniteScroll: (infiniteScroll: boolean) => void;
+
+  markdownPreviewMode: MarkdownPreviewMode;
+  setMarkdownPreviewMode: (markdownPreviewMode: MarkdownPreviewMode) => void;
 }
 
 const useSettings = create<SettingsState>((set, get) => ({
   theme:
     themes.find((t) => t.name === StorageService.getItem("theme")) || themes[0],
-  infiniteScroll: StorageService.getItem("infiniteScroll") === "true" || false,
 
   getAllThemes: (): Theme[] => {
     return themes;
@@ -44,11 +51,21 @@ const useSettings = create<SettingsState>((set, get) => ({
     StorageService.setItem("theme", theme.name);
   },
 
+  infiniteScroll: StorageService.getItem("infiniteScroll") === "true" || false,
   setInfiniteScroll: (infiniteScroll: boolean): void => {
     set((state) => ({ ...state, infiniteScroll }));
     StorageService.setItem("infiniteScroll", infiniteScroll);
   },
+
+  markdownPreviewMode:
+    (StorageService.getItem(
+      "markdownPreviewMode"
+    ) as MarkdownPreviewMode | null) || MarkdownPreviewMode.SideBySide,
+  setMarkdownPreviewMode: (markdownPreviewMode: MarkdownPreviewMode): void => {
+    set((state) => ({ ...state, markdownPreviewMode }));
+    StorageService.setItem("markdownPreviewMode", markdownPreviewMode);
+  },
 }));
 
 export type { Theme, SettingsState };
-export { useSettings };
+export { MarkdownPreviewMode, useSettings };

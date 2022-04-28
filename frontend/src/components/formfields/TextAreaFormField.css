@@ -1,11 +1,60 @@
-.TextAreaFormField .TabSwitch--content {
-  min-width: 50rem;
+.TextAreaFormField {
+  --textarea-height: 32rem;
+}
+
+.TextAreaFormField .MarkdownComposer {
+  flex: 1;
+}
+
+.TextAreaFormField--preview {
+  background: var(--article-bg-color);
+  flex-grow: 1;
+}
+
+.TextAreaFormField--previewHeader {
+  padding: 0.5rem;
+  border-bottom: 2px solid var(--input-border-color);
+}
+
+.TextAreaFormField--previewBody {
+  padding: 0.5rem;
+}
+
+.TextAreaFormField.tabbed .TabSwitch--content {
+  width: 100%;
   display: inline-block;
   overflow-y: auto;
 }
 
-.TextAreaFormField--preview {
-  min-height: 25rem;
-  padding: 0.5rem;
-  background: var(--reviews-bg-color);
+.TextAreaFormField.tabbed .TabSwitch--contentItem.active {
+  width: 100%;
+  height: var(--textarea-height);
+  overflow-y: auto;
+  display: flex;
+}
+
+.TextAreaFormField.tabbed .TextAreaFormField--previewHeader {
+  display: none;
+}
+
+.TextAreaFormField.sideBySide {
+  display: flex;
+  height: var(--textarea-height);
+}
+
+.TextAreaFormField.sideBySide .MarkdownComposer {
+  border-right: 0;
+}
+
+.TextAreaFormField.sideBySide .TextAreaFormField--preview {
+  border: 2px solid var(--input-border-color);
+  border-left: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.TextAreaFormField.sideBySide .TextAreaFormField--previewBody {
+  flex: 1 1 auto;
+  border-left: 2px solid var(--input-border-color);
+  overflow: auto;
 }
