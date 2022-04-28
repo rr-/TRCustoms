@@ -16,3 +16,7 @@
 .GenresFormField--labelText {
   flex-grow: 1;
 }
+
+.GenresFormField--label .Checkbox {
+  display: inline;
+}

@@ -26,14 +26,12 @@ const CheckboxFormField = ({
 
   return (
     <BaseFormField name={name} readonly={readonly} {...props}>
-      <label className="Checkbox--label">
-        <Checkbox
-          disabled={readonly}
-          label={label}
-          onChange={handleChange}
-          checked={values[name]}
-        />
-      </label>
+      <Checkbox
+        disabled={readonly}
+        label={label}
+        onChange={handleChange}
+        checked={values[name]}
+      />
     </BaseFormField>
   );
 };

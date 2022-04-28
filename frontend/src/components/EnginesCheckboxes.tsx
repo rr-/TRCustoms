@@ -34,15 +34,14 @@ const EnginesCheckboxes = ({ value, onChange }: EnginesCheckboxesProps) => {
         Engines:
       </FilterCheckboxesHeader>
       {visibleEngines.map((engine) => (
-        <div key={engine.id}>
-          <Checkbox
-            label={engine.name}
-            onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
-              handleChange(event, engine)
-            }
-            checked={value.includes(engine.id)}
-          />
-        </div>
+        <Checkbox
+          key={engine.id}
+          label={engine.name}
+          onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
+            handleChange(event, engine)
+          }
+          checked={value.includes(engine.id)}
+        />
       ))}
     </div>
   );

@@ -9,10 +9,12 @@ interface CheckboxProps {
 
 const Checkbox = ({ label, ...props }: CheckboxProps) => {
   return (
-    <label className="Checkbox--label">
-      <input type="checkbox" className="Checkbox--input" {...props} />
-      {label}
-    </label>
+    <div className="Checkbox">
+      <label className="Checkbox--label">
+        <input type="checkbox" className="Checkbox--input" {...props} />
+        {label}
+      </label>
+    </div>
   );
 };
 

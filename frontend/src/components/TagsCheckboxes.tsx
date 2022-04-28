@@ -84,15 +84,14 @@ const TagsCheckboxes = ({ value, onChange }: TagsCheckboxesProps) => {
         placeholder="Search tags…"
       />
       {visibleTags.map((tag) => (
-        <div key={tag.id}>
-          <Checkbox
-            label={tag.name}
-            onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
-              handleTagChange(event, tag)
-            }
-            checked={value.includes(tag.id)}
-          />
-        </div>
+        <Checkbox
+          key={tag.id}
+          label={tag.name}
+          onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
+            handleTagChange(event, tag)
+          }
+          checked={value.includes(tag.id)}
+        />
       ))}
       {value.length === MAX_TAGS_FILTER && <p>Maximum tag filter reached.</p>}
       {filteredTags.length > MAX_VISIBLE_TAGS && (

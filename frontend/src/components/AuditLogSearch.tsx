@@ -263,22 +263,18 @@ const AuditLogSearch = ({
               </SectionHeader>
               <div className="AuditLogSearch--sidebarSection">
                 {section.searchList.map((sectionItem, searchNum) => (
-                  <div key={searchNum}>
-                    <Checkbox
-                      label={sectionItem.title}
-                      onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
-                        handleStateSearchCheckboxChange(
-                          event,
-                          section,
-                          sectionItem
-                        )
-                      }
-                      checked={isStateSearchCheckboxChecked(
+                  <Checkbox
+                    key={searchNum}
+                    label={sectionItem.title}
+                    onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
+                      handleStateSearchCheckboxChange(
+                        event,
                         section,
                         sectionItem
-                      )}
-                    />
-                  </div>
+                      )
+                    }
+                    checked={isStateSearchCheckboxChecked(section, sectionItem)}
+                  />
                 ))}
               </div>
             </>
