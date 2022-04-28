@@ -11,4 +11,5 @@
   box-sizing: border-box;
   vertical-align: top;
   border: 0;
+  resize: none;
 }
