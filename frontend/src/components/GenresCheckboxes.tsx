@@ -54,15 +54,14 @@ const GenresCheckboxes = ({ value, onChange }: GenresCheckboxesProps) => {
         Genres:
       </FilterCheckboxesHeader>
       {visibleGenres.map((genre) => (
-        <div key={genre.id}>
-          <Checkbox
-            label={genre.name}
-            checked={value.includes(genre.id)}
-            onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
-              handleChange(event, genre)
-            }
-          />
-        </div>
+        <Checkbox
+          key={genre.id}
+          label={genre.name}
+          checked={value.includes(genre.id)}
+          onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
+            handleChange(event, genre)
+          }
+        />
       ))}
       <div>
         <PushButton
