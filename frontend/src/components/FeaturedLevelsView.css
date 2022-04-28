@@ -55,6 +55,14 @@
   max-height: 10rem;
 }
 
+.FeaturedLevelView > a {
+  aspect-ratio: 4/3;
+  display: block;
+  position: relative;
+}
 .FeaturedLevelView--coverImage {
+  position: absolute;
+  object-fit: cover;
   width: 100%;
+  height: 100%;
 }
