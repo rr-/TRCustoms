@@ -13,6 +13,7 @@ import { SectionHeader } from "src/components/Section";
 import { UserSidebar } from "src/components/UserSidebar";
 import { Markdown } from "src/components/markdown/Markdown";
 import { TitleContext } from "src/contexts/TitleContext";
+import { UserContext } from "src/contexts/UserContext";
 import type { LevelSearchQuery } from "src/services/LevelService";
 import type { ReviewSearchQuery } from "src/services/ReviewService";
 import type { UserDetails } from "src/services/UserService";
@@ -23,7 +24,10 @@ interface UserPageParams {
   userId: string;
 }
 
-const getLevelSearchQuery = (userId: number): LevelSearchQuery => ({
+const getLevelSearchQuery = (
+  userId: number,
+  loggedInUserId: number | undefined
+): LevelSearchQuery => ({
   page: null,
   sort: "-created",
   search: null,
@@ -31,7 +35,7 @@ const getLevelSearchQuery = (userId: number): LevelSearchQuery => ({
   genres: [],
   engines: [],
   authors: [+userId],
-  isApproved: true,
+  isApproved: userId === loggedInUserId ? null : true,
 });
 
 const getReviewSearchQuery = (userId: number): ReviewSearchQuery => ({
@@ -46,9 +50,10 @@ interface UserPageViewProps {
 }
 
 const UserPageView = ({ userId }: UserPageViewProps) => {
+  const loggedInUser = useContext(UserContext).user;
   const { setTitle } = useContext(TitleContext);
   const [levelSearchQuery, setLevelSearchQuery] = useState<LevelSearchQuery>(
-    getLevelSearchQuery(+userId)
+    getLevelSearchQuery(+userId, loggedInUser?.id)
   );
   const [reviewSearchQuery, setReviewSearchQuery] = useState<ReviewSearchQuery>(
     getReviewSearchQuery(+userId)
@@ -64,9 +69,9 @@ const UserPageView = ({ userId }: UserPageViewProps) => {
   }, [setTitle, userResult]);
 
   useEffect(() => {
-    setLevelSearchQuery(getLevelSearchQuery(+userId));
+    setLevelSearchQuery(getLevelSearchQuery(+userId, loggedInUser?.id));
     setReviewSearchQuery(getReviewSearchQuery(+userId));
-  }, [userId]);
+  }, [userId, loggedInUser]);
 
   if (userResult.error) {
     return <p>{userResult.error.message}</p>;
@@ -108,6 +113,7 @@ const UserPageView = ({ userId }: UserPageViewProps) => {
         <Section className="UserPage--authoredLevels">
           <SectionHeader>Levels authored</SectionHeader>
           <LevelsTable
+            showStatus={+userId === loggedInUser?.id}
             searchQuery={levelSearchQuery}
             onSearchQueryChange={setLevelSearchQuery}
           />
