@@ -3,7 +3,6 @@ import { DefinitionItemGroup } from "src/components/DefinitionList";
 import { DefinitionItem } from "src/components/DefinitionList";
 import { DefinitionList } from "src/components/DefinitionList";
 import { PermissionGuard } from "src/components/PermissionGuard";
-import { LoggedInUserGuard } from "src/components/PermissionGuard";
 import { PushButton } from "src/components/PushButton";
 import { SectionHeader } from "src/components/Section";
 import { SidebarBox } from "src/components/SidebarBox";
@@ -13,7 +12,6 @@ import { UserBanPushButton } from "src/components/buttons/UserBanPushButton";
 import { UserDeactivatePushButton } from "src/components/buttons/UserDeactivatePushButton";
 import { UserUnbanPushButton } from "src/components/buttons/UserUnbanPushButton";
 import { IconGlobe } from "src/components/icons";
-import { IconMySubmissions } from "src/components/icons";
 import { IconHeart } from "src/components/icons";
 import { IconPencil } from "src/components/icons";
 import type { UserDetails } from "src/services/UserService";
@@ -29,6 +27,18 @@ const UserSidebar = ({ user }: UserSidebarProps) => {
 
   const handleUserRejection = () => {
     navigate("/");
+  };
+
+  const handleLevelCountClick = () => {
+    document
+      .querySelector(".UserPage--authoredLevels")
+      ?.scrollIntoView({ behavior: "smooth" });
+  };
+
+  const handleReviewCountClick = () => {
+    document
+      .querySelector(".UserPage--reviewedLevels")
+      ?.scrollIntoView({ behavior: "smooth" });
   };
 
   return (
@@ -97,7 +107,7 @@ const UserSidebar = ({ user }: UserSidebarProps) => {
       <DefinitionList>
         <DefinitionItemGroup>
           <DefinitionItem span={true}>
-            <SectionHeader>User info</SectionHeader>
+            <SectionHeader>Details</SectionHeader>
           </DefinitionItem>
 
           <DefinitionItem term="Joined">
@@ -131,15 +141,27 @@ const UserSidebar = ({ user }: UserSidebarProps) => {
 
         <DefinitionItemGroup>
           <DefinitionItem span={true}>
-            <SectionHeader>User submissions</SectionHeader>
+            <SectionHeader>Library</SectionHeader>
           </DefinitionItem>
 
           <DefinitionItem term="Levels authored">
-            {user.authored_level_count}
+            <PushButton
+              isPlain={true}
+              disableTimeout={true}
+              onClick={handleLevelCountClick}
+            >
+              {user.authored_level_count}
+            </PushButton>
           </DefinitionItem>
 
           <DefinitionItem term="Reviews posted">
-            {user.reviewed_level_count}
+            <PushButton
+              isPlain={true}
+              disableTimeout={true}
+              onClick={handleReviewCountClick}
+            >
+              {user.reviewed_level_count}
+            </PushButton>
           </DefinitionItem>
         </DefinitionItemGroup>
       </DefinitionList>
