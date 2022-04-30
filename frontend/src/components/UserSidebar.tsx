@@ -60,13 +60,6 @@ const UserSidebar = ({ user }: UserSidebarProps) => {
               Donate
             </PushButton>
           )}
-          <PermissionGuard require={UserPermission.uploadLevels}>
-            <LoggedInUserGuard user={user}>
-              <PushButton icon={<IconMySubmissions />} to={"/my-submissions"}>
-                My submissions
-              </PushButton>
-            </LoggedInUserGuard>
-          </PermissionGuard>
           {user.is_active ? (
             <>
               <PermissionGuard
