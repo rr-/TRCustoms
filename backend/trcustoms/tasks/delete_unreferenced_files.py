@@ -11,6 +11,7 @@ from trcustoms.reviews.models import LevelReview
 from trcustoms.uploads.models import UploadedFile
 from trcustoms.users.models import User
 from trcustoms.utils import check_model_references
+from trcustoms.walkthroughs.models import Walkthrough
 
 
 def collect_links(text: str | None) -> Iterable[str]:
@@ -29,6 +30,8 @@ def collect_user_links() -> Iterable[str]:
         yield from collect_links(level["description"])
     for review in LevelReview.objects.values("text"):
         yield from collect_links(review["text"])
+    for walkthrough in Walkthrough.objects.values("text"):
+        yield from collect_links(walkthrough["text"])
 
 
 @app.task

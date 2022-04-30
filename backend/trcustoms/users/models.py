@@ -99,6 +99,7 @@ class User(AbstractUser):
 
     authored_level_count = models.PositiveIntegerField(default=0)
     reviewed_level_count = models.PositiveIntegerField(default=0)
+    authored_walkthrough_count = models.PositiveIntegerField(default=0)
 
     @property
     def is_placeholder(self) -> bool:
@@ -121,3 +122,9 @@ class User(AbstractUser):
             is_approved=True
         ).count()
         self.save(update_fields=["authored_level_count"])
+
+    def update_authored_walkthrough_count(self) -> None:
+        self.authored_walkthrough_count = self.authored_walkthroughs.filter(
+            is_approved=True
+        ).count()
+        self.save(update_fields=["authored_walkthrough_count"])
