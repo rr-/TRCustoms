@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     "trcustoms.tags",
     "trcustoms.uploads",
     "trcustoms.users",
+    "trcustoms.walkthroughs",
 ]
 
 MIDDLEWARE = [
