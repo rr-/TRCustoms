@@ -115,6 +115,7 @@ const ReviewsList = ({
       searchQuery={searchQuery}
       onResultCountChange={onResultCountChange}
       queryName="reviews"
+      className="ReviewsList"
       onSearchQueryChange={onSearchQueryChange}
       searchFunc={ReviewService.searchReviews}
       itemKey={(review: ReviewListing) => review.id.toString()}
