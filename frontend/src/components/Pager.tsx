@@ -1,5 +1,6 @@
 import "./Pager.css";
 import { last } from "lodash";
+import { PushButton } from "src/components/PushButton";
 import type { PagedResponse } from "src/types";
 
 const PAGES_AROUND = 2;
@@ -54,13 +55,14 @@ const PagerActiveLink = ({
   children: React.ReactNode;
 }) => {
   return (
-    <button
-      type="button"
-      className="Pager--button link"
+    <PushButton
+      isPlain={true}
+      disableTimeout={true}
+      className="Pager--button"
       onClick={() => onPageChange(page)}
     >
       {children}
-    </button>
+    </PushButton>
   );
 };
 
