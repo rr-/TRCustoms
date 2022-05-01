@@ -1,4 +1,5 @@
 import "./Pager.css";
+import { last } from "lodash";
 import type { PagedResponse } from "src/types";
 
 const PAGES_AROUND = 2;
@@ -26,7 +27,7 @@ const getPagesShown = (
     .reduce(
       (acc: number[], page: number) => [
         ...acc,
-        ...((acc.at(-1) || 0) + 2 === page ? [page - 1] : []),
+        ...((last(acc) || 0) + 2 === page ? [page - 1] : []),
         page,
       ],
       []
@@ -37,8 +38,8 @@ const getPagesShown = (
 const addEllipsisMarkers = (pages: number[]): (number | null)[] => {
   // insert nulls between non-consecutive pages to render the ellipsis
   return pages.reduce(
-    (acc: any, item: number) =>
-      acc.at(-1) + 1 < item ? [...acc, null, item] : [...acc, item],
+    (acc: (number | null)[], item: number) =>
+      (last(acc) || 0) + 1 < item ? [...acc, null, item] : [...acc, item],
     []
   );
 };
