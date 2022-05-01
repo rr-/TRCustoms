@@ -9,6 +9,7 @@ import { PushButton } from "src/components/PushButton";
 import type { UploadedFile } from "src/services/FileService";
 import { FileService } from "src/services/FileService";
 import { UploadType } from "src/services/FileService";
+import { extractErrorMessage } from "src/utils/misc";
 import { formatFileSize } from "src/utils/string";
 
 interface FilePickerPreviewProps {
@@ -198,7 +199,7 @@ const FilePicker = ({
 
   const handleUploadError = useCallback(
     (error: any) => {
-      setErrorMessage(error);
+      setErrorMessage(extractErrorMessage(error));
     },
     [setErrorMessage]
   );
