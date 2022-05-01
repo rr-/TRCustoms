@@ -1,4 +1,4 @@
-.UserPage {
+.UserBasePage {
   display: grid;
   grid-template-areas:
     "header header"
@@ -8,7 +8,7 @@
   gap: 1.5rem;
 }
 @media (max-device-width: 1280px) {
-  .UserPage {
+  .UserBasePage {
     grid-template-columns: 1fr;
     grid-template-areas:
       "header"
@@ -17,31 +17,18 @@
   }
 }
 
-.UserPage--header {
+.UserBasePage--header {
   grid-area: header;
 }
-.UserPage--sidebar {
+.UserBasePage--sidebar {
   grid-area: sidebar;
 }
-.UserPage--main {
+.UserBasePage--main {
   width: 100%;
   grid-area: main;
 }
 
-.UserPage--picture img {
-  width: 100%;
-  display: block;
-}
-
-.UserPage--header :first-child,
-.UserPage--basicInfo :first-child {
-  margin-top: 0;
-}
-.UserPage--header :last-child {
-  margin-bottom: 0;
-}
-
-.UserPage--headerWrapper {
+.UserBasePage--headerWrapper {
   margin: 0;
   font-size: 2.5rem;
   line-height: 2.5rem;
