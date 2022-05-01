@@ -1,3 +1,4 @@
+import "./UserSidebar.css";
 import { useNavigate } from "react-router-dom";
 import { DefinitionItemGroup } from "src/components/DefinitionList";
 import { DefinitionItem } from "src/components/DefinitionList";
@@ -44,7 +45,7 @@ const UserSidebar = ({ user }: UserSidebarProps) => {
   return (
     <SidebarBox
       header={
-        <div className="UserPage--picture">
+        <div className="UserSidebar--picture">
           <UserPicture user={user} />
         </div>
       }

@@ -1,32 +1,19 @@
-import "./UserPage.css";
 import { useState } from "react";
 import { useEffect } from "react";
-import { useContext } from "react";
-import { useQuery } from "react-query";
 import { useParams } from "react-router-dom";
 import { LevelsTable } from "src/components/LevelsTable";
-import { Loader } from "src/components/Loader";
-import { PageGuard } from "src/components/PermissionGuard";
 import { ReviewsList } from "src/components/ReviewsList";
 import { Section } from "src/components/Section";
 import { SectionHeader } from "src/components/Section";
-import { UserSidebar } from "src/components/UserSidebar";
 import { Markdown } from "src/components/markdown/Markdown";
-import { TitleContext } from "src/contexts/TitleContext";
-import { UserContext } from "src/contexts/UserContext";
+import { UserBasePage } from "src/components/pages/UserBasePage";
+import type { UserBasePageChildRenderProps } from "src/components/pages/UserBasePage";
 import type { LevelSearchQuery } from "src/services/LevelService";
 import type { ReviewSearchQuery } from "src/services/ReviewService";
-import type { UserDetails } from "src/services/UserService";
-import { UserPermission } from "src/services/UserService";
-import { UserService } from "src/services/UserService";
-
-interface UserPageParams {
-  userId: string;
-}
 
 const getLevelSearchQuery = (
   userId: number,
-  loggedInUserId: number | undefined
+  isLoggedIn: boolean
 ): LevelSearchQuery => ({
   page: null,
   sort: "-created",
@@ -34,110 +21,72 @@ const getLevelSearchQuery = (
   tags: [],
   genres: [],
   engines: [],
-  authors: [+userId],
-  isApproved: userId === loggedInUserId ? null : true,
+  authors: [userId],
+  isApproved: isLoggedIn ? null : true,
 });
 
 const getReviewSearchQuery = (userId: number): ReviewSearchQuery => ({
-  authors: [+userId],
+  authors: [userId],
   page: null,
   sort: "-created",
   search: "",
 });
 
-interface UserPageViewProps {
-  userId: string;
-}
-
-const UserPageView = ({ userId }: UserPageViewProps) => {
-  const loggedInUser = useContext(UserContext).user;
-  const { setTitle } = useContext(TitleContext);
+const UserPageView = ({ user, isLoggedIn }: UserBasePageChildRenderProps) => {
   const [levelSearchQuery, setLevelSearchQuery] = useState<LevelSearchQuery>(
-    getLevelSearchQuery(+userId, loggedInUser?.id)
+    getLevelSearchQuery(user.id, isLoggedIn)
   );
   const [reviewSearchQuery, setReviewSearchQuery] = useState<ReviewSearchQuery>(
-    getReviewSearchQuery(+userId)
-  );
-
-  const userResult = useQuery<UserDetails, Error>(
-    ["user", UserService.getUserById, userId],
-    async () => UserService.getUserById(+userId)
+    getReviewSearchQuery(user.id)
   );
 
   useEffect(() => {
-    setTitle(userResult?.data?.username || "");
-  }, [setTitle, userResult]);
-
-  useEffect(() => {
-    setLevelSearchQuery(getLevelSearchQuery(+userId, loggedInUser?.id));
-    setReviewSearchQuery(getReviewSearchQuery(+userId));
-  }, [userId, loggedInUser]);
-
-  if (userResult.error) {
-    return <p>{userResult.error.message}</p>;
-  }
-
-  if (userResult.isLoading || !userResult.data) {
-    return <Loader />;
-  }
-
-  const user = userResult.data;
+    setLevelSearchQuery(getLevelSearchQuery(user.id, isLoggedIn));
+    setReviewSearchQuery(getReviewSearchQuery(user.id));
+  }, [user.id, isLoggedIn]);
 
   return (
-    <div className="UserPage">
-      <header className="UserPage--header">
-        <h1 className="UserPage--headerWrapper">{user.username}'s profile</h1>
-        {user.is_active &&
-          (user.first_name || user.last_name) &&
-          `${user.first_name} ${user.last_name}` !== user.username && (
-            <h2>
-              {user.first_name} {user.last_name}
-            </h2>
-          )}
-      </header>
+    <>
+      <Section className="UserPage--basicInfo ChildMarginClear">
+        <SectionHeader>About</SectionHeader>
+        {user.is_active && user.bio ? (
+          <Markdown>{user.bio}</Markdown>
+        ) : (
+          <p>This user prefers to keep an air of mystery around them.</p>
+        )}
+      </Section>
 
-      <aside className="UserPage--sidebar">
-        <UserSidebar user={user} />
-      </aside>
+      <Section className="UserPage--authoredLevels">
+        <SectionHeader>Levels authored</SectionHeader>
+        <LevelsTable
+          showStatus={isLoggedIn}
+          searchQuery={levelSearchQuery}
+          onSearchQueryChange={setLevelSearchQuery}
+        />
+      </Section>
 
-      <div className="UserPage--main">
-        <Section className="UserPage--basicInfo">
-          <SectionHeader>About</SectionHeader>
-          {user.is_active && user.bio ? (
-            <Markdown>{user.bio}</Markdown>
-          ) : (
-            <p>This user prefers to keep an air of mystery around them.</p>
-          )}
-        </Section>
-
-        <Section className="UserPage--authoredLevels">
-          <SectionHeader>Levels authored</SectionHeader>
-          <LevelsTable
-            showStatus={+userId === loggedInUser?.id}
-            searchQuery={levelSearchQuery}
-            onSearchQueryChange={setLevelSearchQuery}
-          />
-        </Section>
-
-        <Section className="UserPage--reviewedLevels">
-          <SectionHeader>Reviews posted</SectionHeader>
-          <ReviewsList
-            showLevels={true}
-            searchQuery={reviewSearchQuery}
-            onSearchQueryChange={setReviewSearchQuery}
-          />
-        </Section>
-      </div>
-    </div>
+      <Section className="UserPage--reviewedLevels">
+        <SectionHeader>Reviews posted</SectionHeader>
+        <ReviewsList
+          showLevels={true}
+          searchQuery={reviewSearchQuery}
+          onSearchQueryChange={setReviewSearchQuery}
+        />
+      </Section>
+    </>
   );
 };
+
+interface UserPageParams {
+  userId: string;
+}
 
 const UserPage = () => {
   const { userId } = (useParams() as unknown) as UserPageParams;
   return (
-    <PageGuard require={UserPermission.viewUsers} owningUserIds={[+userId]}>
-      <UserPageView userId={userId} />
-    </PageGuard>
+    <UserBasePage userId={+userId}>
+      {(props: UserBasePageChildRenderProps) => <UserPageView {...props} />}
+    </UserBasePage>
   );
 };
 
