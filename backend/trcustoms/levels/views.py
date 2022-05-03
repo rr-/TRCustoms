@@ -4,17 +4,12 @@ from django.conf import settings
 from django.db import models
 from django.db.models import F
 from django.http import HttpResponseRedirect
-from rest_framework import mixins, serializers, status, viewsets
+from rest_framework import mixins, status, viewsets
 from rest_framework.decorators import action
 from rest_framework.generics import get_object_or_404
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 
-from trcustoms.audit_logs.utils import (
-    clear_audit_log_action_flags,
-    track_model_creation,
-    track_model_deletion,
-)
 from trcustoms.levels.logic import approve_level, reject_level
 from trcustoms.levels.models import Level, LevelFile
 from trcustoms.levels.serializers import (
@@ -23,7 +18,7 @@ from trcustoms.levels.serializers import (
     LevelRejectionSerializer,
 )
 from trcustoms.mixins import (
-    AuditLogModelWatcherUpdateMixin,
+    AuditLogModelWatcherMixin,
     MultiSerializerMixin,
     PermissionsMixin,
 )
@@ -37,7 +32,7 @@ from trcustoms.utils import parse_bool, parse_ids, slugify, stream_file_field
 
 
 class LevelViewSet(
-    AuditLogModelWatcherUpdateMixin,
+    AuditLogModelWatcherMixin,
     PermissionsMixin,
     MultiSerializerMixin,
     mixins.RetrieveModelMixin,
@@ -62,6 +57,7 @@ class LevelViewSet(
         "approve": [HasPermission(UserPermission.EDIT_LEVELS)],
         "reject": [HasPermission(UserPermission.EDIT_LEVELS)],
     }
+    audit_log_review_create = True
 
     queryset = (
         Level.objects.with_review_count()
@@ -187,17 +183,6 @@ class LevelViewSet(
         reason = serializer.data["reason"]
         reject_level(level, request, reason)
         return Response({})
-
-    def perform_create(self, serializer: serializers.Serializer) -> None:
-        super().perform_create(serializer)
-        track_model_creation(
-            serializer.instance, request=self.request, is_action_required=True
-        )
-
-    def perform_destroy(self, instance) -> None:
-        clear_audit_log_action_flags(obj=instance)
-        track_model_deletion(instance, request=self.request)
-        super().perform_destroy(instance)
 
 
 class LevelFileViewSet(viewsets.GenericViewSet):

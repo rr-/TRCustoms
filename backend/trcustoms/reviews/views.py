@@ -32,6 +32,31 @@ class LevelReviewViewSet(
     mixins.DestroyModelMixin,
     viewsets.GenericViewSet,
 ):
+    queryset = LevelReview.objects.all().prefetch_related(
+        "rating_class",
+        "author",
+        "author__picture",
+        "level",
+    )
+
+    search_fields = [
+        "author__first_name",
+        "author__last_name",
+        "author__username",
+        "level__name",
+    ]
+
+    ordering_fields = [
+        "author__username",
+        "created",
+        "level__name",
+        "level_id",
+        "trle_rating_atmosphere",
+        "trle_rating_enemies",
+        "trle_rating_gameplay",
+        "trle_rating_lighting",
+    ]
+
     permission_classes = [AllowNone]
     permission_classes_by_action = {
         "retrieve": [AllowAny],
@@ -45,12 +70,7 @@ class LevelReviewViewSet(
             HasPermission(UserPermission.EDIT_REVIEWS) | IsAccessingOwnResource
         ],
     }
-    queryset = LevelReview.objects.all().prefetch_related(
-        "rating_class",
-        "author",
-        "author__picture",
-        "level",
-    )
+
     serializer_class = LevelReviewListingSerializer
     serializer_class_by_action = {
         "retrieve": LevelReviewDetailsSerializer,
@@ -58,23 +78,6 @@ class LevelReviewViewSet(
         "partial_update": LevelReviewDetailsSerializer,
         "create": LevelReviewDetailsSerializer,
     }
-    search_fields = [
-        "level__name",
-        "author__username",
-        "author__first_name",
-        "author__last_name",
-        "level__name",
-    ]
-    ordering_fields = [
-        "level__name",
-        "author__username",
-        "level_id",
-        "trle_rating_gameplay",
-        "trle_rating_enemies",
-        "trle_rating_atmosphere",
-        "trle_rating_lighting",
-        "created",
-    ]
 
     def get_object(self):
         obj = get_object_or_404(self.get_queryset(), pk=self.kwargs["pk"])

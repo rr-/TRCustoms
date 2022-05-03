@@ -54,6 +54,7 @@ class UserListingSerializer(serializers.ModelSerializer):
             "is_banned",
             "is_pending_activation",
             "authored_level_count",
+            "authored_walkthrough_count",
             "reviewed_level_count",
             "picture",
             "permissions",
@@ -286,7 +287,7 @@ class UserConfirmEmailSerializer(serializers.Serializer):
         try:
             token = self.token_class(attrs["token"])
         except TokenError as ex:
-            raise serializers.ValidationError(str(ex))
+            raise serializers.ValidationError({"detail": str(ex)})
         return {**ret, "token": token}
 
 
@@ -304,5 +305,5 @@ class UserCompletePasswordResetSerializer(serializers.Serializer):
         try:
             token = self.token_class(attrs["token"])
         except TokenError as ex:
-            raise serializers.ValidationError(str(ex))
+            raise serializers.ValidationError({"detail": str(ex)})
         return {**ret, "token": token}

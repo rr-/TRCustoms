@@ -9,6 +9,7 @@ from trcustoms.genres.models import Genre
 from trcustoms.tags.models import Tag
 from trcustoms.uploads.models import UploadedFile
 from trcustoms.users.models import User
+from trcustoms.walkthroughs.consts import WalkthroughType
 
 
 @registry.register_model(name_getter=lambda instance: instance.name)
@@ -47,6 +48,40 @@ class LevelDifficulty(DatesInfo):
 class LevelQuerySet(models.QuerySet):
     def with_review_count(self):
         return self.annotate(review_count=Count("reviews"))
+
+    def with_video_only_walkthroughs(self):
+        return self.filter(
+            walkthroughs__walkthrough_type=WalkthroughType.LINK,
+            walkthroughs__is_approved=True,
+        ).exclude(
+            id__in=Level.objects.filter(
+                walkthroughs__walkthrough_type=WalkthroughType.TEXT,
+                walkthroughs__is_approved=True,
+            )
+        )
+
+    def with_text_only_walkthroughs(self):
+        return self.filter(
+            walkthroughs__walkthrough_type=WalkthroughType.TEXT,
+            walkthroughs__is_approved=True,
+        ).exclude(
+            id__in=Level.objects.filter(
+                walkthroughs__walkthrough_type=WalkthroughType.LINK,
+                walkthroughs__is_approved=True,
+            )
+        )
+
+    def with_both_walkthroughs(self):
+        return self.filter(
+            walkthroughs__walkthrough_type=WalkthroughType.TEXT,
+            walkthroughs__is_approved=True,
+        ).filter(
+            walkthroughs__walkthrough_type=WalkthroughType.LINK,
+            walkthroughs__is_approved=True,
+        )
+
+    def with_no_walkthroughs(self):
+        return self.exclude(walkthroughs__is_approved=True)
 
 
 @registry.register_model(name_getter=lambda instance: instance.name)
