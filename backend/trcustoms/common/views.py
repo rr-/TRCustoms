@@ -71,7 +71,7 @@ class ConfigViewSet(viewsets.ViewSet):
                     "max_authors": settings.MAX_AUTHORS,
                     "max_tag_length": settings.MAX_TAG_LENGTH,
                 },
-                "total_levels": Level.objects.all().count(),
+                "total_levels": Level.objects.filter(is_approved=True).count(),
                 "total_reviews": LevelReview.objects.all().count(),
                 "total_downloads": (
                     Level.objects.all()
