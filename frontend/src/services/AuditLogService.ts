@@ -24,6 +24,7 @@ enum AuditLogObjectType {
   Tag = "tag",
   News = "news",
   User = "user",
+  Walkthrough = "walkthrough",
 }
 
 interface AuditLogListing {

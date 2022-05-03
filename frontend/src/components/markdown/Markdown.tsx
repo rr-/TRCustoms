@@ -4,11 +4,8 @@ import { useMemo } from "react";
 import ReactMarkdown from "react-markdown";
 import remarkBreaks from "remark-breaks";
 import remarkGfm from "remark-gfm";
+import { remarkTransformHeaders } from "src/components/markdown/MarkdownTOC";
 import { getYoutubeVideoID } from "src/utils/misc";
-
-interface MarkdownProps {
-  children: string;
-}
 
 const coloredTextRegex = /\[([pesto])\]([^\n[\]]*)\[\/\1\]/gi;
 
@@ -50,12 +47,21 @@ const transformLink = (link: any): any => {
   return <a href={link.href}>{link.children}</a>;
 };
 
+interface MarkdownProps {
+  children: string;
+}
+
 const Markdown = ({ children }: MarkdownProps) => {
   const rendered = useMemo(
     () => (
       <div className="Markdown ChildMarginClear">
         <ReactMarkdown
-          remarkPlugins={[remarkGfm, remarkBreaks, remarkTRCustomColors]}
+          remarkPlugins={[
+            remarkGfm,
+            remarkBreaks,
+            remarkTransformHeaders,
+            remarkTRCustomColors,
+          ]}
           components={{ a: transformLink }}
         >
           {children}

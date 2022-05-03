@@ -18,7 +18,7 @@ import { MarkdownColorEnemyButton } from "src/components/markdown-composer/Markd
 import { MarkdownColorTrapButton } from "src/components/markdown-composer/MarkdownButtons";
 
 interface MarkdownButtonStripProps {
-  textarea: HTMLTextAreaElement;
+  textarea: HTMLTextAreaElement | null;
 }
 
 const MarkdownButtonStrip = ({ textarea }: MarkdownButtonStripProps) => {

@@ -33,6 +33,9 @@ import { TextFormattingGuidelinesPage } from "src/components/pages/TextFormattin
 import { UserEditPage } from "src/components/pages/UserEditPage";
 import { UserListPage } from "src/components/pages/UserListPage";
 import { UserPage } from "src/components/pages/UserPage";
+import { UserWalkthroughsPage } from "src/components/pages/UserWalkthroughsPage";
+import { WalkthroughEditPage } from "src/components/pages/WalkthroughEditPage";
+import { WalkthroughPage } from "src/components/pages/WalkthroughPage";
 import { ConfigContextProvider } from "src/contexts/ConfigContext";
 import { useSettings } from "src/contexts/SettingsContext";
 import { TitleContextProvider } from "src/contexts/TitleContext";
@@ -67,8 +70,24 @@ function App() {
                 element={<LevelReviewPage />}
               />
               <Route
+                path="/walkthroughs/:walkthroughId"
+                element={<WalkthroughPage />}
+              />
+              <Route
                 path="/levels/:levelId/review/:reviewId/edit"
                 element={<LevelReviewEditPage />}
+              />
+              <Route
+                path="/levels/:levelId/walkthrough"
+                element={<WalkthroughEditPage />}
+              />
+              <Route
+                path="/levels/:levelId/walkthrough/:walkthroughId/edit"
+                element={<WalkthroughEditPage />}
+              />
+              <Route
+                path="/walkthroughs/:walkthroughId/edit"
+                element={<WalkthroughEditPage />}
               />
               <Route path="/news" element={<NewsCreatePage />} />
               <Route path="/news/:newsId/edit" element={<NewsEditPage />} />
@@ -87,6 +106,10 @@ function App() {
               <Route path="/settings" element={<SettingsPage />} />
               <Route path="/users/:userId" element={<UserPage />} />
               <Route path="/users/:userId/edit" element={<UserEditPage />} />
+              <Route
+                path="/users/:userId/walkthroughs"
+                element={<UserWalkthroughsPage />}
+              />
               <Route
                 path="/email-confirmation/:token"
                 element={<EmailConfirmationPage />}

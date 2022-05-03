@@ -4,7 +4,7 @@
   grid-template-areas:
     "sidebar featured"
     "sidebar main";
-  grid-template-columns: min-content 4fr;
+  grid-template-columns: 1fr 4fr;
   grid-template-rows: min-content 1fr;
 }
 
@@ -36,48 +36,6 @@
   content: "\25cf";
   margin-left: 0.5rem;
   margin-right: 0.5rem;
-}
-
-.ReviewStats--list {
-  position: relative;
-  display: flex;
-  margin: 0.5rem 0;
-  padding: 0;
-  justify-content: space-between;
-  height: 5rem;
-  border-bottom: 2px solid var(--section-border-color);
-}
-.ReviewStats--listItem {
-  display: flex;
-  align-items: flex-end;
-  width: 100%;
-  height: 100%;
-  margin: 0;
-  box-sizing: border-box;
-  padding: 0.2rem 0.2rem 0 0.2rem;
-}
-.ReviewStats--indicator {
-  width: 100%;
-  min-height: 0.25rem;
-  display: block;
-  background: var(--stats-neutral-bar-color);
-}
-.ReviewStats--indicatorFill.negative {
-  background: var(--stats-negative-bar-color);
-}
-.ReviewStats--indicatorFill.positive {
-  background: var(--stats-positive-bar-color);
-}
-.ReviewStats--indicatorFill {
-  width: 100%;
-  height: 100%;
-}
-.ReviewStats--footer {
-  text-align: center;
-}
-
-.ReviewStats--listItem:hover {
-  filter: var(--stats-hover-filter);
 }
 
 .HomePageExtraButtons {

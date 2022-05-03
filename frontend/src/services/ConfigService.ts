@@ -80,6 +80,13 @@ interface Config {
   total_levels: number;
   total_reviews: number;
   total_downloads: number;
+  total_walkthroughs: number;
+  walkthrough_stats: {
+    video_and_text: number;
+    video: number;
+    text: number;
+    none: number;
+  };
 }
 
 type FeaturedLevels = {

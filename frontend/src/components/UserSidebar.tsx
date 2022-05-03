@@ -31,15 +31,23 @@ const UserSidebar = ({ user }: UserSidebarProps) => {
   };
 
   const handleLevelCountClick = () => {
-    document
-      .querySelector(".UserPage--authoredLevels")
-      ?.scrollIntoView({ behavior: "smooth" });
+    const element = document.querySelector(".UserPage--authoredLevels");
+    if (element) {
+      element.scrollIntoView({ behavior: "smooth" });
+    } else {
+      // XXX: should scroll after navigation
+      navigate(`/users/${user.id}`);
+    }
   };
 
   const handleReviewCountClick = () => {
-    document
-      .querySelector(".UserPage--reviewedLevels")
-      ?.scrollIntoView({ behavior: "smooth" });
+    const element = document.querySelector(".UserPage--reviewedLevels");
+    if (element) {
+      element.scrollIntoView({ behavior: "smooth" });
+    } else {
+      // XXX: should scroll after navigation
+      navigate(`/users/${user.id}`);
+    }
   };
 
   return (
@@ -155,6 +163,16 @@ const UserSidebar = ({ user }: UserSidebarProps) => {
               onClick={handleReviewCountClick}
             >
               {user.reviewed_level_count}
+            </PushButton>
+          </DefinitionItem>
+
+          <DefinitionItem term="Walkthroughs">
+            <PushButton
+              isPlain={true}
+              disableTimeout={true}
+              to={`/users/${user.id}/walkthroughs`}
+            >
+              {user.authored_walkthrough_count}
             </PushButton>
           </DefinitionItem>
         </DefinitionItemGroup>

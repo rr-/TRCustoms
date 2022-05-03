@@ -1,0 +1,9 @@
+.MarkdownTOC ul {
+  padding-left: 1.5rem;
+}
+.MarkdownTOC li {
+  padding-left: 0;
+}
+.MarkdownTOC li p {
+  display: inline;
+}

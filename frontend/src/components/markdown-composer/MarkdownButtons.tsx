@@ -19,7 +19,7 @@ import { applyStyle } from "src/components/markdown-composer/MarkdownStyle";
 import type { MarkdownInputStyle } from "src/components/markdown-composer/MarkdownStyle";
 
 interface MarkdownBaseButtonProps {
-  textarea: HTMLTextAreaElement;
+  textarea: HTMLTextAreaElement | null;
   tooltip: string;
   icon: React.ReactElement;
   style: MarkdownInputStyle;
@@ -32,6 +32,9 @@ const MarkdownBaseButton = ({
   style,
 }: MarkdownBaseButtonProps) => {
   const handleClick = useCallback(() => {
+    if (!textarea) {
+      return;
+    }
     applyStyle(textarea, style);
   }, [textarea, style]);
 
@@ -47,7 +50,7 @@ const MarkdownBaseButton = ({
 };
 
 interface MarkdownButtonProps {
-  textarea: HTMLTextAreaElement;
+  textarea: HTMLTextAreaElement | null;
 }
 
 const MarkdownHeaderButton = ({ ...props }: MarkdownButtonProps) => {

@@ -1,21 +1,19 @@
 import "./Modal.css";
+import "./PromptModal.css";
 import { Formik } from "formik";
 import { Form } from "formik";
 import { useRef } from "react";
 import { useEffect } from "react";
-import { PushButton } from "src/components/PushButton";
-import { SearchBar } from "src/components/SearchBar";
 import { SubmitButton } from "src/components/formfields/SubmitButton";
 import { TextFormField } from "src/components/formfields/TextFormField";
-import { IconX } from "src/components/icons";
-import { Dim } from "src/components/modals/Dim";
+import { BaseModal } from "src/components/modals/BaseModal";
 
 interface PromptModalProps {
   isActive: boolean;
-  onIsActiveChange?: ((isActive: boolean) => void) | undefined;
-  onConfirm?: ((text: string) => void) | undefined;
+  onIsActiveChange: (isActive: boolean) => void;
+  onConfirm: (text: string) => void;
   label?: string | undefined;
-  children?: React.ReactNode | undefined;
+  children: React.ReactNode;
 }
 
 const PromptModal = ({
@@ -27,18 +25,6 @@ const PromptModal = ({
 }: PromptModalProps) => {
   const modalRef = useRef<HTMLDivElement>(null);
   const initialValues = { text: "" };
-
-  const handleDimClick = (event: React.MouseEvent) => {
-    if (event.target === event.currentTarget) {
-      event.stopPropagation();
-      event.preventDefault();
-      onIsActiveChange?.(false);
-    }
-  };
-
-  const handleCloseClick = () => {
-    onIsActiveChange?.(false);
-  };
 
   const handleSubmit = (values: any) => {
     if (values.text) {
@@ -57,39 +43,30 @@ const PromptModal = ({
     }, 100);
   }, [isActive]);
 
+  const PromptModalFooter = () => {
+    return (
+      <Formik initialValues={initialValues} onSubmit={handleSubmit}>
+        {({ submitForm }) => (
+          <Form className="PromptModalFooter">
+            <TextFormField label={label} name="text" />
+
+            <SubmitButton onClick={() => submitForm()}>Confirm</SubmitButton>
+          </Form>
+        )}
+      </Formik>
+    );
+  };
+
   return (
-    <Dim isActive={isActive} onMouseDown={handleDimClick}>
-      <div className="Modal" ref={modalRef}>
-        <div className="Modal--body">
-          <PushButton
-            className="Modal--closeButton"
-            isPlain={true}
-            disableTimeout={true}
-            onClick={handleCloseClick}
-          >
-            <IconX />
-          </PushButton>
-
-          {children}
-
-          <Formik initialValues={initialValues} onSubmit={handleSubmit}>
-            {({ submitForm }) => (
-              <Form className="Modal--form">
-                <SearchBar>
-                  <TextFormField label={label} name="text" />
-
-                  <div className="FormField">
-                    <SubmitButton onClick={() => submitForm()}>
-                      Confirm
-                    </SubmitButton>
-                  </div>
-                </SearchBar>
-              </Form>
-            )}
-          </Formik>
-        </div>
-      </div>
-    </Dim>
+    <BaseModal
+      title="Confirmation"
+      isActive={isActive}
+      onIsActiveChange={onIsActiveChange}
+      ref={modalRef}
+      buttons={<PromptModalFooter />}
+    >
+      {children}
+    </BaseModal>
   );
 };
 

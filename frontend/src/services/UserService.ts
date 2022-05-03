@@ -24,6 +24,9 @@ enum UserPermission {
   editNews = "edit_news",
   reviewAuditLogs = "review_audit_logs",
   editTags = "edit_tags",
+  postWalkthroughs = "post_walkthroughs",
+  editWalkthroughs = "edit_walkthroughs",
+  deleteWalkthroughs = "delete_walkthroughs",
 }
 
 interface UserBasic {
@@ -49,6 +52,7 @@ interface UserListing extends UserNested {
   is_pending_activation: boolean;
   authored_level_count: number;
   reviewed_level_count: number;
+  authored_walkthrough_count: number;
   permissions: UserPermission[];
   trle_author_id: number | null;
   trle_reviewer_id: number | null;

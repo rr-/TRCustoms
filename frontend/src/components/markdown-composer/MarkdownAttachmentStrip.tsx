@@ -7,14 +7,18 @@ import { UploadType } from "src/services/FileService";
 import { extractErrorMessage } from "src/utils/misc";
 
 interface MarkdownAttachmentStripProps {
-  textarea: HTMLTextAreaElement;
+  textarea: HTMLTextAreaElement | null;
 }
 
 const MarkdownAttachmentStrip = ({
   textarea,
 }: MarkdownAttachmentStripProps) => {
   const [percentCompleted, setPercentCompleted] = useState<number | null>(null);
+
   const handleUploadFinish = (uploadedFiles: UploadedFile[]) => {
+    if (!textarea) {
+      return;
+    }
     const isImage = uploadedFiles[0].url.match(/\.(jpg|png|gif)$/i);
     applyStyle(
       textarea,

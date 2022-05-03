@@ -33,6 +33,13 @@ const defaultConfig = {
   total_levels: 0,
   total_reviews: 0,
   total_downloads: 0,
+  total_walkthroughs: 0,
+  walkthrough_stats: {
+    video_and_text: 0,
+    video: 0,
+    text: 0,
+    none: 0,
+  },
 };
 
 const ConfigContext = createContext<{

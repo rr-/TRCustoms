@@ -1,5 +1,6 @@
 import "./LevelSidebar.css";
 import { useContext } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { DefinitionItemGroup } from "src/components/DefinitionList";
 import { DefinitionItem } from "src/components/DefinitionList";
@@ -15,6 +16,7 @@ import { LevelApprovePushButton } from "src/components/buttons/LevelApprovePushB
 import { LevelDeletePushButton } from "src/components/buttons/LevelDeletePushButton";
 import { LevelRejectPushButton } from "src/components/buttons/LevelRejectPushButton";
 import { IconDownload } from "src/components/icons";
+import { IconBook } from "src/components/icons";
 import { IconGlobe } from "src/components/icons";
 import { IconPencil } from "src/components/icons";
 import { IconAnnotation } from "src/components/icons";
@@ -22,6 +24,7 @@ import { EngineLink } from "src/components/links/EngineLink";
 import { GenreLink } from "src/components/links/GenreLink";
 import { TagLink } from "src/components/links/TagLink";
 import { UserLink } from "src/components/links/UserLink";
+import { WalkthroughsModal } from "src/components/modals/WalkthroughsModal";
 import { UserContext } from "src/contexts/UserContext";
 import { ExternalLinkType } from "src/services/LevelService";
 import type { LevelDetails } from "src/services/LevelService";
@@ -37,6 +40,9 @@ interface LevelSidebarProps {
 }
 
 const LevelSidebar = ({ level, reviewCount }: LevelSidebarProps) => {
+  const [isWalkthroughsModalActive, setIsWalkthroughsModalActive] = useState(
+    false
+  );
   const navigate = useNavigate();
   const { user } = useContext(UserContext);
 
@@ -50,6 +56,10 @@ const LevelSidebar = ({ level, reviewCount }: LevelSidebarProps) => {
       ?.scrollIntoView({ behavior: "smooth" });
   };
 
+  const handleWalkthroughsButtonClick = () => {
+    setIsWalkthroughsModalActive(true);
+  };
+
   const showFileGoneAlert = () =>
     alert("This file is no longer available on our website.");
 
@@ -60,6 +70,12 @@ const LevelSidebar = ({ level, reviewCount }: LevelSidebarProps) => {
 
   return (
     <div className="LevelSidebar">
+      <WalkthroughsModal
+        level={level}
+        isActive={isWalkthroughsModalActive}
+        onIsActiveChange={setIsWalkthroughsModalActive}
+      />
+
       <SidebarBox
         header={
           <div className="LevelSidebar--cover">
@@ -104,6 +120,17 @@ const LevelSidebar = ({ level, reviewCount }: LevelSidebarProps) => {
             <PermissionGuard require={UserPermission.deleteLevels}>
               <LevelDeletePushButton level={level} onComplete={handleDelete} />
             </PermissionGuard>
+
+            {level.authors.every((author) => author.id !== user?.id) && (
+              <PermissionGuard require={UserPermission.reviewLevels}>
+                <PushButton
+                  icon={<IconBook />}
+                  onClick={handleWalkthroughsButtonClick}
+                >
+                  Walkthrough
+                </PushButton>
+              </PermissionGuard>
+            )}
 
             {level.authors.every((author) => author.id !== user?.id) && (
               <PermissionGuard require={UserPermission.reviewLevels}>

@@ -16,15 +16,18 @@ const MarkdownComposer = ({
   allowAttachments,
   ...props
 }: MarkdownComposerProps) => {
-  const ref = useRef<HTMLDivElement>(null);
-  const textarea = ref.current?.querySelector("textarea");
+  const ref = useRef<HTMLTextAreaElement>(null);
+  const textarea = ref.current;
   return (
-    <div className="MarkdownComposer" ref={ref}>
-      {textarea && <MarkdownButtonStrip textarea={textarea} />}
-      <textarea className="TextArea--input Input" {...field} {...props} />
-      {textarea && allowAttachments && (
-        <MarkdownAttachmentStrip textarea={textarea} />
-      )}
+    <div className="MarkdownComposer">
+      <MarkdownButtonStrip textarea={textarea} />
+      <textarea
+        ref={ref}
+        className="TextArea--input Input"
+        {...field}
+        {...props}
+      />
+      {allowAttachments && <MarkdownAttachmentStrip textarea={textarea} />}
     </div>
   );
 };
