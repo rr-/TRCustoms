@@ -1,0 +1,17 @@
+{% extends "email_base.html" %} {% block content %}
+<p>Hi {{username}},</p>
+
+<p>
+  Apologies, but your walkthrough for the level {{level_name}} has been rejected
+  from TRCustoms.org.
+</p>
+
+<p>
+  Kindly review your level submission based on the reason provided by the Mod
+  Team:
+</p>
+
+<p>{{reason}}</p>
+
+<p>View your level page <a href="{{link}}">here</a>.</p>
+{% endblock %}

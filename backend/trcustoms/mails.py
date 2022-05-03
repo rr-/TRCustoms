@@ -11,6 +11,7 @@ from premailer import transform
 from trcustoms.levels.models import Level
 from trcustoms.reviews.models import LevelReview
 from trcustoms.users.models import User
+from trcustoms.walkthroughs.models import Walkthrough
 
 FROM = "admin@trcustoms.org"
 PREFIX = "[TRCustoms]"
@@ -214,6 +215,71 @@ def send_review_update_mail(review: LevelReview) -> None:
                 "username": username,
                 "reviewer_username": review.author.username,
                 "level_name": review.level.name,
+                "link": link,
+            },
+        )
+
+
+def send_walkthrough_approved_mail(walkthrough: Walkthrough) -> None:
+    link = f"{settings.HOST_SITE}/walkthroughs/{walkthrough.id}"
+    if walkthrough.author:
+        send_mail(
+            template_name="walkthrough_approval",
+            subject=f"{PREFIX} Walkthrough approved",
+            recipients=[walkthrough.author.email],
+            context={
+                "username": walkthrough.author.username,
+                "level_name": walkthrough.level.name,
+                "link": link,
+            },
+        )
+
+
+def send_walkthrough_rejected_mail(
+    walkthrough: Walkthrough, reason: str
+) -> None:
+    link = f"{settings.HOST_SITE}/walkthroughs/{walkthrough.id}"
+    if walkthrough.author:
+        send_mail(
+            template_name="walkthrough_rejection",
+            subject=f"{PREFIX} Walkthrough rejected",
+            recipients=[walkthrough.author.email],
+            context={
+                "username": walkthrough.author.username,
+                "level_name": walkthrough.level.name,
+                "reason": reason,
+                "link": link,
+            },
+        )
+
+
+def send_walkthrough_submission_mail(walkthrough: Walkthrough) -> None:
+    link = f"{settings.HOST_SITE}/walkthroughs/{walkthrough.id}"
+    for username, email in get_level_authors(walkthrough.level):
+        send_mail(
+            template_name="walkthrough_submission",
+            subject=f"{PREFIX} New walkthrough",
+            recipients=[email],
+            context={
+                "username": username,
+                "author_username": walkthrough.author.username,
+                "level_name": walkthrough.level.name,
+                "link": link,
+            },
+        )
+
+
+def send_walkthrough_update_mail(walkthrough: Walkthrough) -> None:
+    link = f"{settings.HOST_SITE}/walkthroughs/{walkthrough.id}"
+    for username, email in get_level_authors(walkthrough.level):
+        send_mail(
+            template_name="walkthrough_update",
+            subject=f"{PREFIX} Walkthrough edited",
+            recipients=[email],
+            context={
+                "username": username,
+                "author_username": walkthrough.author.username,
+                "level_name": walkthrough.level.name,
                 "link": link,
             },
         )

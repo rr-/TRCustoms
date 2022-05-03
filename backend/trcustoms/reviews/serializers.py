@@ -106,10 +106,12 @@ class LevelReviewDetailsSerializer(LevelReviewListingSerializer):
             .exists()
         ):
             raise serializers.ValidationError(
-                "This user has already reviewed this level."
+                {"detail": "This user has already reviewed this level."}
             )
         if level and level.authors.filter(id=author.id).exists():
-            raise serializers.ValidationError("Cannot review own level.")
+            raise serializers.ValidationError(
+                {"detail": "Cannot review own level."}
+            )
 
         # validate that for each question there is exactly one answer.
         answers = validated_data.get("answer_ids", None)

@@ -3,6 +3,7 @@ from rest_framework.permissions import BasePermission
 from trcustoms.levels.models import Level
 from trcustoms.reviews.models import LevelReview
 from trcustoms.users.models import User, UserPermission
+from trcustoms.walkthroughs.models import Walkthrough
 
 
 class AllowNone(BasePermission):
@@ -41,6 +42,8 @@ class IsAccessingOwnResource(BasePermission):
             )
         if isinstance(obj, LevelReview):
             return obj.author == request.user
+        if isinstance(obj, Walkthrough):
+            return obj.author == request.user
         return False
 
 
@@ -57,10 +60,12 @@ def get_permissions(user: User) -> set[UserPermission]:
     if user.is_staff:
         perms |= set(UserPermission) - {
             UserPermission.DELETE_LEVELS,
-            UserPermission.DELETE_REVIEWS,
+            UserPermission.DELETE_LEVELS,
+            UserPermission.DELETE_WALKTHROUGHS,
             UserPermission.EDIT_USERS,
             UserPermission.EDIT_REVIEWS,
             UserPermission.EDIT_NEWS,
+            UserPermission.EDIT_WALKTHROUGHS,
         }
 
     if not user.is_anonymous:
@@ -68,6 +73,7 @@ def get_permissions(user: User) -> set[UserPermission]:
             UserPermission.LIST_USERS,  # autocomplete
             UserPermission.REVIEW_LEVELS,
             UserPermission.UPLOAD_LEVELS,
+            UserPermission.POST_WALKTHROUGHS,
         }
 
     perms |= {

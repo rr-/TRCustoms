@@ -4,6 +4,7 @@ from rest_framework import serializers
 from rest_framework.permissions import BasePermission
 
 from trcustoms.audit_logs.utils import (
+    clear_audit_log_action_flags,
     track_model_creation,
     track_model_deletion,
     track_model_update,
@@ -65,20 +66,33 @@ class MultiSerializerMixin:
 
 
 class AuditLogModelWatcherCreateMixin:
+    audit_log_review_create = False
+
     def perform_create(self, serializer: serializers.Serializer) -> None:
         super().perform_create(serializer)
-        track_model_creation(serializer.instance, request=self.request)
+        track_model_creation(
+            serializer.instance,
+            request=self.request,
+            is_action_required=self.audit_log_review_create,
+        )
 
 
 class AuditLogModelWatcherUpdateMixin:
+    audit_log_review_update = False
+
     def perform_update(self, serializer: serializers.Serializer) -> None:
         instance = self.get_object()
-        with track_model_update(instance, request=self.request):
+        with track_model_update(
+            instance,
+            request=self.request,
+            is_action_required=self.audit_log_review_update,
+        ):
             super().perform_update(serializer)
 
 
 class AuditLogModelWatcherDestroyMixin:
     def perform_destroy(self, instance) -> None:
+        clear_audit_log_action_flags(obj=instance)
         track_model_deletion(instance, request=self.request)
         super().perform_destroy(instance)
 

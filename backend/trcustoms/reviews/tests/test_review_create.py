@@ -142,7 +142,7 @@ def test_review_creation_fails_when_reviewing_own_level(
     data = response.json()
 
     assert response.status_code == status.HTTP_400_BAD_REQUEST, data
-    assert data == {"non_field_errors": ["Cannot review own level."]}
+    assert data == {"detail": ["Cannot review own level."]}
 
 
 @pytest.mark.django_db
@@ -236,6 +236,4 @@ def test_review_creation_fails_if_already_reviewed(
     data = response.json()
 
     assert response.status_code == status.HTTP_400_BAD_REQUEST, data
-    assert data == {
-        "non_field_errors": ["This user has already reviewed this level."]
-    }
+    assert data == {"detail": ["This user has already reviewed this level."]}

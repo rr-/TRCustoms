@@ -95,6 +95,7 @@ def test_user_creation(
         "date_joined": any_datetime(allow_strings=True),
         "last_login": None,
         "authored_level_count": 0,
+        "authored_walkthrough_count": 0,
         "reviewed_level_count": 0,
         "picture": None,
         "country": None,
@@ -102,6 +103,7 @@ def test_user_creation(
         "donation_url": None,
         "permissions": [
             "list_users",
+            "post_walkthroughs",
             "review_levels",
             "upload_levels",
             "view_users",
@@ -285,6 +287,7 @@ def test_user_creation_acquiring_trle_account(
         "date_joined": any_datetime(allow_strings=True),
         "last_login": None,
         "authored_level_count": 0,
+        "authored_walkthrough_count": 0,
         "reviewed_level_count": 0,
         "picture": None,
         "country": None,
@@ -292,6 +295,7 @@ def test_user_creation_acquiring_trle_account(
         "donation_url": None,
         "permissions": [
             "list_users",
+            "post_walkthroughs",
             "review_levels",
             "upload_levels",
             "view_users",

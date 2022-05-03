@@ -18,6 +18,7 @@ from trcustoms.reviews.views import LevelReviewViewSet
 from trcustoms.tags.views import TagViewSet
 from trcustoms.uploads.views import UploadViewSet
 from trcustoms.users.views import UserViewSet
+from trcustoms.walkthroughs.views import WalkthroughViewSet
 
 router = DefaultRouter()
 router.register(r"config", ConfigViewSet, basename="config")
@@ -31,6 +32,7 @@ router.register(r"level_genres", GenreViewSet)
 router.register(r"level_engines", EngineViewSet)
 router.register(r"level_files", LevelFileViewSet)
 router.register(r"reviews", LevelReviewViewSet)
+router.register(r"walkthroughs", WalkthroughViewSet)
 
 urlpatterns = [
     path("api/auth/token/", TokenObtainPairView.as_view()),

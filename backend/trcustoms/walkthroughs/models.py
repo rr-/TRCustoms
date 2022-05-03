@@ -4,6 +4,7 @@ from trcustoms.audit_logs import registry
 from trcustoms.common.models import DatesInfo
 from trcustoms.levels.models import Level
 from trcustoms.users.models import User
+from trcustoms.walkthroughs.consts import WalkthroughType
 
 
 @registry.register_model(
@@ -14,10 +15,6 @@ from trcustoms.users.models import User
     },
 )
 class Walkthrough(DatesInfo):
-    class WalkthroughType(models.TextChoices):
-        LINK = ("l", "Link")
-        TEXT = ("t", "Text")
-
     level = models.ForeignKey(
         Level, on_delete=models.CASCADE, related_name="walkthroughs"
     )

@@ -158,7 +158,7 @@ def test_level_creation_updates_reviewed_level_count(
 
 
 @pytest.mark.django_db
-def test_approved_level_creation_does_not_update_authored_level_count(
+def test_approved_level_creation_updates_authored_level_count(
     level_factory: LevelFactory, user_factory: UserFactory
 ) -> None:
     user = user_factory()

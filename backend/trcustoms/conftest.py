@@ -34,6 +34,7 @@ from trcustoms.reviews.models import (
 from trcustoms.tags.models import Tag
 from trcustoms.uploads.models import UploadedFile
 from trcustoms.users.models import User
+from trcustoms.walkthroughs.models import Walkthrough
 
 
 @register
@@ -176,6 +177,15 @@ class ReviewFactory(factory.django.DjangoModelFactory):
 class RatingClassFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = RatingClass
+
+
+@register
+class WalkthroughFactory(factory.django.DjangoModelFactory):
+    class Meta:
+        model = Walkthrough
+
+    author = factory.SubFactory(UserFactory)
+    level = factory.SubFactory(LevelFactory)
 
 
 @pytest.fixture(name="fake", scope="session")

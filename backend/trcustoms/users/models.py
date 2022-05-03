@@ -26,6 +26,7 @@ class PasswordResetToken(Token):
 class UserPermission(Enum):
     DELETE_LEVELS = "delete_levels"
     DELETE_REVIEWS = "delete_reviews"
+    DELETE_WALKTHROUGHS = "delete_walkthroughs"
     EDIT_LEVELS = "edit_levels"
     EDIT_NEWS = "edit_news"
     EDIT_REVIEWS = "edit_reviews"
@@ -37,6 +38,8 @@ class UserPermission(Enum):
     REVIEW_LEVELS = "review_levels"
     UPLOAD_LEVELS = "upload_levels"
     VIEW_USERS = "view_users"
+    POST_WALKTHROUGHS = "post_walkthroughs"
+    EDIT_WALKTHROUGHS = "edit_walkthroughs"
 
 
 class UserManager(BaseUserManager):
@@ -59,8 +62,13 @@ class User(AbstractUser):
         permissions = [
             (UserPermission.DELETE_LEVELS.value, "Can delete levels"),
             (UserPermission.DELETE_REVIEWS.value, "Can delete reviews"),
+            (
+                UserPermission.DELETE_WALKTHROUGHS.value,
+                "Can delete walkthroughs",
+            ),
             (UserPermission.EDIT_LEVELS.value, "Can edit levels"),
             (UserPermission.EDIT_REVIEWS.value, "Can edit reviews"),
+            (UserPermission.EDIT_WALKTHROUGHS.value, "Can edit walkthroughs"),
             (UserPermission.EDIT_TAGS.value, "Can edit tags"),
             (UserPermission.EDIT_NEWS.value, "Can edit news"),
             (UserPermission.EDIT_USERS.value, "Can edit users"),
@@ -70,6 +78,7 @@ class User(AbstractUser):
             (UserPermission.REVIEW_AUDIT_LOGS.value, "Can review audit logs"),
             (UserPermission.REVIEW_LEVELS.value, "Can review levels"),
             (UserPermission.UPLOAD_LEVELS.value, "Can upload levels"),
+            (UserPermission.POST_WALKTHROUGHS.value, "Can post walkthroughs"),
         ]
 
     class Source(models.TextChoices):
