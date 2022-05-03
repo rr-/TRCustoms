@@ -16,6 +16,7 @@
   --levels-table-bg-color: var(--article-bg-color);
   --reviews-bg-color: var(--article-bg-color);
   --table-details-bg-color: var(--article-bg-color);
+  --walkthroughs-hover-filter: var(--stats-hover-filter);
 }
 
 [data-theme="midnight_ocean"] {
@@ -50,6 +51,7 @@
   --stats-neutral-bar-color: #7b6032;
   --stats-negative-bar-color: #a62626;
   --stats-hover-filter: brightness(190%);
+  --walkthroughs-hover-filter: brightness(140%);
   --message-bg-color: var(--sidebar-bg-color);
   --blockquote-bg-color: var(--bg-color);
   --blockquote-border-color: var(--link-color);

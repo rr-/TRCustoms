@@ -12,6 +12,10 @@ const reprBigNumber = (num: number): string => {
   return `${round(num, 1)}${suffix}`;
 };
 
+const reprPercentage = (num: number, decimalPlaces = 2): string => {
+  return `${round(num * 100, decimalPlaces)}%`;
+};
+
 const titleCase = (input: string): string => {
   let sentences = input.split(/\. /);
   return sentences
@@ -82,4 +86,5 @@ export {
   formatDateTime,
   formatFileSize,
   reprBigNumber,
+  reprPercentage,
 };

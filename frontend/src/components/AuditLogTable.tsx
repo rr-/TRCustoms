@@ -9,6 +9,7 @@ import { GenreLink } from "src/components/links/GenreLink";
 import { LevelLink } from "src/components/links/LevelLink";
 import { TagLink } from "src/components/links/TagLink";
 import { UserLink } from "src/components/links/UserLink";
+import { WalkthroughLink } from "src/components/links/WalkthroughLink";
 import { AuditLogService } from "src/services/AuditLogService";
 import type { AuditLogListing } from "src/services/AuditLogService";
 import { AuditLogObjectType } from "src/services/AuditLogService";
@@ -112,6 +113,16 @@ const AuditLogTableObjectLink = ({
 
     case AuditLogObjectType.News:
       return <>{`News #${auditLog.object_id}`}</>;
+
+    case AuditLogObjectType.Walkthrough:
+      return (
+        <WalkthroughLink
+          walkthrough={{
+            id: +auditLog.object_id,
+            levelName: auditLog.object_name,
+          }}
+        ></WalkthroughLink>
+      );
 
     default:
       return <>{`${auditLog.object_type} #${auditLog.object_id}`}</>;

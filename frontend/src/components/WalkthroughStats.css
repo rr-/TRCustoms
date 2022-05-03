@@ -1,0 +1,42 @@
+.WalkthroughStats {
+  margin-top: 1rem;
+}
+
+.WalkthroughStats--list {
+  display: flex;
+  margin: 0.25rem 0;
+  padding: 0;
+}
+
+.WalkthroughStats--listItem {
+  display: block;
+}
+
+.WalkthroughStats--indicator {
+  height: 22px;
+  background: var(--link-color);
+  mask-image: var(--bg-url);
+  -webkit-mask-image: var(--bg-url);
+}
+
+.WalkthroughStats--indicator.video_only {
+  --bg-url: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='4' height='4'><rect x='0' y='0' width='7' height='2'/></svg>");
+}
+
+.WalkthroughStats--indicator.text_only {
+  --bg-url: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='4' height='4'><rect x='0' y='0' width='1' height='7'/></svg>");
+}
+
+.WalkthroughStats--indicator.none {
+  --bg-url: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='7' height='7'><rect x='3' y='0' width='1' height='1'/></svg>");
+}
+
+.WalkthroughStats--listItem:hover {
+  filter: var(--walkthroughs-hover-filter);
+}
+.WalkthroughStats--indicator:hover {
+}
+
+.WalkthroughStats--footer {
+  text-align: center;
+}
