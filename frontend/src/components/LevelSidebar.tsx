@@ -122,14 +122,12 @@ const LevelSidebar = ({ level, reviewCount }: LevelSidebarProps) => {
             </PermissionGuard>
 
             {level.authors.every((author) => author.id !== user?.id) && (
-              <PermissionGuard require={UserPermission.reviewLevels}>
-                <PushButton
-                  icon={<IconBook />}
-                  onClick={handleWalkthroughsButtonClick}
-                >
-                  Walkthrough
-                </PushButton>
-              </PermissionGuard>
+              <PushButton
+                icon={<IconBook />}
+                onClick={handleWalkthroughsButtonClick}
+              >
+                Walkthrough
+              </PushButton>
             )}
 
             {level.authors.every((author) => author.id !== user?.id) && (
