@@ -44,6 +44,7 @@ class WalkthroughViewSet(
     )
 
     search_fields = [
+        "walkthrough_type",
         "author__first_name",
         "author__last_name",
         "author__username",
@@ -95,6 +96,11 @@ class WalkthroughViewSet(
 
         disable_paging = self.request.query_params.get("disable_paging")
         self.paginator.disable_paging = False
+
+        if walkthrough_type := self.request.query_params.get(
+            "walkthrough_type"
+        ):
+            queryset = queryset.filter(walkthrough_type=walkthrough_type)
 
         if author_ids := parse_ids(self.request.query_params.get("authors")):
             for author_id in author_ids:
