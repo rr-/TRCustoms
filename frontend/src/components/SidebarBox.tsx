@@ -1,18 +1,17 @@
 import "./SidebarBox.css";
 
 interface SidebarBoxProps {
-  id?: string | undefined;
   header?: React.ReactNode | undefined;
   actions?: React.ReactNode | undefined;
   children: React.ReactNode;
 }
 
-const SidebarBox = ({ id, header, actions, children }: SidebarBoxProps) => {
+const SidebarBox = ({ header, actions, children }: SidebarBoxProps) => {
   return (
-    <div id={id || undefined} className="SidebarBox ChildMarginClear">
+    <div className="SidebarBox ChildMarginClear">
       {header && <div className="SidebarBox--header">{header}</div>}
       {actions && <div className="SidebarBox--actions">{actions}</div>}
-      <div className="ChildMarginClear">{children}</div>
+      <div className="SidebarBox--body ChildMarginClear">{children}</div>
     </div>
   );
 };
