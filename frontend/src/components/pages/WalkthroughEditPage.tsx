@@ -68,7 +68,11 @@ const WalkthroughEditPage = () => {
   return (
     <div className="WalkthroughEditPage">
       <PageGuard
-        require={UserPermission.editWalkthroughs}
+        require={
+          walkthrough
+            ? UserPermission.editWalkthroughs
+            : UserPermission.postWalkthroughs
+        }
         owningUserIds={walkthrough?.author ? [walkthrough.author.id] : []}
       >
         {level ? (
