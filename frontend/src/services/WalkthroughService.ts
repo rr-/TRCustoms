@@ -13,6 +13,13 @@ enum WalkthroughType {
   Text = "t",
 }
 
+enum WalkthroughStatus {
+  Draft = "dra",
+  PendingApproval = "pen",
+  Approved = "app",
+  Rejected = "rej",
+}
+
 interface WalkthroughAuthor extends UserNested {
   picture: UploadedFile | null;
   reviewed_level_count: number;
@@ -27,8 +34,7 @@ interface WalkthroughListing {
   walkthrough_type: WalkthroughType;
   created: string;
   last_updated: string;
-  is_approved: boolean;
-  is_pending_approval: boolean;
+  status: WalkthroughStatus;
   rejection_reason: string | null;
 }
 
@@ -126,6 +132,10 @@ const deleteWalkthrough = async (walkthroughId: number): Promise<void> => {
   await api.delete(`${API_URL}/walkthroughs/${walkthroughId}/`);
 };
 
+const publish = async (walkthroughId: number): Promise<void> => {
+  await api.post(`${API_URL}/walkthroughs/${walkthroughId}/publish/`);
+};
+
 const WalkthroughService = {
   searchWalkthroughs,
   getWalkthroughById,
@@ -134,6 +144,7 @@ const WalkthroughService = {
   approve,
   reject,
   delete: deleteWalkthrough,
+  publish,
 };
 
 export type {
@@ -143,4 +154,4 @@ export type {
   WalkthroughSearchResult,
 };
 
-export { WalkthroughType, WalkthroughService };
+export { WalkthroughStatus, WalkthroughType, WalkthroughService };

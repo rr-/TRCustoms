@@ -8,13 +8,10 @@ from rest_framework import serializers
 
 from trcustoms.levels.models import Level
 from trcustoms.levels.serializers import LevelNestedSerializer
-from trcustoms.mails import (
-    send_walkthrough_submission_mail,
-    send_walkthrough_update_mail,
-)
+from trcustoms.mails import send_walkthrough_update_mail
 from trcustoms.uploads.serializers import UploadedFileNestedSerializer
 from trcustoms.users.serializers import UserNestedSerializer
-from trcustoms.walkthroughs.consts import WalkthroughType
+from trcustoms.walkthroughs.consts import WalkthroughStatus, WalkthroughType
 from trcustoms.walkthroughs.models import Walkthrough
 
 
@@ -38,8 +35,7 @@ class WalkthroughListingSerializer(serializers.ModelSerializer):
     level = LevelNestedSerializer(read_only=True)
     legacy_author_name = serializers.ReadOnlyField()
 
-    is_pending_approval = serializers.ReadOnlyField()
-    is_approved = serializers.ReadOnlyField()
+    status = serializers.ReadOnlyField()
     rejection_reason = serializers.ReadOnlyField()
 
     class Meta:
@@ -49,8 +45,7 @@ class WalkthroughListingSerializer(serializers.ModelSerializer):
             "level",
             "author",
             "legacy_author_name",
-            "is_pending_approval",
-            "is_approved",
+            "status",
             "rejection_reason",
             "walkthrough_type",
             "text",
@@ -122,7 +117,6 @@ class WalkthroughDetailsSerializer(WalkthroughListingSerializer):
 
         walkthrough = walkthrough_factory()
         walkthrough.save()
-        send_walkthrough_submission_mail(walkthrough)
         return walkthrough
 
     def update(self, instance, validated_data):
@@ -133,7 +127,8 @@ class WalkthroughDetailsSerializer(WalkthroughListingSerializer):
 
         walkthrough = walkthrough_factory()
         walkthrough.save()
-        send_walkthrough_update_mail(walkthrough)
+        if walkthrough.status == WalkthroughStatus.APPROVED:
+            send_walkthrough_update_mail(walkthrough)
         return walkthrough
 
 

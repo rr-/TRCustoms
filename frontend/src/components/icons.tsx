@@ -40,6 +40,7 @@ export * from "src/components/icons/IconReject";
 export * from "src/components/icons/IconSearch";
 export * from "src/components/icons/IconSortAscending";
 export * from "src/components/icons/IconSortDescending";
+export * from "src/components/icons/IconSubmit";
 export * from "src/components/icons/IconThumbDown";
 export * from "src/components/icons/IconThumbUp";
 export * from "src/components/icons/IconTrash";

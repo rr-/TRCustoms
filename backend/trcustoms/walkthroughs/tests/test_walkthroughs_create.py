@@ -6,7 +6,7 @@ from rest_framework.test import APIClient
 
 from trcustoms.audit_logs.models import AuditLog
 from trcustoms.conftest import LevelFactory, UserFactory, WalkthroughFactory
-from trcustoms.walkthroughs.consts import WalkthroughType
+from trcustoms.walkthroughs.consts import WalkthroughStatus, WalkthroughType
 from trcustoms.walkthroughs.models import Walkthrough
 
 
@@ -120,8 +120,7 @@ def test_walkthrough_creation_ignores_spoofed_fields(
         "text": "https://example.com/",
         "user_id": spoofed_user.id,
         "legacy_author_name": "spoofed legacy author name",
-        "is_pending_approval": False,
-        "is_approved": True,
+        "status": "app",
         "rejection_reason": "spoofed rejection reason",
     }
 
@@ -137,8 +136,7 @@ def test_walkthrough_creation_ignores_spoofed_fields(
     assert walkthrough.author.id != spoofed_user.id
     assert walkthrough.author.id == auth_api_client.user.id
     assert walkthrough.legacy_author_name is None
-    assert walkthrough.is_pending_approval is True
-    assert walkthrough.is_approved is False
+    assert walkthrough.status == WalkthroughStatus.DRAFT
     assert walkthrough.rejection_reason is None
 
 
@@ -179,8 +177,7 @@ def test_walkthrough_creation_success(
             "picture": None,
         },
         "legacy_author_name": walkthrough.legacy_author_name,
-        "is_approved": walkthrough.is_approved,
-        "is_pending_approval": walkthrough.is_pending_approval,
+        "status": walkthrough.status,
         "rejection_reason": walkthrough.rejection_reason,
         "walkthrough_type": walkthrough.walkthrough_type,
         "text": walkthrough.text,
@@ -192,8 +189,7 @@ def test_walkthrough_creation_success(
     assert walkthrough.author.id == auth_api_client.user.id
     assert walkthrough.level.id == level.id
     assert walkthrough.legacy_author_name is None
-    assert walkthrough.is_approved is False
-    assert walkthrough.is_pending_approval is True
+    assert walkthrough.status == WalkthroughStatus.DRAFT
     assert walkthrough.rejection_reason is None
     assert walkthrough.walkthrough_type == WalkthroughType.TEXT
     assert walkthrough.text == payload["text"]
@@ -202,14 +198,13 @@ def test_walkthrough_creation_success(
     assert audit_log.change_type == AuditLog.ChangeType.CREATE
     assert audit_log.object_id == str(walkthrough.id)
 
-    assert len(mail.outbox) == 1
-    assert mail.outbox[0].subject == "[TRCustoms] New walkthrough"
+    assert len(mail.outbox) == 0
 
 
 @pytest.mark.django_db
 def test_walkthrough_creation_does_not_update_authored_level_count() -> None:
     user = UserFactory()
-    WalkthroughFactory(author=user, is_approved=False)
+    WalkthroughFactory(author=user, status=WalkthroughStatus.DRAFT)
     user.refresh_from_db()
     assert user.authored_walkthrough_count == 0
 
@@ -217,6 +212,6 @@ def test_walkthrough_creation_does_not_update_authored_level_count() -> None:
 @pytest.mark.django_db
 def test_walkthrough_creation_updates_authored_level_count() -> None:
     user = UserFactory()
-    WalkthroughFactory(author=user, is_approved=True)
+    WalkthroughFactory(author=user, status=WalkthroughStatus.APPROVED)
     user.refresh_from_db()
     assert user.authored_walkthrough_count == 1

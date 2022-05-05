@@ -2,7 +2,7 @@ import pytest
 
 from trcustoms.conftest import LevelFactory, WalkthroughFactory
 from trcustoms.levels.models import Level
-from trcustoms.walkthroughs.models import WalkthroughType
+from trcustoms.walkthroughs.models import WalkthroughStatus, WalkthroughType
 
 
 @pytest.mark.django_db
@@ -19,7 +19,7 @@ class TestVideoOnlyWalkthroughsQueryset:
         WalkthroughFactory(
             level=level,
             walkthrough_type=WalkthroughType.TEXT,
-            is_approved=False,
+            status=WalkthroughStatus.PENDING_APPROVAL,
         )
         assert Level.objects.with_video_only_walkthroughs().count() == 0
         assert Level.objects.with_text_only_walkthroughs().count() == 0
@@ -31,7 +31,7 @@ class TestVideoOnlyWalkthroughsQueryset:
         WalkthroughFactory(
             level=level,
             walkthrough_type=WalkthroughType.LINK,
-            is_approved=False,
+            status=WalkthroughStatus.PENDING_APPROVAL,
         )
         assert Level.objects.with_video_only_walkthroughs().count() == 0
         assert Level.objects.with_text_only_walkthroughs().count() == 0
@@ -43,7 +43,7 @@ class TestVideoOnlyWalkthroughsQueryset:
         WalkthroughFactory(
             level=level,
             walkthrough_type=WalkthroughType.TEXT,
-            is_approved=True,
+            status=WalkthroughStatus.APPROVED,
         )
         assert Level.objects.with_video_only_walkthroughs().count() == 0
         assert Level.objects.with_text_only_walkthroughs().count() == 1
@@ -55,7 +55,7 @@ class TestVideoOnlyWalkthroughsQueryset:
         WalkthroughFactory(
             level=level,
             walkthrough_type=WalkthroughType.LINK,
-            is_approved=True,
+            status=WalkthroughStatus.APPROVED,
         )
         assert Level.objects.with_video_only_walkthroughs().count() == 1
         assert Level.objects.with_text_only_walkthroughs().count() == 0
@@ -67,12 +67,12 @@ class TestVideoOnlyWalkthroughsQueryset:
         WalkthroughFactory(
             level=level,
             walkthrough_type=WalkthroughType.LINK,
-            is_approved=False,
+            status=WalkthroughStatus.PENDING_APPROVAL,
         )
         WalkthroughFactory(
             level=level,
             walkthrough_type=WalkthroughType.TEXT,
-            is_approved=True,
+            status=WalkthroughStatus.APPROVED,
         )
         assert Level.objects.with_video_only_walkthroughs().count() == 0
         assert Level.objects.with_text_only_walkthroughs().count() == 1
@@ -84,12 +84,12 @@ class TestVideoOnlyWalkthroughsQueryset:
         WalkthroughFactory(
             level=level,
             walkthrough_type=WalkthroughType.LINK,
-            is_approved=True,
+            status=WalkthroughStatus.APPROVED,
         )
         WalkthroughFactory(
             level=level,
             walkthrough_type=WalkthroughType.TEXT,
-            is_approved=False,
+            status=WalkthroughStatus.PENDING_APPROVAL,
         )
         assert Level.objects.with_video_only_walkthroughs().count() == 1
         assert Level.objects.with_text_only_walkthroughs().count() == 0
@@ -101,12 +101,12 @@ class TestVideoOnlyWalkthroughsQueryset:
         WalkthroughFactory(
             level=level,
             walkthrough_type=WalkthroughType.LINK,
-            is_approved=True,
+            status=WalkthroughStatus.APPROVED,
         )
         WalkthroughFactory(
             level=level,
             walkthrough_type=WalkthroughType.TEXT,
-            is_approved=True,
+            status=WalkthroughStatus.APPROVED,
         )
         assert Level.objects.with_video_only_walkthroughs().count() == 0
         assert Level.objects.with_text_only_walkthroughs().count() == 0

@@ -4,10 +4,10 @@ import { ConfirmModal } from "src/components/modals/ConfirmModal";
 import { showAlertOnError } from "src/utils/misc";
 
 interface ConfirmPushButtonProps {
-  icon: React.ReactElement;
+  icon?: React.ReactElement | undefined;
   text: React.ReactElement | string;
   buttonLabel: string;
-  buttonTooltip: string;
+  buttonTooltip?: string | undefined;
   onConfirm: () => Promise<void>;
 }
 

@@ -4,6 +4,7 @@ from rest_framework.test import APIClient
 
 from trcustoms.audit_logs.models import AuditLog
 from trcustoms.conftest import UserFactory, WalkthroughFactory
+from trcustoms.walkthroughs.consts import WalkthroughStatus
 from trcustoms.walkthroughs.models import Walkthrough
 
 
@@ -53,7 +54,9 @@ def test_walkthrough_deletion_updates_authored_walkthrough_count(
     admin_api_client: APIClient,
 ) -> None:
     user = UserFactory()
-    walkthrough = WalkthroughFactory(author=user, is_approved=True)
+    walkthrough = WalkthroughFactory(
+        author=user, status=WalkthroughStatus.APPROVED
+    )
     user.refresh_from_db()
     assert user.authored_walkthrough_count == 1
     admin_api_client.delete(f"/api/walkthroughs/{walkthrough.id}/")

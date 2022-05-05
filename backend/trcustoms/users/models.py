@@ -11,6 +11,7 @@ from rest_framework_simplejwt.tokens import Token
 from trcustoms.audit_logs import registry
 from trcustoms.common.models import Country
 from trcustoms.uploads.models import UploadedFile
+from trcustoms.walkthroughs.consts import WalkthroughStatus
 
 
 class ConfirmEmailToken(Token):
@@ -134,6 +135,6 @@ class User(AbstractUser):
 
     def update_authored_walkthrough_count(self) -> None:
         self.authored_walkthrough_count = self.authored_walkthroughs.filter(
-            is_approved=True
+            status=WalkthroughStatus.APPROVED
         ).count()
         self.save(update_fields=["authored_walkthrough_count"])

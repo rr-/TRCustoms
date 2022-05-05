@@ -16,8 +16,10 @@ from trcustoms.permissions import (
 )
 from trcustoms.users.models import UserPermission
 from trcustoms.utils import parse_bool, parse_ids
+from trcustoms.walkthroughs.consts import WalkthroughStatus
 from trcustoms.walkthroughs.logic import (
     approve_walkthrough,
+    publish_walkthrough,
     reject_walkthrough,
 )
 from trcustoms.walkthroughs.models import Walkthrough
@@ -80,6 +82,10 @@ class WalkthroughViewSet(
         "destroy": [HasPermission(UserPermission.DELETE_WALKTHROUGHS)],
         "approve": [HasPermission(UserPermission.EDIT_WALKTHROUGHS)],
         "reject": [HasPermission(UserPermission.EDIT_WALKTHROUGHS)],
+        "publish": [
+            HasPermission(UserPermission.EDIT_WALKTHROUGHS)
+            | IsAccessingOwnResource
+        ],
     }
 
     serializer_class = WalkthroughListingSerializer
@@ -88,8 +94,6 @@ class WalkthroughViewSet(
         "update": WalkthroughDetailsSerializer,
         "partial_update": WalkthroughDetailsSerializer,
     }
-
-    audit_log_review_create = True
 
     def get_queryset(self):
         queryset = self.queryset
@@ -119,7 +123,10 @@ class WalkthroughViewSet(
                 self.request.query_params.get("is_approved")
             )
         ) is not None:
-            queryset = queryset.filter(is_approved=is_approved)
+            if is_approved:
+                queryset = queryset.filter(status=WalkthroughStatus.APPROVED)
+            else:
+                queryset = queryset.exclude(status=WalkthroughStatus.APPROVED)
 
         return queryset
 
@@ -127,6 +134,12 @@ class WalkthroughViewSet(
         obj = get_object_or_404(self.get_queryset(), pk=self.kwargs["pk"])
         self.check_object_permissions(self.request, obj)
         return obj
+
+    @action(detail=True, methods=["post"])
+    def publish(self, request, pk: int) -> Response:
+        walkthrough = self.get_object()
+        publish_walkthrough(walkthrough, request)
+        return Response({})
 
     @action(detail=True, methods=["post"])
     def approve(self, request, pk: int) -> Response:
