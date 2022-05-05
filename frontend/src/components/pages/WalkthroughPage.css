@@ -28,7 +28,7 @@
   grid-area: main;
 }
 
-.WalkthroughPage .SidebarBox .ChildMarginClear:empty {
+.WalkthroughPage .SidebarBox div:empty {
   display: none;
 }
 
@@ -36,4 +36,20 @@
   width: 100%;
   aspect-ratio: 4/3;
   height: auto;
+  max-height: 75vh;
+}
+
+.WalkthroughPage[data-walkthrough-type="l"] {
+  grid-template-columns: 1fr;
+  grid-template-areas:
+    "header"
+    "sidebar"
+    "main";
+}
+.WalkthroughPage[data-walkthrough-type="l"] .SidebarBox {
+  flex-direction: row;
+  align-items: center;
+}
+.WalkthroughPage[data-walkthrough-type="l"] .SidebarBox--actions {
+  flex-direction: row;
 }

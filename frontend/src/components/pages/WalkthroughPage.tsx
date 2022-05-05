@@ -44,7 +44,10 @@ const WalkthroughPage = () => {
   const walkthrough = result.data;
 
   return (
-    <div className="WalkthroughPage">
+    <div
+      className="WalkthroughPage"
+      data-walkthrough-type={walkthrough.walkthrough_type}
+    >
       <header className="WalkthroughPage--header ChildMarginClear">
         <h1>
           Walkthrough for{" "}
