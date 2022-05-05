@@ -4,6 +4,8 @@ import { useCallback } from "react";
 import { FormGrid } from "src/components/FormGrid";
 import { FormGridButtons } from "src/components/FormGrid";
 import { FormGridFieldSet } from "src/components/FormGrid";
+import { InfoMessage } from "src/components/InfoMessage";
+import { InfoMessageType } from "src/components/InfoMessage";
 import { TextAreaFormField } from "src/components/formfields/TextAreaFormField";
 import { WalkthroughLink } from "src/components/links/WalkthroughLink";
 import type { LevelNested } from "src/services/LevelService";
@@ -12,6 +14,29 @@ import type { WalkthroughDetails } from "src/services/WalkthroughService";
 import { WalkthroughService } from "src/services/WalkthroughService";
 import { WalkthroughStatus } from "src/services/WalkthroughService";
 import { extractErrorMessage } from "src/utils/misc";
+
+interface WalkthroughDraftDisclaimerProps {
+  walkthrough?: WalkthroughDetails | undefined;
+}
+
+const WalkthroughDraftDisclaimer = ({
+  walkthrough,
+}: WalkthroughDraftDisclaimerProps) => {
+  if (walkthrough?.status !== WalkthroughStatus.Draft) {
+    return null;
+  }
+  return (
+    <InfoMessage type={InfoMessageType.Info}>
+      <span>
+        Keep backups saved on your machine as <strong>drafts</strong> will be
+        deleted after 1 week if not updated/submitted.
+        <br />
+        Users cannot see your walkthrough until your draft is submitted and
+        approved.
+      </span>
+    </InfoMessage>
+  );
+};
 
 interface WalkthroughFormProps {
   level?: LevelNested | undefined;
@@ -109,7 +134,10 @@ Example text.`,
                 <TextAreaFormField label="Text" name="text" />
               </FormGridFieldSet>
 
-              <FormGridButtons status={status}>
+              <FormGridButtons
+                status={status}
+                extra={<WalkthroughDraftDisclaimer walkthrough={walkthrough} />}
+              >
                 <button type="submit" disabled={isSubmitting}>
                   {walkthrough?.status === WalkthroughStatus.Draft
                     ? "Update draft"
