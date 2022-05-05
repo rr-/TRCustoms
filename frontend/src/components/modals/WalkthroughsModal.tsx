@@ -30,6 +30,7 @@ const getWalkthroughSearchQuery = (
   page: null,
   sort: "-created",
   search: "",
+  isApproved: true,
 });
 
 interface WalkthroughsModalFooterProps {

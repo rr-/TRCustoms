@@ -15,7 +15,7 @@ from trcustoms.permissions import (
     IsAccessingOwnResource,
 )
 from trcustoms.users.models import UserPermission
-from trcustoms.utils import parse_ids
+from trcustoms.utils import parse_bool, parse_ids
 from trcustoms.walkthroughs.logic import (
     approve_walkthrough,
     reject_walkthrough,
@@ -113,6 +113,13 @@ class WalkthroughViewSet(
                 queryset = queryset.filter(level_id=level_id)
             if disable_paging:
                 self.paginator.disable_paging = True
+
+        if (
+            is_approved := parse_bool(
+                self.request.query_params.get("is_approved")
+            )
+        ) is not None:
+            queryset = queryset.filter(is_approved=is_approved)
 
         return queryset
 

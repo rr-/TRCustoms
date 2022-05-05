@@ -48,6 +48,7 @@ interface WalkthroughSearchQuery extends GenericSearchQuery {
   levels?: Array<number> | undefined;
   authors?: Array<number> | undefined;
   walkthroughType?: WalkthroughType | undefined;
+  isApproved?: boolean | undefined;
 }
 
 interface WalkthroughSearchResult
@@ -61,6 +62,12 @@ const searchWalkthroughs = async (
     walkthrough_type: searchQuery.walkthroughType || null,
     levels: searchQuery.levels?.join(",") || null,
     authors: searchQuery.authors?.join(",") || null,
+    is_approved:
+      searchQuery.isApproved === true
+        ? "1"
+        : searchQuery.isApproved === false
+        ? "0"
+        : undefined,
   });
   const response = (await api.get(`${API_URL}/walkthroughs/`, {
     params,
