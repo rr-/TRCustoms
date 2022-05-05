@@ -47,6 +47,7 @@ interface WalkthroughUpdatePayload {
 interface WalkthroughSearchQuery extends GenericSearchQuery {
   levels?: Array<number> | undefined;
   authors?: Array<number> | undefined;
+  walkthroughType?: WalkthroughType | undefined;
 }
 
 interface WalkthroughSearchResult
@@ -57,6 +58,7 @@ const searchWalkthroughs = async (
 ): Promise<WalkthroughSearchResult> => {
   const params = filterFalsyObjectValues({
     ...getGenericSearchQuery(searchQuery),
+    walkthrough_type: searchQuery.walkthroughType || null,
     levels: searchQuery.levels?.join(",") || null,
     authors: searchQuery.authors?.join(",") || null,
   });
@@ -73,20 +75,6 @@ const getWalkthroughById = async (
     `${API_URL}/walkthroughs/${walkthroughId}/`
   )) as AxiosResponse<WalkthroughDetails>;
   return response.data;
-};
-
-const getWalkthroughByAuthorAndLevelIds = async (
-  levelId: number,
-  authorId: number
-): Promise<WalkthroughDetails | null> => {
-  const reviews = await searchWalkthroughs({
-    authors: [authorId],
-    levels: [levelId],
-  });
-  if (reviews.results.length) {
-    return await getWalkthroughById(reviews.results[0].id);
-  }
-  return null;
 };
 
 const create = async ({
@@ -134,7 +122,6 @@ const deleteWalkthrough = async (walkthroughId: number): Promise<void> => {
 const WalkthroughService = {
   searchWalkthroughs,
   getWalkthroughById,
-  getWalkthroughByAuthorAndLevelIds,
   create,
   update,
   approve,

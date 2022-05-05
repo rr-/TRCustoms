@@ -42,14 +42,20 @@ const WalkthroughsModalFooter = ({ level }: WalkthroughsModalFooterProps) => {
 
   const { user } = useContext(UserContext);
   const ownWalkthroughResult = useQuery<WalkthroughDetails | null, Error>(
-    [
-      "walkthrough",
-      WalkthroughService.getWalkthroughByAuthorAndLevelIds,
-      level.id,
-      user?.id,
-    ],
-    async () =>
-      WalkthroughService.getWalkthroughByAuthorAndLevelIds(level.id, user?.id)
+    ["walkthrough", WalkthroughService.getWalkthroughById, level.id, user?.id],
+    async () => {
+      const walkthroughs = await WalkthroughService.searchWalkthroughs({
+        authors: [user?.id],
+        levels: [level.id],
+        walkthroughType: WalkthroughType.Text,
+      });
+      if (walkthroughs.results.length) {
+        return await WalkthroughService.getWalkthroughById(
+          walkthroughs.results[0].id
+        );
+      }
+      return null;
+    }
   );
 
   const handleVideoButtonClick = () => {
