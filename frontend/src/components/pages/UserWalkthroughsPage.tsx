@@ -12,11 +12,15 @@ interface UserWalkthroughsPageParams {
   userId: string;
 }
 
-const getWalkthroughSearchQuery = (userId: number): WalkthroughSearchQuery => ({
+const getWalkthroughSearchQuery = (
+  userId: number,
+  isLoggedIn: boolean
+): WalkthroughSearchQuery => ({
   authors: [userId],
   page: null,
   sort: "-created",
   search: "",
+  isApproved: isLoggedIn ? undefined : true,
 });
 
 const UserWalkthroughsPageView = ({
@@ -25,10 +29,10 @@ const UserWalkthroughsPageView = ({
 }: UserBasePageChildRenderProps) => {
   const [walkthroughSearchQuery, setWalkthroughSearchQuery] = useState<
     WalkthroughSearchQuery
-  >(getWalkthroughSearchQuery(user.id));
+  >(getWalkthroughSearchQuery(user.id, isLoggedIn));
 
   useEffect(() => {
-    setWalkthroughSearchQuery(getWalkthroughSearchQuery(user.id));
+    setWalkthroughSearchQuery(getWalkthroughSearchQuery(user.id, isLoggedIn));
   }, [user.id, isLoggedIn]);
 
   return (
