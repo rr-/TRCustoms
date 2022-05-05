@@ -9,7 +9,7 @@ from trcustoms.genres.models import Genre
 from trcustoms.tags.models import Tag
 from trcustoms.uploads.models import UploadedFile
 from trcustoms.users.models import User
-from trcustoms.walkthroughs.consts import WalkthroughType
+from trcustoms.walkthroughs.consts import WalkthroughStatus, WalkthroughType
 
 
 @registry.register_model(name_getter=lambda instance: instance.name)
@@ -52,36 +52,36 @@ class LevelQuerySet(models.QuerySet):
     def with_video_only_walkthroughs(self):
         return self.filter(
             walkthroughs__walkthrough_type=WalkthroughType.LINK,
-            walkthroughs__is_approved=True,
+            walkthroughs__status=WalkthroughStatus.APPROVED,
         ).exclude(
             id__in=Level.objects.filter(
                 walkthroughs__walkthrough_type=WalkthroughType.TEXT,
-                walkthroughs__is_approved=True,
+                walkthroughs__status=WalkthroughStatus.APPROVED,
             )
         )
 
     def with_text_only_walkthroughs(self):
         return self.filter(
             walkthroughs__walkthrough_type=WalkthroughType.TEXT,
-            walkthroughs__is_approved=True,
+            walkthroughs__status=WalkthroughStatus.APPROVED,
         ).exclude(
             id__in=Level.objects.filter(
                 walkthroughs__walkthrough_type=WalkthroughType.LINK,
-                walkthroughs__is_approved=True,
+                walkthroughs__status=WalkthroughStatus.APPROVED,
             )
         )
 
     def with_both_walkthroughs(self):
         return self.filter(
             walkthroughs__walkthrough_type=WalkthroughType.TEXT,
-            walkthroughs__is_approved=True,
+            walkthroughs__status=WalkthroughStatus.APPROVED,
         ).filter(
             walkthroughs__walkthrough_type=WalkthroughType.LINK,
-            walkthroughs__is_approved=True,
+            walkthroughs__status=WalkthroughStatus.APPROVED,
         )
 
     def with_no_walkthroughs(self):
-        return self.exclude(walkthroughs__is_approved=True)
+        return self.exclude(walkthroughs__status=WalkthroughStatus.APPROVED)
 
 
 @registry.register_model(name_getter=lambda instance: instance.name)

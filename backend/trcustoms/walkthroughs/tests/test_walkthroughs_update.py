@@ -5,7 +5,7 @@ from rest_framework.test import APIClient
 
 from trcustoms.audit_logs.models import AuditLog
 from trcustoms.conftest import LevelFactory, UserFactory, WalkthroughFactory
-from trcustoms.walkthroughs.consts import WalkthroughType
+from trcustoms.walkthroughs.consts import WalkthroughStatus, WalkthroughType
 from trcustoms.walkthroughs.models import Walkthrough
 
 
@@ -103,8 +103,7 @@ def test_walkthrough_update_ignores_spoofed_fields(
         "level_id": spoofed_level.id,
         "user_id": spoofed_user.id,
         "legacy_author_name": "spoofed legacy author name",
-        "is_pending_approval": False,
-        "is_approved": True,
+        "status": "app",
         "rejection_reason": "spoofed rejection reason",
     }
 
@@ -120,8 +119,7 @@ def test_walkthrough_update_ignores_spoofed_fields(
     assert walkthrough.author.id != spoofed_user.id
     assert walkthrough.author.id == auth_api_client.user.id
     assert walkthrough.legacy_author_name is None
-    assert walkthrough.is_pending_approval is True
-    assert walkthrough.is_approved is False
+    assert walkthrough.status == WalkthroughStatus.DRAFT
     assert walkthrough.rejection_reason is None
 
 
@@ -135,6 +133,7 @@ def test_walkthrough_update_success(
         author=auth_api_client.user,
         text="old text",
         walkthrough_type=WalkthroughType.TEXT,
+        status=WalkthroughStatus.APPROVED,
     )
 
     resp = auth_api_client.patch(
@@ -164,8 +163,7 @@ def test_walkthrough_update_success(
             "picture": None,
         },
         "legacy_author_name": walkthrough.legacy_author_name,
-        "is_approved": walkthrough.is_approved,
-        "is_pending_approval": walkthrough.is_pending_approval,
+        "status": walkthrough.status,
         "rejection_reason": walkthrough.rejection_reason,
         "walkthrough_type": walkthrough.walkthrough_type,
         "text": walkthrough.text,

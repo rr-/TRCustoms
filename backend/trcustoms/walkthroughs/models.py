@@ -4,7 +4,7 @@ from trcustoms.audit_logs import registry
 from trcustoms.common.models import DatesInfo
 from trcustoms.levels.models import Level
 from trcustoms.users.models import User
-from trcustoms.walkthroughs.consts import WalkthroughType
+from trcustoms.walkthroughs.consts import WalkthroughStatus, WalkthroughType
 
 
 @registry.register_model(
@@ -27,8 +27,11 @@ class Walkthrough(DatesInfo):
     )
     legacy_author_name = models.CharField(max_length=64, null=True, blank=True)
 
-    is_pending_approval = models.BooleanField(default=True)
-    is_approved = models.BooleanField(default=False)
+    status = models.CharField(
+        choices=WalkthroughStatus.choices,
+        max_length=3,
+        default=WalkthroughStatus.DRAFT,
+    )
     rejection_reason = models.CharField(max_length=200, null=True, blank=True)
 
     walkthrough_type = models.CharField(

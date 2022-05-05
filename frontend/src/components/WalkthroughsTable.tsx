@@ -5,6 +5,7 @@ import { WalkthroughLink } from "src/components/links/WalkthroughLink";
 import type { WalkthroughListing } from "src/services/WalkthroughService";
 import type { WalkthroughSearchQuery } from "src/services/WalkthroughService";
 import { WalkthroughType } from "src/services/WalkthroughService";
+import { WalkthroughStatus } from "src/services/WalkthroughService";
 import { WalkthroughService } from "src/services/WalkthroughService";
 import { formatDate } from "src/utils/string";
 
@@ -85,11 +86,12 @@ const WalkthroughsTable = ({
       name: "status",
       label: "Status",
       itemElement: ({ item }) =>
-        item.is_approved
-          ? "Approved"
-          : item.is_pending_approval
-          ? "Pending approval"
-          : `Rejected (reason: ${item.rejection_reason})`,
+        ({
+          [WalkthroughStatus.Draft]: "Draft",
+          [WalkthroughStatus.PendingApproval]: "Pending approval",
+          [WalkthroughStatus.Approved]: "Approved",
+          [WalkthroughStatus.Rejected]: `Rejected (reason: ${item.rejection_reason})`,
+        }[item.status]),
     },
   ];
 

@@ -1,20 +1,16 @@
 import { Formik } from "formik";
 import { Form } from "formik";
-import { useState } from "react";
 import { useCallback } from "react";
-import { Link } from "react-router-dom";
 import { FormGrid } from "src/components/FormGrid";
 import { FormGridButtons } from "src/components/FormGrid";
 import { FormGridFieldSet } from "src/components/FormGrid";
-import { PushButton } from "src/components/PushButton";
 import { TextAreaFormField } from "src/components/formfields/TextAreaFormField";
 import { WalkthroughLink } from "src/components/links/WalkthroughLink";
-import { BaseModal } from "src/components/modals/BaseModal";
 import type { LevelNested } from "src/services/LevelService";
-import { StorageService } from "src/services/StorageService";
 import { WalkthroughType } from "src/services/WalkthroughService";
 import type { WalkthroughDetails } from "src/services/WalkthroughService";
 import { WalkthroughService } from "src/services/WalkthroughService";
+import { WalkthroughStatus } from "src/services/WalkthroughService";
 import { extractErrorMessage } from "src/utils/misc";
 
 interface WalkthroughFormProps {
@@ -32,21 +28,6 @@ Example text.
 
 ## Level 2
 Example text.`,
-  };
-
-  const [isAlertVisible, setIsAlertVisible] = useState(false);
-  const [alertText, setAlertText] = useState<string | undefined>();
-
-  const handleSaveDraftButtonClick = (context: any) => {
-    StorageService.setItem("walkthroughDraft", context.values.text);
-    setAlertText("Draft saved.");
-    setIsAlertVisible(true);
-  };
-
-  const handleRestoreDraftButtonClick = (context: any) => {
-    context.setFieldValue("text", StorageService.getItem("walkthroughDraft"));
-    setAlertText("Draft restored.");
-    setIsAlertVisible(true);
   };
 
   const handleSubmitError = useCallback(
@@ -69,6 +50,7 @@ Example text.`,
             { text: values.text }
           );
           setStatus({
+            final: false,
             success: (
               <>
                 Walkthrough updated.{" "}
@@ -91,19 +73,19 @@ Example text.`,
             text: values.text,
           });
           setStatus({
+            final: true,
             success: (
               <>
+                Walkthrough draft saved.{" "}
                 <WalkthroughLink
                   walkthrough={{
                     id: outWalkthrough.id,
                     levelName: outWalkthrough.level.name,
                   }}
                 >
-                  Your walkthrough
+                  Click here
                 </WalkthroughLink>{" "}
-                was uploaded and it now needs to be approved by the staff.
-                Please have patience :) In the meantime, why don't you take a
-                look at <Link to={"/"}>some levels</Link>?
+                to see it.
               </>
             ),
           });
@@ -118,18 +100,10 @@ Example text.`,
   return (
     <Formik initialValues={initialValues} onSubmit={handleSubmit}>
       {({ isSubmitting, status, ...context }) =>
-        !walkthrough && status?.success ? (
+        status?.final && status?.success ? (
           <div className="FormFieldSuccess">{status.success}</div>
         ) : (
           <Form className="Form">
-            <BaseModal
-              title="Alert"
-              isActive={isAlertVisible}
-              onIsActiveChange={setIsAlertVisible}
-            >
-              {alertText}
-            </BaseModal>
-
             <FormGrid>
               <FormGridFieldSet>
                 <TextAreaFormField label="Text" name="text" />
@@ -137,18 +111,12 @@ Example text.`,
 
               <FormGridButtons status={status}>
                 <button type="submit" disabled={isSubmitting}>
-                  {walkthrough ? "Update walkthrough" : "Submit for approval"}
+                  {walkthrough?.status === WalkthroughStatus.Draft
+                    ? "Update draft"
+                    : walkthrough
+                    ? "Update walkthrough"
+                    : "Save draft"}
                 </button>
-
-                <PushButton onClick={() => handleSaveDraftButtonClick(context)}>
-                  Save draft
-                </PushButton>
-
-                <PushButton
-                  onClick={() => handleRestoreDraftButtonClick(context)}
-                >
-                  Restore draft
-                </PushButton>
               </FormGridButtons>
             </FormGrid>
           </Form>

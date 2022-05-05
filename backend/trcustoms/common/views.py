@@ -26,6 +26,7 @@ from trcustoms.reviews.models import LevelReview, ReviewTemplateQuestion
 from trcustoms.reviews.serializers import ReviewTemplateQuestionSerializer
 from trcustoms.tags.models import Tag
 from trcustoms.tags.serializers import TagListingSerializer
+from trcustoms.walkthroughs.consts import WalkthroughStatus
 from trcustoms.walkthroughs.models import Walkthrough
 
 
@@ -78,7 +79,7 @@ def get_total_stats():
         "total_levels": Level.objects.filter(is_approved=True).count(),
         "total_reviews": LevelReview.objects.all().count(),
         "total_walkthroughs": Walkthrough.objects.filter(
-            is_approved=True,
+            status=WalkthroughStatus.APPROVED,
             level__is_approved=True,
         ).count(),
         "total_downloads": (
