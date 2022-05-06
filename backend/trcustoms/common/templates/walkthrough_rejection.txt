@@ -5,7 +5,7 @@ Hi {{username}},
 
 Apologies, your walkthrough for the level but {{level_name}} has been rejected from TRCustoms.org.
 
-Kindly review your level submission based on the reason provided by the Mod Team:
+Kindly review your submission based on the reason provided by the Mod Team:
 
 {{reason}}
 

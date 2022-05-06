@@ -5,7 +5,7 @@ Hi {{username}},
 
 {{reviewer_username}}'s walkthrough for {{level_name}} has been edited.
 
-Click on the link below to go to the level page if you want to view the changes.
+Click on the link below to go to the walkthrough page if you want to view the changes.
 
 {{link}}
 {% endblock %}
