@@ -12,7 +12,7 @@ from trcustoms.walkthroughs.models import Walkthrough
 def delete_stalled_drafts() -> None:
     for walkthrough in Walkthrough.objects.filter(
         status=WalkthroughStatus.DRAFT,
-        created__lte=timezone.now() - timedelta(days=7),
+        last_updated__lte=timezone.now() - timedelta(days=7),
     ):
         logger.info("deleting old walkthrough draft", walkthrough.level.name)
         track_model_deletion(walkthrough, request=None)
