@@ -65,7 +65,6 @@ def get_permissions(user: User) -> set[UserPermission]:
             UserPermission.EDIT_USERS,
             UserPermission.EDIT_REVIEWS,
             UserPermission.EDIT_NEWS,
-            UserPermission.EDIT_WALKTHROUGHS,
         }
 
     if not user.is_anonymous:
