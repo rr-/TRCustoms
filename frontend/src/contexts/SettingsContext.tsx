@@ -32,6 +32,10 @@ const themes: Theme[] = [
     name: "Sepia flashback",
     stub: "sepia_flashback",
   },
+  {
+    name: "Diluted calico",
+    stub: "diluted_calico",
+  },
 ];
 
 interface SettingsState {
