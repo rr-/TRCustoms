@@ -24,6 +24,10 @@ const themes: Theme[] = [
     name: "Lettuce",
     stub: "lettuce",
   },
+  {
+    name: "Sundown",
+    stub: "sundown",
+  },
 ];
 
 interface SettingsState {
