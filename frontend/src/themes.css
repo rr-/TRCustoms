@@ -149,3 +149,40 @@
   --blockquote-bg-color: hsl(var(--primary-hue), 85%, 90%);
   --blockquote-border-color: var(--button-bg-color);
 }
+
+[data-theme="sundown"] {
+  --primary-color: #ffe0ac;
+  --secondary-color: #bc1010;
+  --bg-color: var(--primary-color);
+  --fg-color: #000;
+  --failure-fg-color: #f32d0a;
+  --warning-fg-color: #cb8001;
+  --success-fg-color: #1e921e;
+  --link-color: var(--secondary-color);
+  --link-highlight-bg-color: #f9c96e;
+  --link-highlight-fg-color: #000;
+  --link-text-decoration: none;
+  --outline-color: var(--link-color);
+  --input-bg-color: #fff1d1;
+  --input-fg-color: black;
+  --button-bg-color: #bc1010;
+  --button-fg-color: white;
+  --button-hovered-bg-color: #d34848;
+  --button-text-decoration: none;
+  --label-bg-color: #ebc57c;
+  --navbar-bg-color: #db9e2b;
+  --navbar-active-tab-bg-color: #f9c96e;
+  --navbar-active-tab-fg-color: 000;
+  --sidebar-bg-color: var(--bg-color);
+  --sidebar-padding: 0;
+  --reviews-positive-bg-color: #538f38;
+  --reviews-neutral-bg-color: #cc8610;
+  --reviews-negative-bg-color: #bf2e2e;
+  --stats-positive-bar-color: #538f38;
+  --stats-neutral-bar-color: #cc8610;
+  --stats-negative-bar-color: #bf2e2e;
+  --stats-hover-filter: brightness(190%);
+  --message-bg-color: var(--sidebar-bg-color);
+  --blockquote-bg-color: var(--bg-color);
+  --blockquote-border-color: var(--link-color);
+}
