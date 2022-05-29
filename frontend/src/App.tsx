@@ -41,7 +41,7 @@ import { useSettings } from "src/contexts/SettingsContext";
 import { TitleContextProvider } from "src/contexts/TitleContext";
 import { UserContextProvider } from "src/contexts/UserContext";
 
-function App() {
+const App = () => {
   const { theme } = useSettings();
 
   useEffect(() => {
@@ -129,6 +129,6 @@ function App() {
       </ConfigContextProvider>
     </TitleContextProvider>
   );
-}
+};
 
 export default App;
