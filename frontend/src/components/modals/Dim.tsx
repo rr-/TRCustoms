@@ -12,6 +12,9 @@ interface DimProps {
 const Dim = ({ isActive, className, children, ...props }: DimProps) => {
   useEffect(() => {
     document.body.classList.toggle("modal-open", !!isActive);
+    return () => {
+      document.body.classList.toggle("modal-open", false);
+    };
   }, [isActive]);
 
   return (
