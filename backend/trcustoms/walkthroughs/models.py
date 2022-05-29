@@ -38,7 +38,7 @@ class Walkthrough(DatesInfo):
         choices=WalkthroughType.choices,
         max_length=3,
     )
-    text = models.TextField(max_length=50000)
+    text = models.TextField()
 
     def __str__(self):
         author_name = (
