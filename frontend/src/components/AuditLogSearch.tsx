@@ -130,6 +130,18 @@ const StateSearches: StateSearchSection[] = [
       { title: "Merged", searchState: "merged" },
     ],
   },
+  {
+    title: "Walkthrough States",
+    searchModel: "walkthrough",
+    searchList: [
+      { title: "Created", searchState: "created" },
+      { title: "Published", searchState: "published" },
+      { title: "Updated", searchState: "updated" },
+      { title: "Approved", searchState: "approved" },
+      { title: "Rejected", searchState: "rejected" },
+      { title: "Deleted", searchState: "deleted" },
+    ],
+  },
 ];
 
 const defaultSearchQuery: AuditLogSearchQuery = {
