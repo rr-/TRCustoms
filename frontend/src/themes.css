@@ -188,26 +188,26 @@
 }
 
 [data-theme="sepia_flashback"] {
-  --primary-color: #26211e;
-  --secondary-color: #cb932a;
+  --primary-color: #332b26;
+  --secondary-color: #cc993b;
   --bg-color: var(--primary-color);
-  --fg-color: #ededed;
+  --fg-color: #fef2dc;
   --failure-fg-color: tomato;
   --warning-fg-color: yellow;
   --success-fg-color: limegreen;
   --link-color: var(--secondary-color);
   --link-highlight-bg-color: #5d4825;
-  --link-highlight-fg-color: #eae0d3;
+  --link-highlight-fg-color: #d0e6ed;
   --link-text-decoration: none;
   --outline-color: var(--link-color);
   --input-bg-color: #e2d6c3;
   --input-fg-color: black;
-  --button-bg-color: #a8802f;
-  --button-fg-color: white;
-  --button-hovered-bg-color: #c99d45;
+  --button-bg-color: #c69532;
+  --button-fg-color: black;
+  --button-hovered-bg-color: #daaa4b;
   --button-text-decoration: none;
   --label-bg-color: var(--navbar-bg-color);
-  --navbar-bg-color: #15100d;
+  --navbar-bg-color: #1e1712;
   --navbar-active-tab-bg-color: #5d4825;
   --navbar-active-tab-fg-color: #eae0d3;
   --sidebar-bg-color: var(--navbar-bg-color);
