@@ -30,6 +30,7 @@ def filter_queryset_state(qs, states: str | None):
                 | "merged"
                 | "rejected"
                 | "updated"
+                | "published"
             ):
                 q_obj |= Q(changes__regex=rf"\y{state.title()}\y")
             case "banned":
