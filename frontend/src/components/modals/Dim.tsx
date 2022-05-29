@@ -1,12 +1,9 @@
 import "./Dim.css";
 import { useEffect } from "react";
 
-interface DimProps {
+interface DimProps extends React.HTMLAttributes<HTMLDivElement> {
   isActive?: boolean | undefined;
-  className?: string | undefined;
   children?: React.ReactNode | undefined;
-  onMouseDown?: ((event: React.MouseEvent) => void) | undefined;
-  onWheel?: ((event: React.WheelEvent) => void) | undefined;
 }
 
 const Dim = ({ isActive, className, children, ...props }: DimProps) => {
