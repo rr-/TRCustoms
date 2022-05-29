@@ -224,3 +224,40 @@
   --blockquote-bg-color: var(--bg-color);
   --blockquote-border-color: var(--link-color);
 }
+
+[data-theme="diluted_calico"] {
+  --primary-color: #2d2d2d;
+  --secondary-color: #feb804;
+  --bg-color: var(--primary-color);
+  --fg-color: white;
+  --failure-fg-color: tomato;
+  --warning-fg-color: yellow;
+  --success-fg-color: limegreen;
+  --link-color: var(--secondary-color);
+  --link-highlight-bg-color: #634d14;
+  --link-highlight-fg-color: #eee5cd;
+  --link-text-decoration: none;
+  --outline-color: var(--link-color);
+  --input-bg-color: #eee5cd;
+  --input-fg-color: black;
+  --button-bg-color: #a87c0d;
+  --button-fg-color: white;
+  --button-hovered-bg-color: #c5961f;
+  --button-text-decoration: none;
+  --label-bg-color: var(--navbar-bg-color);
+  --navbar-bg-color: #1f1f1f;
+  --navbar-active-tab-bg-color: #634d14;
+  --navbar-active-tab-fg-color: #eee5cd;
+  --sidebar-bg-color: var(--navbar-bg-color);
+  --sidebar-padding: 1;
+  --reviews-positive-bg-color: #213913;
+  --reviews-neutral-bg-color: #3c3c17;
+  --reviews-negative-bg-color: #4d1f1f;
+  --stats-positive-bar-color: #538f38;
+  --stats-neutral-bar-color: #7b6032;
+  --stats-negative-bar-color: #a62626;
+  --stats-hover-filter: brightness(190%);
+  --message-bg-color: var(--sidebar-bg-color);
+  --blockquote-bg-color: var(--bg-color);
+  --blockquote-border-color: var(--link-color);
+}
