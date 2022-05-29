@@ -28,6 +28,10 @@ const themes: Theme[] = [
     name: "Sundown",
     stub: "sundown",
   },
+  {
+    name: "Sepia flashback",
+    stub: "sepia_flashback",
+  },
 ];
 
 interface SettingsState {
