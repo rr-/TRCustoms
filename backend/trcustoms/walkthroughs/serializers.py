@@ -1,9 +1,5 @@
 from django.core.exceptions import ValidationError
-from django.core.validators import (
-    MaxLengthValidator,
-    MinLengthValidator,
-    URLValidator,
-)
+from django.core.validators import MinLengthValidator, URLValidator
 from rest_framework import serializers
 
 from trcustoms.levels.models import Level
@@ -58,9 +54,7 @@ class WalkthroughDetailsSerializer(WalkthroughListingSerializer):
     level_id = serializers.PrimaryKeyRelatedField(
         write_only=True, source="level", queryset=Level.objects.all()
     )
-    text = serializers.CharField(
-        validators=[MinLengthValidator(0), MaxLengthValidator(50000)]
-    )
+    text = serializers.CharField(validators=[MinLengthValidator(0)])
 
     class Meta:
         model = Walkthrough
