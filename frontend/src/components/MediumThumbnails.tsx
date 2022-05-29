@@ -1,4 +1,5 @@
 import "./MediumThumbnails.css";
+import { TouchEvent } from "react";
 import { useCallback } from "react";
 import { useEffect } from "react";
 import { useState } from "react";
@@ -29,11 +30,28 @@ const MediumThumbnailModal = ({
   canNavigateRight,
   onClose,
 }: MediumThumbnailModalProps) => {
+  const [touchStartX, setTouchStartX] = useState(0);
+  const [touchEndX, setTouchEndX] = useState(0);
+
   const handleDimClick = (event: React.MouseEvent) => {
     if (event.target === event.currentTarget) {
       onClose();
       event.stopPropagation();
       event.preventDefault();
+    }
+  };
+
+  const handleTouchStart = (e: TouchEvent<HTMLDivElement>) => {
+    setTouchStartX(e.changedTouches[0].screenX);
+  };
+
+  const handleTouchEnd = (e: TouchEvent<HTMLDivElement>) => {
+    setTouchEndX(e.changedTouches[0].screenX);
+    if (Math.abs(touchEndX - touchStartX) < 10) {
+      return;
+    }
+    if (file) {
+      onNavigate(file, touchEndX < touchStartX ? +1 : -1);
     }
   };
 
@@ -58,6 +76,8 @@ const MediumThumbnailModal = ({
       className="MediumThumbnailModal"
       onMouseDown={handleDimClick}
       onWheel={handleDimWheel}
+      onTouchStart={handleTouchStart}
+      onTouchEnd={handleTouchEnd}
     >
       {file && (
         <>
