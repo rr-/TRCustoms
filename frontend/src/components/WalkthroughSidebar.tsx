@@ -80,15 +80,14 @@ const WalkthroughSidebar = ({ walkthrough }: WalkthroughSidebarProps) => {
         <MarkdownTOC>{walkthrough.text}</MarkdownTOC>
       ) : (
         <>
-          Watch the full video at{" "}
           <PushButton
             isPlain={true}
             disableTimeout={true}
             to={walkthrough.text}
           >
-            {walkthrough.text}
-          </PushButton>
-          .
+            Click here
+          </PushButton>{" "}
+          to see the full video/playlist.
         </>
       )}
     </SidebarBox>
