@@ -25,6 +25,10 @@ const themes: Theme[] = [
     stub: "diluted_calico",
   },
   {
+    name: "Film noir",
+    stub: "film_noir",
+  },
+  {
     name: "Metropolis",
     stub: "metropolis",
   },

@@ -299,3 +299,41 @@
   --blockquote-bg-color: var(--bg-color);
   --blockquote-border-color: var(--link-color);
 }
+
+[data-theme="film_noir"] {
+  --primary-color: #1a1a1a;
+  --secondary-color: #ff0000;
+  --bg-color: var(--primary-color);
+  --fg-color: #ededed;
+  --failure-fg-color: tomato;
+  --warning-fg-color: #ff0;
+  --success-fg-color: #32cd32;
+  --link-color: var(--secondary-color);
+  --link-highlight-bg-color: #3d3d3d;
+  --link-highlight-fg-color: #dedede;
+  --link-text-decoration: none;
+  --outline-color: var(--link-color);
+  --input-bg-color: #e0a8a8;
+  --input-fg-color: #000;
+  --button-bg-color: #a11e1e;
+  --button-fg-color: #fff;
+  --button-hovered-bg-color: #c13d3d;
+  --button-text-decoration: none;
+  --label-bg-color: var(--navbar-bg-color);
+  --navbar-bg-color: #0d0d0d;
+  --navbar-active-tab-bg-color: #601c1c;
+  --navbar-active-tab-fg-color: #edd0d0;
+  --sidebar-bg-color: var(--navbar-bg-color);
+  --sidebar-padding: 1;
+  --reviews-positive-bg-color: #213913;
+  --reviews-neutral-bg-color: #3c3c17;
+  --reviews-negative-bg-color: #4d1f1f;
+  --stats-positive-bar-color: #538f38;
+  --stats-neutral-bar-color: #7b6032;
+  --stats-negative-bar-color: #a62626;
+  --stats-hover-filter: brightness(190%);
+  --walkthroughs-hover-filter: brightness(140%);
+  --message-bg-color: var(--sidebar-bg-color);
+  --blockquote-bg-color: var(--bg-color);
+  --blockquote-border-color: var(--link-color);
+}
