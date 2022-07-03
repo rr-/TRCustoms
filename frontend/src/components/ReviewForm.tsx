@@ -204,10 +204,10 @@ const ReviewForm = ({ level, review, onGoBack, onSubmit }: ReviewFormProps) => {
             <FormGrid gridType={FormGridType.Column}>
               <FormGridFieldSet title="Review">
                 <InfoMessage type={InfoMessageType.Info}>
-                  Remember to stay respectful and constructive as it is
-                  appreciated.
+                  Remember to stay respectful and constructive.
                   <br />
-                  Use of excessive profanity may cause the review to be removed.
+                  Excessive use of profanities may cause your review to be
+                  removed.
                 </InfoMessage>
 
                 <TextAreaFormField
