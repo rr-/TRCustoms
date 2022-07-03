@@ -1,9 +1,9 @@
-.PromptModalFooter {
+.PromptModalBody.small {
   display: flex;
   align-items: center;
   gap: 1rem;
 }
-.PromptModalFooter .FormField {
+.PromptModalBody.small .FormField {
   margin-bottom: 0;
   display: contents;
 }

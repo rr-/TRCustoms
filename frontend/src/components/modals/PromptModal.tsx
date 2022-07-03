@@ -5,6 +5,7 @@ import { Form } from "formik";
 import { useRef } from "react";
 import { useEffect } from "react";
 import { SubmitButton } from "src/components/formfields/SubmitButton";
+import { TextAreaFormField } from "src/components/formfields/TextAreaFormField";
 import { TextFormField } from "src/components/formfields/TextFormField";
 import { BaseModal } from "src/components/modals/BaseModal";
 
@@ -14,6 +15,7 @@ interface PromptModalProps {
   onConfirm: (text: string) => void;
   label?: string | undefined;
   children: React.ReactNode;
+  big?: boolean | undefined;
 }
 
 const PromptModal = ({
@@ -22,6 +24,7 @@ const PromptModal = ({
   onConfirm,
   label,
   children,
+  big,
 }: PromptModalProps) => {
   const modalRef = useRef<HTMLDivElement>(null);
   const initialValues = { text: "" };
@@ -43,12 +46,16 @@ const PromptModal = ({
     }, 100);
   }, [isActive]);
 
-  const PromptModalFooter = () => {
+  const PromptModalBody = () => {
     return (
       <Formik initialValues={initialValues} onSubmit={handleSubmit}>
         {({ submitForm }) => (
-          <Form className="PromptModalFooter">
-            <TextFormField label={label} name="text" />
+          <Form className={`PromptModalBody ${big ? "big" : "small"}`}>
+            {big ? (
+              <TextAreaFormField label={label} name="text" rich={false} />
+            ) : (
+              <TextFormField label={label} name="text" />
+            )}
 
             <SubmitButton onClick={() => submitForm()}>Confirm</SubmitButton>
           </Form>
@@ -63,7 +70,7 @@ const PromptModal = ({
       isActive={isActive}
       onIsActiveChange={onIsActiveChange}
       ref={modalRef}
-      buttons={<PromptModalFooter />}
+      buttons={<PromptModalBody />}
     >
       {children}
     </BaseModal>

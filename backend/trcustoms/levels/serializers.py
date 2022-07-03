@@ -373,7 +373,7 @@ class LevelDetailsSerializer(LevelListingSerializer):
 
 
 class LevelRejectionSerializer(serializers.Serializer):
-    reason = serializers.CharField(max_length=200)
+    reason = serializers.CharField(max_length=500)
 
 
 class FeaturedLevelListingSerializer(serializers.ModelSerializer):

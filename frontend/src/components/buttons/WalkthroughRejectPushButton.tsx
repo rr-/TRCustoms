@@ -26,6 +26,7 @@ const WalkthroughRejectPushButton = ({
       buttonLabel="Reject"
       buttonTooltip="Hides this walkthrough from the walkthrough listing."
       icon={<IconXCircle />}
+      big={true}
       onConfirm={handleConfirm}
     />
   );

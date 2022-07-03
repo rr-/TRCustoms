@@ -1,11 +1,8 @@
-import { useState } from "react";
 import { useQueryClient } from "react-query";
-import { PushButton } from "src/components/PushButton";
+import { PromptPushButton } from "src/components/buttons/PromptPushButton";
 import { IconBan } from "src/components/icons";
-import { PromptModal } from "src/components/modals/PromptModal";
 import { UserService } from "src/services/UserService";
 import type { UserBasic } from "src/services/UserService";
-import { showAlertOnError } from "src/utils/misc";
 import { resetQueries } from "src/utils/misc";
 
 interface UserBanPushButtonProps {
@@ -13,35 +10,23 @@ interface UserBanPushButtonProps {
 }
 
 const UserBanPushButton = ({ user }: UserBanPushButtonProps) => {
-  const [isModalActive, setIsModalActive] = useState(false);
   const queryClient = useQueryClient();
 
-  const handleButtonClick = () => {
-    setIsModalActive(true);
-  };
-
-  const handleModalConfirm = (reason: string) => {
-    showAlertOnError(async () => {
-      await UserService.ban(user.id, reason);
-      resetQueries(queryClient, ["user", "users", "auditLogs"]);
-    });
+  const handleConfirm = async (result: string) => {
+    await UserService.ban(user.id, result);
+    resetQueries(queryClient, ["user", "users", "auditLogs"]);
   };
 
   return (
-    <>
-      <PromptModal
-        isActive={isModalActive}
-        onIsActiveChange={setIsModalActive}
-        onConfirm={handleModalConfirm}
-        label="Reason"
-      >
-        Please provide the reason for banning this user.
-      </PromptModal>
-
-      <PushButton icon={<IconBan />} onClick={handleButtonClick}>
-        Ban
-      </PushButton>
-    </>
+    <PromptPushButton
+      text={<p>Please provide the reason for banning this user.</p>}
+      promptLabel="Reason"
+      buttonLabel="Ban"
+      buttonTooltip="Bans this user from accessing TRCustoms."
+      icon={<IconBan />}
+      big={true}
+      onConfirm={handleConfirm}
+    />
   );
 };
 

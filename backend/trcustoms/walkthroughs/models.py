@@ -32,7 +32,7 @@ class Walkthrough(DatesInfo):
         max_length=3,
         default=WalkthroughStatus.DRAFT,
     )
-    rejection_reason = models.CharField(max_length=200, null=True, blank=True)
+    rejection_reason = models.CharField(max_length=500, null=True, blank=True)
 
     walkthrough_type = models.CharField(
         choices=WalkthroughType.choices,

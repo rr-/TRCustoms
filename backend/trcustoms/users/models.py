@@ -101,7 +101,7 @@ class User(AbstractUser):
     is_email_confirmed = models.BooleanField(default=False)
     is_pending_activation = models.BooleanField(default=False)
     is_banned = models.BooleanField(default=False)
-    ban_reason = models.CharField(max_length=200, null=True, blank=True)
+    ban_reason = models.CharField(max_length=500, null=True, blank=True)
 
     country = models.ForeignKey(
         Country, null=True, blank=True, on_delete=models.SET_NULL
