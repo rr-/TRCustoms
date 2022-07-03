@@ -17,6 +17,14 @@ const themes: Theme[] = [
     stub: "midnight_ocean",
   },
   {
+    name: "Sepia flashback",
+    stub: "sepia_flashback",
+  },
+  {
+    name: "Diluted calico",
+    stub: "diluted_calico",
+  },
+  {
     name: "Robotic",
     stub: "robotic",
   },
@@ -27,14 +35,6 @@ const themes: Theme[] = [
   {
     name: "Sundown",
     stub: "sundown",
-  },
-  {
-    name: "Sepia flashback",
-    stub: "sepia_flashback",
-  },
-  {
-    name: "Diluted calico",
-    stub: "diluted_calico",
   },
 ];
 
