@@ -261,3 +261,41 @@
   --blockquote-bg-color: var(--bg-color);
   --blockquote-border-color: var(--link-color);
 }
+
+[data-theme="metropolis"] {
+  --primary-color: #fdfdff;
+  --secondary-color: hsl(240deg 100% 50%);
+  --bg-color: var(--primary-color);
+  --fg-color: #00003f;
+  --failure-fg-color: #f44727;
+  --warning-fg-color: #fafa00;
+  --success-fg-color: #02bb02;
+  --link-color: var(--secondary-color);
+  --link-highlight-bg-color: #00008b;
+  --link-highlight-fg-color: #f4faff;
+  --link-text-decoration: none;
+  --outline-color: var(--link-color);
+  --input-bg-color: #f4faff;
+  --input-fg-color: black;
+  --button-bg-color: #00008b;
+  --button-fg-color: white;
+  --button-link-color: var(--fg-color);
+  --button-hovered-bg-color: #5f5fb4;
+  --button-text-decoration: none;
+  --label-bg-color: var(--navbar-bg-color);
+  --navbar-bg-color: #cfcfcf;
+  --navbar-active-tab-bg-color: #b9bdc6;
+  --navbar-active-tab-fg-color: var(--fg-color);
+  --sidebar-bg-color: var(--navbar-bg-color);
+  --sidebar-padding: 1;
+  --reviews-positive-bg-color: hsl(110, 40%, 70%);
+  --reviews-neutral-bg-color: hsl(60deg 33% 69%);
+  --reviews-negative-bg-color: hsl(0, 40%, 75%);
+  --stats-positive-bar-color: #538f38;
+  --stats-neutral-bar-color: #7b6032;
+  --stats-negative-bar-color: #a62626;
+  --stats-hover-filter: brightness(190%);
+  --message-bg-color: var(--sidebar-bg-color);
+  --blockquote-bg-color: var(--bg-color);
+  --blockquote-border-color: var(--link-color);
+}
