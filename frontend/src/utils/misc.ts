@@ -50,10 +50,29 @@ const extractNestedErrorText = (source: any): string[] => {
   );
 };
 
-const getYoutubeVideoID = (url: string): string | null => {
-  let regExp = /^https?:\/\/(?:www\.)?(?:youtube\.com|youtu\.be)\/(?:v\/|\/u\/\w\/|embed\/|watch\?)?\??(?:v=)?([^#&?]*).*/;
+interface YoutubeLink {
+  videoID: string;
+  playlistID: string;
+}
+
+const parseYoutubeLink = (url: string): YoutubeLink | null => {
+  let regExp = new RegExp(
+    "" +
+      /^https?:\/\//.source +
+      /(?:www\.)?/.source +
+      /(?:youtube\.com|youtu\.be)\//.source +
+      /(?:v\/|\/u\/\w\/|embed\/|watch\?)?/.source +
+      /\??(?:v=)?(?<videoID>[^#&?]*)/.source +
+      /(?:&list=(?<playlistID>[^&#*?]+))?/.source +
+      /.*/.source
+  );
   let match = url.match(regExp);
-  return match ? match[1] : null;
+  if (!match?.groups) {
+    return null;
+  }
+  const videoID = match.groups.videoID;
+  const playlistID = match.groups.playlistID;
+  return { videoID, playlistID };
 };
 
 const extractErrorMessage = (error: unknown) => {
@@ -118,7 +137,7 @@ export {
   getCurrentSearchParams,
   extractNestedErrorText,
   extractErrorMessage,
-  getYoutubeVideoID,
+  parseYoutubeLink,
   showAlertOnError,
   resetQueries,
 };
