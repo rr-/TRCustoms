@@ -10,6 +10,7 @@ interface PromptPushButtonProps {
   buttonLabel: string;
   buttonTooltip: string;
   onConfirm: (result: string) => Promise<void>;
+  big?: boolean | undefined;
 }
 
 const PromptPushButton = ({
@@ -19,6 +20,7 @@ const PromptPushButton = ({
   buttonLabel,
   buttonTooltip,
   onConfirm,
+  big,
 }: PromptPushButtonProps) => {
   const [isModalActive, setIsModalActive] = useState(false);
 
@@ -37,6 +39,7 @@ const PromptPushButton = ({
         onIsActiveChange={setIsModalActive}
         onConfirm={handleConfirm}
         label={promptLabel}
+        big={big}
       >
         {text}
       </PromptModal>

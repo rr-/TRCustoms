@@ -10,6 +10,7 @@ import { useSettings } from "src/contexts/SettingsContext";
 import { MarkdownPreviewMode } from "src/contexts/SettingsContext";
 
 interface TextAreaFormFieldProps extends GenericFormFieldProps {
+  rich?: boolean | undefined;
   allowAttachments?: boolean | undefined;
   validate?: (value: string) => string | null;
 }
@@ -88,8 +89,32 @@ const TextAreaFormFieldSide = ({
   );
 };
 
+const TextAreaFormFieldPlain = ({
+  name,
+  readonly,
+  allowAttachments,
+  validate,
+  ...props
+}: TextAreaFormFieldProps) => {
+  const { values } = useFormikContext();
+  return (
+    <BaseFormField name={name} readonly={readonly} {...props}>
+      <div className="TextAreaFormField plain">
+        <Field
+          name={name}
+          validate={validate}
+          readOnly={readonly}
+          as="textarea"
+          className="TextArea--input Input"
+        />
+      </div>
+    </BaseFormField>
+  );
+};
+
 const TextAreaFormField = ({
   allowAttachments,
+  rich,
   ...props
 }: TextAreaFormFieldProps) => {
   if (allowAttachments === undefined) {
@@ -97,6 +122,10 @@ const TextAreaFormField = ({
   }
 
   const { markdownPreviewMode } = useSettings();
+  if (!rich) {
+    return <TextAreaFormFieldPlain {...props} />;
+  }
+
   return markdownPreviewMode === MarkdownPreviewMode.Tabbed ? (
     <TextAreaFormFieldTabbed allowAttachments={allowAttachments} {...props} />
   ) : (

@@ -127,4 +127,4 @@ class WalkthroughDetailsSerializer(WalkthroughListingSerializer):
 
 
 class WalkthroughRejectionSerializer(serializers.Serializer):
-    reason = serializers.CharField(max_length=200)
+    reason = serializers.CharField(max_length=500)

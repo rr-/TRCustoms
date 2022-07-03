@@ -271,7 +271,7 @@ class UserDetailsSerializer(UserListingSerializer):
 
 
 class UserBanSerializer(serializers.Serializer):
-    reason = serializers.CharField(max_length=200)
+    reason = serializers.CharField(max_length=500)
 
 
 class UsernameSerializer(serializers.Serializer):

@@ -24,6 +24,7 @@ const LevelRejectPushButton = ({ level }: LevelRejectPushButtonProps) => {
       buttonLabel="Reject"
       buttonTooltip="Hides this level from the level listing."
       icon={<IconXCircle />}
+      big={true}
       onConfirm={handleConfirm}
     />
   );

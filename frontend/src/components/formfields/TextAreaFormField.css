@@ -38,6 +38,11 @@
   display: none;
 }
 
+.TextAreaFormField.plain .TextArea--input {
+  min-height: 12rem;
+  min-width: 24rem;
+}
+
 .TextAreaFormField.sideBySide {
   display: flex;
   height: var(--textarea-height);
