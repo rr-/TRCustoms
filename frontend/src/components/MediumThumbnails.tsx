@@ -13,7 +13,7 @@ import { KEY_LEFT } from "src/constants";
 import { KEY_RIGHT } from "src/constants";
 import type { UploadedFile } from "src/services/FileService";
 import { DisplayMode } from "src/types";
-import { getYoutubeVideoID } from "src/utils/misc";
+import { parseYoutubeLink } from "src/utils/misc";
 
 interface MediumThumbnailModalProps {
   file?: UploadedFile | undefined;
@@ -151,9 +151,9 @@ const MediumThumbnail = ({
       </div>
     );
   } else if (link) {
-    const youtubeVideoID = getYoutubeVideoID(link);
-    if (youtubeVideoID) {
-      const thumbnailUrl = `https://img.youtube.com/vi/${youtubeVideoID}/mqdefault.jpg`;
+    const youtubeLink = parseYoutubeLink(link);
+    if (youtubeLink?.videoID) {
+      const thumbnailUrl = `https://img.youtube.com/vi/${youtubeLink.videoID}/mqdefault.jpg`;
       return (
         <a
           className={classNames.join(" ")}
