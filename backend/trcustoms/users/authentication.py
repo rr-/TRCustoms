@@ -11,7 +11,7 @@ def user_authentication_rule(user: User | None) -> None:
             detail="Invalid username or password.",
             code="invalid_credentials",
         )
-    if not user.is_email_confirmed:
+    if not user.is_email_confirmed and not user.is_superuser:
         raise AuthenticationFailed(
             detail=(
                 "You need to confirm your email first. "
