@@ -98,6 +98,7 @@ const WalkthroughsModalFooter = ({ level }: WalkthroughsModalFooterProps) => {
         onChange={handleInputChange}
         onKeyDown={handleInputKeyDown}
         value={textInput}
+        placeholder="Youtube video/playlist link"
       />
       <PushButton disableTimeout={true} onClick={handleVideoButtonClick}>
         Add a video guide
