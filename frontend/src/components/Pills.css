@@ -17,4 +17,5 @@
 }
 .Pills--listItem .PushButton {
   text-decoration: none;
+  color: var(--button-fg-color);
 }
