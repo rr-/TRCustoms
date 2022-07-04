@@ -2,7 +2,6 @@ import { useContext } from "react";
 import { useEffect } from "react";
 import { useState } from "react";
 import { GenreSearch } from "src/components/GenreSearch";
-import { defaultSearchQuery } from "src/components/GenreSearch";
 import { GenresTable } from "src/components/GenresTable";
 import { QueryPersister } from "src/components/QueryPersister";
 import { deserializeGenericSearchQuery } from "src/components/QueryPersister";
@@ -10,6 +9,12 @@ import { serializeGenericSearchQuery } from "src/components/QueryPersister";
 import { TitleContext } from "src/contexts/TitleContext";
 import type { GenreSearchQuery } from "src/services/GenreService";
 import { getCurrentSearchParams } from "src/utils/misc";
+
+const defaultSearchQuery: GenreSearchQuery = {
+  page: null,
+  sort: "name",
+  search: null,
+};
 
 const deserializeSearchQuery = (qp: {
   [key: string]: string;
@@ -39,6 +44,7 @@ const GenreListPage = () => {
         setSearchQuery={setSearchQuery}
       />
       <GenreSearch
+        defaultSearchQuery={defaultSearchQuery}
         searchQuery={searchQuery}
         onSearchQueryChange={setSearchQuery}
       />

@@ -10,22 +10,21 @@ import { TextFormField } from "src/components/formfields/TextFormField";
 import { IconSearch } from "src/components/icons";
 import type { TagSearchQuery } from "src/services/TagService";
 
-const defaultSearchQuery: TagSearchQuery = {
-  page: null,
-  sort: "name",
-  search: null,
-};
-
 const convertSearchQueryToFormikValues = (searchQuery: TagSearchQuery) => {
   return { search: searchQuery.search || "" };
 };
 
 interface TagSearchProps {
+  defaultSearchQuery: TagSearchQuery;
   searchQuery: TagSearchQuery;
   onSearchQueryChange: (searchQuery: TagSearchQuery) => void;
 }
 
-const TagSearch = ({ searchQuery, onSearchQueryChange }: TagSearchProps) => {
+const TagSearch = ({
+  defaultSearchQuery,
+  searchQuery,
+  onSearchQueryChange,
+}: TagSearchProps) => {
   const [formikValues, setFormikValues] = useState<any>(
     convertSearchQueryToFormikValues(searchQuery)
   );
@@ -48,7 +47,7 @@ const TagSearch = ({ searchQuery, onSearchQueryChange }: TagSearchProps) => {
 
   const handleClear = useCallback(
     () => onSearchQueryChange(defaultSearchQuery),
-    [onSearchQueryChange]
+    [onSearchQueryChange, defaultSearchQuery]
   );
 
   return (
@@ -80,4 +79,4 @@ const TagSearch = ({ searchQuery, onSearchQueryChange }: TagSearchProps) => {
   );
 };
 
-export { defaultSearchQuery, TagSearch };
+export { TagSearch };
