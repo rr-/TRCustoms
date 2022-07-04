@@ -1,6 +1,8 @@
 import "./ReviewsList.css";
+import { useState } from "react";
 import { DataList } from "src/components/DataList";
 import { PermissionGuard } from "src/components/PermissionGuard";
+import { PushButton } from "src/components/PushButton";
 import { UserPicture } from "src/components/UserPicture";
 import { ReviewDeletePushButton } from "src/components/buttons/ReviewDeletePushButton";
 import { ReviewEditPushButton } from "src/components/buttons/ReviewEditPushButton";
@@ -16,8 +18,11 @@ import type { ReviewSearchQuery } from "src/services/ReviewService";
 import { UserPermission } from "src/services/UserService";
 import { formatDate } from "src/utils/string";
 
+const REVIEW_EXCERPT_CUTOFF = 1200;
+
 interface ReviewsListProps {
   showLevels: boolean;
+  showExcerpts?: boolean | undefined;
   searchQuery: ReviewSearchQuery;
   onResultCountChange?: ((count: number) => void) | undefined;
   onSearchQueryChange?: ((searchQuery: ReviewSearchQuery) => void) | undefined;
@@ -26,9 +31,11 @@ interface ReviewsListProps {
 interface ReviewViewProps {
   review: ReviewListing;
   showLevels: boolean;
+  showExcerpts: boolean;
 }
 
-const ReviewView = ({ review, showLevels }: ReviewViewProps) => {
+const ReviewView = ({ review, showLevels, showExcerpts }: ReviewViewProps) => {
+  const [isExcerptExpanded, setIsExcerptExpanded] = useState(false);
   const classNames = ["Review"];
 
   const position = review.rating_class?.position || 0;
@@ -59,6 +66,17 @@ const ReviewView = ({ review, showLevels }: ReviewViewProps) => {
     );
   }
 
+  const handleReadMoreClick = () => {
+    setIsExcerptExpanded((isExcerptExpanded) => !isExcerptExpanded);
+  };
+
+  const fullText = review.text ?? "No review text is available";
+  const shortText =
+    fullText.length >= REVIEW_EXCERPT_CUTOFF
+      ? fullText.substr(0, fullText.lastIndexOf(" ", REVIEW_EXCERPT_CUTOFF)) +
+        "…"
+      : fullText;
+
   return (
     <div className={classNames.join(" ")}>
       <div className="Review--badge">{badge}</div>
@@ -70,7 +88,20 @@ const ReviewView = ({ review, showLevels }: ReviewViewProps) => {
           </p>
         ) : null}
 
-        <Markdown>{review.text || "No review text is available."}</Markdown>
+        {showExcerpts && shortText !== fullText ? (
+          <>
+            <Markdown>{isExcerptExpanded ? fullText : shortText}</Markdown>
+            <PushButton
+              isPlain={true}
+              disableTimeout={true}
+              onClick={handleReadMoreClick}
+            >
+              ({isExcerptExpanded ? "Read less" : "Read more"})
+            </PushButton>
+          </>
+        ) : (
+          <Markdown>{review.text || "No review text is available."}</Markdown>
+        )}
       </div>
 
       <footer className="Review--footer">
@@ -106,6 +137,7 @@ const ReviewView = ({ review, showLevels }: ReviewViewProps) => {
 
 const ReviewsList = ({
   showLevels,
+  showExcerpts,
   searchQuery,
   onResultCountChange,
   onSearchQueryChange,
@@ -120,7 +152,11 @@ const ReviewsList = ({
       searchFunc={ReviewService.searchReviews}
       itemKey={(review: ReviewListing) => review.id.toString()}
       itemView={(review: ReviewListing) => (
-        <ReviewView review={review} showLevels={showLevels} />
+        <ReviewView
+          review={review}
+          showLevels={showLevels}
+          showExcerpts={showExcerpts ?? false}
+        />
       )}
     />
   );
