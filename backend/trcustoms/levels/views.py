@@ -103,9 +103,6 @@ class LevelViewSet(
     def get_queryset(self):
         queryset = self.queryset
 
-        disable_paging = self.request.query_params.get("disable_paging")
-        self.paginator.disable_paging = False
-
         if sort_style := self.request.query_params.get("sort"):
             match sort_style:
                 case (
@@ -145,8 +142,6 @@ class LevelViewSet(
         if author_ids := parse_ids(self.request.query_params.get("authors")):
             for author_id in author_ids:
                 queryset = queryset.filter(authors__id=author_id)
-            if disable_paging:
-                self.paginator.disable_paging = True
 
         if tag_ids := parse_ids(self.request.query_params.get("tags")):
             for tag_id in tag_ids:

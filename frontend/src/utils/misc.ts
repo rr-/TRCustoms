@@ -13,6 +13,7 @@ const getGenericSearchQuery = (
       searchQuery.page && searchQuery.page !== DISABLE_PAGING
         ? `${searchQuery.page}`
         : null,
+    page_size: searchQuery.pageSize,
     sort: searchQuery.sort,
     search: searchQuery.search,
     disable_paging: searchQuery.page === DISABLE_PAGING ? "1" : null,

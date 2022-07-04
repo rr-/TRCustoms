@@ -7,14 +7,16 @@ import { serializeGenericSearchQuery } from "src/components/QueryPersister";
 import { ReviewsList } from "src/components/ReviewsList";
 import { Section } from "src/components/Section";
 import { SectionHeader } from "src/components/Section";
+import { DISABLE_PAGING } from "src/constants";
 import { TitleContext } from "src/contexts/TitleContext";
 import type { ReviewSearchQuery } from "src/services/ReviewService";
 import { getCurrentSearchParams } from "src/utils/misc";
 
-const defaultSearchQuery = {
+const defaultSearchQuery: ReviewSearchQuery = {
   levels: [],
-  page: 1,
-  sort: "-created",
+  page: DISABLE_PAGING,
+  pageSize: 25,
+  sort: "-created,level_id",
   search: "",
 };
 

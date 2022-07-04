@@ -12,6 +12,7 @@ const deserializeGenericSearchQuery = (
 ): GenericSearchQuery => {
   return {
     page: +qp.page || defaults?.page || undefined,
+    pageSize: +qp.page_size || defaults?.pageSize || undefined,
     sort: qp.sort || defaults?.sort || undefined,
     search: qp.search || defaults?.search || undefined,
   };
@@ -23,6 +24,10 @@ const serializeGenericSearchQuery = (
 ): { [key: string]: any } => {
   return filterFalsyObjectValues({
     page: searchQuery.page === defaults?.page ? undefined : searchQuery.page,
+    pageSize:
+      searchQuery.pageSize === defaults?.pageSize
+        ? undefined
+        : searchQuery.pageSize,
     sort: searchQuery.sort === defaults?.sort ? undefined : searchQuery.sort,
     search:
       searchQuery.search === defaults?.search ? undefined : searchQuery.search,
