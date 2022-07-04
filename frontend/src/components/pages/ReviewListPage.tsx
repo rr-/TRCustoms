@@ -52,6 +52,7 @@ const ReviewListPage = () => {
 
         <ReviewsList
           showLevels={true}
+          showExcerpts={true}
           searchQuery={searchQuery}
           onSearchQueryChange={setSearchQuery}
         />
