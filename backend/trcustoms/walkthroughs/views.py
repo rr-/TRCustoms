@@ -96,7 +96,7 @@ class WalkthroughViewSet(
     }
 
     def get_queryset(self):
-        queryset = self.queryset
+        queryset = super().get_queryset()
 
         if walkthrough_type := self.request.query_params.get(
             "walkthrough_type"

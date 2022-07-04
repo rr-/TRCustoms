@@ -83,6 +83,7 @@ def filter_queryset_object_search(qs, search: str | None):
 class AuditLogViewSet(
     PermissionsMixin, mixins.ListModelMixin, viewsets.GenericViewSet
 ):
+    queryset = AuditLog.objects.all()
     serializer_class = AuditLogListingSerializer
 
     permission_classes = [AllowNone]
@@ -92,7 +93,7 @@ class AuditLogViewSet(
     }
 
     def get_queryset(self):
-        qs = AuditLog.objects.all()
+        qs = super().get_queryset()
 
         qs = filter_queryset_search(
             qs, self.request.query_params.get("search")

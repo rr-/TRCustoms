@@ -1,65 +1,64 @@
 import { useEffect } from "react";
 import { useState } from "react";
 import { useContext } from "react";
-import { LevelsTable } from "src/components/LevelsTable";
 import { QueryPersister } from "src/components/QueryPersister";
 import { deserializeGenericSearchQuery } from "src/components/QueryPersister";
 import { serializeGenericSearchQuery } from "src/components/QueryPersister";
+import { UserSearch } from "src/components/UserSearch";
+import { UsersTable } from "src/components/UsersTable";
 import { TitleContext } from "src/contexts/TitleContext";
-import type { LevelSearchQuery } from "src/services/LevelService";
+import type { UserSearchQuery } from "src/services/UserService";
 import { getCurrentSearchParams } from "src/utils/misc";
 
-const defaultSearchQuery: LevelSearchQuery = {
+const defaultSearchQuery: UserSearchQuery = {
   page: null,
-  sort: "created",
+  sort: "-date_joined",
   search: null,
-  tags: [],
-  genres: [],
-  engines: [],
-  authors: [],
-  isApproved: true,
-  reviewsMax: 5,
+  reviewsMin: 1,
 };
 
 const deserializeSearchQuery = (qp: {
   [key: string]: string;
-}): LevelSearchQuery => ({
+}): UserSearchQuery => ({
   ...defaultSearchQuery,
   ...deserializeGenericSearchQuery(qp, defaultSearchQuery),
 });
 
 const serializeSearchQuery = (
-  searchQuery: LevelSearchQuery
+  searchQuery: UserSearchQuery
 ): { [key: string]: any } =>
   serializeGenericSearchQuery(searchQuery, defaultSearchQuery);
 
-const ReviewLevelSuggestionsPage = () => {
+const ReviewAuthorsPage = () => {
   const { setTitle } = useContext(TitleContext);
-  const [searchQuery, setSearchQuery] = useState<LevelSearchQuery>(
+  const [searchQuery, setSearchQuery] = useState<UserSearchQuery>(
     deserializeSearchQuery(getCurrentSearchParams())
   );
 
   useEffect(() => {
-    setTitle("Level search");
+    setTitle("Users");
   }, [setTitle]);
 
   return (
-    <div className="ReviewLevelSuggestionsPage">
+    <div className="ReviewAuthorsPage">
       <QueryPersister
         serializeSearchQuery={serializeSearchQuery}
         deserializeSearchQuery={deserializeSearchQuery}
         searchQuery={searchQuery}
         setSearchQuery={setSearchQuery}
       />
+      <UserSearch
+        defaultSearchQuery={defaultSearchQuery}
+        searchQuery={searchQuery}
+        onSearchQueryChange={setSearchQuery}
+      />
 
-      <div className="ReviewLevelSuggestionsPage--results">
-        <LevelsTable
-          searchQuery={searchQuery}
-          onSearchQueryChange={setSearchQuery}
-        />
-      </div>
+      <UsersTable
+        searchQuery={searchQuery}
+        onSearchQueryChange={setSearchQuery}
+      />
     </div>
   );
 };
 
-export { ReviewLevelSuggestionsPage };
+export { ReviewAuthorsPage };

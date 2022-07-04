@@ -85,7 +85,7 @@ class LevelReviewViewSet(
         return obj
 
     def get_queryset(self):
-        queryset = self.queryset
+        queryset = super().get_queryset()
 
         if author_ids := parse_ints(self.request.query_params.get("authors")):
             for author_id in author_ids:

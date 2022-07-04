@@ -39,6 +39,7 @@ from trcustoms.users.serializers import (
     UsernameSerializer,
     UserRequestPasswordResetSerializer,
 )
+from trcustoms.utils import parse_int
 
 
 class UserViewSet(
@@ -106,6 +107,18 @@ class UserViewSet(
         obj = get_object_or_404(self.get_queryset(), pk=self.kwargs["pk"])
         self.check_object_permissions(self.request, obj)
         return obj
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+
+        if (
+            reviews_min := parse_int(
+                self.request.query_params.get("reviews_min")
+            )
+        ) is not None:
+            queryset = queryset.filter(reviewed_level_count__gte=reviews_min)
+
+        return queryset
 
     @action(detail=False, url_path=r"by_username/(?P<username>\w+)")
     def by_username(self, request, username: str):
