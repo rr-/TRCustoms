@@ -5,7 +5,6 @@ from rest_framework.decorators import action
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 
-from trcustoms.audit_logs.utils import track_model_update
 from trcustoms.levels.models import Level
 from trcustoms.mixins import (
     AuditLogModelWatcherMixin,
@@ -13,6 +12,7 @@ from trcustoms.mixins import (
     PermissionsMixin,
 )
 from trcustoms.permissions import AllowNone, HasPermission
+from trcustoms.tags.logic import merge_tags
 from trcustoms.tags.models import Tag
 from trcustoms.tags.serializers import (
     TagDetailsSerializer,
@@ -91,26 +91,10 @@ class TagViewSet(
     def merge(self, request, pk, target_pk) -> Response:
         source_tag = self.get_object()
         target_tag = self.queryset.filter(pk=target_pk).first()
-        if not target_tag:
-            raise Http404("Invalid target tag.")
-        with track_model_update(
-            obj=source_tag,
-            request=request,
-            changes=[f"Merged to {target_tag.name}"],
-        ):
-            levels = (
-                Level.objects.filter(tags__id=pk)
-                .exclude(tags__id=target_pk)
-                .values("id")
-            )
-            through_model_cls = Level.tags.through
-            through_model_cls.objects.bulk_create(
-                [
-                    through_model_cls(level_id=level["id"], tag_id=target_pk)
-                    for level in levels
-                ]
-            )
-        source_tag.delete()
+        try:
+            merge_tags(source_tag.name, target_tag.name, request)
+        except Tag.DoesNotExist:
+            raise Http404("Invalid tag.") from None
         return Response(
             TagListingSerializer(instance=target_tag).data,
             status=status.HTTP_200_OK,
