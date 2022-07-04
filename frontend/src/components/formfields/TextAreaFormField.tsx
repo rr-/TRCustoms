@@ -96,7 +96,6 @@ const TextAreaFormFieldPlain = ({
   validate,
   ...props
 }: TextAreaFormFieldProps) => {
-  const { values } = useFormikContext();
   return (
     <BaseFormField name={name} readonly={readonly} {...props}>
       <div className="TextAreaFormField plain">
