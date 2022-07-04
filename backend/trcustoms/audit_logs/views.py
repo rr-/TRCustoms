@@ -9,7 +9,7 @@ from trcustoms.audit_logs.serializers import AuditLogListingSerializer
 from trcustoms.mixins import PermissionsMixin
 from trcustoms.permissions import AllowNone, HasPermission
 from trcustoms.users.models import UserPermission
-from trcustoms.utils import parse_bool, parse_id
+from trcustoms.utils import parse_bool, parse_int
 
 
 def split_terms(search: str) -> Iterable[str]:
@@ -75,7 +75,7 @@ def filter_queryset_object_search(qs, search: str | None):
         qs = qs.filter(
             Q(object_type__model__icontains=term)
             | Q(object_name__icontains=term)
-            | Q(object_id=parse_id(term))
+            | Q(object_id=parse_int(term))
         )
     return qs
 

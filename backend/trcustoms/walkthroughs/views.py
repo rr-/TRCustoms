@@ -15,7 +15,7 @@ from trcustoms.permissions import (
     IsAccessingOwnResource,
 )
 from trcustoms.users.models import UserPermission
-from trcustoms.utils import parse_bool, parse_ids
+from trcustoms.utils import parse_bool, parse_ints
 from trcustoms.walkthroughs.consts import WalkthroughStatus
 from trcustoms.walkthroughs.logic import (
     approve_walkthrough,
@@ -103,11 +103,11 @@ class WalkthroughViewSet(
         ):
             queryset = queryset.filter(walkthrough_type=walkthrough_type)
 
-        if author_ids := parse_ids(self.request.query_params.get("authors")):
+        if author_ids := parse_ints(self.request.query_params.get("authors")):
             for author_id in author_ids:
                 queryset = queryset.filter(author_id=author_id)
 
-        if level_ids := parse_ids(self.request.query_params.get("levels")):
+        if level_ids := parse_ints(self.request.query_params.get("levels")):
             for level_id in level_ids:
                 queryset = queryset.filter(level_id=level_id)
 

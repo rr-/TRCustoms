@@ -18,7 +18,7 @@ from trcustoms.reviews.serializers import (
     LevelReviewListingSerializer,
 )
 from trcustoms.users.models import UserPermission
-from trcustoms.utils import parse_ids
+from trcustoms.utils import parse_ints
 
 
 class LevelReviewViewSet(
@@ -87,11 +87,11 @@ class LevelReviewViewSet(
     def get_queryset(self):
         queryset = self.queryset
 
-        if author_ids := parse_ids(self.request.query_params.get("authors")):
+        if author_ids := parse_ints(self.request.query_params.get("authors")):
             for author_id in author_ids:
                 queryset = queryset.filter(author_id=author_id)
 
-        if level_ids := parse_ids(self.request.query_params.get("levels")):
+        if level_ids := parse_ints(self.request.query_params.get("levels")):
             for level_id in level_ids:
                 queryset = queryset.filter(level_id=level_id)
 

@@ -26,6 +26,7 @@ import { NewsEditPage } from "src/components/pages/NewsEditPage";
 import { PasswordResetFinishPage } from "src/components/pages/PasswordResetFinishPage";
 import { PasswordResetPage } from "src/components/pages/PasswordResetPage";
 import { RegisterPage } from "src/components/pages/RegisterPage";
+import { ReviewLevelSuggestionsPage } from "src/components/pages/ReviewLevelSuggestionsPage";
 import { ReviewListPage } from "src/components/pages/ReviewListPage";
 import { SettingsPage } from "src/components/pages/SettingsPage";
 import { TagListPage } from "src/components/pages/TagListPage";
@@ -96,6 +97,10 @@ const App = () => {
               <Route path="/tags" element={<TagListPage />} />
               <Route path="/genres" element={<GenreListPage />} />
               <Route path="/reviews" element={<ReviewListPage />} />
+              <Route
+                path="/reviews/level_suggestions"
+                element={<ReviewLevelSuggestionsPage />}
+              />
               <Route path="/users" element={<UserListPage />} />
               <Route path="/login" element={<LoginPage />} />
               <Route path="/logout" element={<LogoutPage />} />

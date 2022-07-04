@@ -28,7 +28,13 @@ from trcustoms.permissions import (
     IsAccessingOwnResource,
 )
 from trcustoms.users.models import UserPermission
-from trcustoms.utils import parse_bool, parse_ids, slugify, stream_file_field
+from trcustoms.utils import (
+    parse_bool,
+    parse_int,
+    parse_ints,
+    slugify,
+    stream_file_field,
+)
 
 
 class LevelViewSet(
@@ -139,19 +145,19 @@ class LevelViewSet(
                         F("last_file__file__size").desc(nulls_last=True)
                     )
 
-        if author_ids := parse_ids(self.request.query_params.get("authors")):
+        if author_ids := parse_ints(self.request.query_params.get("authors")):
             for author_id in author_ids:
                 queryset = queryset.filter(authors__id=author_id)
 
-        if tag_ids := parse_ids(self.request.query_params.get("tags")):
+        if tag_ids := parse_ints(self.request.query_params.get("tags")):
             for tag_id in tag_ids:
                 queryset = queryset.filter(tags__id=tag_id)
 
-        if genre_ids := parse_ids(self.request.query_params.get("genres")):
+        if genre_ids := parse_ints(self.request.query_params.get("genres")):
             for genre_id in genre_ids:
                 queryset = queryset.filter(genres__id=genre_id)
 
-        if engine_ids := parse_ids(self.request.query_params.get("engines")):
+        if engine_ids := parse_ints(self.request.query_params.get("engines")):
             queryset = queryset.filter(engine__id__in=engine_ids)
 
         if (
@@ -160,6 +166,13 @@ class LevelViewSet(
             )
         ) is not None:
             queryset = queryset.filter(is_approved=is_approved)
+
+        if (
+            reviews_max := parse_int(
+                self.request.query_params.get("reviews_max")
+            )
+        ) is not None:
+            queryset = queryset.filter(review_count__lte=reviews_max)
 
         return queryset
 
