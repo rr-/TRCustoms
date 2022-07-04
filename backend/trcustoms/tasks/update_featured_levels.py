@@ -170,7 +170,7 @@ def update_best_level_in_genre() -> FeaturedLevel | None:
         genre = Genre.objects.get(name=genre_name)
         visited_genre_names.add(genre_name)
 
-        levels = Level.objects.all(genres=genre)
+        levels = Level.objects.filter(genres=genre)
 
         # make sure we pick only the best rated levels
         levels = filter_by_rating_class(
