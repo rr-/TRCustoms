@@ -71,7 +71,7 @@ def stream_file_field(
     )
 
 
-def parse_id(source: str | None) -> int | None:
+def parse_int(source: str | None) -> int | None:
     if not source:
         return None
     try:
@@ -80,7 +80,7 @@ def parse_id(source: str | None) -> int | None:
         return None
 
 
-def parse_ids(source: str | None) -> list[int]:
+def parse_ints(source: str | None) -> list[int]:
     if not source:
         return []
     try:

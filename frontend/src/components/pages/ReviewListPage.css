@@ -1,0 +1,22 @@
+.ReviewListPage {
+  display: grid;
+  grid-template-areas: "sidebar main";
+  grid-template-columns: 25% auto;
+  grid-template-rows: min-content min-content 1fr;
+  gap: 1.5rem;
+}
+@media (max-device-width: 1280px) {
+  .ReviewListPage {
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      "sidebar"
+      "main";
+  }
+}
+
+.ReviewListPage--sidebar {
+  grid-area: sidebar;
+}
+.ReviewListPage--main {
+  grid-area: main;
+}

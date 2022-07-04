@@ -87,6 +87,7 @@ interface LevelSearchQuery extends GenericSearchQuery {
   engines: number[];
   authors: number[];
   isApproved: boolean | null;
+  reviewsMax?: number | undefined | null;
 }
 
 interface LevelSearchResult
@@ -109,6 +110,7 @@ const searchLevels = async (
         : searchQuery.isApproved === false
         ? "0"
         : false,
+    reviews_max: searchQuery.reviewsMax,
   });
   const response = (await api.get(`${API_URL}/levels/`, {
     params,
