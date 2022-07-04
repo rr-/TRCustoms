@@ -1,5 +1,4 @@
 import pytest
-from mimesis import Generic
 from rest_framework import status
 from rest_framework.test import APIClient
 
@@ -12,7 +11,6 @@ def test_tag_merging(
     tag_factory: TagFactory,
     level_factory: LevelFactory,
     admin_api_client: APIClient,
-    fake: Generic,
 ) -> None:
     """Test that tag merging re-adds all old usages to the new tag."""
     level1 = level_factory()
