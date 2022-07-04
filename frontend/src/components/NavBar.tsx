@@ -92,6 +92,9 @@ const NavBar = () => {
               <NavLink to={"/tags"}>Tags</NavLink>
             </li>
             <li className="NavBar--listItem">
+              <NavLink to={"/reviews"}>Reviews</NavLink>
+            </li>
+            <li className="NavBar--listItem">
               <NavLink to={"/about"}>About</NavLink>
             </li>
 
