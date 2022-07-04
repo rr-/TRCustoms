@@ -13,6 +13,7 @@ interface PagedResponse<TItem> {
 
 interface GenericSearchQuery {
   page?: number | null | undefined | typeof DISABLE_PAGING;
+  pageSize?: number | null | undefined;
   sort?: string | null | undefined;
   search?: string | null | undefined;
 }

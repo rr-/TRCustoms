@@ -98,9 +98,6 @@ class WalkthroughViewSet(
     def get_queryset(self):
         queryset = self.queryset
 
-        disable_paging = self.request.query_params.get("disable_paging")
-        self.paginator.disable_paging = False
-
         if walkthrough_type := self.request.query_params.get(
             "walkthrough_type"
         ):
@@ -109,14 +106,10 @@ class WalkthroughViewSet(
         if author_ids := parse_ids(self.request.query_params.get("authors")):
             for author_id in author_ids:
                 queryset = queryset.filter(author_id=author_id)
-            if disable_paging:
-                self.paginator.disable_paging = True
 
         if level_ids := parse_ids(self.request.query_params.get("levels")):
             for level_id in level_ids:
                 queryset = queryset.filter(level_id=level_id)
-            if disable_paging:
-                self.paginator.disable_paging = True
 
         if (
             is_approved := parse_bool(
