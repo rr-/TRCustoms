@@ -6,6 +6,7 @@ import type { CountryListing } from "src/services/ConfigService";
 import type { UploadedFile } from "src/services/FileService";
 import type { GenericSearchQuery } from "src/types";
 import { GenericSearchResult } from "src/types";
+import { filterFalsyObjectValues } from "src/utils/misc";
 import { getGenericSearchQuery } from "src/utils/misc";
 
 interface CountryNested extends CountryListing {}
@@ -66,7 +67,10 @@ interface UserDetails extends UserListing {
   is_superuser: boolean;
 }
 
-interface UserSearchQuery extends GenericSearchQuery {}
+interface UserSearchQuery extends GenericSearchQuery {
+  reviewsMin?: number | undefined | null;
+}
+
 interface UserSearchResult
   extends GenericSearchResult<UserSearchQuery, UserListing> {}
 
@@ -188,7 +192,10 @@ const register = async ({
 const searchUsers = async (
   searchQuery: UserSearchQuery
 ): Promise<UserSearchResult> => {
-  const params = getGenericSearchQuery(searchQuery);
+  const params = filterFalsyObjectValues({
+    ...getGenericSearchQuery(searchQuery),
+    reviews_min: searchQuery.reviewsMin,
+  });
   const response = (await api.get(`${API_URL}/users/`, {
     params,
   })) as AxiosResponse<UserSearchResult>;

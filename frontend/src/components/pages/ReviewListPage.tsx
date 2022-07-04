@@ -47,6 +47,17 @@ const ReviewListPage = () => {
       <div className="ReviewListPage--sidebar">
         <SidebarBox>
           <Section className="ChildMarginClear">
+            <SectionHeader>Reviewer catalogue</SectionHeader>
+            <PushButton
+              to={`/reviews/authors`}
+              isPlain={true}
+              disableTimeout={true}
+            >
+              Find reviewers
+            </PushButton>
+          </Section>
+
+          <Section className="ChildMarginClear">
             <SectionHeader>Least reviewed levels</SectionHeader>
             <PushButton
               to={`/reviews/level_suggestions`}

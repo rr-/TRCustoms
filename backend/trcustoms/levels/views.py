@@ -107,7 +107,7 @@ class LevelViewSet(
         return obj
 
     def get_queryset(self):
-        queryset = self.queryset
+        queryset = super().get_queryset()
 
         if sort_style := self.request.query_params.get("sort"):
             match sort_style:

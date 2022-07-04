@@ -26,6 +26,7 @@ import { NewsEditPage } from "src/components/pages/NewsEditPage";
 import { PasswordResetFinishPage } from "src/components/pages/PasswordResetFinishPage";
 import { PasswordResetPage } from "src/components/pages/PasswordResetPage";
 import { RegisterPage } from "src/components/pages/RegisterPage";
+import { ReviewAuthorsPage } from "src/components/pages/ReviewAuthorsPage";
 import { ReviewLevelSuggestionsPage } from "src/components/pages/ReviewLevelSuggestionsPage";
 import { ReviewListPage } from "src/components/pages/ReviewListPage";
 import { SettingsPage } from "src/components/pages/SettingsPage";
@@ -97,6 +98,7 @@ const App = () => {
               <Route path="/tags" element={<TagListPage />} />
               <Route path="/genres" element={<GenreListPage />} />
               <Route path="/reviews" element={<ReviewListPage />} />
+              <Route path="/reviews/authors" element={<ReviewAuthorsPage />} />
               <Route
                 path="/reviews/level_suggestions"
                 element={<ReviewLevelSuggestionsPage />}
