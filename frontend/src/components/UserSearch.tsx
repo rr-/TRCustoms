@@ -10,22 +10,21 @@ import { TextFormField } from "src/components/formfields/TextFormField";
 import { IconSearch } from "src/components/icons";
 import type { UserSearchQuery } from "src/services/UserService";
 
-const defaultSearchQuery: UserSearchQuery = {
-  page: null,
-  sort: "-date_joined",
-  search: null,
-};
-
 const convertSearchQueryToFormikValues = (searchQuery: UserSearchQuery) => {
   return { search: searchQuery.search || "" };
 };
 
 interface UserSearchProps {
+  defaultSearchQuery: UserSearchQuery;
   searchQuery: UserSearchQuery;
   onSearchQueryChange: (searchQuery: UserSearchQuery) => void;
 }
 
-const UserSearch = ({ searchQuery, onSearchQueryChange }: UserSearchProps) => {
+const UserSearch = ({
+  defaultSearchQuery,
+  searchQuery,
+  onSearchQueryChange,
+}: UserSearchProps) => {
   const [formikValues, setFormikValues] = useState<any>(
     convertSearchQueryToFormikValues(searchQuery)
   );
@@ -48,7 +47,7 @@ const UserSearch = ({ searchQuery, onSearchQueryChange }: UserSearchProps) => {
 
   const handleClear = useCallback(
     () => onSearchQueryChange(defaultSearchQuery),
-    [onSearchQueryChange]
+    [onSearchQueryChange, defaultSearchQuery]
   );
 
   return (
@@ -80,4 +79,4 @@ const UserSearch = ({ searchQuery, onSearchQueryChange }: UserSearchProps) => {
   );
 };
 
-export { defaultSearchQuery, UserSearch };
+export { UserSearch };

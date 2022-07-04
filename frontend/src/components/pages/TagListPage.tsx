@@ -4,12 +4,17 @@ import { useContext } from "react";
 import { QueryPersister } from "src/components/QueryPersister";
 import { deserializeGenericSearchQuery } from "src/components/QueryPersister";
 import { serializeGenericSearchQuery } from "src/components/QueryPersister";
-import { defaultSearchQuery } from "src/components/TagSearch";
 import { TagSearch } from "src/components/TagSearch";
 import { TagsTable } from "src/components/TagsTable";
 import { TitleContext } from "src/contexts/TitleContext";
 import type { TagSearchQuery } from "src/services/TagService";
 import { getCurrentSearchParams } from "src/utils/misc";
+
+const defaultSearchQuery: TagSearchQuery = {
+  page: null,
+  sort: "name",
+  search: null,
+};
 
 const deserializeSearchQuery = (qp: {
   [key: string]: string;
@@ -40,6 +45,7 @@ const TagListPage = () => {
       />
 
       <TagSearch
+        defaultSearchQuery={defaultSearchQuery}
         searchQuery={searchQuery}
         onSearchQueryChange={setSearchQuery}
       />

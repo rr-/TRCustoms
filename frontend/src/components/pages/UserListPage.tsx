@@ -6,12 +6,17 @@ import { QueryPersister } from "src/components/QueryPersister";
 import { deserializeGenericSearchQuery } from "src/components/QueryPersister";
 import { serializeGenericSearchQuery } from "src/components/QueryPersister";
 import { UserSearch } from "src/components/UserSearch";
-import { defaultSearchQuery } from "src/components/UserSearch";
 import { UsersTable } from "src/components/UsersTable";
 import { TitleContext } from "src/contexts/TitleContext";
 import type { UserSearchQuery } from "src/services/UserService";
 import { UserPermission } from "src/services/UserService";
 import { getCurrentSearchParams } from "src/utils/misc";
+
+const defaultSearchQuery: UserSearchQuery = {
+  page: null,
+  sort: "-date_joined",
+  search: null,
+};
 
 const deserializeSearchQuery = (qp: {
   [key: string]: string;
@@ -41,6 +46,7 @@ const UserListPageView = () => {
         setSearchQuery={setSearchQuery}
       />
       <UserSearch
+        defaultSearchQuery={defaultSearchQuery}
         searchQuery={searchQuery}
         onSearchQueryChange={setSearchQuery}
       />

@@ -34,18 +34,10 @@ const sortOptions = [
   { label: "Smallest size", value: "size" },
 ];
 
-const defaultSearchQuery: LevelSearchQuery = {
-  page: null,
-  sort: "-created",
-  search: null,
-  tags: [],
-  genres: [],
-  engines: [],
-  authors: [],
-  isApproved: true,
-};
-
-const convertSearchQueryToFormikValues = (searchQuery: LevelSearchQuery) => {
+const convertSearchQueryToFormikValues = (
+  searchQuery: LevelSearchQuery,
+  defaultSearchQuery: LevelSearchQuery
+) => {
   return {
     sort: searchQuery.sort || defaultSearchQuery.sort,
     search: searchQuery.search || "",
@@ -57,16 +49,18 @@ const convertSearchQueryToFormikValues = (searchQuery: LevelSearchQuery) => {
 };
 
 interface LevelSearchProps {
+  defaultSearchQuery: LevelSearchQuery;
   searchQuery: LevelSearchQuery;
   onSearchQueryChange: (searchQuery: LevelSearchQuery) => void;
 }
 
 const LevelSearchSidebar = ({
+  defaultSearchQuery,
   searchQuery,
   onSearchQueryChange,
 }: LevelSearchProps) => {
   const [formikValues, setFormikValues] = useState<any>(
-    convertSearchQueryToFormikValues(searchQuery)
+    convertSearchQueryToFormikValues(searchQuery, defaultSearchQuery)
   );
 
   const handleSubmit = useCallback(
@@ -121,12 +115,15 @@ const LevelSearchSidebar = ({
 
   const handleClear = useCallback(
     () => onSearchQueryChange(defaultSearchQuery),
-    [onSearchQueryChange]
+    [onSearchQueryChange, defaultSearchQuery]
   );
 
   useEffect(
-    () => setFormikValues(convertSearchQueryToFormikValues(searchQuery)),
-    [searchQuery]
+    () =>
+      setFormikValues(
+        convertSearchQueryToFormikValues(searchQuery, defaultSearchQuery)
+      ),
+    [searchQuery, defaultSearchQuery]
   );
 
   return (
@@ -209,4 +206,4 @@ const LevelSearchSidebar = ({
   );
 };
 
-export { defaultSearchQuery, LevelSearchSidebar };
+export { LevelSearchSidebar };

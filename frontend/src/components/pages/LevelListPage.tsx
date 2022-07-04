@@ -2,7 +2,6 @@ import "./LevelListPage.css";
 import { useEffect } from "react";
 import { useState } from "react";
 import { useContext } from "react";
-import { defaultSearchQuery } from "src/components/LevelSearchSidebar";
 import { LevelSearchSidebar } from "src/components/LevelSearchSidebar";
 import { LevelsTable } from "src/components/LevelsTable";
 import { QueryPersister } from "src/components/QueryPersister";
@@ -12,6 +11,17 @@ import { TitleContext } from "src/contexts/TitleContext";
 import type { LevelSearchQuery } from "src/services/LevelService";
 import { filterFalsyObjectValues } from "src/utils/misc";
 import { getCurrentSearchParams } from "src/utils/misc";
+
+const defaultSearchQuery: LevelSearchQuery = {
+  page: null,
+  sort: "-created",
+  search: null,
+  tags: [],
+  genres: [],
+  engines: [],
+  authors: [],
+  isApproved: true,
+};
 
 const deserializeSearchQuery = (qp: {
   [key: string]: string;
@@ -60,6 +70,7 @@ const LevelListPage = () => {
       />
       <div className="LevelListPage--sidebar">
         <LevelSearchSidebar
+          defaultSearchQuery={defaultSearchQuery}
           searchQuery={searchQuery}
           onSearchQueryChange={setSearchQuery}
         />

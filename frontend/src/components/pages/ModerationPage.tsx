@@ -2,10 +2,7 @@ import "./ModerationPage.css";
 import { useState } from "react";
 import { useEffect } from "react";
 import { useContext } from "react";
-import {
-  defaultSearchQuery,
-  AuditLogSearch,
-} from "src/components/AuditLogSearch";
+import { AuditLogSearch } from "src/components/AuditLogSearch";
 import { AuditLogTable } from "src/components/AuditLogTable";
 import { InfoMessage } from "src/components/InfoMessage";
 import { InfoMessageType } from "src/components/InfoMessage";
@@ -21,6 +18,12 @@ import type { AuditLogSearchQuery } from "src/services/AuditLogService";
 import { UserPermission } from "src/services/UserService";
 import { filterFalsyObjectValues } from "src/utils/misc";
 import { getCurrentSearchParams } from "src/utils/misc";
+
+const defaultSearchQuery: AuditLogSearchQuery = {
+  isActionRequired: null,
+  page: null,
+  sort: "-created",
+};
 
 const deserializeSearchQuery = (qp: {
   [key: string]: string;
@@ -73,6 +76,7 @@ const ModerationPageView = () => {
           }
         >
           <AuditLogSearch
+            defaultSearchQuery={defaultSearchQuery}
             searchQuery={searchQuery}
             onSearchQueryChange={setSearchQuery}
           />

@@ -144,12 +144,6 @@ const StateSearches: StateSearchSection[] = [
   },
 ];
 
-const defaultSearchQuery: AuditLogSearchQuery = {
-  isActionRequired: null,
-  page: null,
-  sort: "-created",
-};
-
 const convertSearchQueryToFormikValues = (searchQuery: AuditLogSearchQuery) => {
   return {
     userSearch: searchQuery.userSearch || "",
@@ -159,11 +153,13 @@ const convertSearchQueryToFormikValues = (searchQuery: AuditLogSearchQuery) => {
 };
 
 interface AuditLogSearchProps {
+  defaultSearchQuery: AuditLogSearchQuery;
   searchQuery: AuditLogSearchQuery;
   onSearchQueryChange: (searchQuery: AuditLogSearchQuery) => void;
 }
 
 const AuditLogSearch = ({
+  defaultSearchQuery,
   searchQuery,
   onSearchQueryChange,
 }: AuditLogSearchProps) => {
@@ -195,7 +191,7 @@ const AuditLogSearch = ({
       onSearchQueryChange(defaultSearchQuery);
       resetForm();
     },
-    [onSearchQueryChange]
+    [onSearchQueryChange, defaultSearchQuery]
   );
 
   const handleStateSearchCheckboxChange = (
@@ -297,4 +293,4 @@ const AuditLogSearch = ({
   );
 };
 
-export { defaultSearchQuery, AuditLogSearch };
+export { AuditLogSearch };

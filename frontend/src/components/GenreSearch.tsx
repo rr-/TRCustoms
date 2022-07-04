@@ -10,22 +10,18 @@ import { TextFormField } from "src/components/formfields/TextFormField";
 import { IconSearch } from "src/components/icons";
 import type { GenreSearchQuery } from "src/services/GenreService";
 
-const defaultSearchQuery: GenreSearchQuery = {
-  page: null,
-  sort: "name",
-  search: null,
-};
-
 const convertSearchQueryToFormikValues = (searchQuery: GenreSearchQuery) => {
   return { search: searchQuery.search || "" };
 };
 
 interface GenreSearchProps {
+  defaultSearchQuery: GenreSearchQuery;
   searchQuery: GenreSearchQuery;
   onSearchQueryChange: (searchQuery: GenreSearchQuery) => void;
 }
 
 const GenreSearch = ({
+  defaultSearchQuery,
   searchQuery,
   onSearchQueryChange,
 }: GenreSearchProps) => {
@@ -46,7 +42,7 @@ const GenreSearch = ({
 
   const handleClear = useCallback(
     () => onSearchQueryChange(defaultSearchQuery),
-    [onSearchQueryChange]
+    [onSearchQueryChange, defaultSearchQuery]
   );
 
   useEffect(
@@ -83,4 +79,4 @@ const GenreSearch = ({
   );
 };
 
-export { defaultSearchQuery, GenreSearch };
+export { GenreSearch };
