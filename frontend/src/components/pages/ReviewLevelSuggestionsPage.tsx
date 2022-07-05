@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useState } from "react";
 import { useContext } from "react";
-import { LevelsTable } from "src/components/LevelsTable";
+import { LevelList } from "src/components/LevelList";
 import { QueryPersister } from "src/components/QueryPersister";
 import { deserializeGenericSearchQuery } from "src/components/QueryPersister";
 import { serializeGenericSearchQuery } from "src/components/QueryPersister";
@@ -53,7 +53,7 @@ const ReviewLevelSuggestionsPage = () => {
       />
 
       <div className="ReviewLevelSuggestionsPage--results">
-        <LevelsTable
+        <LevelList
           searchQuery={searchQuery}
           onSearchQueryChange={setSearchQuery}
         />

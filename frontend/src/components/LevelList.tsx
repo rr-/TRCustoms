@@ -1,4 +1,4 @@
-import "./LevelsTable.css";
+import "./LevelList.css";
 import { Link } from "react-router-dom";
 import { DataList } from "src/components/DataList";
 import { LevelRating } from "src/components/LevelRating";
@@ -17,7 +17,7 @@ import { formatFileSize } from "src/utils/string";
 import { EMPTY_INPUT_PLACEHOLDER } from "src/utils/string";
 import { pluralize } from "src/utils/string";
 
-interface LevelsTableProps {
+interface LevelListProps {
   showStatus?: boolean | undefined;
   searchQuery: LevelSearchQuery;
   onSearchQueryChange?: ((searchQuery: LevelSearchQuery) => void) | undefined;
@@ -102,11 +102,11 @@ const LevelView = ({ showStatus, level }: LevelViewProps) => {
   );
 };
 
-const LevelsTable = ({
+const LevelList = ({
   showStatus,
   searchQuery,
   onSearchQueryChange,
-}: LevelsTableProps) => {
+}: LevelListProps) => {
   const itemKey = (level: LevelListing) => `${level.id}`;
   const itemView = (level: LevelListing) => (
     <LevelView showStatus={showStatus} level={level} />
@@ -114,7 +114,7 @@ const LevelsTable = ({
 
   return (
     <DataList
-      className="LevelsTable"
+      className="LevelList"
       queryName="levels"
       itemKey={itemKey}
       itemView={itemView}
@@ -125,4 +125,4 @@ const LevelsTable = ({
   );
 };
 
-export { LevelsTable };
+export { LevelList };
