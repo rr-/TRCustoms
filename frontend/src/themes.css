@@ -9,7 +9,6 @@
   --article-bg-color: var(--label-bg-color);
   --news-bg-color: var(--article-bg-color);
   --section-border-color: var(--button-bg-color);
-  --button-link-color: var(--link-color);
   --message-bg-color: var(--blockquote-bg-color);
   --message-accent-bg-color: var(--blockquote-border-color);
   --message-accent-fg-color: var(--fg-color);
@@ -74,7 +73,6 @@
   --input-fg-color: var(--fg-color);
   --button-bg-color: grey;
   --button-fg-color: white;
-  --button-link-color: var(--fg-color);
   --button-hovered-bg-color: silver;
   --button-text-decoration: none;
   --label-bg-color: var(--navbar-bg-color);
@@ -279,7 +277,6 @@
   --input-fg-color: black;
   --button-bg-color: #00008b;
   --button-fg-color: white;
-  --button-link-color: var(--fg-color);
   --button-hovered-bg-color: #5f5fb4;
   --button-text-decoration: none;
   --label-bg-color: var(--navbar-bg-color);
@@ -291,10 +288,11 @@
   --reviews-positive-bg-color: hsl(110, 40%, 70%);
   --reviews-neutral-bg-color: hsl(60deg 33% 69%);
   --reviews-negative-bg-color: hsl(0, 40%, 75%);
-  --stats-positive-bar-color: #538f38;
-  --stats-neutral-bar-color: #7b6032;
-  --stats-negative-bar-color: #a62626;
-  --stats-hover-filter: brightness(190%);
+  --stats-positive-bar-color: #559b2f;
+  --stats-neutral-bar-color: #bba934;
+  --stats-negative-bar-color: #be381a;
+  --stats-hover-filter: brightness(120%);
+  --walkthroughs-hover-filter: brightness(0%);
   --message-bg-color: var(--sidebar-bg-color);
   --blockquote-bg-color: var(--bg-color);
   --blockquote-border-color: var(--link-color);
@@ -332,7 +330,7 @@
   --stats-neutral-bar-color: #7b6032;
   --stats-negative-bar-color: #a62626;
   --stats-hover-filter: brightness(190%);
-  --walkthroughs-hover-filter: brightness(140%);
+  --walkthroughs-hover-filter: invert() brightness(0.7) invert();
   --message-bg-color: var(--sidebar-bg-color);
   --blockquote-bg-color: var(--bg-color);
   --blockquote-border-color: var(--link-color);

@@ -41,5 +41,8 @@
 .PushButton--link {
   display: inline-flex;
   gap: 0.5rem;
-  color: var(--button-link-color);
+  color: var(--link-color);
+}
+.PushButton--link:hover {
+  color: var(--link-highlight-fg-color);
 }
