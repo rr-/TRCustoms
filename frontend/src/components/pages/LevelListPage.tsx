@@ -2,8 +2,8 @@ import "./LevelListPage.css";
 import { useEffect } from "react";
 import { useState } from "react";
 import { useContext } from "react";
+import { LevelList } from "src/components/LevelList";
 import { LevelSearchSidebar } from "src/components/LevelSearchSidebar";
-import { LevelsTable } from "src/components/LevelsTable";
 import { QueryPersister } from "src/components/QueryPersister";
 import { deserializeGenericSearchQuery } from "src/components/QueryPersister";
 import { serializeGenericSearchQuery } from "src/components/QueryPersister";
@@ -77,7 +77,7 @@ const LevelListPage = () => {
       </div>
 
       <div className="LevelListPage--results">
-        <LevelsTable
+        <LevelList
           searchQuery={searchQuery}
           onSearchQueryChange={setSearchQuery}
         />

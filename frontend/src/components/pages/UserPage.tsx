@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useEffect } from "react";
 import { useParams } from "react-router-dom";
-import { LevelsTable } from "src/components/LevelsTable";
+import { LevelList } from "src/components/LevelList";
 import { ReviewsList } from "src/components/ReviewsList";
 import { Section } from "src/components/Section";
 import { SectionHeader } from "src/components/Section";
@@ -58,7 +58,7 @@ const UserPageView = ({ user, isLoggedIn }: UserBasePageChildRenderProps) => {
 
       <Section className="UserPage--authoredLevels">
         <SectionHeader>Levels authored</SectionHeader>
-        <LevelsTable
+        <LevelList
           showStatus={isLoggedIn}
           searchQuery={levelSearchQuery}
           onSearchQueryChange={setLevelSearchQuery}
