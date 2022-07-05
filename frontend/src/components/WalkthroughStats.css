@@ -32,9 +32,9 @@
 }
 
 .WalkthroughStats--listItem:hover {
-  filter: var(--walkthroughs-hover-filter);
 }
 .WalkthroughStats--indicator:hover {
+  filter: var(--walkthroughs-hover-filter);
 }
 
 .WalkthroughStats--footer {
