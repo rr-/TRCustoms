@@ -8,6 +8,7 @@ import { UserSearch } from "src/components/UserSearch";
 import { UsersTable } from "src/components/UsersTable";
 import { TitleContext } from "src/contexts/TitleContext";
 import type { UserSearchQuery } from "src/services/UserService";
+import { filterFalsyObjectValues } from "src/utils/misc";
 import { getCurrentSearchParams } from "src/utils/misc";
 
 const defaultSearchQuery: UserSearchQuery = {
@@ -15,6 +16,7 @@ const defaultSearchQuery: UserSearchQuery = {
   sort: "-date_joined",
   search: null,
   reviewsMin: 1,
+  hideInactiveReviewers: false,
 };
 
 const deserializeSearchQuery = (qp: {
@@ -22,12 +24,16 @@ const deserializeSearchQuery = (qp: {
 }): UserSearchQuery => ({
   ...defaultSearchQuery,
   ...deserializeGenericSearchQuery(qp, defaultSearchQuery),
+  hideInactiveReviewers: qp.hide_inactive === "1",
 });
 
 const serializeSearchQuery = (
   searchQuery: UserSearchQuery
 ): { [key: string]: any } =>
-  serializeGenericSearchQuery(searchQuery, defaultSearchQuery);
+  filterFalsyObjectValues({
+    ...serializeGenericSearchQuery(searchQuery, defaultSearchQuery),
+    hide_inactive: searchQuery.hideInactiveReviewers === true ? "1" : null,
+  });
 
 const ReviewAuthorsPage = () => {
   const { setTitle } = useContext(TitleContext);
@@ -51,6 +57,7 @@ const ReviewAuthorsPage = () => {
         defaultSearchQuery={defaultSearchQuery}
         searchQuery={searchQuery}
         onSearchQueryChange={setSearchQuery}
+        showInactiveReviewersCheckbox={true}
       />
 
       <UsersTable

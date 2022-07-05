@@ -1,5 +1,8 @@
+from datetime import timedelta
+
 from django.db.models import Q
 from django.http import Http404
+from django.utils import timezone
 from rest_framework import mixins, status, viewsets
 from rest_framework.decorators import action
 from rest_framework.generics import get_object_or_404
@@ -117,6 +120,13 @@ class UserViewSet(
             )
         ) is not None:
             queryset = queryset.filter(reviewed_level_count__gte=reviews_min)
+
+        if parse_int(self.request.query_params.get("hide_inactive_reviewers")):
+            queryset = queryset.filter(
+                reviewed_levels__created__gte=(
+                    timezone.now() - timedelta(days=365 / 2)
+                )
+            ).distinct()
 
         return queryset
 
