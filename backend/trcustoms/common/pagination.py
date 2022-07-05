@@ -11,11 +11,15 @@ class CustomPagination(pagination.PageNumberPagination):
             {
                 "current_page": self.page.number,
                 "last_page": (
-                    (self.page.paginator.count + self.page_size - 1)
-                    // self.page_size
+                    (
+                        self.page.paginator.count
+                        + self.page.paginator.per_page
+                        - 1
+                    )
+                    // self.page.paginator.per_page
                 ),
                 "total_count": self.page.paginator.count,
-                "items_on_page": self.page_size,
+                "items_on_page": self.page.paginator.per_page,
                 "next": self.get_next_link(),
                 "previous": self.get_previous_link(),
                 "results": data,
