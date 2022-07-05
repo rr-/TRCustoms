@@ -1,6 +1,3 @@
-.DataList > *:first-child {
-  margin-top: 0;
-}
-.DataList > *:last-child {
-  margin-bottom: 0;
+.DataList--page {
+  display: contents;
 }
