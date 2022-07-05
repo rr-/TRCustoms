@@ -1,0 +1,15 @@
+.UserFancyList > .DataList--body {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  justify-content: space-between;
+}
+
+.UserView {
+  background: var(--sidebar-bg-color);
+  padding: 0.5rem;
+}
+
+.UserView .UserPicture {
+  max-width: 14rem;
+}

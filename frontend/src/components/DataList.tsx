@@ -55,11 +55,13 @@ const PagedDataList = <TItem extends {}, TQuery extends GenericSearchQuery>({
   }
 
   return (
-    <div className={`DataList ${className || ""}`}>
+    <div className={`DataList ChildMarginClear ${className || ""}`}>
       {result.data.results.length ? (
-        result.data.results.map((item) => (
-          <Fragment key={itemKey(item)}>{itemView(item)}</Fragment>
-        ))
+        <div className="DataList--body">
+          {result.data.results.map((item) => (
+            <Fragment key={itemKey(item)}>{itemView(item)}</Fragment>
+          ))}
+        </div>
       ) : (
         <p>There are no results to show.</p>
       )}
@@ -129,18 +131,20 @@ const InfiniteDataList = <TItem extends {}, TQuery extends GenericSearchQuery>({
   }, [onResultCountChange, result]);
 
   return (
-    <div className={`DataList ${className}`}>
+    <div className={`DataList ChildMarginClear ${className}`}>
       {result.data?.pages?.[0]?.total_count === 0 && (
         <p>There are no results to show.</p>
       )}
 
-      {result.data?.pages?.map((result, i) => (
-        <div key={`body${i}`} className="DataList--page">
-          {result.results.map((item) => (
-            <Fragment key={itemKey(item)}>{itemView(item)}</Fragment>
-          ))}
-        </div>
-      ))}
+      <div className="DataList--body">
+        {result.data?.pages?.map((result, i) => (
+          <div key={`body${i}`} className="DataList--page">
+            {result.results.map((item) => (
+              <Fragment key={itemKey(item)}>{itemView(item)}</Fragment>
+            ))}
+          </div>
+        ))}
+      </div>
 
       <span ref={infiniteScrollRef} />
 

@@ -4,7 +4,7 @@ import { useContext } from "react";
 import { QueryPersister } from "src/components/QueryPersister";
 import { deserializeGenericSearchQuery } from "src/components/QueryPersister";
 import { serializeGenericSearchQuery } from "src/components/QueryPersister";
-import { UserList } from "src/components/UserList";
+import { UserFancyList } from "src/components/UserFancyList";
 import { UserSearch } from "src/components/UserSearch";
 import { TitleContext } from "src/contexts/TitleContext";
 import type { UserSearchQuery } from "src/services/UserService";
@@ -13,6 +13,7 @@ import { getCurrentSearchParams } from "src/utils/misc";
 
 const defaultSearchQuery: UserSearchQuery = {
   page: null,
+  pageSize: 10,
   sort: "-date_joined",
   search: null,
   reviewsMin: 1,
@@ -60,7 +61,7 @@ const ReviewAuthorsPage = () => {
         showInactiveReviewersCheckbox={true}
       />
 
-      <UserList
+      <UserFancyList
         searchQuery={searchQuery}
         onSearchQueryChange={setSearchQuery}
       />
