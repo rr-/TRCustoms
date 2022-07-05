@@ -53,6 +53,7 @@ const ReviewListPage = () => {
               isPlain={true}
               disableTimeout={true}
             >
+              <img src="/reviewer_catalogue.jpg" alt="Reviewer catalogue" />
               Find reviewers
             </PushButton>
           </Section>
@@ -64,6 +65,10 @@ const ReviewListPage = () => {
               isPlain={true}
               disableTimeout={true}
             >
+              <img
+                src="/least_reviewed_levels.jpg"
+                alt="Least reviewed levels"
+              />
               Review less known levels
             </PushButton>
             <p>
