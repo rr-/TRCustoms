@@ -5,8 +5,8 @@ import { PageGuard } from "src/components/PermissionGuard";
 import { QueryPersister } from "src/components/QueryPersister";
 import { deserializeGenericSearchQuery } from "src/components/QueryPersister";
 import { serializeGenericSearchQuery } from "src/components/QueryPersister";
+import { UserList } from "src/components/UserList";
 import { UserSearch } from "src/components/UserSearch";
-import { UsersTable } from "src/components/UsersTable";
 import { TitleContext } from "src/contexts/TitleContext";
 import type { UserSearchQuery } from "src/services/UserService";
 import { UserPermission } from "src/services/UserService";
@@ -51,7 +51,7 @@ const UserListPageView = () => {
         onSearchQueryChange={setSearchQuery}
       />
 
-      <UsersTable
+      <UserList
         searchQuery={searchQuery}
         onSearchQueryChange={setSearchQuery}
       />

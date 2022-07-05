@@ -1,0 +1,14 @@
+.UserList--username {
+  width: 24%;
+}
+.UserList--firstName,
+.UserList--lastName {
+  width: 18%;
+}
+.UserList--created,
+.UserList--lastLogin,
+.UserList--updated,
+.UserList--authoredLevelCount {
+  width: 10%;
+  white-space: nowrap;
+}

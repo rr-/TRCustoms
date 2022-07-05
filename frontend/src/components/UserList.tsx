@@ -1,4 +1,4 @@
-import "./UsersTable.css";
+import "./UserList.css";
 import type { DataTableColumn } from "src/components/DataTable";
 import { DataTable } from "src/components/DataTable";
 import { UserLink } from "src/components/links/UserLink";
@@ -8,12 +8,12 @@ import { UserService } from "src/services/UserService";
 import { formatDate } from "src/utils/string";
 import { EMPTY_INPUT_PLACEHOLDER } from "src/utils/string";
 
-interface UsersTableProps {
+interface UserListProps {
   searchQuery: UserSearchQuery;
   onSearchQueryChange?: ((searchQuery: UserSearchQuery) => void) | undefined;
 }
 
-const UsersTable = ({ searchQuery, onSearchQueryChange }: UsersTableProps) => {
+const UserList = ({ searchQuery, onSearchQueryChange }: UserListProps) => {
   const columns: DataTableColumn<UserListing>[] = [
     {
       name: "username",
@@ -63,7 +63,7 @@ const UsersTable = ({ searchQuery, onSearchQueryChange }: UsersTableProps) => {
 
   return (
     <DataTable
-      className="UsersTable"
+      className="UserList"
       queryName="users"
       columns={columns}
       itemKey={itemKey}
@@ -74,4 +74,4 @@ const UsersTable = ({ searchQuery, onSearchQueryChange }: UsersTableProps) => {
   );
 };
 
-export { UsersTable };
+export { UserList };
