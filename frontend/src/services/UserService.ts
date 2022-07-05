@@ -68,7 +68,8 @@ interface UserDetails extends UserListing {
 }
 
 interface UserSearchQuery extends GenericSearchQuery {
-  reviewsMin?: number | undefined | null;
+  reviewsMin?: number | undefined;
+  hideInactiveReviewers?: boolean | undefined;
 }
 
 interface UserSearchResult
@@ -195,6 +196,12 @@ const searchUsers = async (
   const params = filterFalsyObjectValues({
     ...getGenericSearchQuery(searchQuery),
     reviews_min: searchQuery.reviewsMin,
+    hide_inactive_reviewers:
+      searchQuery.hideInactiveReviewers === true
+        ? "1"
+        : searchQuery.hideInactiveReviewers === false
+        ? "0"
+        : false,
   });
   const response = (await api.get(`${API_URL}/users/`, {
     params,
