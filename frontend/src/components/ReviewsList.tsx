@@ -108,7 +108,7 @@ const ReviewView = ({ review, showLevels, showExcerpts }: ReviewViewProps) => {
         <div className="Review--footerInfo">
           <UserLink className="Review--userLink" user={review.author}>
             <>
-              <UserPicture className="Review--userPic" user={review.author} />
+              <UserPicture user={review.author} />
               {review.author.username}
             </>
           </UserLink>

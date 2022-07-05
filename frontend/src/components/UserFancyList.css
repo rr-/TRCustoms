@@ -11,8 +11,3 @@
   overflow: hidden;
   text-overflow: ellipsis;
 }
-
-.UserView .UserPicture {
-  max-width: 100%;
-  aspect-ratio: 1;
-}

@@ -1,4 +1,3 @@
-import "./UserSidebar.css";
 import { useNavigate } from "react-router-dom";
 import { DefinitionItemGroup } from "src/components/DefinitionList";
 import { DefinitionItem } from "src/components/DefinitionList";
@@ -7,6 +6,7 @@ import { PermissionGuard } from "src/components/PermissionGuard";
 import { PushButton } from "src/components/PushButton";
 import { SectionHeader } from "src/components/Section";
 import { SidebarBox } from "src/components/SidebarBox";
+import { UserPictureMode } from "src/components/UserPicture";
 import { UserPicture } from "src/components/UserPicture";
 import { UserActivatePushButton } from "src/components/buttons/UserActivatePushButton";
 import { UserBanPushButton } from "src/components/buttons/UserBanPushButton";
@@ -52,11 +52,7 @@ const UserSidebar = ({ user }: UserSidebarProps) => {
 
   return (
     <SidebarBox
-      header={
-        <div className="UserSidebar--picture">
-          <UserPicture user={user} />
-        </div>
-      }
+      header={<UserPicture user={user} mode={UserPictureMode.Full} />}
       actions={
         <>
           {user.website_url && (
