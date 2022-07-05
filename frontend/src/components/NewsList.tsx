@@ -44,7 +44,7 @@ const NewsView = ({ news }: NewsViewProps) => {
           {news.authors.map((author) => (
             <UserLink key={author.id} className="News--userLink" user={author}>
               <>
-                <UserPicture className="News--userPic" user={author} />
+                <UserPicture user={author} />
                 {author.username}
               </>
             </UserLink>

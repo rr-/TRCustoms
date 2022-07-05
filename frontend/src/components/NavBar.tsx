@@ -55,7 +55,7 @@ const NavBar = () => {
                     className="NavBar--userPicLink"
                     to={`/users/${user.id}`}
                   >
-                    <UserPicture className="NavBar--userPic" user={user} />
+                    <UserPicture user={user} />
                     {user.username}
                   </Link>
                 </li>

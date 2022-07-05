@@ -46,9 +46,7 @@
 }
 
 .News--userPic {
-  display: block;
   width: 2rem;
-  max-height: 100%;
 }
 
 .News--userInfo {

@@ -1,13 +1,12 @@
 import "./UserFancyList.css";
-import { Link } from "react-router-dom";
 import { DataList } from "src/components/DataList";
+import { UserPictureMode } from "src/components/UserPicture";
 import { UserPicture } from "src/components/UserPicture";
 import { UserLink } from "src/components/links/UserLink";
 import type { UserListing } from "src/services/UserService";
 import type { UserSearchQuery } from "src/services/UserService";
 import { UserService } from "src/services/UserService";
 import { formatDate } from "src/utils/string";
-import { EMPTY_INPUT_PLACEHOLDER } from "src/utils/string";
 
 interface UserViewProps {
   user: UserListing;
@@ -17,7 +16,7 @@ const UserView = ({ user }: UserViewProps) => {
   return (
     <article className="UserView">
       <UserLink user={user}>
-        <UserPicture user={user} />
+        <UserPicture user={user} mode={UserPictureMode.Medium} />
         <br />
         {user.username}
       </UserLink>
