@@ -6,7 +6,7 @@
 }
 
 .UserView {
-  background: var(--sidebar-bg-color);
+  background: var(--levels-table-bg-color);
   padding: 0.5rem;
 }
 
