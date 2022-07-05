@@ -4,8 +4,8 @@ import { useContext } from "react";
 import { QueryPersister } from "src/components/QueryPersister";
 import { deserializeGenericSearchQuery } from "src/components/QueryPersister";
 import { serializeGenericSearchQuery } from "src/components/QueryPersister";
+import { UserList } from "src/components/UserList";
 import { UserSearch } from "src/components/UserSearch";
-import { UsersTable } from "src/components/UsersTable";
 import { TitleContext } from "src/contexts/TitleContext";
 import type { UserSearchQuery } from "src/services/UserService";
 import { filterFalsyObjectValues } from "src/utils/misc";
@@ -60,7 +60,7 @@ const ReviewAuthorsPage = () => {
         showInactiveReviewersCheckbox={true}
       />
 
-      <UsersTable
+      <UserList
         searchQuery={searchQuery}
         onSearchQueryChange={setSearchQuery}
       />
