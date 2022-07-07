@@ -1,5 +1,5 @@
 from django.db import models
-from django.db.models import Count, UniqueConstraint
+from django.db.models import UniqueConstraint
 from django.db.models.functions import Lower
 
 from trcustoms.audit_logs import registry
@@ -46,9 +46,6 @@ class LevelDifficulty(DatesInfo):
 
 
 class LevelQuerySet(models.QuerySet):
-    def with_review_count(self):
-        return self.annotate(review_count=Count("reviews"))
-
     def with_video_only_walkthroughs(self):
         return self.filter(
             walkthroughs__walkthrough_type=WalkthroughType.LINK,
@@ -122,6 +119,7 @@ class Level(DatesInfo):
     )
 
     # denormalized fields for faster db lookups
+    review_count = models.PositiveIntegerField(default=0)
     download_count = models.IntegerField(default=0)
     last_file = models.OneToOneField(
         "LevelFile",
@@ -137,6 +135,12 @@ class Level(DatesInfo):
 
     def __str__(self) -> str:
         return f"{self.name} (id={self.pk})"
+
+    def update_review_count(self) -> None:
+        review_count = self.reviews.count()
+        if review_count != self.review_count:
+            self.review_count = review_count
+            self.save(update_fields=["review_count"])
 
     def update_download_count(self) -> None:
         download_count = sum(

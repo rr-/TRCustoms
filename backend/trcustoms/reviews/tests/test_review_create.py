@@ -237,3 +237,26 @@ def test_review_creation_fails_if_already_reviewed(
 
     assert response.status_code == status.HTTP_400_BAD_REQUEST, data
     assert data == {"detail": ["This user has already reviewed this level."]}
+
+
+@pytest.mark.django_db
+def test_review_creation_updates_level_review_count(
+    auth_api_client: APIClient,
+) -> None:
+    level = LevelFactory()
+
+    response = auth_api_client.post(
+        "/api/reviews/",
+        format="json",
+        data={
+            "level_id": level.id,
+            "text": "test",
+            "answer_ids": [],
+        },
+    )
+    data = response.json()
+    level.refresh_from_db()
+
+    assert response.status_code == status.HTTP_201_CREATED, data
+    assert level.reviews.count() == 1  # pylint: disable=no-member
+    assert level.review_count == 1

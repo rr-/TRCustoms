@@ -106,3 +106,33 @@ def test_review_update_rating_classes(
 
     review.refresh_from_db()
     assert review.rating_class.name == "Positive"
+
+
+@pytest.mark.django_db
+def test_review_update_updates_level_review_count(
+    auth_api_client: APIClient,
+) -> None:
+    level1 = LevelFactory()
+    level2 = LevelFactory()
+    review = ReviewFactory(level=level1, author=auth_api_client.user)
+
+    response = auth_api_client.patch(
+        f"/api/reviews/{review.id}/",
+        format="json",
+        data={
+            "level_id": level2.id,
+            "text": "test",
+            "answer_ids": [],
+        },
+    )
+    data = response.json()
+    level1.refresh_from_db()
+    level2.refresh_from_db()
+    review.refresh_from_db()
+
+    assert response.status_code == status.HTTP_200_OK, data
+    assert review.level == level2
+    assert level1.reviews.count() == 0  # pylint: disable=no-member
+    assert level1.review_count == 0
+    assert level2.reviews.count() == 1  # pylint: disable=no-member
+    assert level2.review_count == 1

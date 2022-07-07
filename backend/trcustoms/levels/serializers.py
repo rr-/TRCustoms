@@ -146,14 +146,10 @@ class LevelListingSerializer(serializers.ModelSerializer):
         ),
     )
 
-    review_count = serializers.SerializerMethodField(read_only=True)
     last_file = serializers.SerializerMethodField(read_only=True)
     cover = UploadedFileNestedSerializer(read_only=True)
     screenshots = LevelScreenshotSerializer(read_only=True, many=True)
     external_links = LevelExternalLinkSerializer(required=False, many=True)
-
-    def get_review_count(self, instance: Level) -> int | None:
-        return getattr(instance, "review_count", None)
 
     def get_last_file(self, instance: Level) -> dict[str, Any] | None:
         """Get last file ID from the LevelViewSet's annotated queryset."""
