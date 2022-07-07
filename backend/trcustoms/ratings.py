@@ -30,12 +30,15 @@ def get_review_score(review: LevelReview) -> float:
         )
 
     if review.review_type == LevelReview.ReviewType.TRC:
+        max_score = get_max_review_score()
+        if not max_score:
+            return 0
         return (
             review.answers.annotate(
                 value=F("points") * F("question__weight")
             ).aggregate(Sum("value"))["value__sum"]
             or 0
-        ) / get_max_review_score()
+        ) / max_score
 
     assert False, "Invalid review type"
 

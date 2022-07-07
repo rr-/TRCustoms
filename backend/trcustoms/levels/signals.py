@@ -52,13 +52,13 @@ def update_level_author_info_on_authors_change(
 
 @receiver(pre_delete, sender=Level)
 def remember_level_authors_and_reviews(sender, instance, using, **kwargs):
-    instance.cached_authors = instance.authors.all()
-    instance.cached_reviews = instance.reviews.all()
+    instance._old_authors = instance.authors.all()
+    instance._old_reviews = instance.reviews.all()
 
 
 @receiver(post_delete, sender=Level)
 def update_level_author_info_on_delete(sender, instance, **kwargs):
-    for author in instance.cached_authors:
+    for author in instance._old_authors:
         author.update_authored_level_count()
-    for review in instance.cached_reviews:
+    for review in instance._old_reviews:
         review.author.update_reviewed_level_count()

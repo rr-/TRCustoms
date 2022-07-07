@@ -65,25 +65,21 @@ class LevelViewSet(
     }
     audit_log_review_create = True
 
-    queryset = (
-        Level.objects.with_review_count()
-        .prefetch_related(
-            "engine",
-            "authors",
-            "genres",
-            "tags",
-            "duration",
-            "difficulty",
-            "last_file",
-            "last_file__file",
-            "screenshots",
-            "screenshots__file",
-            "external_links",
-            "cover",
-            "rating_class",
-        )
-        .distinct()
-    )
+    queryset = Level.objects.prefetch_related(
+        "engine",
+        "authors",
+        "genres",
+        "tags",
+        "duration",
+        "difficulty",
+        "last_file",
+        "last_file__file",
+        "screenshots",
+        "screenshots__file",
+        "external_links",
+        "cover",
+        "rating_class",
+    ).distinct()
 
     serializer_class = LevelListingSerializer
     serializer_class_by_action = {

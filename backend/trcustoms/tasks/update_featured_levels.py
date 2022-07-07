@@ -1,7 +1,7 @@
 import random
 from datetime import timedelta
 
-from django.db.models import Count, QuerySet
+from django.db.models import QuerySet
 from django.utils import timezone
 
 from trcustoms.celery import app, logger
@@ -98,9 +98,7 @@ def update_monthly_hidden_gem() -> FeaturedLevel | None:
     levels = filter_only_least_downloaded(levels, 2 / 3)
 
     # only pick levels that have not too many reviews
-    levels = levels.annotate(
-        review_count=Count("reviews", distinct=True)
-    ).filter(review_count__lt=15)
+    levels = levels.filter(review_count__lt=15)
 
     # only picks levels that have favorable ratings, but nothing too extreme
     levels = filter_by_rating_class(
