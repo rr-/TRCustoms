@@ -52,27 +52,31 @@ const extractNestedErrorText = (source: any): string[] => {
 };
 
 interface YoutubeLink {
-  videoID: string;
-  playlistID: string;
+  videoID: string | null;
+  playlistID: string | null;
 }
 
-const parseYoutubeLink = (url: string): YoutubeLink | null => {
-  let regExp = new RegExp(
-    "" +
-      /^https?:\/\//.source +
-      /(?:www\.)?/.source +
-      /(?:youtube\.com|youtu\.be)\//.source +
-      /(?:v\/|\/u\/\w\/|embed\/|watch\?)?/.source +
-      /\??(?:v=)?(?<videoID>[^#&?]*)/.source +
-      /(?:&list=(?<playlistID>[^&#*?]+))?/.source +
-      /.*/.source
-  );
-  let match = url.match(regExp);
-  if (!match?.groups) {
+const parseYoutubeLink = (urlStr: string): YoutubeLink | null => {
+  let url: URL;
+  try {
+    url = new URL(urlStr);
+  } catch (error) {
     return null;
   }
-  const videoID = match.groups.videoID;
-  const playlistID = match.groups.playlistID;
+  if (
+    !["youtube.com", "youtu.be", "www.youtube.com", "www.youtu.be"].includes(
+      url.hostname
+    )
+  ) {
+    return null;
+  }
+  let videoID = url.searchParams.get("v");
+  let playlistID = url.searchParams.get("list");
+  if (!videoID) {
+    if (["youtu.be", "www.youtu.be"].includes(url.hostname)) {
+      videoID = url.pathname.replace("/", "");
+    }
+  }
   return { videoID, playlistID };
 };
 
