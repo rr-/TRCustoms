@@ -212,6 +212,7 @@ const ReviewForm = ({ level, review, onGoBack, onSubmit }: ReviewFormProps) => {
 
                 <TextAreaFormField
                   validate={validateRequired}
+                  rich={true}
                   required={true}
                   label="Review text"
                   name="text"

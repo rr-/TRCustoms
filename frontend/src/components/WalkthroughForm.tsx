@@ -131,7 +131,7 @@ Example text.`,
           <Form className="Form">
             <FormGrid>
               <FormGridFieldSet>
-                <TextAreaFormField label="Text" name="text" />
+                <TextAreaFormField label="Text" name="text" rich={true} />
               </FormGridFieldSet>
 
               <FormGridButtons

@@ -140,6 +140,7 @@ const NewsForm = ({ news, onGoBack, onSubmit }: NewsFormProps) => {
 
                 <TextAreaFormField
                   validate={validateRequired}
+                  rich={true}
                   required={true}
                   label="News text"
                   name="text"
