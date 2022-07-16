@@ -356,6 +356,7 @@ const LevelForm = ({ level, onGoBack, onSubmit }: LevelFormProps) => {
 
               <FormGridFieldSet title="Synopsis">
                 <TextAreaFormField
+                  rich={true}
                   required={true}
                   label="Description"
                   name="description"

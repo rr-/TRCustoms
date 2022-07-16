@@ -259,7 +259,7 @@ const UserForm = ({ user, onGoBack, onSubmit }: UserFormProps) => {
                 <TextFormField label="Last name" name="lastName" />
                 <TextFormField label="Website link" name="websiteUrl" />
                 <TextFormField label="Donation link" name="donationUrl" />
-                <TextAreaFormField label="Bio" name="bio" />
+                <TextAreaFormField label="Bio" name="bio" rich={true} />
                 <DropDownFormField
                   label="Country"
                   name="countryCode"
