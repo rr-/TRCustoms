@@ -153,16 +153,17 @@ def update_best_level_in_genre() -> FeaturedLevel | None:
 
     # choose the next genre in cycle
     if last_featured_level:
-        previous_genre = last_featured_level.chosen_genre
+        previous_genre_name = last_featured_level.chosen_genre.name
     else:
-        previous_genre = Genre.objects.order_by("name").last()
+        previous_genre_name = Genre.objects.order_by("name").last().name
 
     genre_names = list(Genre.objects.values_list("name", flat=True))
     visited_genre_names: set[str] = set()
     while True:
         genre_name = (genre_names + genre_names)[
-            genre_names.index(previous_genre.name) + 1
+            genre_names.index(previous_genre_name) + 1
         ]
+        previous_genre_name = genre_name
         if genre_name in visited_genre_names:
             break
         genre = Genre.objects.get(name=genre_name)
