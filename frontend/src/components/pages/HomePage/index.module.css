@@ -1,0 +1,28 @@
+.page {
+  display: grid;
+  gap: 1rem;
+  grid-template-areas: "leftSidebar main rightSidebar";
+  grid-template-columns: 1fr 4fr;
+  grid-template-rows: min-content 1fr;
+}
+
+@media (max-device-width: 800px) {
+  .page {
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      "leftSidebar"
+      "main"
+      "rightSidebar";
+  }
+}
+
+.featuredLevels {
+  grid-area: main;
+}
+.leftSidebar {
+  grid-area: leftSidebar;
+  white-space: nowrap;
+}
+.rightSidebar {
+  grid-area: rightSidebar;
+}

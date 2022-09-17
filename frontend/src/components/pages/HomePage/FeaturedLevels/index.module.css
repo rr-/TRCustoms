@@ -1,0 +1,65 @@
+.container {
+  position: relative;
+}
+
+.background {
+  position: absolute;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  opacity: 0.15;
+  background-size: cover;
+  background-position: center;
+  transition: opacity 300ms;
+}
+.container:hover .background {
+  opacity: 0.35;
+}
+
+.foreground {
+  position: relative;
+}
+
+.coverLink {
+  aspect-ratio: 4/3;
+  display: block;
+  position: relative;
+  transition: opacity 300ms;
+}
+.coverLink:hover {
+  opacity: 0.9;
+}
+
+.coverImage {
+  position: absolute;
+  object-fit: cover;
+  width: 100%;
+  height: 100%;
+}
+
+.details {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 1rem;
+}
+
+.header {
+  margin-top: 0;
+}
+
+.levelTitle {
+  margin: 0 0 0.5rem 0;
+}
+
+.synopsis {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 5;
+  line-clamp: 5;
+  -webkit-box-orient: vertical;
+}
+.synopsis img,
+.synopsis iframe {
+  display: none;
+}

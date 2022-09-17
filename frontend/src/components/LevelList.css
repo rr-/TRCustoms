@@ -4,7 +4,7 @@
 
 .LevelView {
   padding: 0.5rem;
-  background: var(--levels-table-bg-color);
+  background: var(--box-bg-color);
   display: flex;
   gap: 0.75rem;
   margin-bottom: 1rem;
@@ -19,6 +19,7 @@
   width: 15.5rem;
   display: block;
   position: relative;
+  transition: opacity 300ms;
 }
 .LevelView--coverLink:hover {
   opacity: 0.9;
