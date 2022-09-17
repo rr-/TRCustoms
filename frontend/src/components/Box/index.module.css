@@ -1,0 +1,5 @@
+.container {
+  padding: 1rem;
+  background: var(--box-bg-color);
+  margin-bottom: 1rem;
+}

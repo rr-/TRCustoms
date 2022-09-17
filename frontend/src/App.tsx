@@ -23,6 +23,7 @@ import { ModerationGuidelinesPage } from "src/components/pages/ModerationGuideli
 import { ModerationPage } from "src/components/pages/ModerationPage";
 import { NewsCreatePage } from "src/components/pages/NewsCreatePage";
 import { NewsEditPage } from "src/components/pages/NewsEditPage";
+import { NewsPage } from "src/components/pages/NewsPage";
 import { PasswordResetFinishPage } from "src/components/pages/PasswordResetFinishPage";
 import { PasswordResetPage } from "src/components/pages/PasswordResetPage";
 import { RegisterPage } from "src/components/pages/RegisterPage";
@@ -93,6 +94,7 @@ const App = () => {
                 element={<WalkthroughEditPage />}
               />
               <Route path="/news" element={<NewsCreatePage />} />
+              <Route path="/news/:newsId" element={<NewsPage />} />
               <Route path="/news/:newsId/edit" element={<NewsEditPage />} />
               <Route path="/levels/:levelId/edit" element={<LevelEditPage />} />
               <Route path="/tags" element={<TagListPage />} />

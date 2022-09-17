@@ -12,12 +12,12 @@
 
 .TextAreaFormField--previewHeader {
   padding: 0.5rem;
-  background: var(--article-bg-color);
+  background: var(--box-bg-color);
   border-bottom: 2px solid var(--input-border-color);
 }
 
 .TextAreaFormField--previewBody {
-  background: var(--article-bg-color);
+  background: var(--box-bg-color);
   padding: 0.5rem;
 }
 

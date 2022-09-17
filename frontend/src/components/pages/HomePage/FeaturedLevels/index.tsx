@@ -1,6 +1,8 @@
-import "./FeaturedLevelsView.css";
+import styles from "./index.module.css";
 import { useQuery } from "react-query";
+import { Box } from "src/components/Box";
 import { Loader } from "src/components/Loader";
+import { SectionHeader } from "src/components/Section";
 import { LevelAuthorsLink } from "src/components/links/LevelAuthorsLink";
 import { LevelLink } from "src/components/links/LevelLink";
 import { Markdown } from "src/components/markdown/Markdown";
@@ -35,36 +37,48 @@ const FeaturedLevelView = ({
 }: FeaturedLevelViewProps) => {
   const level = featuredLevel?.level;
   const heading = getHeading(featuredLevel, featureType);
+  const background = level?.screenshots?.[0]?.file?.url;
+
   return (
-    <div className="FeaturedLevelView">
-      <h2 className="FeaturedLevelView--heading">{heading}</h2>
-      {level?.cover && (
-        <LevelLink level={level}>
-          <img
-            className="FeaturedLevelView--coverImage"
-            src={level.cover.url}
-            alt={level.name}
-          />
-        </LevelLink>
-      )}
-      <div className="FeaturedLevelView--detailsWrapper">
-        <div className="FeaturedLevelView--details">
-          <h2 className="FeaturedLevelView--levelLink">
-            {level ? <LevelLink level={level} /> : "No level featured yet."}
-          </h2>
-          {level && (
-            <h4 className="FeaturedLevelView--authorLink">
-              By <LevelAuthorsLink authors={level.authors} />
-            </h4>
+    <Box className={styles.container}>
+      <div
+        className={styles.background}
+        style={background ? { backgroundImage: `url('${background}')` } : {}}
+      />
+      <div className={styles.foreground}>
+        <SectionHeader className={styles.header}>{heading}</SectionHeader>
+
+        <div className={styles.details}>
+          {!!level?.cover && (
+            <LevelLink level={level} className={styles.coverLink}>
+              <img
+                className={styles.coverImage}
+                src={level.cover.url}
+                alt={level.name}
+              />
+            </LevelLink>
           )}
-          {level && (
-            <div className="FeaturedLevelView--synopsis">
-              <Markdown>{level.description}</Markdown>
-            </div>
-          )}
+
+          <div>
+            <h3 className={styles.levelTitle}>
+              {level ? (
+                <>
+                  <LevelLink level={level} /> by{" "}
+                  <LevelAuthorsLink authors={level.authors} />
+                </>
+              ) : (
+                "No level featured yet."
+              )}
+            </h3>
+            {level && (
+              <div className={styles.synopsis}>
+                <Markdown>{level.description}</Markdown>
+              </div>
+            )}
+          </div>
         </div>
       </div>
-    </div>
+    </Box>
   );
 };
 
