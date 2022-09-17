@@ -2,7 +2,6 @@ import "./HomePage.css";
 import { useContext } from "react";
 import { useEffect } from "react";
 import { Link } from "react-router-dom";
-import { DefinitionItemGroup } from "src/components/DefinitionList";
 import { DefinitionItem } from "src/components/DefinitionList";
 import { DefinitionList } from "src/components/DefinitionList";
 import { FeaturedLevelsView } from "src/components/FeaturedLevelsView";
@@ -18,7 +17,7 @@ import { IconDiscord } from "src/components/icons";
 import { IconGitHub } from "src/components/icons";
 import { IconKofi } from "src/components/icons";
 import { IconTwitter } from "src/components/icons";
-import { EngineLink } from "src/components/links/EngineLink";
+import { EngineGFXLink } from "src/components/links/EngineGFXLink";
 import { ConfigContext } from "src/contexts/ConfigContext";
 import { TitleContext } from "src/contexts/TitleContext";
 import { UserPermission } from "src/services/UserService";
@@ -28,24 +27,23 @@ const LevelStats = () => {
   const { config } = useContext(ConfigContext);
 
   return (
-    <DefinitionList>
-      <DefinitionItem term={<Link to="/levels">Total levels</Link>}>
-        {config.total_levels}
-      </DefinitionItem>
+    <>
+      {config.engines.map((engine) => (
+        <EngineGFXLink key={engine.id} engine={engine} />
+      ))}
 
-      <DefinitionItemGroup className="LevelStats--engines">
-        {config.engines.map((engine) => (
-          <DefinitionItem key={engine.id} term={<EngineLink engine={engine} />}>
-            {engine.level_count}
-          </DefinitionItem>
-        ))}
-      </DefinitionItemGroup>
+      <DefinitionList>
+        <DefinitionItem term={<Link to="/levels">Total levels</Link>}>
+          {config.total_levels}
+        </DefinitionItem>
 
-      <DefinitionItem term="Downloads">
-        {reprBigNumber(config.total_downloads)} (
-        {reprBigNumber(config.total_downloads / config.total_levels)} per level)
-      </DefinitionItem>
-    </DefinitionList>
+        <DefinitionItem term="Downloads">
+          {reprBigNumber(config.total_downloads)} (
+          {reprBigNumber(config.total_downloads / config.total_levels)} per
+          level)
+        </DefinitionItem>
+      </DefinitionList>
+    </>
   );
 };
 
