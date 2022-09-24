@@ -55,7 +55,6 @@ def reject_user(user: User, request: Request | None, reason: str) -> None:
     clear_audit_log_action_flags(obj=user)
     if (
         user.authored_levels.exists()
-        or user.authored_news.exists()
         or user.reviewed_levels.exists()
         or user.uploaded_levels.exists()
     ):
