@@ -92,7 +92,7 @@ def update_monthly_hidden_gem() -> FeaturedLevel | None:
     if last_featured_level and timezone.now().day != 1:
         return None
 
-    levels = Level.objects.all()
+    levels = Level.objects.filter(is_approved=True)
 
     # only pick levels that are in the bottom % of the highest download count
     levels = filter_only_least_downloaded(levels, 2 / 3)
@@ -127,7 +127,7 @@ def update_level_of_the_day() -> FeaturedLevel | None:
     if was_featured_recently(last_featured_level, hours=23):
         return None
 
-    levels = Level.objects.all()
+    levels = Level.objects.filter(is_approved=True)
 
     # make sure the level was not picked recently
     levels = filter_out_recently_featured(
@@ -169,7 +169,7 @@ def update_best_level_in_genre() -> FeaturedLevel | None:
         genre = Genre.objects.get(name=genre_name)
         visited_genre_names.add(genre_name)
 
-        levels = Level.objects.filter(genres=genre)
+        levels = Level.objects.filter(is_approved=True, genres=genre)
 
         # make sure we pick only the best rated levels
         levels = filter_by_rating_class(
@@ -199,3 +199,23 @@ def update_featured_levels() -> None:
     update_monthly_hidden_gem()
     update_level_of_the_day()
     update_best_level_in_genre()
+
+
+def get_new_release() -> FeaturedLevel:
+    def get_recent_level() -> Level:
+        recent_levels = Level.objects.filter(
+            is_approved=True,
+            created__gte=timezone.now() - timedelta(days=7),
+        ).all()
+        if recent_levels:
+            return random.choice(recent_levels)
+        return (
+            Level.objects.filter(is_approved=True).order_by("-created").first()
+        )
+
+    return FeaturedLevel(
+        created=timezone.now(),
+        level=get_recent_level(),
+        feature_type=FeaturedLevel.FeatureType.NEW_RELEASE,
+        chosen_genre=None,
+    )

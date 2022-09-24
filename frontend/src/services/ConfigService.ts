@@ -13,6 +13,7 @@ interface CountryListing {
 }
 
 enum FeatureType {
+  NewRelease = "new",
   LevelOfTheDay = "lod",
   MonthlyHiddenGem = "gem",
   BestInGenre = "big",

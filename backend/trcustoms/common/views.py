@@ -26,6 +26,7 @@ from trcustoms.reviews.models import LevelReview, ReviewTemplateQuestion
 from trcustoms.reviews.serializers import ReviewTemplateQuestionSerializer
 from trcustoms.tags.models import Tag
 from trcustoms.tags.serializers import TagListingSerializer
+from trcustoms.tasks.update_featured_levels import get_new_release
 from trcustoms.walkthroughs.consts import WalkthroughStatus
 from trcustoms.walkthroughs.models import Walkthrough
 
@@ -145,14 +146,20 @@ class ConfigViewSet(viewsets.ViewSet):
 
     @action(detail=False)
     def featured_levels(self, request) -> Response:
+        result = {
+            feature_type.value: FeaturedLevelListingSerializer(
+                FeaturedLevel.objects.filter(feature_type=feature_type)
+                .order_by("-created")
+                .first()
+            ).data
+            for feature_type in FeaturedLevel.FeatureType
+        }
+
+        result[
+            FeaturedLevel.FeatureType.NEW_RELEASE.value  # pylint: disable=E1101
+        ] = FeaturedLevelListingSerializer(get_new_release()).data
+
         return Response(
-            {
-                feature_type.value: FeaturedLevelListingSerializer(
-                    FeaturedLevel.objects.filter(feature_type=feature_type)
-                    .order_by("-created")
-                    .first()
-                ).data
-                for feature_type in FeaturedLevel.FeatureType
-            },
+            result,
             status.HTTP_200_OK,
         )

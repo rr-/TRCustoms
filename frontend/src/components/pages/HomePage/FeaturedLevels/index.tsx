@@ -21,6 +21,8 @@ const getHeading = (
   featureType: FeatureType
 ): string => {
   switch (featuredLevel?.feature_type || featureType) {
+    case FeatureType.NewRelease:
+      return "New Release";
     case FeatureType.MonthlyHiddenGem:
       return "Monthly Hidden Gem";
     case FeatureType.LevelOfTheDay:
