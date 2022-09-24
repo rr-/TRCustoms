@@ -169,7 +169,7 @@ class UserViewSet(
             return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
         user = User.objects.filter(
             Q(username=serializer.data["username"])
-            | Q(email=serializer.data["username"])
+            | Q(email__iexact=serializer.data["username"])
         ).first()
         send_email_confirmation_mail(user)
         return Response({})
@@ -245,7 +245,7 @@ class UserViewSet(
         if not serializer.is_valid():
             return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
         user = User.objects.filter(
-            email=serializer.validated_data["email"]
+            email__iexact=serializer.validated_data["email"]
         ).first()
         if user:
             send_password_reset_mail(user)
