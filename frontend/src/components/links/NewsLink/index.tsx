@@ -2,7 +2,6 @@ import { Link } from "react-router-dom";
 import { ConditionalWrapper } from "src/components/common/ConditionalWrapper";
 import { Markdown } from "src/components/markdown/Markdown";
 import type { NewsListing } from "src/services/NewsService";
-import { formatDate } from "src/utils/string";
 
 interface NewsLinkProps extends React.HTMLAttributes<HTMLAnchorElement> {
   news: NewsListing;
@@ -10,7 +9,7 @@ interface NewsLinkProps extends React.HTMLAttributes<HTMLAnchorElement> {
 }
 
 const NewsLink = ({ news, children, ...props }: NewsLinkProps) => {
-  const { id, created, subject } = news;
+  const { id, subject } = news;
 
   return (
     <ConditionalWrapper
@@ -21,13 +20,7 @@ const NewsLink = ({ news, children, ...props }: NewsLinkProps) => {
         </Link>
       )}
     >
-      {children ? (
-        children
-      ) : (
-        <>
-          {formatDate(created)}: <Markdown>{subject || ""}</Markdown>
-        </>
-      )}
+      {children ? children : <Markdown>{subject || ""}</Markdown>}
     </ConditionalWrapper>
   );
 };

@@ -1,11 +1,13 @@
-.link {
-  display: block;
+.wrapper {
+  display: flex;
+  width: 100%;
   margin-bottom: 0.25rem;
   color: white;
   text-decoration: none;
   position: relative;
+  min-height: 3rem;
 }
-.link:hover {
+.wrapper:hover {
   color: white;
 }
 
@@ -15,27 +17,27 @@
   right: 0;
   bottom: 0;
   left: 0;
-
   opacity: 0.8;
   width: 100%;
   display: flex;
   background-size: cover;
   background-position: center;
+  transition: opacity 300ms;
 }
-.link:hover .background {
+
+.wrapper:hover .background {
   opacity: 1;
 }
 
-.link:last-of-type {
-  margin-bottom: 1rem;
-}
-
-.foreground {
+.aside {
   position: relative;
-  display: block;
-  padding: 0 0.5rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0 0.75rem;
   background: rgba(0, 0, 0, 0.5);
-  width: 3rem;
+  min-width: 2.5rem;
+  line-height: 1.33rem;
   text-align: center;
   border-right: 4px solid var(--link-color);
 }

@@ -58,6 +58,9 @@ const MyLink = ({
   if (disabled || isTimeoutActive) {
     classNames.push(styles.disabled);
   }
+  if (icon) {
+    classNames.push(styles.withIcon);
+  }
   if (className) {
     classNames.push(className);
   }
@@ -65,7 +68,7 @@ const MyLink = ({
   const inside = (
     <>
       {icon && <span className={styles.icon}>{icon}</span>}
-      {children && <span className={styles.label}>{children}</span>}
+      {children}
     </>
   );
 
