@@ -1,0 +1,23 @@
+.link {
+  display: inline-flex;
+  gap: 0.5rem;
+  color: var(--link-color);
+}
+.link:hover {
+  color: var(--link-highlight-fg-color);
+}
+
+.icon :global .icon,
+.icon :global .Icon {
+  width: 1.6em;
+  height: 1.6em;
+  margin: 0;
+}
+.label {
+  text-decoration: var(--button-text-decoration);
+}
+
+.disabled {
+  opacity: 0.5;
+  cursor: default;
+}

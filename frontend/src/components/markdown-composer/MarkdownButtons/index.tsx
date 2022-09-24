@@ -1,5 +1,7 @@
+import styles from "./index.module.css";
 import { useCallback } from "react";
-import { Button } from "src/components/common/Button";
+import { Link } from "src/components/common/Link";
+import { IconHelp } from "src/components/icons";
 import { IconMarkdownCode } from "src/components/icons";
 import { IconMarkdownStrikeThrough } from "src/components/icons";
 import { IconMarkdownQuote } from "src/components/icons";
@@ -39,9 +41,8 @@ const MarkdownBaseButton = ({
   }, [textarea, style]);
 
   return (
-    <Button
-      disableTimeout={true}
-      isPlain={true}
+    <Link
+      className={styles.button}
       onClick={handleClick}
       tooltip={tooltip}
       icon={icon}
@@ -248,6 +249,17 @@ const MarkdownColorTrapButton = ({ ...props }: MarkdownButtonProps) => {
   );
 };
 
+const MarkdownHelpButton = () => {
+  return (
+    <Link
+      className={styles.button}
+      icon={<IconHelp />}
+      to="/text-formatting-guide"
+      forceNewWindow={true}
+    />
+  );
+};
+
 export {
   MarkdownHeaderButton,
   MarkdownBoldButton,
@@ -264,4 +276,5 @@ export {
   MarkdownColorObjectButton,
   MarkdownColorEnemyButton,
   MarkdownColorTrapButton,
+  MarkdownHelpButton,
 };

@@ -1,4 +1,4 @@
-import "./index.css";
+import styles from "./index.module.css";
 import { useCallback } from "react";
 import { Key } from "react";
 import { useState } from "react";
@@ -121,13 +121,13 @@ const AutoComplete = <TItem extends Object>({
 
   const AutoCompleteSuggestions = () => {
     return (
-      <div className="AutoCompleteSuggestions">
+      <div className={styles.suggestions}>
         {suggestions.length ? (
-          <ul className="AutoCompleteSuggestions--list">
+          <ul className={styles.list}>
             {suggestions.map((result, index) => {
-              let classNames = ["AutoCompleteSuggestions--listItem"];
+              let classNames = [styles.listItem];
               if (index === activeResultIdx) {
-                classNames.push("active");
+                classNames.push(styles.active);
               }
               return (
                 <li
@@ -143,14 +143,14 @@ const AutoComplete = <TItem extends Object>({
             })}
           </ul>
         ) : (
-          <div className="AutoCompleteSuggestions--empty">No suggestions.</div>
+          <div className={styles.suggestionsEmpty}>No suggestions.</div>
         )}
       </div>
     );
   };
 
   return (
-    <div className="AutoComplete">
+    <div>
       <TextInput
         maxLength={maxLength}
         onChange={handleInputChange}
@@ -160,7 +160,11 @@ const AutoComplete = <TItem extends Object>({
       />
       {showResults && textInput && <AutoCompleteSuggestions />}
       {onNewResultApply && (
-        <Button disabled={!textInput.length} onClick={handleAddButtonClick}>
+        <Button
+          className={styles.addButton}
+          disabled={!textInput.length}
+          onClick={handleAddButtonClick}
+        >
           Add new
         </Button>
       )}

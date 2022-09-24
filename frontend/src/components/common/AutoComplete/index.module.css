@@ -1,8 +1,8 @@
-.AutoComplete .Button {
+.addButton {
   margin-left: 0.5rem;
 }
 
-.AutoCompleteSuggestions {
+.suggestions {
   position: absolute;
   max-height: 20rem;
   min-width: 15rem;
@@ -14,27 +14,27 @@
   margin-top: -2px;
 }
 
-.AutoCompleteSuggestions--empty {
+.suggestionsEmpty {
   padding: 0 0.5rem;
 }
 
-.AutoCompleteSuggestions--list {
+.list {
   list-style-type: none;
   margin: 0;
   padding: 0;
 }
 
-.AutoCompleteSuggestions--listItem {
+.listItem {
   padding: 0 0.5rem;
 }
 
-.AutoCompleteSuggestions--listItem.active,
-.AutoCompleteSuggestions--listItem:hover {
+.listItem.active,
+.listItem:hover {
   background: var(--button-bg-color);
   color: var(--button-fg-color);
   cursor: pointer;
 }
 
-.AutoCompleteSuggestions--listItem:not(:last-of-type) {
+.listItem:not(:last-of-type) {
   border-bottom: 1px solid var(--input-border-color);
 }

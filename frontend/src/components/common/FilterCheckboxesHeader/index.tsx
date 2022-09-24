@@ -1,5 +1,5 @@
 import "./index.css";
-import { Button } from "src/components/common/Button";
+import { Link } from "src/components/common/Link";
 
 interface FilterCheckboxesHeaderProps {
   onClear: () => void;
@@ -12,9 +12,7 @@ const FilterCheckboxesHeader = ({
   return (
     <div className="FilterCheckboxesHeader">
       {children}
-      <Button isPlain={true} disableTimeout={true} onClick={onClear}>
-        (clear)
-      </Button>
+      <Link onClick={onClear}>(clear)</Link>
     </div>
   );
 };

@@ -7,6 +7,7 @@ import { Button } from "src/components/common/Button";
 import { DefinitionItemGroup } from "src/components/common/DefinitionList";
 import { DefinitionItem } from "src/components/common/DefinitionList";
 import { DefinitionList } from "src/components/common/DefinitionList";
+import { Link } from "src/components/common/Link";
 import { PermissionGuard } from "src/components/common/PermissionGuard";
 import { SectionHeader } from "src/components/common/Section";
 import { SidebarBox } from "src/components/common/SidebarBox";
@@ -143,33 +144,21 @@ const UserSidebar = ({ user }: UserSidebarProps) => {
           </DefinitionItem>
 
           <DefinitionItem term="Levels authored">
-            <Button
-              isPlain={true}
-              disableTimeout={true}
-              onClick={handleLevelCountClick}
-            >
+            <Link onClick={handleLevelCountClick}>
               {user.authored_level_count}
-            </Button>
+            </Link>
           </DefinitionItem>
 
           <DefinitionItem term="Reviews posted">
-            <Button
-              isPlain={true}
-              disableTimeout={true}
-              onClick={handleReviewCountClick}
-            >
+            <Link onClick={handleReviewCountClick}>
               {user.reviewed_level_count}
-            </Button>
+            </Link>
           </DefinitionItem>
 
           <DefinitionItem term="Walkthroughs">
-            <Button
-              isPlain={true}
-              disableTimeout={true}
-              to={`/users/${user.id}/walkthroughs`}
-            >
+            <Link to={`/users/${user.id}/walkthroughs`}>
               {user.authored_walkthrough_count}
-            </Button>
+            </Link>
           </DefinitionItem>
         </DefinitionItemGroup>
       </DefinitionList>

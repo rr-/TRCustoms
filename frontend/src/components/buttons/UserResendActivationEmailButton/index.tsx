@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Button } from "src/components/common/Button";
+import { Link } from "src/components/common/Link";
 import { AuthService } from "src/services/AuthService";
 import { UserService } from "src/services/UserService";
 
@@ -19,14 +19,9 @@ const UserResendActivationEmailButton = ({
   };
 
   return (
-    <Button
-      isPlain={true}
-      disabled={isResent}
-      disableTimeout={true}
-      onClick={handleButtonClick}
-    >
+    <Link disabled={isResent} onClick={handleButtonClick}>
       Resend activation email
-    </Button>
+    </Link>
   );
 };
 

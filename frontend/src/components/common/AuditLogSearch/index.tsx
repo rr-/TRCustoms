@@ -1,11 +1,11 @@
-import "./index.css";
+import styles from "./index.module.css";
 import { Formik } from "formik";
 import { Form } from "formik";
 import { useState } from "react";
 import { useCallback } from "react";
 import { useEffect } from "react";
-import { Button } from "src/components/common/Button";
 import { Checkbox } from "src/components/common/Checkbox";
+import { Link } from "src/components/common/Link";
 import { SectionHeader } from "src/components/common/Section";
 import { CheckboxFormField } from "src/components/formfields/CheckboxFormField";
 import { SubmitButton } from "src/components/formfields/SubmitButton";
@@ -231,19 +231,18 @@ const AuditLogSearch = ({
       onSubmit={handleSubmit}
     >
       {({ submitForm, resetForm }) => (
-        <Form className="AuditLogSearch ChildMarginClear">
-          <SectionHeader className="AuditLogSearch--sidebarHeader">
+        <Form className="ChildMarginClear">
+          <SectionHeader className={styles.header}>
             Search filter
-            <Button
-              isPlain={true}
-              disableTimeout={true}
+            <Link
+              className={styles.resetButton}
               onClick={() => handleClear(resetForm)}
             >
               (reset)
-            </Button>
+            </Link>
           </SectionHeader>
 
-          <div className="AuditLogSearch--sidebarSection">
+          <div>
             <CheckboxFormField
               onChange={() => {
                 submitForm();
@@ -263,13 +262,10 @@ const AuditLogSearch = ({
 
           {StateSearches.map((section, sectionNum) => (
             <>
-              <SectionHeader
-                key={sectionNum}
-                className="AuditLogSearch--sidebarHeader"
-              >
+              <SectionHeader key={sectionNum} className={styles.header}>
                 {section.title}
               </SectionHeader>
-              <div className="AuditLogSearch--sidebarSection">
+              <div>
                 {section.searchList.map((sectionItem, searchNum) => (
                   <Checkbox
                     key={searchNum}

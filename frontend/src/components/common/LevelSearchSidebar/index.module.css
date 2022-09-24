@@ -1,0 +1,26 @@
+.header {
+  display: flex;
+  justify-content: space-between;
+}
+
+.resetButton {
+  font-size: 1rem;
+  font-weight: normal;
+}
+
+.section {
+  margin-bottom: 0.5rem;
+}
+
+.section :global .TextFormField--input {
+  width: 100%;
+}
+
+.searchBar {
+  display: flex;
+  align-items: flex-end;
+}
+
+.searchBar :global .TextFormField--input {
+  min-width: 0;
+}

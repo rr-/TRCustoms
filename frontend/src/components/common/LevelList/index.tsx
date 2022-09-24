@@ -1,8 +1,7 @@
 import "./index.css";
-import { Link } from "react-router-dom";
-import { Button } from "src/components/common/Button";
 import { DataList } from "src/components/common/DataList";
 import { LevelRating } from "src/components/common/LevelRating";
+import { Link } from "src/components/common/Link";
 import { IconClock } from "src/components/icons";
 import { IconBadgeCheck } from "src/components/icons";
 import { IconXCircle } from "src/components/icons";
@@ -83,15 +82,11 @@ const LevelView = ({ showStatus, level }: LevelViewProps) => {
         Download:{" "}
         {level.last_file?.url ? (
           <>
-            <Button
-              isPlain={true}
-              disableTimeout={true}
-              to={level.last_file.url}
-            >
+            <Link to={level.last_file.url}>
               <strong>
                 <IconDownload />({formatFileSize(level.last_file?.size)})
               </strong>
-            </Button>{" "}
+            </Link>{" "}
             ({level.download_count} downloads)
           </>
         ) : (

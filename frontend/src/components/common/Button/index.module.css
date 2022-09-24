@@ -1,4 +1,4 @@
-.Button--button {
+.button {
   text-align: center;
   display: inline-flex;
   gap: 0.5rem;
@@ -14,35 +14,27 @@
   box-sizing: border-box;
   cursor: pointer;
 }
-.Button--button:hover {
+.button:hover {
   background: var(--button-hovered-bg-color);
   color: var(--button-hovered-fg-color);
 }
-.Button--button:focus {
+.button:focus {
   outline: 0;
   border-color: var(--outline-color);
 }
 
-.Button--icon .icon,
-.Button--icon .Icon {
+.icon :global .icon,
+.icon :global .Icon {
   width: 1.6em;
   height: 1.6em;
   margin: 0;
 }
-.Button--label {
+
+.label {
   text-decoration: var(--button-text-decoration);
 }
 
-.Button--disabled {
+.disabled {
   opacity: 0.5;
   cursor: default;
-}
-
-.Button--link {
-  display: inline-flex;
-  gap: 0.5rem;
-  color: var(--link-color);
-}
-.Button--link:hover {
-  color: var(--link-highlight-fg-color);
 }

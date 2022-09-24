@@ -1,4 +1,4 @@
-import "./index.css";
+import styles from "./index.module.css";
 
 interface SidebarBoxProps {
   header?: React.ReactNode | undefined;
@@ -8,10 +8,10 @@ interface SidebarBoxProps {
 
 const SidebarBox = ({ header, actions, children }: SidebarBoxProps) => {
   return (
-    <div className="SidebarBox ChildMarginClear">
-      {header && <div className="SidebarBox--header">{header}</div>}
-      {actions && <div className="SidebarBox--actions">{actions}</div>}
-      <div className="SidebarBox--body ChildMarginClear">{children}</div>
+    <div className={`${styles.box} ChildMarginClear`}>
+      {header && <div className={styles.header}>{header}</div>}
+      {actions && <div className={styles.actions}>{actions}</div>}
+      <div className={`${styles.body} ChildMarginClear`}>{children}</div>
     </div>
   );
 };

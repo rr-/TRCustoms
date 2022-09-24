@@ -1,0 +1,22 @@
+.cover {
+  grid-template-columns: 1fr !important;
+}
+
+.basicInfoList {
+  display: inline;
+  margin: 0;
+  padding: 0;
+}
+
+.basicInfoListItem {
+  display: inline;
+  padding: 0;
+  margin: 0;
+}
+.basicInfoListItem:not(:last-child):after {
+  content: ", ";
+}
+
+.fileTableTerm:after {
+  content: unset;
+}

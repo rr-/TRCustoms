@@ -2,8 +2,8 @@ import "./index.css";
 import { useState } from "react";
 import { ReviewDeleteButton } from "src/components/buttons/ReviewDeleteButton";
 import { ReviewEditButton } from "src/components/buttons/ReviewEditButton";
-import { Button } from "src/components/common/Button";
 import { DataList } from "src/components/common/DataList";
+import { Link } from "src/components/common/Link";
 import { PermissionGuard } from "src/components/common/PermissionGuard";
 import { UserPicture } from "src/components/common/UserPicture";
 import { IconThumbUp } from "src/components/icons";
@@ -91,13 +91,9 @@ const ReviewView = ({ review, showLevels, showExcerpts }: ReviewViewProps) => {
         {showExcerpts && shortText !== fullText ? (
           <>
             <Markdown>{isExcerptExpanded ? fullText : shortText}</Markdown>
-            <Button
-              isPlain={true}
-              disableTimeout={true}
-              onClick={handleReadMoreClick}
-            >
+            <Link onClick={handleReadMoreClick}>
               ({isExcerptExpanded ? "Read less" : "Read more"})
-            </Button>
+            </Link>
           </>
         ) : (
           <Markdown>{review.text || "No review text is available."}</Markdown>
