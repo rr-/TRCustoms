@@ -1,6 +1,6 @@
-import "./index.css";
+import styles from "./index.module.css";
 import { Key } from "react";
-import { Button } from "src/components/common/Button";
+import { Link } from "src/components/common/Link";
 import { IconX } from "src/components/icons";
 
 interface PillsProps<TItem> {
@@ -17,15 +17,18 @@ const Pills = <TItem extends Object>({
   onRemove,
 }: PillsProps<TItem>) => {
   return (
-    <div className="Pills">
+    <div className={styles.pills}>
       {source.length ? (
-        <ul className="Pills--list">
+        <ul className={styles.list}>
           {source.map((item) => (
-            <li key={getKey(item)} className="Pills--listItem">
+            <li key={getKey(item)} className={styles.listItem}>
               {getText(item)}{" "}
-              <Button isPlain={true} onClick={() => onRemove(item)}>
+              <Link
+                className={styles.removeLink}
+                onClick={() => onRemove(item)}
+              >
                 <IconX />
-              </Button>
+              </Link>
             </li>
           ))}
         </ul>

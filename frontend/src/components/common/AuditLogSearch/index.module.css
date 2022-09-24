@@ -1,8 +1,9 @@
-.AuditLogSearch--sidebarHeader {
+.header {
   display: flex;
   justify-content: space-between;
 }
-.AuditLogSearch--sidebarHeader .Button {
+
+.resetButton {
   font-size: 1rem;
   font-weight: normal;
 }

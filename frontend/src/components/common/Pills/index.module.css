@@ -1,7 +1,8 @@
-.Pills {
+.pills {
   margin: 0.25rem 0 0 0;
 }
-.Pills--list {
+
+.list {
   list-style-type: none;
   padding: 0;
   margin: 0.5rem 0 0 0;
@@ -9,13 +10,15 @@
   flex-wrap: wrap;
   gap: 0.5rem;
 }
-.Pills--listItem {
+
+.listItem {
   background: var(--button-bg-color);
   color: var(--button-fg-color);
   padding: 0.25rem 0.5rem;
   border-radius: 0.25rem;
 }
-.Pills--listItem .Button {
+
+.removeLink {
   text-decoration: none;
   color: var(--button-fg-color);
 }

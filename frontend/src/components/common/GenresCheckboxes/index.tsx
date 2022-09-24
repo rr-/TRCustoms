@@ -2,9 +2,9 @@ import { sortBy } from "lodash";
 import { useState } from "react";
 import { useEffect } from "react";
 import { useContext } from "react";
-import { Button } from "src/components/common/Button";
 import { Checkbox } from "src/components/common/Checkbox";
 import { FilterCheckboxesHeader } from "src/components/common/FilterCheckboxesHeader";
+import { Link } from "src/components/common/Link";
 import { ConfigContext } from "src/contexts/ConfigContext";
 import type { GenreNested } from "src/services/GenreService";
 
@@ -64,13 +64,9 @@ const GenresCheckboxes = ({ value, onChange }: GenresCheckboxesProps) => {
         />
       ))}
       <div>
-        <Button
-          isPlain={true}
-          disableTimeout={true}
-          onClick={handleExpandButtonClick}
-        >
+        <Link onClick={handleExpandButtonClick}>
           {isExpanded ? "Show less" : "Show all"}
-        </Button>
+        </Link>
       </div>
     </div>
   );

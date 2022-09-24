@@ -3,9 +3,9 @@ import { useQuery } from "react-query";
 import { TagDeleteButton } from "src/components/buttons/TagDeleteButton";
 import { TagMergeButton } from "src/components/buttons/TagMergeButton";
 import { TagRenameButton } from "src/components/buttons/TagRenameButton";
-import { Button } from "src/components/common/Button";
 import type { DataTableColumn } from "src/components/common/DataTable";
 import { DataTable } from "src/components/common/DataTable";
+import { Link } from "src/components/common/Link";
 import { Loader } from "src/components/common/Loader";
 import { PermissionGuard } from "src/components/common/PermissionGuard";
 import { TagLink } from "src/components/links/TagLink";
@@ -71,9 +71,7 @@ const TagsTable = ({ searchQuery, onSearchQueryChange }: TagsTableProps) => {
       sortKey: "name",
       label: "Name",
       itemElement: ({ item, toggleActive }) => (
-        <Button isPlain={true} disableTimeout={true} onClick={toggleActive}>
-          {item.name}
-        </Button>
+        <Link onClick={toggleActive}>{item.name}</Link>
       ),
     },
     {

@@ -1,0 +1,8 @@
+.entry {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.tableButton {
+  margin: 0 0.25rem;
+}

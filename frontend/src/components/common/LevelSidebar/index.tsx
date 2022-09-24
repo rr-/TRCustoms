@@ -1,4 +1,4 @@
-import "./index.css";
+import styles from "./index.module.css";
 import { useContext } from "react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -10,6 +10,7 @@ import { DefinitionItemGroup } from "src/components/common/DefinitionList";
 import { DefinitionItem } from "src/components/common/DefinitionList";
 import { DefinitionList } from "src/components/common/DefinitionList";
 import { LevelRating } from "src/components/common/LevelRating";
+import { Link } from "src/components/common/Link";
 import { Loader } from "src/components/common/Loader";
 import { MediumThumbnails } from "src/components/common/MediumThumbnails";
 import { PermissionGuard } from "src/components/common/PermissionGuard";
@@ -78,9 +79,10 @@ const LevelSidebar = ({ level, reviewCount }: LevelSidebarProps) => {
 
       <SidebarBox
         header={
-          <div className="LevelSidebar--cover">
+          <div>
             {level.cover ? (
               <MediumThumbnails
+                className={styles.cover}
                 displayMode={DisplayMode.Cover}
                 files={[level.cover]}
                 links={[]}
@@ -142,12 +144,9 @@ const LevelSidebar = ({ level, reviewCount }: LevelSidebarProps) => {
           <DefinitionItemGroup>
             <DefinitionItem term="Author(s)">
               {level.authors.length ? (
-                <ul className="LevelSidebar--basicInfoList">
+                <ul className={styles.basicInfoList}>
                   {level.authors.map((author) => (
-                    <li
-                      key={author.id}
-                      className="LevelSidebar--basicInfoListItem"
-                    >
+                    <li key={author.id} className={styles.basicInfoListItem}>
                       <UserLink user={author} />
                     </li>
                   ))}
@@ -163,13 +162,7 @@ const LevelSidebar = ({ level, reviewCount }: LevelSidebarProps) => {
 
             <DefinitionItem term="Reviews">
               {reviewCount !== undefined ? (
-                <Button
-                  isPlain={true}
-                  disableTimeout={true}
-                  onClick={handleReviewCountClick}
-                >
-                  {reviewCount}
-                </Button>
+                <Link onClick={handleReviewCountClick}>{reviewCount}</Link>
               ) : (
                 <Loader inline={true} />
               )}
@@ -219,12 +212,9 @@ const LevelSidebar = ({ level, reviewCount }: LevelSidebarProps) => {
 
             <DefinitionItem term="Genres">
               {level.genres.length ? (
-                <ul className="LevelSidebar--basicInfoList">
+                <ul className={styles.basicInfoList}>
                   {level.genres.map((genre) => (
-                    <li
-                      key={genre.id}
-                      className="LevelSidebar--basicInfoListItem"
-                    >
+                    <li key={genre.id} className={styles.basicInfoListItem}>
                       <GenreLink genre={genre} />
                     </li>
                   ))}
@@ -236,12 +226,9 @@ const LevelSidebar = ({ level, reviewCount }: LevelSidebarProps) => {
 
             <DefinitionItem term="Tags">
               {level.tags.length ? (
-                <ul className="LevelSidebar--basicInfoList">
+                <ul className={styles.basicInfoList}>
                   {level.tags.map((tag) => (
-                    <li
-                      key={tag.id}
-                      className="LevelSidebar--basicInfoListItem"
-                    >
+                    <li key={tag.id} className={styles.basicInfoListItem}>
                       <TagLink tag={tag} />
                     </li>
                   ))}
@@ -264,18 +251,18 @@ const LevelSidebar = ({ level, reviewCount }: LevelSidebarProps) => {
                   <DefinitionItem
                     key={file.id}
                     term={
-                      <span className="LevelSidebar--fileTableTerm">
+                      <span className={styles.fileTableTerm}>
                         {file.url ? (
-                          <Button isPlain={true} to={file.url}>
+                          <Link enableTimeout={true} to={file.url}>
                             Version {file.version}
-                          </Button>
+                          </Link>
                         ) : (
-                          <Button
-                            isPlain={true}
+                          <Link
+                            enableTimeout={true}
                             onClick={() => showFileGoneAlert()}
                           >
                             Version {file.version}
-                          </Button>
+                          </Link>
                         )}
                       </span>
                     }

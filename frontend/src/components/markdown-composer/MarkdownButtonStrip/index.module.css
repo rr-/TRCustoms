@@ -1,4 +1,4 @@
-.MarkdownButtonStrip {
+.strip {
   background: var(--label-bg-color);
   border-bottom: 2px solid var(--input-border-color);
   padding: 0.5rem;
@@ -6,15 +6,11 @@
   gap: 2rem;
 }
 
-.MarkdownButtonStrip--group {
+.group {
   display: flex;
   gap: 0.75rem;
 }
 
-.MarkdownButtonStrip--group:last-of-type {
+.group:last-of-type {
   margin-left: auto;
-}
-.MarkdownButtonStrip--group .Button--icon .Icon {
-  width: 1.4em;
-  height: 1.4em;
 }

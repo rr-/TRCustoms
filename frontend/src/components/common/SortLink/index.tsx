@@ -1,5 +1,5 @@
 import "./index.css";
-import { Button } from "src/components/common/Button";
+import { Link } from "src/components/common/Link";
 import { IconSortDescending } from "src/components/icons";
 import { IconSortAscending } from "src/components/icons";
 
@@ -37,9 +37,7 @@ const SortLink = ({
     onSortChange((descending ? "-" : "") + targetSort);
 
   return (
-    <Button
-      isPlain={true}
-      disableTimeout={true}
+    <Link
       onClick={handleButtonClick}
       className={`link ${isActive ? "SortLink SortLink--active" : "SortLink"}`}
     >
@@ -47,7 +45,7 @@ const SortLink = ({
       <span className="SortLink--indicator">
         {descending ? <IconSortDescending /> : <IconSortAscending />}
       </span>
-    </Button>
+    </Link>
   );
 };
 

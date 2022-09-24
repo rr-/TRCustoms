@@ -1,7 +1,8 @@
-import "./index.css";
+import styles from "./index.module.css";
 import { useFormikContext } from "formik";
 import { useState } from "react";
 import { Button } from "src/components/common/Button";
+import { Link } from "src/components/common/Link";
 import type { GenericFormFieldProps } from "src/components/formfields/BaseFormField";
 import { BaseFormField } from "src/components/formfields/BaseFormField";
 import { IconX } from "src/components/icons";
@@ -105,9 +106,9 @@ const ExternalLinksFormField = ({
 
   return (
     <BaseFormField name={name} readonly={readonly} {...props}>
-      <div className="ExternalLinksFormField--entry">
+      <div className={styles.entry}>
         <input
-          className="ExternalLinksFormField--input Input"
+          className="Input"
           value={textInput}
           onChange={handleTextInputChange}
           onKeyDown={handleTextInputKeyDown}
@@ -115,7 +116,7 @@ const ExternalLinksFormField = ({
         />
 
         <select
-          className="ExternalLinksFormField--select Input"
+          className="Input"
           value={linkType}
           onChange={handleSelectChange}
         >
@@ -133,38 +134,35 @@ const ExternalLinksFormField = ({
 
       <div className="FormFieldError">{validateURL(textInput)}</div>
 
-      <table className="ExternalLinksFormField--table">
+      <table>
         <tbody>
           {value.map((link, i) => (
             <tr key={`${link.url}-${i}`}>
               <td>{link.url}</td>
               <td>{formatLinkType(link.link_type)}</td>
               <td>
-                <Button
-                  disableTimeout={true}
-                  isPlain={true}
+                <Link
+                  className={styles.tableButton}
                   onClick={() => handleRemoveButtonClick(link)}
                 >
                   <IconX />
-                </Button>
+                </Link>
 
-                <Button
+                <Link
+                  className={styles.tableButton}
                   disabled={i === 0}
-                  disableTimeout={true}
-                  isPlain={true}
                   onClick={() => handleMoveUpButtonClick(link)}
                 >
                   <IconChevronUp />
-                </Button>
+                </Link>
 
-                <Button
+                <Link
+                  className={styles.tableButton}
                   disabled={i === value.length - 1}
-                  disableTimeout={true}
-                  isPlain={true}
                   onClick={() => handleMoveDownButtonClick(link)}
                 >
                   <IconChevronDown />
-                </Button>
+                </Link>
               </td>
             </tr>
           ))}

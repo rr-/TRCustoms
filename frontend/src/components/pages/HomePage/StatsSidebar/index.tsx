@@ -1,5 +1,5 @@
 import styles from "./index.module.css";
-import { Button } from "src/components/common/Button";
+import { Link } from "src/components/common/Link";
 import { ReviewStats } from "src/components/common/ReviewStats";
 import { Section } from "src/components/common/Section";
 import { SectionHeader } from "src/components/common/Section";
@@ -23,37 +23,24 @@ const StatsSidebar = () => {
         <SectionHeader>External links</SectionHeader>
 
         <div className={styles.extraButtons}>
-          <Button
-            isPlain={true}
-            icon={<IconDiscord />}
-            to="https://discord.gg/qxpHsYKeKz"
-          >
+          <Link icon={<IconDiscord />} to="https://discord.gg/qxpHsYKeKz">
             Join our Discord
-          </Button>
+          </Link>
 
-          <Button
-            isPlain={true}
-            icon={<IconTwitter />}
-            to="https://twitter.com/trcustomsorg"
-          >
+          <Link icon={<IconTwitter />} to="https://twitter.com/trcustomsorg">
             Follow us on Twitter
-          </Button>
+          </Link>
 
-          <Button
-            isPlain={true}
-            icon={<IconKofi />}
-            to="https://ko-fi.com/trcustomsorg"
-          >
+          <Link icon={<IconKofi />} to="https://ko-fi.com/trcustomsorg">
             Support us on Ko-fi
-          </Button>
+          </Link>
 
-          <Button
-            isPlain={true}
+          <Link
             icon={<IconGitHub />}
             to="https://github.com/rr-/trcustoms/issues"
           >
             Report a bug
-          </Button>
+          </Link>
         </div>
       </Section>
     </SidebarBox>

@@ -1,4 +1,4 @@
-import "src/components/common/Button/index.css";
+import styles from "src/components/common/Button/index.module.css";
 
 interface SubmitButtonProps {
   className?: string | undefined;
@@ -30,9 +30,9 @@ const SubmitButton = ({
     }
   };
 
-  const classNames = ["Button", "Button--button"];
+  const classNames = [styles.button];
   if (disabled) {
-    classNames.push("Button--disabled");
+    classNames.push(styles.disabled);
   }
   if (className) {
     classNames.push(className);
@@ -46,8 +46,8 @@ const SubmitButton = ({
       onClick={handleLinkClick}
       onAuxClick={handleLinkClick}
     >
-      {icon && <span className="Button--icon">{icon}</span>}
-      {children && <span className="Button--label">{children}</span>}
+      {icon && <span className={styles.icon}>{icon}</span>}
+      {children && <span className={styles.label}>{children}</span>}
     </button>
   );
 };

@@ -1,9 +1,9 @@
-import "./index.css";
+import styles from "./index.module.css";
 import { TouchEvent } from "react";
 import { useCallback } from "react";
 import { useEffect } from "react";
 import { useState } from "react";
-import { Button } from "src/components/common/Button";
+import { Link } from "src/components/common/Link";
 import { IconChevronLeft } from "src/components/icons";
 import { IconChevronRight } from "src/components/icons";
 import { IconPlay } from "src/components/icons";
@@ -73,7 +73,7 @@ const MediumThumbnailModal = ({
   return (
     <Dim
       isActive={!!file}
-      className="MediumThumbnailModal"
+      className={styles.modal}
       onMouseDown={handleDimClick}
       onWheel={handleDimWheel}
       onTouchStart={handleTouchStart}
@@ -81,16 +81,18 @@ const MediumThumbnailModal = ({
     >
       {file && (
         <>
-          <Button
-            className={
-              canNavigateLeft ? "" : canNavigateRight ? "disabled" : "hidden"
-            }
-            isPlain={true}
-            disableTimeout={true}
+          <Link
+            className={`${styles.navButton} ${
+              canNavigateLeft
+                ? ""
+                : canNavigateRight
+                ? styles.disabled
+                : styles.hidden
+            }`}
             onClick={() => onNavigate(file, -1)}
           >
             <IconChevronLeft />
-          </Button>
+          </Link>
 
           <img
             onMouseDown={handleImageMouseDown}
@@ -98,16 +100,18 @@ const MediumThumbnailModal = ({
             src={file.url}
           />
 
-          <Button
-            className={
-              canNavigateRight ? "" : canNavigateLeft ? "disabled" : "hidden"
-            }
-            isPlain={true}
-            disableTimeout={true}
+          <Link
+            className={`${styles.navButton} ${
+              canNavigateRight
+                ? ""
+                : canNavigateLeft
+                ? styles.disabled
+                : styles.hidden
+            }`}
             onClick={() => onNavigate(file, +1)}
           >
             <IconChevronRight />
-          </Button>
+          </Link>
         </>
       )}
     </Dim>
@@ -127,7 +131,7 @@ const MediumThumbnail = ({
   displayMode,
   onActivate,
 }: MediumThumbnailProps) => {
-  const classNames = ["MediumThumbnail"];
+  const classNames = [styles.mediumThumbnail];
   switch (displayMode) {
     case DisplayMode.Cover:
       classNames.push("cover");
@@ -142,7 +146,7 @@ const MediumThumbnail = ({
       <div className={classNames.join(" ")}>
         <img
           alt="Thumbnail"
-          className="MediumThumbnail--thumb"
+          className={styles.mediumThumbnailThumb}
           role="link"
           tabIndex={1}
           src={file.url}
@@ -163,10 +167,10 @@ const MediumThumbnail = ({
         >
           <img
             alt="Thumbnail"
-            className="MediumThumbnail--thumb"
+            className={styles.mediumThumbnailThumb}
             src={thumbnailUrl}
           />
-          <span className="MediumThumbnail--overlay">
+          <span className={styles.MediumThumbnailOverlay}>
             <IconPlay />
           </span>
         </a>
@@ -187,12 +191,14 @@ interface MediumThumbnailsProps {
   files: UploadedFile[];
   links: string[];
   displayMode: DisplayMode;
+  className?: string | undefined;
 }
 
 const MediumThumbnails = ({
   displayMode,
   files,
   links,
+  className,
 }: MediumThumbnailsProps) => {
   const [activeFile, setActiveFile] = useState<UploadedFile | undefined>();
   const [canNavigateLeft, setCanNavigateLeft] = useState(false);
@@ -251,7 +257,7 @@ const MediumThumbnails = ({
   useEffect(handleLoad, [handleKeypress]);
 
   return (
-    <div className="MediumThumbnails">
+    <div className={`${styles.thumbnails} ${className || ""}`}>
       <MediumThumbnailModal
         file={activeFile}
         canNavigateLeft={canNavigateLeft}

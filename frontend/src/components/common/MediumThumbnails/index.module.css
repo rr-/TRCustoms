@@ -1,23 +1,23 @@
-.MediumThumbnails {
+.thumbnails {
   display: grid;
   grid-auto-flow: row;
   grid-template-columns: repeat(3, 1fr);
   gap: 0.25rem;
 }
-.MediumThumbnails .MediumThumbnail {
+.thumbnails .mediumThumbnail {
   max-width: 100%;
   height: auto;
   font-size: 4rem;
 }
 
-.MediumThumbnail {
+.mediumThumbnail {
   display: flex;
   justify-content: center;
   align-items: center;
   position: relative;
   color: black;
 }
-.MediumThumbnail--overlay {
+.mediumThumbnailOverlay {
   position: absolute;
   left: 0;
   top: 0;
@@ -29,78 +29,77 @@
   pointer-events: none;
   filter: drop-shadow(0 0 2px rgba(255, 255, 255, 0.7));
 }
-.MediumThumbnail:hover .MediumThumbnail--overlay {
+.mediumThumbnail:hover .mediumThumbnailOverlay {
   filter: drop-shadow(0 0 4px rgba(255, 255, 255, 0.5))
     drop-shadow(0 0 2px rgba(255, 255, 255, 0.5));
 }
 
-.MediumThumbnail img {
+.mediumThumbnail :global img {
   display: block;
 }
 
-.MediumThumbnail--thumb {
+.mediumThumbnailThumb {
   display: block;
   width: 100%;
   height: 100%;
   object-fit: contain;
   cursor: pointer;
 }
-.MediumThumbnail.cover .MediumThumbnail--thumb {
+.mediumThumbnail.cover .mediumThumbnailThumb {
   object-fit: cover;
+  aspect-ratio: 4 / 3;
 }
-.MediumThumbnail.contain .MediumThumbnail--thumb {
-  object-fit: contain;
-}
-.MediumThumbnail--thumb:hover {
+.mediumThumbnailThumb:hover {
   opacity: 0.9;
 }
 
-.MediumThumbnailModal {
+.modal {
   align-items: stretch !important;
   cursor: pointer;
   font-size: 5rem;
 }
 
-.MediumThumbnailModal img {
+.modal :global img {
   flex-grow: 0;
   object-fit: contain;
   max-width: calc(100vw - 4rem * 2 - 2rem * 2);
   max-height: calc(100vh - 2rem * 2);
 }
 
-.MediumThumbnailModal .Button--link {
+.navButton {
   display: flex;
   align-items: center;
   color: silver;
 }
-.MediumThumbnailModal .Button--link:hover {
+.navButton:hover {
   color: white;
 }
-.MediumThumbnailModal .Button--link.disabled {
+
+.disabled {
   opacity: 0.1;
 }
-.MediumThumbnailModal .Button--link.hidden {
+.hidden {
   opacity: 0;
 }
 
 @media (max-device-width: 800px) {
-  .MediumThumbnailModal img {
+  .modal :global img {
     max-width: 100vw;
     max-height: 100vh;
   }
-  .MediumThumbnailModal .Button--link {
+  .navButton {
     position: absolute;
     top: 0;
     bottom: 0;
     color: black;
   }
-  .MediumThumbnailModal .Button--link:hover {
+  .navButton:hover {
     color: black;
   }
-  .MediumThumbnailModal .Button--link:first-child {
+  .navButton:first-child {
     left: 0;
   }
-  .MediumThumbnailModal .Button--link:last-child {
+  .navButton:last-child {
     right: 0;
   }
 }

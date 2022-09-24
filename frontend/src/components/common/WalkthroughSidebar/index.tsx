@@ -5,6 +5,7 @@ import { WalkthroughPublishButton } from "src/components/buttons/WalkthroughPubl
 import { WalkthroughRejectButton } from "src/components/buttons/WalkthroughRejectButton";
 import { WalkthroughUpdateVideoButton } from "src/components/buttons/WalkthroughUpdateVideoButton";
 import { Button } from "src/components/common/Button";
+import { Link } from "src/components/common/Link";
 import { PermissionGuard } from "src/components/common/PermissionGuard";
 import { SidebarBox } from "src/components/common/SidebarBox";
 import { IconPencil } from "src/components/icons";
@@ -80,10 +81,8 @@ const WalkthroughSidebar = ({ walkthrough }: WalkthroughSidebarProps) => {
         <MarkdownTOC>{walkthrough.text}</MarkdownTOC>
       ) : (
         <>
-          <Button isPlain={true} disableTimeout={true} to={walkthrough.text}>
-            Click here
-          </Button>{" "}
-          to see the full video/playlist.
+          <Link to={walkthrough.text}>Click here</Link> to see the full
+          video/playlist.
         </>
       )}
     </SidebarBox>

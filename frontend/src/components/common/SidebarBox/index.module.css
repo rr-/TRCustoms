@@ -1,18 +1,16 @@
-.SidebarBox {
+.box {
   padding: calc(var(--sidebar-padding) * 1rem);
   background: var(--sidebar-bg-color);
   display: flex;
   flex-direction: column;
   gap: 1rem;
 }
-.SidebarBox--actions {
+
+.actions {
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
 }
-.SidebarBox--actions:empty {
+.actions:empty {
   display: none;
-}
-.SidebarBox--actions > .Button {
-  flex-grow: 1;
 }

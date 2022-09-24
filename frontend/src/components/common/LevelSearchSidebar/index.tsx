@@ -1,12 +1,12 @@
-import "./index.css";
+import styles from "./index.module.css";
 import { Formik } from "formik";
 import { Form } from "formik";
 import { useEffect } from "react";
 import { useCallback } from "react";
 import { useState } from "react";
-import { Button } from "src/components/common/Button";
 import { EnginesCheckboxes } from "src/components/common/EnginesCheckboxes";
 import { GenresCheckboxes } from "src/components/common/GenresCheckboxes";
+import { Link } from "src/components/common/Link";
 import { PermissionGuard } from "src/components/common/PermissionGuard";
 import { SectionHeader } from "src/components/common/Section";
 import { SidebarBox } from "src/components/common/SidebarBox";
@@ -134,20 +134,16 @@ const LevelSearchSidebar = ({
         onSubmit={handleSubmit}
       >
         {({ submitForm, resetForm }) => (
-          <Form className="LevelSearchSidebar ChildMarginClear">
-            <SectionHeader className="LevelSearchSidebar--sidebarHeader">
+          <Form className="ChildMarginClear">
+            <SectionHeader className={styles.header}>
               Search filter
-              <Button
-                isPlain={true}
-                disableTimeout={true}
-                onClick={handleClear}
-              >
+              <Link className={styles.resetButton} onClick={handleClear}>
                 (reset)
-              </Button>
+              </Link>
             </SectionHeader>
 
             <PermissionGuard require={UserPermission.editLevels}>
-              <div className="LevelSearchSidebar--sidebarSection">
+              <div className={styles.section}>
                 <CheckboxFormField
                   onChange={() => {
                     submitForm();
@@ -158,7 +154,7 @@ const LevelSearchSidebar = ({
               </div>
             </PermissionGuard>
 
-            <div className="LevelSearchSidebar--sidebarSection">
+            <div className={styles.section}>
               <DropDownFormField
                 onChange={() => {
                   submitForm();
@@ -169,31 +165,28 @@ const LevelSearchSidebar = ({
               />
             </div>
 
-            <div className="LevelSearchSidebar--sidebarSection LevelSearchSidebar--searchBar">
+            <div className={`${styles.section} ${styles.searchBar}`}>
               <TextFormField label="Search level/author" name="search" />
               <div className="FormField">
-                <SubmitButton
-                  onClick={submitForm}
-                  icon={<IconSearch />}
-                ></SubmitButton>
+                <SubmitButton onClick={submitForm} icon={<IconSearch />} />
               </div>
             </div>
 
-            <div className="LevelSearchSidebar--sidebarSection">
+            <div className={styles.section}>
               <EnginesCheckboxes
                 value={searchQuery.engines}
                 onChange={handleEnginesChange}
               />
             </div>
 
-            <div className="LevelSearchSidebar--sidebarSection">
+            <div className={styles.section}>
               <GenresCheckboxes
                 value={searchQuery.genres}
                 onChange={handleGenresChange}
               />
             </div>
 
-            <div className="LevelSearchSidebar--sidebarSection">
+            <div className={styles.section}>
               <TagsCheckboxes
                 value={searchQuery.tags}
                 onChange={handleTagsChange}

@@ -3,8 +3,8 @@ import { useCallback } from "react";
 import { Fragment } from "react";
 import { useEffect } from "react";
 import { useState } from "react";
-import { Button } from "src/components/common/Button";
 import { FileUploader } from "src/components/common/FileUploader";
+import { Link } from "src/components/common/Link";
 import { Loader } from "src/components/common/Loader";
 import type { UploadedFile } from "src/services/FileService";
 import { FileService } from "src/services/FileService";
@@ -135,9 +135,7 @@ const FilePickerPreviewWrapper = ({
         {allowClear && (
           <>
             <br />
-            <Button isPlain={true} onClick={() => clearFile(fileId)}>
-              Remove
-            </Button>
+            <Link onClick={() => clearFile(fileId)}>Remove</Link>
           </>
         )}
       </div>

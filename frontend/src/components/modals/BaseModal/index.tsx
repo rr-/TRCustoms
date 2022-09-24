@@ -1,6 +1,6 @@
 import "../index.css";
 import { forwardRef } from "react";
-import { Button } from "src/components/common/Button";
+import { Link } from "src/components/common/Link";
 import { IconX } from "src/components/icons";
 import { Dim } from "src/components/modals/Dim";
 
@@ -32,14 +32,9 @@ const BaseModal = forwardRef<HTMLDivElement, BaseModalProps>(
           <header className="Modal--header ChildMarginClear">
             {title}
 
-            <Button
-              className="Modal--closeButton"
-              isPlain={true}
-              disableTimeout={true}
-              onClick={handleCloseClick}
-            >
+            <Link className="Modal--closeButton" onClick={handleCloseClick}>
               <IconX />
-            </Button>
+            </Link>
           </header>
 
           <div className="Modal--body ChildMarginClear">{children}</div>
