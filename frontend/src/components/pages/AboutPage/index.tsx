@@ -1,8 +1,8 @@
 import { useContext } from "react";
 import { useEffect } from "react";
 import { Link } from "react-router-dom";
-import type { LegaleseEntry } from "src/components/NestedLegalese";
-import { NestedLegalese } from "src/components/NestedLegalese";
+import type { LegaleseEntry } from "src/components/common/NestedLegalese";
+import { NestedLegalese } from "src/components/common/NestedLegalese";
 import { TitleContext } from "src/contexts/TitleContext";
 
 const About: LegaleseEntry = {

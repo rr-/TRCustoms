@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { useEffect } from "react";
 import { useParams } from "react-router-dom";
-import { Section } from "src/components/Section";
-import { SectionHeader } from "src/components/Section";
-import { WalkthroughsTable } from "src/components/WalkthroughsTable";
+import { Section } from "src/components/common/Section";
+import { SectionHeader } from "src/components/common/Section";
+import { WalkthroughsTable } from "src/components/common/WalkthroughsTable";
 import { UserBasePage } from "src/components/pages/UserBasePage";
 import type { UserBasePageChildRenderProps } from "src/components/pages/UserBasePage";
 import type { WalkthroughSearchQuery } from "src/services/WalkthroughService";

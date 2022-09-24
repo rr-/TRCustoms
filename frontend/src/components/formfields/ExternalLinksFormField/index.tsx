@@ -1,7 +1,7 @@
 import "./index.css";
 import { useFormikContext } from "formik";
 import { useState } from "react";
-import { PushButton } from "src/components/PushButton";
+import { PushButton } from "src/components/common/PushButton";
 import type { GenericFormFieldProps } from "src/components/formfields/BaseFormField";
 import { BaseFormField } from "src/components/formfields/BaseFormField";
 import { IconX } from "src/components/icons";

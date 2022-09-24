@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { PushButton } from "src/components/PushButton";
+import { PushButton } from "src/components/common/PushButton";
 import { PromptModal } from "src/components/modals/PromptModal";
 import { showAlertOnError } from "src/utils/misc";
 

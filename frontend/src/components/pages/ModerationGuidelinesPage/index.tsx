@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useContext } from "react";
-import { PageGuard } from "src/components/PermissionGuard";
-import { SectionHeader } from "src/components/Section";
+import { PageGuard } from "src/components/common/PermissionGuard";
+import { SectionHeader } from "src/components/common/Section";
 import { IconCheck } from "src/components/icons";
 import { IconReject } from "src/components/icons";
 import { TitleContext } from "src/contexts/TitleContext";

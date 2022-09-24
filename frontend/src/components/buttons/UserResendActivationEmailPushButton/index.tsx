@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { PushButton } from "src/components/PushButton";
+import { PushButton } from "src/components/common/PushButton";
 import { AuthService } from "src/services/AuthService";
 import { UserService } from "src/services/UserService";
 

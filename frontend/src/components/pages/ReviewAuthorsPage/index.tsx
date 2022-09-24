@@ -1,11 +1,11 @@
 import { useEffect } from "react";
 import { useState } from "react";
 import { useContext } from "react";
-import { QueryPersister } from "src/components/QueryPersister";
-import { deserializeGenericSearchQuery } from "src/components/QueryPersister";
-import { serializeGenericSearchQuery } from "src/components/QueryPersister";
-import { UserFancyList } from "src/components/UserFancyList";
-import { UserSearch } from "src/components/UserSearch";
+import { QueryPersister } from "src/components/common/QueryPersister";
+import { deserializeGenericSearchQuery } from "src/components/common/QueryPersister";
+import { serializeGenericSearchQuery } from "src/components/common/QueryPersister";
+import { UserFancyList } from "src/components/common/UserFancyList";
+import { UserSearch } from "src/components/common/UserSearch";
 import { TitleContext } from "src/contexts/TitleContext";
 import type { UserSearchQuery } from "src/services/UserService";
 import { filterFalsyObjectValues } from "src/utils/misc";

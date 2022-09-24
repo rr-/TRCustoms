@@ -1,4 +1,4 @@
-import { PushButton } from "src/components/PushButton";
+import { PushButton } from "src/components/common/PushButton";
 import { IconPencil } from "src/components/icons";
 import type { ReviewListing } from "src/services/ReviewService";
 

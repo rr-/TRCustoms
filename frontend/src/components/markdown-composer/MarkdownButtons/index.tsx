@@ -1,5 +1,5 @@
 import { useCallback } from "react";
-import { PushButton } from "src/components/PushButton";
+import { PushButton } from "src/components/common/PushButton";
 import { IconMarkdownCode } from "src/components/icons";
 import { IconMarkdownStrikeThrough } from "src/components/icons";
 import { IconMarkdownQuote } from "src/components/icons";

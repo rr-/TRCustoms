@@ -1,11 +1,11 @@
 import { useEffect } from "react";
 import { useState } from "react";
 import { useContext } from "react";
-import { QueryPersister } from "src/components/QueryPersister";
-import { deserializeGenericSearchQuery } from "src/components/QueryPersister";
-import { serializeGenericSearchQuery } from "src/components/QueryPersister";
-import { TagSearch } from "src/components/TagSearch";
-import { TagsTable } from "src/components/TagsTable";
+import { QueryPersister } from "src/components/common/QueryPersister";
+import { deserializeGenericSearchQuery } from "src/components/common/QueryPersister";
+import { serializeGenericSearchQuery } from "src/components/common/QueryPersister";
+import { TagSearch } from "src/components/common/TagSearch";
+import { TagsTable } from "src/components/common/TagsTable";
 import { TitleContext } from "src/contexts/TitleContext";
 import type { TagSearchQuery } from "src/services/TagService";
 import { getCurrentSearchParams } from "src/utils/misc";

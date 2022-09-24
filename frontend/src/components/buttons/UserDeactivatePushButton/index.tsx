@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useQueryClient } from "react-query";
-import { PushButton } from "src/components/PushButton";
+import { PushButton } from "src/components/common/PushButton";
 import { IconBan } from "src/components/icons";
 import { PromptModal } from "src/components/modals/PromptModal";
 import { UserService } from "src/services/UserService";

@@ -1,10 +1,10 @@
 import styles from "./index.module.css";
-import { PushButton } from "src/components/PushButton";
-import { ReviewStats } from "src/components/ReviewStats";
-import { Section } from "src/components/Section";
-import { SectionHeader } from "src/components/Section";
-import { SidebarBox } from "src/components/SidebarBox";
-import { WalkthroughStats } from "src/components/WalkthroughStats";
+import { PushButton } from "src/components/common/PushButton";
+import { ReviewStats } from "src/components/common/ReviewStats";
+import { Section } from "src/components/common/Section";
+import { SectionHeader } from "src/components/common/Section";
+import { SidebarBox } from "src/components/common/SidebarBox";
+import { WalkthroughStats } from "src/components/common/WalkthroughStats";
 import { IconDiscord } from "src/components/icons";
 import { IconGitHub } from "src/components/icons";
 import { IconKofi } from "src/components/icons";

@@ -1,5 +1,5 @@
 import { useFormikContext } from "formik";
-import { Checkbox } from "src/components/Checkbox";
+import { Checkbox } from "src/components/common/Checkbox";
 import { BaseFormField } from "src/components/formfields/BaseFormField";
 import type { GenericFormFieldProps } from "src/components/formfields/BaseFormField";
 

@@ -3,7 +3,7 @@ import { useEffect } from "react";
 import { useContext } from "react";
 import { Link } from "react-router-dom";
 import { useParams } from "react-router-dom";
-import { Loader } from "src/components/Loader";
+import { Loader } from "src/components/common/Loader";
 import { TitleContext } from "src/contexts/TitleContext";
 import { UserService } from "src/services/UserService";
 import { UserDetails } from "src/services/UserService";

@@ -1,8 +1,8 @@
 import styles from "./index.module.css";
 import { useQuery } from "react-query";
-import { Box } from "src/components/Box";
-import { Loader } from "src/components/Loader";
-import { SectionHeader } from "src/components/Section";
+import { Box } from "src/components/common/Box";
+import { Loader } from "src/components/common/Loader";
+import { SectionHeader } from "src/components/common/Section";
 import { LevelAuthorsLink } from "src/components/links/LevelAuthorsLink";
 import { LevelLink } from "src/components/links/LevelLink";
 import { Markdown } from "src/components/markdown/Markdown";

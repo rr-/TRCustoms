@@ -1,5 +1,5 @@
 import "../index.css";
-import { PushButton } from "src/components/PushButton";
+import { PushButton } from "src/components/common/PushButton";
 import { IconCheck } from "src/components/icons";
 import { IconReject } from "src/components/icons";
 import { BaseModal } from "src/components/modals/BaseModal";
