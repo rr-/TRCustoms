@@ -163,6 +163,7 @@ hr {
 }
 
 pre {
+  white-space: pre-wrap;
   background: var(--blockquote-bg-color);
   padding: 0.5rem;
 }
