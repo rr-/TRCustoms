@@ -1,13 +1,13 @@
 import { useNavigate } from "react-router-dom";
-import { UserActivatePushButton } from "src/components/buttons/UserActivatePushButton";
-import { UserBanPushButton } from "src/components/buttons/UserBanPushButton";
-import { UserDeactivatePushButton } from "src/components/buttons/UserDeactivatePushButton";
-import { UserUnbanPushButton } from "src/components/buttons/UserUnbanPushButton";
+import { UserActivateButton } from "src/components/buttons/UserActivateButton";
+import { UserBanButton } from "src/components/buttons/UserBanButton";
+import { UserDeactivateButton } from "src/components/buttons/UserDeactivateButton";
+import { UserUnbanButton } from "src/components/buttons/UserUnbanButton";
+import { Button } from "src/components/common/Button";
 import { DefinitionItemGroup } from "src/components/common/DefinitionList";
 import { DefinitionItem } from "src/components/common/DefinitionList";
 import { DefinitionList } from "src/components/common/DefinitionList";
 import { PermissionGuard } from "src/components/common/PermissionGuard";
-import { PushButton } from "src/components/common/PushButton";
 import { SectionHeader } from "src/components/common/Section";
 import { SidebarBox } from "src/components/common/SidebarBox";
 import { UserPictureMode } from "src/components/common/UserPicture";
@@ -56,14 +56,14 @@ const UserSidebar = ({ user }: UserSidebarProps) => {
       actions={
         <>
           {user.website_url && (
-            <PushButton to={user.website_url} icon={<IconGlobe />}>
+            <Button to={user.website_url} icon={<IconGlobe />}>
               Website
-            </PushButton>
+            </Button>
           )}
           {user.donation_url && (
-            <PushButton to={user.donation_url} icon={<IconHeart />}>
+            <Button to={user.donation_url} icon={<IconHeart />}>
               Donate
-            </PushButton>
+            </Button>
           )}
           {user.is_active ? (
             <>
@@ -71,28 +71,28 @@ const UserSidebar = ({ user }: UserSidebarProps) => {
                 require={UserPermission.editUsers}
                 owningUsers={[user]}
               >
-                <PushButton icon={<IconPencil />} to={`/users/${user.id}/edit`}>
+                <Button icon={<IconPencil />} to={`/users/${user.id}/edit`}>
                   Edit profile
-                </PushButton>
+                </Button>
               </PermissionGuard>
               <PermissionGuard require={UserPermission.manageUsers}>
                 {user.is_banned ? (
-                  <UserUnbanPushButton user={user} />
+                  <UserUnbanButton user={user} />
                 ) : (
-                  !user.is_superuser && <UserBanPushButton user={user} />
+                  !user.is_superuser && <UserBanButton user={user} />
                 )}
                 {!user.is_superuser && (
-                  <UserDeactivatePushButton user={user}>
+                  <UserDeactivateButton user={user}>
                     Deactivate
-                  </UserDeactivatePushButton>
+                  </UserDeactivateButton>
                 )}
               </PermissionGuard>
             </>
           ) : user.is_pending_activation ? (
             <PermissionGuard require={UserPermission.manageUsers}>
-              <UserActivatePushButton user={user} />
+              <UserActivateButton user={user} />
               {!user.is_superuser && (
-                <UserDeactivatePushButton
+                <UserDeactivateButton
                   onComplete={handleUserRejection}
                   user={user}
                 />
@@ -143,33 +143,33 @@ const UserSidebar = ({ user }: UserSidebarProps) => {
           </DefinitionItem>
 
           <DefinitionItem term="Levels authored">
-            <PushButton
+            <Button
               isPlain={true}
               disableTimeout={true}
               onClick={handleLevelCountClick}
             >
               {user.authored_level_count}
-            </PushButton>
+            </Button>
           </DefinitionItem>
 
           <DefinitionItem term="Reviews posted">
-            <PushButton
+            <Button
               isPlain={true}
               disableTimeout={true}
               onClick={handleReviewCountClick}
             >
               {user.reviewed_level_count}
-            </PushButton>
+            </Button>
           </DefinitionItem>
 
           <DefinitionItem term="Walkthroughs">
-            <PushButton
+            <Button
               isPlain={true}
               disableTimeout={true}
               to={`/users/${user.id}/walkthroughs`}
             >
               {user.authored_walkthrough_count}
-            </PushButton>
+            </Button>
           </DefinitionItem>
         </DefinitionItemGroup>
       </DefinitionList>

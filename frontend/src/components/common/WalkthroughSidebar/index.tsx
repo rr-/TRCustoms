@@ -1,11 +1,11 @@
 import { useNavigate } from "react-router-dom";
-import { WalkthroughApprovePushButton } from "src/components/buttons/WalkthroughApprovePushButton";
-import { WalkthroughDeletePushButton } from "src/components/buttons/WalkthroughDeletePushButton";
-import { WalkthroughPublishPushButton } from "src/components/buttons/WalkthroughPublishPushButton";
-import { WalkthroughRejectPushButton } from "src/components/buttons/WalkthroughRejectPushButton";
-import { WalkthroughUpdateVideoPushButton } from "src/components/buttons/WalkthroughUpdateVideoPushButton";
+import { WalkthroughApproveButton } from "src/components/buttons/WalkthroughApproveButton";
+import { WalkthroughDeleteButton } from "src/components/buttons/WalkthroughDeleteButton";
+import { WalkthroughPublishButton } from "src/components/buttons/WalkthroughPublishButton";
+import { WalkthroughRejectButton } from "src/components/buttons/WalkthroughRejectButton";
+import { WalkthroughUpdateVideoButton } from "src/components/buttons/WalkthroughUpdateVideoButton";
+import { Button } from "src/components/common/Button";
 import { PermissionGuard } from "src/components/common/PermissionGuard";
-import { PushButton } from "src/components/common/PushButton";
 import { SidebarBox } from "src/components/common/SidebarBox";
 import { IconPencil } from "src/components/icons";
 import { MarkdownTOC } from "src/components/markdown/MarkdownTOC";
@@ -34,7 +34,7 @@ const WalkthroughSidebar = ({ walkthrough }: WalkthroughSidebarProps) => {
               require={UserPermission.editWalkthroughs}
               owningUsers={walkthrough.author ? [walkthrough.author] : []}
             >
-              <WalkthroughPublishPushButton walkthrough={walkthrough} />
+              <WalkthroughPublishButton walkthrough={walkthrough} />
             </PermissionGuard>
           )}
 
@@ -43,7 +43,7 @@ const WalkthroughSidebar = ({ walkthrough }: WalkthroughSidebarProps) => {
               require={UserPermission.editWalkthroughs}
               owningUsers={walkthrough.author ? [walkthrough.author] : []}
             >
-              <WalkthroughUpdateVideoPushButton walkthrough={walkthrough} />
+              <WalkthroughUpdateVideoButton walkthrough={walkthrough} />
             </PermissionGuard>
           ) : (
             walkthrough.walkthrough_type === WalkthroughType.Text && (
@@ -51,24 +51,24 @@ const WalkthroughSidebar = ({ walkthrough }: WalkthroughSidebarProps) => {
                 require={UserPermission.editWalkthroughs}
                 owningUsers={walkthrough.author ? [walkthrough.author] : []}
               >
-                <PushButton
+                <Button
                   icon={<IconPencil />}
                   to={`/walkthroughs/${walkthrough.id}/edit`}
                 >
                   Edit
-                </PushButton>
+                </Button>
               </PermissionGuard>
             )
           )}
 
           <PermissionGuard require={UserPermission.editWalkthroughs}>
-            <WalkthroughRejectPushButton walkthrough={walkthrough} />
+            <WalkthroughRejectButton walkthrough={walkthrough} />
             {walkthrough.status !== WalkthroughStatus.Approved && (
-              <WalkthroughApprovePushButton walkthrough={walkthrough} />
+              <WalkthroughApproveButton walkthrough={walkthrough} />
             )}
           </PermissionGuard>
           <PermissionGuard require={UserPermission.deleteWalkthroughs}>
-            <WalkthroughDeletePushButton
+            <WalkthroughDeleteButton
               walkthrough={walkthrough}
               onComplete={handleDelete}
             />
@@ -80,13 +80,9 @@ const WalkthroughSidebar = ({ walkthrough }: WalkthroughSidebarProps) => {
         <MarkdownTOC>{walkthrough.text}</MarkdownTOC>
       ) : (
         <>
-          <PushButton
-            isPlain={true}
-            disableTimeout={true}
-            to={walkthrough.text}
-          >
+          <Button isPlain={true} disableTimeout={true} to={walkthrough.text}>
             Click here
-          </PushButton>{" "}
+          </Button>{" "}
           to see the full video/playlist.
         </>
       )}

@@ -68,18 +68,18 @@
   max-height: calc(100vh - 2rem * 2);
 }
 
-.MediumThumbnailModal .PushButton--link {
+.MediumThumbnailModal .Button--link {
   display: flex;
   align-items: center;
   color: silver;
 }
-.MediumThumbnailModal .PushButton--link:hover {
+.MediumThumbnailModal .Button--link:hover {
   color: white;
 }
-.MediumThumbnailModal .PushButton--link.disabled {
+.MediumThumbnailModal .Button--link.disabled {
   opacity: 0.1;
 }
-.MediumThumbnailModal .PushButton--link.hidden {
+.MediumThumbnailModal .Button--link.hidden {
   opacity: 0;
 }
 
@@ -88,19 +88,19 @@
     max-width: 100vw;
     max-height: 100vh;
   }
-  .MediumThumbnailModal .PushButton--link {
+  .MediumThumbnailModal .Button--link {
     position: absolute;
     top: 0;
     bottom: 0;
     color: black;
   }
-  .MediumThumbnailModal .PushButton--link:hover {
+  .MediumThumbnailModal .Button--link:hover {
     color: black;
   }
-  .MediumThumbnailModal .PushButton--link:first-child {
+  .MediumThumbnailModal .Button--link:first-child {
     left: 0;
   }
-  .MediumThumbnailModal .PushButton--link:last-child {
+  .MediumThumbnailModal .Button--link:last-child {
     right: 0;
   }
 }

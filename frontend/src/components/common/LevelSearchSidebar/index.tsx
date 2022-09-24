@@ -4,10 +4,10 @@ import { Form } from "formik";
 import { useEffect } from "react";
 import { useCallback } from "react";
 import { useState } from "react";
+import { Button } from "src/components/common/Button";
 import { EnginesCheckboxes } from "src/components/common/EnginesCheckboxes";
 import { GenresCheckboxes } from "src/components/common/GenresCheckboxes";
 import { PermissionGuard } from "src/components/common/PermissionGuard";
-import { PushButton } from "src/components/common/PushButton";
 import { SectionHeader } from "src/components/common/Section";
 import { SidebarBox } from "src/components/common/SidebarBox";
 import { TagsCheckboxes } from "src/components/common/TagsCheckboxes";
@@ -137,13 +137,13 @@ const LevelSearchSidebar = ({
           <Form className="LevelSearchSidebar ChildMarginClear">
             <SectionHeader className="LevelSearchSidebar--sidebarHeader">
               Search filter
-              <PushButton
+              <Button
                 isPlain={true}
                 disableTimeout={true}
                 onClick={handleClear}
               >
                 (reset)
-              </PushButton>
+              </Button>
             </SectionHeader>
 
             <PermissionGuard require={UserPermission.editLevels}>

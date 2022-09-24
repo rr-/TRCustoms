@@ -1,5 +1,5 @@
 import "../index.css";
-import { PushButton } from "src/components/common/PushButton";
+import { Button } from "src/components/common/Button";
 import { IconCheck } from "src/components/icons";
 import { IconReject } from "src/components/icons";
 import { BaseModal } from "src/components/modals/BaseModal";
@@ -33,15 +33,15 @@ const ConfirmModal = ({
       onIsActiveChange={onIsActiveChange}
       buttons={
         <>
-          <PushButton disableTimeout={true} onClick={handleConfirmClick}>
+          <Button disableTimeout={true} onClick={handleConfirmClick}>
             <IconCheck />
             Yes
-          </PushButton>
+          </Button>
 
-          <PushButton disableTimeout={true} onClick={handleCancelClick}>
+          <Button disableTimeout={true} onClick={handleCancelClick}>
             <IconReject />
             Cancel
-          </PushButton>
+          </Button>
         </>
       }
     >

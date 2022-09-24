@@ -1,5 +1,5 @@
 import "./index.css";
-import { PushButton } from "src/components/common/PushButton";
+import { Button } from "src/components/common/Button";
 
 interface FilterCheckboxesHeaderProps {
   onClear: () => void;
@@ -12,9 +12,9 @@ const FilterCheckboxesHeader = ({
   return (
     <div className="FilterCheckboxesHeader">
       {children}
-      <PushButton isPlain={true} disableTimeout={true} onClick={onClear}>
+      <Button isPlain={true} disableTimeout={true} onClick={onClear}>
         (clear)
-      </PushButton>
+      </Button>
     </div>
   );
 };

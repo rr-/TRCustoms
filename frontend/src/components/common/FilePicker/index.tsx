@@ -3,9 +3,9 @@ import { useCallback } from "react";
 import { Fragment } from "react";
 import { useEffect } from "react";
 import { useState } from "react";
+import { Button } from "src/components/common/Button";
 import { FileUploader } from "src/components/common/FileUploader";
 import { Loader } from "src/components/common/Loader";
-import { PushButton } from "src/components/common/PushButton";
 import type { UploadedFile } from "src/services/FileService";
 import { FileService } from "src/services/FileService";
 import { UploadType } from "src/services/FileService";
@@ -135,9 +135,9 @@ const FilePickerPreviewWrapper = ({
         {allowClear && (
           <>
             <br />
-            <PushButton isPlain={true} onClick={() => clearFile(fileId)}>
+            <Button isPlain={true} onClick={() => clearFile(fileId)}>
               Remove
-            </PushButton>
+            </Button>
           </>
         )}
       </div>

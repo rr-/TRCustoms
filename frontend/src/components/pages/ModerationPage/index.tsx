@@ -4,10 +4,10 @@ import { useEffect } from "react";
 import { useContext } from "react";
 import { AuditLogSearch } from "src/components/common/AuditLogSearch";
 import { AuditLogTable } from "src/components/common/AuditLogTable";
+import { Button } from "src/components/common/Button";
 import { InfoMessage } from "src/components/common/InfoMessage";
 import { InfoMessageType } from "src/components/common/InfoMessage";
 import { PageGuard } from "src/components/common/PermissionGuard";
-import { PushButton } from "src/components/common/PushButton";
 import { QueryPersister } from "src/components/common/QueryPersister";
 import { deserializeGenericSearchQuery } from "src/components/common/QueryPersister";
 import { serializeGenericSearchQuery } from "src/components/common/QueryPersister";
@@ -66,12 +66,12 @@ const ModerationPageView = () => {
         <SidebarBox
           actions={
             <>
-              <PushButton to={"/mod/how-to"} disableTimeout={true}>
+              <Button to={"/mod/how-to"} disableTimeout={true}>
                 Moderating guidelines
-              </PushButton>
-              <PushButton to={"/users"} disableTimeout={true}>
+              </Button>
+              <Button to={"/users"} disableTimeout={true}>
                 User list
-              </PushButton>
+              </Button>
             </>
           }
         >

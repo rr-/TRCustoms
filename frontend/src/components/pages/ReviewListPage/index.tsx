@@ -2,7 +2,7 @@ import "./index.css";
 import { useEffect } from "react";
 import { useState } from "react";
 import { useContext } from "react";
-import { PushButton } from "src/components/common/PushButton";
+import { Button } from "src/components/common/Button";
 import { QueryPersister } from "src/components/common/QueryPersister";
 import { deserializeGenericSearchQuery } from "src/components/common/QueryPersister";
 import { serializeGenericSearchQuery } from "src/components/common/QueryPersister";
@@ -48,19 +48,19 @@ const ReviewListPage = () => {
         <SidebarBox>
           <Section className="ChildMarginClear">
             <SectionHeader>Reviewer catalogue</SectionHeader>
-            <PushButton
+            <Button
               to={`/reviews/authors`}
               isPlain={true}
               disableTimeout={true}
             >
               <img src="/reviewer_catalogue.jpg" alt="Reviewer catalogue" />
               Find reviewers
-            </PushButton>
+            </Button>
           </Section>
 
           <Section className="ChildMarginClear">
             <SectionHeader>Least reviewed levels</SectionHeader>
-            <PushButton
+            <Button
               to={`/reviews/level_suggestions`}
               isPlain={true}
               disableTimeout={true}
@@ -70,7 +70,7 @@ const ReviewListPage = () => {
                 alt="Least reviewed levels"
               />
               Review less known levels
-            </PushButton>
+            </Button>
             <p>
               A list of levels with less than 5 reviews, sorted by the oldest
               release date.

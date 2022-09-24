@@ -2,9 +2,10 @@ import "./index.css";
 import { useContext } from "react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { LevelApprovePushButton } from "src/components/buttons/LevelApprovePushButton";
-import { LevelDeletePushButton } from "src/components/buttons/LevelDeletePushButton";
-import { LevelRejectPushButton } from "src/components/buttons/LevelRejectPushButton";
+import { LevelApproveButton } from "src/components/buttons/LevelApproveButton";
+import { LevelDeleteButton } from "src/components/buttons/LevelDeleteButton";
+import { LevelRejectButton } from "src/components/buttons/LevelRejectButton";
+import { Button } from "src/components/common/Button";
 import { DefinitionItemGroup } from "src/components/common/DefinitionList";
 import { DefinitionItem } from "src/components/common/DefinitionList";
 import { DefinitionList } from "src/components/common/DefinitionList";
@@ -12,7 +13,6 @@ import { LevelRating } from "src/components/common/LevelRating";
 import { Loader } from "src/components/common/Loader";
 import { MediumThumbnails } from "src/components/common/MediumThumbnails";
 import { PermissionGuard } from "src/components/common/PermissionGuard";
-import { PushButton } from "src/components/common/PushButton";
 import { SectionHeader } from "src/components/common/Section";
 import { SidebarBox } from "src/components/common/SidebarBox";
 import { IconDownload } from "src/components/icons";
@@ -91,14 +91,14 @@ const LevelSidebar = ({ level, reviewCount }: LevelSidebarProps) => {
         actions={
           <>
             {level.last_file?.url && (
-              <PushButton to={level.last_file.url} icon={<IconDownload />}>
+              <Button to={level.last_file.url} icon={<IconDownload />}>
                 Download ({formatFileSize(level.last_file.size)})
-              </PushButton>
+              </Button>
             )}
             {mainLink && (
-              <PushButton to={mainLink} icon={<IconGlobe />}>
+              <Button to={mainLink} icon={<IconGlobe />}>
                 Website
-              </PushButton>
+              </Button>
             )}
             <PermissionGuard
               require={UserPermission.editLevels}
@@ -107,35 +107,32 @@ const LevelSidebar = ({ level, reviewCount }: LevelSidebarProps) => {
                 ...(level.uploader ? [level.uploader] : []),
               ]}
             >
-              <PushButton icon={<IconPencil />} to={`/levels/${level.id}/edit`}>
+              <Button icon={<IconPencil />} to={`/levels/${level.id}/edit`}>
                 Edit
-              </PushButton>
+              </Button>
             </PermissionGuard>
 
             <PermissionGuard require={UserPermission.editLevels}>
-              <LevelRejectPushButton level={level} />
-              {!level.is_approved && <LevelApprovePushButton level={level} />}
+              <LevelRejectButton level={level} />
+              {!level.is_approved && <LevelApproveButton level={level} />}
             </PermissionGuard>
 
             <PermissionGuard require={UserPermission.deleteLevels}>
-              <LevelDeletePushButton level={level} onComplete={handleDelete} />
+              <LevelDeleteButton level={level} onComplete={handleDelete} />
             </PermissionGuard>
 
-            <PushButton
-              icon={<IconBook />}
-              onClick={handleWalkthroughsButtonClick}
-            >
+            <Button icon={<IconBook />} onClick={handleWalkthroughsButtonClick}>
               Walkthrough
-            </PushButton>
+            </Button>
 
             {level.authors.every((author) => author.id !== user?.id) && (
               <PermissionGuard require={UserPermission.reviewLevels}>
-                <PushButton
+                <Button
                   icon={<IconAnnotation />}
                   to={`/levels/${level.id}/review`}
                 >
                   Review
-                </PushButton>
+                </Button>
               </PermissionGuard>
             )}
           </>
@@ -166,13 +163,13 @@ const LevelSidebar = ({ level, reviewCount }: LevelSidebarProps) => {
 
             <DefinitionItem term="Reviews">
               {reviewCount !== undefined ? (
-                <PushButton
+                <Button
                   isPlain={true}
                   disableTimeout={true}
                   onClick={handleReviewCountClick}
                 >
                   {reviewCount}
-                </PushButton>
+                </Button>
               ) : (
                 <Loader inline={true} />
               )}
@@ -269,16 +266,16 @@ const LevelSidebar = ({ level, reviewCount }: LevelSidebarProps) => {
                     term={
                       <span className="LevelSidebar--fileTableTerm">
                         {file.url ? (
-                          <PushButton isPlain={true} to={file.url}>
+                          <Button isPlain={true} to={file.url}>
                             Version {file.version}
-                          </PushButton>
+                          </Button>
                         ) : (
-                          <PushButton
+                          <Button
                             isPlain={true}
                             onClick={() => showFileGoneAlert()}
                           >
                             Version {file.version}
-                          </PushButton>
+                          </Button>
                         )}
                       </span>
                     }

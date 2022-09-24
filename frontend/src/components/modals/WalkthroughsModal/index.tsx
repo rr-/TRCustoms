@@ -4,7 +4,7 @@ import { useContext } from "react";
 import { useState } from "react";
 import { useQuery } from "react-query";
 import { useNavigate } from "react-router-dom";
-import { PushButton } from "src/components/common/PushButton";
+import { Button } from "src/components/common/Button";
 import { TextInput } from "src/components/common/TextInput";
 import { WalkthroughsTable } from "src/components/common/WalkthroughsTable";
 import { BaseModal } from "src/components/modals/BaseModal";
@@ -83,7 +83,7 @@ const WalkthroughsModalFooter = ({ level }: WalkthroughsModalFooterProps) => {
 
   return (
     <div className="WalkthroughsModalFooter">
-      <PushButton
+      <Button
         to={
           ownWalkthroughResult?.data
             ? `/walkthroughs/${ownWalkthroughResult.data.id}/edit`
@@ -91,7 +91,7 @@ const WalkthroughsModalFooter = ({ level }: WalkthroughsModalFooterProps) => {
         }
       >
         Write a text guide
-      </PushButton>
+      </Button>
       OR
       <TextInput
         type="url"
@@ -100,9 +100,9 @@ const WalkthroughsModalFooter = ({ level }: WalkthroughsModalFooterProps) => {
         value={textInput}
         placeholder="Youtube video/playlist link"
       />
-      <PushButton disableTimeout={true} onClick={handleVideoButtonClick}>
+      <Button disableTimeout={true} onClick={handleVideoButtonClick}>
         Add a video guide
-      </PushButton>
+      </Button>
     </div>
   );
 };

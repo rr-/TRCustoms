@@ -3,7 +3,7 @@ import { Form } from "formik";
 import { useEffect } from "react";
 import { useCallback } from "react";
 import { useState } from "react";
-import { PushButton } from "src/components/common/PushButton";
+import { Button } from "src/components/common/Button";
 import { SearchBar } from "src/components/common/SearchBar";
 import { CheckboxFormField } from "src/components/formfields/CheckboxFormField";
 import { SubmitButton } from "src/components/formfields/SubmitButton";
@@ -85,9 +85,9 @@ const UserSearch = ({
             </div>
 
             <div className="FormField">
-              <PushButton disableTimeout={true} onClick={handleClear}>
+              <Button disableTimeout={true} onClick={handleClear}>
                 Reset
-              </PushButton>
+              </Button>
             </div>
           </SearchBar>
         </Form>

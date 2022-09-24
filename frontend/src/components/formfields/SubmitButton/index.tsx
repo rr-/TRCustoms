@@ -1,4 +1,4 @@
-import "src/components/common/PushButton/index.css";
+import "src/components/common/Button/index.css";
 
 interface SubmitButtonProps {
   className?: string | undefined;
@@ -30,9 +30,9 @@ const SubmitButton = ({
     }
   };
 
-  const classNames = ["PushButton", "PushButton--button"];
+  const classNames = ["Button", "Button--button"];
   if (disabled) {
-    classNames.push("PushButton--disabled");
+    classNames.push("Button--disabled");
   }
   if (className) {
     classNames.push(className);
@@ -46,8 +46,8 @@ const SubmitButton = ({
       onClick={handleLinkClick}
       onAuxClick={handleLinkClick}
     >
-      {icon && <span className="PushButton--icon">{icon}</span>}
-      {children && <span className="PushButton--label">{children}</span>}
+      {icon && <span className="Button--icon">{icon}</span>}
+      {children && <span className="Button--label">{children}</span>}
     </button>
   );
 };

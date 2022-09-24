@@ -1,5 +1,5 @@
 import styles from "./index.module.css";
-import { PushButton } from "src/components/common/PushButton";
+import { Button } from "src/components/common/Button";
 import { ReviewStats } from "src/components/common/ReviewStats";
 import { Section } from "src/components/common/Section";
 import { SectionHeader } from "src/components/common/Section";
@@ -23,37 +23,37 @@ const StatsSidebar = () => {
         <SectionHeader>External links</SectionHeader>
 
         <div className={styles.extraButtons}>
-          <PushButton
+          <Button
             isPlain={true}
             icon={<IconDiscord />}
             to="https://discord.gg/qxpHsYKeKz"
           >
             Join our Discord
-          </PushButton>
+          </Button>
 
-          <PushButton
+          <Button
             isPlain={true}
             icon={<IconTwitter />}
             to="https://twitter.com/trcustomsorg"
           >
             Follow us on Twitter
-          </PushButton>
+          </Button>
 
-          <PushButton
+          <Button
             isPlain={true}
             icon={<IconKofi />}
             to="https://ko-fi.com/trcustomsorg"
           >
             Support us on Ko-fi
-          </PushButton>
+          </Button>
 
-          <PushButton
+          <Button
             isPlain={true}
             icon={<IconGitHub />}
             to="https://github.com/rr-/trcustoms/issues"
           >
             Report a bug
-          </PushButton>
+          </Button>
         </div>
       </Section>
     </SidebarBox>

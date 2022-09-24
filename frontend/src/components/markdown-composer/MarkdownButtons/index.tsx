@@ -1,5 +1,5 @@
 import { useCallback } from "react";
-import { PushButton } from "src/components/common/PushButton";
+import { Button } from "src/components/common/Button";
 import { IconMarkdownCode } from "src/components/icons";
 import { IconMarkdownStrikeThrough } from "src/components/icons";
 import { IconMarkdownQuote } from "src/components/icons";
@@ -39,7 +39,7 @@ const MarkdownBaseButton = ({
   }, [textarea, style]);
 
   return (
-    <PushButton
+    <Button
       disableTimeout={true}
       isPlain={true}
       onClick={handleClick}

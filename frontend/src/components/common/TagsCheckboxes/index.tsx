@@ -2,9 +2,9 @@ import { sortBy } from "lodash";
 import { useContext } from "react";
 import { useEffect } from "react";
 import { useState } from "react";
+import { Button } from "src/components/common/Button";
 import { Checkbox } from "src/components/common/Checkbox";
 import { FilterCheckboxesHeader } from "src/components/common/FilterCheckboxesHeader";
-import { PushButton } from "src/components/common/PushButton";
 import { TextInput } from "src/components/common/TextInput";
 import { KEY_RETURN } from "src/constants";
 import { ConfigContext } from "src/contexts/ConfigContext";
@@ -98,9 +98,9 @@ const TagsCheckboxes = ({ value, onChange }: TagsCheckboxesProps) => {
         <p>({filteredTags.length - MAX_VISIBLE_TAGS} tag(s) hidden)</p>
       )}
       <div>
-        <PushButton isPlain={true} disableTimeout={true} to={`/tags`}>
+        <Button isPlain={true} disableTimeout={true} to={`/tags`}>
           Browse all
-        </PushButton>
+        </Button>
       </div>
     </div>
   );

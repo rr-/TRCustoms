@@ -1,6 +1,6 @@
 import "./index.css";
 import { Key } from "react";
-import { PushButton } from "src/components/common/PushButton";
+import { Button } from "src/components/common/Button";
 import { IconX } from "src/components/icons";
 
 interface PillsProps<TItem> {
@@ -23,9 +23,9 @@ const Pills = <TItem extends Object>({
           {source.map((item) => (
             <li key={getKey(item)} className="Pills--listItem">
               {getText(item)}{" "}
-              <PushButton isPlain={true} onClick={() => onRemove(item)}>
+              <Button isPlain={true} onClick={() => onRemove(item)}>
                 <IconX />
-              </PushButton>
+              </Button>
             </li>
           ))}
         </ul>
