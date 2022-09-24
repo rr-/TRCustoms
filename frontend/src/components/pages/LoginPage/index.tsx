@@ -7,7 +7,7 @@ import { useContext } from "react";
 import { useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
-import { UserResendActivationEmailPushButton } from "src/components/buttons/UserResendActivationEmailPushButton";
+import { UserResendActivationEmailButton } from "src/components/buttons/UserResendActivationEmailButton";
 import { FormGrid } from "src/components/common/FormGrid";
 import { FormGridButtons } from "src/components/common/FormGrid";
 import { FormGridFieldSet } from "src/components/common/FormGrid";
@@ -45,7 +45,7 @@ const LoginPage = () => {
                   <>
                     {makeSentence(data.detail)}
                     <br />
-                    <UserResendActivationEmailPushButton
+                    <UserResendActivationEmailButton
                       username={values.username}
                     />
                   </>

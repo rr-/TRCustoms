@@ -3,7 +3,7 @@ import { TouchEvent } from "react";
 import { useCallback } from "react";
 import { useEffect } from "react";
 import { useState } from "react";
-import { PushButton } from "src/components/common/PushButton";
+import { Button } from "src/components/common/Button";
 import { IconChevronLeft } from "src/components/icons";
 import { IconChevronRight } from "src/components/icons";
 import { IconPlay } from "src/components/icons";
@@ -81,7 +81,7 @@ const MediumThumbnailModal = ({
     >
       {file && (
         <>
-          <PushButton
+          <Button
             className={
               canNavigateLeft ? "" : canNavigateRight ? "disabled" : "hidden"
             }
@@ -90,7 +90,7 @@ const MediumThumbnailModal = ({
             onClick={() => onNavigate(file, -1)}
           >
             <IconChevronLeft />
-          </PushButton>
+          </Button>
 
           <img
             onMouseDown={handleImageMouseDown}
@@ -98,7 +98,7 @@ const MediumThumbnailModal = ({
             src={file.url}
           />
 
-          <PushButton
+          <Button
             className={
               canNavigateRight ? "" : canNavigateLeft ? "disabled" : "hidden"
             }
@@ -107,7 +107,7 @@ const MediumThumbnailModal = ({
             onClick={() => onNavigate(file, +1)}
           >
             <IconChevronRight />
-          </PushButton>
+          </Button>
         </>
       )}
     </Dim>

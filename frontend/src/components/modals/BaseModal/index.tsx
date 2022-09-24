@@ -1,6 +1,6 @@
 import "../index.css";
 import { forwardRef } from "react";
-import { PushButton } from "src/components/common/PushButton";
+import { Button } from "src/components/common/Button";
 import { IconX } from "src/components/icons";
 import { Dim } from "src/components/modals/Dim";
 
@@ -32,14 +32,14 @@ const BaseModal = forwardRef<HTMLDivElement, BaseModalProps>(
           <header className="Modal--header ChildMarginClear">
             {title}
 
-            <PushButton
+            <Button
               className="Modal--closeButton"
               isPlain={true}
               disableTimeout={true}
               onClick={handleCloseClick}
             >
               <IconX />
-            </PushButton>
+            </Button>
           </header>
 
           <div className="Modal--body ChildMarginClear">{children}</div>

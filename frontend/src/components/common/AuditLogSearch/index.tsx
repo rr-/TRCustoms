@@ -4,8 +4,8 @@ import { Form } from "formik";
 import { useState } from "react";
 import { useCallback } from "react";
 import { useEffect } from "react";
+import { Button } from "src/components/common/Button";
 import { Checkbox } from "src/components/common/Checkbox";
-import { PushButton } from "src/components/common/PushButton";
 import { SectionHeader } from "src/components/common/Section";
 import { CheckboxFormField } from "src/components/formfields/CheckboxFormField";
 import { SubmitButton } from "src/components/formfields/SubmitButton";
@@ -234,13 +234,13 @@ const AuditLogSearch = ({
         <Form className="AuditLogSearch ChildMarginClear">
           <SectionHeader className="AuditLogSearch--sidebarHeader">
             Search filter
-            <PushButton
+            <Button
               isPlain={true}
               disableTimeout={true}
               onClick={() => handleClear(resetForm)}
             >
               (reset)
-            </PushButton>
+            </Button>
           </SectionHeader>
 
           <div className="AuditLogSearch--sidebarSection">

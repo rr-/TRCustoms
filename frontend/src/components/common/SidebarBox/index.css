@@ -13,6 +13,6 @@
 .SidebarBox--actions:empty {
   display: none;
 }
-.SidebarBox--actions > .PushButton {
+.SidebarBox--actions > .Button {
   flex-grow: 1;
 }

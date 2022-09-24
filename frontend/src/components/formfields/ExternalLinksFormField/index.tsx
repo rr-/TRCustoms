@@ -1,7 +1,7 @@
 import "./index.css";
 import { useFormikContext } from "formik";
 import { useState } from "react";
-import { PushButton } from "src/components/common/PushButton";
+import { Button } from "src/components/common/Button";
 import type { GenericFormFieldProps } from "src/components/formfields/BaseFormField";
 import { BaseFormField } from "src/components/formfields/BaseFormField";
 import { IconX } from "src/components/icons";
@@ -126,9 +126,9 @@ const ExternalLinksFormField = ({
           ))}
         </select>
 
-        <PushButton disableTimeout={true} onClick={() => addCurrentLink()}>
+        <Button disableTimeout={true} onClick={() => addCurrentLink()}>
           Add
-        </PushButton>
+        </Button>
       </div>
 
       <div className="FormFieldError">{validateURL(textInput)}</div>
@@ -140,31 +140,31 @@ const ExternalLinksFormField = ({
               <td>{link.url}</td>
               <td>{formatLinkType(link.link_type)}</td>
               <td>
-                <PushButton
+                <Button
                   disableTimeout={true}
                   isPlain={true}
                   onClick={() => handleRemoveButtonClick(link)}
                 >
                   <IconX />
-                </PushButton>
+                </Button>
 
-                <PushButton
+                <Button
                   disabled={i === 0}
                   disableTimeout={true}
                   isPlain={true}
                   onClick={() => handleMoveUpButtonClick(link)}
                 >
                   <IconChevronUp />
-                </PushButton>
+                </Button>
 
-                <PushButton
+                <Button
                   disabled={i === value.length - 1}
                   disableTimeout={true}
                   isPlain={true}
                   onClick={() => handleMoveDownButtonClick(link)}
                 >
                   <IconChevronDown />
-                </PushButton>
+                </Button>
               </td>
             </tr>
           ))}

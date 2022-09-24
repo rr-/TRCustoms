@@ -2,7 +2,7 @@
   display: flex;
   justify-content: space-between;
 }
-.LevelSearchSidebar--sidebarHeader .PushButton {
+.LevelSearchSidebar--sidebarHeader .Button {
   font-size: 1rem;
   font-weight: normal;
 }

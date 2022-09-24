@@ -1,13 +1,13 @@
 import "./index.css";
 import { useQuery } from "react-query";
-import { TagDeletePushButton } from "src/components/buttons/TagDeletePushButton";
-import { TagMergePushButton } from "src/components/buttons/TagMergePushButton";
-import { TagRenamePushButton } from "src/components/buttons/TagRenamePushButton";
+import { TagDeleteButton } from "src/components/buttons/TagDeleteButton";
+import { TagMergeButton } from "src/components/buttons/TagMergeButton";
+import { TagRenameButton } from "src/components/buttons/TagRenameButton";
+import { Button } from "src/components/common/Button";
 import type { DataTableColumn } from "src/components/common/DataTable";
 import { DataTable } from "src/components/common/DataTable";
 import { Loader } from "src/components/common/Loader";
 import { PermissionGuard } from "src/components/common/PermissionGuard";
-import { PushButton } from "src/components/common/PushButton";
 import { TagLink } from "src/components/links/TagLink";
 import type { TagListing } from "src/services/TagService";
 import type { TagSearchQuery } from "src/services/TagService";
@@ -55,9 +55,9 @@ const TagsTableDetails = ({ tag }: TagsTableDetailsProps) => {
       )}
       <PermissionGuard require={UserPermission.editTags}>
         <div className="FormGridButtons--buttons">
-          <TagMergePushButton tag={tag} />
-          <TagRenamePushButton tag={tag} />
-          <TagDeletePushButton tag={tag} />
+          <TagMergeButton tag={tag} />
+          <TagRenameButton tag={tag} />
+          <TagDeleteButton tag={tag} />
         </div>
       </PermissionGuard>
     </>
@@ -71,9 +71,9 @@ const TagsTable = ({ searchQuery, onSearchQueryChange }: TagsTableProps) => {
       sortKey: "name",
       label: "Name",
       itemElement: ({ item, toggleActive }) => (
-        <PushButton isPlain={true} disableTimeout={true} onClick={toggleActive}>
+        <Button isPlain={true} disableTimeout={true} onClick={toggleActive}>
           {item.name}
-        </PushButton>
+        </Button>
       ),
     },
     {

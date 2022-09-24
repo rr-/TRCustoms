@@ -1,9 +1,9 @@
 import "./index.css";
 import { useQuery } from "react-query";
+import { Button } from "src/components/common/Button";
 import type { DataTableColumn } from "src/components/common/DataTable";
 import { DataTable } from "src/components/common/DataTable";
 import { Loader } from "src/components/common/Loader";
-import { PushButton } from "src/components/common/PushButton";
 import { GenreLink } from "src/components/links/GenreLink";
 import type { GenreListing } from "src/services/GenreService";
 import type { GenreSearchQuery } from "src/services/GenreService";
@@ -63,9 +63,9 @@ const GenresTable = ({
       sortKey: "name",
       label: "Name",
       itemElement: ({ item, toggleActive }) => (
-        <PushButton isPlain={true} disableTimeout={true} onClick={toggleActive}>
+        <Button isPlain={true} disableTimeout={true} onClick={toggleActive}>
           {item.name}
-        </PushButton>
+        </Button>
       ),
     },
     {

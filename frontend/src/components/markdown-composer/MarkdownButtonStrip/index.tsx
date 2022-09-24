@@ -1,5 +1,5 @@
 import "./index.css";
-import { PushButton } from "src/components/common/PushButton";
+import { Button } from "src/components/common/Button";
 import { IconHelp } from "src/components/icons";
 import { MarkdownHeaderButton } from "src/components/markdown-composer/MarkdownButtons";
 import { MarkdownBoldButton } from "src/components/markdown-composer/MarkdownButtons";
@@ -57,7 +57,7 @@ const MarkdownButtonStrip = ({ textarea }: MarkdownButtonStripProps) => {
       </div>
 
       <div className="MarkdownButtonStrip--group">
-        <PushButton
+        <Button
           disableTimeout={true}
           isPlain={true}
           icon={<IconHelp />}

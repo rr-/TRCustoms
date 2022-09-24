@@ -15,7 +15,7 @@
   padding: 0.25rem 0.5rem;
   border-radius: 0.25rem;
 }
-.Pills--listItem .PushButton {
+.Pills--listItem .Button {
   text-decoration: none;
   color: var(--button-fg-color);
 }

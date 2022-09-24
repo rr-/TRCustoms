@@ -14,7 +14,7 @@
 .MarkdownButtonStrip--group:last-of-type {
   margin-left: auto;
 }
-.MarkdownButtonStrip--group .PushButton--icon .Icon {
+.MarkdownButtonStrip--group .Button--icon .Icon {
   width: 1.4em;
   height: 1.4em;
 }

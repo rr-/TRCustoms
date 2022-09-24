@@ -4,9 +4,9 @@ import { useEffect } from "react";
 import { useQuery } from "react-query";
 import { useParams } from "react-router-dom";
 import { Box } from "src/components/common/Box";
+import { Button } from "src/components/common/Button";
 import { Loader } from "src/components/common/Loader";
 import { PermissionGuard } from "src/components/common/PermissionGuard";
-import { PushButton } from "src/components/common/PushButton";
 import { SectionHeader } from "src/components/common/Section";
 import { Markdown } from "src/components/markdown/Markdown";
 import { TitleContext } from "src/contexts/TitleContext";
@@ -62,7 +62,7 @@ const NewsPage = () => {
 
       <PermissionGuard require={UserPermission.editNews}>
         <footer className={styles.footer}>
-          <PushButton to={`/news/${newsId}/edit`}>Edit news</PushButton>
+          <Button to={`/news/${newsId}/edit`}>Edit news</Button>
         </footer>
       </PermissionGuard>
     </Box>

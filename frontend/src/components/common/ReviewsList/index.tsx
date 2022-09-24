@@ -1,10 +1,10 @@
 import "./index.css";
 import { useState } from "react";
-import { ReviewDeletePushButton } from "src/components/buttons/ReviewDeletePushButton";
-import { ReviewEditPushButton } from "src/components/buttons/ReviewEditPushButton";
+import { ReviewDeleteButton } from "src/components/buttons/ReviewDeleteButton";
+import { ReviewEditButton } from "src/components/buttons/ReviewEditButton";
+import { Button } from "src/components/common/Button";
 import { DataList } from "src/components/common/DataList";
 import { PermissionGuard } from "src/components/common/PermissionGuard";
-import { PushButton } from "src/components/common/PushButton";
 import { UserPicture } from "src/components/common/UserPicture";
 import { IconThumbUp } from "src/components/icons";
 import { IconThumbDown } from "src/components/icons";
@@ -91,13 +91,13 @@ const ReviewView = ({ review, showLevels, showExcerpts }: ReviewViewProps) => {
         {showExcerpts && shortText !== fullText ? (
           <>
             <Markdown>{isExcerptExpanded ? fullText : shortText}</Markdown>
-            <PushButton
+            <Button
               isPlain={true}
               disableTimeout={true}
               onClick={handleReadMoreClick}
             >
               ({isExcerptExpanded ? "Read less" : "Read more"})
-            </PushButton>
+            </Button>
           </>
         ) : (
           <Markdown>{review.text || "No review text is available."}</Markdown>
@@ -123,11 +123,11 @@ const ReviewView = ({ review, showLevels, showExcerpts }: ReviewViewProps) => {
             require={UserPermission.editReviews}
             owningUsers={[review.author]}
           >
-            <ReviewEditPushButton review={review} />
+            <ReviewEditButton review={review} />
           </PermissionGuard>
 
           <PermissionGuard require={UserPermission.deleteReviews}>
-            <ReviewDeletePushButton review={review} />
+            <ReviewDeleteButton review={review} />
           </PermissionGuard>
         </div>
       </footer>

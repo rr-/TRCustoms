@@ -3,7 +3,7 @@ import { useCallback } from "react";
 import { Key } from "react";
 import { useState } from "react";
 import { useEffect } from "react";
-import { PushButton } from "src/components/common/PushButton";
+import { Button } from "src/components/common/Button";
 import { TextInput } from "src/components/common/TextInput";
 import { KEY_RETURN } from "src/constants";
 import { KEY_UP } from "src/constants";
@@ -160,9 +160,9 @@ const AutoComplete = <TItem extends Object>({
       />
       {showResults && textInput && <AutoCompleteSuggestions />}
       {onNewResultApply && (
-        <PushButton disabled={!textInput.length} onClick={handleAddButtonClick}>
+        <Button disabled={!textInput.length} onClick={handleAddButtonClick}>
           Add new
-        </PushButton>
+        </Button>
       )}
     </div>
   );
