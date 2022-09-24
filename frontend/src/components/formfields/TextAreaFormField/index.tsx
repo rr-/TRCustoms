@@ -1,7 +1,7 @@
 import "./index.css";
 import { useFormikContext } from "formik";
 import { Field } from "formik";
-import { TabSwitch } from "src/components/TabSwitch";
+import { TabSwitch } from "src/components/common/TabSwitch";
 import { BaseFormField } from "src/components/formfields/BaseFormField";
 import type { GenericFormFieldProps } from "src/components/formfields/BaseFormField";
 import { MarkdownComposer } from "src/components/markdown-composer/MarkdownComposer";

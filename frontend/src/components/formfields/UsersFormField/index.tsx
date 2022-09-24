@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useCallback } from "react";
-import { AutoComplete } from "src/components/AutoComplete";
-import { Pills } from "src/components/Pills";
+import { AutoComplete } from "src/components/common/AutoComplete";
+import { Pills } from "src/components/common/Pills";
 import type { GenericFormFieldProps } from "src/components/formfields/BaseFormField";
 import { BaseFormField } from "src/components/formfields/BaseFormField";
 import type { UserNested } from "src/services/UserService";

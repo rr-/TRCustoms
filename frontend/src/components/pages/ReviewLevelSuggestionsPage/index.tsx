@@ -1,10 +1,10 @@
 import { useEffect } from "react";
 import { useState } from "react";
 import { useContext } from "react";
-import { LevelList } from "src/components/LevelList";
-import { QueryPersister } from "src/components/QueryPersister";
-import { deserializeGenericSearchQuery } from "src/components/QueryPersister";
-import { serializeGenericSearchQuery } from "src/components/QueryPersister";
+import { LevelList } from "src/components/common/LevelList";
+import { QueryPersister } from "src/components/common/QueryPersister";
+import { deserializeGenericSearchQuery } from "src/components/common/QueryPersister";
+import { serializeGenericSearchQuery } from "src/components/common/QueryPersister";
 import { TitleContext } from "src/contexts/TitleContext";
 import type { LevelSearchQuery } from "src/services/LevelService";
 import { getCurrentSearchParams } from "src/utils/misc";

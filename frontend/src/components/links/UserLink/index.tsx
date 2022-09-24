@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { PermissionGuard } from "src/components/PermissionGuard";
+import { PermissionGuard } from "src/components/common/PermissionGuard";
 import { UserBasic } from "src/services/UserService";
 import { UserPermission } from "src/services/UserService";
 

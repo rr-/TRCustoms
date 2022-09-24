@@ -1,6 +1,6 @@
 import "./index.css";
 import { useState } from "react";
-import { FileUploader } from "src/components/FileUploader";
+import { FileUploader } from "src/components/common/FileUploader";
 import { applyStyle } from "src/components/markdown-composer/MarkdownStyle";
 import type { UploadedFile } from "src/services/FileService";
 import { UploadType } from "src/services/FileService";

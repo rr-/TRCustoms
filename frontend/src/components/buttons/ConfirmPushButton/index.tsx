@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { PushButton } from "src/components/PushButton";
+import { PushButton } from "src/components/common/PushButton";
 import { ConfirmModal } from "src/components/modals/ConfirmModal";
 import { showAlertOnError } from "src/utils/misc";
 

@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { ConditionalWrapper } from "src/components/ConditionalWrapper";
+import { ConditionalWrapper } from "src/components/common/ConditionalWrapper";
 import { Markdown } from "src/components/markdown/Markdown";
 import type { NewsListing } from "src/services/NewsService";
 import { formatDate } from "src/utils/string";

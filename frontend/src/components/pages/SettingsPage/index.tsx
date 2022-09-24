@@ -1,8 +1,8 @@
 import "./index.css";
 import { useEffect } from "react";
 import { useContext } from "react";
-import { Checkbox } from "src/components/Checkbox";
-import { ThemeSwitcher } from "src/components/ThemeSwitcher";
+import { Checkbox } from "src/components/common/Checkbox";
+import { ThemeSwitcher } from "src/components/common/ThemeSwitcher";
 import { useSettings } from "src/contexts/SettingsContext";
 import { MarkdownPreviewMode } from "src/contexts/SettingsContext";
 import { TitleContext } from "src/contexts/TitleContext";

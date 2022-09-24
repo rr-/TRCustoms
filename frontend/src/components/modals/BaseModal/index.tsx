@@ -1,6 +1,6 @@
 import "../index.css";
 import { forwardRef } from "react";
-import { PushButton } from "src/components/PushButton";
+import { PushButton } from "src/components/common/PushButton";
 import { IconX } from "src/components/icons";
 import { Dim } from "src/components/modals/Dim";
 

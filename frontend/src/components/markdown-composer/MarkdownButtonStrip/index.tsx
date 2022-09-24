@@ -1,5 +1,5 @@
 import "./index.css";
-import { PushButton } from "src/components/PushButton";
+import { PushButton } from "src/components/common/PushButton";
 import { IconHelp } from "src/components/icons";
 import { MarkdownHeaderButton } from "src/components/markdown-composer/MarkdownButtons";
 import { MarkdownBoldButton } from "src/components/markdown-composer/MarkdownButtons";

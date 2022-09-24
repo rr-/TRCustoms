@@ -2,8 +2,8 @@ import { useCallback } from "react";
 import { useContext } from "react";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { NewsForm } from "src/components/NewsForm";
-import { PageGuard } from "src/components/PermissionGuard";
+import { NewsForm } from "src/components/common/NewsForm";
+import { PageGuard } from "src/components/common/PermissionGuard";
 import { TitleContext } from "src/contexts/TitleContext";
 import { UserPermission } from "src/services/UserService";
 

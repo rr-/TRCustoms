@@ -1,10 +1,10 @@
 import { useState } from "react";
 import { useEffect } from "react";
 import { useParams } from "react-router-dom";
-import { LevelList } from "src/components/LevelList";
-import { ReviewsList } from "src/components/ReviewsList";
-import { Section } from "src/components/Section";
-import { SectionHeader } from "src/components/Section";
+import { LevelList } from "src/components/common/LevelList";
+import { ReviewsList } from "src/components/common/ReviewsList";
+import { Section } from "src/components/common/Section";
+import { SectionHeader } from "src/components/common/Section";
 import { Markdown } from "src/components/markdown/Markdown";
 import { UserBasePage } from "src/components/pages/UserBasePage";
 import type { UserBasePageChildRenderProps } from "src/components/pages/UserBasePage";

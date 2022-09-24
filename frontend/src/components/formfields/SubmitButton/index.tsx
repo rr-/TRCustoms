@@ -1,4 +1,4 @@
-import "../../PushButton/index.css";
+import "src/components/common/PushButton/index.css";
 
 interface SubmitButtonProps {
   className?: string | undefined;

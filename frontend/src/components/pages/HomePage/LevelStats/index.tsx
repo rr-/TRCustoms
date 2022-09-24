@@ -1,7 +1,7 @@
 import { useContext } from "react";
 import { Link } from "react-router-dom";
-import { DefinitionItem } from "src/components/DefinitionList";
-import { DefinitionList } from "src/components/DefinitionList";
+import { DefinitionItem } from "src/components/common/DefinitionList";
+import { DefinitionList } from "src/components/common/DefinitionList";
 import { EngineGFXLink } from "src/components/links/EngineGFXLink";
 import { ConfigContext } from "src/contexts/ConfigContext";
 import { reprBigNumber } from "src/utils/string";
