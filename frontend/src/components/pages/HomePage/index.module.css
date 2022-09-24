@@ -2,11 +2,20 @@
   display: grid;
   gap: 1rem;
   grid-template-areas: "leftSidebar main rightSidebar";
-  grid-template-columns: 1fr 4fr;
-  grid-template-rows: min-content 1fr;
+  grid-template-columns: 1fr 4fr 2fr;
 }
 
-@media (max-device-width: 800px) {
+@media (max-device-width: 1000px) {
+  .page {
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: min-content auto;
+    grid-template-areas:
+      "leftSidebar rightSidebar"
+      "main main";
+  }
+}
+
+@media (max-device-width: 600px) {
   .page {
     grid-template-columns: 1fr;
     grid-template-areas:

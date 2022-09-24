@@ -1,15 +1,18 @@
 import styles from "./index.module.css";
 import { useQuery } from "react-query";
 import { Button } from "src/components/common/Button";
+import { Link } from "src/components/common/Link";
 import { Loader } from "src/components/common/Loader";
 import { PermissionGuard } from "src/components/common/PermissionGuard";
 import { SectionHeader } from "src/components/common/Section";
 import { SidebarBox } from "src/components/common/SidebarBox";
 import { NewsLink } from "src/components/links/NewsLink";
+import { GFXCard } from "src/components/pages/HomePage/GFXCard";
 import type { NewsListing } from "src/services/NewsService";
 import { NewsSearchResult } from "src/services/NewsService";
 import { NewsService } from "src/services/NewsService";
 import { UserPermission } from "src/services/UserService";
+import { formatDate } from "src/utils/string";
 
 const NewsSidebar = () => {
   const searchQuery = {};
@@ -30,10 +33,15 @@ const NewsSidebar = () => {
     <SidebarBox>
       <SectionHeader>News</SectionHeader>
 
+      <Link to="/news/">
+        <GFXCard name="news">Archive</GFXCard>
+      </Link>
+
       {result.data.results.length ? (
         <ul className={styles.list}>
           {result.data.results.map((news: NewsListing) => (
             <li className={styles.listItem} key={news.id}>
+              [{formatDate(news.created)}]
               <NewsLink news={news} />
             </li>
           ))}
@@ -44,7 +52,7 @@ const NewsSidebar = () => {
 
       <footer className={styles.footer}>
         <PermissionGuard require={UserPermission.editNews}>
-          <Button to="/news/">Add new</Button>
+          <Button to="/news/create/">Add new</Button>
         </PermissionGuard>
       </footer>
     </SidebarBox>

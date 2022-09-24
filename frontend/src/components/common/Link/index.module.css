@@ -1,10 +1,14 @@
 .link {
-  display: inline-flex;
-  gap: 0.5rem;
   color: var(--link-color);
+  text-decoration: var(--button-text-decoration);
 }
 .link:hover {
   color: var(--link-highlight-fg-color);
+}
+
+.withIcon {
+  display: inline-flex;
+  gap: 0.5rem;
 }
 
 .icon :global .icon,
@@ -12,9 +16,6 @@
   width: 1.6em;
   height: 1.6em;
   margin: 0;
-}
-.label {
-  text-decoration: var(--button-text-decoration);
 }
 
 .disabled {

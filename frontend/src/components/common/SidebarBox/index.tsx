@@ -9,9 +9,9 @@ interface SidebarBoxProps {
 const SidebarBox = ({ header, actions, children }: SidebarBoxProps) => {
   return (
     <div className={`${styles.box} ChildMarginClear`}>
-      {header && <div className={styles.header}>{header}</div>}
+      {header && <div>{header}</div>}
       {actions && <div className={styles.actions}>{actions}</div>}
-      <div className={`${styles.body} ChildMarginClear`}>{children}</div>
+      <div className="ChildMarginClear">{children}</div>
     </div>
   );
 };
