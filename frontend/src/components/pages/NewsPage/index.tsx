@@ -8,8 +8,6 @@ import { Loader } from "src/components/Loader";
 import { PermissionGuard } from "src/components/PermissionGuard";
 import { PushButton } from "src/components/PushButton";
 import { SectionHeader } from "src/components/Section";
-import { UserPicture } from "src/components/UserPicture";
-import { UserLink } from "src/components/links/UserLink";
 import { Markdown } from "src/components/markdown/Markdown";
 import { TitleContext } from "src/contexts/TitleContext";
 import type { NewsDetails } from "src/services/NewsService";
@@ -55,16 +53,6 @@ const NewsPage = () => {
       <div className={styles.header}>
         <span className={styles.date}>
           Posted on {formatDate(news.created)} by{" "}
-        </span>
-        <span className={styles.authors}>
-          {news.authors.map((author) => (
-            <UserLink key={author.id} className={styles.userLink} user={author}>
-              <>
-                <UserPicture className={styles.userPic} user={author} />
-                {author.username}
-              </>
-            </UserLink>
-          ))}
         </span>
       </div>
 

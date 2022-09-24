@@ -1,20 +1,13 @@
 import { AxiosResponse } from "axios";
 import { api } from "src/api";
 import { API_URL } from "src/constants";
-import type { UploadedFile } from "src/services/FileService";
-import type { UserNested } from "src/services/UserService";
 import type { GenericSearchQuery } from "src/types";
 import { GenericSearchResult } from "src/types";
 import { filterFalsyObjectValues } from "src/utils/misc";
 import { getGenericSearchQuery } from "src/utils/misc";
 
-interface NewsAuthor extends UserNested {
-  picture: UploadedFile | null;
-}
-
 interface NewsListing {
   id: number;
-  authors: NewsAuthor[];
   subject: string | null;
   text: string | null;
   created: string;
@@ -29,7 +22,6 @@ interface NewsSearchResult
   extends GenericSearchResult<NewsSearchQuery, NewsListing> {}
 
 interface NewsBaseChangePayload {
-  authorIds: number[];
   subject: string;
   text: string;
 }
@@ -59,7 +51,6 @@ const update = async (
   payload: NewsUpdatePayload
 ): Promise<NewsDetails> => {
   const data = {
-    author_ids: payload.authorIds,
     subject: payload.subject,
     text: payload.text,
   };
@@ -72,7 +63,6 @@ const update = async (
 
 const create = async (payload: NewsCreatePayload): Promise<NewsDetails> => {
   const data = {
-    author_ids: payload.authorIds,
     subject: payload.subject,
     text: payload.text,
   };

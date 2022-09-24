@@ -13,12 +13,9 @@ import { FormGridButtons } from "src/components/FormGrid";
 import { Loader } from "src/components/Loader";
 import { TextAreaFormField } from "src/components/formfields/TextAreaFormField";
 import { TextFormField } from "src/components/formfields/TextFormField";
-import { UsersFormField } from "src/components/formfields/UsersFormField";
 import { ConfigContext } from "src/contexts/ConfigContext";
-import { UserContext } from "src/contexts/UserContext";
 import type { NewsDetails } from "src/services/NewsService";
 import { NewsService } from "src/services/NewsService";
-import type { UserNested } from "src/services/UserService";
 import { filterFalsyObjectValues } from "src/utils/misc";
 import { resetQueries } from "src/utils/misc";
 import { makeSentence } from "src/utils/string";
@@ -31,13 +28,11 @@ interface NewsFormProps {
 }
 
 const NewsForm = ({ news, onGoBack, onSubmit }: NewsFormProps) => {
-  const { user } = useContext(UserContext);
   const { config } = useContext(ConfigContext);
   const queryClient = useQueryClient();
   const initialValues = {
     subject: news?.subject || "",
     text: news?.text || "",
-    authors: news ? [...news.authors] : user ? [user] : [],
   };
 
   const handleSubmitError = useCallback(
@@ -50,7 +45,6 @@ const NewsForm = ({ news, onGoBack, onSubmit }: NewsFormProps) => {
           setStatus({ error: <>{makeSentence(data.detail)}</> });
         }
         const errors = {
-          authors: data?.author_ids,
           subject: data?.subject,
           text: data?.text,
         };
@@ -73,7 +67,6 @@ const NewsForm = ({ news, onGoBack, onSubmit }: NewsFormProps) => {
       setStatus({});
       try {
         const payload = {
-          authorIds: values.authors.map((author: UserNested) => author.id),
           subject: values.subject,
           text: values.text,
         };
@@ -128,14 +121,6 @@ const NewsForm = ({ news, onGoBack, onSubmit }: NewsFormProps) => {
           <Form>
             <FormGrid gridType={FormGridType.Grid}>
               <FormGridFieldSet>
-                <UsersFormField
-                  required={config.limits.min_authors > 0}
-                  label="Authors"
-                  name="authors"
-                  value={values.authors}
-                  onChange={(value) => setFieldValue("authors", value)}
-                />
-
                 <TextFormField required={true} label="Subject" name="subject" />
 
                 <TextAreaFormField
