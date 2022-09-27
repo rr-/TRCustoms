@@ -2,7 +2,7 @@
   display: grid;
   gap: 1rem;
   grid-template-areas: "leftSidebar main rightSidebar";
-  grid-template-columns: 1fr 4fr 2fr;
+  grid-template-columns: 2fr 5fr 2fr;
 }
 
 @media (max-device-width: 1000px) {

@@ -4,6 +4,7 @@
 .listItem {
   list-style-type: none;
   padding-left: 15px;
+  margin-bottom: 0.75rem;
 }
 .listItem:before {
   content: "";
