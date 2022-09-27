@@ -1,3 +1,4 @@
+import styles from "./index.module.css";
 import { groupBy } from "lodash";
 import { useContext } from "react";
 import { useEffect } from "react";
@@ -6,7 +7,6 @@ import { Box } from "src/components/common/Box";
 import { Loader } from "src/components/common/Loader";
 import { SectionHeader } from "src/components/common/Section";
 import { NewsLink } from "src/components/links/NewsLink";
-import { Markdown } from "src/components/markdown/Markdown";
 import { DISABLE_PAGING } from "src/constants";
 import { TitleContext } from "src/contexts/TitleContext";
 import type { NewsSearchQuery } from "src/services/NewsService";
@@ -50,7 +50,7 @@ const NewsListPage = () => {
           <SectionHeader>{year}</SectionHeader>
           <ul>
             {items.map((news) => (
-              <li>
+              <li className={styles.listItem}>
                 [{formatDate(news.created)}]
                 <NewsLink news={news} />
               </li>
