@@ -19,7 +19,7 @@ class AuditLog(DatesInfo):
     ChangeType = models.TextChoices("ChangeType", "CREATE UPDATE DELETE")
 
     object_id = models.CharField(max_length=64)
-    object_name = models.CharField(max_length=64)
+    object_name = models.CharField(max_length=256)
     object_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
     changes = models.JSONField()
     meta = models.JSONField()
