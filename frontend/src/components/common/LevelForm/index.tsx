@@ -42,6 +42,7 @@ import { resetQueries } from "src/utils/misc";
 import { makeSentence } from "src/utils/string";
 import { pluralize } from "src/utils/string";
 import { validateRequired } from "src/utils/validation";
+import { validateMaxLength } from "src/utils/validation";
 
 interface LevelFormProps {
   level?: LevelDetails | undefined;
@@ -243,12 +244,12 @@ const LevelForm = ({ level, onGoBack, onSubmit }: LevelFormProps) => {
     } = {};
 
     const validatorMap = {
-      name: [validateRequired],
+      name: [validateRequired, validateMaxLength(100)],
       genres: [validateGenres],
       external_links: [validateExternalLinks],
       tags: [validateTags],
       authors: [validateAuthors],
-      description: [validateRequired],
+      description: [validateRequired, validateMaxLength(5000)],
       engine_id: [validateRequired],
       duration_id: [validateRequired],
       difficulty_id: [validateRequired],

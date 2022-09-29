@@ -1,3 +1,5 @@
+import { isString } from "lodash";
+
 const getURLRegexp = () => {
   const ul = "\u00a1-\uffff";
   const ipv4 =
@@ -41,6 +43,16 @@ const validateRequired = (value: any): string | null => {
     return "This field is required";
   }
   return null;
+};
+
+const validateMaxLength = (maxLength: number) => {
+  const validateFunc = (value: any): string | null => {
+    if (isString(value) && value.length > maxLength) {
+      return `This field must be at most ${maxLength} characters long`;
+    }
+    return null;
+  };
+  return validateFunc;
 };
 
 const validateEmail = (email: string): string | null => {
@@ -103,6 +115,7 @@ const validateUserName = (username: string): string | null => {
 
 export {
   validateRequired,
+  validateMaxLength,
   validateEmail,
   validatePassword,
   validatePassword2,

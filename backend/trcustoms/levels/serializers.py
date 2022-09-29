@@ -1,6 +1,7 @@
 from typing import Any
 
 from django.conf import settings
+from django.core.validators import MaxLengthValidator
 from rest_framework import serializers
 
 from trcustoms.common.serializers import RatingClassNestedSerializer
@@ -92,6 +93,12 @@ class LevelNestedSerializer(serializers.ModelSerializer):
 
 
 class LevelListingSerializer(serializers.ModelSerializer):
+    name = serializers.CharField(validators=[MaxLengthValidator(100)])
+    description = serializers.CharField(validators=[MaxLengthValidator(5000)])
+    rejection_reason = serializers.CharField(
+        validators=[MaxLengthValidator(500)], required=False, allow_blank=True
+    )
+
     is_approved = serializers.ReadOnlyField()
     rejection_reason = serializers.ReadOnlyField()
     rating_class = RatingClassNestedSerializer(read_only=True)
