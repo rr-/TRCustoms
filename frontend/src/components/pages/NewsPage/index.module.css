@@ -1,7 +1,7 @@
-.footerInfo {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 2rem;
-  flex-direction: row;
-  align-items: center;
+.header {
+  margin-bottom: 1rem;
+}
+
+.footer {
+  margin-top: 1rem;
 }

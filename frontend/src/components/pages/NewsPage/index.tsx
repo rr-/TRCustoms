@@ -51,12 +51,10 @@ const NewsPage = () => {
       )}
 
       <div className={styles.header}>
-        <span className={styles.date}>
-          Posted on {formatDate(news.created)} by{" "}
-        </span>
+        <em>Posted on {formatDate(news.created)}</em>
       </div>
 
-      <div className={styles.content}>
+      <div className="ChildMarginClear">
         <Markdown>{news.text || "No news text is available."}</Markdown>
       </div>
 
