@@ -20,7 +20,7 @@ const NewsLink = ({ news, children, ...props }: NewsLinkProps) => {
         </Link>
       )}
     >
-      {children ? children : <Markdown>{subject || ""}</Markdown>}
+      {children || <Markdown>{subject || ""}</Markdown>}
     </ConditionalWrapper>
   );
 };

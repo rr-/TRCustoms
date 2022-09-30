@@ -7,6 +7,7 @@ import { useParams } from "react-router-dom";
 import { LevelForm } from "src/components/common/LevelForm";
 import { Loader } from "src/components/common/Loader";
 import { PageGuard } from "src/components/common/PermissionGuard";
+import { SmartWrap } from "src/components/common/SmartWrap";
 import { TitleContext } from "src/contexts/TitleContext";
 import type { LevelDetails } from "src/services/LevelService";
 import { LevelService } from "src/services/LevelService";
@@ -52,7 +53,9 @@ const LevelEditPage = () => {
       owningUserIds={owningUserIds}
     >
       <div className="LevelEditPage">
-        <h1>Editing {level.name}</h1>
+        <h1>
+          <SmartWrap text={`Editing ${level.name}`} />
+        </h1>
 
         <LevelForm onGoBack={handleGoBack} level={level} />
       </div>

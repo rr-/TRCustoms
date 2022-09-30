@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { SmartWrap } from "src/components/common/SmartWrap";
 
 interface WalkthroughLinkProps {
   walkthrough: {
@@ -13,7 +14,7 @@ const WalkthroughLink = ({ walkthrough, children }: WalkthroughLinkProps) => {
   if (id) {
     return (
       <Link to={`/walkthroughs/${id}`}>
-        {children || `Walkthrough for ${levelName}`}
+        {children || <SmartWrap text={`Walkthrough for ${levelName}`} />}
       </Link>
     );
   }

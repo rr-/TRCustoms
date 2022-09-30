@@ -98,10 +98,7 @@ const WalkthroughPage = () => {
     >
       <header className="WalkthroughPage--header ChildMarginClear">
         <h1>
-          Walkthrough for{" "}
-          <LevelLink level={walkthrough.level}>
-            {walkthrough.level.name}
-          </LevelLink>
+          Walkthrough for <LevelLink level={walkthrough.level} />
         </h1>
         {walkthrough.author ? (
           <h2>

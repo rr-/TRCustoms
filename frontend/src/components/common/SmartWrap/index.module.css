@@ -1,0 +1,9 @@
+.line {
+  display: inline-flex;
+  flex-wrap: wrap;
+}
+
+.part {
+  white-space: pre-wrap;
+  word-break: break-word;
+}
