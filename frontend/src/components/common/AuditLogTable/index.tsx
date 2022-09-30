@@ -3,6 +3,7 @@ import { useQuery } from "react-query";
 import type { DataTableColumn } from "src/components/common/DataTable";
 import { DataTable } from "src/components/common/DataTable";
 import { Loader } from "src/components/common/Loader";
+import { SmartWrap } from "src/components/common/SmartWrap";
 import { IconExclamation } from "src/components/icons";
 import { EngineLink } from "src/components/links/EngineLink";
 import { GenreLink } from "src/components/links/GenreLink";
@@ -41,7 +42,7 @@ const AuditLogTableObjectLink = ({
             username: auditLog.object_name,
           }}
         >
-          User {auditLog.object_name}
+          <SmartWrap text={`User ${auditLog.object_name}`} />
         </UserLink>
       );
 
@@ -53,7 +54,7 @@ const AuditLogTableObjectLink = ({
             name: auditLog.object_name,
           }}
         >
-          Level {auditLog.object_name}
+          <SmartWrap text={`Level ${auditLog.object_name}`} />
         </LevelLink>
       );
 
@@ -65,7 +66,7 @@ const AuditLogTableObjectLink = ({
             name: auditLog.object_name,
           }}
         >
-          Engine {auditLog.object_name}
+          <SmartWrap text={`Engine ${auditLog.object_name}`} />
         </EngineLink>
       );
 
@@ -77,7 +78,7 @@ const AuditLogTableObjectLink = ({
             name: auditLog.object_name,
           }}
         >
-          Genre {auditLog.object_name}
+          <SmartWrap text={`Genre ${auditLog.object_name}`} />
         </GenreLink>
       );
 
@@ -89,7 +90,7 @@ const AuditLogTableObjectLink = ({
             name: auditLog.object_name,
           }}
         >
-          Tag {auditLog.object_name}
+          <SmartWrap text={`Tag ${auditLog.object_name}`} />
         </TagLink>
       );
 
@@ -101,18 +102,18 @@ const AuditLogTableObjectLink = ({
             name: auditLog.meta.level_name,
           }}
         >
-          Review of {auditLog.object_name}
+          <SmartWrap text={`Review of ${auditLog.object_name}`} />
         </LevelLink>
       );
 
     case AuditLogObjectType.LevelDuration:
-      return <>{`Duration ${auditLog.object_name}`}</>;
+      return <SmartWrap text={`Duration ${auditLog.object_name}`} />;
 
     case AuditLogObjectType.LevelDifficulty:
-      return <>{`Difficulty ${auditLog.object_name}`}</>;
+      return <SmartWrap text={`Difficulty ${auditLog.object_name}`} />;
 
     case AuditLogObjectType.News:
-      return <>{`News #${auditLog.object_id}`}</>;
+      return <SmartWrap text={`News #${auditLog.object_id}`} />;
 
     case AuditLogObjectType.Walkthrough:
       return (
@@ -121,11 +122,13 @@ const AuditLogTableObjectLink = ({
             id: +auditLog.object_id,
             levelName: auditLog.object_name,
           }}
-        ></WalkthroughLink>
+        />
       );
 
     default:
-      return <>{`${auditLog.object_type} #${auditLog.object_id}`}</>;
+      return (
+        <SmartWrap text={`${auditLog.object_type} #${auditLog.object_id}`} />
+      );
   }
 };
 

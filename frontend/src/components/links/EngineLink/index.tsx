@@ -1,4 +1,5 @@
 import { Link } from "src/components/common/Link";
+import { SmartWrap } from "src/components/common/SmartWrap";
 import type { EngineNested } from "src/services/EngineService";
 
 interface EngineLinkProps {
@@ -8,7 +9,11 @@ interface EngineLinkProps {
 
 const EngineLink = ({ engine, children, ...props }: EngineLinkProps) => {
   const { id, name } = engine;
-  return <Link to={`/levels?engines=${id}`}>{children || name}</Link>;
+  return (
+    <Link to={`/levels?engines=${id}`}>
+      {children || <SmartWrap text={name} />}
+    </Link>
+  );
 };
 
 export { EngineLink };
