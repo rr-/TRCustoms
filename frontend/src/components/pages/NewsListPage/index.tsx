@@ -5,6 +5,7 @@ import { useEffect } from "react";
 import { useQuery } from "react-query";
 import { Box } from "src/components/common/Box";
 import { Loader } from "src/components/common/Loader";
+import { NewsSidebar } from "src/components/common/NewsSidebar";
 import { SectionHeader } from "src/components/common/Section";
 import { NewsLink } from "src/components/links/NewsLink";
 import { DISABLE_PAGING } from "src/constants";
@@ -44,21 +45,28 @@ const NewsListPage = () => {
   );
 
   return (
-    <Box>
-      {resultsByYear.map(([year, items]) => (
-        <>
-          <SectionHeader>{year}</SectionHeader>
-          <ul>
-            {items.map((news) => (
-              <li className={styles.listItem}>
-                [{formatDate(news.created)}]
-                <NewsLink news={news} />
-              </li>
-            ))}
-          </ul>
-        </>
-      ))}
-    </Box>
+    <div className={styles.page}>
+      <div className={styles.main}>
+        <Box>
+          {resultsByYear.map(([year, items]) => (
+            <>
+              <SectionHeader>{year}</SectionHeader>
+              <ul>
+                {items.map((news) => (
+                  <li className={styles.listItem}>
+                    [{formatDate(news.created)}]
+                    <NewsLink news={news} />
+                  </li>
+                ))}
+              </ul>
+            </>
+          ))}
+        </Box>
+      </div>
+      <aside className={styles.rightSidebar}>
+        <NewsSidebar />
+      </aside>
+    </div>
   );
 };
 

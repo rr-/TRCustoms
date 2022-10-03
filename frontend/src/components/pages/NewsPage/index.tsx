@@ -6,6 +6,7 @@ import { useParams } from "react-router-dom";
 import { Box } from "src/components/common/Box";
 import { Button } from "src/components/common/Button";
 import { Loader } from "src/components/common/Loader";
+import { NewsSidebar } from "src/components/common/NewsSidebar";
 import { PermissionGuard } from "src/components/common/PermissionGuard";
 import { SectionHeader } from "src/components/common/Section";
 import { Markdown } from "src/components/markdown/Markdown";
@@ -43,27 +44,31 @@ const NewsPage = () => {
   const news: NewsDetails = newsResult.data;
 
   return (
-    <Box>
-      {news.subject && (
-        <SectionHeader>
-          <Markdown>{news.subject}</Markdown>
-        </SectionHeader>
-      )}
+    <div className={styles.page}>
+      <div className={styles.main}>
+        <Box>
+          {news.subject && (
+            <SectionHeader>
+              <Markdown>{news.subject}</Markdown>
+            </SectionHeader>
+          )}
 
-      <div className={styles.header}>
-        <em>Posted on {formatDate(news.created)}</em>
+          <div className={`${styles.content} ChildMarginClear`}>
+            <Markdown>{news.text || "No news text is available."}</Markdown>
+          </div>
+
+          <footer className={styles.footer}>
+            <em>Posted on {formatDate(news.created)}</em>
+            <PermissionGuard require={UserPermission.editNews}>
+              <Button to={`/news/${newsId}/edit`}>Edit news</Button>
+            </PermissionGuard>
+          </footer>
+        </Box>
       </div>
-
-      <div className="ChildMarginClear">
-        <Markdown>{news.text || "No news text is available."}</Markdown>
-      </div>
-
-      <PermissionGuard require={UserPermission.editNews}>
-        <footer className={styles.footer}>
-          <Button to={`/news/${newsId}/edit`}>Edit news</Button>
-        </footer>
-      </PermissionGuard>
-    </Box>
+      <aside className={styles.rightSidebar}>
+        <NewsSidebar />
+      </aside>
+    </div>
   );
 };
 
