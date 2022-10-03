@@ -1,4 +1,5 @@
 import styles from "./index.module.css";
+import { sortBy } from "lodash";
 import { groupBy } from "lodash";
 import { useContext } from "react";
 import { useEffect } from "react";
@@ -40,8 +41,13 @@ const NewsListPage = () => {
     return <Loader />;
   }
 
-  const resultsByYear = Object.entries(
-    groupBy(result.data.results, (news) => new Date(news.created).getFullYear())
+  const resultsByYear = sortBy(
+    Object.entries(
+      groupBy(result.data.results, (news) =>
+        new Date(news.created).getFullYear()
+      )
+    ),
+    ([year, items]) => -year
   );
 
   return (
