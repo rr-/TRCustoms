@@ -1,7 +1,10 @@
 .UserFancyList > .DataList--body {
   gap: 1rem;
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(10rem, 1fr));
+  grid-template-columns: repeat(
+    auto-fit,
+    minmax(min(100%/3, max(12rem, 100%/6)), 1fr)
+  );
 }
 
 .UserView {
