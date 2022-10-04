@@ -1,8 +1,8 @@
-import { Link } from "react-router-dom";
-import { SmartWrap } from "src/components/common/SmartWrap";
+import { Link } from "src/components/common/Link";
 import { LevelNested } from "src/services/LevelService";
 
-interface LevelLinkProps extends React.HTMLAttributes<HTMLAnchorElement> {
+interface LevelLinkProps {
+  className?: string | undefined;
   level: LevelNested;
   children?: React.ReactNode | undefined;
 }
@@ -13,7 +13,7 @@ const LevelLink = ({ level, children, ...props }: LevelLinkProps) => {
   if (id) {
     return (
       <Link to={`/levels/${id}`} {...props}>
-        {children || <SmartWrap text={name} />}
+        {children || name}
       </Link>
     );
   }

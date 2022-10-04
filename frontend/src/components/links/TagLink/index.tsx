@@ -1,5 +1,4 @@
-import { Link } from "react-router-dom";
-import { SmartWrap } from "src/components/common/SmartWrap";
+import { Link } from "src/components/common/Link";
 import type { TagNested } from "src/services/TagService";
 
 interface TagLinkProps {
@@ -9,11 +8,7 @@ interface TagLinkProps {
 
 const TagLink = ({ tag, children }: TagLinkProps) => {
   const { id, name } = tag;
-  return (
-    <Link to={`/levels?tags=${id}`}>
-      {children || <SmartWrap text={name} />}
-    </Link>
-  );
+  return <Link to={`/levels?tags=${id}`}>{children || name}</Link>;
 };
 
 export { TagLink };

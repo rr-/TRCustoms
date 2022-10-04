@@ -1,6 +1,7 @@
 .link {
   color: var(--link-color);
   text-decoration: var(--button-text-decoration);
+  word-break: break-word;
 }
 .link:hover {
   color: var(--link-highlight-fg-color);
