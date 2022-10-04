@@ -122,7 +122,9 @@ const AuditLogTableObjectLink = ({
             id: +auditLog.object_id,
             levelName: auditLog.object_name,
           }}
-        />
+        >
+          <SmartWrap text={`Walkthrough for ${auditLog.object_name}`} />
+        </WalkthroughLink>
       );
 
     default:

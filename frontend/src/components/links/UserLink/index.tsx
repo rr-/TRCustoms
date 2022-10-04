@@ -1,6 +1,5 @@
-import { Link } from "react-router-dom";
+import { Link } from "src/components/common/Link";
 import { PermissionGuard } from "src/components/common/PermissionGuard";
-import { SmartWrap } from "src/components/common/SmartWrap";
 import { UserBasic } from "src/services/UserService";
 import { UserPermission } from "src/services/UserService";
 
@@ -12,7 +11,7 @@ interface UserLinkProps {
 
 const UserLink = ({ user, className, children }: UserLinkProps) => {
   const { id, username } = user;
-  children ||= <SmartWrap text={username} />;
+  children ||= username;
 
   const fallback = <span className={className}>{children}</span>;
 
