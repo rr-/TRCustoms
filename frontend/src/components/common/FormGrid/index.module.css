@@ -1,0 +1,82 @@
+.buttonsWrapper {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.fieldsetTitle {
+  margin: 1rem 0 0 0;
+}
+.fieldsetFields :global .FormField--label {
+  background: var(--label-bg-color);
+  border: 2px solid transparent;
+  display: inline-block;
+  padding: 0.25rem 0.5rem 0.25rem 1.5rem;
+  line-height: 1.5rem;
+  height: 1.5rem;
+  box-sizing: padding-box;
+  text-align: right;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: min-content auto;
+  gap: 0.5rem 0;
+}
+.grid .buttons {
+  display: contents;
+}
+.grid .buttonsStatus {
+  grid-column: 1 / span 2;
+}
+.grid .buttonsStatus,
+.grid .buttonsExtra,
+.grid .buttonsWrapper {
+  grid-column: 2;
+}
+.grid .fieldset {
+  display: contents;
+}
+.grid .fieldsetTitle,
+.grid .fieldsetHeader,
+.grid .fieldsetFooter {
+  grid-column: 1 / span 2;
+}
+.grid .fieldsetFields {
+  display: contents;
+}
+.grid .fieldsetFields :global .FormField {
+  display: contents;
+}
+.grid .buttonsExtra :global .InfoMessage {
+  margin: 0;
+}
+
+.column .buttons {
+  margin-top: 1rem;
+}
+.column .fieldsetFields :global .FormField--label {
+  margin: 1rem 0 0.5rem 0;
+  padding-left: 0.5rem;
+}
+
+.row {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-bottom: 1rem;
+}
+.row .fieldset {
+  display: contents;
+}
+.row .fieldsetFields {
+  display: contents;
+}
+.row .fieldsetFields :global .FormField {
+  display: flex;
+  margin-bottom: 0;
+}
+.row .buttonsWrapper {
+  gap: 1rem;
+}

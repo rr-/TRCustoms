@@ -1,0 +1,38 @@
+.root {
+  background: var(--bg-color);
+  padding: 0.5rem;
+  box-sizing: border-box;
+  aspect-ratio: 3/2;
+  display: grid;
+  gap: 0.5rem;
+  grid-template-areas: "logo logo" "nav nav" "sidebar main";
+  grid-template-columns: 30% auto;
+  grid-template-rows: min-content min-content auto;
+}
+.logo {
+  grid-area: logo;
+  background: var(--link-color);
+  width: 4rem;
+  height: 1rem;
+}
+.nav {
+  grid-area: nav;
+  background: var(--navbar-bg-color);
+  height: 1rem;
+}
+.sidebar {
+  grid-area: sidebar;
+  background: var(--sidebar-bg-color);
+  padding: calc(var(--sidebar-padding) * 0.5rem);
+}
+.main {
+  grid-area: main;
+}
+.text {
+  background: var(--fg-color);
+  height: 0.2rem;
+  margin: 0 0 0.3rem 0;
+}
+.text.text50 {
+  width: 50%;
+}
