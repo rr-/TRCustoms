@@ -1,9 +1,10 @@
-import "./index.css";
+import styles from "./index.module.css";
 import { useFormikContext } from "formik";
 import { intersection } from "lodash";
 
 enum FormGridType {
   Column = "column",
+  Row = "row",
   Grid = "grid",
 }
 
@@ -32,7 +33,7 @@ interface FormGridFieldSetProps {
 
 const FormGrid = ({ gridType, children }: FormGridProps) => {
   gridType ||= FormGridType.Grid;
-  const classNames = ["FormGrid", gridType];
+  const classNames = [styles[gridType]];
   return <div className={classNames.join(" ")}>{children}</div>;
 };
 
@@ -41,9 +42,9 @@ const FormGridButtons = ({ status, extra, children }: FormGridButtonsProps) => {
   const anyFormikErrors =
     intersection(Object.keys(errors), Object.keys(touched)).length > 0;
   return (
-    <div className="FormGridButtons">
+    <div className={styles.buttons}>
       {(status?.success || status?.error || anyFormikErrors) && (
-        <div className="FormGridButtons--status">
+        <div className={styles.buttonsStatus}>
           {anyFormikErrors && (
             <div className="FormFieldError">
               Please review the errors above.
@@ -58,8 +59,8 @@ const FormGridButtons = ({ status, extra, children }: FormGridButtonsProps) => {
           )}
         </div>
       )}
-      {extra && <div className="FormGridButtons--extra">{extra}</div>}
-      <div className="FormGridButtons--buttons">{children}</div>
+      {extra && <div className={styles.buttonsExtra}>{extra}</div>}
+      <div className={styles.buttonsWrapper}>{children}</div>
     </div>
   );
 };
@@ -71,11 +72,11 @@ const FormGridFieldSet = ({
   children,
 }: FormGridFieldSetProps) => {
   return (
-    <div className="FormGridFieldSet">
-      {title && <h2 className="FormGridFieldSet--title">{title}</h2>}
-      {header && <div className="FormGridFieldSet--header">{header}</div>}
-      <div className="FormGridFieldSet--fields">{children}</div>
-      {footer && <div className="FormGridFieldSet--header">{footer}</div>}
+    <div className={styles.fieldset}>
+      {title && <h2 className={styles.fieldsetTitle}>{title}</h2>}
+      {header && <div className={styles.fieldsetHeader}>{header}</div>}
+      <div className={styles.fieldsetFields}>{children}</div>
+      {footer && <div className={styles.fieldsetHeader}>{footer}</div>}
     </div>
   );
 };

@@ -4,7 +4,10 @@ import { useEffect } from "react";
 import { useCallback } from "react";
 import { useState } from "react";
 import { Button } from "src/components/common/Button";
-import { SearchBar } from "src/components/common/SearchBar";
+import { FormGrid } from "src/components/common/FormGrid";
+import { FormGridButtons } from "src/components/common/FormGrid";
+import { FormGridFieldSet } from "src/components/common/FormGrid";
+import { FormGridType } from "src/components/common/FormGrid";
 import { SubmitButton } from "src/components/formfields/SubmitButton";
 import { TextFormField } from "src/components/formfields/TextFormField";
 import { IconSearch } from "src/components/icons";
@@ -58,21 +61,21 @@ const TagSearch = ({
     >
       {({ submitForm, resetForm }) => (
         <Form className="TagListPage--container">
-          <SearchBar>
-            <TextFormField label="Search" name="search" />
+          <FormGrid gridType={FormGridType.Row}>
+            <FormGridFieldSet>
+              <TextFormField label="Search" name="search" />
+            </FormGridFieldSet>
 
-            <div className="FormField">
+            <FormGridButtons>
               <SubmitButton onClick={() => submitForm()} icon={<IconSearch />}>
                 Search
               </SubmitButton>
-            </div>
 
-            <div className="FormField">
               <Button disableTimeout={true} onClick={handleClear}>
                 Reset
               </Button>
-            </div>
-          </SearchBar>
+            </FormGridButtons>
+          </FormGrid>
         </Form>
       )}
     </Formik>
