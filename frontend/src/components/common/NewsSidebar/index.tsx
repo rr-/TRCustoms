@@ -15,7 +15,9 @@ import { UserPermission } from "src/services/UserService";
 import { formatDate } from "src/utils/string";
 
 const NewsSidebar = () => {
-  const searchQuery = {};
+  const searchQuery = {
+    pageSize: 10,
+  };
   const result = useQuery<NewsSearchResult, Error>(
     ["news", searchQuery],
     async () => NewsService.searchNews(searchQuery)
