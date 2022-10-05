@@ -60,6 +60,30 @@ const Button = ({
     classNames.push(className);
   }
 
+  const inside = (
+    <>
+      {icon && <span className={styles.icon}>{icon}</span>}
+      {children && <span className={styles.label}>{children}</span>}
+    </>
+  );
+
+  if (to?.includes("://")) {
+    // handle external links
+    return (
+      <a
+        title={tooltip}
+        rel="noopener noreferrer"
+        target="_blank"
+        className={classNames.join(" ")}
+        onClick={handleLinkClick}
+        onAuxClick={handleLinkClick}
+        href={to}
+      >
+        {inside}
+      </a>
+    );
+  }
+
   return (
     <Link
       title={tooltip}
@@ -68,8 +92,7 @@ const Button = ({
       onAuxClick={handleLinkClick}
       to={to || "#"}
     >
-      {icon && <span className={styles.icon}>{icon}</span>}
-      {children && <span className={styles.label}>{children}</span>}
+      {inside}
     </Link>
   );
 };
