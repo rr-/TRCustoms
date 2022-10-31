@@ -8,6 +8,7 @@ from django.db.models import Q
 from django.template.loader import get_template
 from premailer import transform
 
+from trcustoms.celery import app as celery_app
 from trcustoms.levels.models import Level
 from trcustoms.reviews.models import LevelReview
 from trcustoms.users.models import User
@@ -33,6 +34,7 @@ def get_level_authors(level: Level) -> Iterable[tuple[str, str]]:
         yield username, email
 
 
+@celery_app.task(autoretry_for=(Exception,), retry_backoff=2)
 def send_mail(
     template_name: str,
     subject: str,
@@ -62,7 +64,7 @@ def send_email_confirmation_mail(user: User) -> None:
         return
     token = user.generate_email_token()
     link = f"{settings.HOST_SITE}/email-confirmation/{token}"
-    send_mail(
+    send_mail.delay(
         template_name="email_confirmation",
         subject=f"{PREFIX} Confirm your registration",
         recipients=[user.email],
@@ -78,7 +80,7 @@ def send_password_reset_mail(user: User) -> None:
         return
     token = user.generate_password_reset_token()
     link = f"{settings.HOST_SITE}/password-reset/{token}"
-    send_mail(
+    send_mail.delay(
         template_name="password_reset",
         subject=f"{PREFIX} Password reset",
         recipients=[user.email],
@@ -92,7 +94,7 @@ def send_password_reset_mail(user: User) -> None:
 def send_welcome_mail(user: User) -> None:
     if not user.email:
         return
-    send_mail(
+    send_mail.delay(
         template_name="welcome",
         subject=f"{PREFIX} Welcome to TRCustoms.org",
         recipients=[user.email],
@@ -105,7 +107,7 @@ def send_welcome_mail(user: User) -> None:
 def send_registration_rejection_mail(user: User, reason: str) -> None:
     if not user.email:
         return
-    send_mail(
+    send_mail.delay(
         template_name="registration_rejection",
         subject=f"{PREFIX} Registration rejected",
         recipients=[user.email],
@@ -119,7 +121,7 @@ def send_registration_rejection_mail(user: User, reason: str) -> None:
 def send_ban_mail(user: User, reason: str) -> None:
     if not user.email:
         return
-    send_mail(
+    send_mail.delay(
         template_name="ban",
         subject=f"{PREFIX} Account banned",
         recipients=[user.email],
@@ -133,7 +135,7 @@ def send_ban_mail(user: User, reason: str) -> None:
 def send_unban_mail(user: User) -> None:
     if not user.email:
         return
-    send_mail(
+    send_mail.delay(
         template_name="unban",
         subject=f"{PREFIX} Account unbanned",
         recipients=[user.email],
@@ -145,7 +147,7 @@ def send_level_submitted_mail(level: Level) -> None:
     if not level.uploader or not level.uploader.email:
         return
     link = f"{settings.HOST_SITE}/levels/{level.id}"
-    send_mail(
+    send_mail.delay(
         template_name="level_submission",
         subject=f"{PREFIX} Level submitted",
         recipients=[level.uploader.email],
@@ -160,7 +162,7 @@ def send_level_submitted_mail(level: Level) -> None:
 def send_level_approved_mail(level: Level) -> None:
     link = f"{settings.HOST_SITE}/levels/{level.id}"
     for username, email in get_level_authors(level):
-        send_mail(
+        send_mail.delay(
             template_name="level_approval",
             subject=f"{PREFIX} Level approved",
             recipients=[email],
@@ -175,7 +177,7 @@ def send_level_approved_mail(level: Level) -> None:
 def send_level_rejected_mail(level: Level, reason: str) -> None:
     for username, email in get_level_authors(level):
         link = f"{settings.HOST_SITE}/levels/{level.id}"
-        send_mail(
+        send_mail.delay(
             template_name="level_rejection",
             subject=f"{PREFIX} Level rejected",
             recipients=[email],
@@ -191,7 +193,7 @@ def send_level_rejected_mail(level: Level, reason: str) -> None:
 def send_review_submission_mail(review: LevelReview) -> None:
     link = f"{settings.HOST_SITE}/levels/{review.level.id}"
     for username, email in get_level_authors(review.level):
-        send_mail(
+        send_mail.delay(
             template_name="review_submission",
             subject=f"{PREFIX} New review",
             recipients=[email],
@@ -207,7 +209,7 @@ def send_review_submission_mail(review: LevelReview) -> None:
 def send_review_update_mail(review: LevelReview) -> None:
     link = f"{settings.HOST_SITE}/levels/{review.level.id}"
     for username, email in get_level_authors(review.level):
-        send_mail(
+        send_mail.delay(
             template_name="review_update",
             subject=f"{PREFIX} Review edited",
             recipients=[email],
@@ -223,7 +225,7 @@ def send_review_update_mail(review: LevelReview) -> None:
 def send_walkthrough_approved_mail(walkthrough: Walkthrough) -> None:
     link = f"{settings.HOST_SITE}/walkthroughs/{walkthrough.id}"
     if walkthrough.author:
-        send_mail(
+        send_mail.delay(
             template_name="walkthrough_approval",
             subject=f"{PREFIX} Walkthrough approved",
             recipients=[walkthrough.author.email],
@@ -240,7 +242,7 @@ def send_walkthrough_rejected_mail(
 ) -> None:
     link = f"{settings.HOST_SITE}/walkthroughs/{walkthrough.id}"
     if walkthrough.author:
-        send_mail(
+        send_mail.delay(
             template_name="walkthrough_rejection",
             subject=f"{PREFIX} Walkthrough rejected",
             recipients=[walkthrough.author.email],
@@ -256,7 +258,7 @@ def send_walkthrough_rejected_mail(
 def send_walkthrough_submission_mail(walkthrough: Walkthrough) -> None:
     link = f"{settings.HOST_SITE}/walkthroughs/{walkthrough.id}"
     for username, email in get_level_authors(walkthrough.level):
-        send_mail(
+        send_mail.delay(
             template_name="walkthrough_submission",
             subject=f"{PREFIX} New walkthrough",
             recipients=[email],
@@ -272,7 +274,7 @@ def send_walkthrough_submission_mail(walkthrough: Walkthrough) -> None:
 def send_walkthrough_update_mail(walkthrough: Walkthrough) -> None:
     link = f"{settings.HOST_SITE}/walkthroughs/{walkthrough.id}"
     for username, email in get_level_authors(walkthrough.level):
-        send_mail(
+        send_mail.delay(
             template_name="walkthrough_update",
             subject=f"{PREFIX} Walkthrough edited",
             recipients=[email],
