@@ -35,7 +35,7 @@ def collect_user_links() -> Iterable[str]:
 
 
 @app.task
-def delete_unreferenced_files() -> None:
+def delete_unreferenced_files(dry_run: bool = False) -> None:
     for uploaded_file in UploadedFile.objects.filter(
         level__isnull=True,
         levelfile__isnull=True,
@@ -44,10 +44,9 @@ def delete_unreferenced_files() -> None:
         created__lte=(timezone.now() - timedelta(hours=24)),
     ).exclude(upload_type=UploadedFile.UploadType.ATTACHMENT):
         logger.info("%s: deleting unused file", uploaded_file.md5sum)
-
         assert not check_model_references(uploaded_file)
-
-        uploaded_file.delete()
+        if not dry_run:
+            uploaded_file.delete()
 
     links = set(collect_user_links())
 
@@ -62,6 +61,6 @@ def delete_unreferenced_files() -> None:
             continue
 
         logger.info("%s: deleting unused file", uploaded_file.md5sum)
-
         assert not check_model_references(uploaded_file)
-        uploaded_file.delete()
+        if not dry_run:
+            uploaded_file.delete()
