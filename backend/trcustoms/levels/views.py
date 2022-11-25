@@ -1,5 +1,7 @@
 from pathlib import Path
 
+import boto3
+from botocore.config import Config
 from django.conf import settings
 from django.db import models
 from django.db.models import F
@@ -222,7 +224,18 @@ class LevelFileViewSet(viewsets.GenericViewSet):
 
         # url = file_field.storage.url(file_field.name, parameters=parameters)
 
-        client = file_field.storage.connection.meta.client
+        client = boto3.client(
+            "s3",
+            aws_access_key_id=settings.AWS_ACCESS_KEY_ID,
+            aws_secret_access_key=settings.AWS_SECRET_ACCESS_KEY,
+            endpoint_url=settings.AWS_S3_ENDPOINT_URL,
+            config=Config(
+                s3={"addressing_style": "path"},
+                signature_version="s3v4",
+                retries=dict(max_attempts=3),
+            ),
+        )
+
         url = client.generate_presigned_url(
             ClientMethod="get_object",
             ExpiresIn=60,
