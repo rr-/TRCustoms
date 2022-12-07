@@ -170,7 +170,7 @@ const MediumThumbnail = ({
             className={styles.mediumThumbnailThumb}
             src={thumbnailUrl}
           />
-          <span className={styles.MediumThumbnailOverlay}>
+          <span className={styles.mediumThumbnailOverlay}>
             <IconPlay />
           </span>
         </a>
