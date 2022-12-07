@@ -1,4 +1,4 @@
-import "./index.css";
+import styles from "./index.module.css";
 import { useQuery } from "react-query";
 import { TagDeleteButton } from "src/components/buttons/TagDeleteButton";
 import { TagMergeButton } from "src/components/buttons/TagMergeButton";
@@ -54,7 +54,7 @@ const TagsTableDetails = ({ tag }: TagsTableDetailsProps) => {
         <p>Not used with other tags.</p>
       )}
       <PermissionGuard require={UserPermission.editTags}>
-        <div className="FormGridButtons--buttons">
+        <div className={styles.buttons}>
           <TagMergeButton tag={tag} />
           <TagRenameButton tag={tag} />
           <TagDeleteButton tag={tag} />
