@@ -73,6 +73,12 @@ const parseYoutubeLink = (urlStr: string): YoutubeLink | null => {
   let videoID = url.searchParams.get("v");
   let playlistID = url.searchParams.get("list");
   if (!videoID) {
+    let match = url.pathname.match(/\/embed\/([^/]+)\/?/);
+    if (match) {
+      videoID = match[1];
+    }
+  }
+  if (!videoID) {
     if (["youtu.be", "www.youtu.be"].includes(url.hostname)) {
       videoID = url.pathname.replace("/", "");
     }
