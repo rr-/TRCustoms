@@ -1,0 +1,13 @@
+:global .TagsTable--name {
+  width: 40%;
+}
+:global .TagsTable--level-count,
+:global .TagsTable--created,
+:global .TagsTable--updated {
+  width: 20%;
+}
+
+.buttons {
+  display: flex;
+  gap: 0.5rem;
+}
