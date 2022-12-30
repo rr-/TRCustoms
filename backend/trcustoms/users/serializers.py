@@ -7,7 +7,10 @@ from rest_framework import serializers
 from rest_framework_simplejwt.exceptions import TokenError
 
 from trcustoms.common.models import Country
-from trcustoms.common.serializers import CountryNestedSerializer
+from trcustoms.common.serializers import (
+    CountryNestedSerializer,
+    CustomCharField,
+)
 from trcustoms.mails import send_email_confirmation_mail
 from trcustoms.permissions import get_permissions
 from trcustoms.uploads.models import UploadedFile
@@ -62,7 +65,7 @@ class UserListingSerializer(serializers.ModelSerializer):
             "trle_author_id",
         ]
 
-    username = serializers.CharField(
+    username = CustomCharField(
         required=True,
         validators=[
             UsernameValidator(),
@@ -71,10 +74,10 @@ class UserListingSerializer(serializers.ModelSerializer):
         ],
     )
 
-    first_name = serializers.CharField(
+    first_name = CustomCharField(
         required=False, validators=[MaxLengthValidator(30)], allow_blank=True
     )
-    last_name = serializers.CharField(
+    last_name = CustomCharField(
         required=False, validators=[MaxLengthValidator(150)], allow_blank=True
     )
     bio = serializers.CharField(
@@ -271,11 +274,11 @@ class UserDetailsSerializer(UserListingSerializer):
 
 
 class UserBanSerializer(serializers.Serializer):
-    reason = serializers.CharField(max_length=500)
+    reason = CustomCharField(max_length=500)
 
 
 class UsernameSerializer(serializers.Serializer):
-    username = serializers.CharField(max_length=200)
+    username = CustomCharField(max_length=200)
 
 
 class UserConfirmEmailSerializer(serializers.Serializer):

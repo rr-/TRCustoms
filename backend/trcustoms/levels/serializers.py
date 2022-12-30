@@ -4,7 +4,10 @@ from django.conf import settings
 from django.core.validators import MaxLengthValidator
 from rest_framework import serializers
 
-from trcustoms.common.serializers import RatingClassNestedSerializer
+from trcustoms.common.serializers import (
+    CustomCharField,
+    RatingClassNestedSerializer,
+)
 from trcustoms.engines.models import Engine
 from trcustoms.engines.serializers import EngineNestedSerializer
 from trcustoms.genres.models import Genre
@@ -93,9 +96,9 @@ class LevelNestedSerializer(serializers.ModelSerializer):
 
 
 class LevelListingSerializer(serializers.ModelSerializer):
-    name = serializers.CharField(validators=[MaxLengthValidator(100)])
+    name = CustomCharField(validators=[MaxLengthValidator(100)])
     description = serializers.CharField(validators=[MaxLengthValidator(5000)])
-    rejection_reason = serializers.CharField(
+    rejection_reason = CustomCharField(
         validators=[MaxLengthValidator(500)], required=False, allow_blank=True
     )
 
@@ -376,7 +379,7 @@ class LevelDetailsSerializer(LevelListingSerializer):
 
 
 class LevelRejectionSerializer(serializers.Serializer):
-    reason = serializers.CharField(max_length=500)
+    reason = CustomCharField(max_length=500)
 
 
 class FeaturedLevelListingSerializer(serializers.ModelSerializer):
