@@ -97,6 +97,9 @@ class LevelViewSet(
         "authors__username",
         "authors__first_name",
         "authors__last_name",
+        "^genres__name",
+        "^tags__name",
+        "=engine__name",
     ]
 
     def get_object(self):
