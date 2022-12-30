@@ -46,7 +46,7 @@ def get_basic_data():
             Engine.objects.with_counts().order_by("position"), many=True
         ).data,
         "difficulties": LevelDifficultyListingSerializer(
-            LevelDifficulty.objects.all(), many=True
+            LevelDifficulty.objects.order_by("position"), many=True
         ).data,
         "durations": LevelDurationListingSerializer(
             LevelDuration.objects.all(), many=True

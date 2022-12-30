@@ -4,6 +4,7 @@ import { Form } from "formik";
 import { useEffect } from "react";
 import { useCallback } from "react";
 import { useState } from "react";
+import { DifficultiesCheckboxes } from "src/components/common/DifficultiesCheckboxes";
 import { EnginesCheckboxes } from "src/components/common/EnginesCheckboxes";
 import { GenresCheckboxes } from "src/components/common/GenresCheckboxes";
 import { Link } from "src/components/common/Link";
@@ -40,6 +41,7 @@ const convertSearchQueryToFormikValues = (
     tags: searchQuery.tags,
     genres: searchQuery.genres,
     engines: searchQuery.engines,
+    difficulties: searchQuery.difficulties,
     isApproved: searchQuery.isApproved,
   };
 };
@@ -104,6 +106,17 @@ const LevelSearchSidebar = ({
         ...searchQuery,
         page: null,
         tags: values,
+      });
+    },
+    [searchQuery, onSearchQueryChange]
+  );
+
+  const handleDifficultiesChange = useCallback(
+    (values: number[]) => {
+      onSearchQueryChange({
+        ...searchQuery,
+        page: null,
+        difficulties: values,
       });
     },
     [searchQuery, onSearchQueryChange]
@@ -186,6 +199,13 @@ const LevelSearchSidebar = ({
               <TagsCheckboxes
                 value={searchQuery.tags}
                 onChange={handleTagsChange}
+              />
+            </div>
+
+            <div className={styles.section}>
+              <DifficultiesCheckboxes
+                value={searchQuery.difficulties}
+                onChange={handleDifficultiesChange}
               />
             </div>
           </Form>
