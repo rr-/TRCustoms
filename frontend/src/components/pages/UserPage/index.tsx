@@ -23,6 +23,7 @@ const getLevelSearchQuery = (
   engines: [],
   difficulties: [],
   durations: [],
+  ratings: [],
   authors: [userId],
   isApproved: isLoggedIn ? null : true,
 });

@@ -146,26 +146,26 @@ class LevelViewSet(
                         F("last_file__file__size").desc(nulls_last=True)
                     )
 
-        if pks := parse_ints(self.request.query_params.get("authors")):
-            for pk in pks:
-                queryset = queryset.filter(authors__pk=pk)
+        and_map = {
+            "authors": "authors__pk",
+            "tags": "tags__pk",
+            "genres": "genres__pk",
+        }
+        or_map = {
+            "engines": "engine__pk",
+            "difficulties": "difficulty__pk",
+            "durations": "duration__pk",
+            "ratings": "rating_class__pk",
+        }
 
-        if pks := parse_ints(self.request.query_params.get("tags")):
-            for pk in pks:
-                queryset = queryset.filter(tags__pk=pk)
+        for query_param, qs_key in and_map.items():
+            if pks := parse_ints(self.request.query_params.get(query_param)):
+                for pk in pks:
+                    queryset = queryset.filter(**{qs_key: pk})
 
-        if pks := parse_ints(self.request.query_params.get("genres")):
-            for pk in pks:
-                queryset = queryset.filter(genres__pk=pk)
-
-        if pks := parse_ints(self.request.query_params.get("engines")):
-            queryset = queryset.filter(engine__pk__in=pks)
-
-        if pks := parse_ints(self.request.query_params.get("difficulties")):
-            queryset = queryset.filter(difficulty__pk__in=pks)
-
-        if pks := parse_ints(self.request.query_params.get("durations")):
-            queryset = queryset.filter(duration__pk__in=pks)
+        for query_param, qs_key in or_map.items():
+            if pks := parse_ints(self.request.query_params.get(query_param)):
+                queryset = queryset.filter(**{f"{qs_key}__in": pks})
 
         if (
             is_approved := parse_bool(
