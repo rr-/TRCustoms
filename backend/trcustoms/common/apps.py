@@ -7,4 +7,5 @@ class CommonConfig(AppConfig):
     name = "trcustoms.common"
 
     def ready(self):
+        import trcustoms.common.serializers
         import trcustoms.common.signals
