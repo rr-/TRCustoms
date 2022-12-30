@@ -41,6 +41,26 @@ def test_tag_creation(
 
 
 @pytest.mark.django_db
+def test_tag_creation_multiple_spaces(
+    any_integer, any_datetime, auth_api_client: APIClient, fake: Generic
+) -> None:
+    """Test that tag creation collapses whitespace."""
+    payload = {
+        "name": "  foo  bar  ",
+    }
+    response = auth_api_client.post("/api/level_tags/", data=payload)
+    data = response.json()
+
+    assert response.status_code == status.HTTP_201_CREATED, data
+    assert data == {
+        "id": any_integer(),
+        "name": "foo bar",
+        "created": any_datetime(allow_strings=True),
+        "last_updated": any_datetime(allow_strings=True),
+    }
+
+
+@pytest.mark.django_db
 def test_tag_creation_duplicate_name(
     tag_factory: TagFactory, auth_api_client: APIClient, fake: Generic
 ) -> None:
