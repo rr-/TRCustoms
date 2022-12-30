@@ -1,8 +1,7 @@
 import { useContext } from "react";
-import { Checkbox } from "src/components/common/Checkbox";
-import { FilterCheckboxesHeader } from "src/components/common/FilterCheckboxesHeader";
+import { EntitiesCheckboxes } from "src/components/common/EntitiesCheckboxes";
 import { ConfigContext } from "src/contexts/ConfigContext";
-import type { EngineNested } from "src/services/EngineService";
+import type { EngineListing } from "src/services/EngineService";
 
 interface EnginesCheckboxesProps {
   value: number[];
@@ -11,39 +10,16 @@ interface EnginesCheckboxesProps {
 
 const EnginesCheckboxes = ({ value, onChange }: EnginesCheckboxesProps) => {
   const { config } = useContext(ConfigContext);
-  const visibleEngines = config.engines;
-
-  const handleChange = (
-    event: React.ChangeEvent<HTMLInputElement>,
-    engine: EngineNested
-  ) => {
-    onChange(
-      event.target.checked
-        ? [...value, engine.id]
-        : value.filter((tagId) => tagId !== engine.id)
-    );
-  };
-
-  const handleClear = () => {
-    onChange([]);
-  };
 
   return (
-    <div className="EnginesCheckboxes">
-      <FilterCheckboxesHeader onClear={handleClear}>
-        Engines:
-      </FilterCheckboxesHeader>
-      {visibleEngines.map((engine) => (
-        <Checkbox
-          key={engine.id}
-          label={engine.name}
-          onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
-            handleChange(event, engine)
-          }
-          checked={value.includes(engine.id)}
-        />
-      ))}
-    </div>
+    <EntitiesCheckboxes
+      header="Engines"
+      entitiesPool={config.engines}
+      value={value}
+      onChange={onChange}
+      getEntityId={(entity: EngineListing) => entity.id}
+      getEntityName={(entity: EngineListing) => entity.name}
+    />
   );
 };
 
