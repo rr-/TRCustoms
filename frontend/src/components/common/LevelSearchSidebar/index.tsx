@@ -20,12 +20,8 @@ import type { LevelSearchQuery } from "src/services/LevelService";
 import { UserPermission } from "src/services/UserService";
 
 const sortOptions = [
-  { label: "Alphabetically", value: "name" },
-  { label: "By engine", value: "engine" },
-  { label: "Newest first", value: "-created" },
-  { label: "Oldest first", value: "created" },
-  { label: "Last updated", value: "-last_updated" },
-  { label: "Least reviewed", value: "review_count" },
+  { label: "Most recent", value: "-created" },
+  { label: "Least recent", value: "created" },
   { label: "Best rated", value: "-rating" },
   { label: "Worst rated", value: "rating" },
   { label: "Most downloaded", value: "-download_count" },
