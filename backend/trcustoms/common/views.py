@@ -49,7 +49,7 @@ def get_basic_data():
             LevelDifficulty.objects.order_by("position"), many=True
         ).data,
         "durations": LevelDurationListingSerializer(
-            LevelDuration.objects.all(), many=True
+            LevelDuration.objects.order_by("position"), many=True
         ).data,
         "review_questions": ReviewTemplateQuestionSerializer(
             ReviewTemplateQuestion.objects.all(), many=True

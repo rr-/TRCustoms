@@ -22,6 +22,7 @@ const getLevelSearchQuery = (
   genres: [],
   engines: [],
   difficulties: [],
+  durations: [],
   authors: [userId],
   isApproved: isLoggedIn ? null : true,
 });
