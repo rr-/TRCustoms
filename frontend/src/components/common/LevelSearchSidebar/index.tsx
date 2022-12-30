@@ -10,6 +10,7 @@ import { EnginesCheckboxes } from "src/components/common/EnginesCheckboxes";
 import { GenresCheckboxes } from "src/components/common/GenresCheckboxes";
 import { Link } from "src/components/common/Link";
 import { PermissionGuard } from "src/components/common/PermissionGuard";
+import { RatingsCheckboxes } from "src/components/common/RatingsCheckboxes";
 import { SectionHeader } from "src/components/common/Section";
 import { SidebarBox } from "src/components/common/SidebarBox";
 import { TagsCheckboxes } from "src/components/common/TagsCheckboxes";
@@ -135,6 +136,17 @@ const LevelSearchSidebar = ({
     [searchQuery, onSearchQueryChange]
   );
 
+  const handleRatingsChange = useCallback(
+    (values: number[]) => {
+      onSearchQueryChange({
+        ...searchQuery,
+        page: null,
+        ratings: values,
+      });
+    },
+    [searchQuery, onSearchQueryChange]
+  );
+
   const handleClear = useCallback(
     () => onSearchQueryChange(defaultSearchQuery),
     [onSearchQueryChange, defaultSearchQuery]
@@ -226,6 +238,13 @@ const LevelSearchSidebar = ({
               <DifficultiesCheckboxes
                 value={searchQuery.difficulties}
                 onChange={handleDifficultiesChange}
+              />
+            </div>
+
+            <div className={styles.section}>
+              <RatingsCheckboxes
+                value={searchQuery.ratings}
+                onChange={handleRatingsChange}
               />
             </div>
           </Form>

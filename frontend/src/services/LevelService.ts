@@ -88,6 +88,7 @@ interface LevelSearchQuery extends GenericSearchQuery {
   authors: number[];
   difficulties: number[];
   durations: number[];
+  ratings: number[];
   isApproved: boolean | null;
   reviewsMax?: number | undefined | null;
 }
@@ -108,6 +109,7 @@ const searchLevels = async (
     authors: searchQuery.authors?.join(","),
     difficulties: searchQuery.difficulties?.join(","),
     durations: searchQuery.durations?.join(","),
+    ratings: searchQuery.ratings?.join(","),
     is_approved:
       searchQuery.isApproved === true
         ? "1"
