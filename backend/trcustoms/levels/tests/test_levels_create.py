@@ -26,6 +26,7 @@ def test_level_creation_missing_fields(auth_api_client: APIClient) -> None:
     assert response.status_code == status.HTTP_400_BAD_REQUEST, data
     assert data == {
         "name": ["This field is required."],
+        "description": ["This field is required."],
         "engine_id": ["This field is required."],
         "duration_id": ["This field is required."],
         "difficulty_id": ["This field is required."],
