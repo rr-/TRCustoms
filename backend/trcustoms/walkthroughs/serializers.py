@@ -2,6 +2,7 @@ from django.core.exceptions import ValidationError
 from django.core.validators import MinLengthValidator, URLValidator
 from rest_framework import serializers
 
+from trcustoms.common.serializers import CustomCharField
 from trcustoms.levels.models import Level
 from trcustoms.levels.serializers import LevelNestedSerializer
 from trcustoms.mails import send_walkthrough_update_mail
@@ -54,7 +55,7 @@ class WalkthroughDetailsSerializer(WalkthroughListingSerializer):
     level_id = serializers.PrimaryKeyRelatedField(
         write_only=True, source="level", queryset=Level.objects.all()
     )
-    text = serializers.CharField(validators=[MinLengthValidator(0)])
+    text = CustomCharField(validators=[MinLengthValidator(0)])
 
     class Meta:
         model = Walkthrough
@@ -127,4 +128,4 @@ class WalkthroughDetailsSerializer(WalkthroughListingSerializer):
 
 
 class WalkthroughRejectionSerializer(serializers.Serializer):
-    reason = serializers.CharField(max_length=500)
+    reason = CustomCharField(max_length=500)
