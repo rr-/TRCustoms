@@ -146,20 +146,20 @@ class LevelViewSet(
                         F("last_file__file__size").desc(nulls_last=True)
                     )
 
-        if author_ids := parse_ints(self.request.query_params.get("authors")):
-            for author_id in author_ids:
-                queryset = queryset.filter(authors__id=author_id)
+        if pks := parse_ints(self.request.query_params.get("authors")):
+            for pk in pks:
+                queryset = queryset.filter(authors__pk=pk)
 
-        if tag_ids := parse_ints(self.request.query_params.get("tags")):
-            for tag_id in tag_ids:
-                queryset = queryset.filter(tags__id=tag_id)
+        if pks := parse_ints(self.request.query_params.get("tags")):
+            for pk in pks:
+                queryset = queryset.filter(tags__pk=pk)
 
-        if genre_ids := parse_ints(self.request.query_params.get("genres")):
-            for genre_id in genre_ids:
-                queryset = queryset.filter(genres__id=genre_id)
+        if pks := parse_ints(self.request.query_params.get("genres")):
+            for pk in pks:
+                queryset = queryset.filter(genres__pk=pk)
 
-        if engine_ids := parse_ints(self.request.query_params.get("engines")):
-            queryset = queryset.filter(engine__id__in=engine_ids)
+        if pks := parse_ints(self.request.query_params.get("engines")):
+            queryset = queryset.filter(engine__pk__in=pks)
 
         if (
             is_approved := parse_bool(
