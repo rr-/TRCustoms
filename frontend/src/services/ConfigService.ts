@@ -34,6 +34,7 @@ interface DurationListing {
 interface DifficultyListing {
   id: number;
   name: string;
+  position: number;
 }
 
 interface ReviewTemplateAnswer {

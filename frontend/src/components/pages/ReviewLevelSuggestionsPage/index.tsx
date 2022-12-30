@@ -17,6 +17,7 @@ const defaultSearchQuery: LevelSearchQuery = {
   genres: [],
   engines: [],
   authors: [],
+  difficulties: [],
   isApproved: true,
   reviewsMax: 5,
 };

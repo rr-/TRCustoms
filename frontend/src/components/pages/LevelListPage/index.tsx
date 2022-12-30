@@ -20,6 +20,7 @@ const defaultSearchQuery: LevelSearchQuery = {
   genres: [],
   engines: [],
   authors: [],
+  difficulties: [],
   isApproved: true,
 };
 
@@ -30,6 +31,7 @@ const deserializeSearchQuery = (qp: {
   tags: (qp.tags?.split(/,/g) || []).map((item) => +item),
   genres: (qp.genres?.split(/,/g) || []).map((item) => +item),
   engines: (qp.engines?.split(/,/g) || []).map((item) => +item),
+  difficulties: (qp.difficulties?.split(/,/g) || []).map((item) => +item),
   authors: [],
   isApproved: qp.approved === "1" ? true : qp.approved === "0" ? false : true,
 });
@@ -42,6 +44,7 @@ const serializeSearchQuery = (
     tags: searchQuery.tags.join(","),
     genres: searchQuery.genres.join(","),
     engines: searchQuery.engines.join(","),
+    difficulties: searchQuery.difficulties.join(","),
     approved:
       searchQuery.isApproved === true
         ? null
