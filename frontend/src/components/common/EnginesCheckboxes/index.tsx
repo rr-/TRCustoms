@@ -13,7 +13,6 @@ const EnginesCheckboxes = ({ value, onChange }: EnginesCheckboxesProps) => {
 
   return (
     <EntitiesCheckboxes
-      header="Engines"
       entitiesPool={config.engines}
       value={value}
       onChange={onChange}

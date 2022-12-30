@@ -13,7 +13,6 @@ const RatingsCheckboxes = ({ value, onChange }: RatingsCheckboxesProps) => {
 
   return (
     <EntitiesCheckboxes
-      header="Ratings"
       entitiesPool={config.review_stats.map((stat) => stat.rating_class)}
       value={value}
       onChange={onChange}

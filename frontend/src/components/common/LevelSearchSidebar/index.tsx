@@ -4,6 +4,7 @@ import { Form } from "formik";
 import { useEffect } from "react";
 import { useCallback } from "react";
 import { useState } from "react";
+import { Collapsible } from "src/components/common/Collapsible";
 import { DifficultiesCheckboxes } from "src/components/common/DifficultiesCheckboxes";
 import { DurationsCheckboxes } from "src/components/common/DurationsCheckboxes";
 import { EnginesCheckboxes } from "src/components/common/EnginesCheckboxes";
@@ -207,45 +208,60 @@ const LevelSearchSidebar = ({
             </div>
 
             <div className={styles.section}>
-              <EnginesCheckboxes
-                value={searchQuery.engines}
-                onChange={handleEnginesChange}
-              />
+              <Collapsible storageKey="levelSearchGenres" title="Genres">
+                <GenresCheckboxes
+                  value={searchQuery.genres}
+                  onChange={handleGenresChange}
+                />
+              </Collapsible>
             </div>
 
             <div className={styles.section}>
-              <GenresCheckboxes
-                value={searchQuery.genres}
-                onChange={handleGenresChange}
-              />
+              <Collapsible storageKey="levelSearchTags" title="Tags">
+                <TagsCheckboxes
+                  value={searchQuery.tags}
+                  onChange={handleTagsChange}
+                />
+              </Collapsible>
             </div>
 
             <div className={styles.section}>
-              <TagsCheckboxes
-                value={searchQuery.tags}
-                onChange={handleTagsChange}
-              />
+              <Collapsible storageKey="levelSearchEngines" title="Engines">
+                <EnginesCheckboxes
+                  value={searchQuery.engines}
+                  onChange={handleEnginesChange}
+                />
+              </Collapsible>
             </div>
 
             <div className={styles.section}>
-              <DurationsCheckboxes
-                value={searchQuery.durations}
-                onChange={handleDurationsChange}
-              />
+              <Collapsible storageKey="levelSearchRatings" title="Ratings">
+                <RatingsCheckboxes
+                  value={searchQuery.ratings}
+                  onChange={handleRatingsChange}
+                />
+              </Collapsible>
             </div>
 
             <div className={styles.section}>
-              <DifficultiesCheckboxes
-                value={searchQuery.difficulties}
-                onChange={handleDifficultiesChange}
-              />
+              <Collapsible storageKey="levelSearchDurations" title="Durations">
+                <DurationsCheckboxes
+                  value={searchQuery.durations}
+                  onChange={handleDurationsChange}
+                />
+              </Collapsible>
             </div>
 
             <div className={styles.section}>
-              <RatingsCheckboxes
-                value={searchQuery.ratings}
-                onChange={handleRatingsChange}
-              />
+              <Collapsible
+                storageKey="levelSearchDifficulties"
+                title="Difficulties"
+              >
+                <DifficultiesCheckboxes
+                  value={searchQuery.difficulties}
+                  onChange={handleDifficultiesChange}
+                />
+              </Collapsible>
             </div>
           </Form>
         )}

@@ -16,7 +16,6 @@ const DifficultiesCheckboxes = ({
 
   return (
     <EntitiesCheckboxes
-      header="Difficulties"
       entitiesPool={config.difficulties}
       value={value}
       onChange={onChange}

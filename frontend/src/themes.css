@@ -12,6 +12,7 @@
   --message-accent-bg-color: var(--blockquote-border-color);
   --message-accent-fg-color: var(--fg-color);
   --walkthroughs-hover-filter: var(--stats-hover-filter);
+  --collapsible-bg-color: var(--bg-color);
 }
 
 [data-theme="midnight_ocean"] {
@@ -88,6 +89,7 @@
   --blockquote-border-color: var(--button-bg-color);
   --message-accent-fg-color: var(--button-fg-color);
   --message-bg-color: var(--box-bg-color);
+  --collapsible-bg-color: var(--navbar-active-tab-bg-color);
 }
 
 [data-theme="lettuce"] {
@@ -142,6 +144,7 @@
   --message-bg-color: hsl(var(--primary-hue), 75%, 75%);
   --blockquote-bg-color: hsl(var(--primary-hue), 85%, 90%);
   --blockquote-border-color: var(--button-bg-color);
+  --collapsible-bg-color: var(--navbar-active-tab-bg-color);
 }
 
 [data-theme="sundown"] {
@@ -179,6 +182,7 @@
   --message-bg-color: var(--sidebar-bg-color);
   --blockquote-bg-color: var(--bg-color);
   --blockquote-border-color: var(--link-color);
+  --collapsible-bg-color: var(--navbar-active-tab-bg-color);
 }
 
 [data-theme="sepia_flashback"] {
@@ -292,6 +296,7 @@
   --message-bg-color: var(--sidebar-bg-color);
   --blockquote-bg-color: var(--bg-color);
   --blockquote-border-color: var(--link-color);
+  --collapsible-bg-color: var(--navbar-active-tab-bg-color);
 }
 
 [data-theme="film_noir"] {
