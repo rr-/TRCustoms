@@ -29,6 +29,7 @@ interface FeaturedLevel {
 interface DurationListing {
   id: number;
   name: string;
+  position: number;
 }
 
 interface DifficultyListing {

@@ -164,6 +164,9 @@ class LevelViewSet(
         if pks := parse_ints(self.request.query_params.get("difficulties")):
             queryset = queryset.filter(difficulty__pk__in=pks)
 
+        if pks := parse_ints(self.request.query_params.get("durations")):
+            queryset = queryset.filter(duration__pk__in=pks)
+
         if (
             is_approved := parse_bool(
                 self.request.query_params.get("is_approved")
