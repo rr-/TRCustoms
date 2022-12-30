@@ -74,7 +74,7 @@ class SessionStorage {
 
 const storages = [new LocalStorage(), new SessionStorage(), new MyStorage()];
 
-const getItem = (key: string): string | null => {
+const getItem = (key: string): any | null => {
   for (let storage of storages) {
     if (storage.isAvailable) {
       return storage.getItem(key);

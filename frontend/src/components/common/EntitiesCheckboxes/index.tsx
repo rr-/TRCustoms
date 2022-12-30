@@ -8,7 +8,7 @@ import { TextInput } from "src/components/common/TextInput";
 import { KEY_RETURN } from "src/constants";
 
 interface EntitiesCheckboxesProps<TEntity> {
-  header: string;
+  header?: React.ReactNode;
   footer?: React.ReactNode;
   entitiesPool: TEntity[];
   maxVisibleEntities?: number;
@@ -118,9 +118,11 @@ const EntitiesCheckboxes = <TEntity extends {}>({
 
   return (
     <div className="EntitiesCheckboxes">
-      <FilterCheckboxesHeader onClear={handleClear}>
-        {header}:
-      </FilterCheckboxesHeader>
+      {header && (
+        <FilterCheckboxesHeader onClear={handleClear}>
+          {header}:
+        </FilterCheckboxesHeader>
+      )}
 
       {useFiltering && (
         <TextInput
@@ -140,27 +142,26 @@ const EntitiesCheckboxes = <TEntity extends {}>({
           checked={value.includes(getEntityId(entity))}
         />
       ))}
-      {useFiltering ? (
-        <>
-          {value.length === maxFilteredEntities && (
-            <p>Cannot filter by any more items.</p>
-          )}
-          {useCollapsing && filteredEntities.length > maxVisibleEntities && (
-            <p>
-              ({filteredEntities.length - maxVisibleEntities} item(s) hidden)
-            </p>
-          )}
-          {footer}
-        </>
-      ) : (
-        useCollapsing && (
-          <div>
-            <Link onClick={handleExpandButtonClick}>
-              {isExpanded ? "Show less" : "Show all"}
-            </Link>
-          </div>
-        )
+
+      {useFiltering && value.length === maxFilteredEntities && (
+        <p>Cannot filter by any more items.</p>
       )}
+
+      {useCollapsing && visibleEntities.length < filteredEntities.length && (
+        <p>
+          ({filteredEntities.length - visibleEntities.length} item(s) hidden)
+        </p>
+      )}
+
+      {useCollapsing && !useFiltering && (
+        <p>
+          <Link onClick={handleExpandButtonClick}>
+            {isExpanded ? "Show less" : "Show all"}
+          </Link>
+        </p>
+      )}
+
+      {footer}
     </div>
   );
 };

@@ -13,7 +13,6 @@ const DurationsCheckboxes = ({ value, onChange }: DurationsCheckboxesProps) => {
 
   return (
     <EntitiesCheckboxes
-      header="Durations"
       entitiesPool={config.durations}
       value={value}
       onChange={onChange}

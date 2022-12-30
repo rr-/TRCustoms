@@ -14,7 +14,6 @@ const TagsCheckboxes = ({ value, onChange }: TagsCheckboxesProps) => {
 
   return (
     <EntitiesCheckboxes
-      header="Tags"
       footer={
         <div>
           <Link to={`/tags`}>Browse all</Link>

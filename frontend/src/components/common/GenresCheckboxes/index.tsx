@@ -13,7 +13,6 @@ const GenresCheckboxes = ({ value, onChange }: GenresCheckboxesProps) => {
 
   return (
     <EntitiesCheckboxes
-      header="Genres"
       entitiesPool={config.genres}
       maxVisibleEntities={8}
       value={value}

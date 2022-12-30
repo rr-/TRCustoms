@@ -1,0 +1,7 @@
+.header {
+  background: var(--collapsible-bg-color);
+  padding: 0.25rem 0.5rem;
+  margin-bottom: 0.5rem;
+  display: flex;
+  justify-content: space-between;
+}
