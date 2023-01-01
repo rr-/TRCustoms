@@ -1,7 +1,10 @@
-.Pager {
+.wrapper {
   margin: 1.5rem 0;
+  display: flex;
+  justify-content: center;
 }
-.Pager ul {
+
+.list {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
@@ -9,27 +12,29 @@
   list-style-type: none;
   margin: 0;
   padding: 0;
+  background: var(--pager-bg-color);
 }
-.Pager li {
+
+.listItem {
   text-align: center;
   margin: 0 0.5rem 0 0;
 }
 
-.Pager--ellipsis {
+.ellipsis {
   opacity: 0.25;
 }
 
-.Pager span,
-.Pager .Pager--button {
+.wrapper span,
+.button {
   display: inline-block;
   width: 3.25rem;
   padding: 0.25rem 0;
   box-sizing: border-box;
 }
 
-.Pager li.active {
-  background: var(--link-highlight-bg-color);
+.listItem.active {
+  background: var(--pager-active-bg-color);
 }
-.Pager li.active .Pager--button {
-  color: var(--link-highlight-fg-color);
+.listItem.active .button {
+  color: var(--pager-active-fg-color);
 }
