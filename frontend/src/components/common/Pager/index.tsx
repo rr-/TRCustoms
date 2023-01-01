@@ -1,4 +1,4 @@
-import "./index.css";
+import styles from "./index.module.css";
 import { last } from "lodash";
 import { Link } from "src/components/common/Link";
 import type { PagedResponse } from "src/types";
@@ -8,7 +8,6 @@ const PAGES_AROUND = 2;
 interface PagerProps<TCollection> {
   onPageChange: (page: number) => void;
   pagedResponse: PagedResponse<TCollection>;
-  className?: string | undefined;
 }
 
 const getPagesShown = (
@@ -55,7 +54,7 @@ const PagerActiveLink = ({
   children: React.ReactNode;
 }) => {
   return (
-    <Link className="Pager--button" onClick={() => onPageChange(page)}>
+    <Link className={styles.button} onClick={() => onPageChange(page)}>
       {children}
     </Link>
   );
@@ -97,7 +96,6 @@ const PagerLink = ({
 const Pager = <TCollection extends {}>({
   onPageChange,
   pagedResponse,
-  className,
 }: PagerProps<TCollection>) => {
   const firstPage = 1;
   const currentPage = pagedResponse.current_page;
@@ -111,14 +109,14 @@ const Pager = <TCollection extends {}>({
   const pagerLinkProps = { onPageChange, firstPage, lastPage };
 
   return (
-    <div className={`Pager ${className || ""}`}>
-      <ul>
-        <li>
+    <div className={styles.wrapper}>
+      <ul className={styles.list}>
+        <li className={styles.listItem}>
           <PagerLink {...pagerLinkProps} page={firstPage}>
             &laquo;
           </PagerLink>
         </li>
-        <li>
+        <li className={styles.listItem}>
           <PagerLink {...pagerLinkProps} page={prevPage}>
             &lsaquo;
           </PagerLink>
@@ -126,11 +124,16 @@ const Pager = <TCollection extends {}>({
 
         {pagesShown.map((page, idx) =>
           page === null ? (
-            <li key={idx} className="Pager--ellipsis">
+            <li key={idx} className={`${styles.listItem} ${styles.ellipsis}`}>
               …
             </li>
           ) : (
-            <li key={idx} className={page === currentPage ? "active" : ""}>
+            <li
+              key={idx}
+              className={`${styles.listItem} ${
+                page === currentPage ? styles.active : ""
+              }`}
+            >
               <PagerLink {...pagerLinkProps} page={page}>
                 {page}
               </PagerLink>
@@ -138,12 +141,12 @@ const Pager = <TCollection extends {}>({
           )
         )}
 
-        <li>
+        <li className={styles.listItem}>
           <PagerLink {...pagerLinkProps} page={nextPage}>
             &rsaquo;
           </PagerLink>
         </li>
-        <li>
+        <li className={styles.listItem}>
           <PagerLink {...pagerLinkProps} page={lastPage}>
             &raquo;
           </PagerLink>

@@ -208,7 +208,6 @@ const PagedDataTable = <TItem extends {}, TQuery extends GenericSearchQuery>(
           onPageChange={(page) =>
             onSearchQueryChange({ ...searchQuery, page: page })
           }
-          className={className ? `${className}--pager` : undefined}
           pagedResponse={result.data}
         />
       ) : null}

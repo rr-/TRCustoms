@@ -4,7 +4,7 @@
   word-break: break-word;
 }
 .link:hover {
-  color: var(--link-highlight-fg-color);
+  color: var(--link-hover-fg-color);
 }
 
 .withIcon {
