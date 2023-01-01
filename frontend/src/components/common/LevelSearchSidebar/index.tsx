@@ -201,7 +201,7 @@ const LevelSearchSidebar = ({
             </div>
 
             <div className={`${styles.section} ${styles.searchBar}`}>
-              <TextFormField label="Search level/author" name="search" />
+              <TextFormField label="Search" name="search" />
               <div className="FormField">
                 <SubmitButton onClick={submitForm} icon={<IconSearch />} />
               </div>
