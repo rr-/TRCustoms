@@ -130,12 +130,12 @@ class LevelViewSet(
                 case "-engine":
                     queryset = queryset.order_by("-engine__name")
                 case "rating":
-                    queryset = queryset.order_by(
-                        F("rating_class__position").asc(nulls_first=True)
+                    queryset = queryset.with_rating_values().order_by(
+                        F("rating_value").asc()
                     )
                 case "-rating":
-                    queryset = queryset.order_by(
-                        F("rating_class__position").desc(nulls_last=True)
+                    queryset = queryset.with_rating_values().order_by(
+                        F("rating_value").desc()
                     )
                 case "size":
                     queryset = queryset.order_by(
