@@ -1,6 +1,6 @@
 from django.db import models
-from django.db.models import UniqueConstraint
-from django.db.models.functions import Lower
+from django.db.models import F, UniqueConstraint, Value
+from django.db.models.functions import Coalesce, Lower
 
 from trcustoms.audit_logs import registry
 from trcustoms.common.models import DatesInfo, RatingClass
@@ -46,6 +46,15 @@ class LevelDifficulty(DatesInfo):
 
 
 class LevelQuerySet(models.QuerySet):
+    def with_rating_values(self):
+        return self.annotate(
+            rating_value=Coalesce(
+                F("rating_class__position"),
+                Value(-0.5),
+                output_field=models.FloatField(),
+            )
+        )
+
     def with_video_only_walkthroughs(self):
         return self.filter(
             walkthroughs__walkthrough_type=WalkthroughType.LINK,
