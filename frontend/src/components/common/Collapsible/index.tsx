@@ -1,6 +1,5 @@
 import styles from "./index.module.css";
 import { useState } from "react";
-import { Link } from "src/components/common/Link";
 import { IconChevronDown } from "src/components/icons/IconChevronDown";
 import { IconChevronUp } from "src/components/icons/IconChevronUp";
 import { StorageService } from "src/services/StorageService";
@@ -33,12 +32,10 @@ const Collapsible = ({
 
   return (
     <div>
-      <div className={styles.header}>
+      <span className={styles.header} onClick={handleLinkClick} role="link">
         {title}
-        <Link onClick={handleLinkClick}>
-          {isExpanded ? <IconChevronDown /> : <IconChevronUp />}
-        </Link>
-      </div>
+        {isExpanded ? <IconChevronDown /> : <IconChevronUp />}
+      </span>
       {isExpanded && children}
     </div>
   );
