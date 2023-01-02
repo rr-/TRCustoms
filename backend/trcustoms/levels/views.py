@@ -139,7 +139,7 @@ class LevelViewSet(
                     )
                 case "size":
                     queryset = queryset.order_by(
-                        F("last_file__file__size").asc(nulls_first=True)
+                        F("last_file__file__size").asc(nulls_last=True)
                     )
                 case "-size":
                     queryset = queryset.order_by(
