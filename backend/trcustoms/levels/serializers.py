@@ -226,7 +226,7 @@ class LevelDetailsSerializer(LevelListingSerializer):
         ),
     )
 
-    files = LevelFileSerializer(read_only=True, many=True)
+    files = serializers.SerializerMethodField(read_only=True)
     file_id = serializers.PrimaryKeyRelatedField(
         write_only=True,
         source="file",
@@ -234,6 +234,13 @@ class LevelDetailsSerializer(LevelListingSerializer):
             upload_type=UploadedFile.UploadType.LEVEL_FILE
         ),
     )
+
+    def get_files(self, instance) -> dict | None:
+        files = instance.files.active()
+        serializer = LevelFileSerializer(
+            instance=files, many=True, context=self.context
+        )
+        return serializer.data
 
     def validate(self, data):
         validated_data = super().validate(data)
