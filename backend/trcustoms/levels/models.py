@@ -160,7 +160,7 @@ class Level(DatesInfo):
             self.save(update_fields=["download_count"])
 
     def update_last_file(self) -> None:
-        last_file = self.files.order_by("-version").first()
+        last_file = self.files.active().order_by("-version").first()
         if last_file != self.last_file:
             self.last_file = last_file
             self.save()
@@ -184,7 +184,14 @@ class LevelScreenshot(DatesInfo):
         return f"{self.level.name} (screenshot id={self.pk})"
 
 
+class LevelFileQuerySet(models.QuerySet):
+    def active(self):
+        return self.filter(is_active=True)
+
+
 class LevelFile(DatesInfo):
+    objects = LevelFileQuerySet.as_manager()
+
     level = models.ForeignKey(
         Level, on_delete=models.CASCADE, related_name="files"
     )
@@ -193,6 +200,7 @@ class LevelFile(DatesInfo):
         UploadedFile, blank=True, null=True, on_delete=models.SET_NULL
     )
 
+    is_active = models.BooleanField(default=True)
     version = models.IntegerField()
     download_count = models.IntegerField(default=0)
 
