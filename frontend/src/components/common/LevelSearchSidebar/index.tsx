@@ -5,6 +5,7 @@ import { useEffect } from "react";
 import { useCallback } from "react";
 import { useState } from "react";
 import { Collapsible } from "src/components/common/Collapsible";
+import { DatePicker } from "src/components/common/DatePicker";
 import { DifficultiesCheckboxes } from "src/components/common/DifficultiesCheckboxes";
 import { DurationsCheckboxes } from "src/components/common/DurationsCheckboxes";
 import { EnginesCheckboxes } from "src/components/common/EnginesCheckboxes";
@@ -47,6 +48,7 @@ const convertSearchQueryToFormikValues = (
     difficulties: searchQuery.difficulties,
     durations: searchQuery.durations,
     isApproved: searchQuery.isApproved,
+    date: searchQuery.date,
   };
 };
 
@@ -99,6 +101,17 @@ const LevelSearchSidebar = ({
         ...searchQuery,
         page: null,
         genres: values,
+      });
+    },
+    [searchQuery, onSearchQueryChange]
+  );
+
+  const handleDateChange = useCallback(
+    (value: string) => {
+      onSearchQueryChange({
+        ...searchQuery,
+        page: null,
+        date: value,
       });
     },
     [searchQuery, onSearchQueryChange]
@@ -205,6 +218,15 @@ const LevelSearchSidebar = ({
               <div className="FormField">
                 <SubmitButton onClick={submitForm} icon={<IconSearch />} />
               </div>
+            </div>
+
+            <div className={styles.section}>
+              <Collapsible storageKey="levelDate" title="Date">
+                <DatePicker
+                  value={searchQuery.date}
+                  onChange={handleDateChange}
+                />
+              </Collapsible>
             </div>
 
             <div className={styles.section}>

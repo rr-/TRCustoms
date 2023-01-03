@@ -1,0 +1,7 @@
+.select {
+  width: 15rem;
+  vertical-align: top;
+}
+.select[multiple] {
+  min-height: 5rem;
+}

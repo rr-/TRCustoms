@@ -38,6 +38,7 @@ const deserializeSearchQuery = (qp: {
   ratings: (qp.ratings?.split(/,/g) || []).map((item) => +item),
   authors: [],
   isApproved: qp.approved === "1" ? true : qp.approved === "0" ? false : true,
+  date: qp.date,
 });
 
 const serializeSearchQuery = (
@@ -57,6 +58,7 @@ const serializeSearchQuery = (
         : searchQuery.isApproved === false
         ? "0"
         : null,
+    date: searchQuery.date,
   });
 
 const LevelListPage = () => {
