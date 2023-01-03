@@ -157,7 +157,7 @@
   --warning-fg-color: #cb8001;
   --success-fg-color: #1e921e;
   --link-color: var(--secondary-color);
-  --link-hover-color: #000;
+  --link-hover-color: #4e0404;
   --link-text-decoration: none;
   --outline-color: var(--link-color);
   --input-bg-color: #fff1d1;
@@ -195,7 +195,7 @@
   --warning-fg-color: yellow;
   --success-fg-color: limegreen;
   --link-color: var(--secondary-color);
-  --link-hover-color: #d0e6ed;
+  --link-hover-color: #eae0d3;
   --link-text-decoration: none;
   --outline-color: var(--link-color);
   --input-bg-color: #e2d6c3;
@@ -268,7 +268,7 @@
   --warning-fg-color: #fafa00;
   --success-fg-color: #02bb02;
   --link-color: var(--secondary-color);
-  --link-hover-color: #f4faff;
+  --link-hover-color: #111145;
   --link-text-decoration: none;
   --outline-color: var(--link-color);
   --input-bg-color: #f4faff;
@@ -306,7 +306,7 @@
   --warning-fg-color: #ff0;
   --success-fg-color: #32cd32;
   --link-color: var(--secondary-color);
-  --link-hover-color: #dedede;
+  --link-hover-color: #ffe9e9;
   --link-text-decoration: none;
   --outline-color: var(--link-color);
   --input-bg-color: #e0a8a8;
