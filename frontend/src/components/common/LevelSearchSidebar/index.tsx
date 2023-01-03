@@ -221,15 +221,6 @@ const LevelSearchSidebar = ({
             </div>
 
             <div className={styles.section}>
-              <Collapsible storageKey="levelDate" title="Date">
-                <DatePicker
-                  value={searchQuery.date}
-                  onChange={handleDateChange}
-                />
-              </Collapsible>
-            </div>
-
-            <div className={styles.section}>
               <Collapsible storageKey="levelSearchGenres" title="Genres">
                 <GenresCheckboxes
                   value={searchQuery.genres}
@@ -252,6 +243,15 @@ const LevelSearchSidebar = ({
                 <EnginesCheckboxes
                   value={searchQuery.engines}
                   onChange={handleEnginesChange}
+                />
+              </Collapsible>
+            </div>
+
+            <div className={styles.section}>
+              <Collapsible storageKey="levelDate" title="Date">
+                <DatePicker
+                  value={searchQuery.date}
+                  onChange={handleDateChange}
                 />
               </Collapsible>
             </div>
