@@ -197,6 +197,7 @@ blockquote > *:last-child {
   outline: 0;
   border-color: var(--outline-color);
 }
+.Input.invalid,
 .Input:invalid {
   border-color: var(--input-invalid-border-color);
 }

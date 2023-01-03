@@ -1,5 +1,6 @@
 import styles from "./index.module.css";
 import { range } from "lodash";
+import { useCallback } from "react";
 import { Dropdown } from "src/components/common/Dropdown";
 import type { DropdownOption } from "src/components/common/Dropdown";
 
@@ -25,33 +26,36 @@ const DatePicker = ({ value, onChange }: DatePickerProps) => {
   ];
   const monthOptions: DropdownOption[] = months.map((monthName, i) => ({
     label: monthName,
-    value: i + 1,
+    value: `${i + 1}`,
   }));
 
   const yearOptions: DropdownOption[] = range(
     1999,
     new Date().getFullYear() + 1
-  ).map((year) => ({ label: `${year}`, value: year }));
+  ).map((year) => ({ label: `${year}`, value: `${year}` }));
 
   let [selectedYear, selectedMonth]: string[] = (value || "").split(/-/);
-
   const submitChange = (year: string, month: string) => {
     onChange(`${year || ""}-${month || ""}`.replace(/-$/, ""));
   };
 
   const onMonthChange = (month: string) => {
-    submitChange(selectedYear, month);
+    submitChange(selectedYear || "", month);
   };
   const onYearChange = (year: string) => {
-    submitChange(year, selectedMonth);
+    submitChange(year, selectedMonth || "");
   };
+
+  const isYearValid = useCallback((): boolean => {
+    return !!selectedYear || !selectedMonth;
+  }, [selectedMonth, selectedYear]);
 
   return (
     <div className={styles.wrapper}>
       <Dropdown
-        className={styles.yearSelect}
+        className={`${styles.yearSelect} ${!isYearValid() && "invalid"}`}
         allowNull={true}
-        nullLabel="Any year"
+        nullLabel="Year*"
         options={yearOptions}
         value={selectedYear}
         onChange={onYearChange}
