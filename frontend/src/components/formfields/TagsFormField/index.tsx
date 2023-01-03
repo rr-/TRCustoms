@@ -1,4 +1,5 @@
 import { useFormikContext } from "formik";
+import { sortBy } from "lodash";
 import { useState } from "react";
 import { useCallback } from "react";
 import { useContext } from "react";
@@ -28,19 +29,16 @@ const TagsFormField = ({
 
   const handleSearchTrigger = useCallback(
     (userInput: string) => {
-      const allTags: {
-        [tagId: string]: TagNested;
-      } = Object.fromEntries(config.tags.map((tag) => [tag.id, tag]));
-
+      const allTags = sortBy(config.tags, (tag) => tag.name);
       setSuggestions(
-        Object.values(allTags).filter(
+        allTags.filter(
           (tag) =>
             value.every((t) => t.id !== tag.id) &&
             tag.name.toLowerCase().indexOf(userInput.toLowerCase()) > -1
         )
       );
     },
-    [config, value]
+    [value, config]
   );
 
   const handleResultApply = useCallback(
