@@ -48,18 +48,15 @@ const Dropdown = ({
       multiple={multiple}
       className={`Input ${styles.select} ${className || ""}`}
       onChange={handleChange}
+      value={value}
     >
       {!multiple && (
-        <option disabled={!allowNull} value={""} selected={!value}>
+        <option disabled={!allowNull} value={""}>
           {nullLabel || "Select an option…"}
         </option>
       )}
       {options.map((option) => (
-        <option
-          key={option.value}
-          value={option.value}
-          selected={option.value == value}
-        >
+        <option key={option.value} value={option.value}>
           {option.label}
         </option>
       ))}
