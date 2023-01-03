@@ -49,17 +49,17 @@ const DatePicker = ({ value, onChange }: DatePickerProps) => {
   return (
     <div className={styles.wrapper}>
       <Dropdown
-        className={styles.select}
+        className={styles.yearSelect}
         allowNull={true}
-        nullLabel="-"
+        nullLabel="Any year"
         options={yearOptions}
         value={selectedYear}
         onChange={onYearChange}
       />
       <Dropdown
-        className={styles.select}
+        className={styles.monthSelect}
         allowNull={true}
-        nullLabel="-"
+        nullLabel="Any month"
         options={monthOptions}
         value={selectedMonth}
         onChange={onMonthChange}
