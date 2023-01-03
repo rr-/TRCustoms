@@ -32,6 +32,7 @@ from trcustoms.permissions import (
 from trcustoms.users.models import UserPermission
 from trcustoms.utils import (
     parse_bool,
+    parse_date_range,
     parse_int,
     parse_ints,
     slugify,
@@ -166,6 +167,13 @@ class LevelViewSet(
         for query_param, qs_key in or_map.items():
             if pks := parse_ints(self.request.query_params.get(query_param)):
                 queryset = queryset.filter(**{f"{qs_key}__in": pks})
+
+        if dates := parse_date_range(self.request.query_params.get("date")):
+            min_date, max_date = dates
+            if min_date:
+                queryset = queryset.filter(created__gte=min_date)
+            if max_date:
+                queryset = queryset.filter(created__lte=max_date)
 
         if (
             is_approved := parse_bool(

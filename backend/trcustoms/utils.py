@@ -1,5 +1,6 @@
 import re
 from collections.abc import Iterable
+from datetime import datetime
 from pathlib import Path
 from typing import Any
 
@@ -93,6 +94,28 @@ def parse_bool(source: str | None) -> bool | None:
     if not source:
         return None
     return source.lower() in ["1", "true", "y", "yes"]
+
+
+def parse_date_range(
+    source: str | None,
+) -> tuple[datetime | None, datetime | None] | None:
+    date_min: datetime | None = None
+    date_max: datetime | None = None
+    print("source", source, flush=1)
+    if source and (
+        match := re.match(r"^(?P<year>\d{4})(?:-(?P<month>\d{1,2}))?$", source)
+    ):
+        year = int(match.group("year"))
+        month = int(match.group("month")) if match.group("month") else None
+        if month:
+            date_min = datetime(year, month, 1)
+            date_max = datetime(year + int(month // 12), (month % 12) + 1, 1)
+        else:
+            date_min = datetime(year, 1, 1)
+            date_max = datetime(year + 1, 1, 1)
+    if not date_min and not date_max:
+        return None
+    return (date_min, date_max)
 
 
 def check_model_references(obj: models.Model):

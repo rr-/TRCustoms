@@ -1,0 +1,9 @@
+.wrapper {
+  display: flex;
+  justify-content: stretch;
+  gap: 0.5rem;
+}
+
+.select {
+  width: 100% !important;
+}
