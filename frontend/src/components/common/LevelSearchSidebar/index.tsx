@@ -221,7 +221,7 @@ const LevelSearchSidebar = ({
             </div>
 
             <div className={styles.section}>
-              <Collapsible storageKey="levelSearchGenres" title="Genres">
+              <Collapsible storageKey="levelSearchGenres" title="Genre">
                 <GenresCheckboxes
                   value={searchQuery.genres}
                   onChange={handleGenresChange}
@@ -239,7 +239,7 @@ const LevelSearchSidebar = ({
             </div>
 
             <div className={styles.section}>
-              <Collapsible storageKey="levelSearchEngines" title="Engines">
+              <Collapsible storageKey="levelSearchEngines" title="Engine">
                 <EnginesCheckboxes
                   value={searchQuery.engines}
                   onChange={handleEnginesChange}
@@ -257,7 +257,7 @@ const LevelSearchSidebar = ({
             </div>
 
             <div className={styles.section}>
-              <Collapsible storageKey="levelSearchRatings" title="Ratings">
+              <Collapsible storageKey="levelSearchRatings" title="Rating">
                 <RatingsCheckboxes
                   value={searchQuery.ratings}
                   onChange={handleRatingsChange}
@@ -266,7 +266,7 @@ const LevelSearchSidebar = ({
             </div>
 
             <div className={styles.section}>
-              <Collapsible storageKey="levelSearchDurations" title="Durations">
+              <Collapsible storageKey="levelSearchDurations" title="Duration">
                 <DurationsCheckboxes
                   value={searchQuery.durations}
                   onChange={handleDurationsChange}
@@ -277,7 +277,7 @@ const LevelSearchSidebar = ({
             <div className={styles.section}>
               <Collapsible
                 storageKey="levelSearchDifficulties"
-                title="Difficulties"
+                title="Difficulty"
               >
                 <DifficultiesCheckboxes
                   value={searchQuery.difficulties}
