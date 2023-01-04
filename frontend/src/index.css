@@ -45,7 +45,7 @@ a:focus-visible {
   isolation: isolate;
 }
 a:hover {
-  color: var(--fg-color);
+  color: var(--link-hover-color);
   outline: 0;
 }
 
