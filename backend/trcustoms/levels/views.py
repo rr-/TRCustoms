@@ -173,7 +173,7 @@ class LevelViewSet(
             if min_date:
                 queryset = queryset.filter(created__gte=min_date)
             if max_date:
-                queryset = queryset.filter(created__lte=max_date)
+                queryset = queryset.filter(created__lt=max_date)
 
         if (
             is_approved := parse_bool(
