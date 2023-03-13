@@ -112,6 +112,7 @@ def test_user_creation(
         "trle_reviewer_id": None,
         "is_staff": False,
         "is_superuser": False,
+        "awards": [],
     }
 
     user = User.objects.get(id=data["id"])
@@ -304,6 +305,7 @@ def test_user_creation_acquiring_trle_account(
         "trle_reviewer_id": None,
         "is_staff": False,
         "is_superuser": False,
+        "awards": [],
     }
 
     user.refresh_from_db()

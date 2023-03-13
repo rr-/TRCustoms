@@ -12,6 +12,7 @@ from pytest_factoryboy import register
 from rest_framework.test import APIClient
 from rest_framework_simplejwt.tokens import RefreshToken
 
+from trcustoms.awards.models import UserAward
 from trcustoms.common.models import RatingClass
 from trcustoms.engines.models import Engine
 from trcustoms.genres.models import Genre
@@ -177,6 +178,10 @@ class ReviewFactory(factory.django.DjangoModelFactory):
 class RatingClassFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = RatingClass
+        django_get_or_create = ("position", "target")
+
+    target = RatingClass.Target.REVIEW
+    min_rating_count = 0
 
 
 @register
@@ -186,6 +191,18 @@ class WalkthroughFactory(factory.django.DjangoModelFactory):
 
     author = factory.SubFactory(UserFactory)
     level = factory.SubFactory(LevelFactory)
+
+
+@register
+class UserAwardFactory(factory.django.DjangoModelFactory):
+    class Meta:
+        model = UserAward
+
+    user = factory.SubFactory(UserFactory)
+    code = factory.Sequence(lambda n: f"code_{n}")
+    title = factory.Sequence(lambda n: f"Title {n}")
+    description = factory.Sequence(lambda n: f"Description {n}")
+    tier = None
 
 
 @pytest.fixture(name="fake", scope="session")
@@ -250,7 +267,7 @@ def fixture_review_rating_classes(
 ) -> QuerySet:
     rating_class_factory(
         target=RatingClass.Target.REVIEW,
-        position=0,
+        position=1,
         min_rating_count=1,
         min_rating_average=None,
         max_rating_average=0.5,
@@ -258,7 +275,7 @@ def fixture_review_rating_classes(
     )
     rating_class_factory(
         target=RatingClass.Target.REVIEW,
-        position=0,
+        position=-1,
         min_rating_count=1,
         min_rating_average=0.5,
         max_rating_average=None,

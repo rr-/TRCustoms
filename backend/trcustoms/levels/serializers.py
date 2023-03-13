@@ -24,6 +24,7 @@ from trcustoms.levels.models import (
 from trcustoms.mails import send_level_submitted_mail
 from trcustoms.tags.models import Tag
 from trcustoms.tags.serializers import TagNestedSerializer
+from trcustoms.tasks import update_awards
 from trcustoms.uploads.models import UploadedFile
 from trcustoms.uploads.serializers import UploadedFileNestedSerializer
 from trcustoms.users.models import User
@@ -364,6 +365,8 @@ class LevelDetailsSerializer(LevelListingSerializer):
 
         level = self.handle_m2m(level_factory, validated_data)
         send_level_submitted_mail(level)
+        for author in level.authors.iterator():
+            update_awards.delay(author.pk)
         return level
 
     def update(self, instance, validated_data):
@@ -372,7 +375,10 @@ class LevelDetailsSerializer(LevelListingSerializer):
         def level_factory():
             return func(instance, validated_data)
 
-        return self.handle_m2m(level_factory, validated_data)
+        level = self.handle_m2m(level_factory, validated_data)
+        for author in level.authors.iterator():
+            update_awards.delay(author.pk)
+        return level
 
     class Meta:
         model = Level

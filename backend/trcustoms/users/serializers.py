@@ -6,6 +6,7 @@ from django.utils import timezone
 from rest_framework import serializers
 from rest_framework_simplejwt.exceptions import TokenError
 
+from trcustoms.awards.serializers import UserAwardSerializer
 from trcustoms.common.models import Country
 from trcustoms.common.serializers import (
     CountryNestedSerializer,
@@ -119,6 +120,7 @@ class UserDetailsSerializer(UserListingSerializer):
     password = serializers.CharField(write_only=True, required=True)
 
     email = CustomEmailField()
+    awards = UserAwardSerializer(read_only=True, many=True)
 
     picture_id = serializers.PrimaryKeyRelatedField(
         write_only=True,
@@ -270,6 +272,7 @@ class UserDetailsSerializer(UserListingSerializer):
             "picture_id",
             "is_staff",
             "is_superuser",
+            "awards",
         ]
 
 
