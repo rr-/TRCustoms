@@ -16,6 +16,7 @@ from trcustoms.reviews.models import (
 
 class Command(BaseCommand):
     help = "Populate the database with initial data."
+    root_dir = Path(__file__).parent / "initial_data"
 
     def handle(self, *args, **options):
         self.create_countries()
@@ -82,7 +83,7 @@ class Command(BaseCommand):
 
     def create_rating_classes(self) -> None:
         data = self.read_json("rating_classes.json")
-        for (path, target) in [
+        for path, target in [
             ("levels", RatingClass.Target.LEVEL),
             ("reviews", RatingClass.Target.REVIEW),
         ]:
@@ -99,10 +100,8 @@ class Command(BaseCommand):
                 )
 
     def read_csv(self, name: str):
-        root_dir = Path(__file__).parent / "initial_data"
-        with (root_dir / name).open("r") as handle:
+        with (self.root_dir / name).open("r") as handle:
             return list(csv.DictReader(handle))
 
     def read_json(self, name: str):
-        root_dir = Path(__file__).parent / "initial_data"
-        return json.loads((root_dir / name).read_text())
+        return json.loads((self.root_dir / name).read_text())
