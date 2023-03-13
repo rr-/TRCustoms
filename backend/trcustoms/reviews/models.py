@@ -53,6 +53,8 @@ class LevelReview(DatesInfo):
         TRLE = ("le", "Legacy (TRLE.net)")
         TRC = ("mo", "Modern (TRCustoms)")
 
+    position = models.IntegerField(default=0)
+
     level = models.ForeignKey(
         Level, on_delete=models.CASCADE, related_name="reviews"
     )

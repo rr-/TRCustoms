@@ -260,3 +260,32 @@ def test_review_creation_updates_level_review_count(
     assert response.status_code == status.HTTP_201_CREATED, data
     assert level.reviews.count() == 1  # pylint: disable=no-member
     assert level.review_count == 1
+
+
+@pytest.mark.django_db
+def test_review_creation_updates_position(
+    auth_api_client: APIClient,
+) -> None:
+    level = LevelFactory()
+    review1 = ReviewFactory(
+        level=level, author=UserFactory(username="foo"), position=1
+    )
+    review1_last_updated = review1.last_updated
+
+    response = auth_api_client.post(
+        "/api/reviews/",
+        format="json",
+        data={
+            "level_id": level.id,
+            "text": "test",
+            "answer_ids": [],
+        },
+    )
+    data = response.json()
+    review1.refresh_from_db()
+    review2 = LevelReview.objects.get(pk=data["id"])
+
+    assert response.status_code == status.HTTP_201_CREATED, data
+    assert review1.position == 1
+    assert review2.position == 2
+    assert review1.last_updated == review1_last_updated
