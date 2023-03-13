@@ -18,6 +18,7 @@ const EnginesCheckboxes = ({ value, onChange }: EnginesCheckboxesProps) => {
       onChange={onChange}
       getEntityId={(entity: EngineListing) => entity.id}
       getEntityName={(entity: EngineListing) => entity.name}
+      getEntitySortPosition={(entity: EngineListing) => entity.position}
     />
   );
 };
