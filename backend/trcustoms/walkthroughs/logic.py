@@ -10,6 +10,7 @@ from trcustoms.mails import (
     send_walkthrough_rejected_mail,
     send_walkthrough_submission_mail,
 )
+from trcustoms.tasks import update_awards
 from trcustoms.walkthroughs.consts import WalkthroughStatus
 from trcustoms.walkthroughs.models import Walkthrough
 
@@ -43,6 +44,7 @@ def approve_walkthrough(
         walkthrough.status = WalkthroughStatus.APPROVED
         walkthrough.rejection_reason = None
         walkthrough.save()
+        update_awards.delay(walkthrough.author.pk)
     clear_audit_log_action_flags(obj=walkthrough)
 
 

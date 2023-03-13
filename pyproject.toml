@@ -32,6 +32,7 @@ disable = [
     "protected-access", # _meta
     "too-many-ancestors",  # how else am I supposed to use DRF mixins
     "fixme",  # my time is too precious to deal with everything at once
+    "consider-iterating-dictionary",  # useless advice
 ]
 
 [tool.pytest.ini_options]

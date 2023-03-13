@@ -6,6 +6,7 @@ from trcustoms.audit_logs.utils import (
 )
 from trcustoms.levels.models import Level
 from trcustoms.mails import send_level_approved_mail, send_level_rejected_mail
+from trcustoms.tasks import update_awards
 
 
 def approve_level(level: Level, request: Request | None) -> None:
@@ -17,6 +18,8 @@ def approve_level(level: Level, request: Request | None) -> None:
             send_level_approved_mail(level)
         level.rejection_reason = None
         level.save()
+        for author in level.authors.iterator():
+            update_awards.delay(author.pk)
     clear_audit_log_action_flags(obj=level)
 
 

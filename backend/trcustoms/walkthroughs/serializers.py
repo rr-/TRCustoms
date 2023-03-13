@@ -6,6 +6,7 @@ from trcustoms.common.serializers import CustomCharField
 from trcustoms.levels.models import Level
 from trcustoms.levels.serializers import LevelNestedSerializer
 from trcustoms.mails import send_walkthrough_update_mail
+from trcustoms.tasks import update_awards
 from trcustoms.uploads.serializers import UploadedFileNestedSerializer
 from trcustoms.users.serializers import UserNestedSerializer
 from trcustoms.walkthroughs.consts import WalkthroughStatus, WalkthroughType
@@ -112,6 +113,7 @@ class WalkthroughDetailsSerializer(WalkthroughListingSerializer):
 
         walkthrough = walkthrough_factory()
         walkthrough.save()
+        update_awards.delay(walkthrough.author.pk)
         return walkthrough
 
     def update(self, instance, validated_data):
@@ -124,6 +126,7 @@ class WalkthroughDetailsSerializer(WalkthroughListingSerializer):
         walkthrough.save()
         if walkthrough.status == WalkthroughStatus.APPROVED:
             send_walkthrough_update_mail(walkthrough)
+        update_awards.delay(walkthrough.author.pk)
         return walkthrough
 
 

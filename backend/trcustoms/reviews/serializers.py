@@ -13,6 +13,7 @@ from trcustoms.reviews.models import (
     ReviewTemplateAnswer,
     ReviewTemplateQuestion,
 )
+from trcustoms.tasks import update_awards
 from trcustoms.uploads.serializers import UploadedFileNestedSerializer
 from trcustoms.users.models import UserPermission
 from trcustoms.users.serializers import UserNestedSerializer
@@ -152,6 +153,7 @@ class LevelReviewDetailsSerializer(LevelReviewListingSerializer):
 
         review = self.handle_m2m(review_factory, validated_data)
         send_review_submission_mail(review)
+        update_awards.delay(review.author.pk)
         return review
 
     def update(self, instance, validated_data):
@@ -162,6 +164,7 @@ class LevelReviewDetailsSerializer(LevelReviewListingSerializer):
 
         review = self.handle_m2m(review_factory, validated_data)
         send_review_update_mail(review)
+        update_awards.delay(review.author.pk)
         return review
 
 

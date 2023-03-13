@@ -11,6 +11,7 @@ from trcustoms.tasks.delete_unreferenced_files import delete_unreferenced_files
 from trcustoms.tasks.delete_unreferenced_tags import delete_unreferenced_tags
 from trcustoms.tasks.merge_duplicate_files import merge_duplicate_files
 from trcustoms.tasks.prune_unused_accounts import prune_unused_accounts
+from trcustoms.tasks.update_awards import update_awards
 from trcustoms.tasks.update_featured_levels import update_featured_levels
 
 
@@ -40,5 +41,6 @@ __all__ = [
     "delete_unreferenced_files",
     "delete_unreferenced_tags",
     "merge_duplicate_files",
+    "update_awards",
     "update_featured_levels",
 ]
