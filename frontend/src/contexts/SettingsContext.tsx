@@ -29,6 +29,14 @@ const themes: Theme[] = [
     stub: "film_noir",
   },
   {
+    name: "Mystic Forest",
+    stub: "mystic_forest",
+  },
+  {
+    name: "Candy",
+    stub: "candy",
+  },
+  {
     name: "Metropolis",
     stub: "metropolis",
   },
