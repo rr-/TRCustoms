@@ -15,7 +15,7 @@ const TOS: LegaleseEntry = {
     {
       title: "Disclaimer",
       description:
-        "Lara Croft and Tomb Raider are registered trademarks of Square Enix Limited at the time of writing. TRCustoms.org is an unofficial Tomb Raider fan site that is run by and supported by fans; and includes fan creations and different depictions of the mentioned trademark. TRCustoms.org is not funded by or maintained by the trademark owners, nor does it mean to represent their views.",
+        "Lara Croft and Tomb Raider are registered trademarks of CDE Entertainment Ltd. at the time of writing. TRCustoms.org is an unofficial Tomb Raider fan site that is run by and supported by fans; and includes fan creations and different depictions of the mentioned trademark. TRCustoms.org is not funded by or maintained by the trademark owners, nor does it mean to represent their views.",
     },
 
     {
