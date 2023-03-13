@@ -16,6 +16,12 @@
   --pager-bg-color: var(--navbar-bg-color);
   --pager-active-bg-color: var(--navbar-active-tab-bg-color);
   --pager-active-fg-color: var(--navbar-active-tab-fg-color);
+
+  --fg-color-pickup: forestgreen;
+  --fg-color-trap: deeppink;
+  --fg-color-enemy: red;
+  --fg-color-secret: darkgoldenrod;
+  --fg-color-object: royalblue;
 }
 
 [data-theme="midnight_ocean"] {
@@ -53,6 +59,7 @@
   --message-bg-color: var(--sidebar-bg-color);
   --blockquote-bg-color: var(--bg-color);
   --blockquote-border-color: var(--link-color);
+  --fg-color-secret: goldenrod;
 }
 
 [data-theme="robotic"] {
@@ -221,6 +228,7 @@
   --message-bg-color: var(--sidebar-bg-color);
   --blockquote-bg-color: var(--bg-color);
   --blockquote-border-color: var(--link-color);
+  --fg-color-secret: goldenrod;
 }
 
 [data-theme="diluted_calico"] {
@@ -257,6 +265,7 @@
   --message-bg-color: var(--sidebar-bg-color);
   --blockquote-bg-color: var(--bg-color);
   --blockquote-border-color: var(--link-color);
+  --fg-color-secret: goldenrod;
 }
 
 [data-theme="metropolis"] {
@@ -332,6 +341,7 @@
   --message-bg-color: var(--sidebar-bg-color);
   --blockquote-bg-color: var(--bg-color);
   --blockquote-border-color: var(--link-color);
+  --fg-color-secret: goldenrod;
 }
 
 [data-theme="mystic_forest"] {
@@ -368,6 +378,7 @@
   --message-bg-color: var(--sidebar-bg-color);
   --blockquote-bg-color: var(--bg-color);
   --blockquote-border-color: var(--link-color);
+  --fg-color-secret: goldenrod;
 }
 
 [data-theme="candy"] {

@@ -31,20 +31,17 @@
 }
 
 .Markdown--color.pickup {
-  color: forestgreen;
+  color: var(--fg-color-pickup);
 }
 .Markdown--color.trap {
-  color: deeppink;
+  color: var(--fg-color-trap);
 }
 .Markdown--color.enemy {
-  color: red;
+  color: var(--fg-color-enemy);
 }
 .Markdown--color.secret {
-  color: darkgoldenrod;
+  color: var(--fg-color-secret);
 }
 .Markdown--color.object {
-  color: royalblue;
-}
-[data-theme="midnight_ocean"] .Markdown--color.secret {
-  color: goldenrod;
+  color: var(--fg-color-object);
 }
