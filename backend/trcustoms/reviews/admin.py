@@ -15,6 +15,7 @@ class LevelReviewAdmin(AuditLogAdminMixin, admin.ModelAdmin):
     list_display = [
         "id",
         "author",
+        "position",
         "level",
         "review_type",
         "rating_class",

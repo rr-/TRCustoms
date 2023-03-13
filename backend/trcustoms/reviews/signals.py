@@ -15,6 +15,8 @@ from trcustoms.signals import disable_signals
 def handle_review_pre_save(sender, instance, **kwargs):
     if instance.id:
         instance._old_level = LevelReview.objects.get(id=instance.id).level
+    else:
+        instance.position = instance.level.reviews.count() + 1
 
 
 @receiver(post_save, sender=LevelReview)
@@ -22,7 +24,7 @@ def handle_review_pre_save(sender, instance, **kwargs):
 def handle_review_creation_and_updates(sender, instance, **kwargs):
     with disable_signals():
         instance.rating_class = get_review_rating_class(instance)
-        instance.save(update_fields=["rating_class"])
+        instance.save(update_fields=["rating_class", "position"])
         level = instance.level
         level.rating_class = get_level_rating_class(level)
         level.update_review_count()
@@ -41,3 +43,10 @@ def handle_review_deletion(sender, instance, **kwargs):
     level.save(update_fields=["rating_class"])
     author = instance.author
     author.update_reviewed_level_count()
+
+    for position, review in enumerate(
+        level.reviews.order_by("created").iterator(), 1
+    ):
+        if position != review.position:
+            # do not trigger modification time changes
+            LevelReview.objects.filter(pk=review.pk).update(position=position)
