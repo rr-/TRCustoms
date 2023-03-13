@@ -3,6 +3,7 @@ import { useCallback } from "react";
 import { Link } from "src/components/common/Link";
 import { IconHelp } from "src/components/icons";
 import { IconMarkdownCode } from "src/components/icons";
+import { IconMarkdownAlignCenter } from "src/components/icons";
 import { IconMarkdownStrikeThrough } from "src/components/icons";
 import { IconMarkdownQuote } from "src/components/icons";
 import { IconMarkdownUnorderedList } from "src/components/icons";
@@ -179,6 +180,20 @@ const MarkdownOrderedListButton = ({ ...props }: MarkdownButtonProps) => {
   );
 };
 
+const MarkdownAlignCenterButton = ({ ...props }: MarkdownButtonProps) => {
+  return (
+    <MarkdownBaseButton
+      icon={<IconMarkdownAlignCenter />}
+      tooltip="Align to center"
+      style={{
+        prefix: "[center]",
+        suffix: "[/center]",
+      }}
+      {...props}
+    />
+  );
+};
+
 const MarkdownColorSecretButton = ({ ...props }: MarkdownButtonProps) => {
   return (
     <MarkdownBaseButton
@@ -271,6 +286,7 @@ export {
   MarkdownImageButton,
   MarkdownUnorderedListButton,
   MarkdownOrderedListButton,
+  MarkdownAlignCenterButton,
   MarkdownColorSecretButton,
   MarkdownColorPickupButton,
   MarkdownColorObjectButton,

@@ -18,6 +18,7 @@ export * from "src/components/icons/IconHeart";
 export * from "src/components/icons/IconHelp";
 export * from "src/components/icons/IconInformationCircle";
 export * from "src/components/icons/IconKofi";
+export * from "src/components/icons/IconMarkdownAlignCenter";
 export * from "src/components/icons/IconMarkdownBold";
 export * from "src/components/icons/IconMarkdownCode";
 export * from "src/components/icons/IconMarkdownColorEnemy";

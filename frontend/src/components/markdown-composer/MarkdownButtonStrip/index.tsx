@@ -9,6 +9,7 @@ import { MarkdownLinkButton } from "src/components/markdown-composer/MarkdownBut
 import { MarkdownImageButton } from "src/components/markdown-composer/MarkdownButtons";
 import { MarkdownUnorderedListButton } from "src/components/markdown-composer/MarkdownButtons";
 import { MarkdownOrderedListButton } from "src/components/markdown-composer/MarkdownButtons";
+import { MarkdownAlignCenterButton } from "src/components/markdown-composer/MarkdownButtons";
 import { MarkdownColorSecretButton } from "src/components/markdown-composer/MarkdownButtons";
 import { MarkdownColorPickupButton } from "src/components/markdown-composer/MarkdownButtons";
 import { MarkdownColorObjectButton } from "src/components/markdown-composer/MarkdownButtons";
@@ -40,6 +41,7 @@ const MarkdownButtonStrip = ({ textarea }: MarkdownButtonStripProps) => {
       <div className={styles.group}>
         <MarkdownUnorderedListButton {...buttonProps} />
         <MarkdownOrderedListButton {...buttonProps} />
+        <MarkdownAlignCenterButton {...buttonProps} />
       </div>
 
       <div className={styles.group}>

@@ -45,3 +45,7 @@
 .Markdown--color.object {
   color: var(--fg-color-object);
 }
+
+.Markdown--alignment.center {
+  text-align: center;
+}

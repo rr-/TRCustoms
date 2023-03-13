@@ -1,5 +1,6 @@
 import "./index.css";
 import { findAndReplace } from "mdast-util-find-and-replace";
+import { toHast } from "mdast-util-to-hast";
 import { useMemo } from "react";
 import ReactMarkdown from "react-markdown";
 import remarkBreaks from "remark-breaks";
@@ -7,9 +8,126 @@ import remarkGfm from "remark-gfm";
 import { remarkTransformHeaders } from "src/components/markdown/MarkdownTOC";
 import { parseYoutubeLink } from "src/utils/misc";
 
-const coloredTextRegex = /\[([pesto])\]([^\n[\]]*)\[\/\1\]/gi;
+const remarkAlignment = () => {
+  const filterEmpty = (root: any) => {
+    return root.filter((item: any) => !(item.type === "text" && !item.value));
+  };
+
+  const transformInline = (root: any) => {
+    const regex = /^(?<prefix>.*?)\[center\](?<content>.*?)\[\/center\](?<suffix>.*)$/i;
+
+    let middle = null;
+    let match = null;
+    for (let node of root.children || []) {
+      if (node.type !== "text") {
+        continue;
+      }
+      if (!middle && (match = node.value.match(regex))) {
+        middle = node;
+        break;
+      }
+    }
+
+    if (!middle) {
+      return false;
+    }
+
+    const newContent = filterEmpty([
+      { type: "text", value: match.groups.prefix },
+      {
+        type: "alignment",
+        data: {
+          hName: "div",
+          hProperties: { class: "Markdown--alignment center" },
+          hChildren: [{ type: "text", value: match.groups.content }],
+        },
+      },
+      { type: "text", value: match.groups.suffix },
+    ]);
+    root.children.splice(root.children.indexOf(middle), 1, ...newContent);
+    return true;
+  };
+
+  const transformBlock = (root: any) => {
+    const startRegex = /^(?<prefix>.*?)\[center\](?<suffix>.*)$/i;
+    const endRegex = /^(?<prefix>.*?)\[\/center\](?<suffix>.*)$/i;
+    let startMatch = null;
+    let endMatch = null;
+
+    let startNode = null;
+    let endNode = null;
+    for (let node of root.children || []) {
+      if (node.type !== "text") {
+        continue;
+      }
+      if (!startNode && (startMatch = node.value.match(startRegex))) {
+        startNode = node;
+      }
+      if (!endNode && (endMatch = node.value.match(endRegex))) {
+        endNode = node;
+      }
+    }
+
+    if (!startNode || !endNode || !startMatch || !endMatch) {
+      return false;
+    }
+
+    const startIdx = root.children.indexOf(startNode);
+    const endIdx = root.children.indexOf(endNode);
+    const content: any = filterEmpty([
+      { type: "text", value: startMatch.groups.suffix },
+      ...root.children.slice(startIdx + 1, endIdx),
+      { type: "text", value: endMatch.groups.prefix },
+    ]);
+    const contentHast = content.map(toHast);
+
+    const newContent: any = filterEmpty([
+      { type: "text", value: startMatch.groups.prefix },
+      {
+        type: "alignment",
+        value: "",
+        data: {
+          hName: "div",
+          hProperties: { class: "Markdown--alignment center" },
+          hChildren: contentHast,
+        },
+      },
+      { type: "text", value: endMatch.groups.suffix },
+    ]);
+
+    if (startIdx === 0 && endIdx === root.children.length - 1) {
+      Object.assign(root, {
+        type: "alignment",
+        value: "",
+        data: {
+          hName: "p",
+          hProperties: { class: "Markdown--alignment center" },
+          hChildren: newContent.map(toHast),
+        },
+      });
+    } else {
+      root.children.splice(startIdx, endIdx + 1 - startIdx, ...newContent);
+    }
+
+    return true;
+  };
+
+  const visit = (root: any) => {
+    transformInline(root);
+    transformBlock(root);
+    for (let node of root.children || []) {
+      visit(node);
+    }
+    return root;
+  };
+
+  return (tree: any) => {
+    return visit(tree);
+  };
+};
 
 const remarkTRCustomColors = () => {
+  const coloredTextRegex = /\[([pesto])\]([^\n[\]]*)\[\/\1\]/gi;
   const replaceColoredText = ($0: string, char: string, text: string): any => {
     let className = {
       p: "pickup",
@@ -70,6 +188,7 @@ const Markdown = ({ children }: MarkdownProps) => {
             remarkBreaks,
             remarkTransformHeaders,
             remarkTRCustomColors,
+            remarkAlignment,
           ]}
           components={{ a: transformLink }}
         >
