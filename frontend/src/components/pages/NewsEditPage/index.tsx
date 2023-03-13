@@ -29,7 +29,10 @@ const NewsEditPageView = ({ newsId }: NewsEditPageViewProps) => {
     async () => NewsService.getNewsById(+newsId)
   );
 
-  const handleGoBack = useCallback(() => navigate("/"), [navigate]);
+  const handleGoBack = useCallback(
+    () => navigate(result?.data?.id ? `/news/${result?.data?.id}` : "/"),
+    [navigate, result]
+  );
 
   useEffect(() => setTitle("News"), [setTitle]);
 

@@ -5,7 +5,6 @@ import { Form } from "formik";
 import { useContext } from "react";
 import { useCallback } from "react";
 import { useQueryClient } from "react-query";
-import { Link } from "react-router-dom";
 import { FormGrid } from "src/components/common/FormGrid";
 import { FormGridFieldSet } from "src/components/common/FormGrid";
 import { FormGridType } from "src/components/common/FormGrid";
@@ -13,6 +12,7 @@ import { FormGridButtons } from "src/components/common/FormGrid";
 import { Loader } from "src/components/common/Loader";
 import { TextAreaFormField } from "src/components/formfields/TextAreaFormField";
 import { TextFormField } from "src/components/formfields/TextFormField";
+import { NewsLink } from "src/components/links/NewsLink";
 import { ConfigContext } from "src/contexts/ConfigContext";
 import type { NewsDetails } from "src/services/NewsService";
 import { NewsService } from "src/services/NewsService";
@@ -79,7 +79,8 @@ const NewsForm = ({ news, onGoBack, onSubmit }: NewsFormProps) => {
           setStatus({
             success: (
               <>
-                News updated. <Link to="/">Click here</Link> to see the changes.
+                News updated. <NewsLink news={outNews}>Click here</NewsLink> to
+                see the changes.
               </>
             ),
           });
@@ -91,8 +92,8 @@ const NewsForm = ({ news, onGoBack, onSubmit }: NewsFormProps) => {
           setStatus({
             success: (
               <>
-                News posted. <Link to="/">Click here</Link> to go back to the
-                home page.
+                News posted. <NewsLink news={outNews}>Click here</NewsLink> to
+                see the changes.
               </>
             ),
           });
