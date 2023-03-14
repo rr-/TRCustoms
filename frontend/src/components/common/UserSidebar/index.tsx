@@ -3,6 +3,7 @@ import { UserActivateButton } from "src/components/buttons/UserActivateButton";
 import { UserBanButton } from "src/components/buttons/UserBanButton";
 import { UserDeactivateButton } from "src/components/buttons/UserDeactivateButton";
 import { UserUnbanButton } from "src/components/buttons/UserUnbanButton";
+import { AwardList } from "src/components/common/AwardList";
 import { Button } from "src/components/common/Button";
 import { DefinitionItemGroup } from "src/components/common/DefinitionList";
 import { DefinitionItem } from "src/components/common/DefinitionList";
@@ -161,6 +162,18 @@ const UserSidebar = ({ user }: UserSidebarProps) => {
             </Link>
           </DefinitionItem>
         </DefinitionItemGroup>
+
+        {user.awards.length ? (
+          <DefinitionItemGroup>
+            <DefinitionItem span={true}>
+              <SectionHeader>Inventory</SectionHeader>
+            </DefinitionItem>
+
+            <DefinitionItem span={true}>
+              <AwardList awards={user.awards} />
+            </DefinitionItem>
+          </DefinitionItemGroup>
+        ) : null}
       </DefinitionList>
     </SidebarBox>
   );

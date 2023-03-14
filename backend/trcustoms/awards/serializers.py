@@ -13,6 +13,7 @@ class UserAwardSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserAward
         fields = [
+            "created",
             "position",
             "code",
             "title",
