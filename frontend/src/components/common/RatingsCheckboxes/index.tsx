@@ -18,7 +18,7 @@ const RatingsCheckboxes = ({ value, onChange }: RatingsCheckboxesProps) => {
       onChange={onChange}
       getEntityId={(entity: RatingClass) => entity.id}
       getEntityName={(entity: RatingClass) => entity.name}
-      getEntitySortPosition={(entity: RatingClass) => entity.position}
+      getEntitySortPosition={(entity: RatingClass) => -entity.position}
     />
   );
 };
