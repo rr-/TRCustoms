@@ -65,6 +65,17 @@ interface UserDetails extends UserListing {
   country?: CountryNested;
   is_staff: boolean;
   is_superuser: boolean;
+  awards: UserAward[];
+}
+
+interface UserAward {
+  created: string;
+  code: string;
+  title: string;
+  description: string;
+  position: number;
+  tier: number;
+  rarity: number;
 }
 
 interface UserSearchQuery extends GenericSearchQuery {
@@ -253,6 +264,28 @@ const completePasswordReset = async (
   const data = { password, token };
   await api.post(`${API_URL}/users/complete_password_reset/`, data);
 };
+const getAwardImageUrl = (award: UserAward) => {
+  const stem = award.tier ? `${award.code}_${award.tier}` : award.code;
+  return `/awards/${stem}.svg`;
+};
+
+const getAwardTierName = (tier: number) => {
+  return {
+    0: "",
+    1: "Bronze",
+    2: "Silver",
+    3: "Gold",
+    4: "Jade",
+    5: "Meteorite",
+  }[tier];
+};
+
+const getAwardTitle = (award: UserAward) => {
+  if (award.tier) {
+    return `${award.title} (${getAwardTierName(award.tier)} Tier)`;
+  }
+  return award.title;
+};
 
 const UserService = {
   register,
@@ -269,6 +302,9 @@ const UserService = {
   getUserByUsername,
   resendActivationLink,
   searchUsers,
+  getAwardImageUrl,
+  getAwardTierName,
+  getAwardTitle,
 };
 
 export type {
@@ -278,5 +314,6 @@ export type {
   UserNested,
   UserSearchQuery,
   UserSearchResult,
+  UserAward,
 };
 export { UserPermission, UserService };
