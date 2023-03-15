@@ -350,8 +350,8 @@
   --bg-color: var(--primary-color);
   --fg-color: #f0edff;
   --failure-fg-color: tomato;
-  --warning-fg-color: #yellow;
-  --success-fg-color: #limegreen;
+  --warning-fg-color: yellow;
+  --success-fg-color: limegreen;
   --link-color: var(--secondary-color);
   --link-hover-color: #95ff85;
   --link-text-decoration: none;
