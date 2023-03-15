@@ -40,11 +40,11 @@ def update_awards(user: User, update_rarity: bool = True) -> None:
     for spec_cls in ALL_AWARDS_CLASSES:
         spec = spec_cls()
         current_tier = user_awards.get(spec_cls.code) or 0
-        max_eligible_tier = 0
+        max_eligible_tier = -1
         for tier in spec.supported_tiers:
             if spec.check_eligible(user, tier):
                 max_eligible_tier = max(max_eligible_tier, tier)
-        if max_eligible_tier and max_eligible_tier >= current_tier:
+        if max_eligible_tier != -1 and max_eligible_tier >= current_tier:
             spec.grant_to_user(user, tier=max_eligible_tier)
             if update_rarity:
                 update_award_rarity(spec.code, tier=max_eligible_tier)
