@@ -14,7 +14,7 @@ interface AwardModalProps {
 const AwardModal = ({ isActive, onIsActiveChange, award }: AwardModalProps) => {
   return (
     <BaseModal
-      title="Award summary"
+      title="Item details"
       isActive={isActive}
       onIsActiveChange={onIsActiveChange}
     >
