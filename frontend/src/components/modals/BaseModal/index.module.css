@@ -1,9 +1,9 @@
-.Modal {
+.modal {
   background: var(--bg-color);
   color: var(--fg-color);
 }
 
-.Modal--header {
+.modalHeader {
   padding: 0.75rem 1rem;
   background: var(--button-bg-color);
   color: var(--button-fg-color);
@@ -12,17 +12,21 @@
   align-items: center;
 }
 
-.Modal--body {
+.modalBody {
   padding: 1rem;
 }
 
-.Modal--buttons {
+.buttons {
   display: flex;
   gap: 0.5rem;
   border-top: 2px solid var(--input-border-color);
   padding: 1rem;
 }
 
-.Modal--buttons:empty {
+.buttons:empty {
   display: none;
+}
+
+.closeButton {
+  color: var(--button-fg-color);
 }

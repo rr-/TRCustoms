@@ -1,4 +1,4 @@
-import "../index.css";
+import styles from "./index.module.css";
 import { forwardRef } from "react";
 import { Link } from "src/components/common/Link";
 import { IconX } from "src/components/icons";
@@ -28,18 +28,22 @@ const BaseModal = forwardRef<HTMLDivElement, BaseModalProps>(
 
     return (
       <Dim isActive={isActive} onMouseDown={handleDimClick}>
-        <div className="Modal" ref={ref}>
-          <header className="Modal--header ChildMarginClear">
+        <div className={styles.modal} ref={ref}>
+          <header className={`${styles.modalHeader} ChildMarginClear`}>
             {title}
 
-            <Link className="Modal--closeButton" onClick={handleCloseClick}>
+            <Link className={styles.closeButton} onClick={handleCloseClick}>
               <IconX />
             </Link>
           </header>
 
-          <div className="Modal--body ChildMarginClear">{children}</div>
+          <div className={`${styles.modalBody} ChildMarginClear`}>
+            {children}
+          </div>
 
-          <footer className="Modal--buttons ChildMarginClear">{buttons}</footer>
+          <footer className={`${styles.buttons} ChildMarginClear`}>
+            {buttons}
+          </footer>
         </div>
       </Dim>
     );
