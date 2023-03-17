@@ -1,4 +1,4 @@
-import "./index.css";
+import styles from "./index.module.css";
 import { useEffect } from "react";
 
 interface DimProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -16,7 +16,9 @@ const Dim = ({ isActive, className, children, ...props }: DimProps) => {
 
   return (
     <div
-      className={`Dim ${className || ""} ${isActive ? "active" : ""}`}
+      className={`${styles.dim} ${className || ""} ${
+        isActive ? styles.active : ""
+      }`}
       {...props}
     >
       {children}

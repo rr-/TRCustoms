@@ -1,4 +1,3 @@
-import "../index.css";
 import { Button } from "src/components/common/Button";
 import { IconCheck } from "src/components/icons";
 import { IconReject } from "src/components/icons";

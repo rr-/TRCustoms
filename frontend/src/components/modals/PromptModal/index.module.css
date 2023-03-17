@@ -1,9 +1,9 @@
-.PromptModalBody.small {
+.formSmall {
   display: flex;
   align-items: center;
   gap: 1rem;
 }
-.PromptModalBody.small .FormField {
+.formSmall :global .FormField {
   margin-bottom: 0;
   display: contents;
 }

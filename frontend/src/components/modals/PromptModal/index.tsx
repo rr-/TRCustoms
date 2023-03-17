@@ -1,5 +1,4 @@
-import "../index.css";
-import "./index.css";
+import styles from "./index.module.css";
 import { Formik } from "formik";
 import { Form } from "formik";
 import { useRef } from "react";
@@ -50,7 +49,7 @@ const PromptModal = ({
     return (
       <Formik initialValues={initialValues} onSubmit={handleSubmit}>
         {({ submitForm }) => (
-          <Form className={`PromptModalBody ${big ? "big" : "small"}`}>
+          <Form className={big ? styles.formBig : styles.formSmall}>
             {big ? (
               <TextAreaFormField label={label} name="text" rich={false} />
             ) : (

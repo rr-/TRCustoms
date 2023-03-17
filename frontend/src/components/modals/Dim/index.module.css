@@ -1,4 +1,4 @@
-.Dim {
+.dim {
   z-index: 99;
   position: fixed;
   display: flex;
@@ -14,7 +14,8 @@
   transition: opacity 300ms, visibility 300ms;
   opacity: 0;
 }
-.Dim.active {
+
+.active {
   opacity: 1;
   visibility: visible;
 }

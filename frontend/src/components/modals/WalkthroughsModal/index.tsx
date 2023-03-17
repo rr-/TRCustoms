@@ -1,5 +1,4 @@
-import "../index.css";
-import "./index.css";
+import styles from "./index.module.css";
 import { useContext } from "react";
 import { useState } from "react";
 import { useQuery } from "react-query";
@@ -82,7 +81,7 @@ const WalkthroughsModalFooter = ({ level }: WalkthroughsModalFooterProps) => {
   };
 
   return (
-    <div className="WalkthroughsModalFooter">
+    <div className={styles.footer}>
       <Button
         to={
           ownWalkthroughResult?.data
