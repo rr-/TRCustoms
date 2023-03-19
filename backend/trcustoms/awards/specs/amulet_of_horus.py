@@ -16,8 +16,8 @@ class Requirement:
 class AmuletOfHorusAwardSpec(BaseAwardSpec):
     max_review_position = 5
     requirements = {
-        1: Requirement(total=25, early=0),
-        2: Requirement(total=100, early=0),
+        1: Requirement(total=25, early=5),
+        2: Requirement(total=100, early=15),
         3: Requirement(total=200, early=50),
         4: Requirement(total=400, early=100),
         5: Requirement(total=800, early=200),
