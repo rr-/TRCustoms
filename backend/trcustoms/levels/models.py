@@ -46,7 +46,10 @@ class LevelDifficulty(DatesInfo):
 
 
 class LevelQuerySet(models.QuerySet):
-    def with_rating_values(self):
+    def downloadable(self) -> models.QuerySet:
+        return self.filter(is_approved=True).exclude(files__isnull=True)
+
+    def with_rating_values(self) -> models.QuerySet:
         return self.annotate(
             rating_value=Coalesce(
                 F("rating_class__position"),
@@ -55,7 +58,7 @@ class LevelQuerySet(models.QuerySet):
             )
         )
 
-    def with_video_only_walkthroughs(self):
+    def with_video_only_walkthroughs(self) -> models.QuerySet:
         return self.filter(
             walkthroughs__walkthrough_type=WalkthroughType.LINK,
             walkthroughs__status=WalkthroughStatus.APPROVED,
@@ -66,7 +69,7 @@ class LevelQuerySet(models.QuerySet):
             )
         )
 
-    def with_text_only_walkthroughs(self):
+    def with_text_only_walkthroughs(self) -> models.QuerySet:
         return self.filter(
             walkthroughs__walkthrough_type=WalkthroughType.TEXT,
             walkthroughs__status=WalkthroughStatus.APPROVED,
@@ -77,7 +80,7 @@ class LevelQuerySet(models.QuerySet):
             )
         )
 
-    def with_both_walkthroughs(self):
+    def with_both_walkthroughs(self) -> models.QuerySet:
         return self.filter(
             walkthroughs__walkthrough_type=WalkthroughType.TEXT,
             walkthroughs__status=WalkthroughStatus.APPROVED,
@@ -86,7 +89,7 @@ class LevelQuerySet(models.QuerySet):
             walkthroughs__status=WalkthroughStatus.APPROVED,
         )
 
-    def with_no_walkthroughs(self):
+    def with_no_walkthroughs(self) -> models.QuerySet:
         return self.exclude(walkthroughs__status=WalkthroughStatus.APPROVED)
 
 
