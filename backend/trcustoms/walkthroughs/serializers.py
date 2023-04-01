@@ -56,7 +56,9 @@ class WalkthroughDetailsSerializer(WalkthroughListingSerializer):
     level_id = serializers.PrimaryKeyRelatedField(
         write_only=True, source="level", queryset=Level.objects.all()
     )
-    text = CustomCharField(validators=[MinLengthValidator(0)])
+    text = CustomCharField(
+        validators=[MinLengthValidator(0)], collapse_whitespace=False
+    )
 
     class Meta:
         model = Walkthrough
@@ -131,4 +133,4 @@ class WalkthroughDetailsSerializer(WalkthroughListingSerializer):
 
 
 class WalkthroughRejectionSerializer(serializers.Serializer):
-    reason = CustomCharField(max_length=500)
+    reason = CustomCharField(collapse_whitespace=False, max_length=500)

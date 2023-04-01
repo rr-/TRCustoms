@@ -1,13 +1,13 @@
 from django.db import models
 from rest_framework import serializers
 
-from trcustoms.common.fields import CustomCharField
+from trcustoms.common.fields import CustomCharField, CustomTextField
 from trcustoms.common.models import Country, RatingClass
 
 serializers.ModelSerializer.serializer_field_mapping.update(
     {
         models.CharField: CustomCharField,
-        models.TextField: CustomCharField,
+        models.TextField: CustomTextField,
     }
 )
 
