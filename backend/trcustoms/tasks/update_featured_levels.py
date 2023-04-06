@@ -102,7 +102,7 @@ def update_monthly_hidden_gem() -> FeaturedLevel | None:
 
     # only picks levels that have favorable ratings, but nothing too extreme
     levels = filter_by_rating_class(
-        levels, ["Mixed", "Slightly Positive", "Positive"]
+        levels, ["Slightly Positive", "Positive"]
     )
 
     # make sure the level was not picked recently
