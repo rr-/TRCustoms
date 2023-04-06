@@ -4,7 +4,6 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("walkthroughs", "0004_remove_walkthrough_is_approved_and_more"),
     ]

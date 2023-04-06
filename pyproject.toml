@@ -18,7 +18,7 @@ reports = "no"
 disable = [
     "import-error",
     "too-few-public-methods",
-    "no-self-use",
+    "use-dict-literal",
     "missing-docstring",
     "unused-argument",  # we can't rename positional arguments in frameworks…
     "duplicate-code",  # false positives in imports…

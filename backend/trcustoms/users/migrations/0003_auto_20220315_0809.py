@@ -12,7 +12,6 @@ def update_users_forward(apps, schema_editor):
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("users", "0002_alter_user_trle_author_id_and_more"),
     ]

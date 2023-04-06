@@ -4,7 +4,6 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("tags", "0002_rename_leveltag_tag"),
         ("levels", "0006_alter_featuredlevel_options"),
