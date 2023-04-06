@@ -16,7 +16,6 @@ def update_walkthroughs_forward(apps, schema_editor):
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("walkthroughs", "0002_add_status"),
     ]

@@ -4,7 +4,6 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("levels", "0011_alter_featuredlevel_feature_type"),
     ]
