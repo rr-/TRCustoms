@@ -1,0 +1,28 @@
+.upgradableArtifactsTable {
+  border-spacing: 0;
+}
+
+.upgradableArtifactsTableCell {
+  padding: 0.25rem 1.5rem;
+}
+.upgradableArtifactsTableCell:first-child {
+  padding-left: 0;
+}
+.upgradableArtifactsTableCell:last-child {
+  padding-right: 0;
+}
+
+.upgradableArtifactsTableRow .upgradableArtifactsTableCell {
+  padding-bottom: 0;
+}
+
+.upgradableArtifactsTableHeader .upgradableArtifactsTableCell {
+  border-bottom: 1px solid var(--fg-color);
+}
+
+.standardArtifactHeader {
+  margin-bottom: 0;
+}
+.standardArtifactDescription {
+  margin-top: 0;
+}
