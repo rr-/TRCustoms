@@ -1,12 +1,10 @@
-import { useEffect } from "react";
 import { useState } from "react";
-import { useContext } from "react";
 import { QueryPersister } from "src/components/common/QueryPersister";
 import { deserializeGenericSearchQuery } from "src/components/common/QueryPersister";
 import { serializeGenericSearchQuery } from "src/components/common/QueryPersister";
 import { UserFancyList } from "src/components/common/UserFancyList";
 import { UserSearch } from "src/components/common/UserSearch";
-import { TitleContext } from "src/contexts/TitleContext";
+import { usePageMetadata } from "src/contexts/PageMetadataContext";
 import type { UserSearchQuery } from "src/services/UserService";
 import { filterFalsyObjectValues } from "src/utils/misc";
 import { getCurrentSearchParams } from "src/utils/misc";
@@ -37,14 +35,11 @@ const serializeSearchQuery = (
   });
 
 const ReviewAuthorsPage = () => {
-  const { setTitle } = useContext(TitleContext);
   const [searchQuery, setSearchQuery] = useState<UserSearchQuery>(
     deserializeSearchQuery(getCurrentSearchParams())
   );
 
-  useEffect(() => {
-    setTitle("Users");
-  }, [setTitle]);
+  usePageMetadata(() => ({ ready: true, title: "Users" }), []);
 
   return (
     <div className="ReviewAuthorsPage">

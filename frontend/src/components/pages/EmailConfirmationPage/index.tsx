@@ -1,10 +1,9 @@
 import { useState } from "react";
 import { useEffect } from "react";
-import { useContext } from "react";
 import { Link } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import { Loader } from "src/components/common/Loader";
-import { TitleContext } from "src/contexts/TitleContext";
+import { usePageMetadata } from "src/contexts/PageMetadataContext";
 import { UserService } from "src/services/UserService";
 import { UserDetails } from "src/services/UserService";
 import { extractErrorMessage } from "src/utils/misc";
@@ -16,7 +15,6 @@ interface UserPageParams {
 const EmailConfirmationPage = () => {
   const [user, setUser] = useState<UserDetails | undefined>();
   const [error, setError] = useState<string | undefined>();
-  const { setTitle } = useContext(TitleContext);
   const { token } = (useParams() as unknown) as UserPageParams;
 
   useEffect(() => {
@@ -30,9 +28,7 @@ const EmailConfirmationPage = () => {
     run();
   }, [token, setUser, setError]);
 
-  useEffect(() => {
-    setTitle("Registration finish");
-  }, [setTitle]);
+  usePageMetadata(() => ({ ready: true, title: "Registration finish" }), []);
 
   if (user) {
     return (

@@ -1,11 +1,10 @@
 import "./index.css";
-import { useEffect } from "react";
 import { useContext } from "react";
 import { useQuery } from "react-query";
 import { Loader } from "src/components/common/Loader";
 import { PageGuard } from "src/components/common/PermissionGuard";
 import { UserSidebar } from "src/components/common/UserSidebar";
-import { TitleContext } from "src/contexts/TitleContext";
+import { usePageMetadata } from "src/contexts/PageMetadataContext";
 import { UserContext } from "src/contexts/UserContext";
 import type { UserDetails } from "src/services/UserService";
 import { UserPermission } from "src/services/UserService";
@@ -23,16 +22,19 @@ interface UserBasePageViewProps {
 
 const UserBasePageView = ({ userId, children }: UserBasePageViewProps) => {
   const loggedInUser = useContext(UserContext).user;
-  const { setTitle } = useContext(TitleContext);
 
   const userResult = useQuery<UserDetails, Error>(
     ["user", UserService.getUserById, userId],
     async () => UserService.getUserById(userId)
   );
 
-  useEffect(() => {
-    setTitle(userResult?.data?.username || "");
-  }, [setTitle, userResult]);
+  usePageMetadata(
+    () => ({
+      ready: !userResult.isLoading,
+      title: userResult?.data?.username,
+    }),
+    [userResult]
+  );
 
   if (userResult.error) {
     return <p>{userResult.error.message}</p>;

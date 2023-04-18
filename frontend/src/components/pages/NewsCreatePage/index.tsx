@@ -1,21 +1,18 @@
 import { useCallback } from "react";
-import { useContext } from "react";
-import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { NewsForm } from "src/components/common/NewsForm";
 import { PageGuard } from "src/components/common/PermissionGuard";
-import { TitleContext } from "src/contexts/TitleContext";
+import { usePageMetadata } from "src/contexts/PageMetadataContext";
 import { UserPermission } from "src/services/UserService";
 
 const NewsCreatePageView = () => {
-  const { setTitle } = useContext(TitleContext);
   const navigate = useNavigate();
 
   const handleGoBack = useCallback(() => {
     navigate(`/`);
   }, [navigate]);
 
-  useEffect(() => setTitle("News"), [setTitle]);
+  usePageMetadata(() => ({ ready: true, title: "News" }), []);
 
   return (
     <div className="NewsCreatePage">

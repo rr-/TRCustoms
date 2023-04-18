@@ -1,17 +1,11 @@
 import styles from "./index.module.css";
-import { useContext } from "react";
-import { useEffect } from "react";
 import { NewsSidebar } from "src/components/common/NewsSidebar";
 import { FeaturedLevelsView } from "src/components/pages/HomePage/FeaturedLevels";
 import { StatsSidebar } from "src/components/pages/HomePage/StatsSidebar";
-import { TitleContext } from "src/contexts/TitleContext";
+import { usePageMetadata } from "src/contexts/PageMetadataContext";
 
 const HomePage = () => {
-  const { setTitle } = useContext(TitleContext);
-
-  useEffect(() => {
-    setTitle("");
-  }, [setTitle]);
+  usePageMetadata(() => ({ ready: true, title: "" }), []);
 
   return (
     <div className={styles.page}>

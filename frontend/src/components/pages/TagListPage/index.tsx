@@ -1,12 +1,10 @@
-import { useEffect } from "react";
 import { useState } from "react";
-import { useContext } from "react";
 import { QueryPersister } from "src/components/common/QueryPersister";
 import { deserializeGenericSearchQuery } from "src/components/common/QueryPersister";
 import { serializeGenericSearchQuery } from "src/components/common/QueryPersister";
 import { TagSearch } from "src/components/common/TagSearch";
 import { TagsTable } from "src/components/common/TagsTable";
-import { TitleContext } from "src/contexts/TitleContext";
+import { usePageMetadata } from "src/contexts/PageMetadataContext";
 import type { TagSearchQuery } from "src/services/TagService";
 import { getCurrentSearchParams } from "src/utils/misc";
 
@@ -26,14 +24,11 @@ const serializeSearchQuery = (
   serializeGenericSearchQuery(searchQuery, defaultSearchQuery);
 
 const TagListPage = () => {
-  const { setTitle } = useContext(TitleContext);
   const [searchQuery, setSearchQuery] = useState<TagSearchQuery>(
     deserializeSearchQuery(getCurrentSearchParams())
   );
 
-  useEffect(() => {
-    setTitle("Tags");
-  }, [setTitle]);
+  usePageMetadata(() => ({ ready: true, title: "Tags" }), []);
 
   return (
     <div className="TagListPage">

@@ -4,7 +4,6 @@ import { Formik } from "formik";
 import { Form } from "formik";
 import { useCallback } from "react";
 import { useContext } from "react";
-import { useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { UserResendActivationEmailButton } from "src/components/buttons/UserResendActivationEmailButton";
@@ -13,7 +12,7 @@ import { FormGridButtons } from "src/components/common/FormGrid";
 import { FormGridFieldSet } from "src/components/common/FormGrid";
 import { PasswordFormField } from "src/components/formfields/PasswordFormField";
 import { TextFormField } from "src/components/formfields/TextFormField";
-import { TitleContext } from "src/contexts/TitleContext";
+import { usePageMetadata } from "src/contexts/PageMetadataContext";
 import { UserContext } from "src/contexts/UserContext";
 import { AuthService } from "src/services/AuthService";
 import { UserService } from "src/services/UserService";
@@ -22,7 +21,6 @@ import { makeSentence } from "src/utils/string";
 
 const LoginPage = () => {
   const navigate = useNavigate();
-  const { setTitle } = useContext(TitleContext);
   const { setUser } = useContext(UserContext);
 
   const handleSubmit = useCallback(
@@ -76,9 +74,7 @@ const LoginPage = () => {
     [navigate, setUser]
   );
 
-  useEffect(() => {
-    setTitle("Login");
-  }, [setTitle]);
+  usePageMetadata(() => ({ ready: true, title: "Login" }), []);
 
   return (
     <div className="LoginForm">

@@ -1,8 +1,6 @@
 import "./index.css";
-import { useContext } from "react";
-import { useEffect } from "react";
 import { Markdown } from "src/components/markdown/Markdown";
-import { TitleContext } from "src/contexts/TitleContext";
+import { usePageMetadata } from "src/contexts/PageMetadataContext";
 
 const sections = [
   {
@@ -83,11 +81,7 @@ Text after line.
 ];
 
 const TextFormattingGuidelinesPage = () => {
-  const { setTitle } = useContext(TitleContext);
-
-  useEffect(() => {
-    setTitle("Text formatting guide");
-  }, [setTitle]);
+  usePageMetadata(() => ({ ready: true, title: "Text formatting guide" }), []);
 
   return (
     <div className="TextFormattingGuidelinesPage">

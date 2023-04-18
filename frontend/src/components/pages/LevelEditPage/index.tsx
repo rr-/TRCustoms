@@ -1,6 +1,4 @@
 import { useCallback } from "react";
-import { useContext } from "react";
-import { useEffect } from "react";
 import { useQuery } from "react-query";
 import { useNavigate } from "react-router-dom";
 import { useParams } from "react-router-dom";
@@ -8,7 +6,7 @@ import { LevelForm } from "src/components/common/LevelForm";
 import { Loader } from "src/components/common/Loader";
 import { PageGuard } from "src/components/common/PermissionGuard";
 import { SmartWrap } from "src/components/common/SmartWrap";
-import { TitleContext } from "src/contexts/TitleContext";
+import { usePageMetadata } from "src/contexts/PageMetadataContext";
 import type { LevelDetails } from "src/services/LevelService";
 import { LevelService } from "src/services/LevelService";
 import { getLevelOwningUserIds } from "src/services/LevelService";
@@ -21,7 +19,6 @@ interface LevelEditPageParams {
 const LevelEditPage = () => {
   const { levelId } = (useParams() as unknown) as LevelEditPageParams;
   const navigate = useNavigate();
-  const { setTitle } = useContext(TitleContext);
 
   const result = useQuery<LevelDetails, Error>(
     ["level", LevelService.getLevelById, levelId],
@@ -32,9 +29,13 @@ const LevelEditPage = () => {
     navigate(`/levels/${levelId}`);
   }, [navigate, levelId]);
 
-  useEffect(() => {
-    setTitle(result?.data?.name || "");
-  }, [setTitle, result]);
+  usePageMetadata(
+    () => ({
+      ready: !result.isLoading,
+      title: result?.data?.name,
+    }),
+    [result]
+  );
 
   if (result.error) {
     return <p>{result.error.message}</p>;

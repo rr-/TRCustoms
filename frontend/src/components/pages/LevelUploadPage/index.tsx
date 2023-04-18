@@ -1,16 +1,13 @@
 import { useState } from "react";
 import { useCallback } from "react";
-import { useEffect } from "react";
-import { useContext } from "react";
 import { Link } from "react-router-dom";
 import { LevelForm } from "src/components/common/LevelForm";
 import { PageGuard } from "src/components/common/PermissionGuard";
-import { TitleContext } from "src/contexts/TitleContext";
+import { usePageMetadata } from "src/contexts/PageMetadataContext";
 import type { LevelDetails } from "src/services/LevelService";
 import { UserPermission } from "src/services/UserService";
 
 const LevelUploadPageView = () => {
-  const { setTitle } = useContext(TitleContext);
   const [isComplete, setIsComplete] = useState(false);
 
   const handleSubmit = useCallback(
@@ -20,9 +17,7 @@ const LevelUploadPageView = () => {
     [setIsComplete]
   );
 
-  useEffect(() => {
-    setTitle("Upload a level");
-  }, [setTitle]);
+  usePageMetadata(() => ({ ready: true, title: "Upload a level" }), []);
 
   return (
     <div className="LevelUploadForm">
