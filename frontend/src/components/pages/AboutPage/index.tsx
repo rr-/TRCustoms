@@ -68,6 +68,15 @@ const About: LegaleseEntry = {
           description:
             'Uploading mature/explicit content such as images and videos to be displayed in TRCustoms.org is prohibited, and may warrant the removal of the content and revocation of user rights. Mature content in uploaded levels is allowed given that it is tagged "Mature" / "Explicit" (depending on the content) and that the content itself is not considered illegal as per international laws.',
         },
+        {
+          title: "How can I collect items in my profile inventory?",
+          description: (
+            <>
+              To find out how to collect items, click{" "}
+              <Link to={`/about/trophies`}>here</Link> for a guide.
+            </>
+          ),
+        },
       ],
     },
 
