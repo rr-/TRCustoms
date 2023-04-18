@@ -19,6 +19,7 @@ RUN npm run build
 # The second stage
 # Copy React static files and start nginx
 FROM nginx:stable-alpine
+COPY services/nginx/nginx_prerender_map.conf /etc/nginx/nginx_prerender_map.conf
 COPY services/nginx/nginx_prod.conf /etc/nginx/nginx.conf
 COPY --from=build /app/frontend/build /usr/share/nginx/html
 CMD ["nginx", "-g", "daemon off;"]

@@ -1,4 +1,4 @@
-version: "3.7"
+version: '3.7'
 
 x-backend-environment: &base-backend-environment
   - SECRET_KEY=${SECRET_KEY}
@@ -105,6 +105,18 @@ services:
     volumes:
       - ./backend/volumes/django_static:/app/backend/django_static
       - ./backend/volumes/uploads:/app/backend/django_uploads
+
+  trcustoms-prerender:
+    container_name: trcustoms_prd_prerender
+    build:
+      context: ./services/prerender/
+    volumes:
+      - ./services/prerender/plugins/:/app/plugins/
+      - ./services/prerender/server.js:/app/server.js
+    networks:
+      - trcustoms
+    ports:
+      - '3010:3000'
 
 networks:
   trcustoms:

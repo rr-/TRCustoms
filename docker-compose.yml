@@ -1,4 +1,4 @@
-version: "3.7"
+version: '3.7'
 
 x-backend-environment: &base-backend-environment
   - SECRET_KEY=${SECRET_KEY}
@@ -84,7 +84,7 @@ services:
       - trcustoms
     command: dev
     ports:
-      - "3000:3000"
+      - '3000:3000'
 
   trcustoms-db:
     <<: *base-trcustoms
@@ -107,15 +107,16 @@ services:
     networks:
       - trcustoms
 
-  nginx:
+  trcustoms-nginx:
     <<: *base-trcustoms
     container_name: trcustoms_dev_nginx
     image: nginx
     volumes:
+      - ./services/nginx/nginx_prerender_map.conf:/etc/nginx/nginx_prerender_map.conf:ro
       - ./services/nginx/nginx_dev.conf:/etc/nginx/nginx.conf:ro
       - ./backend/volumes/uploads/:/app/uploads/
       - ./backend/volumes/django_static/:/app/django_static/
-    command: ["nginx", "-g", "daemon off;"]
+    command: ['nginx', '-g', 'daemon off;']
     networks:
       - trcustoms
     ports:
@@ -134,7 +135,19 @@ services:
     networks:
       - trcustoms
     ports:
-      - "8025:8025"
+      - '8025:8025'
+
+  trcustoms-prerender:
+    container_name: trcustoms_dev_prerender
+    build:
+      context: ./services/prerender/
+    volumes:
+      - ./services/prerender/plugins/:/app/plugins/
+      - ./services/prerender/server.js:/app/server.js
+    networks:
+      - trcustoms
+    ports:
+      - '3010:3000'
 
 networks:
   trcustoms:
