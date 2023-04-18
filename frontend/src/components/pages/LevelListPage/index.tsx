@@ -1,13 +1,11 @@
 import "./index.css";
-import { useEffect } from "react";
 import { useState } from "react";
-import { useContext } from "react";
 import { LevelList } from "src/components/common/LevelList";
 import { LevelSearchSidebar } from "src/components/common/LevelSearchSidebar";
 import { QueryPersister } from "src/components/common/QueryPersister";
 import { deserializeGenericSearchQuery } from "src/components/common/QueryPersister";
 import { serializeGenericSearchQuery } from "src/components/common/QueryPersister";
-import { TitleContext } from "src/contexts/TitleContext";
+import { usePageMetadata } from "src/contexts/PageMetadataContext";
 import type { LevelSearchQuery } from "src/services/LevelService";
 import { filterFalsyObjectValues } from "src/utils/misc";
 import { getCurrentSearchParams } from "src/utils/misc";
@@ -62,14 +60,11 @@ const serializeSearchQuery = (
   });
 
 const LevelListPage = () => {
-  const { setTitle } = useContext(TitleContext);
   const [searchQuery, setSearchQuery] = useState<LevelSearchQuery>(
     deserializeSearchQuery(getCurrentSearchParams())
   );
 
-  useEffect(() => {
-    setTitle("Level search");
-  }, [setTitle]);
+  usePageMetadata(() => ({ ready: true, title: "Level search" }), []);
 
   return (
     <div className="LevelListPage">

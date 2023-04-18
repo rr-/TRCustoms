@@ -1,6 +1,4 @@
 import "./index.css";
-import { useEffect } from "react";
-import { useContext } from "react";
 import { useState } from "react";
 import { useQuery } from "react-query";
 import { useParams } from "react-router-dom";
@@ -15,7 +13,7 @@ import { SectionHeader } from "src/components/common/Section";
 import { SmartWrap } from "src/components/common/SmartWrap";
 import { Markdown } from "src/components/markdown/Markdown";
 import { DISABLE_PAGING } from "src/constants";
-import { TitleContext } from "src/contexts/TitleContext";
+import { usePageMetadata } from "src/contexts/PageMetadataContext";
 import type { UploadedFile } from "src/services/FileService";
 import { ExternalLinkType } from "src/services/LevelService";
 import type { LevelDetails } from "src/services/LevelService";
@@ -28,7 +26,6 @@ interface LevelPageParams {
 }
 
 const LevelPage = () => {
-  const { setTitle } = useContext(TitleContext);
   const { levelId } = (useParams() as unknown) as LevelPageParams;
   const [reviewCount, setReviewCount] = useState<number | undefined>();
   const [reviewsSearchQuery, setReviewsSearchQuery] = useState<
@@ -45,9 +42,13 @@ const LevelPage = () => {
     async () => LevelService.getLevelById(+levelId)
   );
 
-  useEffect(() => {
-    setTitle(result?.data?.name || "");
-  }, [setTitle, result]);
+  usePageMetadata(
+    () => ({
+      ready: !result.isLoading,
+      title: result.data?.name,
+    }),
+    [result]
+  );
 
   if (result.error) {
     return <p>{result.error.message}</p>;

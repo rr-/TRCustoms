@@ -1,8 +1,6 @@
 import styles from "./index.module.css";
-import { useContext } from "react";
-import { useEffect } from "react";
 import { SectionHeader } from "src/components/common/Section";
-import { TitleContext } from "src/contexts/TitleContext";
+import { usePageMetadata } from "src/contexts/PageMetadataContext";
 
 const UpgradableArtifacts = [
   {
@@ -65,11 +63,7 @@ const StandartArtifacts = [
 ];
 
 const TrophiesPage = () => {
-  const { setTitle } = useContext(TitleContext);
-
-  useEffect(() => {
-    setTitle("Item collection guide");
-  }, [setTitle]);
+  usePageMetadata(() => ({ ready: true, title: "Item collection guide" }), []);
 
   const tiers = UpgradableArtifacts[0].tiers;
 

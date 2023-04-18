@@ -1,6 +1,4 @@
 import styles from "./index.module.css";
-import { useContext } from "react";
-import { useEffect } from "react";
 import { useQuery } from "react-query";
 import { useParams } from "react-router-dom";
 import { Box } from "src/components/common/Box";
@@ -10,7 +8,7 @@ import { NewsSidebar } from "src/components/common/NewsSidebar";
 import { PermissionGuard } from "src/components/common/PermissionGuard";
 import { SectionHeader } from "src/components/common/Section";
 import { Markdown } from "src/components/markdown/Markdown";
-import { TitleContext } from "src/contexts/TitleContext";
+import { usePageMetadata } from "src/contexts/PageMetadataContext";
 import type { NewsDetails } from "src/services/NewsService";
 import { NewsService } from "src/services/NewsService";
 import { UserPermission } from "src/services/UserService";
@@ -22,16 +20,19 @@ interface NewsPageParams {
 
 const NewsPage = () => {
   const { newsId } = (useParams() as unknown) as NewsPageParams;
-  const { setTitle } = useContext(TitleContext);
 
   const newsResult = useQuery<NewsDetails, Error>(
     ["news", NewsService.getNewsById, newsId],
     async () => NewsService.getNewsById(+newsId)
   );
 
-  useEffect(() => {
-    setTitle(newsResult?.data?.subject || "");
-  }, [setTitle, newsResult]);
+  usePageMetadata(
+    () => ({
+      ready: !newsResult.isLoading,
+      title: newsResult?.data?.subject,
+    }),
+    [newsResult]
+  );
 
   if (newsResult.error) {
     return <p>{newsResult.error.message}</p>;

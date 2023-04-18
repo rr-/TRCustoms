@@ -1,18 +1,12 @@
-import { useEffect } from "react";
-import { useContext } from "react";
 import { PageGuard } from "src/components/common/PermissionGuard";
 import { SectionHeader } from "src/components/common/Section";
 import { IconCheck } from "src/components/icons";
 import { IconReject } from "src/components/icons";
-import { TitleContext } from "src/contexts/TitleContext";
+import { usePageMetadata } from "src/contexts/PageMetadataContext";
 import { UserPermission } from "src/services/UserService";
 
 const ModerationGuidelinesPageView = () => {
-  const { setTitle } = useContext(TitleContext);
-
-  useEffect(() => {
-    setTitle("Moderating Guidelines");
-  }, [setTitle]);
+  usePageMetadata(() => ({ ready: true, title: "Moderating Guidelines" }), []);
 
   return (
     <div className="ModerationGuidelinesPage">

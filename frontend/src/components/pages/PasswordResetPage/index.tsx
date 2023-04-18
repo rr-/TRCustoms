@@ -2,20 +2,17 @@ import { Formik } from "formik";
 import { Form } from "formik";
 import { useState } from "react";
 import { useCallback } from "react";
-import { useContext } from "react";
-import { useEffect } from "react";
 import { FormGrid } from "src/components/common/FormGrid";
 import { FormGridButtons } from "src/components/common/FormGrid";
 import { FormGridFieldSet } from "src/components/common/FormGrid";
 import { EmailFormField } from "src/components/formfields/EmailFormField";
-import { TitleContext } from "src/contexts/TitleContext";
+import { usePageMetadata } from "src/contexts/PageMetadataContext";
 import { UserService } from "src/services/UserService";
 import { makeSentence } from "src/utils/string";
 import { validateEmail } from "src/utils/validation";
 import { validateRequired } from "src/utils/validation";
 
 const PasswordResetPage = () => {
-  const { setTitle } = useContext(TitleContext);
   const [isComplete, setIsComplete] = useState(false);
 
   const handleSubmit = useCallback(
@@ -33,9 +30,7 @@ const PasswordResetPage = () => {
     [setIsComplete]
   );
 
-  useEffect(() => {
-    setTitle("Password Reset");
-  }, [setTitle]);
+  usePageMetadata(() => ({ ready: true, title: "Password Reset" }), []);
 
   const validate = (values: { [key: string]: any }) => {
     const errors: {

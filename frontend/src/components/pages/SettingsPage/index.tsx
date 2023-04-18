@@ -1,20 +1,15 @@
 import "./index.css";
-import { useEffect } from "react";
-import { useContext } from "react";
 import { Checkbox } from "src/components/common/Checkbox";
 import { ThemeSwitcher } from "src/components/common/ThemeSwitcher";
+import { usePageMetadata } from "src/contexts/PageMetadataContext";
 import { useSettings } from "src/contexts/SettingsContext";
 import { MarkdownPreviewMode } from "src/contexts/SettingsContext";
-import { TitleContext } from "src/contexts/TitleContext";
 
 const SettingsPage = () => {
-  const { setTitle } = useContext(TitleContext);
   const { infiniteScroll, setInfiniteScroll } = useSettings();
   const { markdownPreviewMode, setMarkdownPreviewMode } = useSettings();
 
-  useEffect(() => {
-    setTitle("Settings");
-  }, [setTitle]);
+  usePageMetadata(() => ({ ready: true, title: "Settings" }), []);
 
   return (
     <div className="SettingsPage">

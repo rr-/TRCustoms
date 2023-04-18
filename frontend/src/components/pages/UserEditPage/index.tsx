@@ -1,13 +1,12 @@
 import { useCallback } from "react";
 import { useContext } from "react";
-import { useEffect } from "react";
 import { useQuery } from "react-query";
 import { useNavigate } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import { Loader } from "src/components/common/Loader";
 import { PageGuard } from "src/components/common/PermissionGuard";
 import { UserForm } from "src/components/common/UserForm";
-import { TitleContext } from "src/contexts/TitleContext";
+import { usePageMetadata } from "src/contexts/PageMetadataContext";
 import { UserContext } from "src/contexts/UserContext";
 import { UserService } from "src/services/UserService";
 import type { UserDetails } from "src/services/UserService";
@@ -24,7 +23,6 @@ interface UserEditViewProps {
 const UserEditPageView = ({ userId }: UserEditViewProps) => {
   const userContext = useContext(UserContext);
   const navigate = useNavigate();
-  const { setTitle } = useContext(TitleContext);
 
   const result = useQuery<UserDetails, Error>(
     ["user", UserService.getUserById, userId],
@@ -40,9 +38,7 @@ const UserEditPageView = ({ userId }: UserEditViewProps) => {
     [userContext]
   );
 
-  useEffect(() => {
-    setTitle("Editing user profile");
-  }, [setTitle]);
+  usePageMetadata(() => ({ ready: true, title: "Editing user profile" }), []);
 
   const handleBack = useCallback(() => {
     navigate(`/users/${userId}`);

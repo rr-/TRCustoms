@@ -1,7 +1,5 @@
 import "./index.css";
 import { useState } from "react";
-import { useEffect } from "react";
-import { useContext } from "react";
 import { AuditLogSearch } from "src/components/common/AuditLogSearch";
 import { AuditLogTable } from "src/components/common/AuditLogTable";
 import { Button } from "src/components/common/Button";
@@ -13,7 +11,7 @@ import { deserializeGenericSearchQuery } from "src/components/common/QueryPersis
 import { serializeGenericSearchQuery } from "src/components/common/QueryPersister";
 import { SectionHeader } from "src/components/common/Section";
 import { SidebarBox } from "src/components/common/SidebarBox";
-import { TitleContext } from "src/contexts/TitleContext";
+import { usePageMetadata } from "src/contexts/PageMetadataContext";
 import type { AuditLogSearchQuery } from "src/services/AuditLogService";
 import { UserPermission } from "src/services/UserService";
 import { filterFalsyObjectValues } from "src/utils/misc";
@@ -45,14 +43,11 @@ const serializeSearchQuery = (
   });
 
 const ModerationPageView = () => {
-  const { setTitle } = useContext(TitleContext);
   const [searchQuery, setSearchQuery] = useState<AuditLogSearchQuery>(
     deserializeSearchQuery(getCurrentSearchParams())
   );
 
-  useEffect(() => {
-    setTitle("Moderate");
-  }, [setTitle]);
+  usePageMetadata(() => ({ ready: true, title: "Moderate" }), []);
 
   return (
     <div className="ModerationPage">

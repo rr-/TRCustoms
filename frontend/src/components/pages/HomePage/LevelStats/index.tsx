@@ -13,7 +13,7 @@ const LevelStats = () => {
   return (
     <>
       {config.engines.map((engine) => (
-        <EngineLink engine={engine}>
+        <EngineLink key={engine.name} engine={engine}>
           <GFXCard name={engine.name.toLowerCase()}>
             {engine.name}
             <br />

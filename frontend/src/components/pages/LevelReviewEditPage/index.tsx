@@ -1,13 +1,11 @@
 import { useCallback } from "react";
-import { useContext } from "react";
-import { useEffect } from "react";
 import { useQuery } from "react-query";
 import { useNavigate } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import { Loader } from "src/components/common/Loader";
 import { PageGuard } from "src/components/common/PermissionGuard";
 import { ReviewForm } from "src/components/common/ReviewForm";
-import { TitleContext } from "src/contexts/TitleContext";
+import { usePageMetadata } from "src/contexts/PageMetadataContext";
 import type { LevelNested } from "src/services/LevelService";
 import { LevelService } from "src/services/LevelService";
 import type { ReviewDetails } from "src/services/ReviewService";
@@ -25,7 +23,6 @@ const LevelReviewEditPage = () => {
     reviewId,
   } = (useParams() as unknown) as LevelReviewEditPageParams;
   const navigate = useNavigate();
-  const { setTitle } = useContext(TitleContext);
 
   const levelResult = useQuery<LevelNested, Error>(
     ["level", LevelService.getLevelById, levelId],
@@ -41,11 +38,15 @@ const LevelReviewEditPage = () => {
     navigate(`/levels/${levelId}`);
   }, [navigate, levelId]);
 
-  useEffect(() => {
-    setTitle(
-      levelResult?.data?.name ? `Review for ${levelResult.data.name}` : "Review"
-    );
-  }, [setTitle, levelResult]);
+  usePageMetadata(
+    () => ({
+      ready: !levelResult.isLoading,
+      title: levelResult.data?.name
+        ? `Review for ${levelResult.data.name}`
+        : "Review",
+    }),
+    [levelResult]
+  );
 
   if (levelResult.error) {
     return <p>{levelResult.error.message}</p>;

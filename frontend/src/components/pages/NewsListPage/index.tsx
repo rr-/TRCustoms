@@ -1,8 +1,6 @@
 import styles from "./index.module.css";
 import { sortBy } from "lodash";
 import { groupBy } from "lodash";
-import { useContext } from "react";
-import { useEffect } from "react";
 import { useQuery } from "react-query";
 import { Box } from "src/components/common/Box";
 import { Loader } from "src/components/common/Loader";
@@ -10,7 +8,7 @@ import { NewsSidebar } from "src/components/common/NewsSidebar";
 import { SectionHeader } from "src/components/common/Section";
 import { NewsLink } from "src/components/links/NewsLink";
 import { DISABLE_PAGING } from "src/constants";
-import { TitleContext } from "src/contexts/TitleContext";
+import { usePageMetadata } from "src/contexts/PageMetadataContext";
 import type { NewsSearchQuery } from "src/services/NewsService";
 import type { NewsSearchResult } from "src/services/NewsService";
 import { NewsService } from "src/services/NewsService";
@@ -22,16 +20,13 @@ const NewsListPage = () => {
     sort: "-created",
     search: null,
   };
-  const { setTitle } = useContext(TitleContext);
 
   const result = useQuery<NewsSearchResult, Error>(
     ["news", NewsService.searchNews, newsSearchQuery],
     async () => NewsService.searchNews(newsSearchQuery)
   );
 
-  useEffect(() => {
-    setTitle("News archive");
-  }, [setTitle]);
+  usePageMetadata(() => ({ ready: true, title: "News archive" }), []);
 
   if (result.error) {
     return <p>{result.error.message}</p>;

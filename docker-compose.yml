@@ -77,6 +77,7 @@ services:
       - ./frontend/public/:/app/public/
       - ./frontend/src/:/app/src/
       - ./frontend/tsconfig.json:/app/tsconfig.json
+      - ./frontend/package.json:/app/package.json
       - ./services/frontend/entrypoint.sh:/usr/local/bin/entrypoint.sh
     networks:
       - trcustoms

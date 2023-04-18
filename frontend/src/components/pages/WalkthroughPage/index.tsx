@@ -1,6 +1,4 @@
 import "./index.css";
-import { useContext } from "react";
-import { useEffect } from "react";
 import { useQuery } from "react-query";
 import { useParams } from "react-router-dom";
 import { InfoMessage } from "src/components/common/InfoMessage";
@@ -11,7 +9,7 @@ import { WalkthroughSidebar } from "src/components/common/WalkthroughSidebar";
 import { LevelLink } from "src/components/links/LevelLink";
 import { UserLink } from "src/components/links/UserLink";
 import { Markdown } from "src/components/markdown/Markdown";
-import { TitleContext } from "src/contexts/TitleContext";
+import { usePageMetadata } from "src/contexts/PageMetadataContext";
 import { UserPermission } from "src/services/UserService";
 import { WalkthroughStatus } from "src/services/WalkthroughService";
 import type { WalkthroughDetails } from "src/services/WalkthroughService";
@@ -65,7 +63,6 @@ interface WalkthroughPageParams {
 }
 
 const WalkthroughPage = () => {
-  const { setTitle } = useContext(TitleContext);
   const { walkthroughId } = (useParams() as unknown) as WalkthroughPageParams;
 
   const result = useQuery<WalkthroughDetails | null, Error>(
@@ -73,13 +70,15 @@ const WalkthroughPage = () => {
     async () => WalkthroughService.getWalkthroughById(+walkthroughId)
   );
 
-  useEffect(() => {
-    setTitle(
-      result?.data?.level.name
+  usePageMetadata(
+    () => ({
+      ready: !result.isLoading,
+      title: result.data?.level.name
         ? `Walkthrough for ${result.data.level.name}`
-        : "Walkthrough"
-    );
-  }, [setTitle, result]);
+        : "Walkthrough",
+    }),
+    [result]
+  );
 
   if (result.error) {
     return <p>{result.error.message}</p>;

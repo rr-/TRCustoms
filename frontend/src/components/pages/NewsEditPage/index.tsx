@@ -1,13 +1,11 @@
 import { useCallback } from "react";
-import { useContext } from "react";
-import { useEffect } from "react";
 import { useQuery } from "react-query";
 import { useNavigate } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import { Loader } from "src/components/common/Loader";
 import { NewsForm } from "src/components/common/NewsForm";
 import { PageGuard } from "src/components/common/PermissionGuard";
-import { TitleContext } from "src/contexts/TitleContext";
+import { usePageMetadata } from "src/contexts/PageMetadataContext";
 import type { NewsDetails } from "src/services/NewsService";
 import { NewsService } from "src/services/NewsService";
 import { UserPermission } from "src/services/UserService";
@@ -22,7 +20,6 @@ interface NewsEditPageViewProps {
 
 const NewsEditPageView = ({ newsId }: NewsEditPageViewProps) => {
   const navigate = useNavigate();
-  const { setTitle } = useContext(TitleContext);
 
   const result = useQuery<NewsDetails, Error>(
     ["news", NewsService.getNewsById, newsId],
@@ -34,7 +31,7 @@ const NewsEditPageView = ({ newsId }: NewsEditPageViewProps) => {
     [navigate, result]
   );
 
-  useEffect(() => setTitle("News"), [setTitle]);
+  usePageMetadata(() => ({ ready: true, title: "News" }), []);
 
   if (result.error) {
     return <p>{result.error.message}</p>;

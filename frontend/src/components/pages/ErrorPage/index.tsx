@@ -1,7 +1,5 @@
 import "./index.css";
-import { useContext } from "react";
-import { useEffect } from "react";
-import { TitleContext } from "src/contexts/TitleContext";
+import { usePageMetadata } from "src/contexts/PageMetadataContext";
 
 const Error403Page = () => {
   const images = [
@@ -53,11 +51,8 @@ const Error403Page = () => {
   ];
 
   const image = images[Math.floor(Math.random() * images.length)];
-  const { setTitle } = useContext(TitleContext);
 
-  useEffect(() => {
-    setTitle("403");
-  }, [setTitle]);
+  usePageMetadata(() => ({ ready: true, title: "403" }), []);
 
   return (
     <div className="ErrorPage">
@@ -99,11 +94,7 @@ const Error404Page = () => {
     },
   ];
 
-  const { setTitle } = useContext(TitleContext);
-
-  useEffect(() => {
-    setTitle("404");
-  }, [setTitle]);
+  usePageMetadata(() => ({ ready: true, title: "404" }), []);
 
   const image = images[Math.floor(Math.random() * images.length)];
   return (

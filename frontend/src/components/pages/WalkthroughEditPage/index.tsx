@@ -1,13 +1,11 @@
 import "./index.css";
-import { useContext } from "react";
-import { useEffect } from "react";
 import { useQuery } from "react-query";
 import { useParams } from "react-router-dom";
 import { Loader } from "src/components/common/Loader";
 import { PageGuard } from "src/components/common/PermissionGuard";
 import { WalkthroughForm } from "src/components/common/WalkthroughForm";
 import { LevelLink } from "src/components/links/LevelLink";
-import { TitleContext } from "src/contexts/TitleContext";
+import { usePageMetadata } from "src/contexts/PageMetadataContext";
 import type { LevelDetails } from "src/services/LevelService";
 import { LevelService } from "src/services/LevelService";
 import { UserPermission } from "src/services/UserService";
@@ -20,7 +18,6 @@ interface WalkthroughEditPageParams {
 }
 
 const WalkthroughEditPage = () => {
-  const { setTitle } = useContext(TitleContext);
   const {
     levelId,
     walkthroughId,
@@ -39,13 +36,15 @@ const WalkthroughEditPage = () => {
         : undefined
   );
 
-  useEffect(() => {
-    setTitle(
-      levelResult?.data?.name
+  usePageMetadata(
+    () => ({
+      ready: !levelResult.isLoading && !walkthroughResult.isLoading,
+      title: levelResult?.data?.name
         ? `Walkthrough for ${levelResult.data.name}`
-        : "Walkthrough"
-    );
-  }, [setTitle, walkthroughResult, levelResult]);
+        : "Walkthrough",
+    }),
+    [walkthroughResult, levelResult]
+  );
 
   if (levelResult.error) {
     return <p>{levelResult.error.message}</p>;

@@ -1,7 +1,5 @@
 import "./index.css";
-import { useEffect } from "react";
 import { useState } from "react";
-import { useContext } from "react";
 import { Link } from "src/components/common/Link";
 import { QueryPersister } from "src/components/common/QueryPersister";
 import { deserializeGenericSearchQuery } from "src/components/common/QueryPersister";
@@ -11,7 +9,7 @@ import { Section } from "src/components/common/Section";
 import { SectionHeader } from "src/components/common/Section";
 import { SidebarBox } from "src/components/common/SidebarBox";
 import { DISABLE_PAGING } from "src/constants";
-import { TitleContext } from "src/contexts/TitleContext";
+import { usePageMetadata } from "src/contexts/PageMetadataContext";
 import type { ReviewSearchQuery } from "src/services/ReviewService";
 import { getCurrentSearchParams } from "src/utils/misc";
 
@@ -33,14 +31,11 @@ const serializeSearchQuery = (
   serializeGenericSearchQuery(searchQuery, defaultSearchQuery);
 
 const ReviewListPage = () => {
-  const { setTitle } = useContext(TitleContext);
   const [searchQuery, setSearchQuery] = useState<ReviewSearchQuery>(
     deserializeSearchQuery(getCurrentSearchParams())
   );
 
-  useEffect(() => {
-    setTitle("Reviews");
-  }, [setTitle]);
+  usePageMetadata(() => ({ ready: true, title: "Reviews" }), []);
 
   return (
     <div className="ReviewListPage">

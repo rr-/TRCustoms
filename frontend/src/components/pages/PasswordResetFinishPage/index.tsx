@@ -2,15 +2,13 @@ import { Formik } from "formik";
 import { Form } from "formik";
 import { useState } from "react";
 import { useCallback } from "react";
-import { useContext } from "react";
-import { useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import { FormGrid } from "src/components/common/FormGrid";
 import { FormGridButtons } from "src/components/common/FormGrid";
 import { FormGridFieldSet } from "src/components/common/FormGrid";
 import { PasswordFormField } from "src/components/formfields/PasswordFormField";
-import { TitleContext } from "src/contexts/TitleContext";
+import { usePageMetadata } from "src/contexts/PageMetadataContext";
 import { UserService } from "src/services/UserService";
 import { makeSentence } from "src/utils/string";
 import { validatePassword } from "src/utils/validation";
@@ -22,7 +20,6 @@ interface PasswordResetFinishPageParams {
 }
 
 const PasswordResetFinishPage = () => {
-  const { setTitle } = useContext(TitleContext);
   const { token } = (useParams() as unknown) as PasswordResetFinishPageParams;
   const [isComplete, setIsComplete] = useState(false);
 
@@ -41,9 +38,7 @@ const PasswordResetFinishPage = () => {
     [setIsComplete, token]
   );
 
-  useEffect(() => {
-    setTitle("Password Reset");
-  }, [setTitle]);
+  usePageMetadata(() => ({ ready: true, title: "Password Reset" }), []);
 
   const validate = (values: { [key: string]: any }) => {
     const errors: {
