@@ -50,22 +50,18 @@ x-base-trcustoms-backend: &base-trcustoms-backend
 services:
   trcustoms:
     <<: *base-trcustoms-backend
-    container_name: trcustoms_dev_backend
     command: dev
 
   trcustoms-celery:
     <<: *base-trcustoms-backend
-    container_name: trcustoms_dev_celery
     command: celery
 
   trcustoms-celery-beat:
     <<: *base-trcustoms-backend
-    container_name: trcustoms_dev_celery_beat
     command: celery-beat
 
   trcustoms-frontend:
     <<: *base-trcustoms
-    container_name: trcustoms_dev_frontend
     restart: unless-stopped
     build:
       context: .
@@ -89,7 +85,6 @@ services:
 
   trcustoms-db:
     <<: *base-trcustoms
-    container_name: trcustoms_dev_db
     image: postgres:14.0
     environment: *base-backend-environment
     expose:
@@ -101,7 +96,6 @@ services:
 
   trcustoms-redis:
     <<: *base-trcustoms
-    container_name: trcustoms_dev_redis
     image: redis:6
     expose:
       - 6379
@@ -110,7 +104,6 @@ services:
 
   trcustoms-nginx:
     <<: *base-trcustoms
-    container_name: trcustoms_dev_nginx
     image: nginx
     volumes:
       - ./services/nginx/nginx_prerender_map.conf:/etc/nginx/nginx_prerender_map.conf:ro
@@ -130,7 +123,6 @@ services:
 
   trcustoms-mailhog:
     image: mailhog/mailhog:v1.0.0
-    container_name: trcustoms_dev_mailhog
     expose:
       - 1025
     networks:
@@ -139,7 +131,6 @@ services:
       - '8025:8025'
 
   trcustoms-prerender:
-    container_name: trcustoms_dev_prerender
     build:
       context: ./services/prerender/
     volumes:
