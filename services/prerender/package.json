@@ -1,0 +1,26 @@
+{
+  "name": "docker-prerender",
+  "version": "5.20.2",
+  "description": "Docker Image for Prerender ==========================",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo 'Error: no test specified' && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ball6847/docker-prerender.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ball6847/docker-prerender/issues"
+  },
+  "homepage": "https://github.com/ball6847/docker-prerender#readme",
+  "dependencies": {
+    "cache-manager": "^3.3.0",
+    "cache-manager-fs-hash": "0.0.8",
+    "prerender": "^5.20.2"
+  }
+}
