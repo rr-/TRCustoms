@@ -3,6 +3,9 @@ import type { LegaleseEntry } from "src/components/common/NestedLegalese";
 import { NestedLegalese } from "src/components/common/NestedLegalese";
 import { usePageMetadata } from "src/contexts/PageMetadataContext";
 
+const buildVersion = process.env.REACT_APP_BUILD_VERSION;
+const buildDate = process.env.REACT_APP_BUILD_DATE;
+
 const About: LegaleseEntry = {
   children: [
     {
@@ -14,14 +17,18 @@ const About: LegaleseEntry = {
           and more! Since our official launch on 2 April 2022, our aim was and
           will always be to preserve the amazing productions of the TRLE
           community so that nothing is lost to history.
-          <br />
-          The website currently runs on version{" "}
-          <a
-            href={`https://github.com/rr-/trcustoms/commit/${process.env.REACT_APP_BUILD_VERSION}`}
-          >
-            {process.env.REACT_APP_BUILD_VERSION}
-          </a>{" "}
-          built on {process.env.REACT_APP_BUILD_DATE}.
+          {!!buildVersion && (
+            <>
+              <br />
+              The website currently runs on version{" "}
+              <a
+                href={`https://github.com/rr-/trcustoms/commit/${buildVersion}`}
+              >
+                {buildVersion}
+              </a>{" "}
+              built on {buildDate}.
+            </>
+          )}
         </>
       ),
     },
