@@ -4,6 +4,7 @@ import { useEffect } from "react";
 import { Routes } from "react-router-dom";
 import { Route } from "react-router-dom";
 import { NavBar } from "src/components/common/NavBar";
+import { PageMetadata } from "src/components/common/PageMetadata";
 import { ScrollToTop } from "src/components/common/ScrollToTop";
 import { AboutPage } from "src/components/pages/AboutPage";
 import { EmailConfirmationPage } from "src/components/pages/EmailConfirmationPage";
@@ -44,7 +45,6 @@ import { WalkthroughEditPage } from "src/components/pages/WalkthroughEditPage";
 import { WalkthroughPage } from "src/components/pages/WalkthroughPage";
 import { ConfigContextProvider } from "src/contexts/ConfigContext";
 import { useSettings } from "src/contexts/SettingsContext";
-import { TitleContextProvider } from "src/contexts/TitleContext";
 import { UserContextProvider } from "src/contexts/UserContext";
 
 const App = () => {
@@ -55,94 +55,90 @@ const App = () => {
   }, [theme]);
 
   return (
-    <TitleContextProvider>
-      <ConfigContextProvider>
-        <UserContextProvider>
-          <ScrollToTop />
-          <NavBar />
-          <main id="Content" className="MainContainer">
-            <Routes>
-              <Route path="/" element={<HomePage />} />
-              <Route path="/mod" element={<ModerationPage />} />
-              <Route
-                path="/mod/how-to"
-                element={<ModerationGuidelinesPage />}
-              />
-              <Route path="/levels/upload" element={<LevelUploadPage />} />
-              <Route path="/levels" element={<LevelListPage />} />
-              <Route path="/levels/:levelId" element={<LevelPage />} />
-              <Route
-                path="/levels/:levelId/review"
-                element={<LevelReviewPage />}
-              />
-              <Route
-                path="/walkthroughs/:walkthroughId"
-                element={<WalkthroughPage />}
-              />
-              <Route
-                path="/levels/:levelId/review/:reviewId/edit"
-                element={<LevelReviewEditPage />}
-              />
-              <Route
-                path="/levels/:levelId/walkthrough"
-                element={<WalkthroughEditPage />}
-              />
-              <Route
-                path="/levels/:levelId/walkthrough/:walkthroughId/edit"
-                element={<WalkthroughEditPage />}
-              />
-              <Route
-                path="/walkthroughs/:walkthroughId/edit"
-                element={<WalkthroughEditPage />}
-              />
-              <Route path="/news" element={<NewsListPage />} />
-              <Route path="/news/create" element={<NewsCreatePage />} />
-              <Route path="/news/:newsId" element={<NewsPage />} />
-              <Route path="/news/:newsId/edit" element={<NewsEditPage />} />
-              <Route path="/levels/:levelId/edit" element={<LevelEditPage />} />
-              <Route path="/tags" element={<TagListPage />} />
-              <Route path="/genres" element={<GenreListPage />} />
-              <Route path="/reviews" element={<ReviewListPage />} />
-              <Route path="/reviews/authors" element={<ReviewAuthorsPage />} />
-              <Route
-                path="/reviews/level_suggestions"
-                element={<ReviewLevelSuggestionsPage />}
-              />
-              <Route path="/users" element={<UserListPage />} />
-              <Route path="/login" element={<LoginPage />} />
-              <Route path="/logout" element={<LogoutPage />} />
-              <Route path="/register" element={<RegisterPage />} />
-              <Route path="/password-reset" element={<PasswordResetPage />} />
-              <Route
-                path="/password-reset/:token"
-                element={<PasswordResetFinishPage />}
-              />
-              <Route path="/settings" element={<SettingsPage />} />
-              <Route path="/users/:userId" element={<UserPage />} />
-              <Route path="/users/:userId/edit" element={<UserEditPage />} />
-              <Route
-                path="/users/:userId/walkthroughs"
-                element={<UserWalkthroughsPage />}
-              />
-              <Route
-                path="/email-confirmation/:token"
-                element={<EmailConfirmationPage />}
-              />
-              <Route
-                path="/text-formatting-guide"
-                element={<TextFormattingGuidelinesPage />}
-              />
-              <Route path="/about" element={<AboutPage />} />
-              <Route path="/about/trophies" element={<TrophiesPage />} />
-              <Route path="/about/terms" element={<TermsAndConditionsPage />} />
-              <Route path="/403" element={<Error403Page />} />
-              <Route path="/404" element={<Error404Page />} />
-              <Route path="*" element={<Error404Page />} />
-            </Routes>
-          </main>
-        </UserContextProvider>
-      </ConfigContextProvider>
-    </TitleContextProvider>
+    <ConfigContextProvider>
+      <UserContextProvider>
+        <PageMetadata />
+        <ScrollToTop />
+        <NavBar />
+        <main id="Content" className="MainContainer">
+          <Routes>
+            <Route path="/" element={<HomePage />} />
+            <Route path="/mod" element={<ModerationPage />} />
+            <Route path="/mod/how-to" element={<ModerationGuidelinesPage />} />
+            <Route path="/levels/upload" element={<LevelUploadPage />} />
+            <Route path="/levels" element={<LevelListPage />} />
+            <Route path="/levels/:levelId" element={<LevelPage />} />
+            <Route
+              path="/levels/:levelId/review"
+              element={<LevelReviewPage />}
+            />
+            <Route
+              path="/walkthroughs/:walkthroughId"
+              element={<WalkthroughPage />}
+            />
+            <Route
+              path="/levels/:levelId/review/:reviewId/edit"
+              element={<LevelReviewEditPage />}
+            />
+            <Route
+              path="/levels/:levelId/walkthrough"
+              element={<WalkthroughEditPage />}
+            />
+            <Route
+              path="/levels/:levelId/walkthrough/:walkthroughId/edit"
+              element={<WalkthroughEditPage />}
+            />
+            <Route
+              path="/walkthroughs/:walkthroughId/edit"
+              element={<WalkthroughEditPage />}
+            />
+            <Route path="/news" element={<NewsListPage />} />
+            <Route path="/news/create" element={<NewsCreatePage />} />
+            <Route path="/news/:newsId" element={<NewsPage />} />
+            <Route path="/news/:newsId/edit" element={<NewsEditPage />} />
+            <Route path="/levels/:levelId/edit" element={<LevelEditPage />} />
+            <Route path="/tags" element={<TagListPage />} />
+            <Route path="/genres" element={<GenreListPage />} />
+            <Route path="/reviews" element={<ReviewListPage />} />
+            <Route path="/reviews/authors" element={<ReviewAuthorsPage />} />
+            <Route
+              path="/reviews/level_suggestions"
+              element={<ReviewLevelSuggestionsPage />}
+            />
+            <Route path="/users" element={<UserListPage />} />
+            <Route path="/login" element={<LoginPage />} />
+            <Route path="/logout" element={<LogoutPage />} />
+            <Route path="/register" element={<RegisterPage />} />
+            <Route path="/password-reset" element={<PasswordResetPage />} />
+            <Route
+              path="/password-reset/:token"
+              element={<PasswordResetFinishPage />}
+            />
+            <Route path="/settings" element={<SettingsPage />} />
+            <Route path="/users/:userId" element={<UserPage />} />
+            <Route path="/users/:userId/edit" element={<UserEditPage />} />
+            <Route
+              path="/users/:userId/walkthroughs"
+              element={<UserWalkthroughsPage />}
+            />
+            <Route
+              path="/email-confirmation/:token"
+              element={<EmailConfirmationPage />}
+            />
+            <Route
+              path="/text-formatting-guide"
+              element={<TextFormattingGuidelinesPage />}
+            />
+            <Route path="/about" element={<AboutPage />} />
+            <Route path="/about/trophies" element={<TrophiesPage />} />
+            <Route path="/about/terms" element={<TermsAndConditionsPage />} />
+            <Route path="/403" element={<Error403Page />} />
+            <Route path="/404" element={<Error404Page />} />
+            <Route path="*" element={<Error404Page />} />
+          </Routes>
+        </main>
+      </UserContextProvider>
+    </ConfigContextProvider>
   );
 };
 
