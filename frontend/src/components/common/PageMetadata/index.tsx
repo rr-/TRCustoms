@@ -3,6 +3,8 @@ import { Helmet } from "react-helmet";
 import { usePageMetadataStore } from "src/contexts/PageMetadataContext";
 
 const BASE_TITLE = "TRCustoms";
+const BASE_DESCRIPTION =
+  "A website dedicated to custom levels for classic Tomb Raider games.";
 
 const PageMetadata = () => {
   const { title, ready, description, image } = usePageMetadataStore(
@@ -19,7 +21,7 @@ const PageMetadata = () => {
   return (
     <Helmet>
       <title>{title ? `${BASE_TITLE} - ${title}` : BASE_TITLE}</title>
-      {!!description && <meta name="description" content={description} />}
+      <meta name="description" content={description || BASE_DESCRIPTION} />
       {!!imageUrl && <meta name="og:image" content={imageUrl} />}
     </Helmet>
   );
