@@ -46,6 +46,12 @@ const LevelPage = () => {
     () => ({
       ready: !result.isLoading,
       title: result.data?.name,
+      image: result.data?.cover?.url,
+      description: result.data?.authors
+        ? `A custom Tomb Raider level by ${result.data?.authors.map(
+            (author) => author.username
+          )}`
+        : `A custom Tomb Raider level.`,
     }),
     [result]
   );

@@ -12,5 +12,5 @@ class UnsafeOperationsRateThrottle(throttling.SimpleRateThrottle):
     def get_cache_key(self, request, view):
         return self.cache_format % {
             "scope": self.scope,
-            "ident": request.headers["X-Forwarded-For"],
+            "ident": request.headers.get("X-Forwarded-For"),
         }

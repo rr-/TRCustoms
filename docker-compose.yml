@@ -69,6 +69,8 @@ services:
       args:
         - BUILD_DATE=${BUILD_DATE}
         - BUILD_VERSION=${BUILD_VERSION}
+    environment:
+      - REACT_APP_HOST_SITE=${HOST_SITE}
     volumes:
       - ./frontend/public/:/app/public/
       - ./frontend/src/:/app/src/
@@ -107,6 +109,7 @@ services:
     image: nginx
     volumes:
       - ./services/nginx/nginx_prerender_map.conf:/etc/nginx/nginx_prerender_map.conf:ro
+      - ./services/nginx/nginx_prerender_server.conf:/etc/nginx/nginx_prerender_server.conf:ro
       - ./services/nginx/nginx_dev.conf:/etc/nginx/nginx.conf:ro
       - ./backend/volumes/uploads/:/app/uploads/
       - ./backend/volumes/django_static/:/app/django_static/
