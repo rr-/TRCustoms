@@ -2,6 +2,7 @@ import { AxiosResponse } from "axios";
 import { api } from "src/api";
 import { API_URL } from "src/constants";
 import type { UploadedFile } from "src/services/FileService";
+import type { LevelNested } from "src/services/LevelService";
 import type { UserNested } from "src/services/UserService";
 import type { GenericSearchQuery } from "src/types";
 import { GenericSearchResult } from "src/types";
@@ -15,7 +16,7 @@ interface ReviewAuthor extends UserNested {
 }
 
 interface ReviewListing {
-  level: { id: number; name: string };
+  level: LevelNested;
   id: number;
   author: ReviewAuthor;
   text: string | null;

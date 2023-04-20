@@ -2,6 +2,7 @@ import { AxiosResponse } from "axios";
 import { api } from "src/api";
 import { API_URL } from "src/constants";
 import type { UploadedFile } from "src/services/FileService";
+import type { LevelNested } from "src/services/LevelService";
 import type { UserNested } from "src/services/UserService";
 import type { GenericSearchQuery } from "src/types";
 import { GenericSearchResult } from "src/types";
@@ -26,7 +27,7 @@ interface WalkthroughAuthor extends UserNested {
 }
 
 interface WalkthroughListing {
-  level: { id: number; name: string };
+  level: LevelNested;
   id: number;
   author: WalkthroughAuthor | null;
   legacy_author_name: string | null;

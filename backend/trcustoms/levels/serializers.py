@@ -91,9 +91,11 @@ class LevelFileSerializer(serializers.ModelSerializer):
 
 
 class LevelNestedSerializer(serializers.ModelSerializer):
+    cover = UploadedFileNestedSerializer(read_only=True)
+
     class Meta:
         model = Level
-        fields = ["id", "name"]
+        fields = ["id", "name", "cover"]
 
 
 class LevelListingSerializer(serializers.ModelSerializer):

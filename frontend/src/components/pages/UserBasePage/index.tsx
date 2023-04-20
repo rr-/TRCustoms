@@ -32,6 +32,10 @@ const UserBasePageView = ({ userId, children }: UserBasePageViewProps) => {
     () => ({
       ready: !userResult.isLoading,
       title: userResult?.data?.username,
+      description: userResult?.data?.username
+        ? `Check out ${userResult?.data?.username}'s profile page!`
+        : null,
+      image: userResult?.data?.picture?.url || "/anonymous.svg",
     }),
     [userResult]
   );

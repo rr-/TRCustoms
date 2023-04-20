@@ -28,7 +28,14 @@ const GenreListPage = () => {
     deserializeSearchQuery(getCurrentSearchParams())
   );
 
-  usePageMetadata(() => ({ ready: true, title: "Genres" }), []);
+  usePageMetadata(
+    () => ({
+      ready: true,
+      title: "Genres",
+      description: "Search for custom Tomb Raider games by genres.",
+    }),
+    []
+  );
 
   return (
     <div className="GenreListPage">

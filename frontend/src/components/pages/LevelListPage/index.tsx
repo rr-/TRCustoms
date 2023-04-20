@@ -64,7 +64,15 @@ const LevelListPage = () => {
     deserializeSearchQuery(getCurrentSearchParams())
   );
 
-  usePageMetadata(() => ({ ready: true, title: "Level search" }), []);
+  usePageMetadata(
+    () => ({
+      ready: true,
+      title: "Level search",
+      description:
+        "Search our database for thousands of custom Tomb Raider games.",
+    }),
+    []
+  );
 
   return (
     <div className="LevelListPage">

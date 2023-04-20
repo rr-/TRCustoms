@@ -5,6 +5,7 @@ import { usePageMetadataStore } from "src/contexts/PageMetadataContext";
 const BASE_TITLE = "TRCustoms";
 const BASE_DESCRIPTION =
   "A website dedicated to custom levels for classic Tomb Raider games.";
+const BASE_IMAGE = "/logo.png";
 
 const PageMetadata = () => {
   const { title, ready, description, image } = usePageMetadataStore(
@@ -16,7 +17,7 @@ const PageMetadata = () => {
   }, [ready]);
 
   const baseUrl = process.env.REACT_APP_HOST_SITE;
-  const imageUrl = image && baseUrl ? new URL(image, baseUrl).href : null;
+  const imageUrl = baseUrl ? new URL(image || BASE_IMAGE, baseUrl).href : null;
 
   return (
     <Helmet>

@@ -30,7 +30,14 @@ const PasswordResetPage = () => {
     [setIsComplete]
   );
 
-  usePageMetadata(() => ({ ready: true, title: "Password Reset" }), []);
+  usePageMetadata(
+    () => ({
+      ready: true,
+      title: "Password Reset",
+      description: "Forgot your password? Reset it here!",
+    }),
+    []
+  );
 
   const validate = (values: { [key: string]: any }) => {
     const errors: {

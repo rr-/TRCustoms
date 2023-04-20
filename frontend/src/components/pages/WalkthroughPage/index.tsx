@@ -76,6 +76,12 @@ const WalkthroughPage = () => {
       title: result.data?.level.name
         ? `Walkthrough for ${result.data.level.name}`
         : "Walkthrough",
+      description: result.data?.author?.username
+        ? `A walkthrough by ${result.data.author.username}`
+        : result.data?.level.name
+        ? `A walkthrough for ${result.data.level.name}`
+        : null,
+      image: result.data?.level.cover?.url,
     }),
     [result]
   );

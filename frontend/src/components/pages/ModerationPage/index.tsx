@@ -47,7 +47,14 @@ const ModerationPageView = () => {
     deserializeSearchQuery(getCurrentSearchParams())
   );
 
-  usePageMetadata(() => ({ ready: true, title: "Moderate" }), []);
+  usePageMetadata(
+    () => ({
+      ready: true,
+      title: "Moderate",
+      description: "A page for managing and monitoring user actions.",
+    }),
+    []
+  );
 
   return (
     <div className="ModerationPage">

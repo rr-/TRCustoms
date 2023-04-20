@@ -63,7 +63,15 @@ const StandartArtifacts = [
 ];
 
 const TrophiesPage = () => {
-  usePageMetadata(() => ({ ready: true, title: "Item collection guide" }), []);
+  usePageMetadata(
+    () => ({
+      ready: true,
+      title: "Item collection guide",
+      description:
+        "A guide on how to collect item awards for your profile inventory.",
+    }),
+    []
+  );
 
   const tiers = UpgradableArtifacts[0].tiers;
 

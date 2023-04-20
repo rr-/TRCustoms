@@ -28,7 +28,14 @@ const TagListPage = () => {
     deserializeSearchQuery(getCurrentSearchParams())
   );
 
-  usePageMetadata(() => ({ ready: true, title: "Tags" }), []);
+  usePageMetadata(
+    () => ({
+      ready: true,
+      title: "Tags",
+      description: "Search for custom Tomb Raider games by tags.",
+    }),
+    []
+  );
 
   return (
     <div className="TagListPage">

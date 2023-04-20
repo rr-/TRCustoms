@@ -50,6 +50,7 @@ interface ExternalLink {
 interface LevelNested {
   id: number;
   name: string;
+  cover: UploadedFile | null;
 }
 
 interface LevelListing {
