@@ -1,9 +1,8 @@
 import { Link } from "src/components/common/Link";
-import { LevelNested } from "src/services/LevelService";
 
 interface LevelLinkProps {
   className?: string | undefined;
-  level: LevelNested;
+  level: { id: number; name: string };
   children?: React.ReactNode | undefined;
 }
 

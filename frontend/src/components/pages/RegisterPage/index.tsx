@@ -29,7 +29,15 @@ const RegisterPage = () => {
     [setIsComplete, navigate, setUser]
   );
 
-  usePageMetadata(() => ({ ready: true, title: "Register" }), []);
+  usePageMetadata(
+    () => ({
+      ready: true,
+      title: "Register",
+      description:
+        "Sign up as a user on our website to be able to upload levels, post reviews, and more!",
+    }),
+    []
+  );
 
   return (
     <div className="RegisterForm">

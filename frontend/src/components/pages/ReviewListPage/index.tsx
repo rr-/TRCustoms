@@ -35,7 +35,16 @@ const ReviewListPage = () => {
     deserializeSearchQuery(getCurrentSearchParams())
   );
 
-  usePageMetadata(() => ({ ready: true, title: "Reviews" }), []);
+  usePageMetadata(
+    () => ({
+      ready: true,
+      title: "Reviews",
+      description:
+        "Read the latest reviews posted for custom Tomb Raider games.",
+      image: "reviewer_catalogue.jpg",
+    }),
+    []
+  );
 
   return (
     <div className="ReviewListPage">

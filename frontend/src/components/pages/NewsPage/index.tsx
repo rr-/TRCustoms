@@ -30,6 +30,7 @@ const NewsPage = () => {
     () => ({
       ready: !newsResult.isLoading,
       title: newsResult?.data?.subject,
+      description: "Read the latest news articles.",
     }),
     [newsResult]
   );

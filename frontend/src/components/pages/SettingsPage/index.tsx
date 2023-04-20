@@ -9,7 +9,14 @@ const SettingsPage = () => {
   const { infiniteScroll, setInfiniteScroll } = useSettings();
   const { markdownPreviewMode, setMarkdownPreviewMode } = useSettings();
 
-  usePageMetadata(() => ({ ready: true, title: "Settings" }), []);
+  usePageMetadata(
+    () => ({
+      ready: true,
+      title: "Settings",
+      description: "Manage the website's settings to your personal preference.",
+    }),
+    []
+  );
 
   return (
     <div className="SettingsPage">

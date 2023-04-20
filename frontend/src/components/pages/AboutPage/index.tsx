@@ -99,7 +99,15 @@ const About: LegaleseEntry = {
 };
 
 const AboutPage = () => {
-  usePageMetadata(() => ({ ready: true, title: "About" }), []);
+  usePageMetadata(
+    () => ({
+      ready: true,
+      title: "About",
+      description:
+        "TRCustoms.org is a website that hosts custom Tomb Raider games created by the Tomb Raider Level Editor.",
+    }),
+    []
+  );
 
   return (
     <div className="AboutPage">

@@ -17,7 +17,14 @@ const LevelUploadPageView = () => {
     [setIsComplete]
   );
 
-  usePageMetadata(() => ({ ready: true, title: "Upload a level" }), []);
+  usePageMetadata(
+    () => ({
+      ready: true,
+      title: "Upload a level",
+      description: "Upload your custom Tomb Raider game on our website!",
+    }),
+    []
+  );
 
   return (
     <div className="LevelUploadForm">

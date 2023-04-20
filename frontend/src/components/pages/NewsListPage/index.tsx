@@ -26,7 +26,14 @@ const NewsListPage = () => {
     async () => NewsService.searchNews(newsSearchQuery)
   );
 
-  usePageMetadata(() => ({ ready: true, title: "News archive" }), []);
+  usePageMetadata(
+    () => ({
+      ready: true,
+      title: "News archive",
+      description: "Read the latest news articles.",
+    }),
+    []
+  );
 
   if (result.error) {
     return <p>{result.error.message}</p>;
