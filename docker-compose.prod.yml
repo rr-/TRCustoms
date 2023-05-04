@@ -99,6 +99,7 @@ services:
       - ./backend/volumes/uploads:/app/backend/django_uploads
 
   trcustoms-prerender:
+    <<: *base-trcustoms-backend
     build:
       context: ./services/prerender/
     volumes:

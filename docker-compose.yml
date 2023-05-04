@@ -118,16 +118,8 @@ services:
     depends_on:
       - trcustoms
 
-  trcustoms-mailhog:
-    image: mailhog/mailhog:v1.0.0
-    expose:
-      - 1025
-    networks:
-      - trcustoms
-    ports:
-      - '8025:8025'
-
   trcustoms-prerender:
+    <<: *base-trcustoms-backend
     build:
       context: ./services/prerender/
     volumes:
@@ -137,6 +129,15 @@ services:
       - trcustoms
     ports:
       - '3010:3000'
+
+  trcustoms-mailhog:
+    image: mailhog/mailhog:v1.0.0
+    expose:
+      - 1025
+    networks:
+      - trcustoms
+    ports:
+      - '8025:8025'
 
 networks:
   trcustoms:
