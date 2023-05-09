@@ -1,6 +1,6 @@
 [
   { "position": 0, "name": "Short (<1 hour)" },
-  { "position": 1, "name": "Medium (3+ hours)" },
+  { "position": 1, "name": "Medium (1+ hours)" },
   { "position": 2, "name": "Long (3+ hours)" },
   { "position": 3, "name": "Very long (6+ hours)" }
 ]
