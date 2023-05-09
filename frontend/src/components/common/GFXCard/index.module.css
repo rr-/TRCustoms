@@ -1,6 +1,5 @@
 .card,
 .stripe {
-  margin-bottom: 0.25rem;
   color: white;
   text-decoration: none;
 }
@@ -28,6 +27,7 @@
   width: 100%;
   position: relative;
   min-height: 3rem;
+  margin-bottom: 0.25rem;
 }
 
 .stripe .background {
@@ -52,6 +52,7 @@
 
 .card {
   position: relative;
+  margin-top: 1rem;
 }
 
 .card .background {

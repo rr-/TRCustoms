@@ -1,6 +1,6 @@
 .InfoMessage {
   display: flex;
-  margin: 0 0 2rem 0;
+  margin: 0 0 1rem 0;
 }
 .InfoMessage--aside {
   background: var(--message-accent-bg-color);
