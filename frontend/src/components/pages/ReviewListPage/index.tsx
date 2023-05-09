@@ -46,16 +46,15 @@ const ReviewListPage = () => {
 
   return (
     <ReviewBasePage>
+      <QueryPersister
+        serializeSearchQuery={serializeSearchQuery}
+        deserializeSearchQuery={deserializeSearchQuery}
+        searchQuery={searchQuery}
+        setSearchQuery={setSearchQuery}
+      />
+
       <Section className="ChildMarginClear">
-        <SectionHeader className="ReviewListPage--sectionHeader">
-          Latest reviews
-        </SectionHeader>
-        <QueryPersister
-          serializeSearchQuery={serializeSearchQuery}
-          deserializeSearchQuery={deserializeSearchQuery}
-          searchQuery={searchQuery}
-          setSearchQuery={setSearchQuery}
-        />
+        <SectionHeader>Latest reviews</SectionHeader>
 
         <ReviewsList
           showLevels={true}
