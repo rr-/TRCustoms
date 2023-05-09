@@ -7,6 +7,7 @@
 
 .background {
   transition: filter 300ms;
+  width: 100%;
 }
 .card:hover .background,
 .stripe:hover .background {

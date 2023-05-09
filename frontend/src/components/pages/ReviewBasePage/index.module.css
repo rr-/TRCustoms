@@ -1,4 +1,4 @@
-.ReviewListPage {
+.wrapper {
   display: grid;
   grid-template-areas: "sidebar main";
   grid-template-columns: 25% auto;
@@ -6,7 +6,7 @@
   gap: 1.5rem;
 }
 @media (max-device-width: 1280px) {
-  .ReviewListPage {
+  .wrapper {
     grid-template-columns: 1fr;
     grid-template-areas:
       "sidebar"
@@ -14,13 +14,9 @@
   }
 }
 
-.ReviewListPage--sidebar {
+.sidebar {
   grid-area: sidebar;
 }
-.ReviewListPage--main {
+.main {
   grid-area: main;
-}
-
-.ReviewListPage--sidebar img {
-  width: 100%;
 }

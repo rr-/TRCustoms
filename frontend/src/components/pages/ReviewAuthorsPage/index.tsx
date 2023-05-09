@@ -4,6 +4,7 @@ import { deserializeGenericSearchQuery } from "src/components/common/QueryPersis
 import { serializeGenericSearchQuery } from "src/components/common/QueryPersister";
 import { UserFancyList } from "src/components/common/UserFancyList";
 import { UserSearch } from "src/components/common/UserSearch";
+import { ReviewBasePage } from "src/components/pages/ReviewBasePage";
 import { usePageMetadata } from "src/contexts/PageMetadataContext";
 import type { UserSearchQuery } from "src/services/UserService";
 import { filterFalsyObjectValues } from "src/utils/misc";
@@ -42,7 +43,7 @@ const ReviewAuthorsPage = () => {
   usePageMetadata(() => ({ ready: true, title: "Users" }), []);
 
   return (
-    <div className="ReviewAuthorsPage">
+    <ReviewBasePage>
       <QueryPersister
         serializeSearchQuery={serializeSearchQuery}
         deserializeSearchQuery={deserializeSearchQuery}
@@ -60,7 +61,7 @@ const ReviewAuthorsPage = () => {
         searchQuery={searchQuery}
         onSearchQueryChange={setSearchQuery}
       />
-    </div>
+    </ReviewBasePage>
   );
 };
 

@@ -1,14 +1,11 @@
-import "./index.css";
 import { useState } from "react";
-import { GFXCard } from "src/components/common/GFXCard";
-import { Link } from "src/components/common/Link";
 import { QueryPersister } from "src/components/common/QueryPersister";
 import { deserializeGenericSearchQuery } from "src/components/common/QueryPersister";
 import { serializeGenericSearchQuery } from "src/components/common/QueryPersister";
 import { ReviewsList } from "src/components/common/ReviewsList";
 import { Section } from "src/components/common/Section";
 import { SectionHeader } from "src/components/common/Section";
-import { SidebarBox } from "src/components/common/SidebarBox";
+import { ReviewBasePage } from "src/components/pages/ReviewBasePage";
 import { DISABLE_PAGING } from "src/constants";
 import { usePageMetadata } from "src/contexts/PageMetadataContext";
 import type { ReviewSearchQuery } from "src/services/ReviewService";
@@ -48,53 +45,26 @@ const ReviewListPage = () => {
   );
 
   return (
-    <div className="ReviewListPage">
-      <div className="ReviewListPage--sidebar">
-        <SidebarBox>
-          <Section className="ChildMarginClear">
-            <SectionHeader>Reviewer catalogue</SectionHeader>
-            <Link to={`/reviews/authors`}>
-              <GFXCard name="reviewer_catalogue" variant="big">
-                Reviewer catalogue
-              </GFXCard>
-            </Link>
-          </Section>
+    <ReviewBasePage>
+      <Section className="ChildMarginClear">
+        <SectionHeader className="ReviewListPage--sectionHeader">
+          Latest reviews
+        </SectionHeader>
+        <QueryPersister
+          serializeSearchQuery={serializeSearchQuery}
+          deserializeSearchQuery={deserializeSearchQuery}
+          searchQuery={searchQuery}
+          setSearchQuery={setSearchQuery}
+        />
 
-          <Section className="ChildMarginClear">
-            <SectionHeader>Least reviewed levels</SectionHeader>
-            <Link to={`/reviews/level_suggestions`}>
-              <GFXCard name="least_reviewed_levels" variant="big">
-                Less known levels
-              </GFXCard>
-            </Link>
-            <p>
-              A list of levels with less than 5 reviews, sorted by the oldest
-              release date.
-            </p>
-          </Section>
-        </SidebarBox>
-      </div>
-      <div className="ReviewListPage--main">
-        <Section className="ChildMarginClear">
-          <SectionHeader className="ReviewListPage--sectionHeader">
-            Latest reviews
-          </SectionHeader>
-          <QueryPersister
-            serializeSearchQuery={serializeSearchQuery}
-            deserializeSearchQuery={deserializeSearchQuery}
-            searchQuery={searchQuery}
-            setSearchQuery={setSearchQuery}
-          />
-
-          <ReviewsList
-            showLevels={true}
-            showExcerpts={true}
-            searchQuery={searchQuery}
-            onSearchQueryChange={setSearchQuery}
-          />
-        </Section>
-      </div>
-    </div>
+        <ReviewsList
+          showLevels={true}
+          showExcerpts={true}
+          searchQuery={searchQuery}
+          onSearchQueryChange={setSearchQuery}
+        />
+      </Section>
+    </ReviewBasePage>
   );
 };
 
