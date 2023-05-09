@@ -1,8 +1,12 @@
 import { useState } from "react";
+import { InfoMessage } from "src/components/common/InfoMessage";
+import { InfoMessageType } from "src/components/common/InfoMessage";
 import { LevelList } from "src/components/common/LevelList";
 import { QueryPersister } from "src/components/common/QueryPersister";
 import { deserializeGenericSearchQuery } from "src/components/common/QueryPersister";
 import { serializeGenericSearchQuery } from "src/components/common/QueryPersister";
+import { Section } from "src/components/common/Section";
+import { SectionHeader } from "src/components/common/Section";
 import { ReviewBasePage } from "src/components/pages/ReviewBasePage";
 import { usePageMetadata } from "src/contexts/PageMetadataContext";
 import type { LevelSearchQuery } from "src/services/LevelService";
@@ -51,12 +55,18 @@ const ReviewLevelSuggestionsPage = () => {
         setSearchQuery={setSearchQuery}
       />
 
-      <div className="ReviewLevelSuggestionsPage--results">
+      <Section className="ChildMarginClear">
+        <SectionHeader>Least reviewed levels</SectionHeader>
+
+        <InfoMessage type={InfoMessageType.Info}>
+          This is a list of levels with low amounts of reviews.
+        </InfoMessage>
+
         <LevelList
           searchQuery={searchQuery}
           onSearchQueryChange={setSearchQuery}
         />
-      </div>
+      </Section>
     </ReviewBasePage>
   );
 };

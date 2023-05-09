@@ -2,6 +2,8 @@ import { useState } from "react";
 import { QueryPersister } from "src/components/common/QueryPersister";
 import { deserializeGenericSearchQuery } from "src/components/common/QueryPersister";
 import { serializeGenericSearchQuery } from "src/components/common/QueryPersister";
+import { Section } from "src/components/common/Section";
+import { SectionHeader } from "src/components/common/Section";
 import { UserFancyList } from "src/components/common/UserFancyList";
 import { UserSearch } from "src/components/common/UserSearch";
 import { ReviewBasePage } from "src/components/pages/ReviewBasePage";
@@ -50,17 +52,22 @@ const ReviewAuthorsPage = () => {
         searchQuery={searchQuery}
         setSearchQuery={setSearchQuery}
       />
-      <UserSearch
-        defaultSearchQuery={defaultSearchQuery}
-        searchQuery={searchQuery}
-        onSearchQueryChange={setSearchQuery}
-        showInactiveReviewersCheckbox={true}
-      />
 
-      <UserFancyList
-        searchQuery={searchQuery}
-        onSearchQueryChange={setSearchQuery}
-      />
+      <Section className="ChildMarginClear">
+        <SectionHeader>Reviewer catalogue</SectionHeader>
+
+        <UserSearch
+          defaultSearchQuery={defaultSearchQuery}
+          searchQuery={searchQuery}
+          onSearchQueryChange={setSearchQuery}
+          showInactiveReviewersCheckbox={true}
+        />
+
+        <UserFancyList
+          searchQuery={searchQuery}
+          onSearchQueryChange={setSearchQuery}
+        />
+      </Section>
     </ReviewBasePage>
   );
 };
