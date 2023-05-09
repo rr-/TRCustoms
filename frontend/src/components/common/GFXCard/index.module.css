@@ -1,0 +1,68 @@
+.card,
+.stripe {
+  margin-bottom: 0.25rem;
+  color: white;
+  text-decoration: none;
+}
+
+.background {
+  transition: filter 300ms;
+}
+.card:hover .background,
+.stripe:hover .background {
+  filter: brightness(120%);
+}
+
+.aside {
+  display: flex;
+  align-items: center;
+  line-height: 1.33rem;
+  border: 0 solid var(--link-color);
+  background: rgba(0, 0, 0, 0.5);
+  padding: 0 0.75rem;
+}
+
+.stripe {
+  display: flex;
+  width: 100%;
+  position: relative;
+  min-height: 3rem;
+}
+
+.stripe .background {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  display: flex;
+  background-size: cover;
+  background-position: center;
+}
+
+.stripe .aside {
+  position: relative;
+  justify-content: center;
+  min-width: 2.5rem;
+  text-align: center;
+  border-right-width: 4px;
+}
+
+.card {
+  position: relative;
+}
+
+.card .background {
+  display: block;
+}
+
+.card .aside {
+  padding: 0.5rem 1rem;
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border-top-width: 2px;
+  background: rgba(0, 0, 0, 0.6);
+}

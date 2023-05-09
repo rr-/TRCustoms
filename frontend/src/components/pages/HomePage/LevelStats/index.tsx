@@ -2,8 +2,8 @@ import { useContext } from "react";
 import { Link } from "react-router-dom";
 import { DefinitionItem } from "src/components/common/DefinitionList";
 import { DefinitionList } from "src/components/common/DefinitionList";
+import { GFXCard } from "src/components/common/GFXCard";
 import { EngineLink } from "src/components/links/EngineLink";
-import { GFXCard } from "src/components/pages/HomePage/GFXCard";
 import { ConfigContext } from "src/contexts/ConfigContext";
 import { reprBigNumber } from "src/utils/string";
 

@@ -1,5 +1,6 @@
 import "./index.css";
 import { useState } from "react";
+import { GFXCard } from "src/components/common/GFXCard";
 import { Link } from "src/components/common/Link";
 import { QueryPersister } from "src/components/common/QueryPersister";
 import { deserializeGenericSearchQuery } from "src/components/common/QueryPersister";
@@ -53,19 +54,18 @@ const ReviewListPage = () => {
           <Section className="ChildMarginClear">
             <SectionHeader>Reviewer catalogue</SectionHeader>
             <Link to={`/reviews/authors`}>
-              <img src="/reviewer_catalogue.jpg" alt="Reviewer catalogue" />
-              Find reviewers
+              <GFXCard name="reviewer_catalogue" variant="big">
+                Reviewer catalogue
+              </GFXCard>
             </Link>
           </Section>
 
           <Section className="ChildMarginClear">
             <SectionHeader>Least reviewed levels</SectionHeader>
             <Link to={`/reviews/level_suggestions`}>
-              <img
-                src="/least_reviewed_levels.jpg"
-                alt="Least reviewed levels"
-              />
-              Review less known levels
+              <GFXCard name="least_reviewed_levels" variant="big">
+                Less known levels
+              </GFXCard>
             </Link>
             <p>
               A list of levels with less than 5 reviews, sorted by the oldest
