@@ -1,13 +1,13 @@
 import styles from "./index.module.css";
 import { useQuery } from "react-query";
 import { Button } from "src/components/common/Button";
+import { GFXCard } from "src/components/common/GFXCard";
 import { Link } from "src/components/common/Link";
 import { Loader } from "src/components/common/Loader";
 import { PermissionGuard } from "src/components/common/PermissionGuard";
 import { SectionHeader } from "src/components/common/Section";
 import { SidebarBox } from "src/components/common/SidebarBox";
 import { NewsLink } from "src/components/links/NewsLink";
-import { GFXCard } from "src/components/pages/HomePage/GFXCard";
 import type { NewsListing } from "src/services/NewsService";
 import { NewsSearchResult } from "src/services/NewsService";
 import { NewsService } from "src/services/NewsService";
