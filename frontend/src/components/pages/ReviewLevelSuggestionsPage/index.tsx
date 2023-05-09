@@ -3,6 +3,7 @@ import { LevelList } from "src/components/common/LevelList";
 import { QueryPersister } from "src/components/common/QueryPersister";
 import { deserializeGenericSearchQuery } from "src/components/common/QueryPersister";
 import { serializeGenericSearchQuery } from "src/components/common/QueryPersister";
+import { ReviewBasePage } from "src/components/pages/ReviewBasePage";
 import { usePageMetadata } from "src/contexts/PageMetadataContext";
 import type { LevelSearchQuery } from "src/services/LevelService";
 import { getCurrentSearchParams } from "src/utils/misc";
@@ -42,7 +43,7 @@ const ReviewLevelSuggestionsPage = () => {
   usePageMetadata(() => ({ ready: true, title: "Level search" }), []);
 
   return (
-    <div className="ReviewLevelSuggestionsPage">
+    <ReviewBasePage>
       <QueryPersister
         serializeSearchQuery={serializeSearchQuery}
         deserializeSearchQuery={deserializeSearchQuery}
@@ -56,7 +57,7 @@ const ReviewLevelSuggestionsPage = () => {
           onSearchQueryChange={setSearchQuery}
         />
       </div>
-    </div>
+    </ReviewBasePage>
   );
 };
 
