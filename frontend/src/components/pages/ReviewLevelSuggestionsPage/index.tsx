@@ -65,7 +65,7 @@ const ReviewLevelSuggestionsPage = () => {
       />
 
       <Section className="ChildMarginClear">
-        <SectionHeader>Least reviewed levels</SectionHeader>
+        <SectionHeader>Less known levels</SectionHeader>
 
         <InfoMessage type={InfoMessageType.Info}>
           This is a list of levels with low amounts of reviews.
