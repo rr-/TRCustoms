@@ -5,12 +5,13 @@
 }
 
 .background {
-  transition: filter 300ms;
+  opacity: 0.8;
+  transition: opacity 300ms;
   width: 100%;
 }
 .card:hover .background,
 .stripe:hover .background {
-  filter: brightness(120%);
+  opacity: 1;
 }
 
 .aside {
