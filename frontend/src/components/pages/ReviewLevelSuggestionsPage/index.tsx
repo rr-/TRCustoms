@@ -44,7 +44,16 @@ const ReviewLevelSuggestionsPage = () => {
     deserializeSearchQuery(getCurrentSearchParams())
   );
 
-  usePageMetadata(() => ({ ready: true, title: "Level search" }), []);
+  usePageMetadata(
+    () => ({
+      ready: true,
+      title: "Less known levels",
+      description:
+        "Find levels that don't have a lot of reviews, there might be a hidden gem somewhere.",
+      image: "card-least_reviewed_levels.jpg",
+    }),
+    []
+  );
 
   return (
     <ReviewBasePage>

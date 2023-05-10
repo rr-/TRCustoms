@@ -42,7 +42,15 @@ const ReviewAuthorsPage = () => {
     deserializeSearchQuery(getCurrentSearchParams())
   );
 
-  usePageMetadata(() => ({ ready: true, title: "Users" }), []);
+  usePageMetadata(
+    () => ({
+      ready: true,
+      title: "Reviewer catalogue",
+      description: "Search for custom level critics.",
+      image: "card-reviewer_catalogue.jpg",
+    }),
+    []
+  );
 
   return (
     <ReviewBasePage>
