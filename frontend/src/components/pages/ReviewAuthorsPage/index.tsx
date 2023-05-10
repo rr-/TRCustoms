@@ -14,7 +14,7 @@ import { getCurrentSearchParams } from "src/utils/misc";
 
 const defaultSearchQuery: UserSearchQuery = {
   page: null,
-  pageSize: 10,
+  pageSize: 12,
   sort: "-date_joined",
   search: null,
   reviewsMin: 1,
