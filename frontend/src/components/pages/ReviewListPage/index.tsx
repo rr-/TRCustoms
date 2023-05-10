@@ -39,7 +39,7 @@ const ReviewListPage = () => {
       title: "Reviews",
       description:
         "Read the latest reviews posted for custom Tomb Raider games.",
-      image: "reviewer_catalogue.jpg",
+      image: "card-reviewer_catalogue.jpg",
     }),
     []
   );
