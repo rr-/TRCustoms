@@ -7,6 +7,7 @@ import type { GenericSearchQuery } from "src/types";
 import { GenericSearchResult } from "src/types";
 import { filterFalsyObjectValues } from "src/utils/misc";
 import { getGenericSearchQuery } from "src/utils/misc";
+import { boolToSearchString } from "src/utils/misc";
 
 enum AuditLogChangeType {
   Update = "UPDATE",
@@ -60,12 +61,7 @@ const searchAuditLogs = async (
     level: searchQuery.level || null,
     user_search: searchQuery.userSearch || null,
     object_search: searchQuery.objectSearch || null,
-    is_action_required:
-      searchQuery.isActionRequired === true
-        ? "1"
-        : searchQuery.isActionRequired === false
-        ? "0"
-        : false,
+    is_action_required: boolToSearchString(searchQuery.isActionRequired),
   });
   const response = (await api.get(`${API_URL}/auditlogs/`, {
     params,

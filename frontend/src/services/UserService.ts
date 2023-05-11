@@ -8,6 +8,7 @@ import type { GenericSearchQuery } from "src/types";
 import { GenericSearchResult } from "src/types";
 import { filterFalsyObjectValues } from "src/utils/misc";
 import { getGenericSearchQuery } from "src/utils/misc";
+import { boolToSearchString } from "src/utils/misc";
 
 interface CountryNested extends CountryListing {}
 
@@ -207,12 +208,9 @@ const searchUsers = async (
   const params = filterFalsyObjectValues({
     ...getGenericSearchQuery(searchQuery),
     reviews_min: searchQuery.reviewsMin,
-    hide_inactive_reviewers:
-      searchQuery.hideInactiveReviewers === true
-        ? "1"
-        : searchQuery.hideInactiveReviewers === false
-        ? "0"
-        : false,
+    hide_inactive_reviewers: boolToSearchString(
+      searchQuery.hideInactiveReviewers
+    ),
   });
   const response = (await api.get(`${API_URL}/users/`, {
     params,

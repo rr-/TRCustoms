@@ -4,7 +4,6 @@ import boto3
 from botocore.config import Config
 from django.conf import settings
 from django.db import models
-from django.db.models import F
 from django.http import HttpResponseRedirect
 from rest_framework import mixins, status, viewsets
 from rest_framework.decorators import action
@@ -12,6 +11,7 @@ from rest_framework.generics import get_object_or_404
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 
+from trcustoms.levels.filters import filter_levels_queryset
 from trcustoms.levels.logic import approve_level, reject_level
 from trcustoms.levels.models import Level, LevelFile
 from trcustoms.levels.serializers import (
@@ -30,14 +30,7 @@ from trcustoms.permissions import (
     IsAccessingOwnResource,
 )
 from trcustoms.users.models import UserPermission
-from trcustoms.utils import (
-    parse_bool,
-    parse_date_range,
-    parse_int,
-    parse_ints,
-    slugify,
-    stream_file_field,
-)
+from trcustoms.utils import slugify, stream_file_field
 
 
 class LevelViewSet(
@@ -110,85 +103,7 @@ class LevelViewSet(
 
     def get_queryset(self):
         queryset = super().get_queryset()
-
-        if sort_style := self.request.query_params.get("sort"):
-            match sort_style:
-                case (
-                    "name"
-                    | "-name"
-                    | "created"
-                    | "-created"
-                    | "last_updated"
-                    | "-last_updated"
-                    | "review_count"
-                    | "-review_count"
-                    | "download_count"
-                    | "-download_count"
-                ):
-                    queryset = queryset.order_by(sort_style)
-                case "engine":
-                    queryset = queryset.order_by("engine__name")
-                case "-engine":
-                    queryset = queryset.order_by("-engine__name")
-                case "rating":
-                    queryset = queryset.with_rating_values().order_by(
-                        F("rating_value").asc()
-                    )
-                case "-rating":
-                    queryset = queryset.with_rating_values().order_by(
-                        F("rating_value").desc()
-                    )
-                case "size":
-                    queryset = queryset.order_by(
-                        F("last_file__file__size").asc(nulls_last=True)
-                    )
-                case "-size":
-                    queryset = queryset.order_by(
-                        F("last_file__file__size").desc(nulls_last=True)
-                    )
-
-        and_map = {
-            "authors": "authors__pk",
-            "tags": "tags__pk",
-            "genres": "genres__pk",
-        }
-        or_map = {
-            "engines": "engine__pk",
-            "difficulties": "difficulty__pk",
-            "durations": "duration__pk",
-            "ratings": "rating_class__pk",
-        }
-
-        for query_param, qs_key in and_map.items():
-            if pks := parse_ints(self.request.query_params.get(query_param)):
-                for pk in pks:
-                    queryset = queryset.filter(**{qs_key: pk})
-
-        for query_param, qs_key in or_map.items():
-            if pks := parse_ints(self.request.query_params.get(query_param)):
-                queryset = queryset.filter(**{f"{qs_key}__in": pks})
-
-        if dates := parse_date_range(self.request.query_params.get("date")):
-            min_date, max_date = dates
-            if min_date:
-                queryset = queryset.filter(created__gte=min_date)
-            if max_date:
-                queryset = queryset.filter(created__lt=max_date)
-
-        if (
-            is_approved := parse_bool(
-                self.request.query_params.get("is_approved")
-            )
-        ) is not None:
-            queryset = queryset.filter(is_approved=is_approved)
-
-        if (
-            reviews_max := parse_int(
-                self.request.query_params.get("reviews_max")
-            )
-        ) is not None:
-            queryset = queryset.filter(review_count__lte=reviews_max)
-
+        queryset = filter_levels_queryset(queryset, self.request.query_params)
         return queryset
 
     @action(detail=True, methods=["post"])

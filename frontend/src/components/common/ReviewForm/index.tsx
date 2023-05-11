@@ -1,11 +1,9 @@
 import "./index.css";
 import { AxiosError } from "axios";
 import axios from "axios";
-import { Field } from "formik";
 import { useFormikContext } from "formik";
 import { Formik } from "formik";
 import { Form } from "formik";
-import { property } from "lodash";
 import { useContext } from "react";
 import { useCallback } from "react";
 import { useQueryClient } from "react-query";
@@ -17,6 +15,7 @@ import { InfoMessage } from "src/components/common/InfoMessage";
 import { InfoMessageType } from "src/components/common/InfoMessage";
 import { Loader } from "src/components/common/Loader";
 import { BaseFormField } from "src/components/formfields/BaseFormField";
+import { RadioboxFormField } from "src/components/formfields/RadioboxFormField";
 import { TextAreaFormField } from "src/components/formfields/TextAreaFormField";
 import { LevelLink } from "src/components/links/LevelLink";
 import { ConfigContext } from "src/contexts/ConfigContext";
@@ -49,20 +48,13 @@ const ReviewQuestionFormField = ({
   name,
   readonly,
 }: ReviewQuestionFormFieldProps) => {
-  const { values, setFieldValue } = useFormikContext();
+  const { setFieldValue } = useFormikContext();
 
   const handleAnswerChange = (
-    event: React.ChangeEvent<HTMLInputElement>,
-    templateAnswer: ReviewTemplateAnswer
+    templateAnswer: ReviewTemplateAnswer,
+    checked: boolean
   ) => {
-    setFieldValue(name, event.target.checked ? templateAnswer.id : null);
-  };
-
-  const validateAnswer = (value: number | null) => {
-    if (value === null) {
-      return "This field is required.";
-    }
-    return null;
+    setFieldValue(name, checked ? templateAnswer.id : null);
   };
 
   return (
@@ -78,19 +70,17 @@ const ReviewQuestionFormField = ({
           key={templateAnswer.id}
           className="ReviewQuestionFormField--answerRow"
         >
-          <label>
-            <Field
-              name={name}
-              validate={validateAnswer}
-              disabled={readonly}
-              type="radio"
-              onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
-                handleAnswerChange(event, templateAnswer)
-              }
-              checked={property(name)(values) === templateAnswer.id}
-            />
-            {templateAnswer.answer_text}
-          </label>
+          <RadioboxFormField
+            label={templateAnswer.answer_text}
+            name={name}
+            required={true}
+            readonly={readonly}
+            hideErrors={true} /* handled by parent BaseFormField */
+            onChange={(checked: boolean) =>
+              handleAnswerChange(templateAnswer, checked)
+            }
+            id={templateAnswer.id}
+          />
         </div>
       ))}
     </BaseFormField>
@@ -112,6 +102,21 @@ const ReviewForm = ({ level, review, onGoBack, onSubmit }: ReviewFormProps) => {
         )?.[0] || null,
       ])
     ),
+  };
+
+  const validate = (values: { [key: string]: any }) => {
+    const errors: { answers: string[] } = { answers: [] };
+
+    for (let templateQuestion of config.review_questions) {
+      const validator = validateRequired;
+      const value = values.answers?.[templateQuestion.id];
+      const error = validator(value);
+      if (error) {
+        errors.answers[templateQuestion.id] = makeSentence(error);
+      }
+    }
+
+    return errors;
   };
 
   const handleSubmitError = useCallback(
@@ -193,6 +198,7 @@ const ReviewForm = ({ level, review, onGoBack, onSubmit }: ReviewFormProps) => {
   return (
     <Formik
       initialValues={initialValues}
+      validate={validate}
       enableReinitialize={true}
       onSubmit={handleSubmit}
     >

@@ -25,6 +25,8 @@ const defaultSearchQuery: LevelSearchQuery = {
   ratings: [],
   isApproved: true,
   reviewsMax: 5,
+  videoWalkthroughs: null,
+  textWalkthroughs: null,
 };
 
 const deserializeSearchQuery = (qp: {

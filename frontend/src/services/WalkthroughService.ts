@@ -8,6 +8,7 @@ import type { GenericSearchQuery } from "src/types";
 import { GenericSearchResult } from "src/types";
 import { filterFalsyObjectValues } from "src/utils/misc";
 import { getGenericSearchQuery } from "src/utils/misc";
+import { boolToSearchString } from "src/utils/misc";
 
 enum WalkthroughType {
   Link = "l",
@@ -69,12 +70,7 @@ const searchWalkthroughs = async (
     walkthrough_type: searchQuery.walkthroughType || null,
     levels: searchQuery.levels?.join(",") || null,
     authors: searchQuery.authors?.join(",") || null,
-    is_approved:
-      searchQuery.isApproved === true
-        ? "1"
-        : searchQuery.isApproved === false
-        ? "0"
-        : undefined,
+    is_approved: boolToSearchString(searchQuery.isApproved),
   });
   const response = (await api.get(`${API_URL}/walkthroughs/`, {
     params,
