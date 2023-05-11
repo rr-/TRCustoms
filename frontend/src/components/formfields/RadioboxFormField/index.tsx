@@ -1,19 +1,22 @@
 import { useFormikContext } from "formik";
-import { Checkbox } from "src/components/common/Checkbox";
+import { at } from "lodash";
+import { Radiobox } from "src/components/common/Radiobox";
 import { BaseFormField } from "src/components/formfields/BaseFormField";
 import type { GenericFormFieldProps } from "src/components/formfields/BaseFormField";
 
-interface CheckboxFormFieldProps extends GenericFormFieldProps {
+interface RadioboxFormFieldProps extends GenericFormFieldProps {
+  id: any;
   onChange?: (checked: boolean) => void | undefined;
 }
 
-const CheckboxFormField = ({
+const RadioboxFormField = ({
   name,
+  id,
   label,
   readonly,
   onChange,
   ...props
-}: CheckboxFormFieldProps) => {
+}: RadioboxFormFieldProps) => {
   const { values, setFieldValue } = useFormikContext() as {
     values: { [key: string]: any };
     setFieldValue: (name: string, value: any) => void;
@@ -24,16 +27,18 @@ const CheckboxFormField = ({
     onChange?.(event.target.checked);
   };
 
+  const checked = at(values, name)?.includes(id);
+
   return (
     <BaseFormField name={name} readonly={readonly} {...props}>
-      <Checkbox
+      <Radiobox
         disabled={readonly}
         label={label}
         onChange={handleChange}
-        checked={values[name]}
+        checked={checked}
       />
     </BaseFormField>
   );
 };
 
-export { CheckboxFormField };
+export { RadioboxFormField };

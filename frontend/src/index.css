@@ -82,55 +82,6 @@ button:focus {
   border-color: var(--outline-color);
 }
 
-input[type="radio"] {
-  position: relative;
-  cursor: pointer;
-  width: 20px;
-  height: 20px;
-  vertical-align: text-top;
-  border: 0;
-  margin: 0 0.5rem 0 0;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  appearance: none;
-}
-input[type="radio"]:not(:checked):before {
-  content: "";
-  display: block;
-  border-radius: 50%;
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  top: 0;
-  left: 0;
-  border: 2px solid var(--input-border-color);
-  background-color: var(--bg-color);
-  color: var(--input-fg-color);
-  box-sizing: border-box;
-}
-input[type="radio"]:checked:before {
-  content: "";
-  display: block;
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  border-radius: 50%;
-  top: 0;
-  left: 0;
-  border-color: var(--button-bg-color);
-  background-color: var(--button-bg-color);
-}
-input[type="radio"]:checked:after {
-  content: "";
-  display: block;
-  width: 12px;
-  height: 12px;
-  border-radius: 50%;
-  background: var(--fg-color);
-  position: absolute;
-}
-
 #Content {
   margin-top: 1rem;
   margin-bottom: 1rem;

@@ -32,6 +32,18 @@ const filterFalsyObjectValues = <T extends any>(source: {
   ) as { [key: string]: T };
 };
 
+const boolToSearchString = (
+  value: boolean | null | undefined
+): string | null => {
+  return value === true ? "1" : value === false ? "0" : null;
+};
+
+const searchStringToBool = (
+  value: string | null | undefined
+): boolean | null => {
+  return value === "1" ? true : value === "0" ? false : null;
+};
+
 const extractNestedErrorText = (source: any): string[] => {
   if (source === null || source === undefined) {
     return [];
@@ -144,6 +156,8 @@ const resetQueries = (
 
 export {
   filterFalsyObjectValues,
+  boolToSearchString,
+  searchStringToBool,
   getGenericSearchQuery,
   getCurrentSearchParams,
   extractNestedErrorText,

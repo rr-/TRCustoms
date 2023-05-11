@@ -26,6 +26,8 @@ const getLevelSearchQuery = (
   ratings: [],
   authors: [userId],
   isApproved: isLoggedIn ? null : true,
+  videoWalkthroughs: null,
+  textWalkthroughs: null,
 });
 
 const getReviewSearchQuery = (userId: number): ReviewSearchQuery => ({

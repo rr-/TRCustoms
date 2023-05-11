@@ -12,6 +12,7 @@ class WalkthroughAdmin(AuditLogAdminMixin, admin.ModelAdmin):
         "author",
         "level",
         "walkthrough_type",
+        "status",
         "created",
         "last_updated",
     ]

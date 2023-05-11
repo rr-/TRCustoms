@@ -7,6 +7,7 @@ interface GenericFormFieldProps {
   extraInformation?: React.ReactNode | string | undefined;
   required?: boolean | undefined;
   readonly?: boolean | undefined;
+  hideErrors?: boolean | undefined;
 }
 
 interface BaseFormFieldProps extends GenericFormFieldProps {
@@ -19,6 +20,7 @@ const BaseFormField = ({
   label,
   extraInformation,
   children,
+  hideErrors,
 }: BaseFormFieldProps) => {
   return (
     <div className="FormField">
@@ -32,7 +34,7 @@ const BaseFormField = ({
       <div className="FormField--field">
         {children}
         {extraInformation ? <div>{extraInformation}</div> : null}
-        <FormFieldError name={name} />
+        {!hideErrors && <FormFieldError name={name} />}
       </div>
     </div>
   );

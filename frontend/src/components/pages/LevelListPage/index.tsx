@@ -9,6 +9,8 @@ import { usePageMetadata } from "src/contexts/PageMetadataContext";
 import type { LevelSearchQuery } from "src/services/LevelService";
 import { filterFalsyObjectValues } from "src/utils/misc";
 import { getCurrentSearchParams } from "src/utils/misc";
+import { searchStringToBool } from "src/utils/misc";
+import { boolToSearchString } from "src/utils/misc";
 
 const defaultSearchQuery: LevelSearchQuery = {
   page: null,
@@ -22,6 +24,8 @@ const defaultSearchQuery: LevelSearchQuery = {
   durations: [],
   ratings: [],
   isApproved: true,
+  videoWalkthroughs: null,
+  textWalkthroughs: null,
 };
 
 const deserializeSearchQuery = (qp: {
@@ -35,7 +39,9 @@ const deserializeSearchQuery = (qp: {
   durations: (qp.durations?.split(/,/g) || []).map((item) => +item),
   ratings: (qp.ratings?.split(/,/g) || []).map((item) => +item),
   authors: [],
-  isApproved: qp.approved === "1" ? true : qp.approved === "0" ? false : true,
+  isApproved: searchStringToBool(qp.approved) ?? true,
+  videoWalkthroughs: searchStringToBool(qp.video_walkthroughs),
+  textWalkthroughs: searchStringToBool(qp.text_walkthroughs),
   date: qp.date,
 });
 
@@ -53,10 +59,10 @@ const serializeSearchQuery = (
     approved:
       searchQuery.isApproved === true
         ? null
-        : searchQuery.isApproved === false
-        ? "0"
-        : null,
+        : boolToSearchString(searchQuery.isApproved),
     date: searchQuery.date,
+    video_walkthroughs: boolToSearchString(searchQuery.videoWalkthroughs),
+    text_walkthroughs: boolToSearchString(searchQuery.textWalkthroughs),
   });
 
 const LevelListPage = () => {

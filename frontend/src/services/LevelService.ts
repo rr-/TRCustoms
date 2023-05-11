@@ -11,6 +11,7 @@ import { GenericSearchResult } from "src/types";
 import type { RatingClass } from "src/types";
 import { filterFalsyObjectValues } from "src/utils/misc";
 import { getGenericSearchQuery } from "src/utils/misc";
+import { boolToSearchString } from "src/utils/misc";
 
 interface Screenshot {
   id: number;
@@ -93,6 +94,8 @@ interface LevelSearchQuery extends GenericSearchQuery {
   isApproved: boolean | null;
   reviewsMax?: number | undefined | null;
   date?: string;
+  videoWalkthroughs: boolean | null;
+  textWalkthroughs: boolean | null;
 }
 
 interface LevelSearchResult
@@ -112,14 +115,11 @@ const searchLevels = async (
     difficulties: searchQuery.difficulties?.join(","),
     durations: searchQuery.durations?.join(","),
     ratings: searchQuery.ratings?.join(","),
-    is_approved:
-      searchQuery.isApproved === true
-        ? "1"
-        : searchQuery.isApproved === false
-        ? "0"
-        : false,
+    is_approved: boolToSearchString(searchQuery.isApproved),
     reviews_max: searchQuery.reviewsMax,
     date: searchQuery.date,
+    video_walkthroughs: boolToSearchString(searchQuery.videoWalkthroughs),
+    text_walkthroughs: boolToSearchString(searchQuery.textWalkthroughs),
   });
   const response = (await api.get(`${API_URL}/levels/`, {
     params,

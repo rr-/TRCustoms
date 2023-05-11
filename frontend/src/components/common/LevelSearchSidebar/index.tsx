@@ -10,6 +10,7 @@ import { DifficultiesCheckboxes } from "src/components/common/DifficultiesCheckb
 import { DurationsCheckboxes } from "src/components/common/DurationsCheckboxes";
 import { EnginesCheckboxes } from "src/components/common/EnginesCheckboxes";
 import { GenresCheckboxes } from "src/components/common/GenresCheckboxes";
+import { WalkthroughRadioboxes } from "src/components/common/LevelSearchSidebar/WalkthroughRadioboxes";
 import { Link } from "src/components/common/Link";
 import { PermissionGuard } from "src/components/common/PermissionGuard";
 import { RatingsCheckboxes } from "src/components/common/RatingsCheckboxes";
@@ -48,6 +49,8 @@ const convertSearchQueryToFormikValues = (
     difficulties: searchQuery.difficulties,
     durations: searchQuery.durations,
     isApproved: searchQuery.isApproved,
+    videoWalkthroughs: searchQuery.videoWalkthroughs,
+    textWalkthroughs: searchQuery.textWalkthroughs,
     date: searchQuery.date,
   };
 };
@@ -79,6 +82,8 @@ const LevelSearchSidebar = ({
         genres: values.genres,
         engines: values.engines,
         isApproved: values.isApproved,
+        videoWalkthroughs: values.videoWalkthroughs,
+        textWalkthroughs: values.textWalkthroughs,
       });
     },
     [searchQuery, onSearchQueryChange]
@@ -145,6 +150,18 @@ const LevelSearchSidebar = ({
         ...searchQuery,
         page: null,
         difficulties: values,
+      });
+    },
+    [searchQuery, onSearchQueryChange]
+  );
+
+  const handleWalkthroughsChange = useCallback(
+    (videoWalkthroughs: boolean | null, textWalkthroughs: boolean | null) => {
+      onSearchQueryChange({
+        ...searchQuery,
+        page: null,
+        videoWalkthroughs: videoWalkthroughs,
+        textWalkthroughs: textWalkthroughs,
       });
     },
     [searchQuery, onSearchQueryChange]
@@ -282,6 +299,16 @@ const LevelSearchSidebar = ({
                 <DifficultiesCheckboxes
                   value={searchQuery.difficulties}
                   onChange={handleDifficultiesChange}
+                />
+              </Collapsible>
+            </div>
+
+            <div className={styles.section}>
+              <Collapsible storageKey="levelWalkthroughs" title="Walkthroughs">
+                <WalkthroughRadioboxes
+                  videoWalkthroughs={searchQuery.videoWalkthroughs}
+                  textWalkthroughs={searchQuery.textWalkthroughs}
+                  onChange={handleWalkthroughsChange}
                 />
               </Collapsible>
             </div>
