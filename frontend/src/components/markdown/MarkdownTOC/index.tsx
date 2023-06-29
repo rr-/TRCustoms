@@ -1,7 +1,6 @@
 import "./index.css";
 import Slugger from "github-slugger";
-import { all } from "mdast-util-to-hast/lib/traverse";
-import { wrap } from "mdast-util-to-hast/lib/wrap";
+import { all } from "mdast-util-to-hast";
 import { toString } from "mdast-util-to-string";
 import { toc } from "mdast-util-toc";
 import ReactMarkdown from "react-markdown";
@@ -67,7 +66,7 @@ const handlerTOC = (h: any, node: any) => {
     node,
     "div",
     { class: "MarkdownTOC ChildMarginClear" },
-    wrap(all(h, node), true)
+    h.wrap(all(h, node), true)
   );
 };
 

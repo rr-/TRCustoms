@@ -1,4 +1,5 @@
 import { Formik } from "formik";
+import type { FormikHelpers } from "formik";
 import { Form } from "formik";
 import { useCallback } from "react";
 import { FormGrid } from "src/components/common/FormGrid";
@@ -38,6 +39,10 @@ const WalkthroughDraftDisclaimer = ({
   );
 };
 
+interface WalkthroughFormValues {
+  text: string;
+}
+
 interface WalkthroughFormProps {
   level?: LevelNested | undefined;
   walkthrough?: WalkthroughDetails | undefined;
@@ -56,7 +61,10 @@ Example text.`,
   };
 
   const handleSubmitError = useCallback(
-    (error, { setSubmitting, setStatus }) => {
+    (
+      error: unknown,
+      { setSubmitting, setStatus }: FormikHelpers<WalkthroughFormValues>
+    ) => {
       console.error(error);
       const message = extractErrorMessage(error);
       setSubmitting(false);
@@ -66,7 +74,11 @@ Example text.`,
   );
 
   const handleSubmit = useCallback(
-    async (values, { setSubmitting, setStatus, setErrors }) => {
+    async (
+      values: WalkthroughFormValues,
+      helpers: FormikHelpers<WalkthroughFormValues>
+    ) => {
+      const { setStatus } = helpers;
       setStatus({});
       try {
         if (walkthrough?.id) {
@@ -116,7 +128,7 @@ Example text.`,
           });
         }
       } catch (error) {
-        handleSubmitError(error, { setSubmitting, setStatus, setErrors });
+        handleSubmitError(error, helpers);
       }
     },
     [level, walkthrough, handleSubmitError]

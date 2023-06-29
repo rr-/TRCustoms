@@ -1,5 +1,6 @@
 import { AxiosError } from "axios";
 import axios from "axios";
+import type { FormikHelpers } from "formik";
 import { Formik } from "formik";
 import { Form } from "formik";
 import { useContext } from "react";
@@ -54,11 +55,26 @@ interface UserFormProps {
   onSubmit?: ((user: UserDetails, password: string | null) => void) | undefined;
 }
 
+interface UserFormValues {
+  username: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  oldPassword: string;
+  password: string;
+  password2: string;
+  bio: string;
+  pictureId: number | undefined;
+  countryCode: string;
+  websiteUrl: string;
+  donationUrl: string;
+}
+
 const UserForm = ({ user, onGoBack, onSubmit }: UserFormProps) => {
   const { config } = useContext(ConfigContext);
   const { setUser } = useContext(UserContext);
 
-  const initialValues = {
+  const initialValues: UserFormValues = {
     username: user?.username || "",
     firstName: user?.first_name || "",
     lastName: user?.last_name || "",
@@ -68,13 +84,16 @@ const UserForm = ({ user, onGoBack, onSubmit }: UserFormProps) => {
     password2: "",
     bio: user?.bio || "",
     pictureId: user?.picture?.id || undefined,
-    countryCode: user?.country?.code || undefined,
+    countryCode: user?.country?.code || "",
     websiteUrl: user?.website_url || "",
     donationUrl: user?.donation_url || "",
   };
 
   const handleSubmitError = useCallback(
-    (error, { setSubmitting, setStatus, setErrors }) => {
+    (
+      error: unknown,
+      { setSubmitting, setStatus, setErrors }: FormikHelpers<UserFormValues>
+    ) => {
       setSubmitting(false);
       if (axios.isAxiosError(error)) {
         const axiosError = error as AxiosError;
@@ -110,7 +129,8 @@ const UserForm = ({ user, onGoBack, onSubmit }: UserFormProps) => {
   );
 
   const handleSubmit = useCallback(
-    async (values, { setSubmitting, setStatus, setErrors }) => {
+    async (values: UserFormValues, helpers: FormikHelpers<UserFormValues>) => {
+      const { setStatus } = helpers;
       setStatus({});
       try {
         const payload = {
@@ -159,7 +179,7 @@ const UserForm = ({ user, onGoBack, onSubmit }: UserFormProps) => {
           onSubmit?.(outUser, values.password);
         }
       } catch (error) {
-        handleSubmitError(error, { setSubmitting, setStatus, setErrors });
+        handleSubmitError(error, helpers);
       }
     },
     [user, setUser, onSubmit, handleSubmitError]

@@ -147,7 +147,7 @@ interface FilePickerProps {
   uploadType: UploadType;
   label?: React.ReactNode | undefined;
   fileIds?: number[] | undefined;
-  onError?: ((error: any) => void) | undefined;
+  onError?: ((error: unknown) => void) | undefined;
   onChange?: ((fileIds: number[]) => void) | undefined;
   allowMultiple?: boolean | undefined;
   allowClear: boolean;
@@ -174,7 +174,7 @@ const FilePicker = ({
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   const clearFile = useCallback(
-    (fileId) => {
+    (fileId: number) => {
       setErrorMessage(null);
       const newFileIds = [...currentFileIds.filter((id) => id !== fileId)];
       setCurrentFileIds(newFileIds);
@@ -196,7 +196,7 @@ const FilePicker = ({
   };
 
   const handleUploadError = useCallback(
-    (error: any) => {
+    (error: unknown) => {
       setErrorMessage(extractErrorMessage(error));
     },
     [setErrorMessage]

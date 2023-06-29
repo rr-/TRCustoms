@@ -1,6 +1,7 @@
 import "./index.css";
 import { AxiosError } from "axios";
 import axios from "axios";
+import type { FormikHelpers } from "formik";
 import { useFormikContext } from "formik";
 import { Formik } from "formik";
 import { Form } from "formik";
@@ -35,6 +36,11 @@ interface ReviewFormProps {
   review?: ReviewDetails | null | undefined;
   onGoBack?: (() => void) | undefined;
   onSubmit?: ((review: ReviewDetails) => void) | undefined;
+}
+
+interface ReviewFormValues {
+  text: string;
+  answers: Record<string, number | null>;
 }
 
 interface ReviewQuestionFormFieldProps {
@@ -90,7 +96,7 @@ const ReviewQuestionFormField = ({
 const ReviewForm = ({ level, review, onGoBack, onSubmit }: ReviewFormProps) => {
   const queryClient = useQueryClient();
   const { config } = useContext(ConfigContext);
-  const initialValues = {
+  const initialValues: ReviewFormValues = {
     text: review?.text || "",
     answers: Object.fromEntries(
       config.review_questions.map((templateQuestion) => [
@@ -105,22 +111,25 @@ const ReviewForm = ({ level, review, onGoBack, onSubmit }: ReviewFormProps) => {
   };
 
   const validate = (values: { [key: string]: any }) => {
-    const errors: { answers: string[] } = { answers: [] };
+    const errors: Record<string, string> = {};
 
     for (let templateQuestion of config.review_questions) {
       const validator = validateRequired;
       const value = values.answers?.[templateQuestion.id];
       const error = validator(value);
       if (error) {
-        errors.answers[templateQuestion.id] = makeSentence(error);
+        errors[templateQuestion.id] = makeSentence(error);
       }
     }
 
-    return errors;
+    return Object.keys(errors).length ? { answers: errors } : {};
   };
 
   const handleSubmitError = useCallback(
-    (error, { setSubmitting, setStatus, setErrors }) => {
+    (
+      error: unknown,
+      { setSubmitting, setStatus, setErrors }: FormikHelpers<ReviewFormValues>
+    ) => {
       setSubmitting(false);
       if (axios.isAxiosError(error)) {
         const axiosError = error as AxiosError;
@@ -133,7 +142,7 @@ const ReviewForm = ({ level, review, onGoBack, onSubmit }: ReviewFormProps) => {
           answers: extractNestedErrorText(data?.answer_ids),
         };
         if (Object.keys(filterFalsyObjectValues(errors)).length) {
-          setErrors(errors);
+          setErrors(errors as any);
         } else {
           console.error(error);
           setStatus({ error: <>Unknown error.</> });
@@ -147,7 +156,11 @@ const ReviewForm = ({ level, review, onGoBack, onSubmit }: ReviewFormProps) => {
   );
 
   const handleSubmit = useCallback(
-    async (values, { setSubmitting, setStatus, setErrors }) => {
+    async (
+      values: ReviewFormValues,
+      helpers: FormikHelpers<ReviewFormValues>
+    ) => {
+      const { setStatus } = helpers;
       setStatus({});
       try {
         const payload = {
@@ -185,7 +198,7 @@ const ReviewForm = ({ level, review, onGoBack, onSubmit }: ReviewFormProps) => {
           });
         }
       } catch (error) {
-        handleSubmitError(error, { setSubmitting, setStatus, setErrors });
+        handleSubmitError(error, helpers);
       }
     },
     [level, review, onSubmit, handleSubmitError, queryClient]

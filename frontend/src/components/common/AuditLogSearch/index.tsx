@@ -194,7 +194,7 @@ const AuditLogSearch = ({
   );
 
   const handleClear = useCallback(
-    async (resetForm) => {
+    async (resetForm: () => void) => {
       onSearchQueryChange(defaultSearchQuery);
       resetForm();
     },

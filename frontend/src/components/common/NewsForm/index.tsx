@@ -1,5 +1,6 @@
 import { AxiosError } from "axios";
 import axios from "axios";
+import type { FormikHelpers } from "formik";
 import { Formik } from "formik";
 import { Form } from "formik";
 import { useContext } from "react";
@@ -27,16 +28,24 @@ interface NewsFormProps {
   onSubmit?: ((news: NewsDetails) => void) | undefined;
 }
 
+interface NewsFormValues {
+  subject: string;
+  text: string;
+}
+
 const NewsForm = ({ news, onGoBack, onSubmit }: NewsFormProps) => {
   const { config } = useContext(ConfigContext);
   const queryClient = useQueryClient();
-  const initialValues = {
+  const initialValues: NewsFormValues = {
     subject: news?.subject || "",
     text: news?.text || "",
   };
 
   const handleSubmitError = useCallback(
-    (error, { setSubmitting, setStatus, setErrors }) => {
+    (
+      error: unknown,
+      { setSubmitting, setStatus, setErrors }: FormikHelpers<NewsFormValues>
+    ) => {
       setSubmitting(false);
       if (axios.isAxiosError(error)) {
         const axiosError = error as AxiosError;
@@ -63,7 +72,8 @@ const NewsForm = ({ news, onGoBack, onSubmit }: NewsFormProps) => {
   );
 
   const handleSubmit = useCallback(
-    async (values, { setSubmitting, setStatus, setErrors }) => {
+    async (values: NewsFormValues, helpers: FormikHelpers<NewsFormValues>) => {
+      const { setStatus } = helpers;
       setStatus({});
       try {
         const payload = {
@@ -99,7 +109,7 @@ const NewsForm = ({ news, onGoBack, onSubmit }: NewsFormProps) => {
           });
         }
       } catch (error) {
-        handleSubmitError(error, { setSubmitting, setStatus, setErrors });
+        handleSubmitError(error, helpers);
       }
     },
     [news, onSubmit, handleSubmitError, queryClient]

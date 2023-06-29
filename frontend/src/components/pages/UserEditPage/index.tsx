@@ -31,7 +31,7 @@ const UserEditPageView = ({ userId }: UserEditViewProps) => {
   );
 
   const handleSubmit = useCallback(
-    (outUser, password) => {
+    (outUser: UserDetails, password: string | null) => {
       if (outUser.id === userContext.user.id) {
         userContext.setUser(outUser);
       }

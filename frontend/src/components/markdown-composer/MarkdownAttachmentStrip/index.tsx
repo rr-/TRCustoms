@@ -35,7 +35,7 @@ const MarkdownAttachmentStrip = ({
     );
   };
 
-  const handleUploadError = (error: Error | null) => {
+  const handleUploadError = (error: unknown) => {
     const message = extractErrorMessage(error);
     if (message) {
       alert(message);

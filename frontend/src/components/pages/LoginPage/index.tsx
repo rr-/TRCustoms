@@ -1,5 +1,6 @@
 import { AxiosError } from "axios";
 import axios from "axios";
+import type { FormikHelpers } from "formik";
 import { Formik } from "formik";
 import { Form } from "formik";
 import { useCallback } from "react";
@@ -20,12 +21,21 @@ import { UserService } from "src/services/UserService";
 import { filterFalsyObjectValues } from "src/utils/misc";
 import { makeSentence } from "src/utils/string";
 
+interface LoginFormValues {
+  username: string;
+  password: string;
+}
+
 const LoginPage = () => {
   const navigate = useNavigate();
   const { setUser } = useContext(UserContext);
+  const initialValues: LoginFormValues = { username: "", password: "" };
 
   const handleSubmit = useCallback(
-    async (values, { setSubmitting, setStatus, setErrors }) => {
+    async (
+      values: LoginFormValues,
+      { setSubmitting, setStatus, setErrors }: FormikHelpers<LoginFormValues>
+    ) => {
       setStatus({});
       try {
         await AuthService.login(values.username, values.password);
@@ -79,10 +89,7 @@ const LoginPage = () => {
 
   return (
     <PlainLayout header="Login">
-      <Formik
-        initialValues={{ username: "", password: "" }}
-        onSubmit={handleSubmit}
-      >
+      <Formik initialValues={initialValues} onSubmit={handleSubmit}>
         {({ isSubmitting, status }) => (
           <Form>
             <FormGrid>

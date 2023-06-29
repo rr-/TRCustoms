@@ -135,17 +135,17 @@ const getLevelById = async (levelId: number): Promise<LevelDetails> => {
 };
 
 interface LevelBaseChangePayload {
-  name: string;
-  description: string;
-  engine_id: number;
-  duration_id: number;
-  difficulty_id: number;
-  genre_ids: number[];
-  tag_ids: number[];
-  author_ids: number[];
-  cover_id: number;
-  screenshot_ids: number[];
-  file_id?: number | undefined;
+  name?: string;
+  description?: string;
+  engine_id?: number;
+  duration_id?: number;
+  difficulty_id?: number;
+  genre_ids?: number[];
+  tag_ids?: number[];
+  author_ids?: number[];
+  cover_id?: number;
+  screenshot_ids?: number[];
+  file_id?: number;
 }
 
 interface LevelUpdatePayload extends LevelBaseChangePayload {}

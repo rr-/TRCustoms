@@ -1,3 +1,4 @@
+import type { FormikHelpers } from "formik";
 import { Formik } from "formik";
 import { Form } from "formik";
 import { useState } from "react";
@@ -13,11 +14,18 @@ import { makeSentence } from "src/utils/string";
 import { validateEmail } from "src/utils/validation";
 import { validateRequired } from "src/utils/validation";
 
+interface PasswordResetFormValues {
+  email: string;
+}
+
 const PasswordResetPage = () => {
   const [isComplete, setIsComplete] = useState(false);
 
   const handleSubmit = useCallback(
-    async (values, { setSubmitting, setStatus }) => {
+    async (
+      values: PasswordResetFormValues,
+      { setSubmitting, setStatus }: FormikHelpers<PasswordResetFormValues>
+    ) => {
       setStatus({});
       try {
         await UserService.requestPasswordReset(values.email);
@@ -40,7 +48,7 @@ const PasswordResetPage = () => {
     []
   );
 
-  const validate = (values: { [key: string]: any }) => {
+  const validate = (values: Record<string, any>) => {
     const errors: {
       [key: string]: string | null;
     } = {};
