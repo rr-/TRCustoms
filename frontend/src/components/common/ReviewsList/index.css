@@ -74,8 +74,9 @@
   align-items: center;
   gap: 0.5rem 2rem;
   flex-grow: 1;
+  flex-wrap: wrap;
 }
-@media (max-device-width: 500px) {
+@media (max-device-width: 800px) {
   .Review--footerInfo {
     flex-direction: column;
     align-items: flex-start;

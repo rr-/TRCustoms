@@ -52,7 +52,7 @@ const UserPageView = ({ user, isLoggedIn }: UserBasePageChildRenderProps) => {
 
   return (
     <>
-      <Section className="UserPage--basicInfo ChildMarginClear">
+      <Section>
         <SectionHeader>About</SectionHeader>
         {user.is_active && user.bio ? (
           <Markdown>{user.bio}</Markdown>
@@ -61,7 +61,8 @@ const UserPageView = ({ user, isLoggedIn }: UserBasePageChildRenderProps) => {
         )}
       </Section>
 
-      <Section className="UserPage--authoredLevels">
+      <Section>
+        <div className="Anchor--userAuthoredLevels" />
         <SectionHeader>Levels authored</SectionHeader>
         <LevelList
           showStatus={isLoggedIn}
@@ -70,7 +71,8 @@ const UserPageView = ({ user, isLoggedIn }: UserBasePageChildRenderProps) => {
         />
       </Section>
 
-      <Section className="UserPage--reviewedLevels">
+      <Section>
+        <div className="Anchor--userReviewedLevels" />
         <SectionHeader>Reviews posted</SectionHeader>
         <ReviewsList
           showLevels={true}

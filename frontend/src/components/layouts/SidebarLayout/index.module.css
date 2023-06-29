@@ -1,0 +1,32 @@
+.wrapper {
+  display: grid;
+  gap: 1rem 1.5rem;
+}
+.wrapper.normal {
+  grid-template-columns: minmax(300px, 25%) 1fr;
+}
+.wrapper.stacked {
+  grid-template-columns: 25%) 1fr;
+}
+
+.wrapper.normal .header {
+  grid-column: span 2;
+}
+
+.headerText {
+  margin: 0;
+  font-size: 2rem;
+  line-height: 2.5rem;
+}
+.subheaderText {
+  margin: 0.5rem 0 0 0;
+}
+
+@media (max-device-width: 640px) {
+  .wrapper {
+    grid-template-columns: 1fr;
+  }
+  .header {
+    grid-column: 1;
+  }
+}

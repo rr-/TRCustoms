@@ -6,7 +6,7 @@
 }
 
 .SectionHeader {
-  margin: 2rem 0 0.5rem 0;
+  margin: 0 0 0.5rem 0;
   border-bottom: 2px solid var(--section-border-color);
 }
 .SectionHeader + p {

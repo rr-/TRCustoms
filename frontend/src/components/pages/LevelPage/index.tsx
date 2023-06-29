@@ -1,4 +1,3 @@
-import "./index.css";
 import { useState } from "react";
 import { useQuery } from "react-query";
 import { useParams } from "react-router-dom";
@@ -11,6 +10,7 @@ import { ReviewsList } from "src/components/common/ReviewsList";
 import { Section } from "src/components/common/Section";
 import { SectionHeader } from "src/components/common/Section";
 import { SmartWrap } from "src/components/common/SmartWrap";
+import { SidebarLayout } from "src/components/layouts/SidebarLayout";
 import { Markdown } from "src/components/markdown/Markdown";
 import { DISABLE_PAGING } from "src/constants";
 import { usePageMetadata } from "src/contexts/PageMetadataContext";
@@ -71,63 +71,54 @@ const LevelPage = () => {
     .map((link) => link.url);
 
   return (
-    <div className="LevelPage">
-      <header className="LevelPage--header">
-        <h1 className="LevelPage--headerWrapper">
-          <SmartWrap text={level.name} />
-        </h1>
-      </header>
-
-      <aside className="LevelPage--sidebar">
-        <LevelSidebar level={level} reviewCount={reviewCount} />
-      </aside>
-
-      <div className="LevelPage--main">
-        {level.is_approved || (
-          <InfoMessage type={InfoMessageType.Warning}>
-            {level.rejection_reason ? (
-              <>
-                This level was rejected by staff. Reason:{" "}
-                {level.rejection_reason}
-              </>
-            ) : (
-              <>This level is currently pending approval.</>
-            )}
-          </InfoMessage>
-        )}
-
-        {!!level.screenshots.length && (
-          <Section className="LevelPage--media">
-            <MediumThumbnails
-              displayMode={DisplayMode.Contain}
-              files={level.screenshots
-                .filter((screenshot) => !!screenshot.file)
-                .map((screenshot) => screenshot.file as UploadedFile)}
-              links={showcaseLinks}
-            />
-          </Section>
-        )}
-
-        <Section className="LevelPage--basicInfo">
-          <SectionHeader>About the game</SectionHeader>
-          {level.description ? (
-            <Markdown>{level.description}</Markdown>
+    <SidebarLayout
+      header={<SmartWrap text={level.name} />}
+      sidebar={<LevelSidebar level={level} reviewCount={reviewCount} />}
+    >
+      {level.is_approved || (
+        <InfoMessage type={InfoMessageType.Warning}>
+          {level.rejection_reason ? (
+            <>
+              This level was rejected by staff. Reason: {level.rejection_reason}
+            </>
           ) : (
-            <p>This level has no description yet.</p>
+            <>This level is currently pending approval.</>
           )}
-        </Section>
+        </InfoMessage>
+      )}
 
-        <Section className="LevelPage--reviews">
-          <SectionHeader>Reviews</SectionHeader>
-          <ReviewsList
-            showLevels={false}
-            searchQuery={reviewsSearchQuery}
-            onResultCountChange={setReviewCount}
-            onSearchQueryChange={setReviewsSearchQuery}
+      {false && !!level.screenshots.length && (
+        <Section>
+          <MediumThumbnails
+            displayMode={DisplayMode.Contain}
+            files={level.screenshots
+              .filter((screenshot) => !!screenshot.file)
+              .map((screenshot) => screenshot.file as UploadedFile)}
+            links={showcaseLinks}
           />
         </Section>
-      </div>
-    </div>
+      )}
+
+      <Section>
+        <SectionHeader>About the game</SectionHeader>
+        {level.description ? (
+          <Markdown>{level.description}</Markdown>
+        ) : (
+          <p>This level has no description yet.</p>
+        )}
+      </Section>
+
+      <Section>
+        <div className="Anchor--levelReviews" />
+        <SectionHeader>Reviews</SectionHeader>
+        <ReviewsList
+          showLevels={false}
+          searchQuery={reviewsSearchQuery}
+          onResultCountChange={setReviewCount}
+          onSearchQueryChange={setReviewsSearchQuery}
+        />
+      </Section>
+    </SidebarLayout>
   );
 };
 

@@ -1,5 +1,5 @@
-import styles from "./index.module.css";
 import { ReviewSearchSidebar } from "src/components/common/ReviewSearchSidebar";
+import { SidebarLayout } from "src/components/layouts/SidebarLayout";
 
 interface ReviewBasePageProps {
   children: React.ReactNode;
@@ -7,12 +7,7 @@ interface ReviewBasePageProps {
 
 const ReviewBasePage = ({ children }: ReviewBasePageProps) => {
   return (
-    <div className={styles.wrapper}>
-      <div className={styles.sidebar}>
-        <ReviewSearchSidebar />
-      </div>
-      <div className={styles.main}>{children}</div>
-    </div>
+    <SidebarLayout sidebar={<ReviewSearchSidebar />}>{children}</SidebarLayout>
   );
 };
 

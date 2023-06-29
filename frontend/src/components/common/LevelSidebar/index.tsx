@@ -53,7 +53,7 @@ const LevelSidebar = ({ level, reviewCount }: LevelSidebarProps) => {
 
   const handleReviewCountClick = () => {
     document
-      .querySelector(".LevelPage--reviews")
+      .querySelector(".Anchor--levelReviews")
       ?.scrollIntoView({ behavior: "smooth" });
   };
 
