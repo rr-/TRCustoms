@@ -1,7 +1,22 @@
-import { ChevronDownIcon } from "@heroicons/react/outline";
-
 const IconChevronDown = () => {
-  return <ChevronDownIcon className="Icon" />;
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      className="Icon"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+    >
+      <path
+        fill="none"
+        stroke="currentColor"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="2"
+        d="m19 9l-7 7l-7-7"
+      />
+    </svg>
+  );
 };
 
 export { IconChevronDown };
