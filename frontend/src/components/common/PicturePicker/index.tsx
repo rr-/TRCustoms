@@ -8,7 +8,7 @@ interface PicturePickerProps {
   label?: React.ReactNode | undefined;
   uploadType: UploadType;
   fileIds?: number[] | undefined;
-  onError?: ((error: any) => void) | undefined;
+  onError?: ((error: unknown) => void) | undefined;
   onChange?: ((fileIds: number[]) => void) | undefined;
   allowMultiple?: boolean | undefined;
   allowClear: boolean;

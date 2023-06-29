@@ -1,3 +1,4 @@
+import type { FormikHelpers } from "formik";
 import { Formik } from "formik";
 import { Form } from "formik";
 import { useState } from "react";
@@ -20,12 +21,25 @@ interface PasswordResetFinishPageParams {
   token: string;
 }
 
+interface PasswordResetFinishFormValues {
+  password: string;
+  password2: string;
+}
+
 const PasswordResetFinishPage = () => {
   const { token } = (useParams() as unknown) as PasswordResetFinishPageParams;
   const [isComplete, setIsComplete] = useState(false);
 
+  const initialValues: PasswordResetFinishFormValues = {
+    password: "",
+    password2: "",
+  };
+
   const handleSubmit = useCallback(
-    async (values, { setSubmitting, setStatus }) => {
+    async (
+      values: PasswordResetFinishFormValues,
+      { setSubmitting, setStatus }: FormikHelpers<PasswordResetFinishFormValues>
+    ) => {
       setStatus({});
       try {
         await UserService.completePasswordReset(values.password, token);
@@ -79,7 +93,7 @@ const PasswordResetFinishPage = () => {
         </>
       ) : (
         <Formik
-          initialValues={{ password: "", password2: "" }}
+          initialValues={initialValues}
           validate={validate}
           onSubmit={handleSubmit}
         >

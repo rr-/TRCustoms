@@ -13,7 +13,7 @@ interface FileUploaderProps {
   allowMultiple?: boolean | undefined;
   disableProgressbar?: boolean | undefined;
   onUploadFinish?: ((uploadedFiles: UploadedFile[]) => void) | undefined;
-  onUploadError?: ((error: any) => void) | undefined;
+  onUploadError?: ((error: unknown) => void) | undefined;
   onUploadPercentChange?: ((percent: number | null) => void) | undefined;
   label?: React.ReactNode | undefined;
 }
@@ -33,7 +33,7 @@ const FileUploader = ({
   const isUploading = percentCompleted !== null;
 
   const handleError = useCallback(
-    (error) => {
+    (error: unknown) => {
       onUploadError?.(error);
     },
     [onUploadError]

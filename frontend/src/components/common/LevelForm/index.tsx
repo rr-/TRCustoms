@@ -1,5 +1,6 @@
 import { AxiosError } from "axios";
 import axios from "axios";
+import type { FormikHelpers } from "formik";
 import { Formik } from "formik";
 import { Form } from "formik";
 import { useRef } from "react";
@@ -75,12 +76,28 @@ const UploadDisclaimer = () => {
   );
 };
 
+interface LevelFormValues {
+  name: string;
+  description: string;
+  genres: GenreNested[];
+  external_links: ExternalLink[];
+  authors: UserNested[];
+  tags: TagNested[];
+  engine_id: number | undefined;
+  difficulty_id: number | undefined;
+  duration_id: number | undefined;
+  cover_id: number | undefined;
+  screenshot_ids: number[];
+  file_id: number | undefined;
+}
+
 const LevelForm = ({ level, onGoBack, onSubmit }: LevelFormProps) => {
   const formikRef = useRef<any>();
   const { user } = useContext(UserContext);
   const queryClient = useQueryClient();
   const { config } = useContext(ConfigContext);
-  const initialValues = {
+
+  const initialValues: LevelFormValues = {
     name: level?.name || "",
     description: level?.description || "",
     genres: level ? [...level.genres] : [],
@@ -98,7 +115,7 @@ const LevelForm = ({ level, onGoBack, onSubmit }: LevelFormProps) => {
             .map((screenshot) => (screenshot.file as UploadedFile).id),
         ]
       : [],
-    file_id: null,
+    file_id: undefined,
   };
 
   const validateGenres = (value: number[]): string | null => {
@@ -155,7 +172,10 @@ const LevelForm = ({ level, onGoBack, onSubmit }: LevelFormProps) => {
   };
 
   const handleSubmitError = useCallback(
-    (error, { setSubmitting, setStatus, setErrors }) => {
+    (
+      error: unknown,
+      { setSubmitting, setStatus, setErrors }: FormikHelpers<LevelFormValues>
+    ) => {
       setSubmitting(false);
       if (axios.isAxiosError(error)) {
         const axiosError = error as AxiosError;
@@ -192,7 +212,11 @@ const LevelForm = ({ level, onGoBack, onSubmit }: LevelFormProps) => {
   );
 
   const handleSubmit = useCallback(
-    async (values, { setSubmitting, setStatus, setErrors }) => {
+    async (
+      values: LevelFormValues,
+      helpers: FormikHelpers<LevelFormValues>
+    ) => {
+      const { setStatus } = helpers;
       setStatus({});
       try {
         const payload = {
@@ -232,7 +256,7 @@ const LevelForm = ({ level, onGoBack, onSubmit }: LevelFormProps) => {
           onSubmit?.(outLevel);
         }
       } catch (error) {
-        handleSubmitError(error, { setSubmitting, setStatus, setErrors });
+        handleSubmitError(error, helpers);
       }
     },
     [level, onSubmit, handleSubmitError, queryClient]

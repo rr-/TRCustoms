@@ -6,7 +6,7 @@ interface FormFieldErrorProps {
 
 const FormFieldError = ({ name }: FormFieldErrorProps) => (
   <ErrorMessage name={name}>
-    {(msg) => <div className="FormFieldError">{msg}</div>}
+    {(msg: any) => <div className="FormFieldError">{msg}</div>}
   </ErrorMessage>
 );
 
