@@ -1,7 +1,7 @@
-import { XIcon } from "@heroicons/react/outline";
+import { IconX } from "../IconX";
 
 const IconReject = () => {
-  return <XIcon className="Icon" />;
+  return <IconX />;
 };
 
 export { IconReject };
