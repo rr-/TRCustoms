@@ -1,4 +1,4 @@
-import "./index.css";
+import styles from "./index.module.css";
 import { useFormikContext } from "formik";
 import { Field } from "formik";
 import { TabSwitch } from "src/components/common/TabSwitch";
@@ -25,7 +25,7 @@ const TextAreaFormFieldTabbed = ({
   const { values } = useFormikContext();
   return (
     <BaseFormField name={name} readonly={readonly} {...props}>
-      <div className="TextAreaFormField tabbed">
+      <div className={`${styles.wrapper} ${styles.tabbed}`}>
         <TabSwitch
           tabs={[
             {
@@ -43,11 +43,9 @@ const TextAreaFormFieldTabbed = ({
             {
               label: "Preview",
               content: (
-                <div className="TextAreaFormField--preview">
-                  <div className="TextAreaFormField--previewHeader">
-                    Preview
-                  </div>
-                  <div className="TextAreaFormField--previewBody">
+                <div className={styles.header}>
+                  <div className={styles.previewHeader}>Preview</div>
+                  <div className={styles.previewBody}>
                     <Markdown>{(values as any)[name]}</Markdown>
                   </div>
                 </div>
@@ -70,7 +68,7 @@ const TextAreaFormFieldSide = ({
   const { values } = useFormikContext();
   return (
     <BaseFormField name={name} readonly={readonly} {...props}>
-      <div className="TextAreaFormField sideBySide">
+      <div className={`${styles.wrapper} ${styles.sideBySide}`}>
         <Field
           name={name}
           validate={validate}
@@ -78,9 +76,9 @@ const TextAreaFormFieldSide = ({
           allowAttachments={allowAttachments}
           component={MarkdownComposer}
         />
-        <div className="TextAreaFormField--preview">
-          <div className="TextAreaFormField--previewHeader">Preview</div>
-          <div className="TextAreaFormField--previewBody">
+        <div className={styles.preview}>
+          <div className={styles.previewHeader}>Preview</div>
+          <div className={styles.previewBody}>
             <Markdown>{(values as any)[name]}</Markdown>
           </div>
         </div>
@@ -98,7 +96,7 @@ const TextAreaFormFieldPlain = ({
 }: TextAreaFormFieldProps) => {
   return (
     <BaseFormField name={name} readonly={readonly} {...props}>
-      <div className="TextAreaFormField plain">
+      <div className={`${styles.wrapper} ${styles.plain}`}>
         <Field
           name={name}
           validate={validate}

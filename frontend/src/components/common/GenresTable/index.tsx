@@ -1,4 +1,4 @@
-import "./index.css";
+import styles from "./index.module.css";
 import { useQuery } from "react-query";
 import type { DataTableColumn } from "src/components/common/DataTable";
 import { DataTable } from "src/components/common/DataTable";
@@ -67,7 +67,7 @@ const GenresTable = ({
       ),
     },
     {
-      name: "level-count",
+      name: "levelCount",
       sortKey: "level_count",
       label: "Usages",
       itemElement: ({ item }) => `${item.level_count}`,
@@ -90,7 +90,7 @@ const GenresTable = ({
 
   return (
     <DataTable
-      className="GenresTable"
+      className={styles.table}
       queryName="genres"
       columns={columns}
       itemKey={itemKey}

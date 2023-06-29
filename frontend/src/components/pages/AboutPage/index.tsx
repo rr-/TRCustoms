@@ -112,7 +112,7 @@ const AboutPage = () => {
 
   return (
     <PlainLayout>
-      <NestedLegalese entry={About} />
+      <NestedLegalese prefix="about" entry={About} />
     </PlainLayout>
   );
 };

@@ -1,10 +1,11 @@
-import "./index.css";
+import styles from "./index.module.css";
 import { useState } from "react";
 import { LevelList } from "src/components/common/LevelList";
 import { LevelSearchSidebar } from "src/components/common/LevelSearchSidebar";
 import { QueryPersister } from "src/components/common/QueryPersister";
 import { deserializeGenericSearchQuery } from "src/components/common/QueryPersister";
 import { serializeGenericSearchQuery } from "src/components/common/QueryPersister";
+import { SidebarLayout } from "src/components/layouts/SidebarLayout";
 import { usePageMetadata } from "src/contexts/PageMetadataContext";
 import type { LevelSearchQuery } from "src/services/LevelService";
 import { filterFalsyObjectValues } from "src/utils/misc";
@@ -80,28 +81,29 @@ const LevelListPage = () => {
     []
   );
 
-  return (
-    <div className="LevelListPage">
-      <QueryPersister
-        serializeSearchQuery={serializeSearchQuery}
-        deserializeSearchQuery={deserializeSearchQuery}
-        searchQuery={searchQuery}
-        setSearchQuery={setSearchQuery}
-      />
-      <div className="LevelListPage--sidebar">
-        <LevelSearchSidebar
-          defaultSearchQuery={defaultSearchQuery}
-          searchQuery={searchQuery}
-          onSearchQueryChange={setSearchQuery}
-        />
-      </div>
+  const sidebar = (
+    <LevelSearchSidebar
+      defaultSearchQuery={defaultSearchQuery}
+      searchQuery={searchQuery}
+      onSearchQueryChange={setSearchQuery}
+    />
+  );
 
-      <div className="LevelListPage--results">
+  return (
+    <div className={styles.wrapper}>
+      <SidebarLayout sidebar={sidebar}>
+        <QueryPersister
+          serializeSearchQuery={serializeSearchQuery}
+          deserializeSearchQuery={deserializeSearchQuery}
+          searchQuery={searchQuery}
+          setSearchQuery={setSearchQuery}
+        />
+
         <LevelList
           searchQuery={searchQuery}
           onSearchQueryChange={setSearchQuery}
         />
-      </div>
+      </SidebarLayout>
     </div>
   );
 };

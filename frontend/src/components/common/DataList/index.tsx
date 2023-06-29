@@ -1,4 +1,4 @@
-import "./index.css";
+import styles from "./index.module.css";
 import { useRef } from "react";
 import { Fragment } from "react";
 import { useEffect } from "react";
@@ -17,6 +17,7 @@ interface DataListProps<TItem, TQuery> {
   queryName: string;
   itemKey: (item: TItem) => string;
   itemView: (item: TItem) => React.ReactNode;
+  pageView?: (children: React.ReactNode) => React.ReactNode;
 
   searchQuery: TQuery;
   searchFunc: (
@@ -27,6 +28,11 @@ interface DataListProps<TItem, TQuery> {
   onSearchQueryChange?: ((searchQuery: TQuery) => void) | undefined;
 }
 
+interface ConcreteDataListProps<TItem, TQuery>
+  extends DataListProps<TItem, TQuery> {
+  pageView: (children: React.ReactNode) => React.ReactNode;
+}
+
 const PagedDataList = <TItem extends {}, TQuery extends GenericSearchQuery>({
   className,
   searchQuery,
@@ -35,8 +41,9 @@ const PagedDataList = <TItem extends {}, TQuery extends GenericSearchQuery>({
   onSearchQueryChange,
   itemKey,
   itemView,
+  pageView,
   queryName,
-}: DataListProps<TItem, TQuery>) => {
+}: ConcreteDataListProps<TItem, TQuery>) => {
   const result = useQuery<GenericSearchResult<TQuery, TItem>, Error>(
     [queryName, searchFunc, searchQuery],
     async () => searchFunc(searchQuery)
@@ -55,13 +62,13 @@ const PagedDataList = <TItem extends {}, TQuery extends GenericSearchQuery>({
   }
 
   return (
-    <div className={`DataList ChildMarginClear ${className || ""}`}>
+    <div className={`ChildMarginClear ${className || ""}`}>
       {result.data.results.length ? (
-        <div className="DataList--body">
-          {result.data.results.map((item) => (
+        pageView(
+          result.data.results.map((item) => (
             <Fragment key={itemKey(item)}>{itemView(item)}</Fragment>
-          ))}
-        </div>
+          ))
+        )
       ) : (
         <p>There are no results to show.</p>
       )}
@@ -87,8 +94,9 @@ const InfiniteDataList = <TItem extends {}, TQuery extends GenericSearchQuery>({
   onResultCountChange,
   itemKey,
   itemView,
+  pageView,
   queryName,
-}: DataListProps<TItem, TQuery>) => {
+}: ConcreteDataListProps<TItem, TQuery>) => {
   const result = useInfiniteQuery<GenericSearchResult<TQuery, TItem>, Error>(
     [queryName, searchQuery],
     async ({ pageParam }) => {
@@ -131,20 +139,20 @@ const InfiniteDataList = <TItem extends {}, TQuery extends GenericSearchQuery>({
   }, [onResultCountChange, result]);
 
   return (
-    <div className={`DataList ChildMarginClear ${className}`}>
+    <div className={`ChildMarginClear ${className}`}>
       {result.data?.pages?.[0]?.total_count === 0 && (
         <p>There are no results to show.</p>
       )}
 
-      <div className="DataList--body">
-        {result.data?.pages?.map((result, i) => (
-          <div key={`body${i}`} className="DataList--page">
+      {pageView(
+        result.data?.pages?.map((result, i) => (
+          <div key={`body${i}`} className={styles.page}>
             {result.results.map((item) => (
               <Fragment key={itemKey(item)}>{itemView(item)}</Fragment>
             ))}
           </div>
-        ))}
-      </div>
+        ))
+      )}
 
       <span ref={infiniteScrollRef} />
 
@@ -153,14 +161,17 @@ const InfiniteDataList = <TItem extends {}, TQuery extends GenericSearchQuery>({
   );
 };
 
-const DataList = <TItem extends {}, TQuery extends GenericSearchQuery>(
-  props: DataListProps<TItem, TQuery>
-) => {
+const DataList = <TItem extends {}, TQuery extends GenericSearchQuery>({
+  pageView,
+  ...props
+}: DataListProps<TItem, TQuery>) => {
   const { infiniteScroll } = useSettings();
+  pageView ||= (children) => <div>{children}</div>;
+
   if (infiniteScroll) {
-    return <InfiniteDataList {...props} />;
+    return <InfiniteDataList pageView={pageView} {...props} />;
   }
-  return <PagedDataList {...props} />;
+  return <PagedDataList pageView={pageView} {...props} />;
 };
 
 export { PagedDataList, InfiniteDataList, DataList };

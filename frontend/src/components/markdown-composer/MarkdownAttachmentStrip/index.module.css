@@ -1,0 +1,39 @@
+.wrapper {
+  background: var(--input-bg-color);
+  color: var(--input-fg-color);
+  font-size: calc(var(--font-size) * 0.9);
+  line-height: calc(var(--font-size) * 0.9 * 1.25);
+  border-top: 2px solid var(--input-border-color);
+  position: relative;
+}
+
+.wrapper :global .FileUploader--dropArea {
+  padding: 0.25rem 0.5rem;
+  display: block;
+  cursor: pointer;
+}
+
+.wrapper :global .FileUploader--input:disabled + .FileUploader--dropArea {
+  cursor: default;
+  opacity: 0.5;
+}
+
+.wrapper :global .FileUploader--input:active + .FileUploader--dropArea,
+.wrapper :global .FileUploader--input:focus + .FileUploader--dropArea,
+.wrapper :global .FileUploader--dropArea.active {
+  background: var(--input-bg-color);
+}
+
+.progressIndicator {
+  position: absolute;
+  z-index: 50;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  background: var(--label-bg-color);
+}
+
+.label {
+  position: relative;
+  z-index: 60;
+}

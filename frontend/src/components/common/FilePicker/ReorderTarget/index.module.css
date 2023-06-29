@@ -1,0 +1,28 @@
+.wrapper {
+  position: relative;
+  top: -1rem;
+  bottom: -1rem;
+  margin: -0.333rem;
+  width: 3px;
+}
+
+.wrapper.active {
+  background: var(--fg-color);
+}
+
+.zone {
+  position: absolute;
+  top: -2rem;
+  bottom: -2rem;
+  left: -6rem;
+  right: -6rem;
+  z-index: 10;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  pointer-events: none;
+}
+
+.wrapper.dropActive .zone {
+  pointer-events: unset;
+}

@@ -62,7 +62,7 @@ const ReviewAuthorsPage = () => {
         setSearchQuery={setSearchQuery}
       />
 
-      <Section className="ChildMarginClear">
+      <Section>
         <SectionHeader>Reviewer catalogue</SectionHeader>
 
         <UserSearch

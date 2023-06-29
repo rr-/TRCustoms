@@ -48,7 +48,7 @@ const FeaturedLevelView = ({
         style={background ? { backgroundImage: `url('${background}')` } : {}}
       />
       <div className={styles.foreground}>
-        <SectionHeader className={styles.header}>{heading}</SectionHeader>
+        <SectionHeader>{heading}</SectionHeader>
 
         <div className={styles.details}>
           {!!level?.cover && (
@@ -99,7 +99,7 @@ const FeaturedLevelsView = () => {
   }
 
   return (
-    <div className="FeaturedLevelsView">
+    <div>
       {Object.values(FeatureType).map((featureType) => (
         <FeaturedLevelView
           key={featureType}

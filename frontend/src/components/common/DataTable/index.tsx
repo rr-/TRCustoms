@@ -1,9 +1,10 @@
-import "./index.css";
+import styles from "./index.module.css";
 import { useRef } from "react";
 import { Fragment } from "react";
 import { useState } from "react";
 import { useQuery } from "react-query";
 import { useInfiniteQuery } from "react-query";
+import { Box } from "src/components/common/Box";
 import { Loader } from "src/components/common/Loader";
 import { Pager } from "src/components/common/Pager";
 import { SortLink } from "src/components/common/SortLink";
@@ -30,7 +31,7 @@ interface DataTableColumn<TItem> {
 }
 
 interface DataTableProps<TItem, TQuery> {
-  className?: string | undefined;
+  className?: string;
   queryName: string;
   itemKey: (item: TItem) => string;
   columns: DataTableColumn<TItem>[];
@@ -46,17 +47,16 @@ interface DataTableProps<TItem, TQuery> {
 }
 
 const DataTableHeader = <TItem extends {}, TQuery extends GenericSearchQuery>({
-  className,
   columns,
   searchQuery,
   onSearchQueryChange,
 }: DataTableProps<TItem, TQuery>) => {
   return (
-    <thead className="DataTable--header">
-      <tr className="DataTable--row">
+    <thead>
+      <tr>
         {columns.map((column) => (
           <th
-            className={className ? `${className}--${column.name}` : undefined}
+            className={column.name || ""}
             title={column.tooltip || undefined}
             key={`head-${column.name}`}
           >
@@ -81,7 +81,6 @@ const DataTableHeader = <TItem extends {}, TQuery extends GenericSearchQuery>({
 };
 
 const DataTableBody = <TItem extends {}, TQuery extends GenericSearchQuery>({
-  className,
   result,
   itemKey,
   columns,
@@ -106,28 +105,24 @@ const DataTableBody = <TItem extends {}, TQuery extends GenericSearchQuery>({
 
   if (message) {
     return (
-      <tbody className="DataTable--body">
-        <tr className="DataTable--row">
-          <td className="DataTable--cell" colSpan={100}>
-            {message}
-          </td>
+      <tbody>
+        <tr>
+          <td colSpan={100}>{message}</td>
         </tr>
       </tbody>
     );
   }
 
   return (
-    <tbody className="DataTable--body">
+    <tbody>
       {result?.data?.results.map((item) => {
         const key = itemKey(item);
         return (
           <Fragment key={key}>
-            <tr className="DataTable--row">
+            <tr>
               {columns.map((column) => (
                 <td
-                  className={`DataTable--cell ${
-                    className ? `${className}--${column.name}` : ""
-                  }`}
+                  className={column.name || ""}
                   title={column.itemTooltip?.(item) || undefined}
                   key={`${key}-${column.name}`}
                 >
@@ -140,8 +135,10 @@ const DataTableBody = <TItem extends {}, TQuery extends GenericSearchQuery>({
               ))}
             </tr>
             {detailsElement && activeRow === key && (
-              <tr className="DataTable--details">
-                <td colSpan={100}>{detailsElement(item)}</td>
+              <tr className={styles.details}>
+                <td colSpan={100}>
+                  <Box>{detailsElement(item)}</Box>
+                </td>
               </tr>
             )}
           </Fragment>
@@ -152,21 +149,15 @@ const DataTableBody = <TItem extends {}, TQuery extends GenericSearchQuery>({
 };
 
 const DataTableFooter = <TItem extends {}, TQuery extends GenericSearchQuery>({
-  className,
   columns,
 }: DataTableProps<TItem, TQuery>) => {
   return (
     <>
       {columns.some((column) => !!column.footer) && (
-        <tfoot className="DataTable--footer">
-          <tr className="DataTable--row">
+        <tfoot>
+          <tr>
             {columns.map((column) => (
-              <th
-                className={
-                  className ? `${className}--${column.name}` : undefined
-                }
-                key={`foot-${column.name}`}
-              >
+              <th key={`foot-${column.name}`} className={column.name || ""}>
                 {column.footer?.()}
               </th>
             ))}
@@ -195,7 +186,7 @@ const PagedDataTable = <TItem extends {}, TQuery extends GenericSearchQuery>(
 
   return (
     <>
-      <table className={`DataTable ${className}`}>
+      <table className={`${styles.table} ${className || ""}`}>
         <DataTableHeader {...props} />
         <DataTableBody result={result} {...props} />
         <DataTableFooter {...props} />

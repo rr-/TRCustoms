@@ -1,4 +1,4 @@
-import "./index.css";
+import styles from "./index.module.css";
 import { Link } from "src/components/common/Link";
 import { IconSortDescending } from "src/components/icons";
 import { IconSortAscending } from "src/components/icons";
@@ -39,10 +39,10 @@ const SortLink = ({
   return (
     <Link
       onClick={handleButtonClick}
-      className={`link ${isActive ? "SortLink SortLink--active" : "SortLink"}`}
+      className={`${styles.link} ${isActive ? styles.active : ""}`}
     >
       {children}
-      <span className="SortLink--indicator">
+      <span className={styles.indicator}>
         {descending ? <IconSortDescending /> : <IconSortAscending />}
       </span>
     </Link>

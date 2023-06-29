@@ -1,4 +1,4 @@
-import "./index.css";
+import styles from "./index.module.css";
 import { useState } from "react";
 import { FileUploader } from "src/components/common/FileUploader";
 import { applyStyle } from "src/components/markdown-composer/MarkdownStyle";
@@ -47,7 +47,7 @@ const MarkdownAttachmentStrip = ({
   };
 
   return (
-    <div className="MarkdownAttachmentStrip">
+    <div className={styles.wrapper}>
       <FileUploader
         allowMultiple={false}
         disableProgressbar={true}
@@ -59,10 +59,10 @@ const MarkdownAttachmentStrip = ({
           percentCompleted ? (
             <>
               <span
-                className="MarkdownAttachmentStrip--progressIndicator"
+                className={styles.progressIndicator}
                 style={{ width: `${percentCompleted}%` }}
               />
-              <span className="MarkdownAttachmentStrip--label">
+              <span className={styles.label}>
                 Uploading…{" "}
                 {`${Math.round(percentCompleted * 100) / 100}% complete`}
               </span>

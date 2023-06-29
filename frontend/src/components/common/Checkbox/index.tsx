@@ -1,4 +1,4 @@
-import "./index.css";
+import styles from "./index.module.css";
 
 interface CheckboxProps {
   label: string | React.ReactNode;
@@ -9,9 +9,9 @@ interface CheckboxProps {
 
 const Checkbox = ({ label, ...props }: CheckboxProps) => {
   return (
-    <div className="Checkbox">
-      <label className="Checkbox--label">
-        <input type="checkbox" className="Checkbox--input" {...props} />
+    <div>
+      <label className={styles.label}>
+        <input type="checkbox" className={styles.input} {...props} />
         {label}
       </label>
     </div>

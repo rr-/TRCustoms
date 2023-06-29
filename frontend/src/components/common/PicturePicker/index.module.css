@@ -1,0 +1,10 @@
+.wrapper {
+  width: 15rem;
+  aspect-ratio: calc(4 / 3);
+}
+.wrapper.cover {
+  object-fit: cover;
+}
+.wrapper.contain {
+  object-fit: contain;
+}

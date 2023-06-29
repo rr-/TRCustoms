@@ -1,0 +1,3 @@
+.wrapper :global .TextAreaFormField {
+  --textarea-height: 75vh;
+}

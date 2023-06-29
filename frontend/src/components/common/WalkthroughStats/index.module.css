@@ -1,0 +1,44 @@
+.wrapper {
+  margin-top: 1rem;
+}
+
+.list {
+  display: flex;
+  margin: 0.25rem 0;
+  padding: 0;
+}
+
+.listItem {
+  display: block;
+}
+
+.indicator {
+  height: 22px;
+  background: var(--link-color);
+  mask-image: var(--bg-url);
+  -webkit-mask-image: var(--bg-url);
+}
+
+.indicator.videoAndText {
+  --bg-url: unset;
+}
+
+.indicator.videoOnly {
+  --bg-url: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='4' height='4'><rect x='0' y='0' width='7' height='2'/></svg>");
+}
+
+.indicator.textOnly {
+  --bg-url: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='4' height='4'><rect x='0' y='0' width='1' height='7'/></svg>");
+}
+
+.indicator.none {
+  --bg-url: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='7' height='7'><rect x='3' y='0' width='1' height='1'/></svg>");
+}
+
+.indicator:hover {
+  filter: var(--walkthroughs-hover-filter);
+}
+
+.footer {
+  text-align: center;
+}

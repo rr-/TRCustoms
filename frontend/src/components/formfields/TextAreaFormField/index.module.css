@@ -1,0 +1,59 @@
+.wrapper {
+  --textarea-height: 32rem;
+}
+
+.wrapper :global .MarkdownComposer {
+  flex: 1;
+}
+
+.preview {
+  flex-grow: 1;
+}
+
+.previewHeader {
+  padding: 0.5rem;
+  background: var(--box-bg-color);
+  border-bottom: 2px solid var(--input-border-color);
+}
+
+.previewBody {
+  background: var(--box-bg-color);
+  padding: 0.5rem;
+  height: var(--textarea-height);
+  box-sizing: border-box;
+}
+
+.wrapper.tabbed {
+  --min-tab-height: var(--textarea-height);
+}
+
+.wrapper.tabbed .previewHeader {
+  display: none;
+}
+
+.wrapper.plain :global .TextArea--input {
+  min-height: 12rem;
+  min-width: 24rem;
+}
+
+.wrapper.sideBySide {
+  display: flex;
+  height: var(--textarea-height);
+}
+
+.wrapper.sideBySide :global .MarkdownComposer {
+  border-right: 0;
+}
+
+.wrapper.sideBySide .preview {
+  border: 2px solid var(--input-border-color);
+  border-left: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.wrapper.sideBySide .previewBody {
+  flex: 1 1 auto;
+  border-left: 2px solid var(--input-border-color);
+  overflow: auto;
+}

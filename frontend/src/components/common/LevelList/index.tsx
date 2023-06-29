@@ -1,4 +1,4 @@
-import "./index.css";
+import styles from "./index.module.css";
 import { DataList } from "src/components/common/DataList";
 import { LevelRating } from "src/components/common/LevelRating";
 import { Link } from "src/components/common/Link";
@@ -29,18 +29,18 @@ interface LevelViewProps {
 
 const LevelView = ({ showStatus, level }: LevelViewProps) => {
   return (
-    <article className="LevelView">
-      <Link className="LevelView--coverLink" to={`/levels/${level.id}`}>
+    <article className={styles.wrapper}>
+      <Link className={styles.coverLink} to={`/levels/${level.id}`}>
         {level.cover ? (
           <img
-            className="LevelView--coverImage"
+            className={styles.coverImage}
             src={level.cover.url}
             alt={level.name}
           />
         ) : null}
       </Link>
 
-      <div className="LevelView--details">
+      <div className={styles.details}>
         <strong>
           <LevelLink level={level} />
         </strong>{" "}
@@ -49,15 +49,15 @@ const LevelView = ({ showStatus, level }: LevelViewProps) => {
         {showStatus && (
           <>
             {level.is_approved ? (
-              <span className="LevelView--statusApproved">
+              <span className={`${styles.status} ${styles.approved}`}>
                 <IconBadgeCheck /> Approved!
               </span>
             ) : level.rejection_reason ? (
-              <span className="LevelView--statusRejected">
+              <span className={`${styles.status} ${styles.rejected}`}>
                 <IconXCircle /> Rejected
               </span>
             ) : (
-              <span className="LevelView--statusPending">
+              <span className={`${styles.status} ${styles.pending}`}>
                 <IconClock /> Pending approval
               </span>
             )}
@@ -109,7 +109,6 @@ const LevelList = ({
 
   return (
     <DataList
-      className="LevelList"
       queryName="levels"
       itemKey={itemKey}
       itemView={itemView}

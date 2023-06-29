@@ -1,0 +1,37 @@
+.wrapper {
+  vertical-align: top;
+}
+
+.wrapper :global .FileUploader--dropArea {
+  display: flex;
+  min-height: 6rem;
+  justify-content: center;
+  align-items: center;
+  width: 25rem;
+  background: var(--bg-color);
+  border: 3px dashed var(--button-bg-color);
+  line-height: 140%;
+  text-align: center;
+  cursor: pointer;
+  overflow: hidden;
+  word-wrap: break-word;
+}
+
+.wrapper :global .FileUploader--input:disabled + .FileUploader--dropArea {
+  cursor: default;
+  opacity: 0.5;
+}
+
+.wrapper :global .FileUploader--input:active + .FileUploader--dropArea,
+.wrapper :global .FileUploader--input:focus + .FileUploader--dropArea,
+.wrapper :global .FileUploader--dropArea.active {
+  border-color: var(--fg-color);
+}
+
+.previews {
+  margin-top: 0.5rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  text-align: center;
+}

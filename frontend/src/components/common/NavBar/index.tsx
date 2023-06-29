@@ -1,4 +1,4 @@
-import "./index.css";
+import styles from "./index.module.css";
 import { useContext } from "react";
 import type { LinkProps } from "react-router-dom";
 import { Link } from "react-router-dom";
@@ -39,37 +39,36 @@ const NavBar = () => {
 
   return (
     <div className="MainContainer">
-      <div className="NavBar">
-        <nav className="NavBar--primary">
-          <h1>
-            <Link to={"/"}>
-              <Logo />
+      <div className={styles.wrapper}>
+        <nav className={styles.primary}>
+          <h1 className={styles.header}>
+            <Link className={styles.headerLink} to={"/"}>
+              <div className={styles.logo}>
+                <Logo />
+              </div>
               TRCustoms.org
             </Link>
           </h1>
-          <ul className="NavBar--list NavBar--grow">
+          <ul className={`${styles.list} ${styles.grow}`}>
             {user ? (
               <>
-                <li className="NavBar--listItem">
-                  <Link
-                    className="NavBar--userPicLink"
-                    to={`/users/${user.id}`}
-                  >
+                <li className={styles.listItem}>
+                  <Link className={styles.userPicLink} to={`/users/${user.id}`}>
                     <UserPicture user={user} />
                     {user.username}
                   </Link>
                 </li>
-                <li className="NavBar--listItem">
+                <li className={styles.listItem}>
                   <Link to={"/logout"}>Log out</Link>
                 </li>
               </>
             ) : (
               <>
-                <li className="NavBar--listItem">Not logged in.</li>
-                <li className="NavBar--listItem">
+                <li className={styles.listItem}>Not logged in.</li>
+                <li className={styles.listItem}>
                   <Link to={"/login"}>Log in</Link>
                 </li>
-                <li className="NavBar--listItem">
+                <li className={styles.listItem}>
                   <Link to={"/register"}>Register</Link>
                 </li>
               </>
@@ -77,40 +76,40 @@ const NavBar = () => {
           </ul>
         </nav>
 
-        <nav className="NavBar--secondary">
-          <ul className="NavBar--list">
-            <li className="NavBar--listItem">
+        <nav className={styles.secondary}>
+          <ul className={styles.list}>
+            <li className={styles.listItem}>
               <NavLink to={"/"}>Home</NavLink>
             </li>
-            <li className="NavBar--listItem">
+            <li className={styles.listItem}>
               <LevelsNavLink to={"/levels"}>Levels</LevelsNavLink>
             </li>
-            <li className="NavBar--listItem">
+            <li className={styles.listItem}>
               <NavLink to={"/genres"}>Genres</NavLink>
             </li>
-            <li className="NavBar--listItem">
+            <li className={styles.listItem}>
               <NavLink to={"/tags"}>Tags</NavLink>
             </li>
-            <li className="NavBar--listItem">
+            <li className={styles.listItem}>
               <NavLink to={"/reviews"}>Reviews</NavLink>
             </li>
-            <li className="NavBar--listItem">
+            <li className={styles.listItem}>
               <NavLink to={"/about"}>About</NavLink>
             </li>
 
-            <li className="NavBar--listItem NavBar--grow" />
+            <li className={`${styles.listItem} ${styles.grow}`} />
 
             <PermissionGuard require={UserPermission.uploadLevels}>
-              <li className="NavBar--listItem">
+              <li className={styles.listItem}>
                 <NavLink to={"/levels/upload"}>Upload level</NavLink>
               </li>
             </PermissionGuard>
             <PermissionGuard require={UserPermission.editLevels}>
-              <li className="NavBar--listItem">
+              <li className={styles.listItem}>
                 <NavLink to={"/mod"}>Moderate</NavLink>
               </li>
             </PermissionGuard>
-            <li className="NavBar--listItem">
+            <li className={styles.listItem}>
               <NavLink to={"/settings"}>Settings</NavLink>
             </li>
           </ul>

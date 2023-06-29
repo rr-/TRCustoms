@@ -109,7 +109,6 @@ const WalkthroughsTable = ({
 
   return (
     <DataTable
-      className="WalkthroughsTable"
       queryName="walkthroughs"
       columns={columns}
       itemKey={itemKey}

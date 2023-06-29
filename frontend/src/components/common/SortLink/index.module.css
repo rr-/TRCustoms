@@ -1,0 +1,10 @@
+.link {
+  white-space: nowrap;
+}
+.indicator {
+  margin-left: 0.25rem;
+  display: none;
+}
+.link.active .indicator {
+  display: inline-block;
+}

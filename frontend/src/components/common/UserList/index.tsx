@@ -1,4 +1,4 @@
-import "./index.css";
+import styles from "./index.module.css";
 import type { DataTableColumn } from "src/components/common/DataTable";
 import { DataTable } from "src/components/common/DataTable";
 import { UserLink } from "src/components/links/UserLink";
@@ -63,7 +63,7 @@ const UserList = ({ searchQuery, onSearchQueryChange }: UserListProps) => {
 
   return (
     <DataTable
-      className="UserList"
+      className={styles.table}
       queryName="users"
       columns={columns}
       itemKey={itemKey}

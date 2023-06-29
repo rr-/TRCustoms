@@ -1,0 +1,51 @@
+.embedYoutube {
+  width: 640px;
+  height: 480px;
+  border: 0;
+}
+
+.wrapper {
+  word-break: break-word;
+}
+
+.wrapper :global img {
+  max-width: 100%;
+}
+
+.wrapper :global table {
+  border-collapse: collapse;
+}
+
+.wrapper :global table td,
+.wrapper :global table th {
+  padding: 0.25rem 1rem;
+}
+
+.wrapper :global table td:first-child,
+.wrapper :global table th:first-child {
+  padding-left: 0;
+}
+
+.wrapper :global table thead th {
+  border-bottom: 1px solid var(--fg-color);
+}
+
+.color.pickup {
+  color: var(--fg-color-pickup);
+}
+.color.trap {
+  color: var(--fg-color-trap);
+}
+.color.enemy {
+  color: var(--fg-color-enemy);
+}
+.color.secret {
+  color: var(--fg-color-secret);
+}
+.color.object {
+  color: var(--fg-color-object);
+}
+
+.center {
+  text-align: center;
+}

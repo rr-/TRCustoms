@@ -1,3 +1,4 @@
+import styles from "./index.module.css";
 import { sortBy } from "lodash";
 import { useEffect } from "react";
 import { useState } from "react";
@@ -117,7 +118,7 @@ const EntitiesCheckboxes = <TEntity extends {}>({
   };
 
   return (
-    <div className="EntitiesCheckboxes">
+    <div className={styles.wrapper}>
       {header && (
         <FilterCheckboxesHeader onClear={handleClear}>
           {header}:
@@ -132,16 +133,18 @@ const EntitiesCheckboxes = <TEntity extends {}>({
         />
       )}
 
-      {visibleEntities.map((entity) => (
-        <Checkbox
-          key={getEntityId(entity)}
-          label={getEntityName(entity)}
-          onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
-            handleEntityChange(event, entity)
-          }
-          checked={value.includes(getEntityId(entity))}
-        />
-      ))}
+      <div>
+        {visibleEntities.map((entity) => (
+          <Checkbox
+            key={getEntityId(entity)}
+            label={getEntityName(entity)}
+            onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
+              handleEntityChange(event, entity)
+            }
+            checked={value.includes(getEntityId(entity))}
+          />
+        ))}
+      </div>
 
       {useFiltering && value.length === maxFilteredEntities && (
         <p>Cannot filter by any more items.</p>

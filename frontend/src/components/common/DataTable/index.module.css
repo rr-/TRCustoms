@@ -1,0 +1,19 @@
+.table :global th button {
+  font-weight: bold;
+}
+.table {
+  border-spacing: 0;
+  width: 100%;
+}
+.table :global th,
+.table :global td {
+  padding: 0.15rem 0.5rem;
+}
+.table :global th:first-child,
+.table :global td:first-child {
+  padding-left: 0;
+}
+.table :global th:last-child,
+.table :global td:last-child {
+  padding-right: 0;
+}

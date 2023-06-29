@@ -52,12 +52,10 @@ const GenreListPage = () => {
         onSearchQueryChange={setSearchQuery}
       />
 
-      <div className="GenreListPage--results">
-        <GenresTable
-          searchQuery={searchQuery}
-          onSearchQueryChange={setSearchQuery}
-        />
-      </div>
+      <GenresTable
+        searchQuery={searchQuery}
+        onSearchQueryChange={setSearchQuery}
+      />
     </PlainLayout>
   );
 };

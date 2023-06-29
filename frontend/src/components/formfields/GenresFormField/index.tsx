@@ -1,4 +1,4 @@
-import "./index.css";
+import styles from "./index.module.css";
 import { useFormikContext } from "formik";
 import { useContext } from "react";
 import { Checkbox } from "src/components/common/Checkbox";
@@ -41,10 +41,10 @@ const GenresFormField = ({
 
   return (
     <BaseFormField name={name} readonly={readonly} {...props}>
-      <div className="GenresFormField">
+      <div className={styles.wrapper}>
         {Object.values(genreMap).map((genre) => (
           <div key={genre.id}>
-            <label className="GenresFormField--label">
+            <label className={styles.label}>
               <Checkbox
                 label={genre.name}
                 disabled={readonly}
@@ -53,7 +53,7 @@ const GenresFormField = ({
                 }
                 checked={value.map((g) => g.id).includes(genre.id)}
               />
-              <span title={genre.description}>
+              <span className={styles.icon} title={genre.description}>
                 <IconInformationCircle />
               </span>
             </label>

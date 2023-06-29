@@ -199,12 +199,14 @@ const LevelSearchSidebar = ({
         onSubmit={handleSubmit}
       >
         {({ submitForm, resetForm }) => (
-          <Form className="ChildMarginClear">
-            <SectionHeader className={styles.header}>
-              Search filter
-              <Link className={styles.resetButton} onClick={handleClear}>
-                (reset)
-              </Link>
+          <Form className={`${styles.wrapper} ChildMarginClear`}>
+            <SectionHeader>
+              <span className={styles.header}>
+                Search filter
+                <Link className={styles.resetButton} onClick={handleClear}>
+                  (reset)
+                </Link>
+              </span>
             </SectionHeader>
 
             <PermissionGuard require={UserPermission.editLevels}>

@@ -1,4 +1,4 @@
-import "./index.css";
+import styles from "./index.module.css";
 
 interface DefinitionItemGroupProps {
   className?: string | undefined;
@@ -10,11 +10,12 @@ const DefinitionItemGroup = ({
   children,
 }: DefinitionItemGroupProps) => {
   return (
-    <div className={`DefinitionItemGroup ChildMarginClear ${className || ""}`}>
+    <div className={`${styles.group} ChildMarginClear ${className || ""}`}>
       {children}
     </div>
   );
 };
+
 interface DefinitionItemProps {
   span?: boolean | undefined;
   term?: React.ReactNode | undefined;
@@ -23,9 +24,9 @@ interface DefinitionItemProps {
 
 const DefinitionItem = ({ span, term, children }: DefinitionItemProps) => {
   return (
-    <div className={`DefinitionItem ${span ? "span" : ""}`}>
-      {term && <div className="DefinitionItem--term">{term}</div>}
-      <div className="DefinitionItem--value">{children}</div>
+    <div className={`${styles.item} ${span ? styles.span : ""}`}>
+      {term && <div className={styles.term}>{term}</div>}
+      <div className={styles.value}>{children}</div>
     </div>
   );
 };
@@ -35,7 +36,7 @@ interface DefinitionListProps {
 }
 
 const DefinitionList = ({ children }: DefinitionListProps) => {
-  return <div className="DefinitionList">{children}</div>;
+  return <div className={styles.list}>{children}</div>;
 };
 
 export { DefinitionItem, DefinitionItemGroup, DefinitionList };

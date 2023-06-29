@@ -134,10 +134,10 @@ const MediumThumbnail = ({
   const classNames = [styles.mediumThumbnail];
   switch (displayMode) {
     case DisplayMode.Cover:
-      classNames.push("cover");
+      classNames.push(styles.cover);
       break;
     case DisplayMode.Contain:
-      classNames.push("contain");
+      classNames.push(styles.contain);
       break;
   }
 
@@ -179,8 +179,8 @@ const MediumThumbnail = ({
   }
 
   return (
-    <div className="MediumThumbnail">
-      <div className="MediumThumbnail--thumb"></div>
+    <div className={styles.mediumThumbnail}>
+      <div className={styles.mediumThumbnailThumb}></div>
     </div>
   );
 };

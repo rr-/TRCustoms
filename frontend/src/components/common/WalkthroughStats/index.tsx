@@ -1,4 +1,4 @@
-import "./index.css";
+import styles from "./index.module.css";
 import { useState } from "react";
 import { useContext } from "react";
 import { ConfigContext } from "src/contexts/ConfigContext";
@@ -12,22 +12,22 @@ const WalkthroughStats = () => {
   const stats = [
     {
       title: "Video and text",
-      className: "video_and_text",
+      className: styles.videoAndText,
       count: config.walkthrough_stats.video_and_text,
     },
     {
       title: "Video only",
-      className: "video_only",
+      className: styles.videoOnly,
       count: config.walkthrough_stats.video,
     },
     {
       title: "Text only",
-      className: "text_only",
+      className: styles.textOnly,
       count: config.walkthrough_stats.text,
     },
     {
       title: "Missing",
-      className: "none",
+      className: styles.none,
       count: config.walkthrough_stats.none,
     },
   ];
@@ -62,12 +62,12 @@ const WalkthroughStats = () => {
   );
 
   return (
-    <div className="WalkthroughStats">
-      <ul className="WalkthroughStats--list">
+    <div className={styles.wrapper}>
+      <ul className={styles.list}>
         {stats.map((item) => (
           <li
             key={item.title}
-            className="WalkthroughStats--listItem"
+            className={styles.listItem}
             onMouseEnter={() => handleMouseEnter(item)}
             onMouseLeave={() => handleMouseLeave(item)}
             style={{
@@ -76,14 +76,12 @@ const WalkthroughStats = () => {
           >
             <div
               title={item.title}
-              className={`WalkthroughStats--indicator ${item.className}`}
+              className={`${styles.indicator} ${item.className}`}
             ></div>
           </li>
         ))}
       </ul>
-      <footer className="WalkthroughStats--footer">
-        {tooltip || defaultTooltip}
-      </footer>
+      <footer className={styles.footer}>{tooltip || defaultTooltip}</footer>
     </div>
   );
 };

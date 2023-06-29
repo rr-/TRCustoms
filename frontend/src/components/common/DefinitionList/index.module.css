@@ -1,0 +1,35 @@
+.list {
+  display: grid;
+  grid-template-columns: minmax(30%, min-content) auto;
+  gap: 0 1rem;
+}
+
+.group {
+  display: contents;
+}
+.group:not(:first-child) > .item:first-of-type > * {
+  margin-top: 1rem;
+}
+.group:not(:last-child) > .item:last-of-type > * {
+  margin-bottom: 0.5rem;
+}
+
+.item {
+  display: contents;
+}
+.item.span {
+  display: block;
+  grid-column: 1 / span 2;
+}
+
+.term {
+  white-space: nowrap;
+  text-align: left;
+}
+.term:after {
+  content: ":";
+}
+.value {
+  margin: 0;
+  text-align: left;
+}

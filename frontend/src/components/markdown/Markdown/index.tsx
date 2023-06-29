@@ -1,4 +1,4 @@
-import "./index.css";
+import styles from "./index.module.css";
 import { findAndReplace } from "mdast-util-find-and-replace";
 import { toHast } from "mdast-util-to-hast";
 import { useMemo } from "react";
@@ -38,7 +38,7 @@ const remarkAlignment = () => {
         type: "alignment",
         data: {
           hName: "div",
-          hProperties: { class: "Markdown--alignment center" },
+          hProperties: { class: styles.center },
           hChildren: [{ type: "text", value: match.groups.content }],
         },
       },
@@ -88,7 +88,7 @@ const remarkAlignment = () => {
         value: "",
         data: {
           hName: "div",
-          hProperties: { class: "Markdown--alignment center" },
+          hProperties: { class: styles.center },
           hChildren: contentHast,
         },
       },
@@ -101,7 +101,7 @@ const remarkAlignment = () => {
         value: "",
         data: {
           hName: "p",
-          hProperties: { class: "Markdown--alignment center" },
+          hProperties: { class: styles.center },
           hChildren: newContent.map(toHast),
         },
       });
@@ -130,17 +130,17 @@ const remarkTRCustomColors = () => {
   const coloredTextRegex = /\[([pesto])\]([^\n[\]]*)\[\/\1\]/gi;
   const replaceColoredText = ($0: string, char: string, text: string): any => {
     let className = {
-      p: "pickup",
-      e: "enemy",
-      s: "secret",
-      t: "trap",
-      o: "object",
+      p: styles.pickup,
+      e: styles.enemy,
+      s: styles.secret,
+      t: styles.trap,
+      o: styles.object,
     }[char];
     return {
       type: "element",
       data: {
         hName: "span",
-        hProperties: { class: `Markdown--color ${className}` },
+        hProperties: { class: `${styles.color} ${className}` },
         hChildren: [{ type: "text", value: text }],
       },
     };
@@ -157,7 +157,7 @@ const transformLink = (link: any): any => {
     return (
       <iframe
         title="YouTube video"
-        className="Markdown--Embed--YouTube"
+        className={styles.embedYoutube}
         src={`https://www.youtube.com/embed/${youtubeVideo.videoID}?autoplay=0&iv_load_policy=3&showinfo=0&rel=0&start=0&end=0&list=${youtubeVideo.playlistID}`}
       />
     );
@@ -166,7 +166,7 @@ const transformLink = (link: any): any => {
     return (
       <iframe
         title="YouTube video"
-        className="Markdown--Embed--YouTube"
+        className={styles.embedYoutube}
         src={`https://www.youtube.com/embed/${youtubeVideo.videoID}?autoplay=0&iv_load_policy=3&showinfo=0&rel=0&start=0&end=0`}
       />
     );
@@ -181,7 +181,7 @@ interface MarkdownProps {
 const Markdown = ({ children }: MarkdownProps) => {
   const rendered = useMemo(
     () => (
-      <div className="Markdown ChildMarginClear">
+      <div className={`${styles.wrapper} ChildMarginClear`}>
         <ReactMarkdown
           remarkPlugins={[
             remarkGfm,

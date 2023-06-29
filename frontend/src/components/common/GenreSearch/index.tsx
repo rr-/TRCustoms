@@ -60,7 +60,7 @@ const GenreSearch = ({
       onSubmit={handleSubmit}
     >
       {({ submitForm }) => (
-        <Form className="GenreSearch">
+        <Form>
           <FormGrid gridType={FormGridType.Row}>
             <FormGridFieldSet>
               <TextFormField label="Search" name="search" />

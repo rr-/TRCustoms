@@ -1,4 +1,3 @@
-import "./index.css";
 import { useState } from "react";
 import { AuditLogSearch } from "src/components/common/AuditLogSearch";
 import { AuditLogTable } from "src/components/common/AuditLogTable";

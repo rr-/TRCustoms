@@ -14,10 +14,12 @@ import { LevelStats } from "src/components/pages/HomePage/LevelStats";
 const StatsSidebar = () => {
   return (
     <SidebarBox>
-      <SectionHeader>Statistics</SectionHeader>
-      <LevelStats />
-      <ReviewStats />
-      <WalkthroughStats />
+      <Section>
+        <SectionHeader>Statistics</SectionHeader>
+        <LevelStats />
+        <ReviewStats />
+        <WalkthroughStats />
+      </Section>
 
       <Section>
         <SectionHeader>External links</SectionHeader>

@@ -238,7 +238,7 @@ const UserForm = ({ user, onGoBack, onSubmit }: UserFormProps) => {
         !user && status?.success ? (
           <div className="FormFieldSuccess">{status.success}</div>
         ) : (
-          <Form className="Form">
+          <Form>
             <FormGrid>
               <FormGridFieldSet title="Basic information">
                 <TextFormField

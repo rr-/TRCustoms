@@ -1,4 +1,4 @@
-import "./index.css";
+import styles from "./index.module.css";
 import { useState } from "react";
 
 interface TabPage {
@@ -18,19 +18,19 @@ const TabSwitch = ({ tabs }: TabSwitchProps) => {
   };
 
   return (
-    <div className="TabSwitch">
+    <div className={styles.wrapper}>
       <nav>
-        <ul className="TabSwitch--nav">
+        <ul className={styles.nav}>
           {tabs.map((tab, i) => (
             <li
-              className={`TabSwitch--navItem ${
-                i === activeTab ? "active" : ""
+              className={`${styles.navItem} ${
+                i === activeTab ? styles.active : ""
               }`}
               key={i}
             >
               <span
                 role="button"
-                className="TabSwitch--navItemLink"
+                className={styles.navItemLink}
                 onClick={() => handleTabClick(i)}
               >
                 {tab.label}
@@ -39,12 +39,12 @@ const TabSwitch = ({ tabs }: TabSwitchProps) => {
           ))}
         </ul>
       </nav>
-      <div className="TabSwitch--content">
+      <div className={styles.content}>
         {tabs.map((tab, i) => (
           <div
-            className={`TabSwitch--contentItem ${
-              i === activeTab ? "active" : ""
-            }`}
+            className={`${styles.contentItem} ${
+              i === activeTab ? styles.active : ""
+            } ChildMarginClear`}
             key={i}
           >
             {tab.content}

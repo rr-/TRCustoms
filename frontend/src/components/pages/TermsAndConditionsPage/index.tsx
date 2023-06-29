@@ -225,7 +225,7 @@ const TermsAndConditionsPage = () => {
 
   return (
     <PlainLayout>
-      <NestedLegalese title="Terms and Conditions" entry={TOS} />
+      <NestedLegalese prefix="tos" title="Terms and Conditions" entry={TOS} />
     </PlainLayout>
   );
 };
