@@ -1,147 +1,15 @@
-import "./index.css";
+import { FilePickerPreview } from "./Preview";
+import type { FilePickerPreviewProps } from "./Preview";
+import { FilePickerPreviewWrapper } from "./Preview";
+import { FilePickerReorderTarget } from "./ReorderTarget";
+import styles from "./index.module.css";
 import { useCallback } from "react";
 import { Fragment } from "react";
-import { useEffect } from "react";
 import { useState } from "react";
 import { FileUploader } from "src/components/common/FileUploader";
-import { Link } from "src/components/common/Link";
-import { Loader } from "src/components/common/Loader";
 import type { UploadedFile } from "src/services/FileService";
-import { FileService } from "src/services/FileService";
 import { UploadType } from "src/services/FileService";
 import { extractErrorMessage } from "src/utils/misc";
-import { formatFileSize } from "src/utils/string";
-
-interface FilePickerPreviewProps {
-  uploadedFile: UploadedFile;
-}
-
-const FilePickerPreview = ({ uploadedFile }: FilePickerPreviewProps) => {
-  return <>{`${uploadedFile.md5sum} (${formatFileSize(uploadedFile.size)})`}</>;
-};
-
-interface FilePickerReorderTargetProps {
-  position: number;
-  reorderSourcePosition: number | null;
-  reorderTargetPosition: number | null;
-  setReorderSourcePosition: (position: number | null) => void;
-  setReorderTargetPosition: (position: number | null) => void;
-  onReorder: (position: number, targetPosition: number) => void;
-}
-
-const FilePickerReorderTarget = ({
-  position,
-  reorderSourcePosition,
-  reorderTargetPosition,
-  setReorderSourcePosition,
-  setReorderTargetPosition,
-  onReorder,
-}: FilePickerReorderTargetProps) => {
-  const ReorderEvents = {
-    onDragEnter: (event: React.DragEvent) => {
-      setReorderTargetPosition(position);
-    },
-    onDragLeave: (event: React.DragEvent) => {
-      setReorderTargetPosition(null);
-    },
-    onDrop: (event: React.DragEvent) => {
-      setReorderSourcePosition(null);
-      setReorderTargetPosition(null);
-      if (reorderSourcePosition !== null && reorderTargetPosition !== null) {
-        const oldIndex = reorderSourcePosition;
-        const newIndex =
-          reorderTargetPosition > reorderSourcePosition
-            ? reorderTargetPosition - 1
-            : reorderTargetPosition;
-        onReorder(oldIndex, newIndex);
-      }
-    },
-  };
-
-  return (
-    <div
-      className={`FilePickerReorderTarget ${
-        reorderSourcePosition !== null ? "dropActive" : ""
-      } ${reorderTargetPosition === position ? "active" : ""}`}
-    >
-      <div
-        className="FilePickerReorderTarget--zone"
-        draggable={false}
-        onDragStart={(event) => event.preventDefault()}
-        onDragOver={(event) => event.preventDefault()}
-        onDragEnter={(event) => ReorderEvents.onDragEnter(event)}
-        onDragLeave={(event) => ReorderEvents.onDragLeave(event)}
-        onDrop={(event) => ReorderEvents.onDrop(event)}
-      >
-        <div className="FilePickerReorderTarget--divider" />
-      </div>
-    </div>
-  );
-};
-
-interface FilePickerPreviewWrapperProps {
-  allowClear: boolean;
-  position: number;
-  fileId: number;
-  clearFile: (fileId: number) => void;
-  previewWidget: typeof FilePickerPreview;
-  reorderSourcePosition: number | null;
-  setReorderSourcePosition: (fileId: number | null) => void;
-}
-
-const FilePickerPreviewWrapper = ({
-  allowClear,
-  position,
-  fileId,
-  clearFile,
-  previewWidget,
-  reorderSourcePosition,
-  setReorderSourcePosition,
-}: FilePickerPreviewWrapperProps) => {
-  const [uploadedFile, setUploadedFile] = useState<UploadedFile | null>(null);
-
-  const ReorderEvents = {
-    onDragStart: (event: React.DragEvent) => {
-      window.setTimeout(() => {
-        setReorderSourcePosition(position);
-      }, 0);
-    },
-    onDragEnd: (event: React.DragEvent) => {
-      setReorderSourcePosition(null);
-    },
-  };
-
-  useEffect(() => {
-    const run = async () => {
-      setUploadedFile(await FileService.getFileById(fileId));
-    };
-    run();
-  }, [fileId]);
-
-  const classNames = [];
-  if (reorderSourcePosition === position) {
-    classNames.push("FilePickerPreviewWrapper--reorderSource");
-  }
-
-  return (
-    <div className="FilePickerPreviewWrapper">
-      <div
-        className={classNames.join(" ")}
-        draggable={true}
-        onDragStart={ReorderEvents.onDragStart}
-        onDragEnd={ReorderEvents.onDragEnd}
-      >
-        {uploadedFile ? previewWidget({ uploadedFile }) : <Loader />}
-        {allowClear && (
-          <>
-            <br />
-            <Link onClick={() => clearFile(fileId)}>Remove</Link>
-          </>
-        )}
-      </div>
-    </div>
-  );
-};
 
 interface FilePickerProps {
   uploadType: UploadType;
@@ -215,7 +83,7 @@ const FilePicker = ({
   );
 
   return (
-    <div className="FilePicker">
+    <div className={styles.wrapper}>
       <FileUploader
         uploadType={uploadType}
         allowMultiple={allowMultiple}
@@ -223,7 +91,7 @@ const FilePicker = ({
         onUploadError={handleUploadError}
         label={label}
       />
-      <div className="FilePicker--previews">
+      <div className={styles.previews}>
         {currentFileIds.length > 1 ? (
           <FilePickerReorderTarget
             position={0}

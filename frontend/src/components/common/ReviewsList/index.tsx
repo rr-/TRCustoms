@@ -1,4 +1,4 @@
-import "./index.css";
+import styles from "./index.module.css";
 import { useState } from "react";
 import { ReviewDeleteButton } from "src/components/buttons/ReviewDeleteButton";
 import { ReviewEditButton } from "src/components/buttons/ReviewEditButton";
@@ -36,12 +36,12 @@ interface ReviewViewProps {
 
 const ReviewView = ({ review, showLevels, showExcerpts }: ReviewViewProps) => {
   const [isExcerptExpanded, setIsExcerptExpanded] = useState(false);
-  const classNames = ["Review"];
+  const classNames = [styles.wrapper];
 
   const position = review.rating_class?.position || 0;
   let badge: React.ReactNode;
   if (position > 0) {
-    classNames.push("positive");
+    classNames.push(styles.positive);
     badge = (
       <>
         <IconThumbUp />
@@ -49,7 +49,7 @@ const ReviewView = ({ review, showLevels, showExcerpts }: ReviewViewProps) => {
       </>
     );
   } else if (position < 0) {
-    classNames.push("negative");
+    classNames.push(styles.negative);
     badge = (
       <>
         <IconThumbDown />
@@ -57,7 +57,7 @@ const ReviewView = ({ review, showLevels, showExcerpts }: ReviewViewProps) => {
       </>
     );
   } else {
-    classNames.push("neutral");
+    classNames.push(styles.neutral);
     badge = (
       <>
         <IconDotsCircleHorizontal />
@@ -79,11 +79,11 @@ const ReviewView = ({ review, showLevels, showExcerpts }: ReviewViewProps) => {
 
   return (
     <div className={classNames.join(" ")}>
-      <div className="Review--badge">{badge}</div>
+      <div className={styles.badge}>{badge}</div>
 
-      <div className="Review--content ChildMarginClear">
+      <div className={`${styles.content} ChildMarginClear`}>
         {showLevels ? (
-          <p className="ReviewsList--level">
+          <p>
             Review on <LevelLink level={review.level} />
           </p>
         ) : null}
@@ -100,11 +100,13 @@ const ReviewView = ({ review, showLevels, showExcerpts }: ReviewViewProps) => {
         )}
       </div>
 
-      <footer className="Review--footer">
-        <div className="Review--footerInfo">
-          <UserLink className="Review--userLink" user={review.author}>
+      <footer className={styles.footer}>
+        <div className={styles.info}>
+          <UserLink className={styles.userLink} user={review.author}>
             <>
-              <UserPicture user={review.author} />
+              <div className={styles.userPic}>
+                <UserPicture user={review.author} />
+              </div>
               {review.author.username}
             </>
           </UserLink>
@@ -114,7 +116,7 @@ const ReviewView = ({ review, showLevels, showExcerpts }: ReviewViewProps) => {
           <span>Posted on: {formatDate(review.created)}</span>
         </div>
 
-        <div className="Review--buttons">
+        <div className={styles.buttons}>
           <PermissionGuard
             require={UserPermission.editReviews}
             owningUsers={[review.author]}
@@ -143,7 +145,6 @@ const ReviewsList = ({
       searchQuery={searchQuery}
       onResultCountChange={onResultCountChange}
       queryName="reviews"
-      className="ReviewsList"
       onSearchQueryChange={onSearchQueryChange}
       searchFunc={ReviewService.searchReviews}
       itemKey={(review: ReviewListing) => review.id.toString()}

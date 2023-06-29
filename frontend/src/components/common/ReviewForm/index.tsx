@@ -1,4 +1,3 @@
-import "./index.css";
 import { AxiosError } from "axios";
 import axios from "axios";
 import type { FormikHelpers } from "formik";
@@ -72,10 +71,7 @@ const ReviewQuestionFormField = ({
       }`}
     >
       {templateQuestion.answers.map((templateAnswer) => (
-        <div
-          key={templateAnswer.id}
-          className="ReviewQuestionFormField--answerRow"
-        >
+        <div key={templateAnswer.id}>
           <RadioboxFormField
             label={templateAnswer.answer_text}
             name={name}
@@ -219,7 +215,7 @@ const ReviewForm = ({ level, review, onGoBack, onSubmit }: ReviewFormProps) => {
         status?.success ? (
           <div className="FormFieldSuccess">{status.success}</div>
         ) : (
-          <Form className="ReviewForm">
+          <Form>
             <FormGrid gridType={FormGridType.Column}>
               <FormGridFieldSet title="Review">
                 <InfoMessage type={InfoMessageType.Info}>

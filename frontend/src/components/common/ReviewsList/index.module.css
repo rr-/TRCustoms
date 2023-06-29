@@ -1,0 +1,84 @@
+.wrapper {
+  display: grid;
+  margin-bottom: 3rem;
+  grid-template-rows: auto auto auto;
+  background: var(--box-bg-color);
+}
+.wrapper.positive .badge {
+  background-color: var(--reviews-positive-bg-color);
+}
+.wrapper.neutral .badge {
+  background-color: var(--reviews-neutral-bg-color);
+}
+.wrapper.negative .badge {
+  background-color: var(--reviews-negative-bg-color);
+}
+
+.content {
+  padding: 1rem;
+  border-bottom: 2px solid;
+}
+.wrapper.positive .content {
+  border-bottom-color: var(--reviews-positive-bg-color);
+}
+.wrapper.neutral .content {
+  border-bottom-color: var(--reviews-neutral-bg-color);
+}
+.wrapper.negative .content {
+  border-bottom-color: var(--reviews-negative-bg-color);
+}
+
+.badge {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 1rem;
+}
+.badge :global .Icon {
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  font-size: 2rem;
+}
+
+.footer {
+  padding: 1rem;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  white-space: nowrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem 2rem;
+}
+
+.buttons {
+  display: flex;
+  gap: 0.5rem;
+  align-items: flex-end;
+}
+
+.userLink {
+  display: flex;
+  max-width: 100%;
+  align-items: center;
+  gap: 0.5rem;
+  flex-basis: 0;
+}
+
+.userPic {
+  width: 2rem;
+}
+
+.footer .info {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem 2rem;
+  flex-grow: 1;
+  flex-wrap: wrap;
+}
+@media (max-device-width: 800px) {
+  .footer .info {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}

@@ -239,14 +239,16 @@ const AuditLogSearch = ({
     >
       {({ submitForm, resetForm }) => (
         <Form className="ChildMarginClear">
-          <SectionHeader className={styles.header}>
-            Search filter
-            <Link
-              className={styles.resetButton}
-              onClick={() => handleClear(resetForm)}
-            >
-              (reset)
-            </Link>
+          <SectionHeader>
+            <span className={styles.header}>
+              Search filter
+              <Link
+                className={styles.resetButton}
+                onClick={() => handleClear(resetForm)}
+              >
+                (reset)
+              </Link>
+            </span>
           </SectionHeader>
 
           <div className={styles.form}>

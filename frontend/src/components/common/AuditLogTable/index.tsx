@@ -1,4 +1,4 @@
-import "./index.css";
+import styles from "./index.module.css";
 import { useQuery } from "react-query";
 import type { DataTableColumn } from "src/components/common/DataTable";
 import { DataTable } from "src/components/common/DataTable";
@@ -192,10 +192,10 @@ const AuditLogTable = ({
       name: "changes",
       label: "Changes",
       itemElement: ({ item }) => (
-        <span className="AuditLogTable--changesWrapper">
+        <span className={styles.changesWrapper}>
           {item.changes.join(" ")}
           {item.is_action_required && (
-            <span className="AuditLogTable--requiresAction">
+            <span className={styles.requiresAction}>
               <IconExclamation /> Requires action
             </span>
           )}
@@ -207,17 +207,15 @@ const AuditLogTable = ({
   const itemKey = (auditLog: AuditLogListing) => `${auditLog.id}`;
 
   return (
-    <div className="AuditLogTable">
-      <DataTable
-        className="AuditLogTable"
-        queryName="auditLogs"
-        columns={columns}
-        itemKey={itemKey}
-        searchQuery={searchQuery}
-        searchFunc={AuditLogService.searchAuditLogs}
-        onSearchQueryChange={onSearchQueryChange}
-      />
-    </div>
+    <DataTable
+      className={styles.table}
+      queryName="auditLogs"
+      columns={columns}
+      itemKey={itemKey}
+      searchQuery={searchQuery}
+      searchFunc={AuditLogService.searchAuditLogs}
+      onSearchQueryChange={onSearchQueryChange}
+    />
   );
 };
 

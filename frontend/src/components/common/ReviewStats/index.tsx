@@ -1,4 +1,4 @@
-import "./index.css";
+import styles from "./index.module.css";
 import { sortBy } from "lodash";
 import { useState } from "react";
 import { useContext } from "react";
@@ -32,27 +32,29 @@ const ReviewStats = () => {
   );
 
   return (
-    <div className="ReviewStats">
-      <ul className="ReviewStats--list">
+    <div className={styles.wrapper}>
+      <ul className={styles.list}>
         {sortBy(config.review_stats, (item) => item.rating_class.position).map(
           (item) => (
             <li
               key={item.rating_class.name}
-              className="ReviewStats--listItem"
+              className={styles.listItem}
               onMouseEnter={() => handleMouseEnter(item)}
               onMouseLeave={() => handleMouseLeave(item)}
             >
               <div
                 data-rating-position={item.rating_class.position}
                 title={item.rating_class.name}
-                className="ReviewStats--indicator"
+                className={styles.indicator}
                 style={{
                   height: `${(item.level_count * 100) / maxLevelCount}%`,
                 }}
               >
                 <div
-                  className={`ReviewStats--indicatorFill ${
-                    item.rating_class.position > 0 ? "positive" : "negative"
+                  className={`${styles.indicatorFill} ${
+                    item.rating_class.position > 0
+                      ? styles.positive
+                      : styles.negative
                   }`}
                   style={{
                     opacity: `${
@@ -67,9 +69,7 @@ const ReviewStats = () => {
           )
         )}
       </ul>
-      <footer className="ReviewStats--footer">
-        {tooltip || defaultTooltip}
-      </footer>
+      <footer className={styles.footer}>{tooltip || defaultTooltip}</footer>
     </div>
   );
 };

@@ -1,9 +1,9 @@
-:global .TagsTable--name {
+.table :global .name {
   width: 40%;
 }
-:global .TagsTable--level-count,
-:global .TagsTable--created,
-:global .TagsTable--updated {
+.table :global .levelCount,
+.table :global .created,
+.table :global .updated {
   width: 20%;
 }
 

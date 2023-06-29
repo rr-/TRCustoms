@@ -140,7 +140,7 @@ Example text.`,
         status?.final && status?.success ? (
           <div className="FormFieldSuccess">{status.success}</div>
         ) : (
-          <Form className="Form">
+          <Form>
             <FormGrid>
               <FormGridFieldSet>
                 <TextAreaFormField label="Text" name="text" rich={true} />

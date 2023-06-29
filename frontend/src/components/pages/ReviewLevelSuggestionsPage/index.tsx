@@ -67,7 +67,7 @@ const ReviewLevelSuggestionsPage = () => {
         setSearchQuery={setSearchQuery}
       />
 
-      <Section className="ChildMarginClear">
+      <Section>
         <SectionHeader>Less known levels</SectionHeader>
 
         <InfoMessage type={InfoMessageType.Info}>

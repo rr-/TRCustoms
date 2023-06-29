@@ -1,4 +1,4 @@
-import "./index.css";
+import styles from "./index.module.css";
 
 interface ProgressBarProps {
   title: string;
@@ -7,12 +7,12 @@ interface ProgressBarProps {
 
 const ProgressBar = ({ title, percentCompleted }: ProgressBarProps) => {
   return (
-    <div className="ProgressBar">
+    <div className={styles.wrapper}>
       {title} {`${Math.round(percentCompleted * 100) / 100}% complete`}
       <br />
-      <div className="ProgressBar--container">
+      <div className={styles.indicator}>
         <div
-          className="ProgressBar--indicator"
+          className={styles.indicatorFill}
           style={{ width: `${percentCompleted}%` }}
         ></div>
       </div>

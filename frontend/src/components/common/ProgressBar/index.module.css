@@ -1,0 +1,17 @@
+.wrapper {
+  text-align: center;
+}
+
+.indicator {
+  height: 0.5rem;
+  max-width: 10rem;
+  margin: 0.5rem auto;
+  outline: 2px solid var(--input-border-color);
+  border-radius: 0.5rem;
+  position: relative;
+}
+
+.indicatorFill {
+  height: 100%;
+  background: var(--label-bg-color);
+}

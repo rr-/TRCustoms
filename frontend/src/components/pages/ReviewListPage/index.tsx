@@ -54,7 +54,7 @@ const ReviewListPage = () => {
         setSearchQuery={setSearchQuery}
       />
 
-      <Section className="ChildMarginClear">
+      <Section>
         <SectionHeader>Latest reviews</SectionHeader>
 
         <ReviewsList

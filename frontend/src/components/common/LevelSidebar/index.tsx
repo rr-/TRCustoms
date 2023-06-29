@@ -70,7 +70,7 @@ const LevelSidebar = ({ level, reviewCount }: LevelSidebarProps) => {
     )[0]?.url || null;
 
   return (
-    <div className="LevelSidebar">
+    <div>
       <WalkthroughsModal
         level={level}
         isActive={isWalkthroughsModalActive}

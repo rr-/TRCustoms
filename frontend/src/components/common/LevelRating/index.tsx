@@ -1,4 +1,4 @@
-import "./index.css";
+import styles from "./index.module.css";
 import type { RatingClass } from "src/types";
 
 interface LevelRatingProps {
@@ -9,13 +9,13 @@ const LevelRating = ({ ratingClass }: LevelRatingProps) => {
   if (!ratingClass) {
     return <>Not enough reviews</>;
   }
-  let color: string = "neutral";
+  let style = styles.neutral;
   if (ratingClass.position > 0) {
-    color = "positive";
+    style = styles.positive;
   } else if (ratingClass.position < 0) {
-    color = "negative";
+    style = styles.negative;
   }
-  return <span className={`LevelRating ${color}`}>{ratingClass.name}</span>;
+  return <span className={style}>{ratingClass.name}</span>;
 };
 
 export { LevelRating };

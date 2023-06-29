@@ -60,7 +60,7 @@ const TagSearch = ({
       onSubmit={handleSubmit}
     >
       {({ submitForm, resetForm }) => (
-        <Form className="TagListPage--container">
+        <Form>
           <FormGrid gridType={FormGridType.Row}>
             <FormGridFieldSet>
               <TextFormField label="Search" name="search" />

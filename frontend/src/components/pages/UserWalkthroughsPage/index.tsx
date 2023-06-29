@@ -36,7 +36,7 @@ const UserWalkthroughsPageView = ({
   }, [user.id, isLoggedIn]);
 
   return (
-    <Section className="ChildMarginClear">
+    <Section>
       <SectionHeader>Walkthroughs</SectionHeader>
       <WalkthroughsTable
         showLevelNames={true}

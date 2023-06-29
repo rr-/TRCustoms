@@ -1,25 +1,23 @@
-import "./index.css";
+import styles from "./index.module.css";
 
 interface SectionProps {
-  className?: string | undefined;
   children: React.ReactNode;
 }
 
 interface SectionHeaderProps {
-  className?: string | undefined;
   children: React.ReactNode;
 }
 
-const Section = ({ className, children }: SectionProps) => {
+const Section = ({ children }: SectionProps) => {
   return (
-    <section className={`Section ${className || ""} ChildMarginClear`}>
+    <section className={`${styles.section} ChildMarginClear`}>
       {children}
     </section>
   );
 };
 
-const SectionHeader = ({ className, children }: SectionHeaderProps) => {
-  return <h2 className={`SectionHeader ${className || ""}`}>{children}</h2>;
+const SectionHeader = ({ children }: SectionHeaderProps) => {
+  return <h2 className={styles.header}>{children}</h2>;
 };
 
 export { Section, SectionHeader };

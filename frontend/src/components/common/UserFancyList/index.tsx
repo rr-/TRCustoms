@@ -1,4 +1,4 @@
-import "./index.css";
+import styles from "./index.module.css";
 import { DataList } from "src/components/common/DataList";
 import { UserPictureMode } from "src/components/common/UserPicture";
 import { UserPicture } from "src/components/common/UserPicture";
@@ -14,12 +14,12 @@ interface UserViewProps {
 
 const UserView = ({ user }: UserViewProps) => {
   return (
-    <article className="UserView">
-      <UserLink user={user}>
+    <article className={styles.item}>
+      <UserLink className={styles.link} user={user}>
         <UserPicture user={user} mode={UserPictureMode.Medium} />
-        <br />
-        {user.username}
+        <span className={styles.username}>{user.username}</span>
       </UserLink>
+
       <div>
         Reviews posted: {user.reviewed_level_count}
         <br />
@@ -38,15 +38,18 @@ const UserFancyList = ({
   searchQuery,
   onSearchQueryChange,
 }: UserFancyListProps) => {
-  const itemView = (user: UserListing) => <UserView user={user} />;
-
   const itemKey = (user: UserListing) => `${user.id}`;
+  const itemView = (user: UserListing) => <UserView user={user} />;
+  const pageView = (children: React.ReactNode) => (
+    <div className={styles.page}>{children}</div>
+  );
 
   return (
     <DataList
-      className="UserFancyList"
+      className={styles.wrapper}
       queryName="users"
       itemKey={itemKey}
+      pageView={pageView}
       itemView={itemView}
       searchQuery={searchQuery}
       searchFunc={UserService.searchUsers}

@@ -80,6 +80,7 @@ const TrophiesPage = () => {
   return (
     <PlainLayout header="Item collection guide">
       <Section>
+        <SectionHeader>Introduction</SectionHeader>
         <p>
           By accomplishing various feats and proving your worth, you may find
           yourself eligible to obtain a rare prized item that goes into your

@@ -75,7 +75,7 @@ const TagsTable = ({ searchQuery, onSearchQueryChange }: TagsTableProps) => {
       ),
     },
     {
-      name: "level-count",
+      name: "levelCount",
       sortKey: "level_count",
       label: "Usages",
       itemElement: ({ item }) => `${item.level_count}`,
@@ -98,7 +98,7 @@ const TagsTable = ({ searchQuery, onSearchQueryChange }: TagsTableProps) => {
 
   return (
     <DataTable
-      className="TagsTable"
+      className={styles.table}
       queryName="tags"
       columns={columns}
       itemKey={itemKey}

@@ -1,4 +1,4 @@
-import "./index.css";
+import styles from "./index.module.css";
 import { IconInformationCircle } from "src/components/icons";
 import { IconExclamation } from "src/components/icons";
 
@@ -27,11 +27,11 @@ const InfoMessageIcon = ({ type }: InfoMessageIconProps) => {
 
 const InfoMessage = ({ type, children }: InfoMessageProps) => {
   return (
-    <div className="InfoMessage">
-      <aside className="InfoMessage--aside">
+    <div className={styles.wrapper}>
+      <aside className={styles.aside}>
         <InfoMessageIcon type={type} />
       </aside>
-      <div className="InfoMessage--text">{children}</div>
+      <div className={styles.text}>{children}</div>
     </div>
   );
 };

@@ -53,12 +53,10 @@ const TagListPage = () => {
         onSearchQueryChange={setSearchQuery}
       />
 
-      <div className="TagListPage--results">
-        <TagsTable
-          searchQuery={searchQuery}
-          onSearchQueryChange={setSearchQuery}
-        />
-      </div>
+      <TagsTable
+        searchQuery={searchQuery}
+        onSearchQueryChange={setSearchQuery}
+      />
     </PlainLayout>
   );
 };

@@ -47,9 +47,6 @@
 .grid .fieldsetFields :global .FormField {
   display: contents;
 }
-.grid .buttonsExtra :global .InfoMessage {
-  margin: 0;
-}
 
 .column .buttons {
   margin-top: 1rem;

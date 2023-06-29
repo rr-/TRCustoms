@@ -1,0 +1,14 @@
+.section {
+  margin: 0 0 2rem 0;
+}
+.section > *:last-child {
+  margin-bottom: 0;
+}
+
+.header {
+  margin: 0 0 0.5rem 0;
+  border-bottom: 2px solid var(--section-border-color);
+}
+.header + p {
+  margin-top: 0.5rem;
+}

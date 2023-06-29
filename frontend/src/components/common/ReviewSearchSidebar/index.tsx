@@ -7,7 +7,7 @@ import { SidebarBox } from "src/components/common/SidebarBox";
 const ReviewSearchSidebar = () => {
   return (
     <SidebarBox>
-      <Section className="ChildMarginClear">
+      <Section>
         <SectionHeader>Reviewer longue</SectionHeader>
 
         <Link to={`/reviews/authors`}>

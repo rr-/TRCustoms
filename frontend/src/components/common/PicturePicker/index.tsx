@@ -1,4 +1,4 @@
-import "./index.css";
+import styles from "./index.module.css";
 import { FilePicker } from "src/components/common/FilePicker";
 import type { FilePickerPreviewProps } from "src/components/common/FilePicker";
 import { UploadType } from "src/services/FileService";
@@ -23,13 +23,13 @@ const PicturePickerPreview = ({
   uploadedFile,
   displayMode,
 }: PicturePickerPreviewProps) => {
-  const classNames = ["PicturePickerPreview"];
+  const classNames = [styles.wrapper];
   switch (displayMode) {
     case DisplayMode.Cover:
-      classNames.push("cover");
+      classNames.push(styles.cover);
       break;
     case DisplayMode.Contain:
-      classNames.push("contain");
+      classNames.push(styles.contain);
       break;
   }
   return (

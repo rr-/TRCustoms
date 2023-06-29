@@ -1,6 +1,7 @@
 import styles from "./index.module.css";
 import { useFormikContext } from "formik";
 import { intersection } from "lodash";
+import { SectionHeader } from "src/components/common/Section";
 
 enum FormGridType {
   Column = "column",
@@ -73,7 +74,11 @@ const FormGridFieldSet = ({
 }: FormGridFieldSetProps) => {
   return (
     <div className={styles.fieldset}>
-      {title && <h2 className={styles.fieldsetTitle}>{title}</h2>}
+      {title && (
+        <div className={styles.fieldsetTitle}>
+          <SectionHeader>{title}</SectionHeader>
+        </div>
+      )}
       {header && <div className={styles.fieldsetHeader}>{header}</div>}
       <div className={styles.fieldsetFields}>{children}</div>
       {footer && <div className={styles.fieldsetHeader}>{footer}</div>}

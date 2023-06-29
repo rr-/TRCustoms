@@ -1,6 +1,8 @@
+import styles from "./index.module.css";
+
 const Logo = () => {
   return (
-    <svg className="Logo" viewBox="0 0 441.8 668.86">
+    <svg className={styles.wrapper} viewBox="0 0 441.8 668.86">
       <defs>
         <linearGradient id="gr1" x1="0" x2="0" y1="0" y2="1">
           <stop offset="20%" stopColor="#442111" />

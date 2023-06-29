@@ -1,3 +1,8 @@
+.wrapper {
+  white-space: nowrap;
+  min-width: 16rem;
+}
+
 .header {
   display: flex;
   justify-content: space-between;
@@ -12,15 +17,18 @@
   margin-bottom: 0.5rem;
 }
 
-.section :global .TextFormField--input {
+.section :global .DropDownFormField--select,
+.section :global .TextFormField--input,
+.section :global .TextInput--input {
   width: 100%;
 }
 
 .searchBar {
-  display: flex;
+  display: grid;
+  grid-template-columns: 1fr min-content;
   align-items: flex-end;
 }
 
-.searchBar :global .TextFormField--input {
-  min-width: 0;
+.section :global p {
+  margin: 0;
 }

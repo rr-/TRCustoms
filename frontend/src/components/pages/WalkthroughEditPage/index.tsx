@@ -1,8 +1,9 @@
-import "./index.css";
+import styles from "./index.module.css";
 import { useQuery } from "react-query";
 import { useParams } from "react-router-dom";
 import { Loader } from "src/components/common/Loader";
 import { PageGuard } from "src/components/common/PermissionGuard";
+import { SmartWrap } from "src/components/common/SmartWrap";
 import { WalkthroughForm } from "src/components/common/WalkthroughForm";
 import { PlainLayout } from "src/components/layouts/PlainLayout";
 import { LevelLink } from "src/components/links/LevelLink";
@@ -65,6 +66,18 @@ const WalkthroughEditPage = () => {
     return <p>Invalid action.</p>;
   }
 
+  const actualLevel = level || walkthrough?.level;
+  const header = actualLevel ? (
+    <>
+      Walkthrough for{" "}
+      <LevelLink level={actualLevel}>
+        <SmartWrap text={actualLevel.name} />
+      </LevelLink>
+    </>
+  ) : (
+    <>Walkthrough</>
+  );
+
   return (
     <PageGuard
       require={
@@ -74,25 +87,13 @@ const WalkthroughEditPage = () => {
       }
       owningUserIds={walkthrough?.author ? [walkthrough.author.id] : []}
     >
-      <PlainLayout>
-        {level ? (
-          <h1>
-            {" "}
-            Walkthrough for <LevelLink level={level} />
-          </h1>
-        ) : walkthrough?.level ? (
-          <h1>
-            {" "}
-            Walkthrough for <LevelLink level={walkthrough.level} />
-          </h1>
-        ) : (
-          <h1>Walkthrough</h1>
-        )}
-
-        <WalkthroughForm
-          walkthrough={walkthrough || undefined}
-          level={level || walkthrough?.level}
-        />
+      <PlainLayout header={header}>
+        <div className={styles.wrapper}>
+          <WalkthroughForm
+            walkthrough={walkthrough || undefined}
+            level={level || walkthrough?.level}
+          />
+        </div>
       </PlainLayout>
     </PageGuard>
   );

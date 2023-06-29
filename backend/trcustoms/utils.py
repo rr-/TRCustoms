@@ -101,7 +101,6 @@ def parse_date_range(
 ) -> tuple[datetime | None, datetime | None] | None:
     date_min: datetime | None = None
     date_max: datetime | None = None
-    print("source", source, flush=1)
     if source and (
         match := re.match(r"^(?P<year>\d{4})(?:-(?P<month>\d{1,2}))?$", source)
     ):

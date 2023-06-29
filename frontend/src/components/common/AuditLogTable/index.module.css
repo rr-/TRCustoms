@@ -1,0 +1,26 @@
+.table :global td {
+  border-bottom: 1px solid var(--label-bg-color);
+}
+
+.table :global .created,
+.table :global .author {
+  white-space: nowrap;
+  width: 10%;
+}
+
+.table :global .object {
+  width: 40%;
+}
+.table :global .changes {
+  width: 40%;
+}
+
+.changesWrapper {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0 0.5rem;
+}
+.requiresAction {
+  white-space: nowrap;
+}

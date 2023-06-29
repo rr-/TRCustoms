@@ -1,4 +1,4 @@
-import "./index.css";
+import styles from "./index.module.css";
 import { Link } from "src/components/common/Link";
 
 interface FilterCheckboxesHeaderProps {
@@ -10,7 +10,7 @@ const FilterCheckboxesHeader = ({
   children,
 }: FilterCheckboxesHeaderProps) => {
   return (
-    <div className="FilterCheckboxesHeader">
+    <div className={styles.wrapper}>
       {children}
       <Link onClick={onClear}>(clear)</Link>
     </div>

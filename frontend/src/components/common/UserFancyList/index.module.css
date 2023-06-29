@@ -1,0 +1,26 @@
+.page {
+  display: grid;
+  grid-template-columns: repeat(
+    auto-fit,
+    minmax(min(100%/3, max(12rem, 100%/6)), 1fr)
+  );
+  gap: 1rem;
+}
+
+.item {
+  flex-direction: column;
+  background: var(--box-bg-color);
+  padding: 0.5rem;
+  text-align: center;
+}
+
+.link {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+.username {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
