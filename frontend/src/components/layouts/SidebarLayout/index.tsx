@@ -1,11 +1,18 @@
 import styles from "./index.module.css";
+import { PageHeader } from "src/components/common/PageHeader";
+
+enum SidebarLayoutVariant {
+  Stacked = "stacked",
+  Regular = "regular",
+  Reverse = "reverse",
+}
 
 interface SidebarLayoutProps {
   header?: React.ReactNode;
   subheader?: React.ReactNode;
   sidebar?: React.ReactNode;
   children: React.ReactNode;
-  stacked?: boolean;
+  variant?: SidebarLayoutVariant;
 }
 
 const SidebarLayout = ({
@@ -13,17 +20,16 @@ const SidebarLayout = ({
   subheader,
   sidebar,
   children,
-  stacked,
+  variant,
 }: SidebarLayoutProps) => {
-  const variant = stacked ? styles.stacked : styles.normal;
+  variant ||= SidebarLayoutVariant.Regular;
 
   return (
-    <div className={`${styles.wrapper} ${variant}`}>
+    <div className={`${styles.wrapper} ${styles[variant]}`}>
       {(header || subheader) && (
-        <header className={`${styles.header} ChildMarginClear`}>
-          {header && <h1 className={styles.headerText}>{header}</h1>}
-          {subheader && <h2 className={styles.subheaderText}>{subheader}</h2>}
-        </header>
+        <div className={styles.header}>
+          <PageHeader header={header} subheader={subheader} />
+        </div>
       )}
 
       <aside className={styles.sidebar}>{sidebar}</aside>
@@ -33,4 +39,4 @@ const SidebarLayout = ({
   );
 };
 
-export { SidebarLayout };
+export { SidebarLayout, SidebarLayoutVariant };

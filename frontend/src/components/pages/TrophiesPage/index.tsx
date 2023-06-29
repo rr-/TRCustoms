@@ -1,5 +1,7 @@
 import styles from "./index.module.css";
+import { Section } from "src/components/common/Section";
 import { SectionHeader } from "src/components/common/Section";
+import { PlainLayout } from "src/components/layouts/PlainLayout";
 import { usePageMetadata } from "src/contexts/PageMetadataContext";
 
 const UpgradableArtifacts = [
@@ -76,82 +78,89 @@ const TrophiesPage = () => {
   const tiers = UpgradableArtifacts[0].tiers;
 
   return (
-    <div className="TrophiesPage">
-      <SectionHeader>Item collection guide</SectionHeader>
+    <PlainLayout header="Item collection guide">
+      <Section>
+        <p>
+          By accomplishing various feats and proving your worth, you may find
+          yourself eligible to obtain a rare prized item that goes into your
+          Inventory. These awards are highly coveted and come with a lasting
+          impact on your profile. Take on the challenge and see if you have what
+          it takes to earn one for yourself.
+        </p>
+      </Section>
 
-      <p>
-        By accomplishing various feats and proving your worth, you may find
-        yourself eligible to obtain a rare prized item that goes into your
-        Inventory. These awards are highly coveted and come with a lasting
-        impact on your profile. Take on the challenge and see if you have what
-        it takes to earn one for yourself.
-      </p>
+      <Section>
+        <SectionHeader>Upgradable items</SectionHeader>
 
-      <SectionHeader>Upgradable items</SectionHeader>
+        <p>
+          As you advance in your journey, you may find yourself eligible for an
+          upgradable reward. These recognitions come in tiers, each one more
+          prestigious than the last.
+        </p>
+        <p>
+          Here's a breakdown of specific requirements necessary to obtain and
+          upgrade the items:
+        </p>
 
-      <p>
-        As you advance in your journey, you may find yourself eligible for an
-        upgradable reward. These recognitions come in tiers, each one more
-        prestigious than the last.
-      </p>
-      <p>
-        Here's a breakdown of specific requirements necessary to obtain and
-        upgrade the items:
-      </p>
-
-      <table className={styles.upgradableArtifactsTable}>
-        <thead>
-          <tr className={styles.upgradableArtifactsTableHeader}>
-            <th className={styles.upgradableArtifactsTableCell}>Tiers</th>
-            {UpgradableArtifacts.map((artifact) => (
-              <th
-                className={styles.upgradableArtifactsTableCell}
-                key={artifact.name}
-              >
-                {artifact.name}
-              </th>
-            ))}
-          </tr>
-        </thead>
-        <tbody>
-          {tiers.map((tier) => (
-            <tr className={styles.upgradableArtifactsTableRow} key={tier.name}>
-              <td className={styles.upgradableArtifactsTableCell}>
-                {tier.name} tier
-              </td>
+        <table className={styles.upgradableArtifactsTable}>
+          <thead>
+            <tr className={styles.upgradableArtifactsTableHeader}>
+              <th className={styles.upgradableArtifactsTableCell}>Tiers</th>
               {UpgradableArtifacts.map((artifact) => (
-                <td
+                <th
                   className={styles.upgradableArtifactsTableCell}
                   key={artifact.name}
                 >
-                  {
-                    artifact.tiers.filter((t) => t.name === tier.name)[0]
-                      .description
-                  }
-                </td>
+                  {artifact.name}
+                </th>
               ))}
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {tiers.map((tier) => (
+              <tr
+                className={styles.upgradableArtifactsTableRow}
+                key={tier.name}
+              >
+                <td className={styles.upgradableArtifactsTableCell}>
+                  {tier.name} tier
+                </td>
+                {UpgradableArtifacts.map((artifact) => (
+                  <td
+                    className={styles.upgradableArtifactsTableCell}
+                    key={artifact.name}
+                  >
+                    {
+                      artifact.tiers.filter((t) => t.name === tier.name)[0]
+                        .description
+                    }
+                  </td>
+                ))}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </Section>
 
-      <SectionHeader>Standard items</SectionHeader>
+      <Section>
+        <SectionHeader>Standard items</SectionHeader>
 
-      <p>
-        Whether it's for offering guidance to younger explorers or making an
-        incredible level, these one-shot items can be obtained for a single,
-        outstanding accomplishment.
-      </p>
+        <p>
+          Whether it's for offering guidance to younger explorers or making an
+          incredible level, these one-shot items can be obtained for a single,
+          outstanding accomplishment.
+        </p>
 
-      {StandartArtifacts.map((artifact) => (
-        <>
-          <h3 className={styles.standardArtifactHeader}>{artifact.name}</h3>
-          <p className={styles.standardArtifactDescription}>
-            {artifact.description}
-          </p>
-        </>
-      ))}
-    </div>
+        {StandartArtifacts.map((artifact) => (
+          <>
+            <h3 className={styles.standardArtifactHeader}>{artifact.name}</h3>
+            <p className={styles.standardArtifactDescription}>
+              {artifact.description}
+            </p>
+          </>
+        ))}
+      </Section>
+    </PlainLayout>
   );
 };
 

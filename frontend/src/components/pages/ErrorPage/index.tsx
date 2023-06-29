@@ -1,4 +1,5 @@
-import "./index.css";
+import styles from "./index.module.css";
+import { CenterLayout } from "src/components/layouts/CenterLayout";
 import { usePageMetadata } from "src/contexts/PageMetadataContext";
 
 const Error403Page = () => {
@@ -55,10 +56,10 @@ const Error403Page = () => {
   usePageMetadata(() => ({ ready: true, title: "403" }), []);
 
   return (
-    <div className="ErrorPage">
-      <img alt="403 error" src={image.image} />
-      {image.text}
-    </div>
+    <CenterLayout>
+      <img className={styles.image} alt="403 error" src={image.image} />
+      <div>{image.text}</div>
+    </CenterLayout>
   );
 };
 
@@ -98,10 +99,10 @@ const Error404Page = () => {
 
   const image = images[Math.floor(Math.random() * images.length)];
   return (
-    <div className="ErrorPage">
-      <img alt="404 error" src={image.image} />
-      {image.text}
-    </div>
+    <CenterLayout>
+      <img className={styles.image} alt="404 error" src={image.image} />
+      <div>{image.text}</div>
+    </CenterLayout>
   );
 };
 

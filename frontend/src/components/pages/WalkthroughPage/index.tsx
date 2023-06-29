@@ -6,6 +6,7 @@ import { Loader } from "src/components/common/Loader";
 import { PermissionGuard } from "src/components/common/PermissionGuard";
 import { WalkthroughSidebar } from "src/components/common/WalkthroughSidebar";
 import { SidebarLayout } from "src/components/layouts/SidebarLayout";
+import { SidebarLayoutVariant } from "src/components/layouts/SidebarLayout";
 import { LevelLink } from "src/components/links/LevelLink";
 import { UserLink } from "src/components/links/UserLink";
 import { Markdown } from "src/components/markdown/Markdown";
@@ -118,7 +119,11 @@ const WalkthroughPage = () => {
 
   return (
     <SidebarLayout
-      stacked={walkthrough.walkthrough_type === WalkthroughType.Link}
+      variant={
+        walkthrough.walkthrough_type === WalkthroughType.Link
+          ? SidebarLayoutVariant.Stacked
+          : SidebarLayoutVariant.Regular
+      }
       header={header}
       subheader={subheader}
       sidebar={sidebar}

@@ -5,9 +5,10 @@ import { LevelList } from "src/components/common/LevelList";
 import { QueryPersister } from "src/components/common/QueryPersister";
 import { deserializeGenericSearchQuery } from "src/components/common/QueryPersister";
 import { serializeGenericSearchQuery } from "src/components/common/QueryPersister";
+import { ReviewSearchSidebar } from "src/components/common/ReviewSearchSidebar";
 import { Section } from "src/components/common/Section";
 import { SectionHeader } from "src/components/common/Section";
-import { ReviewBasePage } from "src/components/pages/ReviewBasePage";
+import { SidebarLayout } from "src/components/layouts/SidebarLayout";
 import { usePageMetadata } from "src/contexts/PageMetadataContext";
 import type { LevelSearchQuery } from "src/services/LevelService";
 import { getCurrentSearchParams } from "src/utils/misc";
@@ -58,7 +59,7 @@ const ReviewLevelSuggestionsPage = () => {
   );
 
   return (
-    <ReviewBasePage>
+    <SidebarLayout sidebar={<ReviewSearchSidebar />}>
       <QueryPersister
         serializeSearchQuery={serializeSearchQuery}
         deserializeSearchQuery={deserializeSearchQuery}
@@ -78,7 +79,7 @@ const ReviewLevelSuggestionsPage = () => {
           onSearchQueryChange={setSearchQuery}
         />
       </Section>
-    </ReviewBasePage>
+    </SidebarLayout>
   );
 };
 

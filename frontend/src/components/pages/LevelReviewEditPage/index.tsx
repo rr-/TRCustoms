@@ -5,6 +5,7 @@ import { useParams } from "react-router-dom";
 import { Loader } from "src/components/common/Loader";
 import { PageGuard } from "src/components/common/PermissionGuard";
 import { ReviewForm } from "src/components/common/ReviewForm";
+import { PlainLayout } from "src/components/layouts/PlainLayout";
 import { usePageMetadata } from "src/contexts/PageMetadataContext";
 import type { LevelNested } from "src/services/LevelService";
 import { LevelService } from "src/services/LevelService";
@@ -72,11 +73,9 @@ const LevelReviewEditPage = () => {
       require={UserPermission.editReviews}
       owningUserIds={[review.author.id]}
     >
-      <div className="LevelReviewEditPage">
-        <h1>Reviewing {level.name}</h1>
-
+      <PlainLayout header={`Reviewing ${level.name}`}>
         <ReviewForm onGoBack={handleGoBack} review={review} level={level} />
-      </div>
+      </PlainLayout>
     </PageGuard>
   );
 };

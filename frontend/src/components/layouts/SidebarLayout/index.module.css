@@ -2,24 +2,25 @@
   display: grid;
   gap: 1rem 1.5rem;
 }
-.wrapper.normal {
+.wrapper.regular {
   grid-template-columns: minmax(300px, 25%) 1fr;
+}
+.wrapper.reverse {
+  grid-template-columns: 1fr minmax(300px, 25%);
+  grid-auto-flow: dense;
 }
 .wrapper.stacked {
   grid-template-columns: 25%) 1fr;
 }
 
-.wrapper.normal .header {
+.wrapper.regular .header {
   grid-column: span 2;
 }
-
-.headerText {
-  margin: 0;
-  font-size: 2rem;
-  line-height: 2.5rem;
+.wrapper.reverse .sidebar {
+  grid-column: 2;
 }
-.subheaderText {
-  margin: 0.5rem 0 0 0;
+.wrapper.reverse .content {
+  grid-column: 1;
 }
 
 @media (max-device-width: 640px) {

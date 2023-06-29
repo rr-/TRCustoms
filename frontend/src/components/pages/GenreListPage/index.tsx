@@ -4,6 +4,7 @@ import { GenresTable } from "src/components/common/GenresTable";
 import { QueryPersister } from "src/components/common/QueryPersister";
 import { deserializeGenericSearchQuery } from "src/components/common/QueryPersister";
 import { serializeGenericSearchQuery } from "src/components/common/QueryPersister";
+import { PlainLayout } from "src/components/layouts/PlainLayout";
 import { usePageMetadata } from "src/contexts/PageMetadataContext";
 import type { GenreSearchQuery } from "src/services/GenreService";
 import { getCurrentSearchParams } from "src/utils/misc";
@@ -38,7 +39,7 @@ const GenreListPage = () => {
   );
 
   return (
-    <div className="GenreListPage">
+    <PlainLayout>
       <QueryPersister
         serializeSearchQuery={serializeSearchQuery}
         deserializeSearchQuery={deserializeSearchQuery}
@@ -57,7 +58,7 @@ const GenreListPage = () => {
           onSearchQueryChange={setSearchQuery}
         />
       </div>
-    </div>
+    </PlainLayout>
   );
 };
 

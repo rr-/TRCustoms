@@ -3,6 +3,7 @@ import { useCallback } from "react";
 import { Link } from "react-router-dom";
 import { LevelForm } from "src/components/common/LevelForm";
 import { PageGuard } from "src/components/common/PermissionGuard";
+import { PlainLayout } from "src/components/layouts/PlainLayout";
 import { usePageMetadata } from "src/contexts/PageMetadataContext";
 import type { LevelDetails } from "src/services/LevelService";
 import { UserPermission } from "src/services/UserService";
@@ -27,9 +28,7 @@ const LevelUploadPageView = () => {
   );
 
   return (
-    <div className="LevelUploadForm">
-      <h1>Upload new level</h1>
-
+    <>
       {isComplete ? (
         <>
           Your level was uploaded and it now needs to be approved by the staff.
@@ -39,14 +38,16 @@ const LevelUploadPageView = () => {
       ) : (
         <LevelForm onSubmit={handleSubmit} />
       )}
-    </div>
+    </>
   );
 };
 
 const LevelUploadPage = () => {
   return (
     <PageGuard require={UserPermission.uploadLevels}>
-      <LevelUploadPageView />
+      <PlainLayout header="Upload new level">
+        <LevelUploadPageView />
+      </PlainLayout>
     </PageGuard>
   );
 };

@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import { Loader } from "src/components/common/Loader";
 import { ReviewForm } from "src/components/common/ReviewForm";
+import { PlainLayout } from "src/components/layouts/PlainLayout";
 import { usePageMetadata } from "src/contexts/PageMetadataContext";
 import { UserContext } from "src/contexts/UserContext";
 import type { LevelNested } from "src/services/LevelService";
@@ -60,11 +61,9 @@ const LevelReviewPage = () => {
   const review = reviewResult.data;
 
   return (
-    <div className="LevelReviewPage">
-      <h1>Reviewing {level.name}</h1>
-
+    <PlainLayout header={`Reviewing ${level.name}`}>
       <ReviewForm onGoBack={handleGoBack} review={review} level={level} />
-    </div>
+    </PlainLayout>
   );
 };
 

@@ -1,28 +1,26 @@
-.TextFormattingGuidelinesPage--section {
+.section {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 1rem;
-  background: var(--box-bg-color);
-  padding: 1rem;
   margin-bottom: 3rem;
 }
 
-.TextFormattingGuidelinesPage--sectionHeader {
+.sectionHeader {
   margin: 0 0 1rem 0;
 }
 
-.TextFormattingGuidelinesPage--exampleHeader {
+.exampleHeader {
   display: block;
   margin: 0 0 0.5rem 0;
 }
 
-.TextFormattingGuidelinesPage--code {
+.code {
   white-space: pre-wrap;
   margin: 0;
 }
 
 @media (max-device-width: 800px) {
-  .TextFormattingGuidelinesPage--section {
+  .section {
     grid-template-columns: 1fr;
   }
 }

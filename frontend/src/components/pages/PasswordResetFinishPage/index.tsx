@@ -8,6 +8,7 @@ import { FormGrid } from "src/components/common/FormGrid";
 import { FormGridButtons } from "src/components/common/FormGrid";
 import { FormGridFieldSet } from "src/components/common/FormGrid";
 import { PasswordFormField } from "src/components/formfields/PasswordFormField";
+import { PlainLayout } from "src/components/layouts/PlainLayout";
 import { usePageMetadata } from "src/contexts/PageMetadataContext";
 import { UserService } from "src/services/UserService";
 import { makeSentence } from "src/utils/string";
@@ -70,9 +71,7 @@ const PasswordResetFinishPage = () => {
   };
 
   return (
-    <div className="PasswordResetFinishPage">
-      <h1>Password Reset Finish</h1>
-
+    <PlainLayout header="Password Reset Finish">
       {isComplete ? (
         <>
           Password reset complete. You may now <Link to={"/login"}>log in</Link>
@@ -109,7 +108,7 @@ const PasswordResetFinishPage = () => {
           )}
         </Formik>
       )}
-    </div>
+    </PlainLayout>
   );
 };
 

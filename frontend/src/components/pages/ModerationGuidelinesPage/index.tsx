@@ -2,6 +2,7 @@ import { PageGuard } from "src/components/common/PermissionGuard";
 import { SectionHeader } from "src/components/common/Section";
 import { IconCheck } from "src/components/icons";
 import { IconReject } from "src/components/icons";
+import { PlainLayout } from "src/components/layouts/PlainLayout";
 import { usePageMetadata } from "src/contexts/PageMetadataContext";
 import { UserPermission } from "src/services/UserService";
 
@@ -9,8 +10,7 @@ const ModerationGuidelinesPageView = () => {
   usePageMetadata(() => ({ ready: true, title: "Moderating Guidelines" }), []);
 
   return (
-    <div className="ModerationGuidelinesPage">
-      <h1>Moderating Guidelines</h1>
+    <>
       <SectionHeader>Introduction</SectionHeader>
       <p>
         As a moderator, you have the ability to grant and revoke access to
@@ -117,14 +117,16 @@ const ModerationGuidelinesPageView = () => {
       <p>
         Repeated offenders and trolls must be banned with a reason provided.
       </p>
-    </div>
+    </>
   );
 };
 
 const ModerationGuidelinesPage = () => {
   return (
     <PageGuard require={UserPermission.reviewAuditLogs}>
-      <ModerationGuidelinesPageView />
+      <PlainLayout header="Moderating Guidelines">
+        <ModerationGuidelinesPageView />
+      </PlainLayout>
     </PageGuard>
   );
 };

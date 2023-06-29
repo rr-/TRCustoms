@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import type { LegaleseEntry } from "src/components/common/NestedLegalese";
 import { NestedLegalese } from "src/components/common/NestedLegalese";
+import { PlainLayout } from "src/components/layouts/PlainLayout";
 import { usePageMetadata } from "src/contexts/PageMetadataContext";
 
 const buildVersion = process.env.REACT_APP_BUILD_VERSION;
@@ -110,9 +111,9 @@ const AboutPage = () => {
   );
 
   return (
-    <div className="AboutPage">
+    <PlainLayout>
       <NestedLegalese entry={About} />
-    </div>
+    </PlainLayout>
   );
 };
 

@@ -6,6 +6,7 @@ import { FormGrid } from "src/components/common/FormGrid";
 import { FormGridButtons } from "src/components/common/FormGrid";
 import { FormGridFieldSet } from "src/components/common/FormGrid";
 import { EmailFormField } from "src/components/formfields/EmailFormField";
+import { PlainLayout } from "src/components/layouts/PlainLayout";
 import { usePageMetadata } from "src/contexts/PageMetadataContext";
 import { UserService } from "src/services/UserService";
 import { makeSentence } from "src/utils/string";
@@ -64,9 +65,7 @@ const PasswordResetPage = () => {
   };
 
   return (
-    <div className="PasswordResetPage">
-      <h1>Password Reset</h1>
-
+    <PlainLayout header="Password Reset">
       {isComplete ? (
         <>
           If the e-mail was correct, an email with further instructions will be
@@ -94,7 +93,7 @@ const PasswordResetPage = () => {
           )}
         </Formik>
       )}
-    </div>
+    </PlainLayout>
   );
 };
 

@@ -5,6 +5,7 @@ import { deserializeGenericSearchQuery } from "src/components/common/QueryPersis
 import { serializeGenericSearchQuery } from "src/components/common/QueryPersister";
 import { UserList } from "src/components/common/UserList";
 import { UserSearch } from "src/components/common/UserSearch";
+import { PlainLayout } from "src/components/layouts/PlainLayout";
 import { usePageMetadata } from "src/contexts/PageMetadataContext";
 import type { UserSearchQuery } from "src/services/UserService";
 import { UserPermission } from "src/services/UserService";
@@ -33,7 +34,7 @@ const UserListPageView = () => {
   usePageMetadata(() => ({ ready: true, title: "Users" }), []);
 
   return (
-    <div className="UserListPage">
+    <PlainLayout>
       <QueryPersister
         serializeSearchQuery={serializeSearchQuery}
         deserializeSearchQuery={deserializeSearchQuery}
@@ -50,7 +51,7 @@ const UserListPageView = () => {
         searchQuery={searchQuery}
         onSearchQueryChange={setSearchQuery}
       />
-    </div>
+    </PlainLayout>
   );
 };
 

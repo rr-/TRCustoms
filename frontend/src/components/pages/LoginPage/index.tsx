@@ -12,6 +12,7 @@ import { FormGridButtons } from "src/components/common/FormGrid";
 import { FormGridFieldSet } from "src/components/common/FormGrid";
 import { PasswordFormField } from "src/components/formfields/PasswordFormField";
 import { TextFormField } from "src/components/formfields/TextFormField";
+import { PlainLayout } from "src/components/layouts/PlainLayout";
 import { usePageMetadata } from "src/contexts/PageMetadataContext";
 import { UserContext } from "src/contexts/UserContext";
 import { AuthService } from "src/services/AuthService";
@@ -77,8 +78,7 @@ const LoginPage = () => {
   usePageMetadata(() => ({ ready: true, title: "Login" }), []);
 
   return (
-    <div className="LoginForm">
-      <h1>Login</h1>
+    <PlainLayout header="Login">
       <Formik
         initialValues={{ username: "", password: "" }}
         onSubmit={handleSubmit}
@@ -100,7 +100,7 @@ const LoginPage = () => {
           </Form>
         )}
       </Formik>
-    </div>
+    </PlainLayout>
   );
 };
 
