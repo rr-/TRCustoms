@@ -1,37 +1,37 @@
-.page {
+.wrapper {
   display: grid;
   gap: 1rem;
-  grid-template-areas: "leftSidebar main rightSidebar";
+  grid-template-areas: "left main right";
   grid-template-columns: 2fr 5fr 2fr;
 }
 
 @media (max-device-width: 1000px) {
-  .page {
+  .wrapper {
     grid-template-columns: 1fr 1fr;
     grid-template-rows: min-content auto;
     grid-template-areas:
-      "leftSidebar rightSidebar"
+      "left right"
       "main main";
   }
 }
 
 @media (max-device-width: 600px) {
-  .page {
+  .wrapper {
     grid-template-columns: 1fr;
     grid-template-areas:
-      "leftSidebar"
+      "left"
       "main"
-      "rightSidebar";
+      "right";
   }
 }
 
-.featuredLevels {
+.main {
   grid-area: main;
 }
-.leftSidebar {
-  grid-area: leftSidebar;
+.left {
+  grid-area: left;
   white-space: nowrap;
 }
-.rightSidebar {
-  grid-area: rightSidebar;
+.right {
+  grid-area: right;
 }
