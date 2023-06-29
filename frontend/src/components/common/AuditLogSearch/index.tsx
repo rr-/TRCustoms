@@ -5,6 +5,7 @@ import { useState } from "react";
 import { useCallback } from "react";
 import { useEffect } from "react";
 import { Checkbox } from "src/components/common/Checkbox";
+import { Collapsible } from "src/components/common/Collapsible";
 import { Link } from "src/components/common/Link";
 import { SectionHeader } from "src/components/common/Section";
 import { CheckboxFormField } from "src/components/formfields/CheckboxFormField";
@@ -20,6 +21,7 @@ interface StateSearchSectionItem {
 
 interface StateSearchSection {
   title: string;
+  storageKey: string;
   searchModel: string;
   searchList: StateSearchSectionItem[];
 }
@@ -92,6 +94,7 @@ const isSearchTermPresent = (
 const StateSearches: StateSearchSection[] = [
   {
     title: "User States",
+    storageKey: `auditLogUserStatus`,
     searchModel: "user",
     searchList: [
       { title: "Created", searchState: "created" },
@@ -104,6 +107,7 @@ const StateSearches: StateSearchSection[] = [
   },
   {
     title: "Level States",
+    storageKey: `auditLogLevelStatus`,
     searchModel: "level",
     searchList: [
       { title: "Created", searchState: "created" },
@@ -115,6 +119,7 @@ const StateSearches: StateSearchSection[] = [
   },
   {
     title: "Review States",
+    storageKey: `auditLogReviewStatus`,
     searchModel: "levelreview",
     searchList: [
       { title: "Posted", searchState: "created" },
@@ -123,6 +128,7 @@ const StateSearches: StateSearchSection[] = [
   },
   {
     title: "Tag States",
+    storageKey: `auditLogTagStatus`,
     searchModel: "tag",
     searchList: [
       { title: "Created", searchState: "created" },
@@ -132,6 +138,7 @@ const StateSearches: StateSearchSection[] = [
   },
   {
     title: "Walkthrough States",
+    storageKey: `auditLogWalkthroughStatus`,
     searchModel: "walkthrough",
     searchList: [
       { title: "Created", searchState: "created" },
@@ -242,7 +249,7 @@ const AuditLogSearch = ({
             </Link>
           </SectionHeader>
 
-          <div>
+          <div className={styles.form}>
             <CheckboxFormField
               onChange={() => {
                 submitForm();
@@ -253,7 +260,7 @@ const AuditLogSearch = ({
 
             <TextFormField label="Search user" name="userSearch" />
             <TextFormField label="Search object" name="objectSearch" />
-            <div className="FormField">
+            <div className={styles.submitStrip}>
               <SubmitButton onClick={submitForm} icon={<IconSearch />}>
                 Search
               </SubmitButton>
@@ -261,11 +268,12 @@ const AuditLogSearch = ({
           </div>
 
           {StateSearches.map((section, sectionNum) => (
-            <>
-              <SectionHeader key={sectionNum} className={styles.header}>
-                {section.title}
-              </SectionHeader>
-              <div>
+            <div className={styles.section}>
+              <Collapsible
+                key={section.storageKey}
+                storageKey={section.storageKey}
+                title={section.title}
+              >
                 {section.searchList.map((sectionItem, searchNum) => (
                   <Checkbox
                     key={searchNum}
@@ -280,8 +288,8 @@ const AuditLogSearch = ({
                     checked={isStateSearchCheckboxChecked(section, sectionItem)}
                   />
                 ))}
-              </div>
-            </>
+              </Collapsible>
+            </div>
           ))}
         </Form>
       )}
