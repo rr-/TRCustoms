@@ -4,6 +4,7 @@ import { InfoMessage } from "src/components/common/InfoMessage";
 import { InfoMessageType } from "src/components/common/InfoMessage";
 import { Loader } from "src/components/common/Loader";
 import { PermissionGuard } from "src/components/common/PermissionGuard";
+import { SmartWrap } from "src/components/common/SmartWrap";
 import { WalkthroughSidebar } from "src/components/common/WalkthroughSidebar";
 import { SidebarLayout } from "src/components/layouts/SidebarLayout";
 import { SidebarLayoutVariant } from "src/components/layouts/SidebarLayout";
@@ -99,12 +100,18 @@ const WalkthroughPage = () => {
   const walkthrough = result.data;
   const header = (
     <>
-      Walkthrough for <LevelLink level={walkthrough.level} />
+      Walkthrough for{" "}
+      <LevelLink level={walkthrough.level}>
+        <SmartWrap text={walkthrough.level.name} />
+      </LevelLink>
     </>
   );
   const subheader = walkthrough.author ? (
     <>
-      by <UserLink user={walkthrough.author} />
+      by{" "}
+      <UserLink user={walkthrough.author}>
+        <SmartWrap text={walkthrough.author.username} />
+      </UserLink>
     </>
   ) : (
     walkthrough.legacy_author_name && <>by {walkthrough.legacy_author_name}</>

@@ -124,7 +124,7 @@ const ModerationGuidelinesPageView = () => {
 const ModerationGuidelinesPage = () => {
   return (
     <PageGuard require={UserPermission.reviewAuditLogs}>
-      <PlainLayout header="Moderating Guidelines">
+      <PlainLayout header="Moderating guidelines">
         <ModerationGuidelinesPageView />
       </PlainLayout>
     </PageGuard>
