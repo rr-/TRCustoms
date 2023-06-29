@@ -1,4 +1,6 @@
-import "./index.css";
+import styles from "./index.module.css";
+import { Box } from "src/components/common/Box";
+import { PlainLayout } from "src/components/layouts/PlainLayout";
 import { Markdown } from "src/components/markdown/Markdown";
 import { usePageMetadata } from "src/contexts/PageMetadataContext";
 
@@ -84,37 +86,27 @@ const TextFormattingGuidelinesPage = () => {
   usePageMetadata(() => ({ ready: true, title: "Text formatting guide" }), []);
 
   return (
-    <div className="TextFormattingGuidelinesPage">
-      <h1>Text formatting guide</h1>
-      <div className="TextFormattingGuidelinesPage--sections">
-        {sections.map((section) => (
-          <>
-            <h2 className="TextFormattingGuidelinesPage--sectionHeader">
-              {section.title}
-            </h2>
-            <article
-              key={section.title}
-              className="TextFormattingGuidelinesPage--section"
-            >
+    <PlainLayout header="Text formatting guide">
+      {sections.map((section) => (
+        <>
+          <h2 className={styles.sectionHeader}>{section.title}</h2>
+          <Box>
+            <article key={section.title} className={styles.section}>
               <div className="ChildMarginClear">
-                <h3 className="TextFormattingGuidelinesPage--exampleHeader">
-                  Syntax
-                </h3>
-                <pre className="TextFormattingGuidelinesPage--code">
+                <h3 className={styles.exampleHeader}>Syntax</h3>
+                <pre className={styles.code}>
                   <code>{section.text}</code>
                 </pre>
               </div>
               <div className="ChildMarginClear">
-                <h3 className="TextFormattingGuidelinesPage--exampleHeader">
-                  Result
-                </h3>
+                <h3 className={styles.exampleHeader}>Result</h3>
                 <Markdown>{section.text}</Markdown>
               </div>
             </article>
-          </>
-        ))}
-      </div>
-    </div>
+          </Box>
+        </>
+      ))}
+    </PlainLayout>
   );
 };
 

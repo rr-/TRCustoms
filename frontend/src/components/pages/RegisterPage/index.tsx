@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { InfoMessageType } from "src/components/common/InfoMessage";
 import { InfoMessage } from "src/components/common/InfoMessage";
 import { UserForm } from "src/components/common/UserForm";
+import { PlainLayout } from "src/components/layouts/PlainLayout";
 import { usePageMetadata } from "src/contexts/PageMetadataContext";
 import { UserContext } from "src/contexts/UserContext";
 import { AuthService } from "src/services/AuthService";
@@ -40,9 +41,7 @@ const RegisterPage = () => {
   );
 
   return (
-    <div className="RegisterForm">
-      <h1>Register</h1>
-
+    <PlainLayout header="Register">
       <InfoMessage type={InfoMessageType.Info}>
         <span>
           If you already have a user profile on trle.net, you can claim it by
@@ -61,7 +60,7 @@ const RegisterPage = () => {
       ) : (
         <UserForm onSubmit={handleSubmit} />
       )}
-    </div>
+    </PlainLayout>
   );
 };
 

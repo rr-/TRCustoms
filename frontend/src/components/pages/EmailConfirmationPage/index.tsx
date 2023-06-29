@@ -3,6 +3,7 @@ import { useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import { Loader } from "src/components/common/Loader";
+import { PlainLayout } from "src/components/layouts/PlainLayout";
 import { usePageMetadata } from "src/contexts/PageMetadataContext";
 import { UserService } from "src/services/UserService";
 import { UserDetails } from "src/services/UserService";
@@ -32,7 +33,7 @@ const EmailConfirmationPage = () => {
 
   if (user) {
     return (
-      <div className="EmailConfirmationPage">
+      <PlainLayout>
         {user.is_active ? (
           <p>
             Your email was confirmed. You can now{" "}
@@ -50,14 +51,14 @@ const EmailConfirmationPage = () => {
             </p>
           </>
         )}
-      </div>
+      </PlainLayout>
     );
   } else if (error) {
     return (
-      <div className="EmailConfirmationPage">
+      <PlainLayout>
         <p>There was something wrong with email confirmation.</p>
         <p>{error}</p>
-      </div>
+      </PlainLayout>
     );
   } else {
     return <Loader />;

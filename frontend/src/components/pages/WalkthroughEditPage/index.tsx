@@ -4,6 +4,7 @@ import { useParams } from "react-router-dom";
 import { Loader } from "src/components/common/Loader";
 import { PageGuard } from "src/components/common/PermissionGuard";
 import { WalkthroughForm } from "src/components/common/WalkthroughForm";
+import { PlainLayout } from "src/components/layouts/PlainLayout";
 import { LevelLink } from "src/components/links/LevelLink";
 import { usePageMetadata } from "src/contexts/PageMetadataContext";
 import type { LevelDetails } from "src/services/LevelService";
@@ -65,15 +66,15 @@ const WalkthroughEditPage = () => {
   }
 
   return (
-    <div className="WalkthroughEditPage">
-      <PageGuard
-        require={
-          walkthrough
-            ? UserPermission.editWalkthroughs
-            : UserPermission.postWalkthroughs
-        }
-        owningUserIds={walkthrough?.author ? [walkthrough.author.id] : []}
-      >
+    <PageGuard
+      require={
+        walkthrough
+          ? UserPermission.editWalkthroughs
+          : UserPermission.postWalkthroughs
+      }
+      owningUserIds={walkthrough?.author ? [walkthrough.author.id] : []}
+    >
+      <PlainLayout>
         {level ? (
           <h1>
             {" "}
@@ -92,8 +93,8 @@ const WalkthroughEditPage = () => {
           walkthrough={walkthrough || undefined}
           level={level || walkthrough?.level}
         />
-      </PageGuard>
-    </div>
+      </PlainLayout>
+    </PageGuard>
   );
 };
 

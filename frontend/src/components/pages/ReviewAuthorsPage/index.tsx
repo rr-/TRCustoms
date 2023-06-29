@@ -2,11 +2,12 @@ import { useState } from "react";
 import { QueryPersister } from "src/components/common/QueryPersister";
 import { deserializeGenericSearchQuery } from "src/components/common/QueryPersister";
 import { serializeGenericSearchQuery } from "src/components/common/QueryPersister";
+import { ReviewSearchSidebar } from "src/components/common/ReviewSearchSidebar";
 import { Section } from "src/components/common/Section";
 import { SectionHeader } from "src/components/common/Section";
 import { UserFancyList } from "src/components/common/UserFancyList";
 import { UserSearch } from "src/components/common/UserSearch";
-import { ReviewBasePage } from "src/components/pages/ReviewBasePage";
+import { SidebarLayout } from "src/components/layouts/SidebarLayout";
 import { usePageMetadata } from "src/contexts/PageMetadataContext";
 import type { UserSearchQuery } from "src/services/UserService";
 import { filterFalsyObjectValues } from "src/utils/misc";
@@ -53,7 +54,7 @@ const ReviewAuthorsPage = () => {
   );
 
   return (
-    <ReviewBasePage>
+    <SidebarLayout sidebar={<ReviewSearchSidebar />}>
       <QueryPersister
         serializeSearchQuery={serializeSearchQuery}
         deserializeSearchQuery={deserializeSearchQuery}
@@ -76,7 +77,7 @@ const ReviewAuthorsPage = () => {
           onSearchQueryChange={setSearchQuery}
         />
       </Section>
-    </ReviewBasePage>
+    </SidebarLayout>
   );
 };
 

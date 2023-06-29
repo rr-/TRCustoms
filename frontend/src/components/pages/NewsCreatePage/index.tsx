@@ -2,6 +2,7 @@ import { useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { NewsForm } from "src/components/common/NewsForm";
 import { PageGuard } from "src/components/common/PermissionGuard";
+import { PlainLayout } from "src/components/layouts/PlainLayout";
 import { usePageMetadata } from "src/contexts/PageMetadataContext";
 import { UserPermission } from "src/services/UserService";
 
@@ -14,18 +15,15 @@ const NewsCreatePageView = () => {
 
   usePageMetadata(() => ({ ready: true, title: "News" }), []);
 
-  return (
-    <div className="NewsCreatePage">
-      <h1>Creating news</h1>
-      <NewsForm onGoBack={handleGoBack} news={null} />
-    </div>
-  );
+  return <NewsForm onGoBack={handleGoBack} news={null} />;
 };
 
 const NewsCreatePage = () => {
   return (
     <PageGuard require={UserPermission.editNews}>
-      <NewsCreatePageView />
+      <PlainLayout header="Creating news">
+        <NewsCreatePageView />
+      </PlainLayout>
     </PageGuard>
   );
 };

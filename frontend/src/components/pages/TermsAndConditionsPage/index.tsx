@@ -1,5 +1,6 @@
 import type { LegaleseEntry } from "src/components/common/NestedLegalese";
 import { NestedLegalese } from "src/components/common/NestedLegalese";
+import { PlainLayout } from "src/components/layouts/PlainLayout";
 import { usePageMetadata } from "src/contexts/PageMetadataContext";
 
 const TOS: LegaleseEntry = {
@@ -223,9 +224,9 @@ const TermsAndConditionsPage = () => {
   usePageMetadata(() => ({ ready: true, title: "Terms and Conditions" }), []);
 
   return (
-    <div className="TermsAndConditionsPage">
+    <PlainLayout>
       <NestedLegalese title="Terms and Conditions" entry={TOS} />
-    </div>
+    </PlainLayout>
   );
 };
 

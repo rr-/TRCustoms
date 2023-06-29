@@ -6,6 +6,7 @@ import { useParams } from "react-router-dom";
 import { Loader } from "src/components/common/Loader";
 import { PageGuard } from "src/components/common/PermissionGuard";
 import { UserForm } from "src/components/common/UserForm";
+import { PlainLayout } from "src/components/layouts/PlainLayout";
 import { usePageMetadata } from "src/contexts/PageMetadataContext";
 import { UserContext } from "src/contexts/UserContext";
 import { UserService } from "src/services/UserService";
@@ -55,11 +56,9 @@ const UserEditPageView = ({ userId }: UserEditViewProps) => {
   const user = result.data;
 
   return (
-    <div id="UserEditPage">
-      <h1>Editing {user.username}'s profile</h1>
-
+    <PlainLayout header={`Editing ${user.username}'s profile`}>
       <UserForm onGoBack={handleBack} onSubmit={handleSubmit} user={user} />
-    </div>
+    </PlainLayout>
   );
 };
 

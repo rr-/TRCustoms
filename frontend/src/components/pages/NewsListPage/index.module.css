@@ -1,27 +1,3 @@
-.page {
-  display: grid;
-  gap: 1rem;
-  grid-template-areas: "main rightSidebar";
-  grid-template-columns: 7fr 2fr;
-}
-
-@media (max-device-width: 1000px) {
-  .page {
-    grid-template-columns: auto;
-    grid-template-rows: min-content auto;
-    grid-template-areas:
-      "rightSidebar"
-      "main";
-  }
-}
-
-.main {
-  grid-area: main;
-}
-.rightSidebar {
-  grid-area: rightSidebar;
-}
-
 .listItem {
   margin-bottom: 0.75rem;
 }

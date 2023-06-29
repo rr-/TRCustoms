@@ -11,6 +11,7 @@ import { deserializeGenericSearchQuery } from "src/components/common/QueryPersis
 import { serializeGenericSearchQuery } from "src/components/common/QueryPersister";
 import { SectionHeader } from "src/components/common/Section";
 import { SidebarBox } from "src/components/common/SidebarBox";
+import { SidebarLayout } from "src/components/layouts/SidebarLayout";
 import { usePageMetadata } from "src/contexts/PageMetadataContext";
 import type { AuditLogSearchQuery } from "src/services/AuditLogService";
 import { UserPermission } from "src/services/UserService";
@@ -56,50 +57,49 @@ const ModerationPageView = () => {
     []
   );
 
+  const sidebar = (
+    <SidebarBox
+      actions={
+        <>
+          <Button to={"/mod/how-to"} disableTimeout={true}>
+            Moderating guidelines
+          </Button>
+          <Button to={"/users"} disableTimeout={true}>
+            User list
+          </Button>
+        </>
+      }
+    >
+      <AuditLogSearch
+        defaultSearchQuery={defaultSearchQuery}
+        searchQuery={searchQuery}
+        onSearchQueryChange={setSearchQuery}
+      />
+    </SidebarBox>
+  );
+
   return (
-    <div className="ModerationPage">
+    <SidebarLayout sidebar={sidebar}>
       <QueryPersister
         serializeSearchQuery={serializeSearchQuery}
         deserializeSearchQuery={deserializeSearchQuery}
         searchQuery={searchQuery}
         setSearchQuery={setSearchQuery}
       />
-      <div className="ModerationPage--sidebar">
-        <SidebarBox
-          actions={
-            <>
-              <Button to={"/mod/how-to"} disableTimeout={true}>
-                Moderating guidelines
-              </Button>
-              <Button to={"/users"} disableTimeout={true}>
-                User list
-              </Button>
-            </>
-          }
-        >
-          <AuditLogSearch
-            defaultSearchQuery={defaultSearchQuery}
-            searchQuery={searchQuery}
-            onSearchQueryChange={setSearchQuery}
-          />
-        </SidebarBox>
-      </div>
 
-      <div className="ModerationPage--results ChildMarginClear">
-        <InfoMessage type={InfoMessageType.Info}>
-          The log contains recent changes made by all users. All these changes
-          are already live.
-          <br />
-          New levels and users can be approved on their individual pages.
-        </InfoMessage>
+      <InfoMessage type={InfoMessageType.Info}>
+        The log contains recent changes made by all users. All these changes are
+        already live.
+        <br />
+        New levels and users can be approved on their individual pages.
+      </InfoMessage>
 
-        <SectionHeader>Recent actions</SectionHeader>
-        <AuditLogTable
-          searchQuery={searchQuery}
-          onSearchQueryChange={setSearchQuery}
-        />
-      </div>
-    </div>
+      <SectionHeader>Recent actions</SectionHeader>
+      <AuditLogTable
+        searchQuery={searchQuery}
+        onSearchQueryChange={setSearchQuery}
+      />
+    </SidebarLayout>
   );
 };
 

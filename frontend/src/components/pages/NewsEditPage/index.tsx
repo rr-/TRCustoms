@@ -5,6 +5,7 @@ import { useParams } from "react-router-dom";
 import { Loader } from "src/components/common/Loader";
 import { NewsForm } from "src/components/common/NewsForm";
 import { PageGuard } from "src/components/common/PermissionGuard";
+import { PlainLayout } from "src/components/layouts/PlainLayout";
 import { usePageMetadata } from "src/contexts/PageMetadataContext";
 import type { NewsDetails } from "src/services/NewsService";
 import { NewsService } from "src/services/NewsService";
@@ -44,10 +45,9 @@ const NewsEditPageView = ({ newsId }: NewsEditPageViewProps) => {
   const news = result.data;
 
   return (
-    <div className="NewsEditPage">
-      <h1>Editing {news.subject || "news"}</h1>
+    <PlainLayout header={`Editing ${news.subject || "news"}`}>
       <NewsForm onGoBack={handleGoBack} news={news} />
-    </div>
+    </PlainLayout>
   );
 };
 

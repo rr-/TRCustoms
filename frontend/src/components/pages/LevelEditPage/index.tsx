@@ -6,6 +6,7 @@ import { LevelForm } from "src/components/common/LevelForm";
 import { Loader } from "src/components/common/Loader";
 import { PageGuard } from "src/components/common/PermissionGuard";
 import { SmartWrap } from "src/components/common/SmartWrap";
+import { PlainLayout } from "src/components/layouts/PlainLayout";
 import { usePageMetadata } from "src/contexts/PageMetadataContext";
 import type { LevelDetails } from "src/services/LevelService";
 import { LevelService } from "src/services/LevelService";
@@ -53,13 +54,9 @@ const LevelEditPage = () => {
       require={UserPermission.editLevels}
       owningUserIds={owningUserIds}
     >
-      <div className="LevelEditPage">
-        <h1>
-          <SmartWrap text={`Editing ${level.name}`} />
-        </h1>
-
+      <PlainLayout header={<SmartWrap text={`Editing ${level.name}`} />}>
         <LevelForm onGoBack={handleGoBack} level={level} />
-      </div>
+      </PlainLayout>
     </PageGuard>
   );
 };

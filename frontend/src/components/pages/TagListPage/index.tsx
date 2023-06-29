@@ -4,6 +4,7 @@ import { deserializeGenericSearchQuery } from "src/components/common/QueryPersis
 import { serializeGenericSearchQuery } from "src/components/common/QueryPersister";
 import { TagSearch } from "src/components/common/TagSearch";
 import { TagsTable } from "src/components/common/TagsTable";
+import { PlainLayout } from "src/components/layouts/PlainLayout";
 import { usePageMetadata } from "src/contexts/PageMetadataContext";
 import type { TagSearchQuery } from "src/services/TagService";
 import { getCurrentSearchParams } from "src/utils/misc";
@@ -38,7 +39,7 @@ const TagListPage = () => {
   );
 
   return (
-    <div className="TagListPage">
+    <PlainLayout>
       <QueryPersister
         serializeSearchQuery={serializeSearchQuery}
         deserializeSearchQuery={deserializeSearchQuery}
@@ -58,7 +59,7 @@ const TagListPage = () => {
           onSearchQueryChange={setSearchQuery}
         />
       </div>
-    </div>
+    </PlainLayout>
   );
 };
 

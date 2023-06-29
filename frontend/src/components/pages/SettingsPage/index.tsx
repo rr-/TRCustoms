@@ -1,6 +1,6 @@
-import "./index.css";
 import { Checkbox } from "src/components/common/Checkbox";
 import { ThemeSwitcher } from "src/components/common/ThemeSwitcher";
+import { PlainLayout } from "src/components/layouts/PlainLayout";
 import { usePageMetadata } from "src/contexts/PageMetadataContext";
 import { useSettings } from "src/contexts/SettingsContext";
 import { MarkdownPreviewMode } from "src/contexts/SettingsContext";
@@ -19,7 +19,7 @@ const SettingsPage = () => {
   );
 
   return (
-    <div className="SettingsPage">
+    <PlainLayout>
       <h2>Active theme</h2>
       <ThemeSwitcher />
 
@@ -42,7 +42,7 @@ const SettingsPage = () => {
         }
         checked={markdownPreviewMode === MarkdownPreviewMode.SideBySide}
       />
-    </div>
+    </PlainLayout>
   );
 };
 
