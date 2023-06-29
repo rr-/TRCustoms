@@ -33,7 +33,7 @@ const UserSidebar = ({ user }: UserSidebarProps) => {
   };
 
   const handleLevelCountClick = () => {
-    const element = document.querySelector(".UserPage--authoredLevels");
+    const element = document.querySelector(".Anchor--userAuthoredLevels");
     if (element) {
       element.scrollIntoView({ behavior: "smooth" });
     } else {
@@ -43,7 +43,7 @@ const UserSidebar = ({ user }: UserSidebarProps) => {
   };
 
   const handleReviewCountClick = () => {
-    const element = document.querySelector(".UserPage--reviewedLevels");
+    const element = document.querySelector(".Anchor--userReviewedLevels");
     if (element) {
       element.scrollIntoView({ behavior: "smooth" });
     } else {

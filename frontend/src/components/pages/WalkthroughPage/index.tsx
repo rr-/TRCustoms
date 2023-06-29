@@ -1,4 +1,3 @@
-import "./index.css";
 import { useQuery } from "react-query";
 import { useParams } from "react-router-dom";
 import { InfoMessage } from "src/components/common/InfoMessage";
@@ -6,11 +5,13 @@ import { InfoMessageType } from "src/components/common/InfoMessage";
 import { Loader } from "src/components/common/Loader";
 import { PermissionGuard } from "src/components/common/PermissionGuard";
 import { WalkthroughSidebar } from "src/components/common/WalkthroughSidebar";
+import { SidebarLayout } from "src/components/layouts/SidebarLayout";
 import { LevelLink } from "src/components/links/LevelLink";
 import { UserLink } from "src/components/links/UserLink";
 import { Markdown } from "src/components/markdown/Markdown";
 import { usePageMetadata } from "src/contexts/PageMetadataContext";
 import { UserPermission } from "src/services/UserService";
+import { WalkthroughType } from "src/services/WalkthroughService";
 import { WalkthroughStatus } from "src/services/WalkthroughService";
 import type { WalkthroughDetails } from "src/services/WalkthroughService";
 import { WalkthroughService } from "src/services/WalkthroughService";
@@ -95,37 +96,35 @@ const WalkthroughPage = () => {
   }
 
   const walkthrough = result.data;
+  const header = (
+    <>
+      Walkthrough for <LevelLink level={walkthrough.level} />
+    </>
+  );
+  const subheader = walkthrough.author ? (
+    <>
+      by <UserLink user={walkthrough.author} />
+    </>
+  ) : (
+    walkthrough.legacy_author_name && <>by {walkthrough.legacy_author_name}</>
+  );
+  const sidebar = <WalkthroughSidebar walkthrough={walkthrough} />;
+  const content = (
+    <>
+      <WalkthroughStatusBox walkthrough={walkthrough} />
+      <Markdown>{walkthrough.text}</Markdown>
+    </>
+  );
 
   return (
-    <div
-      className="WalkthroughPage"
-      data-walkthrough-type={walkthrough.walkthrough_type}
+    <SidebarLayout
+      stacked={walkthrough.walkthrough_type === WalkthroughType.Link}
+      header={header}
+      subheader={subheader}
+      sidebar={sidebar}
     >
-      <header className="WalkthroughPage--header ChildMarginClear">
-        <h1>
-          Walkthrough for <LevelLink level={walkthrough.level} />
-        </h1>
-        {walkthrough.author ? (
-          <h2>
-            by <UserLink user={walkthrough.author} />
-          </h2>
-        ) : (
-          walkthrough.legacy_author_name && (
-            <h2>by {walkthrough.legacy_author_name}</h2>
-          )
-        )}
-      </header>
-
-      <aside className="WalkthroughPage--sidebar">
-        <WalkthroughSidebar walkthrough={walkthrough} />
-      </aside>
-
-      <div className="WalkthroughPage--main">
-        <WalkthroughStatusBox walkthrough={walkthrough} />
-
-        <Markdown>{walkthrough.text}</Markdown>
-      </div>
-    </div>
+      {content}
+    </SidebarLayout>
   );
 };
 

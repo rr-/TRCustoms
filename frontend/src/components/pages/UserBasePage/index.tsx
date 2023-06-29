@@ -1,9 +1,9 @@
-import "./index.css";
 import { useContext } from "react";
 import { useQuery } from "react-query";
 import { Loader } from "src/components/common/Loader";
 import { PageGuard } from "src/components/common/PermissionGuard";
 import { UserSidebar } from "src/components/common/UserSidebar";
+import { SidebarLayout } from "src/components/layouts/SidebarLayout";
 import { usePageMetadata } from "src/contexts/PageMetadataContext";
 import { UserContext } from "src/contexts/UserContext";
 import type { UserDetails } from "src/services/UserService";
@@ -50,32 +50,20 @@ const UserBasePageView = ({ userId, children }: UserBasePageViewProps) => {
 
   const user = userResult.data;
 
+  const subheader = `${user.first_name} ${user.last_name}`.trim();
+  const showSubheader =
+    user.is_active && subheader && subheader !== user.username;
   return (
-    <div className="UserBasePage">
-      <header className="UserBasePage--header ChildMarginClear">
-        <h1 className="UserBasePage--headerWrapper">
-          {user.username}'s profile
-        </h1>
-        {user.is_active &&
-          (user.first_name || user.last_name) &&
-          `${user.first_name} ${user.last_name}` !== user.username && (
-            <h2>
-              {user.first_name} {user.last_name}
-            </h2>
-          )}
-      </header>
-
-      <aside className="UserBasePage--sidebar">
-        <UserSidebar user={user} />
-      </aside>
-
-      <div className="UserBasePage--main">
-        {children({
-          user,
-          isLoggedIn: userId === loggedInUser?.id,
-        })}
-      </div>
-    </div>
+    <SidebarLayout
+      header={`${user.username}'s profile`}
+      subheader={showSubheader ? subheader : undefined}
+      sidebar={<UserSidebar user={user} />}
+    >
+      {children({
+        user,
+        isLoggedIn: userId === loggedInUser?.id,
+      })}
+    </SidebarLayout>
   );
 };
 

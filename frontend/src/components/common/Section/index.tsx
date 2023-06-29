@@ -11,7 +11,11 @@ interface SectionHeaderProps {
 }
 
 const Section = ({ className, children }: SectionProps) => {
-  return <section className={`Section ${className || ""}`}>{children}</section>;
+  return (
+    <section className={`Section ${className || ""} ChildMarginClear`}>
+      {children}
+    </section>
+  );
 };
 
 const SectionHeader = ({ className, children }: SectionHeaderProps) => {
