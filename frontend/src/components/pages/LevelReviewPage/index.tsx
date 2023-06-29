@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import { Loader } from "src/components/common/Loader";
 import { ReviewForm } from "src/components/common/ReviewForm";
+import { SmartWrap } from "src/components/common/SmartWrap";
 import { PlainLayout } from "src/components/layouts/PlainLayout";
 import { usePageMetadata } from "src/contexts/PageMetadataContext";
 import { UserContext } from "src/contexts/UserContext";
@@ -61,7 +62,7 @@ const LevelReviewPage = () => {
   const review = reviewResult.data;
 
   return (
-    <PlainLayout header={`Reviewing ${level.name}`}>
+    <PlainLayout header={<SmartWrap text={`Reviewing ${level.name}`} />}>
       <ReviewForm onGoBack={handleGoBack} review={review} level={level} />
     </PlainLayout>
   );

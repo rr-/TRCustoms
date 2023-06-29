@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import { Loader } from "src/components/common/Loader";
 import { PageGuard } from "src/components/common/PermissionGuard";
+import { SmartWrap } from "src/components/common/SmartWrap";
 import { UserForm } from "src/components/common/UserForm";
 import { PlainLayout } from "src/components/layouts/PlainLayout";
 import { usePageMetadata } from "src/contexts/PageMetadataContext";
@@ -56,7 +57,9 @@ const UserEditPageView = ({ userId }: UserEditViewProps) => {
   const user = result.data;
 
   return (
-    <PlainLayout header={`Editing ${user.username}'s profile`}>
+    <PlainLayout
+      header={<SmartWrap text={`Editing ${user.username}'s profile`} />}
+    >
       <UserForm onGoBack={handleBack} onSubmit={handleSubmit} user={user} />
     </PlainLayout>
   );
