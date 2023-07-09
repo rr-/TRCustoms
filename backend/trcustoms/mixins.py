@@ -33,8 +33,6 @@ if not TYPE_CHECKING:
 
 
 class PermissionsMixin(PermissionsMixinProtocol):
-    """A mixin for permission management."""
-
     def get_permissions(self) -> list[BasePermission]:
         """Return permission depending on `action` by looking at a
         `permission_classes_by_action` map.

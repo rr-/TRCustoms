@@ -1,3 +1,4 @@
+from drf_spectacular.utils import extend_schema, extend_schema_view
 from rest_framework import status, viewsets
 from rest_framework.decorators import action
 from rest_framework.generics import get_object_or_404
@@ -5,6 +6,7 @@ from rest_framework.parsers import MultiPartParser
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 
+from trcustoms.common.serializers import EmptySerializer
 from trcustoms.mixins import PermissionsMixin
 from trcustoms.tasks.convert_images import RECOMMENDED_SIZE, convert_image
 from trcustoms.uploads.models import UploadedFile
@@ -25,12 +27,19 @@ def schedule_image_conversion_if_needed(uploaded_file: UploadedFile) -> None:
     convert_image.apply_async((uploaded_file.id,), countdown=30)
 
 
+@extend_schema_view(
+    file=extend_schema(
+        request=EmptySerializer,
+        responses={status.HTTP_200_OK: EmptySerializer},
+    )
+)
 class UploadViewSet(PermissionsMixin, viewsets.GenericViewSet):
     permission_classes = [IsAuthenticated]
     permission_classes_by_action = {
         "retrieve": [AllowAny],
         "file": [AllowAny],
     }
+    serializer_class = UploadedFileDetailsSerializer
 
     parser_classes = [MultiPartParser]
 
