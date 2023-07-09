@@ -1,4 +1,8 @@
-from rest_framework.permissions import BasePermission, IsAuthenticated
+from rest_framework.permissions import (
+    SAFE_METHODS,
+    BasePermission,
+    IsAuthenticated,
+)
 
 from trcustoms.levels.models import Level
 from trcustoms.playlists.models import PlaylistItem
@@ -13,6 +17,11 @@ class AllowNone(BasePermission):
 
     def has_object_permission(self, request, view, obj) -> bool:
         return False
+
+
+class AllowReadOnly(BasePermission):
+    def has_permission(self, request, view):
+        return request.method in SAFE_METHODS
 
 
 def HasPermission(permission: UserPermission) -> BasePermission:

@@ -17,3 +17,7 @@ class RatingClassNestedSerializer(serializers.ModelSerializer):
     class Meta:
         model = RatingClass
         fields = ["id", "name", "position"]
+
+
+class EmptySerializer(serializers.Serializer):
+    pass

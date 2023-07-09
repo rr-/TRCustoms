@@ -17,6 +17,13 @@ class TagListingSerializer(serializers.ModelSerializer):
         model = Tag
         fields = ["id", "name", "level_count", "created", "last_updated"]
 
+    def save(self):
+        super().save()
+        self.instance = Tag.objects.with_counts().get(  # pylint: disable=W0201
+            pk=self.instance.pk
+        )
+        return self.instance
+
     def get_level_count(self, instance: Tag) -> int:
         return instance.level_count
 
@@ -40,4 +47,8 @@ class TagDetailsSerializer(TagListingSerializer):
 
     class Meta:
         model = Tag
-        fields = ["id", "name", "created", "last_updated"]
+        fields = ["id", "name", "level_count", "created", "last_updated"]
+
+
+class TagMergeSerializer(serializers.Serializer):
+    target_tag_id = serializers.IntegerField()
