@@ -234,6 +234,15 @@ def fixture_admin_api_client(auth_api_client: APIClient) -> APIClient:
     return auth_api_client
 
 
+@pytest.fixture(name="any_object")
+def fixture_any_object() -> object:
+    class AnyObject:
+        def __eq__(self, other):
+            return isinstance(other, object)
+
+    return AnyObject
+
+
 @pytest.fixture(name="any_integer")
 def fixture_any_integer() -> object:
     class AnyInteger:
