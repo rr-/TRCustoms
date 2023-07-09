@@ -6,7 +6,7 @@ from rest_framework.permissions import (
 
 from trcustoms.levels.models import Level
 from trcustoms.playlists.models import PlaylistItem
-from trcustoms.reviews.models import LevelReview
+from trcustoms.reviews.models import Review
 from trcustoms.users.models import User, UserPermission
 from trcustoms.walkthroughs.models import Walkthrough
 
@@ -50,7 +50,7 @@ class IsAccessingOwnResource(IsAuthenticated):
                     obj.uploader == request.user
                     or obj.authors.filter(id=request.user.id).exists()
                 )
-            case LevelReview():
+            case Review():
                 result = obj.author == request.user
             case Walkthrough():
                 result = obj.author == request.user

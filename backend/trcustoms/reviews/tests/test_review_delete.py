@@ -3,7 +3,7 @@ from rest_framework import status
 from rest_framework.test import APIClient
 
 from trcustoms.levels.tests.factories import LevelFactory
-from trcustoms.reviews.models import LevelReview
+from trcustoms.reviews.models import Review
 from trcustoms.reviews.tests.factories import ReviewFactory
 from trcustoms.users.tests.factories import UserFactory
 
@@ -54,4 +54,4 @@ def test_review_deletion_updates_position(
     assert review3.position == 2
     assert review1.last_updated == review1_last_updated
     assert review3.last_updated == review3_last_updated
-    assert not LevelReview.objects.filter(pk=review2.pk).exists()
+    assert not Review.objects.filter(pk=review2.pk).exists()

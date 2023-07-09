@@ -7,7 +7,7 @@ from trcustoms.common.consts import RatingClassSubject
 from trcustoms.common.models import RatingClass
 from trcustoms.levels.models import Level
 from trcustoms.reviews.consts import ReviewType
-from trcustoms.reviews.models import LevelReview, ReviewTemplateQuestion
+from trcustoms.reviews.models import Review, ReviewTemplateQuestion
 
 
 @cache
@@ -17,7 +17,7 @@ def get_max_review_score() -> int:
     ).aggregate(Sum("value"))["value__sum"]
 
 
-def get_review_score(review: LevelReview) -> float:
+def get_review_score(review: Review) -> float:
     if review.review_type == ReviewType.TRLE:
         return (
             mean(
@@ -80,7 +80,7 @@ def get_level_rating_class(level: Level) -> RatingClass:
     return get_rating_class(RatingClassSubject.LEVEL, average, count)
 
 
-def get_review_rating_class(review: LevelReview) -> RatingClass:
+def get_review_rating_class(review: Review) -> RatingClass:
     ratings = [get_review_score(review)]
     if not ratings:
         return None

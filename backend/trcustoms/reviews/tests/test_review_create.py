@@ -5,7 +5,7 @@ from rest_framework import status
 from rest_framework.test import APIClient
 
 from trcustoms.levels.tests.factories import LevelFactory
-from trcustoms.reviews.models import LevelReview
+from trcustoms.reviews.models import Review
 from trcustoms.reviews.tests.factories import (
     ReviewFactory,
     ReviewTemplateAnswerFactory,
@@ -104,7 +104,7 @@ def test_review_creation_rating_classes(
         },
     )
     data = response.json()
-    review = LevelReview.objects.get(pk=data["id"])
+    review = Review.objects.get(pk=data["id"])
 
     assert review.answers.count() == 1
     assert review.answers.first().points == 10
@@ -263,7 +263,7 @@ def test_review_creation_updates_position(
     )
     data = response.json()
     review1.refresh_from_db()
-    review2 = LevelReview.objects.get(pk=data["id"])
+    review2 = Review.objects.get(pk=data["id"])
 
     assert response.status_code == status.HTTP_201_CREATED, data
     assert review1.position == 1

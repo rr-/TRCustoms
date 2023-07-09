@@ -3,14 +3,14 @@ from django.contrib import admin
 from trcustoms.audit_logs.mixins import AuditLogAdminMixin
 from trcustoms.ratings import get_review_score
 from trcustoms.reviews.models import (
-    LevelReview,
+    Review,
     ReviewTemplateAnswer,
     ReviewTemplateQuestion,
 )
 
 
-@admin.register(LevelReview)
-class LevelReviewAdmin(AuditLogAdminMixin, admin.ModelAdmin):
+@admin.register(Review)
+class ReviewAdmin(AuditLogAdminMixin, admin.ModelAdmin):
     ordering = ["-created"]
     list_display = [
         "id",

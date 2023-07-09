@@ -10,7 +10,7 @@ from trcustoms.mails import (
 from trcustoms.permissions import get_permissions
 from trcustoms.reviews.consts import ReviewType
 from trcustoms.reviews.models import (
-    LevelReview,
+    Review,
     ReviewTemplateAnswer,
     ReviewTemplateQuestion,
 )
@@ -31,7 +31,7 @@ class ReviewAuthorSerializer(UserNestedSerializer):
         ]
 
 
-class LevelReviewListingSerializer(serializers.ModelSerializer):
+class ReviewListingSerializer(serializers.ModelSerializer):
     author = ReviewAuthorSerializer(
         read_only=True,
         default=serializers.CreateOnlyDefault(
@@ -42,7 +42,7 @@ class LevelReviewListingSerializer(serializers.ModelSerializer):
     rating_class = RatingClassNestedSerializer(read_only=True)
 
     class Meta:
-        model = LevelReview
+        model = Review
         fields = [
             "id",
             "author",
@@ -54,7 +54,7 @@ class LevelReviewListingSerializer(serializers.ModelSerializer):
         ]
 
 
-class LevelReviewDetailsSerializer(LevelReviewListingSerializer):
+class ReviewDetailsSerializer(ReviewListingSerializer):
     level_id = serializers.PrimaryKeyRelatedField(
         write_only=True, source="level", queryset=Level.objects.all()
     )
@@ -65,8 +65,8 @@ class LevelReviewDetailsSerializer(LevelReviewListingSerializer):
     )
 
     class Meta:
-        model = LevelReview
-        fields = LevelReviewListingSerializer.Meta.fields + [
+        model = Review
+        fields = ReviewListingSerializer.Meta.fields + [
             "answers",
             "answer_ids",
             "level_id",

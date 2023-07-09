@@ -12,16 +12,16 @@ from trcustoms.permissions import (
     HasPermission,
     IsAccessingOwnResource,
 )
-from trcustoms.reviews.models import LevelReview
+from trcustoms.reviews.models import Review
 from trcustoms.reviews.serializers import (
-    LevelReviewDetailsSerializer,
-    LevelReviewListingSerializer,
+    ReviewDetailsSerializer,
+    ReviewListingSerializer,
 )
 from trcustoms.users.models import UserPermission
 from trcustoms.utils import parse_ints
 
 
-class LevelReviewViewSet(
+class ReviewViewSet(
     AuditLogModelWatcherMixin,
     PermissionsMixin,
     MultiSerializerMixin,
@@ -32,7 +32,7 @@ class LevelReviewViewSet(
     mixins.DestroyModelMixin,
     viewsets.GenericViewSet,
 ):
-    queryset = LevelReview.objects.all().prefetch_related(
+    queryset = Review.objects.all().prefetch_related(
         "rating_class",
         "author",
         "author__picture",
@@ -71,12 +71,12 @@ class LevelReviewViewSet(
         ],
     }
 
-    serializer_class = LevelReviewListingSerializer
+    serializer_class = ReviewListingSerializer
     serializer_class_by_action = {
-        "retrieve": LevelReviewDetailsSerializer,
-        "update": LevelReviewDetailsSerializer,
-        "partial_update": LevelReviewDetailsSerializer,
-        "create": LevelReviewDetailsSerializer,
+        "retrieve": ReviewDetailsSerializer,
+        "update": ReviewDetailsSerializer,
+        "partial_update": ReviewDetailsSerializer,
+        "create": ReviewDetailsSerializer,
     }
 
     def get_object(self):

@@ -49,7 +49,7 @@ class ReviewTemplateAnswer(DatesInfo):
         "level_name": instance.level.name,
     },
 )
-class LevelReview(DatesInfo):
+class Review(DatesInfo):
     position = models.IntegerField(default=0)
 
     level = models.ForeignKey(

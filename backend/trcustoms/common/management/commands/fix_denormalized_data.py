@@ -6,7 +6,7 @@ from tqdm import tqdm
 
 from trcustoms.levels.models import Level
 from trcustoms.ratings import get_level_rating_class, get_review_rating_class
-from trcustoms.reviews.models import LevelReview
+from trcustoms.reviews.models import Review
 from trcustoms.signals import disable_signals
 from trcustoms.users.models import User
 
@@ -54,16 +54,16 @@ class Command(BaseCommand):
 
     def fix_review_ratings(self) -> None:
         with tqdm(
-            desc="Review ratings", total=LevelReview.objects.count()
+            desc="Review ratings", total=Review.objects.count()
         ) as progress:
             review_map = defaultdict(list)
-            for review in LevelReview.objects.all():
+            for review in Review.objects.all():
                 rating_class = get_review_rating_class(review)
                 rating_class_id = rating_class.id if rating_class else None
                 review_map[rating_class_id].append(review.id)
                 progress.update()
 
         for rating_class_id, review_ids in review_map.items():
-            LevelReview.objects.filter(id__in=review_ids).update(
+            Review.objects.filter(id__in=review_ids).update(
                 rating_class_id=rating_class_id
             )

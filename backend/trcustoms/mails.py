@@ -10,7 +10,7 @@ from premailer import transform
 
 from trcustoms.celery import app as celery_app
 from trcustoms.levels.models import Level
-from trcustoms.reviews.models import LevelReview
+from trcustoms.reviews.models import Review
 from trcustoms.users.models import User
 from trcustoms.walkthroughs.models import Walkthrough
 
@@ -190,7 +190,7 @@ def send_level_rejected_mail(level: Level, reason: str) -> None:
         )
 
 
-def send_review_submission_mail(review: LevelReview) -> None:
+def send_review_submission_mail(review: Review) -> None:
     link = f"{settings.HOST_SITE}/levels/{review.level.id}"
     for username, email in get_level_authors(review.level):
         send_mail.delay(
@@ -206,7 +206,7 @@ def send_review_submission_mail(review: LevelReview) -> None:
         )
 
 
-def send_review_update_mail(review: LevelReview) -> None:
+def send_review_update_mail(review: Review) -> None:
     link = f"{settings.HOST_SITE}/levels/{review.level.id}"
     for username, email in get_level_authors(review.level):
         send_mail.delay(
