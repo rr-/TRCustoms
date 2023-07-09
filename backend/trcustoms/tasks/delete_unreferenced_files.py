@@ -7,7 +7,7 @@ from django.utils import timezone
 from trcustoms.celery import app, logger
 from trcustoms.levels.models import Level
 from trcustoms.news.models import News
-from trcustoms.reviews.models import LevelReview
+from trcustoms.reviews.models import Review
 from trcustoms.uploads.consts import UploadType
 from trcustoms.uploads.models import UploadedFile
 from trcustoms.users.models import User
@@ -29,7 +29,7 @@ def collect_user_links() -> Iterable[str]:
         yield from collect_links(user["bio"])
     for level in Level.objects.values("description"):
         yield from collect_links(level["description"])
-    for review in LevelReview.objects.values("text"):
+    for review in Review.objects.values("text"):
         yield from collect_links(review["text"])
     for walkthrough in Walkthrough.objects.values("text"):
         yield from collect_links(walkthrough["text"])

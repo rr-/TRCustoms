@@ -2,7 +2,7 @@ import factory
 
 from trcustoms.levels.tests.factories import LevelFactory
 from trcustoms.reviews.models import (
-    LevelReview,
+    Review,
     ReviewTemplateAnswer,
     ReviewTemplateQuestion,
 )
@@ -30,7 +30,7 @@ class ReviewTemplateAnswerFactory(factory.django.DjangoModelFactory):
 
 class ReviewFactory(factory.django.DjangoModelFactory):
     class Meta:
-        model = LevelReview
+        model = Review
 
     author = factory.SubFactory(UserFactory)
     level = factory.SubFactory(LevelFactory)

@@ -13,7 +13,7 @@ from trcustoms.genres.models import Genre
 from trcustoms.levels.consts import FeatureType
 from trcustoms.levels.models import Level, LevelDifficulty, LevelDuration
 from trcustoms.levels.serializers import FeaturedLevelsSerializer
-from trcustoms.reviews.models import LevelReview, ReviewTemplateQuestion
+from trcustoms.reviews.models import Review, ReviewTemplateQuestion
 from trcustoms.tags.models import Tag
 from trcustoms.tasks.update_featured_levels import get_featured_level
 from trcustoms.walkthroughs.consts import WalkthroughStatus
@@ -82,7 +82,7 @@ def get_config_data():
         ),
         stats=dict(
             total_levels=Level.objects.filter(is_approved=True).count(),
-            total_reviews=LevelReview.objects.all().count(),
+            total_reviews=Review.objects.all().count(),
             total_walkthroughs=Walkthrough.objects.filter(
                 status=WalkthroughStatus.APPROVED,
                 level__is_approved=True,
