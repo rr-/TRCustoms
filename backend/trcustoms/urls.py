@@ -14,7 +14,7 @@ from rest_framework_simplejwt.views import (
 )
 
 from trcustoms.audit_logs.views import AuditLogViewSet
-from trcustoms.common.views import ConfigViewSet
+from trcustoms.config.views import ConfigViewSet
 from trcustoms.engines.views import EngineViewSet
 from trcustoms.genres.views import GenreViewSet
 from trcustoms.levels.views import LevelFileViewSet, LevelViewSet
@@ -59,13 +59,13 @@ urlpatterns = [
     path("api/schema/", SpectacularAPIView.as_view(), name="schema"),
     path(
         "api/swagger/",
-        SpectacularSwaggerView.as_view(url_name="api:common:schema"),
+        SpectacularSwaggerView.as_view(url_name="schema"),
         name="swagger-ui",
     ),
     path(
         "api/redoc/",
         SpectacularRedocView.as_view(url_name="schema"),
-        name="redoc",
+        name="redoc-ui",
     ),
 ]
 

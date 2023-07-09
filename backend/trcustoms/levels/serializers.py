@@ -4,10 +4,8 @@ from django.conf import settings
 from django.core.validators import MaxLengthValidator
 from rest_framework import serializers
 
-from trcustoms.common.serializers import (
-    CustomCharField,
-    RatingClassNestedSerializer,
-)
+from trcustoms.common.fields import CustomCharField
+from trcustoms.common.serializers import RatingClassNestedSerializer
 from trcustoms.engines.models import Engine
 from trcustoms.engines.serializers import EngineNestedSerializer
 from trcustoms.genres.models import Genre

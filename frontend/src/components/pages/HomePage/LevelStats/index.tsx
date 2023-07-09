@@ -24,13 +24,15 @@ const LevelStats = () => {
 
       <DefinitionList>
         <DefinitionItem term={<Link to="/levels">Total levels</Link>}>
-          {config.total_levels}
+          {config.stats.total_levels}
         </DefinitionItem>
 
         <DefinitionItem term="Downloads">
-          {reprBigNumber(config.total_downloads)} (
-          {reprBigNumber(config.total_downloads / config.total_levels)} per
-          level)
+          {reprBigNumber(config.stats.total_downloads)} (
+          {reprBigNumber(
+            config.stats.total_downloads / config.stats.total_levels
+          )}{" "}
+          per level)
         </DefinitionItem>
       </DefinitionList>
     </>

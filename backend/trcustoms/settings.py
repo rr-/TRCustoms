@@ -38,18 +38,19 @@ INSTALLED_APPS = [
     "django_cleanup.apps.CleanupConfig",
     "storages",
     "trcustoms.audit_logs",
+    "trcustoms.awards",
     "trcustoms.common",
+    "trcustoms.config",
     "trcustoms.engines",
     "trcustoms.genres",
     "trcustoms.levels",
     "trcustoms.news",
+    "trcustoms.playlists",
     "trcustoms.reviews",
     "trcustoms.tags",
     "trcustoms.uploads",
     "trcustoms.users",
     "trcustoms.walkthroughs",
-    "trcustoms.awards",
-    "trcustoms.playlists",
 ]
 
 MIDDLEWARE = [
