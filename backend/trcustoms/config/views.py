@@ -2,8 +2,7 @@ from typing import Any
 
 from django.conf import settings
 from django.db.models import Count, Sum
-from rest_framework import status, viewsets
-from rest_framework.decorators import action
+from rest_framework import generics, status, viewsets
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 
@@ -17,10 +16,10 @@ from trcustoms.levels.models import (
     LevelDifficulty,
     LevelDuration,
 )
-from trcustoms.levels.serializers import FeaturedLevelListingSerializer
+from trcustoms.levels.serializers import FeaturedLevelsSerializer
 from trcustoms.reviews.models import LevelReview, ReviewTemplateQuestion
 from trcustoms.tags.models import Tag
-from trcustoms.tasks.update_featured_levels import get_new_release
+from trcustoms.tasks.update_featured_levels import get_featured_level
 from trcustoms.walkthroughs.consts import WalkthroughStatus
 from trcustoms.walkthroughs.models import Walkthrough
 
@@ -114,22 +113,22 @@ class ConfigViewSet(viewsets.ViewSet):
             status.HTTP_200_OK,
         )
 
-    @action(detail=False)
-    def featured_levels(self, request) -> Response:
-        result = {
-            feature_type.value: FeaturedLevelListingSerializer(
-                FeaturedLevel.objects.filter(feature_type=feature_type)
-                .order_by("-created")
-                .first()
-            ).data
-            for feature_type in FeaturedLevel.FeatureType
+
+class FeaturedLevelsView(generics.RetrieveAPIView):
+    serializer_class = FeaturedLevelsSerializer
+
+    def get_object(self):
+        return {
+            "monthly_hidden_gem": get_featured_level(
+                FeaturedLevel.FeatureType.MONTHLY_HIDDEN_GEM
+            ),
+            "level_of_the_day": get_featured_level(
+                FeaturedLevel.FeatureType.LEVEL_OF_THE_DAY
+            ),
+            "best_in_genre": get_featured_level(
+                FeaturedLevel.FeatureType.BEST_IN_GENRE
+            ),
+            "new_release": get_featured_level(
+                FeaturedLevel.FeatureType.NEW_RELEASE
+            ),
         }
-
-        result[
-            FeaturedLevel.FeatureType.NEW_RELEASE.value  # pylint: disable=E1101
-        ] = FeaturedLevelListingSerializer(get_new_release()).data
-
-        return Response(
-            result,
-            status.HTTP_200_OK,
-        )

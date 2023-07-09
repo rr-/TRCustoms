@@ -14,7 +14,7 @@ from rest_framework_simplejwt.views import (
 )
 
 from trcustoms.audit_logs.views import AuditLogViewSet
-from trcustoms.config.views import ConfigViewSet
+from trcustoms.config.views import ConfigViewSet, FeaturedLevelsView
 from trcustoms.engines.views import EngineViewSet
 from trcustoms.genres.views import GenreViewSet
 from trcustoms.levels.views import LevelFileViewSet, LevelViewSet
@@ -46,6 +46,11 @@ urlpatterns = [
     path("api/auth/token/refresh/", TokenRefreshView.as_view()),
     path("admin/", admin.site.urls),
     path("api/", include(router.urls)),
+    path(
+        "api/config/featured_levels/",
+        FeaturedLevelsView.as_view(),
+        name="featured-level-list",
+    ),
     path(
         "api/users/<int:user_id>/playlist/",
         as_list_view(PlaylistItemViewSet),
