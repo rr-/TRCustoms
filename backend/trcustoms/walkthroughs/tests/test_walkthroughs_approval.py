@@ -42,12 +42,12 @@ def test_walkthrough_approval_rejects_non_admin(
 
 @pytest.mark.django_db
 def test_walkthrough_approval_success(
-    admin_api_client: APIClient,
+    staff_api_client: APIClient,
 ) -> None:
     walkthrough = WalkthroughFactory(
         level=LevelFactory(authors=[UserFactory()])
     )
-    resp = admin_api_client.post(
+    resp = staff_api_client.post(
         f"/api/walkthroughs/{walkthrough.id}/approve/", format="json"
     )
     audit_log = AuditLog.objects.first()
@@ -99,10 +99,10 @@ def test_walkthrough_rejection_rejects_non_admin(
 
 @pytest.mark.django_db
 def test_walkthrough_rejection_missing_fields(
-    admin_api_client: APIClient,
+    staff_api_client: APIClient,
 ) -> None:
     walkthrough = WalkthroughFactory(status=WalkthroughStatus.APPROVED)
-    resp = admin_api_client.post(
+    resp = staff_api_client.post(
         f"/api/walkthroughs/{walkthrough.id}/reject/", format="json"
     )
     assert resp.status_code == status.HTTP_400_BAD_REQUEST, resp.content
@@ -112,10 +112,10 @@ def test_walkthrough_rejection_missing_fields(
 
 @pytest.mark.django_db
 def test_walkthrough_rejection_success(
-    admin_api_client: APIClient,
+    staff_api_client: APIClient,
 ) -> None:
     walkthrough = WalkthroughFactory(status=WalkthroughStatus.APPROVED)
-    resp = admin_api_client.post(
+    resp = staff_api_client.post(
         f"/api/walkthroughs/{walkthrough.id}/reject/",
         format="json",
         data={"reason": "Bad formatting"},

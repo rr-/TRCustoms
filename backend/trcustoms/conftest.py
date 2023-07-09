@@ -227,9 +227,16 @@ def fixture_auth_api_client(
     return api_client
 
 
-@pytest.fixture(name="admin_api_client")
-def fixture_admin_api_client(auth_api_client: APIClient) -> APIClient:
+@pytest.fixture(name="staff_api_client")
+def fixture_staff_api_client(auth_api_client: APIClient) -> APIClient:
     auth_api_client.user.is_staff = True
+    auth_api_client.user.save()
+    return auth_api_client
+
+
+@pytest.fixture(name="superuser_api_client")
+def fixture_superuser_api_client(auth_api_client: APIClient) -> APIClient:
+    auth_api_client.user.is_superuser = True
     auth_api_client.user.save()
     return auth_api_client
 

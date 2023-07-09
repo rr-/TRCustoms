@@ -10,7 +10,7 @@ from trcustoms.tags.models import Tag
 def test_tag_merging(
     tag_factory: TagFactory,
     level_factory: LevelFactory,
-    admin_api_client: APIClient,
+    staff_api_client: APIClient,
 ) -> None:
     """Test that tag merging re-adds all old usages to the new tag."""
     level1 = level_factory()
@@ -24,7 +24,7 @@ def test_tag_merging(
     level2.tags.set([tag1])
     level3.tags.set([tag1, tag2])
 
-    response = admin_api_client.post(
+    response = staff_api_client.post(
         f"/api/level_tags/{tag1.id}/merge/{tag2.id}/"
     )
     data = response.json()

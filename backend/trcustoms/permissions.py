@@ -1,4 +1,4 @@
-from rest_framework.permissions import BasePermission
+from rest_framework.permissions import BasePermission, IsAuthenticated
 
 from trcustoms.levels.models import Level
 from trcustoms.reviews.models import LevelReview
@@ -19,8 +19,6 @@ def HasPermission(permission: UserPermission) -> BasePermission:
         def has_permission(self, request, view) -> bool:
             if not request.user:
                 return False
-            if request.user.is_staff:
-                return True
             return permission in get_permissions(request.user)
 
         def has_object_permission(self, request, view, obj) -> bool:
@@ -29,22 +27,24 @@ def HasPermission(permission: UserPermission) -> BasePermission:
     return HasPermissionImpl
 
 
-class IsAccessingOwnResource(BasePermission):
+class IsAccessingOwnResource(IsAuthenticated):
     def has_object_permission(self, request, view, obj) -> bool:
         if not request.user:
             return False
-        if isinstance(obj, User):
-            return obj == request.user
-        if isinstance(obj, Level):
-            return (
-                obj.uploader == request.user
-                or obj.authors.filter(id=request.user.id).exists()
-            )
-        if isinstance(obj, LevelReview):
-            return obj.author == request.user
-        if isinstance(obj, Walkthrough):
-            return obj.author == request.user
-        return False
+        result = False
+        match obj:
+            case User():
+                result = obj == request.user
+            case Level():
+                result = (
+                    obj.uploader == request.user
+                    or obj.authors.filter(id=request.user.id).exists()
+                )
+            case LevelReview():
+                result = obj.author == request.user
+            case Walkthrough():
+                result = obj.author == request.user
+        return result
 
 
 def get_permissions(user: User) -> set[UserPermission]:
@@ -59,7 +59,6 @@ def get_permissions(user: User) -> set[UserPermission]:
 
     if user.is_staff:
         perms |= set(UserPermission) - {
-            UserPermission.DELETE_LEVELS,
             UserPermission.DELETE_LEVELS,
             UserPermission.DELETE_WALKTHROUGHS,
             UserPermission.EDIT_USERS,

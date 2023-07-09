@@ -9,9 +9,7 @@ from trcustoms.walkthroughs.models import Walkthrough
 
 
 @pytest.mark.django_db
-def test_walkthrough_deletion_requires_login(
-    api_client: APIClient,
-) -> None:
+def test_walkthrough_deletion_requires_login(api_client: APIClient) -> None:
     walkthrough = WalkthroughFactory()
     resp = api_client.delete(f"/api/walkthroughs/{walkthrough.id}/")
     assert resp.status_code == status.HTTP_401_UNAUTHORIZED, resp.content
@@ -22,7 +20,7 @@ def test_walkthrough_deletion_requires_login(
 
 
 @pytest.mark.django_db
-def test_walkthrough_deletion_rejects_non_admin(
+def test_walkthrough_deletion_rejects_non_staff(
     auth_api_client: APIClient,
 ) -> None:
     walkthrough = WalkthroughFactory(author=auth_api_client.user)
@@ -35,12 +33,24 @@ def test_walkthrough_deletion_rejects_non_admin(
 
 
 @pytest.mark.django_db
-def test_walkthrough_deletion_success(
-    admin_api_client: APIClient,
+def test_walkthrough_deletion_rejects_staff(
+    staff_api_client: APIClient,
 ) -> None:
-    user = UserFactory()
-    walkthrough = WalkthroughFactory(author=user)
-    resp = admin_api_client.delete(f"/api/walkthroughs/{walkthrough.id}/")
+    walkthrough = WalkthroughFactory()
+    resp = staff_api_client.delete(f"/api/walkthroughs/{walkthrough.id}/")
+    assert resp.status_code == status.HTTP_403_FORBIDDEN, resp.content
+    assert resp.json() == {
+        "detail": "You do not have permission to perform this action."
+    }
+    assert Walkthrough.objects.filter(pk=walkthrough.pk).exists()
+
+
+@pytest.mark.django_db
+def test_walkthrough_deletion_success(
+    superuser_api_client: APIClient,
+) -> None:
+    walkthrough = WalkthroughFactory()
+    resp = superuser_api_client.delete(f"/api/walkthroughs/{walkthrough.id}/")
     audit_log = AuditLog.objects.first()
     assert resp.status_code == status.HTTP_204_NO_CONTENT
     assert not Walkthrough.objects.filter(pk=walkthrough.pk).exists()
@@ -51,7 +61,7 @@ def test_walkthrough_deletion_success(
 
 @pytest.mark.django_db
 def test_walkthrough_deletion_updates_authored_walkthrough_count(
-    admin_api_client: APIClient,
+    superuser_api_client: APIClient,
 ) -> None:
     user = UserFactory()
     walkthrough = WalkthroughFactory(
@@ -59,6 +69,6 @@ def test_walkthrough_deletion_updates_authored_walkthrough_count(
     )
     user.refresh_from_db()
     assert user.authored_walkthrough_count == 1
-    admin_api_client.delete(f"/api/walkthroughs/{walkthrough.id}/")
+    superuser_api_client.delete(f"/api/walkthroughs/{walkthrough.id}/")
     user.refresh_from_db()
     assert user.authored_walkthrough_count == 0

@@ -39,12 +39,12 @@ def test_user_retrieval_does_not_show_emails(
 
 @pytest.mark.django_db
 def test_user_retrieval_show_emails_to_admins(
-    admin_api_client: APIClient,
+    staff_api_client: APIClient,
     user_factory: UserFactory,
 ) -> None:
     user = user_factory(email="jdoe@example.com")
 
-    response = admin_api_client.get(f"/api/users/{user.id}/")
+    response = staff_api_client.get(f"/api/users/{user.id}/")
     data = response.json()
     assert response.status_code == status.HTTP_200_OK, data
     assert data["email"] == user.email
