@@ -274,3 +274,6 @@ if TESTING:
     del REST_FRAMEWORK["DEFAULT_THROTTLE_CLASSES"]
     del REST_FRAMEWORK["DEFAULT_THROTTLE_RATES"]
     CELERY_TASK_ALWAYS_EAGER = True
+    PASSWORD_HASHERS = (
+        "django.contrib.auth.hashers.UnsaltedMD5PasswordHasher",
+    )
