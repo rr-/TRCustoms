@@ -10,12 +10,8 @@ from trcustoms.common.models import Country
 from trcustoms.config.serializers import ConfigSerializer
 from trcustoms.engines.models import Engine
 from trcustoms.genres.models import Genre
-from trcustoms.levels.models import (
-    FeaturedLevel,
-    Level,
-    LevelDifficulty,
-    LevelDuration,
-)
+from trcustoms.levels.consts import FeatureType
+from trcustoms.levels.models import Level, LevelDifficulty, LevelDuration
 from trcustoms.levels.serializers import FeaturedLevelsSerializer
 from trcustoms.reviews.models import LevelReview, ReviewTemplateQuestion
 from trcustoms.tags.models import Tag
@@ -120,15 +116,11 @@ class FeaturedLevelsView(generics.RetrieveAPIView):
     def get_object(self):
         return {
             "monthly_hidden_gem": get_featured_level(
-                FeaturedLevel.FeatureType.MONTHLY_HIDDEN_GEM
+                FeatureType.MONTHLY_HIDDEN_GEM
             ),
             "level_of_the_day": get_featured_level(
-                FeaturedLevel.FeatureType.LEVEL_OF_THE_DAY
+                FeatureType.LEVEL_OF_THE_DAY
             ),
-            "best_in_genre": get_featured_level(
-                FeaturedLevel.FeatureType.BEST_IN_GENRE
-            ),
-            "new_release": get_featured_level(
-                FeaturedLevel.FeatureType.NEW_RELEASE
-            ),
+            "best_in_genre": get_featured_level(FeatureType.BEST_IN_GENRE),
+            "new_release": get_featured_level(FeatureType.NEW_RELEASE),
         }

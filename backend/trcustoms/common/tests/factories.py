@@ -1,5 +1,6 @@
 import factory
 
+from trcustoms.common.consts import RatingClassSubject
 from trcustoms.common.models import RatingClass
 
 
@@ -8,5 +9,5 @@ class RatingClassFactory(factory.django.DjangoModelFactory):
         model = RatingClass
         django_get_or_create = ("position", "target")
 
-    target = RatingClass.Target.REVIEW
+    target = RatingClassSubject.REVIEW
     min_rating_count = 0

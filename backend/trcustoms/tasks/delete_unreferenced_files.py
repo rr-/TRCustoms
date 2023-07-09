@@ -8,6 +8,7 @@ from trcustoms.celery import app, logger
 from trcustoms.levels.models import Level
 from trcustoms.news.models import News
 from trcustoms.reviews.models import LevelReview
+from trcustoms.uploads.consts import UploadType
 from trcustoms.uploads.models import UploadedFile
 from trcustoms.users.models import User
 from trcustoms.utils import check_model_references
@@ -42,7 +43,7 @@ def delete_unreferenced_files(dry_run: bool = False) -> None:
         levelscreenshot__isnull=True,
         user__isnull=True,
         created__lte=(timezone.now() - timedelta(hours=24)),
-    ).exclude(upload_type=UploadedFile.UploadType.ATTACHMENT):
+    ).exclude(upload_type=UploadType.ATTACHMENT):
         logger.info("%s: deleting unused file", uploaded_file.md5sum)
         assert not check_model_references(uploaded_file)
         if not dry_run:
@@ -52,7 +53,7 @@ def delete_unreferenced_files(dry_run: bool = False) -> None:
 
     for uploaded_file in UploadedFile.objects.filter(
         created__lte=(timezone.now() - timedelta(hours=24)),
-        upload_type=UploadedFile.UploadType.ATTACHMENT,
+        upload_type=UploadType.ATTACHMENT,
         content__isnull=False,
     ):
         name = uploaded_file.content.name

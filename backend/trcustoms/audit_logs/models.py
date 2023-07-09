@@ -1,6 +1,7 @@
 from django.contrib.contenttypes.models import ContentType
 from django.db import models
 
+from trcustoms.audit_logs.consts import ChangeType
 from trcustoms.common.models import DatesInfo
 from trcustoms.users.models import User
 
@@ -15,8 +16,6 @@ class AuditLogManager(models.Manager):
 
 class AuditLog(DatesInfo):
     objects = AuditLogManager()
-
-    ChangeType = models.TextChoices("ChangeType", "CREATE UPDATE DELETE")
 
     object_id = models.CharField(max_length=64)
     object_name = models.CharField(max_length=256)

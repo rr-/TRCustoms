@@ -1,5 +1,7 @@
 from django.db import models
 
+from trcustoms.common.consts import RatingClassSubject
+
 
 class DatesInfo(models.Model):
     """Base class for models expected to store creation and last update
@@ -24,11 +26,7 @@ class Country(models.Model):
 
 
 class RatingClass(models.Model):
-    class Target(models.TextChoices):
-        LEVEL = ("le", "Level")
-        REVIEW = ("re", "Review")
-
-    target = models.CharField(choices=Target.choices, max_length=2)
+    target = models.CharField(choices=RatingClassSubject.choices, max_length=2)
     position = models.IntegerField(null=True, blank=True)
     name = models.CharField(max_length=30)
 

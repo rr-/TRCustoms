@@ -4,33 +4,27 @@ from pathlib import Path
 from django.db import models
 
 from trcustoms.common.models import DatesInfo
+from trcustoms.uploads.consts import UploadType
 from trcustoms.uploads.storage import get_user_upload_storage
 
 user_upload_storage = get_user_upload_storage()
 
 
 class UploadedFile(DatesInfo):
-    class UploadType(models.TextChoices):
-        USER_PICTURE = ("up", "User picture")
-        LEVEL_COVER = ("lb", "Level cover image")
-        LEVEL_SCREENSHOT = ("ls", "Level screenshot")
-        LEVEL_FILE = ("lf", "Level file")
-        ATTACHMENT = ("at", "Post attachment")
-
     class Meta:
         default_permissions = []
 
     def get_upload_directory(self) -> str:
         match self.upload_type:
-            case UploadedFile.UploadType.USER_PICTURE:
+            case UploadType.USER_PICTURE:
                 return "avatars"
-            case UploadedFile.UploadType.LEVEL_COVER:
+            case UploadType.LEVEL_COVER:
                 return "level_images"
-            case UploadedFile.UploadType.LEVEL_SCREENSHOT:
+            case UploadType.LEVEL_SCREENSHOT:
                 return "level_images"
-            case UploadedFile.UploadType.LEVEL_FILE:
+            case UploadType.LEVEL_FILE:
                 return "levels"
-            case UploadedFile.UploadType.ATTACHMENT:
+            case UploadType.ATTACHMENT:
                 return "attachments"
             case _:
                 raise ValueError("unknown upload type")

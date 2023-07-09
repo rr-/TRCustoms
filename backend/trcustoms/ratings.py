@@ -3,8 +3,10 @@ from statistics import mean
 
 from django.db.models import F, Max, QuerySet, Sum
 
+from trcustoms.common.consts import RatingClassSubject
 from trcustoms.common.models import RatingClass
 from trcustoms.levels.models import Level
+from trcustoms.reviews.consts import ReviewType
 from trcustoms.reviews.models import LevelReview, ReviewTemplateQuestion
 
 
@@ -16,7 +18,7 @@ def get_max_review_score() -> int:
 
 
 def get_review_score(review: LevelReview) -> float:
-    if review.review_type == LevelReview.ReviewType.TRLE:
+    if review.review_type == ReviewType.TRLE:
         return (
             mean(
                 [
@@ -29,7 +31,7 @@ def get_review_score(review: LevelReview) -> float:
             / 10.0
         )
 
-    if review.review_type == LevelReview.ReviewType.TRC:
+    if review.review_type == ReviewType.TRC:
         max_score = get_max_review_score()
         if not max_score:
             return 0
@@ -44,7 +46,7 @@ def get_review_score(review: LevelReview) -> float:
 
 
 @cache
-def get_rating_classes(target: RatingClass.Target) -> QuerySet:
+def get_rating_classes(target: RatingClassSubject) -> QuerySet:
     return sorted(
         RatingClass.objects.filter(target=target),
         key=lambda rating_class: abs(rating_class.position),
@@ -54,7 +56,7 @@ def get_rating_classes(target: RatingClass.Target) -> QuerySet:
 
 @cache
 def get_rating_class(
-    target: RatingClass.Target, average: float, count: int
+    target: RatingClassSubject, average: float, count: int
 ) -> RatingClass:
     for rating_class in get_rating_classes(target):
         # pylint: disable=chained-comparison
@@ -75,7 +77,7 @@ def get_level_rating_class(level: Level) -> RatingClass:
 
     average = mean(ratings)
     count = len(ratings)
-    return get_rating_class(RatingClass.Target.LEVEL, average, count)
+    return get_rating_class(RatingClassSubject.LEVEL, average, count)
 
 
 def get_review_rating_class(review: LevelReview) -> RatingClass:
@@ -85,4 +87,4 @@ def get_review_rating_class(review: LevelReview) -> RatingClass:
 
     average = mean(ratings)
     count = len(ratings)
-    return get_rating_class(RatingClass.Target.REVIEW, average, count)
+    return get_rating_class(RatingClassSubject.REVIEW, average, count)

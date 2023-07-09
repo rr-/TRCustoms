@@ -7,11 +7,12 @@ from django.utils import timezone
 from trcustoms.celery import app, logger
 from trcustoms.common.models import RatingClass
 from trcustoms.genres.models import Genre
+from trcustoms.levels.consts import FeatureType
 from trcustoms.levels.models import FeaturedLevel, Level
 
 
 def feature_level(
-    feature_type: FeaturedLevel.FeatureType,
+    feature_type: FeatureType,
     level_pool: QuerySet[Level],
     **kwargs,
 ) -> FeaturedLevel | None:
@@ -34,7 +35,7 @@ def was_featured_recently(
 
 
 def get_last_featured_level(
-    feature_type: FeaturedLevel.FeatureType,
+    feature_type: FeatureType,
 ) -> FeaturedLevel | None:
     return (
         FeaturedLevel.objects.filter(feature_type=feature_type)
@@ -68,7 +69,7 @@ def filter_by_rating_class(
 
 
 def filter_out_recently_featured(
-    levels: QuerySet[Level], feature_type: FeaturedLevel.FeatureType, days: int
+    levels: QuerySet[Level], feature_type: FeatureType, days: int
 ) -> QuerySet[Level]:
     return levels.exclude(
         id__in=FeaturedLevel.objects.filter(
@@ -80,7 +81,7 @@ def filter_out_recently_featured(
 
 def update_monthly_hidden_gem() -> FeaturedLevel | None:
     last_featured_level = get_last_featured_level(
-        FeaturedLevel.FeatureType.MONTHLY_HIDDEN_GEM
+        FeatureType.MONTHLY_HIDDEN_GEM
     )
 
     # if a level was featured recently, abort
@@ -106,20 +107,18 @@ def update_monthly_hidden_gem() -> FeaturedLevel | None:
     # make sure the level was not picked recently
     levels = filter_out_recently_featured(
         levels,
-        feature_type=FeaturedLevel.FeatureType.MONTHLY_HIDDEN_GEM,
+        feature_type=FeatureType.MONTHLY_HIDDEN_GEM,
         days=365 * 2 + 7,
     )
 
     return feature_level(
-        feature_type=FeaturedLevel.FeatureType.MONTHLY_HIDDEN_GEM,
+        feature_type=FeatureType.MONTHLY_HIDDEN_GEM,
         level_pool=levels,
     )
 
 
 def update_level_of_the_day() -> FeaturedLevel | None:
-    last_featured_level = get_last_featured_level(
-        FeaturedLevel.FeatureType.LEVEL_OF_THE_DAY
-    )
+    last_featured_level = get_last_featured_level(FeatureType.LEVEL_OF_THE_DAY)
 
     # if a level was featured recently, abort
     if was_featured_recently(last_featured_level, hours=23):
@@ -130,20 +129,18 @@ def update_level_of_the_day() -> FeaturedLevel | None:
     # make sure the level was not picked recently
     levels = filter_out_recently_featured(
         levels,
-        feature_type=FeaturedLevel.FeatureType.LEVEL_OF_THE_DAY,
+        feature_type=FeatureType.LEVEL_OF_THE_DAY,
         days=365,
     )
 
     return feature_level(
-        feature_type=FeaturedLevel.FeatureType.LEVEL_OF_THE_DAY,
+        feature_type=FeatureType.LEVEL_OF_THE_DAY,
         level_pool=levels,
     )
 
 
 def update_best_level_in_genre() -> FeaturedLevel | None:
-    last_featured_level = get_last_featured_level(
-        FeaturedLevel.FeatureType.BEST_IN_GENRE
-    )
+    last_featured_level = get_last_featured_level(FeatureType.BEST_IN_GENRE)
 
     # if a level was featured recently, abort
     if was_featured_recently(last_featured_level, days=14):
@@ -177,12 +174,12 @@ def update_best_level_in_genre() -> FeaturedLevel | None:
         # make sure the level was not picked recently
         levels = filter_out_recently_featured(
             levels,
-            feature_type=FeaturedLevel.FeatureType.BEST_IN_GENRE,
+            feature_type=FeatureType.BEST_IN_GENRE,
             days=365 * 3,
         )
 
         featured_level = feature_level(
-            feature_type=FeaturedLevel.FeatureType.BEST_IN_GENRE,
+            feature_type=FeatureType.BEST_IN_GENRE,
             level_pool=levels,
             chosen_genre=genre,
         )
@@ -217,16 +214,16 @@ def get_new_release() -> FeaturedLevel | None:
         return FeaturedLevel(
             created=timezone.now(),
             level=recent_level,
-            feature_type=FeaturedLevel.FeatureType.NEW_RELEASE,
+            feature_type=FeatureType.NEW_RELEASE,
             chosen_genre=None,
         )
     return None
 
 
 def get_featured_level(
-    feature_type: FeaturedLevel.FeatureType,
+    feature_type: FeatureType,
 ) -> FeaturedLevel | None:
-    if feature_type == FeaturedLevel.FeatureType.NEW_RELEASE:
+    if feature_type == FeatureType.NEW_RELEASE:
         return get_new_release()
     return (
         FeaturedLevel.objects.filter(feature_type=feature_type)

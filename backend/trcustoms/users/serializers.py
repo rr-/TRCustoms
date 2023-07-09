@@ -12,8 +12,10 @@ from trcustoms.common.models import Country
 from trcustoms.common.serializers import CountryNestedSerializer
 from trcustoms.mails import send_email_confirmation_mail
 from trcustoms.permissions import get_permissions
+from trcustoms.uploads.consts import UploadType
 from trcustoms.uploads.models import UploadedFile
 from trcustoms.uploads.serializers import UploadedFileNestedSerializer
+from trcustoms.users.consts import UserSource
 from trcustoms.users.models import (
     ConfirmEmailToken,
     PasswordResetToken,
@@ -131,7 +133,7 @@ class UserDetailsSerializer(UserListingSerializer):
         allow_null=True,
         source="picture",
         queryset=UploadedFile.objects.filter(
-            upload_type=UploadedFile.UploadType.USER_PICTURE
+            upload_type=UploadType.USER_PICTURE
         ),
     )
 
@@ -255,7 +257,7 @@ class UserDetailsSerializer(UserListingSerializer):
             instance.set_password(password)
         instance.is_pending_activation = True
         instance.is_active = False
-        instance.source = User.Source.trcustoms
+        instance.source = UserSource.trcustoms
         instance.save()
 
         send_email_confirmation_mail(instance)

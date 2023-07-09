@@ -3,6 +3,7 @@ from django.core import mail
 from rest_framework import status
 from rest_framework.test import APIClient
 
+from trcustoms.audit_logs.consts import ChangeType
 from trcustoms.audit_logs.models import AuditLog
 from trcustoms.levels.tests.factories import LevelFactory
 from trcustoms.users.tests.factories import UserFactory
@@ -179,7 +180,7 @@ def test_walkthrough_update_success(
     assert walkthrough.text == "https://example.com/new/"
 
     assert audit_log
-    assert audit_log.change_type == AuditLog.ChangeType.UPDATE
+    assert audit_log.change_type == ChangeType.UPDATE
     assert audit_log.object_id == str(walkthrough.id)
 
     assert len(mail.outbox) == 1

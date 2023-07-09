@@ -2,6 +2,7 @@ import pytest
 from rest_framework import status
 from rest_framework.test import APIClient
 
+from trcustoms.audit_logs.consts import ChangeType
 from trcustoms.audit_logs.models import AuditLog
 from trcustoms.users.tests.factories import UserFactory
 from trcustoms.walkthroughs.consts import WalkthroughStatus
@@ -56,7 +57,7 @@ def test_walkthrough_deletion_success(
     assert resp.status_code == status.HTTP_204_NO_CONTENT
     assert not Walkthrough.objects.filter(pk=walkthrough.pk).exists()
     assert audit_log
-    assert audit_log.change_type == AuditLog.ChangeType.DELETE
+    assert audit_log.change_type == ChangeType.DELETE
     assert audit_log.object_id == str(walkthrough.id)
 
 

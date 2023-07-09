@@ -23,6 +23,7 @@ from trcustoms.mails import send_level_submitted_mail
 from trcustoms.tags.models import Tag
 from trcustoms.tags.serializers import TagNestedSerializer
 from trcustoms.tasks import update_awards
+from trcustoms.uploads.consts import UploadType
 from trcustoms.uploads.models import UploadedFile
 from trcustoms.uploads.serializers import UploadedFileNestedSerializer
 from trcustoms.users.models import User
@@ -211,8 +212,8 @@ class LevelDetailsSerializer(LevelListingSerializer):
         queryset=UploadedFile.objects.filter(
             upload_type__in=[
                 # allow legacy dupes between covers and screenshots
-                UploadedFile.UploadType.LEVEL_COVER,
-                UploadedFile.UploadType.LEVEL_SCREENSHOT,
+                UploadType.LEVEL_COVER,
+                UploadType.LEVEL_SCREENSHOT,
             ]
         ),
     )
@@ -224,8 +225,8 @@ class LevelDetailsSerializer(LevelListingSerializer):
         queryset=UploadedFile.objects.filter(
             upload_type__in=[
                 # allow legacy dupes between covers and screenshots
-                UploadedFile.UploadType.LEVEL_COVER,
-                UploadedFile.UploadType.LEVEL_SCREENSHOT,
+                UploadType.LEVEL_COVER,
+                UploadType.LEVEL_SCREENSHOT,
             ],
         ),
     )
@@ -235,7 +236,7 @@ class LevelDetailsSerializer(LevelListingSerializer):
         write_only=True,
         source="file",
         queryset=UploadedFile.objects.filter(
-            upload_type=UploadedFile.UploadType.LEVEL_FILE
+            upload_type=UploadType.LEVEL_FILE
         ),
     )
 

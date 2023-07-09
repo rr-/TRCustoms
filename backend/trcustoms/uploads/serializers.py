@@ -2,39 +2,39 @@ import re
 
 from rest_framework import serializers
 
-from trcustoms.uploads.consts import GIGABYTE, KILOBYTE, MEGABYTE
+from trcustoms.uploads.consts import GIGABYTE, KILOBYTE, MEGABYTE, UploadType
 from trcustoms.uploads.models import UploadedFile
 
 MAX_SIZE_MAP = {
-    UploadedFile.UploadType.USER_PICTURE: [
+    UploadType.USER_PICTURE: [
         (".*", 300 * KILOBYTE),
     ],
-    UploadedFile.UploadType.LEVEL_COVER: [
+    UploadType.LEVEL_COVER: [
         ("image/png", 10 * MEGABYTE),
         (".*", MEGABYTE),
     ],
-    UploadedFile.UploadType.LEVEL_SCREENSHOT: [
+    UploadType.LEVEL_SCREENSHOT: [
         ("image/png", 10 * MEGABYTE),
         (".*", MEGABYTE),
     ],
-    UploadedFile.UploadType.LEVEL_FILE: [
+    UploadType.LEVEL_FILE: [
         (".*", GIGABYTE),
     ],
-    UploadedFile.UploadType.ATTACHMENT: [
+    UploadType.ATTACHMENT: [
         (".*", 0.5 * MEGABYTE),
     ],
 }
 
 CONTENT_TYPE_MAP = {
-    UploadedFile.UploadType.USER_PICTURE: ["image/jpeg", "image/png"],
-    UploadedFile.UploadType.LEVEL_COVER: ["image/jpeg", "image/png"],
-    UploadedFile.UploadType.LEVEL_SCREENSHOT: ["image/jpeg", "image/png"],
-    UploadedFile.UploadType.LEVEL_FILE: [
+    UploadType.USER_PICTURE: ["image/jpeg", "image/png"],
+    UploadType.LEVEL_COVER: ["image/jpeg", "image/png"],
+    UploadType.LEVEL_SCREENSHOT: ["image/jpeg", "image/png"],
+    UploadType.LEVEL_FILE: [
         "application/zip",
         "application/zip-compressed",
         "application/x-zip-compressed",
     ],
-    UploadedFile.UploadType.ATTACHMENT: [
+    UploadType.ATTACHMENT: [
         "image/png",
         "image/jpeg",
         "application/zip",

@@ -4,6 +4,7 @@ from pathlib import Path
 
 from django.core.management.base import BaseCommand
 
+from trcustoms.common.consts import RatingClassSubject
 from trcustoms.common.models import Country, RatingClass
 from trcustoms.engines.models import Engine
 from trcustoms.genres.models import Genre
@@ -84,8 +85,8 @@ class Command(BaseCommand):
     def create_rating_classes(self) -> None:
         data = self.read_json("rating_classes.json")
         for path, target in [
-            ("levels", RatingClass.Target.LEVEL),
-            ("reviews", RatingClass.Target.REVIEW),
+            ("levels", RatingClassSubject.LEVEL),
+            ("reviews", RatingClassSubject.REVIEW),
         ]:
             for item in data[path]:
                 RatingClass.objects.update_or_create(

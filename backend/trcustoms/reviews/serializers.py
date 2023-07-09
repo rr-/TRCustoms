@@ -8,6 +8,7 @@ from trcustoms.mails import (
     send_review_update_mail,
 )
 from trcustoms.permissions import get_permissions
+from trcustoms.reviews.consts import ReviewType
 from trcustoms.reviews.models import (
     LevelReview,
     ReviewTemplateAnswer,
@@ -137,7 +138,7 @@ class LevelReviewDetailsSerializer(LevelReviewListingSerializer):
         answers = validated_data.pop("answer_ids", None)
 
         review = review_factory()
-        review.review_type = LevelReview.ReviewType.TRC
+        review.review_type = ReviewType.TRC
         review.save()
 
         if answers is not None:

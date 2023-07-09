@@ -3,6 +3,7 @@ from mimesis import Generic
 from rest_framework import status
 from rest_framework.test import APIClient
 
+from trcustoms.audit_logs.consts import ChangeType
 from trcustoms.audit_logs.models import AuditLog
 from trcustoms.audit_logs.utils import make_audit_log
 from trcustoms.users.models import User
@@ -124,7 +125,7 @@ def test_user_deactivation(staff_api_client: APIClient) -> None:
     make_audit_log(
         obj=user,
         request=None,
-        change_type=AuditLog.ChangeType.CREATE,
+        change_type=ChangeType.CREATE,
         changes=[],
     )
 

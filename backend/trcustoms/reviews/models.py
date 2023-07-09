@@ -4,6 +4,7 @@ from django.db.models import UniqueConstraint
 from trcustoms.audit_logs import registry
 from trcustoms.common.models import DatesInfo, RatingClass
 from trcustoms.levels.models import Level
+from trcustoms.reviews.consts import ReviewType
 from trcustoms.users.models import User
 
 
@@ -49,10 +50,6 @@ class ReviewTemplateAnswer(DatesInfo):
     },
 )
 class LevelReview(DatesInfo):
-    class ReviewType(models.TextChoices):
-        TRLE = ("le", "Legacy (TRLE.net)")
-        TRC = ("mo", "Modern (TRCustoms)")
-
     position = models.IntegerField(default=0)
 
     level = models.ForeignKey(

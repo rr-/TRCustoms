@@ -14,7 +14,7 @@ from trcustoms.levels.tests.factories import (
 )
 from trcustoms.reviews.tests.factories import ReviewFactory
 from trcustoms.tags.tests.factories import TagFactory
-from trcustoms.uploads.models import UploadedFile
+from trcustoms.uploads.consts import UploadType
 from trcustoms.uploads.tests.factories import UploadedFileFactory
 from trcustoms.users.tests.factories import UserFactory
 
@@ -75,16 +75,12 @@ def test_level_update_success(auth_api_client: APIClient) -> None:
     genre = GenreFactory()
     tag = TagFactory()
     user = UserFactory()
-    cover = UploadedFileFactory(
-        upload_type=UploadedFile.UploadType.LEVEL_COVER
-    )
+    cover = UploadedFileFactory(upload_type=UploadType.LEVEL_COVER)
     screenshots = [
-        UploadedFileFactory(
-            upload_type=UploadedFile.UploadType.LEVEL_SCREENSHOT
-        )
+        UploadedFileFactory(upload_type=UploadType.LEVEL_SCREENSHOT)
         for _ in range(3)
     ]
-    file = UploadedFileFactory(upload_type=UploadedFile.UploadType.LEVEL_FILE)
+    file = UploadedFileFactory(upload_type=UploadType.LEVEL_FILE)
 
     response = auth_api_client.patch(
         f"/api/levels/{level.id}/",

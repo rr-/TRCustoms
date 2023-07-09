@@ -8,8 +8,7 @@ from django.core.files.uploadedfile import SimpleUploadedFile
 from PIL import Image
 
 from trcustoms.tasks.convert_images import convert_image
-from trcustoms.uploads.consts import MEGABYTE
-from trcustoms.uploads.models import UploadedFile
+from trcustoms.uploads.consts import MEGABYTE, UploadType
 from trcustoms.uploads.tests.factories import UploadedFileFactory
 
 
@@ -43,7 +42,7 @@ def fixture_complex_png() -> Image:
 def test_convert_non_image() -> None:
     uploaded_file = UploadedFileFactory(
         content=SimpleUploadedFile("text file.txt", b"not an image"),
-        upload_type=UploadedFile.UploadType.LEVEL_SCREENSHOT,
+        upload_type=UploadType.LEVEL_SCREENSHOT,
     )
 
     with pytest.raises(PIL.UnidentifiedImageError):
@@ -54,7 +53,7 @@ def test_convert_non_image() -> None:
 def test_small_files_do_not_get_converted(simple_jpeg: bytes) -> None:
     uploaded_file = UploadedFileFactory(
         content=SimpleUploadedFile("image.jpeg", simple_jpeg),
-        upload_type=UploadedFile.UploadType.LEVEL_SCREENSHOT,
+        upload_type=UploadType.LEVEL_SCREENSHOT,
     )
     old_name = uploaded_file.content.name
 
@@ -71,7 +70,7 @@ def test_small_files_do_not_get_converted(simple_jpeg: bytes) -> None:
 def test_big_files_get_converted(complex_png: bytes) -> None:
     uploaded_file = UploadedFileFactory(
         content=SimpleUploadedFile("image.png", complex_png),
-        upload_type=UploadedFile.UploadType.LEVEL_SCREENSHOT,
+        upload_type=UploadType.LEVEL_SCREENSHOT,
     )
     old_name = uploaded_file.content.name
     assert uploaded_file.size > MEGABYTE
@@ -91,7 +90,7 @@ def test_big_files_get_converted(complex_png: bytes) -> None:
 def test_png_files_always_get_converted(simple_png: bytes) -> None:
     uploaded_file = UploadedFileFactory(
         content=SimpleUploadedFile("image.png", simple_png),
-        upload_type=UploadedFile.UploadType.LEVEL_SCREENSHOT,
+        upload_type=UploadType.LEVEL_SCREENSHOT,
     )
     old_name = uploaded_file.content.name
 
