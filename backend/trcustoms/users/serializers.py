@@ -38,6 +38,8 @@ class UserListingSerializer(serializers.ModelSerializer):
     trle_reviewer_id = serializers.ReadOnlyField()
     trle_author_id = serializers.ReadOnlyField()
     permissions = serializers.SerializerMethodField(read_only=True)
+    date_joined = serializers.ReadOnlyField()
+    last_login = serializers.ReadOnlyField()
     authored_level_count = serializers.ReadOnlyField()
     authored_walkthrough_count = serializers.ReadOnlyField()
     reviewed_level_count = serializers.ReadOnlyField()

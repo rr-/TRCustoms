@@ -1,8 +1,8 @@
 from datetime import timedelta
 
 from django.db.models import Q
-from django.http import Http404
 from django.utils import timezone
+from drf_spectacular.utils import extend_schema, extend_schema_view
 from rest_framework import mixins, status, viewsets
 from rest_framework.decorators import action
 from rest_framework.generics import get_object_or_404
@@ -10,6 +10,7 @@ from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework_simplejwt.settings import api_settings as jwt_settings
 
+from trcustoms.common.serializers import EmptySerializer
 from trcustoms.mails import (
     send_email_confirmation_mail,
     send_password_reset_mail,
@@ -45,6 +46,40 @@ from trcustoms.users.serializers import (
 from trcustoms.utils import parse_int
 
 
+@extend_schema_view(
+    resend_activation_email=extend_schema(
+        request=UsernameSerializer,
+        responses={status.HTTP_200_OK: EmptySerializer},
+    ),
+    confirm_email=extend_schema(
+        request=UserConfirmEmailSerializer,
+        responses={status.HTTP_200_OK: UserDetailsSerializer},
+    ),
+    activate=extend_schema(
+        request=EmptySerializer,
+        responses={status.HTTP_200_OK: EmptySerializer},
+    ),
+    deactivate=extend_schema(
+        request=UserBanSerializer,
+        responses={status.HTTP_200_OK: EmptySerializer},
+    ),
+    ban=extend_schema(
+        request=UserBanSerializer,
+        responses={status.HTTP_200_OK: EmptySerializer},
+    ),
+    unban=extend_schema(
+        request=EmptySerializer,
+        responses={status.HTTP_200_OK: EmptySerializer},
+    ),
+    request_password_reset=extend_schema(
+        request=UserRequestPasswordResetSerializer,
+        responses={status.HTTP_200_OK: EmptySerializer},
+    ),
+    complete_password_reset=extend_schema(
+        request=UserCompletePasswordResetSerializer,
+        responses={status.HTTP_200_OK: EmptySerializer},
+    ),
+)
 class UserViewSet(
     AuditLogModelWatcherUpdateMixin,
     PermissionsMixin,
@@ -132,9 +167,7 @@ class UserViewSet(
 
     @action(detail=False, url_path=r"by_username/(?P<username>\w+)")
     def by_username(self, request, username: str):
-        user = self.queryset.filter(username__iexact=username).first()
-        if not user:
-            raise Http404("No user found with this username.")
+        user = get_object_or_404(self.queryset, username__iexact=username)
         serializer = self.get_serializer(user)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
@@ -172,7 +205,7 @@ class UserViewSet(
             | Q(email__iexact=serializer.data["username"])
         ).first()
         send_email_confirmation_mail(user)
-        return Response({})
+        return Response({}, status.HTTP_200_OK)
 
     @action(detail=False, methods=["post"])
     def confirm_email(self, request) -> Response:
@@ -181,9 +214,7 @@ class UserViewSet(
             return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
         token = serializer.validated_data["token"]
         user_id = token[jwt_settings.USER_ID_CLAIM]
-        user = User.objects.filter(id=user_id).first()
-        if not user:
-            raise Http404("User not found.")
+        user = get_object_or_404(User, id=user_id)
         confirm_user_email(user, request)
         return Response(
             UserDetailsSerializer(
@@ -197,7 +228,7 @@ class UserViewSet(
     def activate(self, request, pk: int) -> Response:
         user = self.get_object()
         activate_user(user, request)
-        return Response({})
+        return Response({}, status.HTTP_200_OK)
 
     @action(detail=True, methods=["post"])
     def deactivate(self, request, pk: int) -> Response:
@@ -217,13 +248,13 @@ class UserViewSet(
         else:
             deactivate_user(user, request, reason)
 
-        return Response({})
+        return Response({}, status.HTTP_200_OK)
 
     @action(detail=True, methods=["post"])
     def unban(self, request, pk: int) -> Response:
         user = self.get_object()
         unban_user(user, request)
-        return Response({})
+        return Response({}, status.HTTP_200_OK)
 
     @action(detail=True, methods=["post"])
     def ban(self, request, pk: int) -> Response:
@@ -237,7 +268,7 @@ class UserViewSet(
             )
         reason = serializer.data["reason"]
         ban_user(user, request, reason)
-        return Response({})
+        return Response({}, status.HTTP_200_OK)
 
     @action(detail=False, methods=["post"])
     def request_password_reset(self, request) -> Response:
@@ -249,7 +280,7 @@ class UserViewSet(
         ).first()
         if user:
             send_password_reset_mail(user)
-        return Response({})
+        return Response({}, status.HTTP_200_OK)
 
     @action(detail=False, methods=["post"])
     def complete_password_reset(self, request) -> Response:
@@ -258,9 +289,7 @@ class UserViewSet(
             return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
         token = serializer.validated_data["token"]
         user_id = token[jwt_settings.USER_ID_CLAIM]
-        user = User.objects.filter(id=user_id).first()
-        if not user:
-            raise Http404("User not found.")
+        user = get_object_or_404(User, id=user_id)
         user.set_password(serializer.validated_data["password"])
         user.save()
-        return Response({})
+        return Response({}, status.HTTP_200_OK)
