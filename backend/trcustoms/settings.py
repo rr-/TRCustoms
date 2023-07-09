@@ -33,6 +33,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "rest_framework",
     "rest_framework_simplejwt",
+    "drf_spectacular",
     "django_unused_media",
     "django_cleanup.apps.CleanupConfig",
     "storages",
@@ -172,6 +173,7 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 REST_FRAMEWORK = {
+    "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
     "DEFAULT_FILTER_BACKENDS": [
         "rest_framework.filters.SearchFilter",
         "rest_framework.filters.OrderingFilter",
@@ -270,6 +272,12 @@ CSRF_TRUSTED_ORIGINS = [
     "https://staging.trcustoms.org",
 ]
 
+SPECTACULAR_SETTINGS = {
+    "TITLE": "TRCustoms",
+    "DESCRIPTION": "An API for TRCustoms.org",
+    "SERVE_INCLUDE_SCHEMA": True,
+    "SCHEMA_PATH_PREFIX": r"/api",
+}
 
 if TESTING:
     del REST_FRAMEWORK["DEFAULT_THROTTLE_CLASSES"]

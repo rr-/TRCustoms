@@ -20,3 +20,4 @@ django-storages==1.13.2
 premailer==3.10.0
 tqdm==4.65.0
 numpy==1.25.1
+drf-spectacular==0.26.3
