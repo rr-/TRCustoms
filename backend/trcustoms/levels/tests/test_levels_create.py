@@ -5,7 +5,8 @@ from rest_framework.test import APIClient
 
 from trcustoms.engines.tests.factories import EngineFactory
 from trcustoms.genres.tests.factories import GenreFactory
-from trcustoms.levels.models import Level, LevelExternalLink
+from trcustoms.levels.consts import LevelLinkType
+from trcustoms.levels.models import Level
 from trcustoms.levels.tests.factories import (
     DifficultyFactory,
     DurationFactory,
@@ -13,7 +14,7 @@ from trcustoms.levels.tests.factories import (
 )
 from trcustoms.reviews.tests.factories import ReviewFactory
 from trcustoms.tags.tests.factories import TagFactory
-from trcustoms.uploads.models import UploadedFile
+from trcustoms.uploads.consts import UploadType
 from trcustoms.uploads.tests.factories import UploadedFileFactory
 from trcustoms.users.tests.factories import UserFactory
 
@@ -47,16 +48,12 @@ def test_level_creation_success(auth_api_client: APIClient) -> None:
     genre = GenreFactory()
     tag = TagFactory()
     user = UserFactory()
-    cover = UploadedFileFactory(
-        upload_type=UploadedFile.UploadType.LEVEL_COVER
-    )
+    cover = UploadedFileFactory(upload_type=UploadType.LEVEL_COVER)
     screenshots = [
-        UploadedFileFactory(
-            upload_type=UploadedFile.UploadType.LEVEL_SCREENSHOT
-        )
+        UploadedFileFactory(upload_type=UploadType.LEVEL_SCREENSHOT)
         for _ in range(3)
     ]
-    file = UploadedFileFactory(upload_type=UploadedFile.UploadType.LEVEL_FILE)
+    file = UploadedFileFactory(upload_type=UploadType.LEVEL_FILE)
 
     response = auth_api_client.post(
         "/api/levels/",
@@ -109,16 +106,10 @@ def test_level_creation_success(auth_api_client: APIClient) -> None:
     assert level.external_links.count() == 2
     assert level.external_links.all()[0].url == "https://example.com"
     assert level.external_links.all()[0].position == 0
-    assert (
-        level.external_links.all()[0].link_type
-        == LevelExternalLink.LinkType.SHOWCASE
-    )
+    assert level.external_links.all()[0].link_type == LevelLinkType.SHOWCASE
     assert level.external_links.all()[1].url == "http://example.com"
     assert level.external_links.all()[1].position == 1
-    assert (
-        level.external_links.all()[1].link_type
-        == LevelExternalLink.LinkType.MAIN
-    )
+    assert level.external_links.all()[1].link_type == LevelLinkType.MAIN
     assert len(mail.outbox) == 1
     assert mail.outbox[0].subject == "[TRCustoms] Level submitted"
     assert level.uploader == auth_api_client.user

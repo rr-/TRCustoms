@@ -10,6 +10,7 @@ from mimesis import Generic
 from rest_framework.test import APIClient
 from rest_framework_simplejwt.tokens import RefreshToken
 
+from trcustoms.common.consts import RatingClassSubject
 from trcustoms.common.models import RatingClass
 from trcustoms.common.tests.factories import RatingClassFactory
 from trcustoms.ratings import (
@@ -93,7 +94,7 @@ def fixture_any_datetime() -> object:
 @pytest.fixture(name="review_rating_classes")
 def fixture_review_rating_classes() -> QuerySet:
     RatingClassFactory(
-        target=RatingClass.Target.REVIEW,
+        target=RatingClassSubject.REVIEW,
         position=1,
         min_rating_count=1,
         min_rating_average=None,
@@ -101,7 +102,7 @@ def fixture_review_rating_classes() -> QuerySet:
         name="Negative",
     )
     RatingClassFactory(
-        target=RatingClass.Target.REVIEW,
+        target=RatingClassSubject.REVIEW,
         position=-1,
         min_rating_count=1,
         min_rating_average=0.5,

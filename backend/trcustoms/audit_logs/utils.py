@@ -5,6 +5,7 @@ from django.contrib.contenttypes.models import ContentType
 from django.db import models
 from rest_framework.request import Request
 
+from trcustoms.audit_logs.consts import ChangeType
 from trcustoms.audit_logs.models import AuditLog
 from trcustoms.audit_logs.registry import get_registered_model_info
 from trcustoms.users.models import User
@@ -13,7 +14,7 @@ from trcustoms.users.models import User
 def make_audit_log(
     obj: models.Model,
     request: Request | None,
-    change_type: AuditLog.ChangeType,
+    change_type: ChangeType,
     changes: list[str],
     change_author: User | None = None,
     is_action_required: bool = False,
@@ -57,7 +58,7 @@ def track_model_creation(
     make_audit_log(
         obj=obj,
         request=request,
-        change_type=AuditLog.ChangeType.CREATE,
+        change_type=ChangeType.CREATE,
         **kwargs,
     )
 
@@ -70,7 +71,7 @@ def track_model_update(obj: models.Model, request: Request | None, **kwargs):
     make_audit_log(
         obj=obj,
         request=request,
-        change_type=AuditLog.ChangeType.UPDATE,
+        change_type=ChangeType.UPDATE,
         **kwargs,
     )
 
@@ -82,7 +83,7 @@ def track_model_deletion(
     make_audit_log(
         obj=obj,
         request=request,
-        change_type=AuditLog.ChangeType.DELETE,
+        change_type=ChangeType.DELETE,
         **kwargs,
     )
 

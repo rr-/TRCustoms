@@ -2,6 +2,7 @@ from django.db.models import Count
 
 from trcustoms.celery import app, logger
 from trcustoms.levels.models import Level, LevelFile, LevelScreenshot
+from trcustoms.uploads.consts import UploadType
 from trcustoms.uploads.models import UploadedFile
 from trcustoms.users.models import User
 from trcustoms.utils import check_model_references
@@ -10,9 +11,7 @@ from trcustoms.utils import check_model_references
 @app.task
 def merge_duplicate_files() -> None:
     for result in (
-        UploadedFile.objects.exclude(
-            upload_type=UploadedFile.UploadType.ATTACHMENT
-        )
+        UploadedFile.objects.exclude(upload_type=UploadType.ATTACHMENT)
         .values("md5sum", "upload_type")
         .annotate(dupe_count=Count("md5sum"))
         .filter(dupe_count__gt=1)

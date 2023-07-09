@@ -6,6 +6,7 @@ from rest_framework import status
 from rest_framework.test import APIClient
 
 from trcustoms.audit_logs.models import AuditLog
+from trcustoms.users.consts import UserSource
 from trcustoms.users.models import User
 from trcustoms.users.tests.factories import UserFactory
 
@@ -117,7 +118,7 @@ def test_user_creation(
 
     user = User.objects.get(id=data["id"])
     assert user.check_password(VALID_PASSWORD)
-    assert user.source == User.Source.trcustoms
+    assert user.source == UserSource.trcustoms
 
     # create a log only after confirming the account
     assert AuditLog.objects.count() == 0
@@ -261,7 +262,7 @@ def test_user_creation_acquiring_trle_account(
     """Test that it is possible to register a TRCustoms user over a legacy TRLE
     account.
     """
-    user = UserFactory(source=User.Source.trle, is_active=False)
+    user = UserFactory(source=UserSource.trle, is_active=False)
     user.date_joined = datetime(1990, 1, 1)
     user.set_unusable_password()
     user.save()
@@ -309,7 +310,7 @@ def test_user_creation_acquiring_trle_account(
 
     user.refresh_from_db()
     assert user.email == payload["email"]
-    assert user.source == User.Source.trle
+    assert user.source == UserSource.trle
     assert user.date_joined != datetime(1990, 1, 1)
 
 

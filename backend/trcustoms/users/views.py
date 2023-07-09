@@ -25,6 +25,7 @@ from trcustoms.permissions import (
     HasPermission,
     IsAccessingOwnResource,
 )
+from trcustoms.users.consts import UserSource
 from trcustoms.users.logic import (
     activate_user,
     ban_user,
@@ -183,7 +184,7 @@ class UserViewSet(
         trle_user = User.objects.filter(
             username__iexact=request.data.get("username"),
             is_active=False,
-            source=User.Source.trle,
+            source=UserSource.trle,
         ).first()
         if trle_user:
             self.kwargs[kwarg_field] = trle_user.id

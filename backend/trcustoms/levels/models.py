@@ -6,6 +6,7 @@ from trcustoms.audit_logs import registry
 from trcustoms.common.models import DatesInfo, RatingClass
 from trcustoms.engines.models import Engine
 from trcustoms.genres.models import Genre
+from trcustoms.levels.consts import FeatureType, LevelLinkType
 from trcustoms.tags.models import Tag
 from trcustoms.uploads.models import UploadedFile
 from trcustoms.users.models import User
@@ -221,17 +222,13 @@ class LevelFile(DatesInfo):
 
 
 class LevelExternalLink(DatesInfo):
-    class LinkType(models.TextChoices):
-        SHOWCASE = ("sh", "Showcase")
-        MAIN = ("ma", "Main")
-
     level = models.ForeignKey(
         Level, on_delete=models.CASCADE, related_name="external_links"
     )
     url = models.URLField(max_length=256)
     position = models.IntegerField()
     link_type = models.CharField(
-        choices=LinkType.choices,
+        choices=LevelLinkType.choices,
         max_length=2,
     )
 
@@ -249,12 +246,6 @@ class LevelExternalLink(DatesInfo):
 
 
 class FeaturedLevel(DatesInfo):
-    class FeatureType(models.TextChoices):
-        NEW_RELEASE = ("new", "New release")
-        MONTHLY_HIDDEN_GEM = ("gem", "Monthly hidden gem")
-        LEVEL_OF_THE_DAY = ("lod", "Level of the day")
-        BEST_IN_GENRE = ("big", "Best in genre")
-
     class Meta:
         default_permissions = []
 

@@ -9,6 +9,7 @@ from rest_framework.response import Response
 from trcustoms.common.serializers import EmptySerializer
 from trcustoms.mixins import PermissionsMixin
 from trcustoms.tasks.convert_images import RECOMMENDED_SIZE, convert_image
+from trcustoms.uploads.consts import UploadType
 from trcustoms.uploads.models import UploadedFile
 from trcustoms.uploads.serializers import UploadedFileDetailsSerializer
 from trcustoms.utils import stream_file_field
@@ -16,8 +17,8 @@ from trcustoms.utils import stream_file_field
 
 def schedule_image_conversion_if_needed(uploaded_file: UploadedFile) -> None:
     if uploaded_file.upload_type not in {
-        UploadedFile.UploadType.LEVEL_SCREENSHOT,
-        UploadedFile.UploadType.LEVEL_COVER,
+        UploadType.LEVEL_SCREENSHOT,
+        UploadType.LEVEL_COVER,
     }:
         return
 

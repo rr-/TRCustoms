@@ -7,7 +7,7 @@ from trcustoms.levels.models import (
     LevelDuration,
     LevelScreenshot,
 )
-from trcustoms.uploads.models import UploadedFile
+from trcustoms.uploads.consts import UploadType
 from trcustoms.uploads.tests.factories import UploadedFileFactory
 
 
@@ -33,7 +33,7 @@ class ScreenshotFactory(factory.django.DjangoModelFactory):
 
     file = factory.SubFactory(
         UploadedFileFactory,
-        upload_type=UploadedFile.UploadType.LEVEL_SCREENSHOT,
+        upload_type=UploadType.LEVEL_SCREENSHOT,
     )
     position = factory.Sequence(lambda n: n)
 

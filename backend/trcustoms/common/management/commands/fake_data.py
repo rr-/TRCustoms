@@ -16,6 +16,7 @@ from trcustoms.levels.models import (
     LevelScreenshot,
 )
 from trcustoms.tags.models import Tag
+from trcustoms.uploads.consts import UploadType
 from trcustoms.uploads.models import UploadedFile
 from trcustoms.users.models import User
 
@@ -46,7 +47,7 @@ def create_fake_user() -> User:
     if created:
         user.picture = UploadedFile.objects.create(
             content=ContentFile(fake.binaryfile.image(), name="picture.png"),
-            upload_type=UploadedFile.UploadType.USER_PICTURE,
+            upload_type=UploadType.USER_PICTURE,
         )
         user.save()
     return user
@@ -96,7 +97,7 @@ def create_fake_level() -> Level:
 
         level.cover = UploadedFile.objects.create(
             content=ContentFile(fake.binaryfile.image(), name="picture.png"),
-            upload_type=UploadedFile.UploadType.LEVEL_COVER,
+            upload_type=UploadType.LEVEL_COVER,
         )
         for _i in range(
             settings.MIN_SCREENSHOTS, settings.MAX_SCREENSHOTS + 1
@@ -107,7 +108,7 @@ def create_fake_level() -> Level:
                     content=ContentFile(
                         fake.binaryfile.image(), name="picture.png"
                     ),
-                    upload_type=UploadedFile.UploadType.LEVEL_SCREENSHOT,
+                    upload_type=UploadType.LEVEL_SCREENSHOT,
                 ),
             )
 

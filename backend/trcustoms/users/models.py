@@ -11,6 +11,7 @@ from rest_framework_simplejwt.tokens import Token
 from trcustoms.audit_logs import registry
 from trcustoms.common.models import Country
 from trcustoms.uploads.models import UploadedFile
+from trcustoms.users.consts import UserSource
 from trcustoms.walkthroughs.consts import WalkthroughStatus
 
 
@@ -84,10 +85,6 @@ class User(AbstractUser):
             (UserPermission.EDIT_PLAYLISTS.value, "Can edit playlists"),
         ]
 
-    class Source(models.TextChoices):
-        trle = "trle", "trle.net"
-        trcustoms = "trcustoms", "trcustoms"
-
     trle_reviewer_id = models.IntegerField(blank=True, null=True)
     trle_author_id = models.IntegerField(blank=True, null=True)
     website_url = models.URLField(blank=True, null=True, max_length=256)
@@ -98,7 +95,7 @@ class User(AbstractUser):
     )
 
     bio = models.TextField(max_length=5000, blank=True)
-    source = models.CharField(max_length=10, choices=Source.choices)
+    source = models.CharField(max_length=10, choices=UserSource.choices)
 
     is_email_confirmed = models.BooleanField(default=False)
     is_pending_activation = models.BooleanField(default=False)
