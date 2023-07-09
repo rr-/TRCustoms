@@ -8,12 +8,12 @@ from trcustoms.reviews.models import LevelReview
 
 @pytest.mark.django_db
 def test_review_deletion_updates_level_review_count(
-    admin_api_client: APIClient,
+    staff_api_client: APIClient,
 ) -> None:
     level = LevelFactory()
     review = ReviewFactory(level=level)
 
-    response = admin_api_client.delete(
+    response = staff_api_client.delete(
         f"/api/reviews/{review.id}/",
         format="json",
     )
@@ -26,7 +26,7 @@ def test_review_deletion_updates_level_review_count(
 
 @pytest.mark.django_db
 def test_review_deletion_updates_position(
-    admin_api_client: APIClient,
+    staff_api_client: APIClient,
 ) -> None:
     level = LevelFactory()
     review1 = ReviewFactory(
@@ -41,7 +41,7 @@ def test_review_deletion_updates_position(
     review1_last_updated = review1.last_updated
     review3_last_updated = review3.last_updated
 
-    admin_api_client.delete(
+    staff_api_client.delete(
         f"/api/reviews/{review2.id}/",
         format="json",
     )

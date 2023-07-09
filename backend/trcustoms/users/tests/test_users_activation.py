@@ -14,7 +14,7 @@ VALID_PASSWORD = "Test123!"
 @pytest.mark.django_db
 def test_user_email_activation(
     user_factory: UserFactory,
-    admin_api_client: APIClient,
+    staff_api_client: APIClient,
     fake: Generic,
 ) -> None:
     user = user_factory(
@@ -25,7 +25,7 @@ def test_user_email_activation(
         is_email_confirmed=False,
     )
 
-    response = admin_api_client.post(
+    response = staff_api_client.post(
         "/api/users/confirm_email/",
         data={"token": user.generate_email_token()},
     )
@@ -42,7 +42,7 @@ def test_user_email_activation(
 @pytest.mark.django_db
 def test_user_email_activation_invalid_token(
     user_factory: UserFactory,
-    admin_api_client: APIClient,
+    staff_api_client: APIClient,
     fake: Generic,
 ) -> None:
     user = user_factory(
@@ -53,7 +53,7 @@ def test_user_email_activation_invalid_token(
         is_email_confirmed=False,
     )
 
-    response = admin_api_client.post(
+    response = staff_api_client.post(
         "/api/users/confirm_email/",
         data={"token": "bad"},
     )
@@ -69,7 +69,7 @@ def test_user_email_activation_invalid_token(
 @pytest.mark.django_db
 def test_user_activation(
     user_factory: UserFactory,
-    admin_api_client: APIClient,
+    staff_api_client: APIClient,
     fake: Generic,
 ) -> None:
     user = user_factory(
@@ -80,7 +80,7 @@ def test_user_activation(
         is_email_confirmed=True,
     )
 
-    response = admin_api_client.post(
+    response = staff_api_client.post(
         f"/api/users/{user.id}/activate/",
         data={"reason": "no reason"},
     )
@@ -97,7 +97,7 @@ def test_user_activation(
 
 @pytest.mark.django_db
 def test_user_rejection(
-    admin_api_client: APIClient,
+    staff_api_client: APIClient,
     fake: Generic,
 ) -> None:
     payload = {
@@ -105,13 +105,13 @@ def test_user_rejection(
         "username": fake.person.username(),
         "password": VALID_PASSWORD,
     }
-    response = admin_api_client.post("/api/users/", data=payload)
+    response = staff_api_client.post("/api/users/", data=payload)
     data = response.json()
     user_id = data["id"]
 
     assert AuditLog.objects.count() == 0
 
-    response = admin_api_client.post(
+    response = staff_api_client.post(
         f"/api/users/{user_id}/deactivate/",
         data={"reason": "no reason"},
     )
@@ -126,7 +126,7 @@ def test_user_rejection(
 
 @pytest.mark.django_db
 def test_user_deactivation(
-    admin_api_client: APIClient,
+    staff_api_client: APIClient,
     user_factory: UserFactory,
 ) -> None:
     user = user_factory(
@@ -142,7 +142,7 @@ def test_user_deactivation(
         changes=[],
     )
 
-    response = admin_api_client.post(
+    response = staff_api_client.post(
         f"/api/users/{user.id}/deactivate/",
         data={"reason": "no reason"},
     )

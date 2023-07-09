@@ -55,12 +55,12 @@ def test_walkthrough_update_allows_edits_from_owner(
 
 @pytest.mark.django_db
 def test_walkthrough_update_allows_edits_from_admin(
-    admin_api_client: APIClient,
+    staff_api_client: APIClient,
 ) -> None:
     walkthrough = WalkthroughFactory(
         author=UserFactory(username="unique user")
     )
-    resp = admin_api_client.patch(
+    resp = staff_api_client.patch(
         f"/api/walkthroughs/{walkthrough.id}/", format="json", data={}
     )
     assert resp.status_code == status.HTTP_200_OK, resp.content
