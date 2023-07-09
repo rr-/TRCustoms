@@ -1,21 +1,20 @@
 import pytest
 
-from trcustoms.conftest import LevelFactory, TagFactory
+from trcustoms.levels.tests.factories import LevelFactory
 from trcustoms.tags.logic import merge_tags, split_tag
 from trcustoms.tags.models import Tag
+from trcustoms.tags.tests.factories import TagFactory
 
 
 @pytest.mark.django_db
-def test_tag_splitting(
-    tag_factory: TagFactory, level_factory: LevelFactory
-) -> None:
+def test_tag_splitting() -> None:
     """Test that tag merging re-adds all old usages to the new tag."""
-    level1 = level_factory()
-    level2 = level_factory()
-    level3 = level_factory()
+    level1 = LevelFactory()
+    level2 = LevelFactory()
+    level3 = LevelFactory()
 
-    tag1 = tag_factory(name="cave/cat")
-    tag2 = tag_factory(name="caves")
+    tag1 = TagFactory(name="cave/cat")
+    tag2 = TagFactory(name="caves")
 
     level1.tags.set([])
     level2.tags.set([tag1])
@@ -41,16 +40,14 @@ def test_tag_splitting(
 
 
 @pytest.mark.django_db
-def test_tag_merging(
-    tag_factory: TagFactory, level_factory: LevelFactory
-) -> None:
+def test_tag_merging() -> None:
     """Test that tag merging re-adds all old usages to the new tag."""
-    level1 = level_factory()
-    level2 = level_factory()
-    level3 = level_factory()
+    level1 = LevelFactory()
+    level2 = LevelFactory()
+    level3 = LevelFactory()
 
-    tag1 = tag_factory(name="winston")
-    tag2 = tag_factory(name="kurtis")
+    tag1 = TagFactory(name="winston")
+    tag2 = TagFactory(name="kurtis")
 
     level1.tags.set([])
     level2.tags.set([tag1])

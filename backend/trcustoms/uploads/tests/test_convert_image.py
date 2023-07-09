@@ -7,10 +7,10 @@ import pytest
 from django.core.files.uploadedfile import SimpleUploadedFile
 from PIL import Image
 
-from trcustoms.conftest import UploadedFileFactory
 from trcustoms.tasks.convert_images import convert_image
 from trcustoms.uploads.consts import MEGABYTE
 from trcustoms.uploads.models import UploadedFile
+from trcustoms.uploads.tests.factories import UploadedFileFactory
 
 
 def img_to_bytes(img: Image, fmt: str) -> bytes:
@@ -40,8 +40,8 @@ def fixture_complex_png() -> Image:
 
 
 @pytest.mark.django_db
-def test_convert_non_image(uploaded_file_factory: UploadedFileFactory) -> None:
-    uploaded_file = uploaded_file_factory(
+def test_convert_non_image() -> None:
+    uploaded_file = UploadedFileFactory(
         content=SimpleUploadedFile("text file.txt", b"not an image"),
         upload_type=UploadedFile.UploadType.LEVEL_SCREENSHOT,
     )
@@ -51,11 +51,8 @@ def test_convert_non_image(uploaded_file_factory: UploadedFileFactory) -> None:
 
 
 @pytest.mark.django_db
-def test_small_files_do_not_get_converted(
-    simple_jpeg: bytes,
-    uploaded_file_factory: UploadedFileFactory,
-) -> None:
-    uploaded_file = uploaded_file_factory(
+def test_small_files_do_not_get_converted(simple_jpeg: bytes) -> None:
+    uploaded_file = UploadedFileFactory(
         content=SimpleUploadedFile("image.jpeg", simple_jpeg),
         upload_type=UploadedFile.UploadType.LEVEL_SCREENSHOT,
     )
@@ -71,11 +68,8 @@ def test_small_files_do_not_get_converted(
 
 
 @pytest.mark.django_db
-def test_big_files_get_converted(
-    complex_png: bytes,
-    uploaded_file_factory: UploadedFileFactory,
-) -> None:
-    uploaded_file = uploaded_file_factory(
+def test_big_files_get_converted(complex_png: bytes) -> None:
+    uploaded_file = UploadedFileFactory(
         content=SimpleUploadedFile("image.png", complex_png),
         upload_type=UploadedFile.UploadType.LEVEL_SCREENSHOT,
     )
@@ -94,11 +88,8 @@ def test_big_files_get_converted(
 
 
 @pytest.mark.django_db
-def test_png_files_always_get_converted(
-    simple_png: bytes,
-    uploaded_file_factory: UploadedFileFactory,
-) -> None:
-    uploaded_file = uploaded_file_factory(
+def test_png_files_always_get_converted(simple_png: bytes) -> None:
+    uploaded_file = UploadedFileFactory(
         content=SimpleUploadedFile("image.png", simple_png),
         upload_type=UploadedFile.UploadType.LEVEL_SCREENSHOT,
     )

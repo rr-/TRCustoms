@@ -4,14 +4,14 @@ from django.db.models import QuerySet
 from rest_framework import status
 from rest_framework.test import APIClient
 
-from trcustoms.conftest import (
-    LevelFactory,
+from trcustoms.levels.tests.factories import LevelFactory
+from trcustoms.reviews.models import LevelReview
+from trcustoms.reviews.tests.factories import (
     ReviewFactory,
     ReviewTemplateAnswerFactory,
     ReviewTemplateQuestionFactory,
-    UserFactory,
 )
-from trcustoms.reviews.models import LevelReview
+from trcustoms.users.tests.factories import UserFactory
 
 
 @pytest.mark.django_db
@@ -32,22 +32,18 @@ def test_review_creation_success(
     any_object,
     any_integer,
     any_datetime,
-    user_factory: UserFactory,
-    level_factory: LevelFactory,
-    review_template_question_factory: ReviewTemplateQuestionFactory,
-    review_template_answer_factory: ReviewTemplateAnswerFactory,
     auth_api_client: APIClient,
 ) -> None:
-    level = level_factory(authors=[user_factory(username="example")])
+    level = LevelFactory(authors=[UserFactory(username="example")])
 
     questions = [
-        review_template_question_factory(),
-        review_template_question_factory(),
+        ReviewTemplateQuestionFactory(),
+        ReviewTemplateQuestionFactory(),
     ]
     answers = [
-        review_template_answer_factory(question=questions[0]),
-        review_template_answer_factory(question=questions[0]),
-        review_template_answer_factory(question=questions[1]),
+        ReviewTemplateAnswerFactory(question=questions[0]),
+        ReviewTemplateAnswerFactory(question=questions[0]),
+        ReviewTemplateAnswerFactory(question=questions[1]),
     ]
 
     response = auth_api_client.post(
@@ -88,18 +84,14 @@ def test_review_creation_rating_classes(
     any_integer,
     any_datetime,
     review_rating_classes: QuerySet,
-    user_factory: UserFactory,
-    level_factory: LevelFactory,
-    review_template_question_factory: ReviewTemplateQuestionFactory,
-    review_template_answer_factory: ReviewTemplateAnswerFactory,
     auth_api_client: APIClient,
 ) -> None:
-    level = level_factory(authors=[user_factory(username="example")])
+    level = LevelFactory(authors=[UserFactory(username="example")])
 
-    question = review_template_question_factory()
+    question = ReviewTemplateQuestionFactory()
     answers = [
-        review_template_answer_factory(question=question, points=0),
-        review_template_answer_factory(question=question, points=10),
+        ReviewTemplateAnswerFactory(question=question, points=0),
+        ReviewTemplateAnswerFactory(question=question, points=10),
     ]
 
     response = auth_api_client.post(
@@ -124,12 +116,9 @@ def test_review_creation_rating_classes(
 def test_review_creation_fails_when_reviewing_own_level(
     any_integer,
     any_datetime,
-    level_factory: LevelFactory,
-    review_template_question_factory: ReviewTemplateQuestionFactory,
-    review_template_answer_factory: ReviewTemplateAnswerFactory,
     auth_api_client: APIClient,
 ) -> None:
-    level = level_factory(authors=[auth_api_client.user])
+    level = LevelFactory(authors=[auth_api_client.user])
 
     response = auth_api_client.post(
         "/api/reviews/",
@@ -148,21 +137,18 @@ def test_review_creation_fails_when_reviewing_own_level(
 
 @pytest.mark.django_db
 def test_review_creation_fails_if_too_many_answers_for_single_question(
-    level_factory: LevelFactory,
-    review_template_question_factory: ReviewTemplateQuestionFactory,
-    review_template_answer_factory: ReviewTemplateAnswerFactory,
     auth_api_client: APIClient,
 ) -> None:
-    level = level_factory()
+    level = LevelFactory()
 
     questions = [
-        review_template_question_factory(),
-        review_template_question_factory(),
+        ReviewTemplateQuestionFactory(),
+        ReviewTemplateQuestionFactory(),
     ]
     answers = [
-        review_template_answer_factory(question=questions[0]),
-        review_template_answer_factory(question=questions[0]),
-        review_template_answer_factory(question=questions[1]),
+        ReviewTemplateAnswerFactory(question=questions[0]),
+        ReviewTemplateAnswerFactory(question=questions[0]),
+        ReviewTemplateAnswerFactory(question=questions[1]),
     ]
 
     response = auth_api_client.post(
@@ -182,21 +168,18 @@ def test_review_creation_fails_if_too_many_answers_for_single_question(
 
 @pytest.mark.django_db
 def test_review_creation_fails_if_question_has_no_answer(
-    level_factory: LevelFactory,
-    review_template_question_factory: ReviewTemplateQuestionFactory,
-    review_template_answer_factory: ReviewTemplateAnswerFactory,
     auth_api_client: APIClient,
 ) -> None:
-    level = level_factory()
+    level = LevelFactory()
 
     questions = [
-        review_template_question_factory(),
-        review_template_question_factory(),
+        ReviewTemplateQuestionFactory(),
+        ReviewTemplateQuestionFactory(),
     ]
     answers = [
-        review_template_answer_factory(question=questions[0]),
-        review_template_answer_factory(question=questions[0]),
-        review_template_answer_factory(question=questions[1]),
+        ReviewTemplateAnswerFactory(question=questions[0]),
+        ReviewTemplateAnswerFactory(question=questions[0]),
+        ReviewTemplateAnswerFactory(question=questions[1]),
     ]
 
     response = auth_api_client.post(
@@ -216,14 +199,10 @@ def test_review_creation_fails_if_question_has_no_answer(
 
 @pytest.mark.django_db
 def test_review_creation_fails_if_already_reviewed(
-    level_factory: LevelFactory,
-    review_factory: ReviewFactory,
-    review_template_question_factory: ReviewTemplateQuestionFactory,
-    review_template_answer_factory: ReviewTemplateAnswerFactory,
     auth_api_client: APIClient,
 ) -> None:
-    level = level_factory()
-    review_factory(level=level, author=auth_api_client.user)
+    level = LevelFactory()
+    ReviewFactory(level=level, author=auth_api_client.user)
 
     response = auth_api_client.post(
         "/api/reviews/",

@@ -1,13 +1,11 @@
 import pytest
 
 from trcustoms.awards.specs import SanglyphAwardSpec
-from trcustoms.conftest import (
-    LevelFactory,
-    ReviewFactory,
-    UserFactory,
-    WalkthroughFactory,
-)
+from trcustoms.levels.tests.factories import LevelFactory
+from trcustoms.reviews.tests.factories import ReviewFactory
+from trcustoms.users.tests.factories import UserFactory
 from trcustoms.walkthroughs.consts import WalkthroughStatus
+from trcustoms.walkthroughs.tests.factories import WalkthroughFactory
 
 
 @pytest.fixture(name="spec")

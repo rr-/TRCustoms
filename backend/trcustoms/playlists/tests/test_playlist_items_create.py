@@ -3,9 +3,11 @@ from mimesis import Generic
 from rest_framework import status
 from rest_framework.test import APIClient
 
-from trcustoms.conftest import LevelFactory, PlaylistItemFactory, UserFactory
+from trcustoms.levels.tests.factories import LevelFactory
 from trcustoms.playlists.consts import PlaylistStatus
 from trcustoms.playlists.models import PlaylistItem
+from trcustoms.playlists.tests.factories import PlaylistItemFactory
+from trcustoms.users.tests.factories import UserFactory
 
 
 @pytest.mark.django_db
@@ -44,9 +46,7 @@ def test_playlist_item_creation_fails_on_missing_fields(
 def test_playlist_item_creation_rejects_duplicate_submissions(
     auth_api_client: APIClient,
 ) -> None:
-    level = LevelFactory()
-    PlaylistItemFactory(
-        level=level,
+    playlist_item = PlaylistItemFactory(
         user=auth_api_client.user,
     )
 
@@ -54,7 +54,7 @@ def test_playlist_item_creation_rejects_duplicate_submissions(
         f"/api/users/{auth_api_client.user.pk}/playlist/",
         format="json",
         data={
-            "level_id": level.pk,
+            "level_id": playlist_item.level.pk,
             "status": "on_hold",
         },
     )
@@ -113,13 +113,13 @@ def test_playlist_item_creation_rejects_alien_user(
 
 
 @pytest.mark.django_db
-def test_playlist_item_creation_accepts_alien_user_for_admin(
-    admin_api_client: APIClient,
+def test_playlist_item_creation_accepts_alien_user_for_staff(
+    staff_api_client: APIClient,
 ) -> None:
     spoofed_user = UserFactory(username="spoofed")
     level = LevelFactory()
 
-    resp = admin_api_client.post(
+    resp = staff_api_client.post(
         f"/api/users/{spoofed_user.pk}/playlist/",
         format="json",
         data={

@@ -3,7 +3,7 @@ from mimesis import Generic
 from rest_framework import status
 from rest_framework.test import APIClient
 
-from trcustoms.conftest import TagFactory
+from trcustoms.tags.tests.factories import TagFactory
 
 
 @pytest.mark.django_db
@@ -62,12 +62,12 @@ def test_tag_creation_multiple_spaces(
 
 @pytest.mark.django_db
 def test_tag_creation_duplicate_name(
-    tag_factory: TagFactory, auth_api_client: APIClient, fake: Generic
+    auth_api_client: APIClient, fake: Generic
 ) -> None:
     """Test that tag creation prevents from creating a tag with a duplicate
     name.
     """
-    tag_factory(name="winston")
+    TagFactory(name="winston")
     payload = {"name": "winston"}
     response = auth_api_client.post("/api/level_tags/", data=payload)
     data = response.json()
@@ -78,12 +78,12 @@ def test_tag_creation_duplicate_name(
 
 @pytest.mark.django_db
 def test_tag_creation_duplicate_name_case_sensitivity(
-    tag_factory: TagFactory, auth_api_client: APIClient, fake: Generic
+    auth_api_client: APIClient, fake: Generic
 ) -> None:
     """Test that tag creation prevents from creating a tag with a duplicate
     name even if its case does not match.
     """
-    tag_factory(name="winston")
+    TagFactory(name="winston")
     payload = {"name": "WINSTON"}
     response = auth_api_client.post("/api/level_tags/", data=payload)
     data = response.json()

@@ -2,9 +2,11 @@ import pytest
 from rest_framework import status
 from rest_framework.test import APIClient
 
-from trcustoms.conftest import LevelFactory, PlaylistItemFactory, UserFactory
+from trcustoms.levels.tests.factories import LevelFactory
 from trcustoms.playlists.consts import PlaylistStatus
 from trcustoms.playlists.models import PlaylistItem
+from trcustoms.playlists.tests.factories import PlaylistItemFactory
+from trcustoms.users.tests.factories import UserFactory
 
 
 @pytest.mark.django_db
@@ -59,14 +61,14 @@ def test_playlist_item_update_allows_edits_from_owner(
 
 
 @pytest.mark.django_db
-def test_playlist_item_update_allows_edits_from_admin(
-    admin_api_client: APIClient,
+def test_playlist_item_update_allows_edits_from_staff(
+    staff_api_client: APIClient,
 ) -> None:
     playlist_item = PlaylistItemFactory(
         user=UserFactory(username="unique user")
     )
-    resp = admin_api_client.patch(
-        f"/api/users/{admin_api_client.user.pk}/playlist/{playlist_item.pk}/",
+    resp = staff_api_client.patch(
+        f"/api/users/{staff_api_client.user.pk}/playlist/{playlist_item.pk}/",
         format="json",
         data={},
     )

@@ -4,9 +4,11 @@ from rest_framework import status
 from rest_framework.test import APIClient
 
 from trcustoms.audit_logs.models import AuditLog
-from trcustoms.conftest import LevelFactory, UserFactory, WalkthroughFactory
+from trcustoms.levels.tests.factories import LevelFactory
+from trcustoms.users.tests.factories import UserFactory
 from trcustoms.walkthroughs.consts import WalkthroughStatus, WalkthroughType
 from trcustoms.walkthroughs.models import Walkthrough
+from trcustoms.walkthroughs.tests.factories import WalkthroughFactory
 
 
 @pytest.mark.django_db
@@ -54,7 +56,7 @@ def test_walkthrough_update_allows_edits_from_owner(
 
 
 @pytest.mark.django_db
-def test_walkthrough_update_allows_edits_from_admin(
+def test_walkthrough_update_allows_edits_from_staff(
     staff_api_client: APIClient,
 ) -> None:
     walkthrough = WalkthroughFactory(

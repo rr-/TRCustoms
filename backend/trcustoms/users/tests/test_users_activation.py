@@ -5,19 +5,17 @@ from rest_framework.test import APIClient
 
 from trcustoms.audit_logs.models import AuditLog
 from trcustoms.audit_logs.utils import make_audit_log
-from trcustoms.conftest import UserFactory
 from trcustoms.users.models import User
+from trcustoms.users.tests.factories import UserFactory
 
 VALID_PASSWORD = "Test123!"
 
 
 @pytest.mark.django_db
 def test_user_email_activation(
-    user_factory: UserFactory,
-    staff_api_client: APIClient,
-    fake: Generic,
+    staff_api_client: APIClient, fake: Generic
 ) -> None:
-    user = user_factory(
+    user = UserFactory(
         email=fake.person.email(),
         username=fake.person.username(),
         is_pending_activation=True,
@@ -41,11 +39,9 @@ def test_user_email_activation(
 
 @pytest.mark.django_db
 def test_user_email_activation_invalid_token(
-    user_factory: UserFactory,
-    staff_api_client: APIClient,
-    fake: Generic,
+    staff_api_client: APIClient, fake: Generic
 ) -> None:
-    user = user_factory(
+    user = UserFactory(
         email=fake.person.email(),
         username=fake.person.username(),
         is_pending_activation=True,
@@ -67,12 +63,8 @@ def test_user_email_activation_invalid_token(
 
 
 @pytest.mark.django_db
-def test_user_activation(
-    user_factory: UserFactory,
-    staff_api_client: APIClient,
-    fake: Generic,
-) -> None:
-    user = user_factory(
+def test_user_activation(staff_api_client: APIClient, fake: Generic) -> None:
+    user = UserFactory(
         email=fake.person.email(),
         username=fake.person.username(),
         is_pending_activation=True,
@@ -96,10 +88,7 @@ def test_user_activation(
 
 
 @pytest.mark.django_db
-def test_user_rejection(
-    staff_api_client: APIClient,
-    fake: Generic,
-) -> None:
+def test_user_rejection(staff_api_client: APIClient, fake: Generic) -> None:
     payload = {
         "email": fake.person.email(),
         "username": fake.person.username(),
@@ -125,11 +114,8 @@ def test_user_rejection(
 
 
 @pytest.mark.django_db
-def test_user_deactivation(
-    staff_api_client: APIClient,
-    user_factory: UserFactory,
-) -> None:
-    user = user_factory(
+def test_user_deactivation(staff_api_client: APIClient) -> None:
+    user = UserFactory(
         username="user_to_be_deactivated",
         is_pending_activation=False,
         is_active=True,

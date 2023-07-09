@@ -4,7 +4,9 @@ from trcustoms.awards.specs.amulet_of_horus import (
     AmuletOfHorusAwardSpec,
     Requirement,
 )
-from trcustoms.conftest import LevelFactory, ReviewFactory, UserFactory
+from trcustoms.levels.tests.factories import LevelFactory
+from trcustoms.reviews.tests.factories import ReviewFactory
+from trcustoms.users.tests.factories import UserFactory
 
 
 @pytest.fixture(name="spec")

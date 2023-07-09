@@ -1,8 +1,9 @@
 import pytest
 
 from trcustoms.awards.specs.scion import Requirement, ScionAwardSpec
-from trcustoms.conftest import UserFactory, WalkthroughFactory
+from trcustoms.users.tests.factories import UserFactory
 from trcustoms.walkthroughs.consts import WalkthroughStatus
+from trcustoms.walkthroughs.tests.factories import WalkthroughFactory
 
 
 @pytest.fixture(name="spec")

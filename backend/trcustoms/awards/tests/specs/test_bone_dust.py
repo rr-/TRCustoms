@@ -3,7 +3,9 @@ from datetime import timedelta
 import pytest
 
 from trcustoms.awards.specs import BoneDustAwardSpec
-from trcustoms.conftest import GenreFactory, LevelFactory, UserFactory
+from trcustoms.genres.tests.factories import GenreFactory
+from trcustoms.levels.tests.factories import LevelFactory
+from trcustoms.users.tests.factories import UserFactory
 
 
 @pytest.fixture(name="spec")
