@@ -3,5 +3,6 @@ pytest
 pytest-cov
 pytest-django
 pytest-factoryboy
+pytest-profiling
 factory-boy
 mimesis
