@@ -16,7 +16,11 @@ from rest_framework_simplejwt.views import (
 from trcustoms.audit_logs.views import AuditLogViewSet
 from trcustoms.config.views import ConfigViewSet, FeaturedLevelsView
 from trcustoms.engines.views import EngineViewSet
-from trcustoms.genres.views import GenreViewSet
+from trcustoms.genres.views import (
+    GenreDetailView,
+    GenreListView,
+    GenreStatsView,
+)
 from trcustoms.levels.views import LevelFileViewSet, LevelViewSet
 from trcustoms.news.views import NewsViewSet
 from trcustoms.playlists.views import PlaylistItemViewSet
@@ -35,7 +39,6 @@ router.register(r"uploads", UploadViewSet, basename="uploads")
 router.register(r"auditlogs", AuditLogViewSet, basename="auditlogs")
 router.register(r"levels", LevelViewSet)
 router.register(r"level_tags", TagViewSet)
-router.register(r"level_genres", GenreViewSet)
 router.register(r"level_engines", EngineViewSet)
 router.register(r"level_files", LevelFileViewSet)
 router.register(r"reviews", LevelReviewViewSet)
@@ -46,6 +49,9 @@ urlpatterns = [
     path("api/auth/token/refresh/", TokenRefreshView.as_view()),
     path("admin/", admin.site.urls),
     path("api/", include(router.urls)),
+    path("api/level_genres/", GenreListView.as_view()),
+    path("api/level_genres/<int:pk>/", GenreDetailView.as_view()),
+    path("api/level_genres/<int:pk>/stats/", GenreStatsView.as_view()),
     path(
         "api/config/featured_levels/",
         FeaturedLevelsView.as_view(),
