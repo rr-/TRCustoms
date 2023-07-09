@@ -41,6 +41,7 @@ class UserPermission(Enum):
     VIEW_USERS = "view_users"
     POST_WALKTHROUGHS = "post_walkthroughs"
     EDIT_WALKTHROUGHS = "edit_walkthroughs"
+    EDIT_PLAYLISTS = "edit_playlists"
 
 
 class UserManager(BaseUserManager):
@@ -80,6 +81,7 @@ class User(AbstractUser):
             (UserPermission.REVIEW_LEVELS.value, "Can review levels"),
             (UserPermission.UPLOAD_LEVELS.value, "Can upload levels"),
             (UserPermission.POST_WALKTHROUGHS.value, "Can post walkthroughs"),
+            (UserPermission.EDIT_PLAYLISTS.value, "Can edit playlists"),
         ]
 
     class Source(models.TextChoices):

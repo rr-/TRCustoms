@@ -1,6 +1,7 @@
 from rest_framework.permissions import BasePermission, IsAuthenticated
 
 from trcustoms.levels.models import Level
+from trcustoms.playlists.models import PlaylistItem
 from trcustoms.reviews.models import LevelReview
 from trcustoms.users.models import User, UserPermission
 from trcustoms.walkthroughs.models import Walkthrough
@@ -44,6 +45,8 @@ class IsAccessingOwnResource(IsAuthenticated):
                 result = obj.author == request.user
             case Walkthrough():
                 result = obj.author == request.user
+            case PlaylistItem():
+                result = obj.user == request.user
         return result
 
 
@@ -79,3 +82,7 @@ def get_permissions(user: User) -> set[UserPermission]:
     }
 
     return perms
+
+
+def has_permission(user: User, permission: UserPermission) -> bool:
+    return permission in get_permissions(user)

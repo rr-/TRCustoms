@@ -22,6 +22,7 @@ from trcustoms.levels.models import (
     LevelDuration,
     LevelScreenshot,
 )
+from trcustoms.playlists.models import PlaylistItem
 from trcustoms.ratings import (
     get_max_review_score,
     get_rating_class,
@@ -203,6 +204,15 @@ class UserAwardFactory(factory.django.DjangoModelFactory):
     title = factory.Sequence(lambda n: f"Title {n}")
     description = factory.Sequence(lambda n: f"Description {n}")
     tier = None
+
+
+@register
+class PlaylistItemFactory(factory.django.DjangoModelFactory):
+    class Meta:
+        model = PlaylistItem
+
+    user = factory.SubFactory(UserFactory)
+    level = factory.SubFactory(LevelFactory)
 
 
 @pytest.fixture(name="fake", scope="session")
