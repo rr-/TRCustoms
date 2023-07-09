@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     "trcustoms.users",
     "trcustoms.walkthroughs",
     "trcustoms.awards",
+    "trcustoms.playlists",
 ]
 
 MIDDLEWARE = [

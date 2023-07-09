@@ -14,10 +14,12 @@ from trcustoms.engines.views import EngineViewSet
 from trcustoms.genres.views import GenreViewSet
 from trcustoms.levels.views import LevelFileViewSet, LevelViewSet
 from trcustoms.news.views import NewsViewSet
+from trcustoms.playlists.views import PlaylistItemViewSet
 from trcustoms.reviews.views import LevelReviewViewSet
 from trcustoms.tags.views import TagViewSet
 from trcustoms.uploads.views import UploadViewSet
 from trcustoms.users.views import UserViewSet
+from trcustoms.utils.views import as_detail_view, as_list_view
 from trcustoms.walkthroughs.views import WalkthroughViewSet
 
 router = DefaultRouter()
@@ -39,6 +41,16 @@ urlpatterns = [
     path("api/auth/token/refresh/", TokenRefreshView.as_view()),
     path("admin/", admin.site.urls),
     path("api/", include(router.urls)),
+    path(
+        "api/users/<int:user_id>/playlist/",
+        as_list_view(PlaylistItemViewSet),
+        name="user-playlist-list",
+    ),
+    path(
+        "api/users/<int:user_id>/playlist/<int:pk>/",
+        as_detail_view(PlaylistItemViewSet),
+        name="user-playlist-detail",
+    ),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
