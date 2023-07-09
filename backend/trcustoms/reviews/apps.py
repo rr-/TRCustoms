@@ -7,4 +7,4 @@ class ReviewsConfig(AppConfig):
     name = "trcustoms.reviews"
 
     def ready(self):
-        import trcustoms.reviews.signals
+        import trcustoms.reviews.signals  # noqa: F401

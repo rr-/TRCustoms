@@ -7,4 +7,4 @@ class WalkthroughsConfig(AppConfig):
     name = "trcustoms.walkthroughs"
 
     def ready(self):
-        import trcustoms.walkthroughs.signals
+        import trcustoms.walkthroughs.signals  # noqa: F401
