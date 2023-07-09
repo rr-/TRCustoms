@@ -22,7 +22,9 @@ def test_tag_merging(staff_api_client: APIClient) -> None:
     level3.tags.set([tag1, tag2])
 
     response = staff_api_client.post(
-        f"/api/level_tags/{tag1.id}/merge/{tag2.id}/"
+        f"/api/level_tags/{tag1.id}/merge/",
+        format="json",
+        data={"target_tag_id": tag2.id},
     )
     data = response.json()
 

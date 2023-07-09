@@ -25,7 +25,13 @@ from trcustoms.levels.views import LevelFileViewSet, LevelViewSet
 from trcustoms.news.views import NewsViewSet
 from trcustoms.playlists.views import PlaylistItemViewSet
 from trcustoms.reviews.views import LevelReviewViewSet
-from trcustoms.tags.views import TagViewSet
+from trcustoms.tags.views import (
+    TagDetailView,
+    TagListView,
+    TagMergeView,
+    TagRetrieveByNameView,
+    TagStatsView,
+)
 from trcustoms.uploads.views import UploadViewSet
 from trcustoms.users.views import UserViewSet
 from trcustoms.utils.views import as_detail_view, as_list_view
@@ -38,7 +44,6 @@ router.register(r"news", NewsViewSet)
 router.register(r"uploads", UploadViewSet, basename="uploads")
 router.register(r"auditlogs", AuditLogViewSet, basename="auditlogs")
 router.register(r"levels", LevelViewSet)
-router.register(r"level_tags", TagViewSet)
 router.register(r"level_engines", EngineViewSet)
 router.register(r"level_files", LevelFileViewSet)
 router.register(r"reviews", LevelReviewViewSet)
@@ -52,32 +57,24 @@ urlpatterns = [
     path("api/level_genres/", GenreListView.as_view()),
     path("api/level_genres/<int:pk>/", GenreDetailView.as_view()),
     path("api/level_genres/<int:pk>/stats/", GenreStatsView.as_view()),
+    path("api/level_tags/", TagListView.as_view()),
+    path("api/level_tags/<int:pk>/", TagDetailView.as_view()),
     path(
-        "api/config/featured_levels/",
-        FeaturedLevelsView.as_view(),
-        name="featured-level-list",
+        "api/level_tags/by_name/<str:name>/", TagRetrieveByNameView.as_view()
     ),
+    path("api/level_tags/<int:pk>/merge/", TagMergeView.as_view()),
+    path("api/level_tags/<int:pk>/stats/", TagStatsView.as_view()),
+    path("api/config/featured_levels/", FeaturedLevelsView.as_view()),
     path(
-        "api/users/<int:user_id>/playlist/",
-        as_list_view(PlaylistItemViewSet),
-        name="user-playlist-list",
+        "api/users/<int:user_id>/playlist/", as_list_view(PlaylistItemViewSet)
     ),
     path(
         "api/users/<int:user_id>/playlist/<int:pk>/",
         as_detail_view(PlaylistItemViewSet),
-        name="user-playlist-detail",
     ),
     path("api/schema/", SpectacularAPIView.as_view(), name="schema"),
-    path(
-        "api/swagger/",
-        SpectacularSwaggerView.as_view(url_name="schema"),
-        name="swagger-ui",
-    ),
-    path(
-        "api/redoc/",
-        SpectacularRedocView.as_view(url_name="schema"),
-        name="redoc-ui",
-    ),
+    path("api/swagger/", SpectacularSwaggerView.as_view(url_name="schema")),
+    path("api/redoc/", SpectacularRedocView.as_view(url_name="schema")),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

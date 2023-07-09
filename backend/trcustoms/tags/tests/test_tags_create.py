@@ -35,6 +35,7 @@ def test_tag_creation(
     assert data == {
         "id": any_integer(),
         "name": payload["name"],
+        "level_count": 0,
         "created": any_datetime(allow_strings=True),
         "last_updated": any_datetime(allow_strings=True),
     }
@@ -55,6 +56,7 @@ def test_tag_creation_multiple_spaces(
     assert data == {
         "id": any_integer(),
         "name": "foo bar",
+        "level_count": 0,
         "created": any_datetime(allow_strings=True),
         "last_updated": any_datetime(allow_strings=True),
     }

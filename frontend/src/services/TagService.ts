@@ -32,10 +32,9 @@ const searchTags = async (
 };
 
 const getByName = async (name: string): Promise<TagListing> => {
-  const params = { name: name };
-  const response = (await api.get(`${API_URL}/level_tags/by_name/`, {
-    params,
-  })) as AxiosResponse<TagListing>;
+  const response = (await api.get(
+    `${API_URL}/level_tags/by_name/${name}/`
+  )) as AxiosResponse<TagListing>;
   return response.data;
 };
 
@@ -83,7 +82,8 @@ const merge = async (
   sourceTagId: number,
   targetTagId: number
 ): Promise<void> => {
-  await api.post(`${API_URL}/level_tags/${sourceTagId}/merge/${targetTagId}/`);
+  const data = { target_tag_id: targetTagId };
+  await api.post(`${API_URL}/level_tags/${sourceTagId}/merge/`, data);
 };
 
 const TagService = {
