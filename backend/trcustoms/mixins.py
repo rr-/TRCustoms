@@ -29,7 +29,7 @@ class PermissionsMixinProtocol(Protocol):
 
 if not TYPE_CHECKING:
     # protocols cause problems with Django
-    PermissionsMixinProtocol = object
+    PermissionsMixinProtocol = object  # noqa: F811
 
 
 class PermissionsMixin(PermissionsMixinProtocol):

@@ -2,7 +2,6 @@
 
 from typing import Any
 
-from celery import Celery
 from celery.schedules import crontab
 
 from trcustoms.celery import app

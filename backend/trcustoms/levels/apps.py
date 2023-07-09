@@ -7,4 +7,4 @@ class LevelsConfig(AppConfig):
     name = "trcustoms.levels"
 
     def ready(self):
-        import trcustoms.levels.signals
+        import trcustoms.levels.signals  # noqa: F401

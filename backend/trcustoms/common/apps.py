@@ -1,4 +1,4 @@
-# pylint: disable=unused-import,import-outside-toplevel
+# pylint: disable=W0611,C0415
 from django.apps import AppConfig
 
 
@@ -7,5 +7,5 @@ class CommonConfig(AppConfig):
     name = "trcustoms.common"
 
     def ready(self):
-        import trcustoms.common.serializers
-        import trcustoms.common.signals
+        import trcustoms.common.serializers  # noqa: F401
+        import trcustoms.common.signals  # noqa: F401
