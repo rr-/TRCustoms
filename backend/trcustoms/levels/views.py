@@ -5,12 +5,14 @@ from botocore.config import Config
 from django.conf import settings
 from django.db import models
 from django.http import HttpResponseRedirect
+from drf_spectacular.utils import extend_schema, extend_schema_view
 from rest_framework import mixins, status, viewsets
 from rest_framework.decorators import action
 from rest_framework.generics import get_object_or_404
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 
+from trcustoms.common.serializers import EmptySerializer
 from trcustoms.levels.filters import filter_levels_queryset
 from trcustoms.levels.logic import approve_level, reject_level
 from trcustoms.levels.models import Level, LevelFile
@@ -33,6 +35,16 @@ from trcustoms.users.models import UserPermission
 from trcustoms.utils import slugify, stream_file_field
 
 
+@extend_schema_view(
+    approve=extend_schema(
+        request=EmptySerializer,
+        responses={status.HTTP_200_OK: EmptySerializer},
+    ),
+    reject=extend_schema(
+        request=LevelRejectionSerializer,
+        responses={status.HTTP_200_OK: EmptySerializer},
+    ),
+)
 class LevelViewSet(
     AuditLogModelWatcherMixin,
     PermissionsMixin,
@@ -110,7 +122,7 @@ class LevelViewSet(
     def approve(self, request, pk: int) -> Response:
         level = self.get_object()
         approve_level(level, request)
-        return Response({})
+        return Response({}, status.HTTP_200_OK)
 
     @action(detail=True, methods=["post"])
     def reject(self, request, pk: int) -> Response:

@@ -103,6 +103,9 @@ class LevelListingSerializer(serializers.ModelSerializer):
         validators=[MaxLengthValidator(500)], required=False, allow_blank=True
     )
 
+    download_count = serializers.ReadOnlyField()
+    review_count = serializers.ReadOnlyField()
+
     is_approved = serializers.ReadOnlyField()
     rejection_reason = serializers.ReadOnlyField()
     rating_class = RatingClassNestedSerializer(read_only=True)
