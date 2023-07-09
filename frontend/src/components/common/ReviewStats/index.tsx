@@ -10,31 +10,32 @@ const ReviewStats = () => {
   const [tooltip, setTooltip] = useState<string | undefined>();
 
   const maxLevelCount = Math.max(
-    ...config.review_stats.map((item) => item.level_count)
+    ...config.stats.reviews.map((item) => item.level_count)
   );
   const maxRatingClassPosition = Math.max(
-    ...config.review_stats.map((item) => item.rating_class.position)
+    ...config.stats.reviews.map((item) => item.rating_class.position)
   );
 
-  const handleMouseEnter = (item: typeof config.review_stats[0]) => {
+  const handleMouseEnter = (item: typeof config.stats.reviews[0]) => {
     setTooltip(`${item.rating_class.name}: ${item.level_count}`);
   };
 
-  const handleMouseLeave = (item: typeof config.review_stats[0]) => {
+  const handleMouseLeave = (item: typeof config.stats.reviews[0]) => {
     setTooltip(undefined);
   };
 
   const defaultTooltip = (
     <>
-      Reviews: {reprBigNumber(config.total_reviews)} (
-      {reprBigNumber(config.total_reviews / config.total_levels)} per level)
+      Reviews: {reprBigNumber(config.stats.total_reviews)} (
+      {reprBigNumber(config.stats.total_reviews / config.stats.total_levels)}{" "}
+      per level)
     </>
   );
 
   return (
     <div className={styles.wrapper}>
       <ul className={styles.list}>
-        {sortBy(config.review_stats, (item) => item.rating_class.position).map(
+        {sortBy(config.stats.reviews, (item) => item.rating_class.position).map(
           (item) => (
             <li
               key={item.rating_class.name}

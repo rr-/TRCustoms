@@ -1,5 +1,9 @@
 # pylint: disable=W0611,C0415
 from django.apps import AppConfig
+from django.db import models
+from rest_framework import serializers
+
+from trcustoms.common.fields import CustomCharField, CustomTextField
 
 
 class CommonConfig(AppConfig):
@@ -7,5 +11,11 @@ class CommonConfig(AppConfig):
     name = "trcustoms.common"
 
     def ready(self):
-        import trcustoms.common.serializers  # noqa: F401
         import trcustoms.common.signals  # noqa: F401
+
+        serializers.ModelSerializer.serializer_field_mapping.update(
+            {
+                models.CharField: CustomCharField,
+                models.TextField: CustomTextField,
+            }
+        )

@@ -59,14 +59,6 @@ interface Config {
   durations: DurationListing[];
   difficulties: DifficultyListing[];
   review_questions: ReviewTemplateQuestion[];
-  review_stats: {
-    rating_class: {
-      id: number;
-      position: number;
-      name: string;
-    };
-    level_count: number;
-  }[];
   limits: {
     min_tags: number;
     max_tags: number;
@@ -80,15 +72,25 @@ interface Config {
     max_authors: number;
     max_tag_length: number;
   };
-  total_levels: number;
-  total_reviews: number;
-  total_downloads: number;
-  total_walkthroughs: number;
-  walkthrough_stats: {
-    video_and_text: number;
-    video: number;
-    text: number;
-    none: number;
+  stats: {
+    total_levels: number;
+    total_reviews: number;
+    total_downloads: number;
+    total_walkthroughs: number;
+    reviews: {
+      rating_class: {
+        id: number;
+        position: number;
+        name: string;
+      };
+      level_count: number;
+    }[];
+    walkthroughs: {
+      video_and_text: number;
+      video: number;
+      text: number;
+      none: number;
+    };
   };
 }
 

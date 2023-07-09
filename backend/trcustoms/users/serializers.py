@@ -7,11 +7,9 @@ from rest_framework import serializers
 from rest_framework_simplejwt.exceptions import TokenError
 
 from trcustoms.awards.serializers import UserAwardSerializer
+from trcustoms.common.fields import CustomCharField
 from trcustoms.common.models import Country
-from trcustoms.common.serializers import (
-    CountryNestedSerializer,
-    CustomCharField,
-)
+from trcustoms.common.serializers import CountryNestedSerializer
 from trcustoms.mails import send_email_confirmation_mail
 from trcustoms.permissions import get_permissions
 from trcustoms.uploads.models import UploadedFile

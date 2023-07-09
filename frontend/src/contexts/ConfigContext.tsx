@@ -16,7 +16,6 @@ const defaultConfig = {
   durations: [],
   difficulties: [],
   review_questions: [],
-  review_stats: [],
   limits: {
     min_tags: 0,
     max_tags: 0,
@@ -30,15 +29,18 @@ const defaultConfig = {
     max_authors: 0,
     max_tag_length: 0,
   },
-  total_levels: 0,
-  total_reviews: 0,
-  total_downloads: 0,
-  total_walkthroughs: 0,
-  walkthrough_stats: {
-    video_and_text: 0,
-    video: 0,
-    text: 0,
-    none: 0,
+  stats: {
+    total_levels: 0,
+    total_reviews: 0,
+    total_downloads: 0,
+    total_walkthroughs: 0,
+    reviews: [],
+    walkthroughs: {
+      video_and_text: 0,
+      video: 0,
+      text: 0,
+      none: 0,
+    },
   },
 };
 

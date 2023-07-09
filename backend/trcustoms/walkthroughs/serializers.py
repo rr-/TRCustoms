@@ -2,7 +2,7 @@ from django.core.exceptions import ValidationError
 from django.core.validators import MinLengthValidator, URLValidator
 from rest_framework import serializers
 
-from trcustoms.common.serializers import CustomCharField
+from trcustoms.common.fields import CustomCharField
 from trcustoms.levels.models import Level
 from trcustoms.levels.serializers import LevelNestedSerializer
 from trcustoms.mails import send_walkthrough_update_mail

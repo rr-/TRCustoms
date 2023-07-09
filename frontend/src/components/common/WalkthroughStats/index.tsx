@@ -13,33 +13,33 @@ const WalkthroughStats = () => {
     {
       title: "Video and text",
       className: styles.videoAndText,
-      count: config.walkthrough_stats.video_and_text,
+      count: config.stats.walkthroughs.video_and_text,
     },
     {
       title: "Video only",
       className: styles.videoOnly,
-      count: config.walkthrough_stats.video,
+      count: config.stats.walkthroughs.video,
     },
     {
       title: "Text only",
       className: styles.textOnly,
-      count: config.walkthrough_stats.text,
+      count: config.stats.walkthroughs.text,
     },
     {
       title: "Missing",
       className: styles.none,
-      count: config.walkthrough_stats.none,
+      count: config.stats.walkthroughs.none,
     },
   ];
 
   const maxLevelCount = Math.max(
-    ...config.review_stats.map((item) => item.level_count)
+    ...config.stats.reviews.map((item) => item.level_count)
   );
 
   const handleMouseEnter = (item: typeof stats[0]) => {
     setTooltip(
       `${item.title}: ${item.count} (${reprPercentage(
-        item.count / config.total_levels
+        item.count / config.stats.total_levels
       )})`
     );
   };
@@ -50,12 +50,12 @@ const WalkthroughStats = () => {
 
   const defaultTooltip = (
     <>
-      Walkthroughs: {reprBigNumber(config.total_walkthroughs)} (
+      Walkthroughs: {reprBigNumber(config.stats.total_walkthroughs)} (
       {reprPercentage(
-        (config.walkthrough_stats.video_and_text +
-          config.walkthrough_stats.video +
-          config.walkthrough_stats.text) /
-          config.total_levels
+        (config.stats.walkthroughs.video_and_text +
+          config.stats.walkthroughs.video +
+          config.stats.walkthroughs.text) /
+          config.stats.total_levels
       )}
       )
     </>
