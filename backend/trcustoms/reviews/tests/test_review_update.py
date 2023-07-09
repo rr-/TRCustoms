@@ -4,13 +4,13 @@ from django.db.models import QuerySet
 from rest_framework import status
 from rest_framework.test import APIClient
 
-from trcustoms.conftest import (
-    LevelFactory,
+from trcustoms.levels.tests.factories import LevelFactory
+from trcustoms.reviews.tests.factories import (
     ReviewFactory,
     ReviewTemplateAnswerFactory,
     ReviewTemplateQuestionFactory,
-    UserFactory,
 )
+from trcustoms.users.tests.factories import UserFactory
 
 
 @pytest.mark.django_db
@@ -18,24 +18,19 @@ def test_review_update_success(
     any_object,
     any_integer,
     any_datetime,
-    user_factory: UserFactory,
-    level_factory: LevelFactory,
-    review_factory: ReviewFactory,
-    review_template_question_factory: ReviewTemplateQuestionFactory,
-    review_template_answer_factory: ReviewTemplateAnswerFactory,
     auth_api_client: APIClient,
 ) -> None:
-    level = level_factory(authors=[user_factory(username="example")])
-    review = review_factory(level=level, author=auth_api_client.user)
+    level = LevelFactory(authors=[UserFactory(username="example")])
+    review = ReviewFactory(level=level, author=auth_api_client.user)
 
     questions = [
-        review_template_question_factory(),
-        review_template_question_factory(),
+        ReviewTemplateQuestionFactory(),
+        ReviewTemplateQuestionFactory(),
     ]
     answers = [
-        review_template_answer_factory(question=questions[0]),
-        review_template_answer_factory(question=questions[0]),
-        review_template_answer_factory(question=questions[1]),
+        ReviewTemplateAnswerFactory(question=questions[0]),
+        ReviewTemplateAnswerFactory(question=questions[0]),
+        ReviewTemplateAnswerFactory(question=questions[1]),
     ]
 
     response = auth_api_client.patch(
@@ -76,20 +71,15 @@ def test_review_update_rating_classes(
     any_integer,
     any_datetime,
     review_rating_classes: QuerySet,
-    user_factory: UserFactory,
-    level_factory: LevelFactory,
-    review_factory: ReviewFactory,
-    review_template_question_factory: ReviewTemplateQuestionFactory,
-    review_template_answer_factory: ReviewTemplateAnswerFactory,
     auth_api_client: APIClient,
 ) -> None:
-    level = level_factory(authors=[user_factory(username="example")])
-    review = review_factory(level=level, author=auth_api_client.user)
+    level = LevelFactory(authors=[UserFactory(username="example")])
+    review = ReviewFactory(level=level, author=auth_api_client.user)
 
-    question = review_template_question_factory()
+    question = ReviewTemplateQuestionFactory()
     answers = [
-        review_template_answer_factory(question=question, points=0),
-        review_template_answer_factory(question=question, points=10),
+        ReviewTemplateAnswerFactory(question=question, points=0),
+        ReviewTemplateAnswerFactory(question=question, points=10),
     ]
     review.answers.set([answers[0]])
 

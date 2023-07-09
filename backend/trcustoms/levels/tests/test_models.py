@@ -1,8 +1,9 @@
 import pytest
 
-from trcustoms.conftest import LevelFactory, WalkthroughFactory
 from trcustoms.levels.models import Level
+from trcustoms.levels.tests.factories import LevelFactory
 from trcustoms.walkthroughs.models import WalkthroughStatus, WalkthroughType
+from trcustoms.walkthroughs.tests.factories import WalkthroughFactory
 
 
 @pytest.mark.django_db

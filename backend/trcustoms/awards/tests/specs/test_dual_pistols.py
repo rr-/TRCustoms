@@ -1,7 +1,9 @@
 import pytest
 
 from trcustoms.awards.specs import DualPistolsAwardSpec
-from trcustoms.conftest import LevelFactory, RatingClassFactory, UserFactory
+from trcustoms.common.tests.factories import RatingClassFactory
+from trcustoms.levels.tests.factories import LevelFactory
+from trcustoms.users.tests.factories import UserFactory
 
 
 @pytest.fixture(name="spec")

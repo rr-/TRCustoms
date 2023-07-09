@@ -1,8 +1,9 @@
 import pytest
 
 from trcustoms.awards.specs import ALL_AWARDS_CLASSES, BaseAwardSpec
-from trcustoms.conftest import UserAwardFactory, UserFactory
+from trcustoms.awards.tests.factories import UserAwardFactory
 from trcustoms.users.models import User
+from trcustoms.users.tests.factories import UserFactory
 
 
 @pytest.mark.django_db

@@ -6,8 +6,8 @@ from rest_framework import status
 from rest_framework.test import APIClient
 
 from trcustoms.audit_logs.models import AuditLog
-from trcustoms.conftest import UserFactory
 from trcustoms.users.models import User
+from trcustoms.users.tests.factories import UserFactory
 
 VALID_PASSWORD = "Test123!"
 
@@ -125,12 +125,12 @@ def test_user_creation(
 
 @pytest.mark.django_db
 def test_user_creation_duplicate_username_active_user(
-    user_factory: UserFactory, api_client: APIClient, fake: Generic
+    api_client: APIClient, fake: Generic
 ) -> None:
     """Test that user creation prevents from creating a user with a duplicate
     username.
     """
-    user = user_factory()
+    user = UserFactory()
     payload = {
         "email": fake.person.email(),
         "username": user.username,
@@ -145,12 +145,12 @@ def test_user_creation_duplicate_username_active_user(
 
 @pytest.mark.django_db
 def test_user_creation_duplicate_username_inactive_user(
-    user_factory: UserFactory, api_client: APIClient, fake: Generic
+    api_client: APIClient, fake: Generic
 ) -> None:
     """Test that user creation prevents from creating a user with a duplicate
     username.
     """
-    user = user_factory(is_active=False)
+    user = UserFactory(is_active=False)
     payload = {
         "email": fake.person.email(),
         "username": user.username,
@@ -169,12 +169,12 @@ def test_user_creation_duplicate_username_inactive_user(
 
 @pytest.mark.django_db
 def test_user_creation_duplicate_username_case_sensitivity(
-    user_factory: UserFactory, api_client: APIClient, fake: Generic
+    api_client: APIClient, fake: Generic
 ) -> None:
     """Test that user creation prevents from creating a user with a duplicate
     username even if its case does not match.
     """
-    user = user_factory(username="JohnDoe")
+    user = UserFactory(username="JohnDoe")
     payload = {
         "email": fake.person.email(),
         "username": user.username.lower(),
@@ -189,12 +189,12 @@ def test_user_creation_duplicate_username_case_sensitivity(
 
 @pytest.mark.django_db
 def test_user_creation_duplicate_email_active_user(
-    user_factory: UserFactory, api_client: APIClient, fake: Generic
+    api_client: APIClient, fake: Generic
 ) -> None:
     """Test that user creation prevents from creating a user with a duplicate
     email.
     """
-    user = user_factory()
+    user = UserFactory()
     payload = {
         "email": user.email,
         "username": fake.person.username(),
@@ -209,12 +209,12 @@ def test_user_creation_duplicate_email_active_user(
 
 @pytest.mark.django_db
 def test_user_creation_duplicate_email_inactive_user(
-    user_factory: UserFactory, api_client: APIClient, fake: Generic
+    api_client: APIClient, fake: Generic
 ) -> None:
     """Test that user creation prevents from creating a user with a duplicate
     email.
     """
-    user = user_factory(is_active=False)
+    user = UserFactory(is_active=False)
     payload = {
         "email": user.email,
         "username": fake.person.username(),
@@ -233,12 +233,12 @@ def test_user_creation_duplicate_email_inactive_user(
 
 @pytest.mark.django_db
 def test_user_creation_duplicate_email_case_sensitivity(
-    user_factory: UserFactory, api_client: APIClient, fake: Generic
+    api_client: APIClient, fake: Generic
 ) -> None:
     """Test that user creation prevents from creating a user with a duplicate
     email even if its case does not match.
     """
-    user = user_factory(email="JOHNDOE@EXAMPLE.COM")
+    user = UserFactory(email="JOHNDOE@EXAMPLE.COM")
     payload = {
         "email": user.email.lower(),
         "username": fake.person.username(),
@@ -255,14 +255,13 @@ def test_user_creation_duplicate_email_case_sensitivity(
 def test_user_creation_acquiring_trle_account(
     any_integer,
     any_datetime,
-    user_factory: UserFactory,
     api_client: APIClient,
     fake: Generic,
 ) -> None:
     """Test that it is possible to register a TRCustoms user over a legacy TRLE
     account.
     """
-    user = user_factory(source=User.Source.trle, is_active=False)
+    user = UserFactory(source=User.Source.trle, is_active=False)
     user.date_joined = datetime(1990, 1, 1)
     user.set_unusable_password()
     user.save()

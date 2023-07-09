@@ -2,7 +2,7 @@ import pytest
 from rest_framework import status
 from rest_framework.test import APIClient
 
-from trcustoms.conftest import UserFactory
+from trcustoms.users.tests.factories import UserFactory
 
 VALID_PASSWORD = "Test123!"
 
@@ -29,12 +29,9 @@ def test_user_profile(auth_api_client: APIClient) -> None:
 
 
 @pytest.mark.django_db
-def test_login_success(
-    api_client: APIClient,
-    user_factory: UserFactory,
-) -> None:
+def test_login_success(api_client: APIClient) -> None:
     """Test that the token endpoint returns a valid JWT token."""
-    user = user_factory(username="JohnDoe")
+    user = UserFactory(username="JohnDoe")
     user.set_password(VALID_PASSWORD)
     user.save()
     response = api_client.post(
@@ -50,12 +47,9 @@ def test_login_success(
 
 
 @pytest.mark.django_db
-def test_login_success_case_insensitive(
-    api_client: APIClient,
-    user_factory: UserFactory,
-) -> None:
+def test_login_success_case_insensitive(api_client: APIClient) -> None:
     """Test that users can log in with any capitalization."""
-    user = user_factory(username="JohnDoe")
+    user = UserFactory(username="JohnDoe")
     user.set_password(VALID_PASSWORD)
     user.save()
     response = api_client.post(

@@ -3,9 +3,10 @@ from rest_framework import status
 from rest_framework.test import APIClient
 
 from trcustoms.audit_logs.models import AuditLog
-from trcustoms.conftest import UserFactory, WalkthroughFactory
+from trcustoms.users.tests.factories import UserFactory
 from trcustoms.walkthroughs.consts import WalkthroughStatus
 from trcustoms.walkthroughs.models import Walkthrough
+from trcustoms.walkthroughs.tests.factories import WalkthroughFactory
 
 
 @pytest.mark.django_db

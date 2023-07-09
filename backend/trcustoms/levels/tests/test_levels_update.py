@@ -3,41 +3,30 @@ from django.core import mail
 from rest_framework import status
 from rest_framework.test import APIClient
 
-from trcustoms.conftest import (
+from trcustoms.engines.tests.factories import EngineFactory
+from trcustoms.genres.tests.factories import GenreFactory
+from trcustoms.levels.models import Level
+from trcustoms.levels.tests.factories import (
     DifficultyFactory,
     DurationFactory,
-    EngineFactory,
-    GenreFactory,
     LevelFactory,
-    ReviewFactory,
     ScreenshotFactory,
-    TagFactory,
-    UploadedFileFactory,
-    UserFactory,
 )
-from trcustoms.levels.models import Level
+from trcustoms.reviews.tests.factories import ReviewFactory
+from trcustoms.tags.tests.factories import TagFactory
 from trcustoms.uploads.models import UploadedFile
+from trcustoms.uploads.tests.factories import UploadedFileFactory
+from trcustoms.users.tests.factories import UserFactory
 
 
 @pytest.mark.django_db
-def test_level_partial_update_success(
-    level_factory: LevelFactory,
-    engine_factory: EngineFactory,
-    duration_factory: DurationFactory,
-    difficulty_factory: DifficultyFactory,
-    genre_factory: GenreFactory,
-    tag_factory: TagFactory,
-    screenshot_factory: ScreenshotFactory,
-    uploaded_file_factory: UploadedFileFactory,
-    user_factory: UserFactory,
-    auth_api_client: APIClient,
-) -> None:
-    level = level_factory(
+def test_level_partial_update_success(auth_api_client: APIClient) -> None:
+    level = LevelFactory(
         authors=[auth_api_client.user],
-        genres=[genre_factory()],
+        genres=[GenreFactory()],
     )
     for _ in range(3):
-        screenshot_factory(level=level)
+        ScreenshotFactory(level=level)
 
     response = auth_api_client.patch(
         f"/api/levels/{level.id}/",
@@ -75,40 +64,27 @@ def test_level_partial_update_success(
 
 
 @pytest.mark.django_db
-def test_level_update_success(
-    level_factory: LevelFactory,
-    engine_factory: EngineFactory,
-    duration_factory: DurationFactory,
-    difficulty_factory: DifficultyFactory,
-    genre_factory: GenreFactory,
-    tag_factory: TagFactory,
-    screenshot_factory: ScreenshotFactory,
-    uploaded_file_factory: UploadedFileFactory,
-    user_factory: UserFactory,
-    auth_api_client: APIClient,
-) -> None:
-    level = level_factory(authors=[auth_api_client.user])
+def test_level_update_success(auth_api_client: APIClient) -> None:
+    level = LevelFactory(authors=[auth_api_client.user])
     for _ in range(3):
-        screenshot_factory(level=level)
+        ScreenshotFactory(level=level)
 
-    engine = engine_factory()
-    duration = duration_factory()
-    difficulty = difficulty_factory()
-    genre = genre_factory()
-    tag = tag_factory()
-    user = user_factory()
-    cover = uploaded_file_factory(
+    engine = EngineFactory()
+    duration = DurationFactory()
+    difficulty = DifficultyFactory()
+    genre = GenreFactory()
+    tag = TagFactory()
+    user = UserFactory()
+    cover = UploadedFileFactory(
         upload_type=UploadedFile.UploadType.LEVEL_COVER
     )
     screenshots = [
-        uploaded_file_factory(
+        UploadedFileFactory(
             upload_type=UploadedFile.UploadType.LEVEL_SCREENSHOT
         )
         for _ in range(3)
     ]
-    file = uploaded_file_factory(
-        upload_type=UploadedFile.UploadType.LEVEL_FILE
-    )
+    file = UploadedFileFactory(upload_type=UploadedFile.UploadType.LEVEL_FILE)
 
     response = auth_api_client.patch(
         f"/api/levels/{level.id}/",
@@ -150,18 +126,14 @@ def test_level_update_success(
 
 @pytest.mark.django_db
 def test_level_update_updates_authored_level_count(
-    level_factory: LevelFactory,
-    user_factory: UserFactory,
-    genre_factory: GenreFactory,
-    screenshot_factory: ScreenshotFactory,
     staff_api_client: APIClient,
 ) -> None:
-    user1 = user_factory(username="u1")
-    user2 = user_factory(username="u2")
-    user3 = user_factory(username="u3")
-    level = level_factory(authors=[user1, user3], genres=[genre_factory()])
+    user1 = UserFactory(username="u1")
+    user2 = UserFactory(username="u2")
+    user3 = UserFactory(username="u3")
+    level = LevelFactory(authors=[user1, user3], genres=[GenreFactory()])
     for _ in range(3):
-        screenshot_factory(level=level)
+        ScreenshotFactory(level=level)
 
     user1.refresh_from_db()
     user2.refresh_from_db()
@@ -188,19 +160,13 @@ def test_level_update_updates_authored_level_count(
 
 
 @pytest.mark.django_db
-def test_level_update_keeps_uploader_user(
-    level_factory: LevelFactory,
-    user_factory: UserFactory,
-    genre_factory: GenreFactory,
-    screenshot_factory: ScreenshotFactory,
-    staff_api_client: APIClient,
-) -> None:
-    user = user_factory(username="uploader")
-    level = level_factory(
-        uploader=user, genres=[genre_factory()], authors=[user_factory()]
+def test_level_update_keeps_uploader_user(staff_api_client: APIClient) -> None:
+    user = UserFactory(username="uploader")
+    level = LevelFactory(
+        uploader=user, genres=[GenreFactory()], authors=[UserFactory()]
     )
     for _ in range(3):
-        screenshot_factory(level=level)
+        ScreenshotFactory(level=level)
 
     response = staff_api_client.patch(
         f"/api/levels/{level.id}/", format="json", data={"name": "new title"}
@@ -216,11 +182,9 @@ def test_level_update_keeps_uploader_user(
 
 
 @pytest.mark.django_db
-def test_approving_level_updates_authored_level_count(
-    level_factory: LevelFactory, user_factory: UserFactory
-) -> None:
-    user = user_factory()
-    level = level_factory(authors=[user], is_approved=False)
+def test_approving_level_updates_authored_level_count() -> None:
+    user = UserFactory()
+    level = LevelFactory(authors=[user], is_approved=False)
     level.is_approved = True
     level.save()
     user.refresh_from_db()
@@ -228,14 +192,10 @@ def test_approving_level_updates_authored_level_count(
 
 
 @pytest.mark.django_db
-def test_approving_level_updates_reviewed_level_count(
-    level_factory: LevelFactory,
-    review_factory: ReviewFactory,
-    user_factory: UserFactory,
-) -> None:
-    user = user_factory()
-    level = level_factory(is_approved=True)
-    review_factory(level=level, author=user)
+def test_approving_level_updates_reviewed_level_count() -> None:
+    user = UserFactory()
+    level = LevelFactory(is_approved=True)
+    ReviewFactory(level=level, author=user)
     level.is_approved = True
     level.save()
     user.refresh_from_db()

@@ -2,8 +2,10 @@ import pytest
 from rest_framework import status
 from rest_framework.test import APIClient
 
-from trcustoms.conftest import LevelFactory, ReviewFactory, UserFactory
+from trcustoms.levels.tests.factories import LevelFactory
 from trcustoms.reviews.models import LevelReview
+from trcustoms.reviews.tests.factories import ReviewFactory
+from trcustoms.users.tests.factories import UserFactory
 
 
 @pytest.mark.django_db

@@ -3,7 +3,7 @@ from datetime import datetime
 import pytest
 
 from trcustoms.awards.specs import SeraphAwardSpec
-from trcustoms.conftest import UserFactory
+from trcustoms.users.tests.factories import UserFactory
 
 
 @pytest.fixture(name="spec")
