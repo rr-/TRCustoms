@@ -13,10 +13,10 @@ interface CountryListing {
 }
 
 enum FeatureType {
-  NewRelease = "new",
-  LevelOfTheDay = "lod",
-  MonthlyHiddenGem = "gem",
-  BestInGenre = "big",
+  NewRelease = "new_release",
+  LevelOfTheDay = "level_of_the_day",
+  MonthlyHiddenGem = "monthly_hidden_gem",
+  BestInGenre = "best_in_genre",
 }
 
 interface FeaturedLevel {

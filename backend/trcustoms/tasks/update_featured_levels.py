@@ -199,7 +199,7 @@ def update_featured_levels() -> None:
     update_best_level_in_genre()
 
 
-def get_new_release() -> FeaturedLevel:
+def get_new_release() -> FeaturedLevel | None:
     def get_recent_level() -> Level:
         recent_levels = (
             Level.objects.downloadable()
@@ -212,9 +212,24 @@ def get_new_release() -> FeaturedLevel:
             return random.choice(recent_levels)
         return Level.objects.downloadable().order_by("-created").first()
 
-    return FeaturedLevel(
-        created=timezone.now(),
-        level=get_recent_level(),
-        feature_type=FeaturedLevel.FeatureType.NEW_RELEASE,
-        chosen_genre=None,
+    recent_level = get_recent_level()
+    if recent_level:
+        return FeaturedLevel(
+            created=timezone.now(),
+            level=recent_level,
+            feature_type=FeaturedLevel.FeatureType.NEW_RELEASE,
+            chosen_genre=None,
+        )
+    return None
+
+
+def get_featured_level(
+    feature_type: FeaturedLevel.FeatureType,
+) -> FeaturedLevel | None:
+    if feature_type == FeaturedLevel.FeatureType.NEW_RELEASE:
+        return get_new_release()
+    return (
+        FeaturedLevel.objects.filter(feature_type=feature_type)
+        .order_by("-created")
+        .first()
     )

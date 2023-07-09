@@ -407,3 +407,10 @@ class FeaturedLevelListingSerializer(serializers.ModelSerializer):
             "level",
             "chosen_genre",
         ]
+
+
+class FeaturedLevelsSerializer(serializers.Serializer):
+    new_release = FeaturedLevelListingSerializer()
+    monthly_hidden_gem = FeaturedLevelListingSerializer()
+    level_of_the_day = FeaturedLevelListingSerializer()
+    best_in_genre = FeaturedLevelListingSerializer()
