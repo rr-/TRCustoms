@@ -143,6 +143,7 @@ def test_walkthrough_creation_ignores_spoofed_fields(
 @pytest.mark.django_db
 def test_walkthrough_creation_success(
     auth_api_client: APIClient,
+    any_object,
     any_integer,
     any_datetime,
     fake: Generic,
@@ -168,6 +169,7 @@ def test_walkthrough_creation_success(
         "level": {
             "id": walkthrough.level.id,
             "name": walkthrough.level.name,
+            "cover": any_object(),
         },
         "author": {
             "id": walkthrough.author.id,
