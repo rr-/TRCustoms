@@ -111,6 +111,7 @@ class ConfigViewSet(viewsets.ViewSet):
 
 
 class FeaturedLevelsView(generics.RetrieveAPIView):
+    permission_classes = [AllowAny]
     serializer_class = FeaturedLevelsSerializer
 
     def get_object(self):
