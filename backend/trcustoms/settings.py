@@ -4,24 +4,30 @@ from datetime import timedelta
 from pathlib import Path
 
 
-def get_setting(name: str) -> str:
+def get_setting(name: str, allow_null: bool = False) -> str:
     """Return a setting from the environment variables.
 
     Raises an error if the setting is not definied.
     """
     ret = os.environ.get(name)
     if ret is None:
+        if allow_null:
+            return ""
         raise RuntimeError(f"Missing configuration variable {name}")
     return ret
+
+
+def get_bool_setting(name: str, **kwargs) -> bool:
+    return get_setting(name, **kwargs).lower() in {"true", "yes", "y", "1"}
 
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 CACHE_DIR = BASE_DIR / "cache"
 
 SECRET_KEY = get_setting("SECRET_KEY")
-DEBUG = get_setting("DEBUG").lower() in {"1", "true"}
-DEBUG_SQL = get_setting("DEBUG_SQL").lower() in {"1", "true"}
-TESTING = os.environ.get("TESTING", "").lower() in {"1", "true"} or any(
+DEBUG = get_bool_setting("DEBUG")
+DEBUG_SQL = get_bool_setting("DEBUG_SQL")
+TESTING = get_bool_setting("TESTING", allow_null=True) or any(
     arg.endswith("test") for arg in sys.argv
 )
 ALLOWED_HOSTS = ["*"]
@@ -262,12 +268,7 @@ AWS_S3_ENDPOINT_URL = get_setting("AWS_S3_ENDPOINT_URL")
 AWS_S3_CUSTOM_DOMAIN = get_setting("AWS_S3_CUSTOM_DOMAIN")
 AWS_S3_OBJECT_PARAMETERS = {"CacheControl": "max-age=86400"}
 AWS_MEDIA_LOCATION = "media"
-USE_AWS_STORAGE = get_setting("USE_AWS_STORAGE").lower() in {
-    "1",
-    "true",
-    "y",
-    "yes",
-}
+USE_AWS_STORAGE = get_bool_setting("USE_AWS_STORAGE")
 
 CSRF_TRUSTED_ORIGINS = [
     "http://localhost:8000",
