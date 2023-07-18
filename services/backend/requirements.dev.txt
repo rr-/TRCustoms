@@ -6,3 +6,4 @@ pytest-factoryboy
 pytest-profiling
 factory-boy
 mimesis
+pytest-xdist
