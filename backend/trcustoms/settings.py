@@ -21,7 +21,9 @@ CACHE_DIR = BASE_DIR / "cache"
 SECRET_KEY = get_setting("SECRET_KEY")
 DEBUG = get_setting("DEBUG").lower() in {"1", "true"}
 DEBUG_SQL = get_setting("DEBUG_SQL").lower() in {"1", "true"}
-TESTING = any(arg.endswith("test") for arg in sys.argv)
+TESTING = os.environ.get("TESTING", "").lower() in {"1", "true"} or any(
+    arg.endswith("test") for arg in sys.argv
+)
 ALLOWED_HOSTS = ["*"]
 
 INSTALLED_APPS = [
@@ -287,3 +289,4 @@ if TESTING:
     PASSWORD_HASHERS = (
         "django.contrib.auth.hashers.UnsaltedMD5PasswordHasher",
     )
+    os.environ["TESTING"] = "1"  # for xdist, which destroys sys.argv
