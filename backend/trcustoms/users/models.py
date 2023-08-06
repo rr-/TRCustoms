@@ -106,6 +106,7 @@ class User(AbstractUser):
         Country, null=True, blank=True, on_delete=models.SET_NULL
     )
 
+    played_level_count = models.PositiveIntegerField(default=0)
     authored_level_count = models.PositiveIntegerField(default=0)
     reviewed_level_count = models.PositiveIntegerField(default=0)
     authored_walkthrough_count = models.PositiveIntegerField(default=0)
@@ -125,6 +126,10 @@ class User(AbstractUser):
             level__is_approved=True
         ).count()
         self.save(update_fields=["reviewed_level_count"])
+
+    def update_played_level_count(self) -> None:
+        self.played_level_count = self.playlist_items.played().count()
+        self.save(update_fields=["played_level_count"])
 
     def update_authored_level_count(self) -> None:
         self.authored_level_count = self.authored_levels.filter(
