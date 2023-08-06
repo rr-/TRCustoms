@@ -1,4 +1,4 @@
-def _as_view(viewset, actions):
+def as_view(viewset, actions):
     actual_actions = {
         action: method
         for action, method in actions.items()
@@ -8,7 +8,7 @@ def _as_view(viewset, actions):
 
 
 def as_list_view(viewset):
-    return _as_view(
+    return as_view(
         viewset,
         actions={
             "get": "list",
@@ -18,7 +18,7 @@ def as_list_view(viewset):
 
 
 def as_detail_view(viewset):
-    return _as_view(
+    return as_view(
         viewset,
         actions={
             "get": "retrieve",

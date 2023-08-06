@@ -144,6 +144,10 @@ blockquote > *:last-child {
   height: calc(2rem + 4px);
   box-sizing: border-box;
 }
+.Input:disabled {
+  border-color: var(--input-disabled-border-color);
+  background: var(--input-disabled-bg-color);
+}
 .Input:focus {
   outline: 0;
   border-color: var(--outline-color);

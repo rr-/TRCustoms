@@ -1,8 +1,8 @@
 import { Radioboxes } from "src/components/common/Radioboxes";
 
 interface WalkthroughRadioboxesProps {
-  videoWalkthroughs: boolean | null;
-  textWalkthroughs: boolean | null;
+  videoWalkthroughs: boolean | null | undefined;
+  textWalkthroughs: boolean | null | undefined;
   onChange: (
     videoWalkthroughs: boolean | null,
     textWalkthroughs: boolean | null
@@ -10,8 +10,8 @@ interface WalkthroughRadioboxesProps {
 }
 
 interface OptionId {
-  videoWalkthroughs: boolean | null;
-  textWalkthroughs: boolean | null;
+  videoWalkthroughs: boolean | null | undefined;
+  textWalkthroughs: boolean | null | undefined;
 }
 
 interface Option {
@@ -53,9 +53,9 @@ const WalkthroughRadioboxes = ({
     },
   ];
 
-  const onChangeInternal = (value: OptionId | null): void => {
+  const onChangeInternal = (value: OptionId | null | undefined): void => {
     if (value) {
-      onChange(value.videoWalkthroughs, value.textWalkthroughs);
+      onChange(value.videoWalkthroughs ?? null, value.textWalkthroughs ?? null);
     } else {
       onChange(null, null);
     }

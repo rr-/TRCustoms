@@ -1,5 +1,6 @@
 from rest_framework import serializers
 
+from trcustoms.common.errors import CustomAPIException
 from trcustoms.levels.models import Level
 from trcustoms.levels.serializers import LevelNestedSerializer
 from trcustoms.permissions import UserPermission, has_permission
@@ -46,8 +47,11 @@ class PlaylistItemSerializer(serializers.ModelSerializer):
             .exclude(id=self.instance.id if self.instance else None)
             .exists()
         ):
-            raise serializers.ValidationError(
-                {"level_id": "This level already appears in this playlist."}
+            raise CustomAPIException(
+                detail={
+                    "level_id": "This level already appears in this playlist.",
+                },
+                code="duplicate_level",
             )
 
         return validated_data

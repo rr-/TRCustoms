@@ -242,7 +242,7 @@ const LevelSearchSidebar = ({
             <div className={styles.section}>
               <Collapsible storageKey="levelSearchGenres" title="Genre">
                 <GenresCheckboxes
-                  value={searchQuery.genres}
+                  value={searchQuery.genres || []}
                   onChange={handleGenresChange}
                 />
               </Collapsible>
@@ -251,7 +251,7 @@ const LevelSearchSidebar = ({
             <div className={styles.section}>
               <Collapsible storageKey="levelSearchTags" title="Tags">
                 <TagsCheckboxes
-                  value={searchQuery.tags}
+                  value={searchQuery.tags || []}
                   onChange={handleTagsChange}
                 />
               </Collapsible>
@@ -260,7 +260,7 @@ const LevelSearchSidebar = ({
             <div className={styles.section}>
               <Collapsible storageKey="levelSearchEngines" title="Engine">
                 <EnginesCheckboxes
-                  value={searchQuery.engines}
+                  value={searchQuery.engines || []}
                   onChange={handleEnginesChange}
                 />
               </Collapsible>
@@ -278,7 +278,7 @@ const LevelSearchSidebar = ({
             <div className={styles.section}>
               <Collapsible storageKey="levelSearchRatings" title="Rating">
                 <RatingsCheckboxes
-                  value={searchQuery.ratings}
+                  value={searchQuery.ratings || []}
                   onChange={handleRatingsChange}
                 />
               </Collapsible>
@@ -287,7 +287,7 @@ const LevelSearchSidebar = ({
             <div className={styles.section}>
               <Collapsible storageKey="levelSearchDurations" title="Duration">
                 <DurationsCheckboxes
-                  value={searchQuery.durations}
+                  value={searchQuery.durations || []}
                   onChange={handleDurationsChange}
                 />
               </Collapsible>
@@ -299,7 +299,7 @@ const LevelSearchSidebar = ({
                 title="Difficulty"
               >
                 <DifficultiesCheckboxes
-                  value={searchQuery.difficulties}
+                  value={searchQuery.difficulties || []}
                   onChange={handleDifficultiesChange}
                 />
               </Collapsible>

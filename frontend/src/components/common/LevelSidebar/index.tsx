@@ -2,6 +2,7 @@ import styles from "./index.module.css";
 import { useContext } from "react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { LevelAddToMyPlaylistButton } from "src/components/buttons/LevelAddToMyPlaylistButton";
 import { LevelApproveButton } from "src/components/buttons/LevelApproveButton";
 import { LevelDeleteButton } from "src/components/buttons/LevelDeleteButton";
 import { LevelRejectButton } from "src/components/buttons/LevelRejectButton";
@@ -122,6 +123,8 @@ const LevelSidebar = ({ level, reviewCount }: LevelSidebarProps) => {
             <PermissionGuard require={UserPermission.deleteLevels}>
               <LevelDeleteButton level={level} onComplete={handleDelete} />
             </PermissionGuard>
+
+            {user && <LevelAddToMyPlaylistButton level={level} />}
 
             <Button icon={<IconBook />} onClick={handleWalkthroughsButtonClick}>
               Walkthrough

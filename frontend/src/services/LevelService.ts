@@ -84,18 +84,18 @@ interface LevelDetails extends LevelListing {
 }
 
 interface LevelSearchQuery extends GenericSearchQuery {
-  tags: number[];
-  genres: number[];
-  engines: number[];
-  authors: number[];
-  difficulties: number[];
-  durations: number[];
-  ratings: number[];
-  isApproved: boolean | null;
+  tags?: number[];
+  genres?: number[];
+  engines?: number[];
+  authors?: number[];
+  difficulties?: number[];
+  durations?: number[];
+  ratings?: number[];
+  isApproved?: boolean | null;
   reviewsMax?: number | undefined | null;
   date?: string;
-  videoWalkthroughs: boolean | null;
-  textWalkthroughs: boolean | null;
+  videoWalkthroughs?: boolean | null;
+  textWalkthroughs?: boolean | null;
 }
 
 interface LevelSearchResult
@@ -108,7 +108,7 @@ const searchLevels = async (
 ): Promise<LevelSearchResult> => {
   const params = filterFalsyObjectValues({
     ...getGenericSearchQuery(searchQuery),
-    tags: searchQuery.tags.join(","),
+    tags: searchQuery.tags?.join(","),
     genres: searchQuery.genres?.join(","),
     engines: searchQuery.engines?.join(","),
     authors: searchQuery.authors?.join(","),

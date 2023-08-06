@@ -1,0 +1,14 @@
+.notYetPlayed {
+}
+
+.dropped {
+  color: var(--failure-fg-color);
+}
+
+.playing {
+  color: var(--warning-fg-color);
+}
+
+.finished {
+  color: var(--success-fg-color);
+}

@@ -68,7 +68,7 @@ def test_playlist_item_update_allows_edits_from_staff(
         user=UserFactory(username="unique user")
     )
     resp = staff_api_client.patch(
-        f"/api/users/{staff_api_client.user.pk}/playlist/{playlist_item.pk}/",
+        f"/api/users/{playlist_item.user.pk}/playlist/{playlist_item.pk}/",
         format="json",
         data={},
     )

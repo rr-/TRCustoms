@@ -1,6 +1,7 @@
 :root {
   --input-border-color: var(--button-bg-color);
   --input-invalid-border-color: red;
+  --input-disabled-border-color: grey;
   --button-hovered-fg-color: var(--button-fg-color);
   --tab-switch-active-bg-color: var(--navbar-active-tab-bg-color);
   --tab-switch-inactive-bg-color: var(--label-bg-color);
@@ -38,6 +39,7 @@
   --outline-color: var(--link-color);
   --input-bg-color: #a8c7e0;
   --input-fg-color: black;
+  --input-disabled-bg-color: #c7c7c7;
   --button-bg-color: #1e67a1;
   --button-fg-color: white;
   --button-hovered-bg-color: #2f7ab6;
@@ -76,6 +78,7 @@
   --outline-color: var(--link-color);
   --input-bg-color: var(--bg-color);
   --input-fg-color: var(--fg-color);
+  --input-disabled-bg-color: #dddddd;
   --button-bg-color: grey;
   --button-fg-color: white;
   --button-hovered-bg-color: silver;
@@ -130,6 +133,11 @@
   --outline-color: var(--fg-color);
   --input-bg-color: hsl(var(--secondary-hue), var(--secondary-sat), 97%);
   --input-fg-color: var(--fg-color);
+  --input-disabled-bg-color: hsl(
+    var(--secondary-hue),
+    0%,
+    var(--secondary-light)
+  );
   --button-bg-color: var(--primary-color);
   --button-fg-color: var(--fg-color);
   --button-hovered-bg-color: var(--label-bg-color);
@@ -169,6 +177,7 @@
   --outline-color: var(--link-color);
   --input-bg-color: #fff1d1;
   --input-fg-color: black;
+  --input-disabled-bg-color: #e8e8e8e8;
   --button-bg-color: #bc1010;
   --button-fg-color: white;
   --button-hovered-bg-color: #d34848;
@@ -207,6 +216,7 @@
   --outline-color: var(--link-color);
   --input-bg-color: #e2d6c3;
   --input-fg-color: black;
+  --input-disabled-bg-color: #eeeeee;
   --button-bg-color: #c69532;
   --button-fg-color: black;
   --button-hovered-bg-color: #daaa4b;
@@ -245,6 +255,7 @@
   --outline-color: var(--link-color);
   --input-bg-color: #eee5cd;
   --input-fg-color: black;
+  --input-disabled-bg-color: #eeeeee;
   --button-bg-color: #a87c0d;
   --button-fg-color: white;
   --button-hovered-bg-color: #c5961f;
@@ -282,6 +293,7 @@
   --outline-color: var(--link-color);
   --input-bg-color: #f4faff;
   --input-fg-color: black;
+  --input-disabled-bg-color: #dddddd;
   --button-bg-color: #00008b;
   --button-fg-color: white;
   --button-hovered-bg-color: #5f5fb4;
@@ -320,6 +332,7 @@
   --outline-color: var(--link-color);
   --input-bg-color: #e0a8a8;
   --input-fg-color: #000;
+  --input-disabled-bg-color: #eeeeee;
   --button-bg-color: #a11e1e;
   --button-fg-color: #fff;
   --button-hovered-bg-color: #c13d3d;
@@ -358,6 +371,7 @@
   --outline-color: var(--link-color);
   --input-bg-color: #c3e4b5;
   --input-fg-color: #000;
+  --input-disabled-bg-color: #d8d8d8;
   --button-bg-color: #45a11e;
   --button-fg-color: #fff;
   --button-hovered-bg-color: #5bbb32;
@@ -396,6 +410,7 @@
   --outline-color: var(--link-color);
   --input-bg-color: #eaefff;
   --input-fg-color: #4c005e;
+  --input-disabled-bg-color: #cccccc;
   --button-bg-color: #d900de;
   --button-fg-color: white;
   --button-hovered-bg-color: #ef5bf3;

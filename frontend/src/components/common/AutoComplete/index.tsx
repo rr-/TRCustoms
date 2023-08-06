@@ -17,10 +17,12 @@ interface AutoCompleteProps<TItem> {
   onSearchTrigger: (textInput: string) => void;
   onResultApply: (result: TItem) => void;
   onNewResultApply?: ((textInput: string) => void) | undefined;
+  placeholder?: string;
 }
 
 const AutoComplete = <TItem extends Object>({
   maxLength,
+  placeholder,
   suggestions,
   getResultText,
   getResultKey,
@@ -156,7 +158,7 @@ const AutoComplete = <TItem extends Object>({
         onChange={handleInputChange}
         onKeyDown={handleInputKeyDown}
         value={textInput}
-        placeholder="Start typing to search…"
+        placeholder={placeholder || "Start typing to search…"}
       />
       {showResults && textInput && <AutoCompleteSuggestions />}
       {onNewResultApply && (
