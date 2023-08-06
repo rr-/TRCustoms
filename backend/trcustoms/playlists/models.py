@@ -7,10 +7,26 @@ from trcustoms.playlists.consts import PlaylistStatus
 from trcustoms.users.models import User
 
 
+class PlaylistItemQuerySet(models.QuerySet):
+    def played(self) -> models.QuerySet:
+        return self.filter(
+            status__in=[
+                PlaylistStatus.FINISHED,
+                PlaylistStatus.PLAYING,
+                PlaylistStatus.DROPPED,
+                PlaylistStatus.ON_HOLD,
+            ]
+        )
+
+
 class PlaylistItem(DatesInfo):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="+")
+    objects = PlaylistItemQuerySet.as_manager()
+
+    user = models.ForeignKey(
+        User, on_delete=models.CASCADE, related_name="playlist_items"
+    )
     level = models.ForeignKey(
-        Level, on_delete=models.CASCADE, related_name="+"
+        Level, on_delete=models.CASCADE, related_name="playlist_items"
     )
     status = models.CharField(
         choices=PlaylistStatus.choices,

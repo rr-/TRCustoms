@@ -42,6 +42,7 @@ class UserListingSerializer(serializers.ModelSerializer):
     permissions = serializers.SerializerMethodField(read_only=True)
     date_joined = serializers.ReadOnlyField()
     last_login = serializers.ReadOnlyField()
+    played_level_count = serializers.ReadOnlyField()
     authored_level_count = serializers.ReadOnlyField()
     authored_walkthrough_count = serializers.ReadOnlyField()
     reviewed_level_count = serializers.ReadOnlyField()
@@ -62,6 +63,7 @@ class UserListingSerializer(serializers.ModelSerializer):
             "is_active",
             "is_banned",
             "is_pending_activation",
+            "played_level_count",
             "authored_level_count",
             "authored_walkthrough_count",
             "reviewed_level_count",

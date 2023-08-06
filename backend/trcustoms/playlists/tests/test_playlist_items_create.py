@@ -178,3 +178,11 @@ def test_playlist_item_creation_success(
     assert playlist_item.user.pk == auth_api_client.user.pk
     assert playlist_item.level.pk == level.pk
     assert playlist_item.status == PlaylistStatus.ON_HOLD
+
+
+@pytest.mark.django_db
+def test_playlist_item_creation_updates_played_level_count() -> None:
+    user = UserFactory()
+    PlaylistItemFactory(user=user, status=PlaylistStatus.FINISHED)
+    user.refresh_from_db()
+    assert user.played_level_count == 1
