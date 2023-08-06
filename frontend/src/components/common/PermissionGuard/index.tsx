@@ -3,6 +3,7 @@ import { useContext } from "react";
 import { useState } from "react";
 import { Error403Page } from "src/components/pages/ErrorPage";
 import { UserContext } from "src/contexts/UserContext";
+import type { UserDetails } from "src/services/UserService";
 import type { UserNested } from "src/services/UserService";
 import { UserPermission } from "src/services/UserService";
 
@@ -40,6 +41,22 @@ const GenericGuard = ({
   return <>{isShown ? children : alternative}</>;
 };
 
+const hasPermission = (
+  loggedInUser: UserDetails,
+  require: UserPermission | string,
+  owningUserIds?: number[]
+): boolean => {
+  return (
+    anonymousPermissions.some((r) => r === require) ||
+    loggedInUser?.permissions?.some((r) => r === require) ||
+    !!(
+      owningUserIds &&
+      loggedInUser?.id &&
+      owningUserIds.includes(loggedInUser.id)
+    )
+  );
+};
+
 const PermissionGuard = ({
   require,
   owningUsers,
@@ -50,9 +67,11 @@ const PermissionGuard = ({
 
   useEffect(() => {
     setIsShown(
-      anonymousPermissions.some((r) => r === require) ||
-        user?.permissions?.includes(require) ||
-        (owningUsers && owningUsers.map((u) => u.id).includes(user?.id))
+      hasPermission(
+        user,
+        require,
+        owningUsers?.map((u) => u.id)
+      )
     );
   }, [user, owningUsers, require]);
 
@@ -75,11 +94,7 @@ const PageGuard = ({ require, owningUserIds, children }: PageGuardProps) => {
   const [isShown, setIsShown] = useState<boolean>(false);
 
   useEffect(() => {
-    setIsShown(
-      anonymousPermissions.some((r) => r === require) ||
-        user?.permissions?.includes(require) ||
-        owningUserIds?.includes(user?.id)
-    );
+    setIsShown(hasPermission(user, require, owningUserIds));
   }, [user, owningUserIds, require]);
 
   return (
@@ -89,4 +104,4 @@ const PageGuard = ({ require, owningUserIds, children }: PageGuardProps) => {
   );
 };
 
-export { PermissionGuard, LoggedInUserGuard, PageGuard };
+export { hasPermission, PermissionGuard, LoggedInUserGuard, PageGuard };

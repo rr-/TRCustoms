@@ -16,18 +16,8 @@ import { getCurrentSearchParams } from "src/utils/misc";
 const defaultSearchQuery: LevelSearchQuery = {
   page: null,
   sort: "created",
-  search: null,
-  tags: [],
-  genres: [],
-  engines: [],
-  authors: [],
-  difficulties: [],
-  durations: [],
-  ratings: [],
   isApproved: true,
   reviewsMax: 5,
-  videoWalkthroughs: null,
-  textWalkthroughs: null,
 };
 
 const deserializeSearchQuery = (qp: {

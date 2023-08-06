@@ -2,6 +2,7 @@ export * from "src/components/icons/IconAnnotation";
 export * from "src/components/icons/IconBadgeCheck";
 export * from "src/components/icons/IconBan";
 export * from "src/components/icons/IconBook";
+export * from "src/components/icons/IconBookmark";
 export * from "src/components/icons/IconCheck";
 export * from "src/components/icons/IconChevronDown";
 export * from "src/components/icons/IconChevronLeft";

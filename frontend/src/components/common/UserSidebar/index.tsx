@@ -144,6 +144,12 @@ const UserSidebar = ({ user }: UserSidebarProps) => {
             <SectionHeader>Library</SectionHeader>
           </DefinitionItem>
 
+          <DefinitionItem term="Played levels">
+            <Link to={`/users/${user.id}/playlist`}>
+              {user.played_level_count}
+            </Link>
+          </DefinitionItem>
+
           <DefinitionItem term="Levels authored">
             <Link onClick={handleLevelCountClick}>
               {user.authored_level_count}

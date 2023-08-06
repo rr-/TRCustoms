@@ -34,7 +34,7 @@ from trcustoms.tags.views import (
 )
 from trcustoms.uploads.views import UploadViewSet
 from trcustoms.users.views import UserViewSet
-from trcustoms.utils.views import as_detail_view, as_list_view
+from trcustoms.utils.views import as_detail_view, as_list_view, as_view
 from trcustoms.walkthroughs.views import WalkthroughViewSet
 
 router = DefaultRouter()
@@ -71,6 +71,10 @@ urlpatterns = [
     path(
         "api/users/<int:user_id>/playlist/<int:pk>/",
         as_detail_view(PlaylistItemViewSet),
+    ),
+    path(
+        "api/users/<int:user_id>/playlist/by_level_id/<int:level_id>/",
+        as_view(PlaylistItemViewSet, actions={"get": "by_level_id"}),
     ),
     path("api/schema/", SpectacularAPIView.as_view(), name="schema"),
     path("api/swagger/", SpectacularSwaggerView.as_view(url_name="schema")),

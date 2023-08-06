@@ -29,6 +29,7 @@ enum UserPermission {
   postWalkthroughs = "post_walkthroughs",
   editWalkthroughs = "edit_walkthroughs",
   deleteWalkthroughs = "delete_walkthroughs",
+  editPlaylists = "edit_playlists",
 }
 
 interface UserBasic {

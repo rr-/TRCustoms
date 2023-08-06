@@ -39,6 +39,7 @@ import { TrophiesPage } from "src/components/pages/TrophiesPage";
 import { UserEditPage } from "src/components/pages/UserEditPage";
 import { UserListPage } from "src/components/pages/UserListPage";
 import { UserPage } from "src/components/pages/UserPage";
+import { UserPlaylistPage } from "src/components/pages/UserPlaylistPage";
 import { UserWalkthroughsPage } from "src/components/pages/UserWalkthroughsPage";
 import { WalkthroughEditPage } from "src/components/pages/WalkthroughEditPage";
 import { WalkthroughPage } from "src/components/pages/WalkthroughPage";
@@ -119,6 +120,10 @@ const App = () => {
             <Route
               path="/users/:userId/walkthroughs"
               element={<UserWalkthroughsPage />}
+            />
+            <Route
+              path="/users/:userId/playlist"
+              element={<UserPlaylistPage />}
             />
             <Route
               path="/email-confirmation/:token"

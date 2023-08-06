@@ -17,16 +17,7 @@ const defaultSearchQuery: LevelSearchQuery = {
   page: null,
   sort: "-created",
   search: null,
-  tags: [],
-  genres: [],
-  engines: [],
-  authors: [],
-  difficulties: [],
-  durations: [],
-  ratings: [],
   isApproved: true,
-  videoWalkthroughs: null,
-  textWalkthroughs: null,
 };
 
 const deserializeSearchQuery = (qp: {
@@ -51,12 +42,12 @@ const serializeSearchQuery = (
 ): { [key: string]: any } =>
   filterFalsyObjectValues({
     ...serializeGenericSearchQuery(searchQuery, defaultSearchQuery),
-    tags: searchQuery.tags.join(","),
-    genres: searchQuery.genres.join(","),
-    engines: searchQuery.engines.join(","),
-    difficulties: searchQuery.difficulties.join(","),
-    durations: searchQuery.durations.join(","),
-    ratings: searchQuery.ratings.join(","),
+    tags: searchQuery.tags?.join(","),
+    genres: searchQuery.genres?.join(","),
+    engines: searchQuery.engines?.join(","),
+    difficulties: searchQuery?.difficulties?.join(","),
+    durations: searchQuery.durations?.join(","),
+    ratings: searchQuery.ratings?.join(","),
     approved:
       searchQuery.isApproved === true
         ? null
