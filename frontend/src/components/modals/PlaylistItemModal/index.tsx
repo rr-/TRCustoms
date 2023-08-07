@@ -9,6 +9,7 @@ interface PlaylistItemModalProps {
   user: UserNested;
   level: LevelNested;
   onSubmit?: (() => void) | undefined;
+  onNavigateToMyPlaylist?: (() => void) | undefined;
 }
 
 const PlaylistItemModal = ({
@@ -17,6 +18,7 @@ const PlaylistItemModal = ({
   user,
   level,
   onSubmit,
+  onNavigateToMyPlaylist,
 }: PlaylistItemModalProps) => {
   return (
     <BaseModal
@@ -24,7 +26,14 @@ const PlaylistItemModal = ({
       isActive={isActive}
       onIsActiveChange={onIsActiveChange}
     >
-      <PlaylistItemForm user={user} level={level} onSubmit={onSubmit} />
+      {isActive && (
+        <PlaylistItemForm
+          user={user}
+          level={level}
+          onSubmit={onSubmit}
+          onNavigateToMyPlaylist={onNavigateToMyPlaylist}
+        />
+      )}
     </BaseModal>
   );
 };
