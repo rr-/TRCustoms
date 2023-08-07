@@ -5,6 +5,7 @@ import { Formik } from "formik";
 import { Form } from "formik";
 import { useCallback } from "react";
 import { useQuery } from "react-query";
+import { useNavigate } from "react-router-dom";
 import { FormGrid } from "src/components/common/FormGrid";
 import { FormGridButtons } from "src/components/common/FormGrid";
 import { FormGridFieldSet } from "src/components/common/FormGrid";
@@ -20,10 +21,11 @@ import { filterFalsyObjectValues } from "src/utils/misc";
 import { makeSentence } from "src/utils/string";
 import { validateRequired } from "src/utils/validation";
 
-interface UserFormProps {
+interface PlaylistItemFormProps {
   user: UserNested;
   level: LevelNested;
   onSubmit?: (() => void) | undefined;
+  onNavigateToMyPlaylist?: (() => void) | undefined;
 }
 
 interface PlaylistItemFormValues {
@@ -31,16 +33,20 @@ interface PlaylistItemFormValues {
   status?: PlaylistItemStatus;
 }
 
-const PlaylistItemForm = ({ user, level, onSubmit }: UserFormProps) => {
-  const playlistItemResult = useQuery<PlaylistItemDetails, Error>(
-    ["playlists", PlaylistService.get, user?.id, level.id],
-    async () => PlaylistService.get(user?.id, level.id)
-  );
+interface PlaylistItemFormViewProps extends PlaylistItemFormProps {
+  playlistItem?: PlaylistItemDetails | null;
+}
 
-  const playlistItem = playlistItemResult?.data;
-
+const PlaylistItemFormView = ({
+  user,
+  level,
+  playlistItem,
+  onSubmit,
+  onNavigateToMyPlaylist,
+}: PlaylistItemFormViewProps) => {
+  const navigate = useNavigate();
   const initialValues: PlaylistItemFormValues = {
-    levelName: level?.name,
+    levelName: level.name,
     status: playlistItem?.status,
   };
 
@@ -101,6 +107,14 @@ const PlaylistItemForm = ({ user, level, onSubmit }: UserFormProps) => {
     return errors;
   };
 
+  const handleNavigateToPlaylist = useCallback(() => {
+    if (onNavigateToMyPlaylist) {
+      onNavigateToMyPlaylist();
+    } else {
+      navigate(`/users/${user.id}/playlist`);
+    }
+  }, [user, navigate, onNavigateToMyPlaylist]);
+
   const handleSubmit = useCallback(
     async (
       values: PlaylistItemFormValues,
@@ -129,7 +143,7 @@ const PlaylistItemForm = ({ user, level, onSubmit }: UserFormProps) => {
               <span className="FormFieldSuccess">Playlist updated.</span>
               <br />
               <br />
-              <Link to={`/users/${user.id}/playlist`}>Click here</Link> to see
+              <Link onClick={handleNavigateToPlaylist}>Click here</Link> to see
               your playlist.
             </>
           ),
@@ -139,7 +153,14 @@ const PlaylistItemForm = ({ user, level, onSubmit }: UserFormProps) => {
         handleSubmitError(error, helpers);
       }
     },
-    [user, level, playlistItem, onSubmit, handleSubmitError]
+    [
+      user,
+      level,
+      playlistItem,
+      onSubmit,
+      handleSubmitError,
+      handleNavigateToPlaylist,
+    ]
   );
 
   const statusOptions = [
@@ -149,10 +170,6 @@ const PlaylistItemForm = ({ user, level, onSubmit }: UserFormProps) => {
     { label: "Dropped", value: PlaylistItemStatus.Dropped },
     { label: "On hold", value: PlaylistItemStatus.OnHold },
   ];
-
-  if (playlistItemResult.isLoading) {
-    return <></>;
-  }
 
   return (
     <Formik
@@ -189,6 +206,34 @@ const PlaylistItemForm = ({ user, level, onSubmit }: UserFormProps) => {
         )
       }
     </Formik>
+  );
+};
+
+const PlaylistItemForm = ({
+  user,
+  level,
+  onSubmit,
+  onNavigateToMyPlaylist,
+}: PlaylistItemFormProps) => {
+  const playlistItemResult = useQuery<PlaylistItemDetails, Error>(
+    ["playlists", PlaylistService.get, user.id, level.id],
+    async () => PlaylistService.get(user.id, level.id)
+  );
+
+  if (playlistItemResult.isLoading) {
+    return <></>;
+  }
+
+  const playlistItem = playlistItemResult?.data;
+
+  return (
+    <PlaylistItemFormView
+      user={user}
+      level={level}
+      playlistItem={playlistItem}
+      onSubmit={onSubmit}
+      onNavigateToMyPlaylist={onNavigateToMyPlaylist}
+    />
   );
 };
 

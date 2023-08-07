@@ -31,10 +31,14 @@ const EditPlaylistItemButton = ({
     setIsModalActive(true);
   };
 
+  const handleNavigateToMyPlaylist = () => {
+    resetQueries(queryClient, ["playlists"], false);
+  };
+
   const handleIsModalActiveChange = (value: boolean) => {
     setIsModalActive(value);
     if (isChanged) {
-      resetQueries(queryClient, ["playlists"]);
+      resetQueries(queryClient, ["playlists"], false);
     }
   };
 
@@ -46,6 +50,7 @@ const EditPlaylistItemButton = ({
         user={user}
         level={level}
         onSubmit={handleSubmit}
+        onNavigateToMyPlaylist={handleNavigateToMyPlaylist}
       />
 
       <Link onClick={handleButtonClick}>Edit</Link>

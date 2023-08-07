@@ -144,12 +144,6 @@ const UserSidebar = ({ user }: UserSidebarProps) => {
             <SectionHeader>Library</SectionHeader>
           </DefinitionItem>
 
-          <DefinitionItem term="Played levels">
-            <Link to={`/users/${user.id}/playlist`}>
-              {user.played_level_count}
-            </Link>
-          </DefinitionItem>
-
           <DefinitionItem term="Levels authored">
             <Link onClick={handleLevelCountClick}>
               {user.authored_level_count}
@@ -165,6 +159,12 @@ const UserSidebar = ({ user }: UserSidebarProps) => {
           <DefinitionItem term="Walkthroughs">
             <Link to={`/users/${user.id}/walkthroughs`}>
               {user.authored_walkthrough_count}
+            </Link>
+          </DefinitionItem>
+
+          <DefinitionItem term="Played levels">
+            <Link to={`/users/${user.id}/playlist`}>
+              {user.played_level_count}
             </Link>
           </DefinitionItem>
         </DefinitionItemGroup>
