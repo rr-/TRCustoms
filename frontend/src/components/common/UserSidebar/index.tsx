@@ -162,7 +162,7 @@ const UserSidebar = ({ user }: UserSidebarProps) => {
             </Link>
           </DefinitionItem>
 
-          <DefinitionItem term="Played levels">
+          <DefinitionItem term="Levels played">
             <Link to={`/users/${user.id}/playlist`}>
               {user.played_level_count}
             </Link>
