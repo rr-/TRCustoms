@@ -46,7 +46,7 @@ class GlobalStatsSerializer(serializers.Serializer):
     total_walkthroughs = serializers.IntegerField()
     total_downloads = serializers.IntegerField()
     reviews = ReviewStatSerializer(many=True)
-    walkthroughs = WalkthroughStatSerializer(many=True)
+    walkthroughs = WalkthroughStatSerializer()
 
 
 class ConfigSerializer(serializers.Serializer):

@@ -22,13 +22,11 @@ from trcustoms.walkthroughs.models import Walkthrough
 
 def get_walkthrough_stats() -> dict[str, int]:
     qs = Level.objects.filter(is_approved=True)
-    return (
-        dict(
-            video_and_text=qs.with_both_walkthroughs().count(),
-            video=qs.with_video_only_walkthroughs().count(),
-            text=qs.with_text_only_walkthroughs().count(),
-            none=qs.with_no_walkthroughs().count(),
-        ),
+    return dict(
+        video_and_text=qs.with_both_walkthroughs().count(),
+        video=qs.with_video_only_walkthroughs().count(),
+        text=qs.with_text_only_walkthroughs().count(),
+        none=qs.with_no_walkthroughs().count(),
     )
 
 
