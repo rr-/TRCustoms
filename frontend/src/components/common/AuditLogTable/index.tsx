@@ -94,6 +94,7 @@ const AuditLogTableObjectLink = ({
         </TagLink>
       );
 
+    case AuditLogObjectType.LevelReviewLegacy:
     case AuditLogObjectType.LevelReview:
       return (
         <LevelLink
