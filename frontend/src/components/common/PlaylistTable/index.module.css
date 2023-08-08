@@ -12,3 +12,10 @@
 .finished {
   color: var(--success-fg-color);
 }
+
+.table :global .status,
+.table :global .updated,
+.table :global .actions {
+  white-space: nowrap;
+  width: 5%;
+}
