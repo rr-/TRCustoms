@@ -11,6 +11,7 @@ from rest_framework.decorators import action
 from rest_framework.generics import get_object_or_404
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
+from storages.utils import clean_name
 
 from trcustoms.common.serializers import EmptySerializer
 from trcustoms.levels.filters import filter_levels_queryset
@@ -186,7 +187,7 @@ class LevelFileViewSet(viewsets.GenericViewSet):
             Params={
                 "Bucket": file_field.storage.bucket_name,
                 "Key": file_field.storage._normalize_name(
-                    file_field.storage._clean_name(file_field.name)
+                    clean_name(file_field.name)
                 ),
                 **parameters,
             },
