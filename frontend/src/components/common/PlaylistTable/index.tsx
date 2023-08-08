@@ -90,6 +90,7 @@ const PlaylistTable = ({
 
   return (
     <DataTable
+      className={styles.table}
       queryName="playlists"
       columns={columns}
       itemKey={itemKey}
