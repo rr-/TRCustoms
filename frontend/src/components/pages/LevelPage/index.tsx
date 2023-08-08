@@ -87,7 +87,7 @@ const LevelPage = () => {
         </InfoMessage>
       )}
 
-      {false && !!level.screenshots.length && (
+      {!!level.screenshots.length && (
         <Section>
           <MediumThumbnails
             displayMode={DisplayMode.Contain}
