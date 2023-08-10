@@ -7,7 +7,7 @@ class LevelLinkType(models.TextChoices):
 
 
 class FeatureType(models.TextChoices):
-    NEW_RELEASE = ("new", "New release")
-    MONTHLY_HIDDEN_GEM = ("gem", "Monthly hidden gem")
-    LEVEL_OF_THE_DAY = ("lod", "Level of the day")
-    BEST_IN_GENRE = ("big", "Best in genre")
+    NEW_RELEASE = ("new_release", "New release")
+    MONTHLY_HIDDEN_GEM = ("monthly_hidden_gem", "Monthly hidden gem")
+    LEVEL_OF_THE_DAY = ("level_of_the_day", "Level of the day")
+    BEST_IN_GENRE = ("best_in_genre", "Best in genre")
