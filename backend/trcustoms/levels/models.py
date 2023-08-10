@@ -252,7 +252,7 @@ class FeaturedLevel(DatesInfo):
     level = models.ForeignKey(
         Level, on_delete=models.CASCADE, related_name="+"
     )
-    feature_type = models.CharField(choices=FeatureType.choices, max_length=3)
+    feature_type = models.CharField(choices=FeatureType.choices, max_length=24)
 
     chosen_genre = models.ForeignKey(
         Genre,
