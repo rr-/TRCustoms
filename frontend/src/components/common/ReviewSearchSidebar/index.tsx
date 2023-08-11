@@ -8,7 +8,7 @@ const ReviewSearchSidebar = () => {
   return (
     <SidebarBox>
       <Section>
-        <SectionHeader>Reviewer longue</SectionHeader>
+        <SectionHeader>Reviewer lounge</SectionHeader>
 
         <Link to={`/reviews/authors`}>
           <GFXCard name="reviewer_catalogue" variant="big">
