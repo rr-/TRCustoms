@@ -98,6 +98,10 @@ const update = async (
   return response.data;
 };
 
+const import_ = async (userId: number): Promise<void> => {
+  await api.post(`${API_URL}/users/${userId}/playlist/import/`);
+};
+
 const delete_ = async (
   userId: number,
   playlistItemId: number
@@ -111,6 +115,7 @@ const PlaylistService = {
   create,
   update,
   delete: delete_,
+  import: import_,
 };
 
 export type {

@@ -106,9 +106,9 @@ def test_playlist_item_creation_rejects_alien_user(
     )
     playlist_item_count = PlaylistItem.objects.all().count()
 
-    assert resp.status_code == status.HTTP_400_BAD_REQUEST, resp.content
+    assert resp.status_code == status.HTTP_403_FORBIDDEN, resp.content
     assert resp.json() == {
-        "detail": ["Cannot assign a different user to this playlist item."]
+        "detail": "You do not have permission to perform this action."
     }
     assert playlist_item_count == 0
 

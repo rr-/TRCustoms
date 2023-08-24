@@ -2,6 +2,7 @@ import styles from "./index.module.css";
 import { useState } from "react";
 import { useQueryClient } from "react-query";
 import { useParams } from "react-router-dom";
+import { PlaylistImportButton } from "src/components/buttons/PlaylistImportButton";
 import { PermissionGuard } from "src/components/common/PermissionGuard";
 import { PlaylistAddForm } from "src/components/common/PlaylistAddForm";
 import { PlaylistTable } from "src/components/common/PlaylistTable";
@@ -39,7 +40,10 @@ const UserPlaylistPageView = ({ user }: UserBasePageChildRenderProps) => {
           require={UserPermission.editPlaylists}
           owningUsers={[user]}
         >
-          <PlaylistAddForm userId={user.id} onAdd={handleAdd} />
+          <div className={styles.toolbar}>
+            <PlaylistAddForm userId={user.id} onAdd={handleAdd} />
+            <PlaylistImportButton userId={user.id} />
+          </div>
         </PermissionGuard>
 
         <PlaylistTable

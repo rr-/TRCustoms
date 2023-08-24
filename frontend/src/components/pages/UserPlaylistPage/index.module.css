@@ -3,3 +3,10 @@
   flex-direction: column;
   gap: 1rem;
 }
+.toolbar {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
