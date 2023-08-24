@@ -5,7 +5,7 @@ from django.core.management.base import BaseCommand
 from tqdm import tqdm
 
 from trcustoms.levels.models import Level
-from trcustoms.ratings import get_level_rating_class, get_review_rating_class
+from trcustoms.ratings import get_object_rating_class
 from trcustoms.reviews.models import Review
 from trcustoms.signals import disable_signals
 from trcustoms.users.models import User
@@ -42,7 +42,7 @@ class Command(BaseCommand):
         ) as progress:
             level_map = defaultdict(list)
             for level in Level.objects.all().prefetch_related("reviews"):
-                rating_class = get_level_rating_class(level)
+                rating_class = get_object_rating_class(level)
                 rating_class_id = rating_class.id if rating_class else None
                 level_map[rating_class_id].append(level.id)
                 progress.update()
@@ -58,7 +58,7 @@ class Command(BaseCommand):
         ) as progress:
             review_map = defaultdict(list)
             for review in Review.objects.all():
-                rating_class = get_review_rating_class(review)
+                rating_class = get_object_rating_class(review)
                 rating_class_id = rating_class.id if rating_class else None
                 review_map[rating_class_id].append(review.id)
                 progress.update()
