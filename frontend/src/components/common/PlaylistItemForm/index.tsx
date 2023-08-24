@@ -16,13 +16,12 @@ import type { LevelNested } from "src/services/LevelService";
 import type { PlaylistItemDetails } from "src/services/PlaylistService";
 import { PlaylistService } from "src/services/PlaylistService";
 import { PlaylistItemStatus } from "src/services/PlaylistService";
-import type { UserNested } from "src/services/UserService";
 import { filterFalsyObjectValues } from "src/utils/misc";
 import { makeSentence } from "src/utils/string";
 import { validateRequired } from "src/utils/validation";
 
 interface PlaylistItemFormProps {
-  user: UserNested;
+  userId: number;
   level: LevelNested;
   onSubmit?: (() => void) | undefined;
   onNavigateToMyPlaylist?: (() => void) | undefined;
@@ -38,7 +37,7 @@ interface PlaylistItemFormViewProps extends PlaylistItemFormProps {
 }
 
 const PlaylistItemFormView = ({
-  user,
+  userId,
   level,
   playlistItem,
   onSubmit,
@@ -111,9 +110,9 @@ const PlaylistItemFormView = ({
     if (onNavigateToMyPlaylist) {
       onNavigateToMyPlaylist();
     } else {
-      navigate(`/users/${user.id}/playlist`);
+      navigate(`/users/${userId}/playlist`);
     }
-  }, [user, navigate, onNavigateToMyPlaylist]);
+  }, [userId, navigate, onNavigateToMyPlaylist]);
 
   const handleSubmit = useCallback(
     async (
@@ -128,13 +127,13 @@ const PlaylistItemFormView = ({
           const payload = {
             status: values.status,
           };
-          await PlaylistService.update(user.id, playlistItem?.id, payload);
+          await PlaylistService.update(userId, playlistItem?.id, payload);
         } else if (level && values.status) {
           const payload = {
             levelId: level.id,
             status: values.status,
           };
-          await PlaylistService.create(user.id, payload);
+          await PlaylistService.create(userId, payload);
         }
 
         setStatus({
@@ -154,7 +153,7 @@ const PlaylistItemFormView = ({
       }
     },
     [
-      user,
+      userId,
       level,
       playlistItem,
       onSubmit,
@@ -210,14 +209,14 @@ const PlaylistItemFormView = ({
 };
 
 const PlaylistItemForm = ({
-  user,
+  userId,
   level,
   onSubmit,
   onNavigateToMyPlaylist,
 }: PlaylistItemFormProps) => {
   const playlistItemResult = useQuery<PlaylistItemDetails, Error>(
-    ["playlists", PlaylistService.get, user.id, level.id],
-    async () => PlaylistService.get(user.id, level.id)
+    ["playlists", PlaylistService.get, userId, level.id],
+    async () => PlaylistService.get(userId, level.id)
   );
 
   if (playlistItemResult.isLoading) {
@@ -228,7 +227,7 @@ const PlaylistItemForm = ({
 
   return (
     <PlaylistItemFormView
-      user={user}
+      userId={userId}
       level={level}
       playlistItem={playlistItem}
       onSubmit={onSubmit}

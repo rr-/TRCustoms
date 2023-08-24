@@ -39,7 +39,7 @@ const UserPlaylistPageView = ({ user }: UserBasePageChildRenderProps) => {
           require={UserPermission.editPlaylists}
           owningUsers={[user]}
         >
-          <PlaylistAddForm user={user} onAdd={handleAdd} />
+          <PlaylistAddForm userId={user.id} onAdd={handleAdd} />
         </PermissionGuard>
 
         <PlaylistTable

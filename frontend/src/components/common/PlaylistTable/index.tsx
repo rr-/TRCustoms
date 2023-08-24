@@ -76,7 +76,7 @@ const PlaylistTable = ({
       itemElement: ({ item }) => (
         <>
           <EditPlaylistItemButton
-            user={item.user}
+            userId={item.user.id}
             level={item.level}
             item={item}
           />{" "}
