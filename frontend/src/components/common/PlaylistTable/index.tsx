@@ -32,7 +32,7 @@ const PlaylistTable = ({
   let columns: DataTableColumn<PlaylistItemListing>[] = [
     {
       name: "status",
-      sortKey: "status",
+      sortKey: "status,-last_updated",
       label: "Status",
       itemElement: ({ item }) =>
         ({

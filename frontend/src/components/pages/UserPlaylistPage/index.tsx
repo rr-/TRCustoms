@@ -22,7 +22,7 @@ const UserPlaylistPageView = ({ user }: UserBasePageChildRenderProps) => {
     PlaylistSearchQuery
   >({
     page: null,
-    sort: "-status",
+    sort: "-status,-last_updated",
   });
   const queryClient = useQueryClient();
 
