@@ -1,7 +1,7 @@
 from functools import cache
 from statistics import mean
 
-from django.db.models import F, Max, QuerySet, Sum
+from django.db.models import F, Max, Model, QuerySet, Sum
 
 from trcustoms.common.consts import RatingClassSubject
 from trcustoms.common.models import RatingClass
@@ -70,21 +70,45 @@ def get_rating_class(
     return None
 
 
-def get_level_rating_class(level: Level) -> RatingClass:
-    ratings = [get_review_score(review) for review in level.reviews.all()]
+class BaseScorer:
+    target: RatingClassSubject = NotImplemented
+    model: type[Model] = NotImplemented
+
+    @classmethod
+    def get_review_scores(cls, instance: Model) -> float:
+        raise NotImplementedError("not implemented")
+
+
+class LevelScorer(BaseScorer):
+    target = RatingClassSubject.LEVEL
+    model = Level
+
+    @classmethod
+    def get_review_scores(cls, instance: Model) -> list[float]:
+        return [get_review_score(review) for review in instance.reviews.all()]
+
+
+class ReviewScorer(BaseScorer):
+    target = RatingClassSubject.REVIEW
+    model = Review
+
+    @classmethod
+    def get_review_scores(cls, instance: Model) -> list[float]:
+        return [get_review_score(instance)]
+
+
+def get_object_rating_class(instance: Level | Review) -> RatingClass:
+    for scorer in BaseScorer.__subclasses__():
+        if isinstance(instance, scorer.model):
+            ratings = scorer.get_review_scores(instance)
+            target = scorer.target
+            break
+    else:
+        assert False, "Invalid instance"
+
     if not ratings:
         return None
 
     average = mean(ratings)
     count = len(ratings)
-    return get_rating_class(RatingClassSubject.LEVEL, average, count)
-
-
-def get_review_rating_class(review: Review) -> RatingClass:
-    ratings = [get_review_score(review)]
-    if not ratings:
-        return None
-
-    average = mean(ratings)
-    count = len(ratings)
-    return get_rating_class(RatingClassSubject.REVIEW, average, count)
+    return get_rating_class(target, average, count)
