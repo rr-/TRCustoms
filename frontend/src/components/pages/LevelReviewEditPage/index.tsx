@@ -1,4 +1,5 @@
 import { useCallback } from "react";
+import { useState } from "react";
 import { useQuery } from "react-query";
 import { useNavigate } from "react-router-dom";
 import { useParams } from "react-router-dom";
@@ -7,6 +8,7 @@ import { PageGuard } from "src/components/common/PermissionGuard";
 import { ReviewForm } from "src/components/common/ReviewForm";
 import { SmartWrap } from "src/components/common/SmartWrap";
 import { PlainLayout } from "src/components/layouts/PlainLayout";
+import { PlaylistAddModal } from "src/components/modals/PlaylistAddModal";
 import { usePageMetadata } from "src/contexts/PageMetadataContext";
 import type { LevelNested } from "src/services/LevelService";
 import { LevelService } from "src/services/LevelService";
@@ -20,6 +22,7 @@ interface LevelReviewEditPageParams {
 }
 
 const LevelReviewEditPage = () => {
+  const [isModalActive, setIsModalActive] = useState(false);
   const {
     levelId,
     reviewId,
@@ -39,6 +42,10 @@ const LevelReviewEditPage = () => {
   const handleGoBack = useCallback(() => {
     navigate(`/levels/${levelId}`);
   }, [navigate, levelId]);
+
+  const handleSubmit = useCallback(() => {
+    setIsModalActive(true);
+  }, [setIsModalActive]);
 
   usePageMetadata(
     () => ({
@@ -75,7 +82,19 @@ const LevelReviewEditPage = () => {
       owningUserIds={[review.author.id]}
     >
       <PlainLayout header={<SmartWrap text={`Reviewing ${level.name}`} />}>
-        <ReviewForm onGoBack={handleGoBack} review={review} level={level} />
+        <PlaylistAddModal
+          isActive={isModalActive}
+          onIsActiveChange={setIsModalActive}
+          levelId={level.id}
+          userId={review.author.id}
+        />
+
+        <ReviewForm
+          onGoBack={handleGoBack}
+          onSubmit={handleSubmit}
+          review={review}
+          level={level}
+        />
       </PlainLayout>
     </PageGuard>
   );
