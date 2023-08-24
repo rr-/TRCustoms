@@ -62,7 +62,8 @@ def test_playlist_item_creation_rejects_duplicate_submissions(
 
     assert resp.status_code == status.HTTP_400_BAD_REQUEST, resp.content
     assert resp.json() == {
-        "level_id": ["This level already appears in this playlist."]
+        "level_id": "This level already appears in this playlist.",
+        "code": "duplicate_level",
     }
     assert playlist_item_count == 1
 
