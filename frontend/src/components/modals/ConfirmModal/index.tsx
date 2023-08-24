@@ -34,11 +34,18 @@ const ConfirmModal = ({
     onConfirm();
   };
 
+  const handleIsActiveChange = (state: boolean) => {
+    onIsActiveChange(state);
+    if (!state) {
+      setIsConfirmed(false);
+    }
+  };
+
   return (
     <BaseModal
       title="Confirmation"
       isActive={isActive}
-      onIsActiveChange={onIsActiveChange}
+      onIsActiveChange={handleIsActiveChange}
       buttons={
         isConfirmed ? (
           <></>

@@ -1,4 +1,6 @@
 import styles from "./index.module.css";
+import { useState } from "react";
+import { useEffect } from "react";
 import { forwardRef } from "react";
 import { Link } from "src/components/common/Link";
 import { IconX } from "src/components/icons";
@@ -14,20 +16,35 @@ interface BaseModalProps {
 
 const BaseModal = forwardRef<HTMLDivElement, BaseModalProps>(
   ({ title, children, buttons, isActive, onIsActiveChange }, ref) => {
+    const [isDimActive, setIsDimActive] = useState(isActive);
+
+    useEffect(() => setIsDimActive(isActive), [isActive]);
+
     const handleDimClick = (event: React.MouseEvent) => {
       if (event.target === event.currentTarget) {
         event.stopPropagation();
         event.preventDefault();
-        onIsActiveChange(false);
+        setIsDimActive(false);
       }
     };
 
     const handleCloseClick = () => {
-      onIsActiveChange(false);
+      setIsDimActive(false);
+    };
+
+    const handleTransitionEnd = () => {
+      const state = document.body.classList.contains("modal-open");
+      if (!state) {
+        onIsActiveChange(false);
+      }
     };
 
     return (
-      <Dim isActive={isActive} onMouseDown={handleDimClick}>
+      <Dim
+        isActive={isDimActive}
+        onMouseDown={handleDimClick}
+        onTransitionEnd={handleTransitionEnd}
+      >
         <div className={styles.modal} ref={ref}>
           <header className={`${styles.modalHeader} ChildMarginClear`}>
             {title}
