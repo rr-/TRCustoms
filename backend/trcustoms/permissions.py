@@ -38,6 +38,12 @@ def HasPermission(permission: UserPermission) -> BasePermission:
 
 
 class IsAccessingOwnResource(IsAuthenticated):
+    def has_permission(self, request, view):
+        user_id = view.kwargs.get("user_id")
+        if user_id:
+            return user_id == request.user.pk
+        return super().has_permission(request, view)
+
     def has_object_permission(self, request, view, obj) -> bool:
         if not request.user:
             return False

@@ -73,6 +73,10 @@ urlpatterns = [
         as_detail_view(PlaylistItemViewSet),
     ),
     path(
+        "api/users/<int:user_id>/playlist/import/",
+        as_view(PlaylistItemViewSet, actions={"post": "import_"}),
+    ),
+    path(
         "api/users/<int:user_id>/playlist/by_level_id/<int:level_id>/",
         as_view(PlaylistItemViewSet, actions={"get": "by_level_id"}),
     ),

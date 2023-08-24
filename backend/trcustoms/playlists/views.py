@@ -1,20 +1,29 @@
+from drf_spectacular.utils import extend_schema, extend_schema_view
 from rest_framework import mixins, status, viewsets
 from rest_framework.decorators import action
 from rest_framework.generics import get_object_or_404
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 
+from trcustoms.common.serializers import EmptySerializer
 from trcustoms.mixins import PermissionsMixin
 from trcustoms.permissions import (
     AllowNone,
     HasPermission,
     IsAccessingOwnResource,
 )
+from trcustoms.playlists.logic import sync_playlist_with_reviews
 from trcustoms.playlists.models import PlaylistItem
 from trcustoms.playlists.serializers import PlaylistItemSerializer
-from trcustoms.users.models import UserPermission
+from trcustoms.users.models import User, UserPermission
 
 
+@extend_schema_view(
+    import_=extend_schema(
+        request=EmptySerializer,
+        responses={status.HTTP_200_OK: EmptySerializer},
+    )
+)
 class PlaylistItemViewSet(
     PermissionsMixin,
     mixins.CreateModelMixin,
@@ -48,6 +57,10 @@ class PlaylistItemViewSet(
             HasPermission(UserPermission.EDIT_PLAYLISTS)
             | IsAccessingOwnResource
         ],
+        "import_": [
+            HasPermission(UserPermission.EDIT_PLAYLISTS)
+            | IsAccessingOwnResource
+        ],
     }
 
     serializer_class = PlaylistItemSerializer
@@ -69,3 +82,9 @@ class PlaylistItemViewSet(
         )
         serializer = self.get_serializer(item)
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+    @action(detail=False)
+    def import_(self, request, user_id: int):
+        user = get_object_or_404(User, pk=user_id)
+        sync_playlist_with_reviews(user)
+        return Response({}, status=status.HTTP_200_OK)

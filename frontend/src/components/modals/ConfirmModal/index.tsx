@@ -5,6 +5,7 @@ import { IconReject } from "src/components/icons";
 import { BaseModal } from "src/components/modals/BaseModal";
 
 interface ConfirmModalProps {
+  title?: string;
   isActive: boolean;
   onIsActiveChange: (isActive: boolean) => void;
   onConfirm: () => void;
@@ -13,6 +14,7 @@ interface ConfirmModalProps {
 }
 
 const ConfirmModal = ({
+  title,
   isActive,
   onIsActiveChange,
   onConfirm,
@@ -43,7 +45,7 @@ const ConfirmModal = ({
 
   return (
     <BaseModal
-      title="Confirmation"
+      title={title || "Confirmation"}
       isActive={isActive}
       onIsActiveChange={handleIsActiveChange}
       buttons={
