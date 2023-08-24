@@ -14,14 +14,17 @@ from trcustoms.permissions import (
 )
 from trcustoms.playlists.logic import sync_playlist_with_reviews
 from trcustoms.playlists.models import PlaylistItem
-from trcustoms.playlists.serializers import PlaylistItemSerializer
+from trcustoms.playlists.serializers import (
+    PlaylistImportResultSerializer,
+    PlaylistItemSerializer,
+)
 from trcustoms.users.models import User, UserPermission
 
 
 @extend_schema_view(
     import_=extend_schema(
         request=EmptySerializer,
-        responses={status.HTTP_200_OK: EmptySerializer},
+        responses={status.HTTP_200_OK: PlaylistImportResultSerializer},
     )
 )
 class PlaylistItemViewSet(
@@ -86,5 +89,7 @@ class PlaylistItemViewSet(
     @action(detail=False)
     def import_(self, request, user_id: int):
         user = get_object_or_404(User, pk=user_id)
-        sync_playlist_with_reviews(user)
-        return Response({}, status=status.HTTP_200_OK)
+        updated_items = sync_playlist_with_reviews(user)
+        return Response(
+            {"updated_items": updated_items}, status=status.HTTP_200_OK
+        )

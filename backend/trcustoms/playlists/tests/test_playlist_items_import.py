@@ -45,6 +45,7 @@ def test_playlist_item_import_accepts_owner(
     resp = auth_api_client.post(f"/api/users/{user.pk}/playlist/import/")
     playlist_item = PlaylistItem.objects.first()
     assert resp.status_code == status.HTTP_200_OK
+    assert resp.json() == {"updated_items": 1}
     assert playlist_item
     assert playlist_item.user == user
     assert playlist_item.level.pk == review.level.pk

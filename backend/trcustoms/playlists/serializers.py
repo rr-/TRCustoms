@@ -67,3 +67,7 @@ class PlaylistItemSerializer(serializers.ModelSerializer):
             "created",
             "last_updated",
         ]
+
+
+class PlaylistImportResultSerializer(serializers.Serializer):
+    updated_items = serializers.IntegerField()

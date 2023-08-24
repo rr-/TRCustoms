@@ -47,6 +47,10 @@ interface PlaylistSearchQuery extends GenericSearchQuery {}
 interface PlaylistSearchResult
   extends GenericSearchResult<PlaylistSearchQuery, PlaylistItemListing> {}
 
+interface PlaylistImportResult {
+  updated_items: number;
+}
+
 const search = async (
   userId: number,
   searchQuery: PlaylistSearchQuery
@@ -98,8 +102,11 @@ const update = async (
   return response.data;
 };
 
-const import_ = async (userId: number): Promise<void> => {
-  await api.post(`${API_URL}/users/${userId}/playlist/import/`);
+const import_ = async (userId: number): Promise<PlaylistImportResult> => {
+  const response = (await api.post(
+    `${API_URL}/users/${userId}/playlist/import/`
+  )) as AxiosResponse<PlaylistImportResult>;
+  return response.data;
 };
 
 const delete_ = async (
@@ -123,6 +130,7 @@ export type {
   PlaylistItemListing,
   PlaylistSearchQuery,
   PlaylistSearchResult,
+  PlaylistImportResult,
 };
 
 export { PlaylistItemStatus, PlaylistService };
