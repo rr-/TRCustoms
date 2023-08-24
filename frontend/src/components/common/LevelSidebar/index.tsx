@@ -2,10 +2,10 @@ import styles from "./index.module.css";
 import { useContext } from "react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { LevelAddToMyPlaylistButton } from "src/components/buttons/LevelAddToMyPlaylistButton";
 import { LevelApproveButton } from "src/components/buttons/LevelApproveButton";
 import { LevelDeleteButton } from "src/components/buttons/LevelDeleteButton";
 import { LevelRejectButton } from "src/components/buttons/LevelRejectButton";
+import { PlaylistAddButton } from "src/components/buttons/PlaylistAddButton";
 import { Button } from "src/components/common/Button";
 import { DefinitionItemGroup } from "src/components/common/DefinitionList";
 import { DefinitionItem } from "src/components/common/DefinitionList";
@@ -124,9 +124,7 @@ const LevelSidebar = ({ level, reviewCount }: LevelSidebarProps) => {
               <LevelDeleteButton level={level} onComplete={handleDelete} />
             </PermissionGuard>
 
-            {user && (
-              <LevelAddToMyPlaylistButton userId={user.id} level={level} />
-            )}
+            {user && <PlaylistAddButton userId={user.id} level={level} />}
 
             <Button icon={<IconBook />} onClick={handleWalkthroughsButtonClick}>
               Walkthrough

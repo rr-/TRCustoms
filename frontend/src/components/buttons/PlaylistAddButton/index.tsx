@@ -6,15 +6,12 @@ import { PlaylistItemModal } from "src/components/modals/PlaylistItemModal";
 import type { LevelNested } from "src/services/LevelService";
 import { resetQueries } from "src/utils/misc";
 
-interface LevelAddToMyPlaylistButtonProps {
+interface PlaylistAddButtonProps {
   userId: number;
   level: LevelNested;
 }
 
-const LevelAddToMyPlaylistButton = ({
-  userId,
-  level,
-}: LevelAddToMyPlaylistButtonProps) => {
+const PlaylistAddButton = ({ userId, level }: PlaylistAddButtonProps) => {
   const queryClient = useQueryClient();
   const [isChanged, setIsChanged] = useState(false);
   const [isModalActive, setIsModalActive] = useState(false);
@@ -51,4 +48,4 @@ const LevelAddToMyPlaylistButton = ({
   );
 };
 
-export { LevelAddToMyPlaylistButton };
+export { PlaylistAddButton };
