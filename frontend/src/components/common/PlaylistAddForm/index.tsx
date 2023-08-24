@@ -5,14 +5,13 @@ import type { LevelNested } from "src/services/LevelService";
 import { LevelService } from "src/services/LevelService";
 import { PlaylistItemStatus } from "src/services/PlaylistService";
 import { PlaylistService } from "src/services/PlaylistService";
-import type { UserNested } from "src/services/UserService";
 
 interface PlaylistAddFormProps {
-  user: UserNested;
+  userId: number;
   onAdd?: () => void;
 }
 
-const PlaylistAddForm = ({ user, onAdd }: PlaylistAddFormProps) => {
+const PlaylistAddForm = ({ userId, onAdd }: PlaylistAddFormProps) => {
   const [suggestions, setSuggestions] = useState<LevelNested[]>([]);
 
   const handleSearchTrigger = useCallback(async (userInput: string) => {
@@ -36,7 +35,7 @@ const PlaylistAddForm = ({ user, onAdd }: PlaylistAddFormProps) => {
   const handleResultApply = useCallback(
     async (level: LevelNested) => {
       try {
-        await PlaylistService.create(user.id, {
+        await PlaylistService.create(userId, {
           levelId: level.id,
           status: PlaylistItemStatus.NotYetPlayed,
         });
@@ -50,7 +49,7 @@ const PlaylistAddForm = ({ user, onAdd }: PlaylistAddFormProps) => {
         }
       }
     },
-    [user, onAdd]
+    [userId, onAdd]
   );
 
   return (

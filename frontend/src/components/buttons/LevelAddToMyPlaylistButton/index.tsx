@@ -1,22 +1,20 @@
-import { useContext } from "react";
 import { useState } from "react";
 import { useQueryClient } from "react-query";
 import { Button } from "src/components/common/Button";
 import { IconBookmark } from "src/components/icons";
 import { PlaylistItemModal } from "src/components/modals/PlaylistItemModal";
-import { UserContext } from "src/contexts/UserContext";
 import type { LevelNested } from "src/services/LevelService";
-import { PlaylistService } from "src/services/PlaylistService";
 import { resetQueries } from "src/utils/misc";
 
 interface LevelAddToMyPlaylistButtonProps {
+  userId: number;
   level: LevelNested;
 }
 
 const LevelAddToMyPlaylistButton = ({
+  userId,
   level,
 }: LevelAddToMyPlaylistButtonProps) => {
-  const { user } = useContext(UserContext);
   const queryClient = useQueryClient();
   const [isChanged, setIsChanged] = useState(false);
   const [isModalActive, setIsModalActive] = useState(false);
@@ -36,16 +34,12 @@ const LevelAddToMyPlaylistButton = ({
     }
   };
 
-  if (!user) {
-    return <></>;
-  }
-
   return (
     <>
       <PlaylistItemModal
         isActive={isModalActive}
         onIsActiveChange={handleIsModalActiveChange}
-        user={user}
+        userId={userId}
         level={level}
         onSubmit={handleSubmit}
       />

@@ -124,7 +124,9 @@ const LevelSidebar = ({ level, reviewCount }: LevelSidebarProps) => {
               <LevelDeleteButton level={level} onComplete={handleDelete} />
             </PermissionGuard>
 
-            {user && <LevelAddToMyPlaylistButton level={level} />}
+            {user && (
+              <LevelAddToMyPlaylistButton userId={user.id} level={level} />
+            )}
 
             <Button icon={<IconBook />} onClick={handleWalkthroughsButtonClick}>
               Walkthrough

@@ -4,17 +4,16 @@ import { Link } from "src/components/common/Link";
 import { PlaylistItemModal } from "src/components/modals/PlaylistItemModal";
 import type { LevelNested } from "src/services/LevelService";
 import type { PlaylistItemListing } from "src/services/PlaylistService";
-import type { UserNested } from "src/services/UserService";
 import { resetQueries } from "src/utils/misc";
 
 interface EditPlaylistItemButtonProps {
-  user: UserNested;
+  userId: number;
   level: LevelNested;
   item: PlaylistItemListing;
 }
 
 const EditPlaylistItemButton = ({
-  user,
+  userId,
   level,
   item,
 }: EditPlaylistItemButtonProps) => {
@@ -47,7 +46,7 @@ const EditPlaylistItemButton = ({
       <PlaylistItemModal
         isActive={isModalActive}
         onIsActiveChange={handleIsModalActiveChange}
-        user={user}
+        userId={userId}
         level={level}
         onSubmit={handleSubmit}
         onNavigateToMyPlaylist={handleNavigateToMyPlaylist}
