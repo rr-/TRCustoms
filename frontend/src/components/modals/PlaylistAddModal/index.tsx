@@ -44,7 +44,7 @@ const PlaylistAddModal = ({
       } else {
         await PlaylistService.create(userId, { levelId, status });
       }
-      resetQueries(queryClient, ["playlists"]);
+      //resetQueries(queryClient, ["playlists"]);
     });
   };
 
@@ -53,6 +53,7 @@ const PlaylistAddModal = ({
       isActive={isActive}
       onIsActiveChange={onIsActiveChange}
       onConfirm={handleConfirm}
+      confirmedChildren={<>Playlist updated.</>}
     >
       {playlistItem ? (
         <>Do you want to mark this level as finished in your playlist?</>

@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Button } from "src/components/common/Button";
 import { IconCheck } from "src/components/icons";
 import { IconReject } from "src/components/icons";
@@ -8,6 +9,7 @@ interface ConfirmModalProps {
   onIsActiveChange: (isActive: boolean) => void;
   onConfirm: () => void;
   children: React.ReactNode;
+  confirmedChildren?: React.ReactNode;
 }
 
 const ConfirmModal = ({
@@ -15,13 +17,20 @@ const ConfirmModal = ({
   onIsActiveChange,
   onConfirm,
   children,
+  confirmedChildren,
 }: ConfirmModalProps) => {
+  const [isConfirmed, setIsConfirmed] = useState(false);
+
   const handleCancelClick = () => {
     onIsActiveChange(false);
   };
 
   const handleConfirmClick = () => {
-    onIsActiveChange(false);
+    if (confirmedChildren) {
+      setIsConfirmed(true);
+    } else {
+      onIsActiveChange(false);
+    }
     onConfirm();
   };
 
@@ -31,20 +40,24 @@ const ConfirmModal = ({
       isActive={isActive}
       onIsActiveChange={onIsActiveChange}
       buttons={
-        <>
-          <Button disableTimeout={true} onClick={handleConfirmClick}>
-            <IconCheck />
-            Yes
-          </Button>
+        isConfirmed ? (
+          <></>
+        ) : (
+          <>
+            <Button disableTimeout={true} onClick={handleConfirmClick}>
+              <IconCheck />
+              Yes
+            </Button>
 
-          <Button disableTimeout={true} onClick={handleCancelClick}>
-            <IconReject />
-            Cancel
-          </Button>
-        </>
+            <Button disableTimeout={true} onClick={handleCancelClick}>
+              <IconReject />
+              Cancel
+            </Button>
+          </>
+        )
       }
     >
-      {children}
+      {isConfirmed ? confirmedChildren : children}
     </BaseModal>
   );
 };
