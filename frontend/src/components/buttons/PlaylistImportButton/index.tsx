@@ -3,6 +3,7 @@ import { useQueryClient } from "react-query";
 import { Button } from "src/components/common/Button";
 import { ConfirmModal } from "src/components/modals/ConfirmModal";
 import { PlaylistService } from "src/services/PlaylistService";
+import type { PlaylistImportResult } from "src/services/PlaylistService";
 import { resetQueries } from "src/utils/misc";
 
 interface PlaylistImportButtonProps {
@@ -12,13 +13,16 @@ interface PlaylistImportButtonProps {
 const PlaylistImportButton = ({ userId }: PlaylistImportButtonProps) => {
   const queryClient = useQueryClient();
   const [isModalActive, setIsModalActive] = useState(false);
+  const [result, setResult] = useState<PlaylistImportResult>({
+    updated_items: 0,
+  });
 
   const handleButtonClick = () => {
     setIsModalActive(true);
   };
 
   const handleConfirm = async () => {
-    await PlaylistService.import(userId);
+    setResult(await PlaylistService.import(userId));
     resetQueries(queryClient, ["playlists"]);
   };
 
@@ -29,7 +33,13 @@ const PlaylistImportButton = ({ userId }: PlaylistImportButtonProps) => {
         isActive={isModalActive}
         onIsActiveChange={setIsModalActive}
         onConfirm={handleConfirm}
-        confirmedChildren={<>Import complete.</>}
+        confirmedChildren={
+          result ? (
+            <>Import complete. {result.updated_items} items added.</>
+          ) : (
+            <>Import in progress…</>
+          )
+        }
       >
         This action will populate the playlist with the levels you reviewed.
         <br />

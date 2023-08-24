@@ -3,7 +3,7 @@ from trcustoms.playlists.models import PlaylistItem
 from trcustoms.users.models import User
 
 
-def sync_playlist_with_reviews(user: User) -> None:
+def sync_playlist_with_reviews(user: User) -> int:
     existing_level_ids = list(
         user.playlist_items.values_list("level_id", flat=True)
     )
@@ -40,3 +40,5 @@ def sync_playlist_with_reviews(user: User) -> None:
     )
 
     user.update_played_level_count()
+
+    return len(playlist_items_to_create)
