@@ -2,15 +2,13 @@ from datetime import datetime
 
 import pytest
 
-from trcustoms.awards.specs import SeraphAwardSpec
+from trcustoms.awards.specs import AwardSpec, seraph
 from trcustoms.users.tests.factories import UserFactory
 
 
 @pytest.fixture(name="spec")
 def fixture_spec() -> None:
-    spec = SeraphAwardSpec()
-    spec.required = 3
-    return spec
+    return list(seraph())[0]
 
 
 @pytest.mark.django_db
@@ -25,7 +23,7 @@ def fixture_spec() -> None:
     ],
 )
 def test_seraph_award_spec(
-    spec: SeraphAwardSpec,
+    spec: AwardSpec,
     is_active: bool,
     is_banned: bool,
     date_joined: datetime,
@@ -33,4 +31,4 @@ def test_seraph_award_spec(
 ) -> None:
     user = UserFactory(is_active=is_active, is_banned=is_banned)
     user.date_joined = date_joined
-    assert spec.check_eligible(user, tier=None) is expected
+    assert spec.requirement(user) is expected

@@ -1,6 +1,6 @@
 import pytest
 
-from trcustoms.awards.specs import IrisAwardSpec
+from trcustoms.awards.specs import AwardSpec, iris
 from trcustoms.users.tests.factories import UserFactory
 from trcustoms.walkthroughs.consts import WalkthroughStatus, WalkthroughType
 from trcustoms.walkthroughs.tests.factories import WalkthroughFactory
@@ -8,8 +8,8 @@ from trcustoms.walkthroughs.tests.factories import WalkthroughFactory
 
 @pytest.fixture(name="spec")
 def fixture_spec() -> None:
-    spec = IrisAwardSpec()
-    spec.required = 2
+    spec = list(iris())[0]
+    spec.requirement.min_walkthroughs = 2
     return spec
 
 
@@ -51,7 +51,7 @@ def fixture_spec() -> None:
     ],
 )
 def test_iris_award_spec_success(
-    spec: IrisAwardSpec,
+    spec: AwardSpec,
     walkthroughs: list[tuple[WalkthroughStatus, WalkthroughType]],
     expected: bool,
 ) -> None:
@@ -62,4 +62,4 @@ def test_iris_award_spec_success(
             status=status,
             walkthrough_type=walkthrough_type,
         )
-    assert spec.check_eligible(user, tier=None) is expected
+    assert spec.requirement(user) is expected

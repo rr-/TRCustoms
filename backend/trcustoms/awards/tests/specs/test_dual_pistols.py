@@ -1,6 +1,6 @@
 import pytest
 
-from trcustoms.awards.specs import DualPistolsAwardSpec
+from trcustoms.awards.specs import AwardSpec, dual_pistols
 from trcustoms.common.tests.factories import RatingClassFactory
 from trcustoms.levels.tests.factories import LevelFactory
 from trcustoms.users.tests.factories import UserFactory
@@ -8,59 +8,59 @@ from trcustoms.users.tests.factories import UserFactory
 
 @pytest.fixture(name="spec")
 def fixture_spec() -> None:
-    spec = DualPistolsAwardSpec()
-    spec.required = 3
+    spec = list(dual_pistols())[0]
+    spec.requirement.min_levels = 3
     return spec
 
 
 @pytest.mark.django_db
-def test_dual_pistols_award_spec_success(spec: DualPistolsAwardSpec) -> None:
+def test_dual_pistols_award_spec_success(spec: AwardSpec) -> None:
     rating_class = RatingClassFactory(position=0)
     user = UserFactory()
-    for _ in range(spec.required):
+    for _ in range(spec.requirement.min_levels):
         LevelFactory(authors=[user], rating_class=rating_class)
-    assert spec.check_eligible(user, tier=None) is True
+    assert spec.requirement(user) is True
 
 
 @pytest.mark.django_db
 def test_dual_pistols_award_spec_unapproved_levels(
-    spec: DualPistolsAwardSpec,
+    spec: AwardSpec,
 ) -> None:
     rating_class = RatingClassFactory(position=0)
     user = UserFactory()
-    for _ in range(spec.required - 1):
+    for _ in range(spec.requirement.min_levels - 1):
         LevelFactory(
             authors=[user], rating_class=rating_class, is_approved=True
         )
     LevelFactory(authors=[user], rating_class=rating_class, is_approved=False)
-    assert spec.check_eligible(user, tier=None) is False
+    assert spec.requirement(user) is False
 
 
 @pytest.mark.django_db
 def test_dual_pistols_award_spec_not_enough_levels(
-    spec: DualPistolsAwardSpec,
+    spec: AwardSpec,
 ) -> None:
     good_rating_class = RatingClassFactory(position=0)
     user = UserFactory()
-    for _ in range(spec.required - 1):
+    for _ in range(spec.requirement.min_levels - 1):
         LevelFactory(
             authors=[user], rating_class=good_rating_class, is_approved=True
         )
-    assert spec.check_eligible(user, tier=None) is False
+    assert spec.requirement(user) is False
 
 
 @pytest.mark.django_db
 def test_dual_pistols_award_spec_too_low_ratings(
-    spec: DualPistolsAwardSpec,
+    spec: AwardSpec,
 ) -> None:
     good_rating_class = RatingClassFactory(position=0)
     bad_rating_class = RatingClassFactory(position=-1)
     user = UserFactory()
-    for _ in range(spec.required - 1):
+    for _ in range(spec.requirement.min_levels - 1):
         LevelFactory(
             authors=[user], rating_class=good_rating_class, is_approved=True
         )
     LevelFactory(
         authors=[user], rating_class=bad_rating_class, is_approved=True
     )
-    assert spec.check_eligible(user, tier=None) is False
+    assert spec.requirement(user) is False

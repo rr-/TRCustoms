@@ -1,42 +1,37 @@
-from dataclasses import dataclass
+from collections.abc import Iterable
 
-from trcustoms.awards.specs.base import BaseAwardSpec
-from trcustoms.users.models import User
+from trcustoms.awards.requirements.impl import (
+    AuthoredReviewsAwardRequirement,
+    AuthoredReviewsPositionAwardRequirement,
+)
+from trcustoms.awards.specs.base import AwardSpec
+
+SPECS: list[tuple[str, int, int]] = [
+    ("You have started your journey as a critic.", 25, 5, 5),
+    ("You have quite a lot of level reviews under your belt.", 100, 15, 5),
+    ("You are an avid critic, striving to be the first reviewer.", 200, 50, 5),
+    ("You have garnered quite the reputation as a critic.", 400, 100, 5),
+    ("You are a well-known critic, on top of every game.", 800, 200, 5),
+]
 
 
-@dataclass
-class Requirement:
-    total: int
-    early: int
-
-    def passes(self, total: int, early: int) -> bool:
-        return total >= self.total and early >= self.early
-
-
-class AmuletOfHorusAwardSpec(BaseAwardSpec):
-    max_review_position = 5
-    requirements = {
-        1: Requirement(total=25, early=5),
-        2: Requirement(total=100, early=15),
-        3: Requirement(total=200, early=50),
-        4: Requirement(total=400, early=100),
-        5: Requirement(total=800, early=200),
-    }
-
-    code = "amulet_of_horus"
-    title = "Amulet of Horus"
-    descriptions = {
-        1: "You have started your journey as a critic.",
-        2: "You have quite a lot of level reviews under your belt.",
-        3: "You are an avid critic, striving to be the first reviewer.",
-        4: "You have garnered quite the reputation as a critic.",
-        5: "You are a well-known critic, on top of every game.",
-    }
-    position = 2
-
-    def check_eligible(self, user: User, tier: int) -> bool:
-        total = user.reviewed_levels.all().count()
-        early = user.reviewed_levels.filter(
-            position__lte=self.max_review_position
-        ).count()
-        return self.requirements[tier].passes(total=total, early=early)
+def amulet_of_horus() -> Iterable[AwardSpec]:
+    for tier, (
+        description,
+        min_total_reviews,
+        min_early_reviews,
+        max_early_review_position,
+    ) in enumerate(SPECS, 1):
+        yield AwardSpec(
+            code="amulet_of_horus",
+            title="Amulet of Horus",
+            tier=tier,
+            description=description,
+            requirement=(
+                AuthoredReviewsAwardRequirement(min_reviews=min_total_reviews)
+                & AuthoredReviewsPositionAwardRequirement(
+                    min_reviews=min_early_reviews,
+                    max_position=max_early_review_position,
+                )
+            ),
+        )

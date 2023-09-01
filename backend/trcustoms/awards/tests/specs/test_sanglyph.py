@@ -1,6 +1,6 @@
 import pytest
 
-from trcustoms.awards.specs import SanglyphAwardSpec
+from trcustoms.awards.specs import AwardSpec, sanglyph
 from trcustoms.levels.tests.factories import LevelFactory
 from trcustoms.reviews.tests.factories import ReviewFactory
 from trcustoms.users.tests.factories import UserFactory
@@ -10,10 +10,10 @@ from trcustoms.walkthroughs.tests.factories import WalkthroughFactory
 
 @pytest.fixture(name="spec")
 def fixture_spec() -> None:
-    spec = SanglyphAwardSpec()
-    spec.required_levels = 2
-    spec.required_reviews = 2
-    spec.required_walkthroughs = 2
+    spec = list(sanglyph())[0]
+    spec.requirement.lhs.lhs.min_levels = 2
+    spec.requirement.lhs.rhs.min_reviews = 2
+    spec.requirement.rhs.min_walkthroughs = 2
     return spec
 
 
@@ -31,7 +31,7 @@ def fixture_spec() -> None:
     ],
 )
 def test_sanglyph_award_spec(
-    spec: SanglyphAwardSpec,
+    spec: AwardSpec,
     levels: int,
     walkthroughs: int,
     reviews: int,
@@ -52,4 +52,4 @@ def test_sanglyph_award_spec(
         )
     for _ in range(reviews):
         ReviewFactory(author=user)
-    assert spec.check_eligible(user, tier=None) is expected
+    assert spec.requirement(user) is expected

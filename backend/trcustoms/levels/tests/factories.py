@@ -67,3 +67,9 @@ class LevelFactory(factory.django.DjangoModelFactory):
         # pylint: disable=no-member
         if create and extracted:
             self.genres.set(extracted)
+
+    @factory.post_generation
+    def tags(self, create, extracted, **kwargs):
+        # pylint: disable=no-member
+        if create and extracted:
+            self.tags.set(extracted)
