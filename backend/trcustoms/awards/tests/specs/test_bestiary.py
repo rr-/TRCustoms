@@ -1,6 +1,6 @@
 import pytest
 
-from trcustoms.awards.specs import BestiaryAwardSpec
+from trcustoms.awards.specs import AwardSpec, bestiary
 from trcustoms.users.tests.factories import UserFactory
 from trcustoms.walkthroughs.consts import WalkthroughStatus, WalkthroughType
 from trcustoms.walkthroughs.tests.factories import WalkthroughFactory
@@ -8,29 +8,27 @@ from trcustoms.walkthroughs.tests.factories import WalkthroughFactory
 
 @pytest.fixture(name="spec")
 def fixture_spec() -> None:
-    spec = BestiaryAwardSpec()
-    spec.required = 3
+    spec = list(bestiary())[0]
+    spec.requirement.min_walkthroughs = 3
     return spec
 
 
 @pytest.mark.django_db
-def test_bestiary_award_spec_success(spec: BestiaryAwardSpec) -> None:
+def test_bestiary_award_spec_success(spec: AwardSpec) -> None:
     user = UserFactory()
-    for _ in range(spec.required):
+    for _ in range(spec.requirement.min_walkthroughs):
         WalkthroughFactory(
             author=user,
             status=WalkthroughStatus.APPROVED,
             walkthrough_type=WalkthroughType.TEXT,
         )
-    assert spec.check_eligible(user, tier=None) is True
+    assert spec.requirement(user) is True
 
 
 @pytest.mark.django_db
-def test_bestiary_award_spec_unapproved_walkthroughs(
-    spec: BestiaryAwardSpec,
-) -> None:
+def test_bestiary_award_spec_unapproved_walkthroughs(spec: AwardSpec) -> None:
     user = UserFactory()
-    for _ in range(spec.required - 1):
+    for _ in range(spec.requirement.min_walkthroughs - 1):
         WalkthroughFactory(
             author=user,
             status=WalkthroughStatus.APPROVED,
@@ -41,15 +39,13 @@ def test_bestiary_award_spec_unapproved_walkthroughs(
         status=WalkthroughStatus.APPROVED,
         walkthrough_type=WalkthroughType.LINK,
     )
-    assert spec.check_eligible(user, tier=None) is False
+    assert spec.requirement(user) is False
 
 
 @pytest.mark.django_db
-def test_bestiary_award_spec_not_text_walkthroughs(
-    spec: BestiaryAwardSpec,
-) -> None:
+def test_bestiary_award_spec_not_text_walkthroughs(spec: AwardSpec) -> None:
     user = UserFactory()
-    for _ in range(spec.required - 1):
+    for _ in range(spec.requirement.min_walkthroughs - 1):
         WalkthroughFactory(
             author=user,
             status=WalkthroughStatus.APPROVED,
@@ -60,18 +56,16 @@ def test_bestiary_award_spec_not_text_walkthroughs(
         status=WalkthroughStatus.PENDING_APPROVAL,
         walkthrough_type=WalkthroughType.TEXT,
     )
-    assert spec.check_eligible(user, tier=None) is False
+    assert spec.requirement(user) is False
 
 
 @pytest.mark.django_db
-def test_bestiary_award_spec_not_enough_walkthroughs(
-    spec: BestiaryAwardSpec,
-) -> None:
+def test_bestiary_award_spec_not_enough_walkthroughs(spec: AwardSpec) -> None:
     user = UserFactory()
-    for _ in range(spec.required - 1):
+    for _ in range(spec.requirement.min_walkthroughs - 1):
         WalkthroughFactory(
             author=user,
             status=WalkthroughStatus.APPROVED,
             walkthrough_type=WalkthroughType.TEXT,
         )
-    assert spec.check_eligible(user, tier=None) is False
+    assert spec.requirement(user) is False

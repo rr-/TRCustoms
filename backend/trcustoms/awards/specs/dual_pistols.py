@@ -1,24 +1,23 @@
-from trcustoms.awards.specs.base import BaseAwardSpec
-from trcustoms.users.models import User
+from collections.abc import Iterable
+
+from trcustoms.awards.requirements.impl import (
+    AuthoredLevelsRatingCountRequirement,
+)
+from trcustoms.awards.specs.base import AwardSpec
 
 
-class DualPistolsAwardSpec(BaseAwardSpec):
-    required = 10
+def dual_pistols() -> Iterable[AwardSpec]:
+    min_levels = 10
 
-    code = "dual_pistols"
-    title = "Dual Pistols"
-    descriptions = {
-        0: f"You released {required} levels that are up to standard."
-    }
-    position = 4
-
-    def check_eligible(self, user: User, tier: int) -> bool:
-        # User has released X or more approved levels with at least mixed
-        # rating.
-        return (
-            user.authored_levels.filter(
-                is_approved=True,
-                rating_class__position__gte=0,
-            ).count()
-            >= self.required
-        )
+    yield AwardSpec(
+        code="dual_pistols",
+        title="Dual Pistols",
+        description=(
+            "You released {min_levels} levels that are up to standard."
+        ),
+        requirement=AuthoredLevelsRatingCountRequirement(
+            min_rating=0,
+            min_levels=min_levels,
+            extrapolate_ratings=True,
+        ),
+    )

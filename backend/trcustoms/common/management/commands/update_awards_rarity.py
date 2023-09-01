@@ -1,7 +1,7 @@
 from django.core.management.base import BaseCommand
 
 from trcustoms.awards.logic import get_award_rarity, update_award_rarities
-from trcustoms.awards.specs import ALL_AWARDS_CLASSES
+from trcustoms.awards.specs import ALL_AWARD_SPECS
 
 
 class Command(BaseCommand):
@@ -11,10 +11,7 @@ class Command(BaseCommand):
         update_award_rarities()
 
         align = 30
-        for spec_cls in sorted(
-            ALL_AWARDS_CLASSES, key=lambda cls: cls.position
-        ):
-            spec = spec_cls()
+        for spec in sorted(ALL_AWARD_SPECS, key=lambda cls: cls.position):
             for tier in spec.supported_tiers:
                 rarity = get_award_rarity(spec.code, tier)
                 if tier:
