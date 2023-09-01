@@ -1,53 +1,78 @@
-from collections import defaultdict
-from dataclasses import dataclass
+from collections.abc import Iterable
 
-from trcustoms.awards.specs.base import BaseAwardSpec
-from trcustoms.users.models import User
-
-
-@dataclass
-class Requirement:
-    count: int
-    rating: int
+from trcustoms.awards.requirements.impl import (
+    AuthoredLevelsRatingCountRequirement,
+)
+from trcustoms.awards.specs.base import AwardSpec
 
 
-class DragonStatueAwardSpec(BaseAwardSpec):
-    extrapolate_ratings = True
-    requirements = {
-        1: [Requirement(count=1, rating=2), Requirement(count=3, rating=1)],
-        2: [Requirement(count=1, rating=3), Requirement(count=3, rating=2)],
-        3: [Requirement(count=1, rating=4), Requirement(count=5, rating=3)],
-        4: [Requirement(count=1, rating=5), Requirement(count=5, rating=4)],
-        5: [Requirement(count=3, rating=5)],
-    }
+def dragon_statue() -> Iterable[AwardSpec]:
+    yield AwardSpec(
+        code="dragon_statue",
+        title="Dragon Statue",
+        tier=1,
+        description="You are a fine builder, so keep it up!",
+        requirement=(
+            AuthoredLevelsRatingCountRequirement(
+                extrapolate_ratings=True, min_levels=1, min_rating=2
+            )
+            | AuthoredLevelsRatingCountRequirement(
+                extrapolate_ratings=True, min_levels=3, min_rating=1
+            )
+        ),
+    )
 
-    code = "dragon_statue"
-    title = "Dragon Statue"
-    descriptions = {
-        1: "You are a fine builder, so keep it up!",
-        2: "You are a reliable builder.",
-        3: "You are a veteran builder.",
-        4: "You are an exceptional builder.",
-        5: "You have proven to be an extraordinary builder.",
-    }
-    position = 1
+    yield AwardSpec(
+        code="dragon_statue",
+        title="Dragon Statue",
+        tier=2,
+        description="You are a reliable builder.",
+        requirement=(
+            AuthoredLevelsRatingCountRequirement(
+                extrapolate_ratings=True, min_levels=1, min_rating=3
+            )
+            | AuthoredLevelsRatingCountRequirement(
+                extrapolate_ratings=True, min_levels=3, min_rating=2
+            )
+        ),
+    )
 
-    def check_eligible(self, user: User, tier: int) -> bool:
-        authored_level_rating_counts = defaultdict(int)
-        for rating_class in user.authored_levels.values_list(
-            "rating_class__position", flat=True
-        ):
-            if not rating_class:
-                continue
-            if self.extrapolate_ratings:
-                for num in range(1, rating_class + 1):
-                    authored_level_rating_counts[num] += 1
-            else:
-                authored_level_rating_counts[rating_class] += 1
+    yield AwardSpec(
+        code="dragon_statue",
+        title="Dragon Statue",
+        tier=3,
+        description="You are a veteran builder.",
+        requirement=(
+            AuthoredLevelsRatingCountRequirement(
+                extrapolate_ratings=True, min_levels=1, min_rating=4
+            )
+            | AuthoredLevelsRatingCountRequirement(
+                extrapolate_ratings=True, min_levels=5, min_rating=3
+            )
+        ),
+    )
 
-        requirements = self.requirements[tier]
-        return any(
-            authored_level_rating_counts[requirement.rating]
-            >= requirement.count
-            for requirement in requirements
-        )
+    yield AwardSpec(
+        code="dragon_statue",
+        title="Dragon Statue",
+        tier=4,
+        description="You are an exceptional builder.",
+        requirement=(
+            AuthoredLevelsRatingCountRequirement(
+                extrapolate_ratings=True, min_levels=1, min_rating=5
+            )
+            | AuthoredLevelsRatingCountRequirement(
+                extrapolate_ratings=True, min_levels=5, min_rating=4
+            )
+        ),
+    )
+
+    yield AwardSpec(
+        code="dragon_statue",
+        title="Dragon Statue",
+        tier=5,
+        description="You have proven to be an extraordinary builder.",
+        requirement=AuthoredLevelsRatingCountRequirement(
+            extrapolate_ratings=True, min_levels=3, min_rating=5
+        ),
+    )

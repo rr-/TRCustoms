@@ -1,23 +1,18 @@
 import pytest
 
-from trcustoms.awards.specs.scion import Requirement, ScionAwardSpec
+from trcustoms.awards.specs import AwardSpec, scion
 from trcustoms.users.tests.factories import UserFactory
 from trcustoms.walkthroughs.consts import WalkthroughStatus
 from trcustoms.walkthroughs.tests.factories import WalkthroughFactory
 
 
-@pytest.fixture(name="spec")
-def fixture_spec() -> None:
-    spec = ScionAwardSpec()
-    spec.requirements = {
-        1: Requirement(walkthroughs=1),
-        2: Requirement(walkthroughs=2),
-        3: Requirement(walkthroughs=3),
-    }
-    spec.descriptions = {
-        tier: f"Tier {tier} description" for tier in spec.requirements.keys()
-    }
-    return spec
+@pytest.fixture(name="specs")
+def fixture_specs() -> None:
+    specs = list(scion())
+    specs[0].requirement.min_walkthroughs = 1
+    specs[1].requirement.min_walkthroughs = 2
+    specs[2].requirement.min_walkthroughs = 3
+    return specs
 
 
 @pytest.mark.django_db
@@ -35,7 +30,7 @@ def fixture_spec() -> None:
     ],
 )
 def test_scion_award_spec(
-    spec: ScionAwardSpec,
+    specs: list[AwardSpec],
     approved_walkthroughs: int,
     unapproved_walkthroughs: int,
     expected_tier: int | None,
@@ -47,5 +42,5 @@ def test_scion_award_spec(
         WalkthroughFactory(
             author=user, status=WalkthroughStatus.PENDING_APPROVAL
         )
-    for tier in spec.supported_tiers:
-        assert spec.check_eligible(user, tier) is (tier <= expected_tier)
+    for spec in specs:
+        assert spec.requirement(user) is (spec.tier <= expected_tier)

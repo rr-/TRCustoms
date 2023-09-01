@@ -1,6 +1,11 @@
+from collections.abc import Iterable
+from itertools import groupby
+
 from django.core.cache import cache
 
-from trcustoms.awards.specs import ALL_AWARDS_CLASSES
+from trcustoms.awards.models import UserAward
+from trcustoms.awards.specs import ALL_AWARD_SPECS
+from trcustoms.awards.specs.base import AwardSpec
 from trcustoms.users.models import User
 
 
@@ -19,10 +24,8 @@ def update_award_rarity(award_code: str, tier: int) -> int:
 
 
 def update_award_rarities() -> None:
-    for spec_cls in ALL_AWARDS_CLASSES:
-        spec = spec_cls()
-        for tier in spec.supported_tiers:
-            update_award_rarity(spec_cls.code, tier)
+    for spec in ALL_AWARD_SPECS:
+        update_award_rarity(spec.code, spec.tier)
 
 
 def get_award_rarity(award_code: str, tier: int) -> int:
@@ -32,19 +35,66 @@ def get_award_rarity(award_code: str, tier: int) -> int:
     return rarity
 
 
-def update_awards(user: User, update_rarity: bool = True) -> None:
-    user_awards = {
-        award.code: award.position for award in user.awards.iterator()
-    }
+def update_user_award_tier(
+    user: User,
+    award_code: str,
+    award_spec: AwardSpec | None,
+) -> None:
+    if not award_spec:
+        UserAward.objects.filter(user=user, code=award_code).delete()
+        return
 
-    for spec_cls in ALL_AWARDS_CLASSES:
-        spec = spec_cls()
-        current_tier = user_awards.get(spec_cls.code) or 0
-        max_eligible_tier = -1
-        for tier in spec.supported_tiers:
-            if spec.check_eligible(user, tier):
-                max_eligible_tier = max(max_eligible_tier, tier)
-        if max_eligible_tier != -1 and max_eligible_tier >= current_tier:
-            spec.grant_to_user(user, tier=max_eligible_tier)
+    UserAward.objects.update_or_create(
+        user=user,
+        code=award_spec.code,
+        defaults=dict(
+            tier=award_spec.tier,
+            title=award_spec.title,
+            position=ALL_AWARD_SPECS.index(award_spec),
+            description=award_spec.description,
+        ),
+    )
+
+
+def get_max_eligible_spec(
+    user: User, specs: Iterable[AwardSpec]
+) -> tuple[int, AwardSpec | None]:
+    specs = list(specs)
+
+    if len(set(spec.code for spec in specs)) != 1:
+        raise RuntimeError("cannot mix award types in this context")
+
+    max_eligible_spec = None
+    for spec in specs:
+        if spec.requirement(user) and (
+            max_eligible_spec is None or spec.tier > max_eligible_spec.tier
+        ):
+            max_eligible_spec = spec
+    return (
+        max_eligible_spec.tier if max_eligible_spec else -1,
+        max_eligible_spec,
+    )
+
+
+def update_awards(user: User, update_rarity: bool = True) -> None:
+    user_awards = {award.code: award.tier for award in user.awards.iterator()}
+
+    for code, group in groupby(ALL_AWARD_SPECS, lambda spec: spec.code):
+        group = list(group)
+        current_tier = user_awards.get(code, -1)
+        max_eligible_tier, max_eligible_spec = get_max_eligible_spec(
+            user, group
+        )
+
+        if max_eligible_tier > current_tier or (
+            max_eligible_tier < current_tier
+            and any(spec.can_be_removed for spec in group)
+        ):
+            update_user_award_tier(
+                user=user,
+                award_code=code,
+                award_spec=max_eligible_spec,
+            )
             if update_rarity:
-                update_award_rarity(spec.code, tier=max_eligible_tier)
+                update_award_rarity(code, tier=current_tier)
+                update_award_rarity(code, tier=max_eligible_tier)

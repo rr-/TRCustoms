@@ -1,43 +1,55 @@
-from dataclasses import dataclass
+from collections.abc import Iterable
 
-from trcustoms.awards.specs.base import BaseAwardSpec
-from trcustoms.users.models import User
-from trcustoms.walkthroughs.consts import WalkthroughStatus
-
-
-@dataclass
-class Requirement:
-    walkthroughs: int
-
-    def passes(self, walkthroughs) -> bool:
-        return walkthroughs >= self.walkthroughs
+from trcustoms.awards.requirements.impl import (
+    AuthoredWalkthroughsAwardRequirement,
+)
+from trcustoms.awards.specs.base import AwardSpec
 
 
-class ScionAwardSpec(BaseAwardSpec):
-    requirements = {
-        1: Requirement(walkthroughs=50),
-        2: Requirement(walkthroughs=100),
-        3: Requirement(walkthroughs=250),
-        4: Requirement(walkthroughs=500),
-        5: Requirement(walkthroughs=1000),
-    }
-
-    code = "scion"
-    title = "Scion"
-    descriptions = {
-        1: (
+def scion() -> Iterable[AwardSpec]:
+    yield AwardSpec(
+        code="scion",
+        title="Scion",
+        tier=1,
+        description=(
             "A baseline of quality guides has been set, "
             "will you be able to surpass it?"
         ),
-        2: "Your work as a guide is proving to be more than just a hobby.",
-        3: "Your dedication to the community is impressive.",
-        4: "You have saved others countless hours.",
-        5: "Being a guide is simply your way of life.",
-    }
-    position = 3
+        requirement=AuthoredWalkthroughsAwardRequirement(min_walkthroughs=50),
+    )
 
-    def check_eligible(self, user: User, tier: int) -> bool:
-        walkthroughs = user.authored_walkthroughs.filter(
-            status=WalkthroughStatus.APPROVED,
-        ).count()
-        return self.requirements[tier].passes(walkthroughs=walkthroughs)
+    yield AwardSpec(
+        code="scion",
+        title="Scion",
+        tier=2,
+        description=(
+            "Your work as a guide is proving to be more than just a hobby."
+        ),
+        requirement=AuthoredWalkthroughsAwardRequirement(min_walkthroughs=100),
+    )
+
+    yield AwardSpec(
+        code="scion",
+        title="Scion",
+        tier=3,
+        description="Your dedication to the community is impressive.",
+        requirement=AuthoredWalkthroughsAwardRequirement(min_walkthroughs=250),
+    )
+
+    yield AwardSpec(
+        code="scion",
+        title="Scion",
+        tier=4,
+        description="You have saved others countless hours.",
+        requirement=AuthoredWalkthroughsAwardRequirement(min_walkthroughs=500),
+    )
+
+    yield AwardSpec(
+        code="scion",
+        title="Scion",
+        tier=5,
+        description="Being a guide is simply your way of life.",
+        requirement=AuthoredWalkthroughsAwardRequirement(
+            min_walkthroughs=1000
+        ),
+    )
