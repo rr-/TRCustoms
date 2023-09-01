@@ -1,6 +1,6 @@
 import pytest
 
-from trcustoms.awards.specs import WernersBrokenGlassesAwardSpec
+from trcustoms.awards.specs import AwardSpec, werners_broken_glasses
 from trcustoms.levels.tests.factories import LevelFactory
 from trcustoms.reviews.tests.factories import ReviewFactory
 from trcustoms.users.tests.factories import UserFactory
@@ -8,9 +8,9 @@ from trcustoms.users.tests.factories import UserFactory
 
 @pytest.fixture(name="spec")
 def fixture_spec() -> None:
-    spec = WernersBrokenGlassesAwardSpec()
-    spec.required_position = 2
-    spec.required_count = 2
+    spec = list(werners_broken_glasses())[0]
+    spec.requirement.max_position = 2
+    spec.requirement.min_reviews = 2
     return spec
 
 
@@ -24,7 +24,7 @@ def fixture_spec() -> None:
     ],
 )
 def test_werners_broken_glasses_award_spec(
-    spec: WernersBrokenGlassesAwardSpec,
+    spec: AwardSpec,
     review_positions: list[int],
     expected: bool,
 ) -> None:
@@ -34,4 +34,4 @@ def test_werners_broken_glasses_award_spec(
         for n in range(position - 1):
             ReviewFactory(level=level, author=UserFactory(username=f"john{n}"))
         ReviewFactory(level=level, author=user)
-    assert spec.check_eligible(user, tier=None) is expected
+    assert spec.requirement(user) is expected

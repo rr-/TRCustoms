@@ -1,33 +1,32 @@
-from trcustoms.awards.specs.base import BaseAwardSpec
-from trcustoms.users.models import User
-from trcustoms.walkthroughs.consts import WalkthroughStatus
+from collections.abc import Iterable
+
+from trcustoms.awards.requirements.impl import (
+    AuthoredLevelsAwardRequirement,
+    AuthoredReviewsAwardRequirement,
+    AuthoredWalkthroughsAwardRequirement,
+)
+from trcustoms.awards.specs.base import AwardSpec
 
 
-class SanglyphAwardSpec(BaseAwardSpec):
-    code = "sanglyph"
-    title = "The Sanglyph"
-    descriptions = {
-        0: (
+def sanglyph() -> Iterable[AwardSpec]:
+    min_levels = 3
+    min_reviews = 30
+    min_walkthroughs = 10
+
+    yield AwardSpec(
+        code="sanglyph",
+        title="The Sanglyph",
+        description=(
             "You built levels, reviewed levels, and guided others through "
             "levels. Respect!"
+        ),
+        requirement=AuthoredLevelsAwardRequirement(
+            min_levels=min_levels,
         )
-    }
-    position = 11
-
-    required_levels = 3
-    required_reviews = 30
-    required_walkthroughs = 10
-
-    def check_eligible(self, user: User, tier: int) -> bool:
-        # Built 3 levels, reviewed 30 levels, and released 10 walkthroughs.
-        # With the levels and walkthroughs being approved of course.
-        levels = user.authored_levels.filter(is_approved=True)
-        reviews = user.reviewed_levels
-        walkthroughs = user.authored_walkthroughs.filter(
-            status=WalkthroughStatus.APPROVED
+        & AuthoredReviewsAwardRequirement(
+            min_reviews=min_reviews,
         )
-        return (
-            levels.count() >= self.required_levels
-            and reviews.count() >= self.required_reviews
-            and walkthroughs.count() >= self.required_walkthroughs
-        )
+        & AuthoredWalkthroughsAwardRequirement(
+            min_walkthroughs=min_walkthroughs,
+        ),
+    )

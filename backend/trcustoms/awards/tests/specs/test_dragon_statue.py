@@ -1,34 +1,41 @@
 import pytest
 
-from trcustoms.awards.specs.dragon_statue import (
-    DragonStatueAwardSpec,
-    Requirement,
+from trcustoms.awards.logic import get_max_eligible_spec
+from trcustoms.awards.requirements.impl import (
+    AuthoredLevelsRatingCountRequirement,
 )
+from trcustoms.awards.specs import AwardSpec, dragon_statue
 from trcustoms.common.tests.factories import RatingClassFactory
 from trcustoms.levels.tests.factories import LevelFactory
 from trcustoms.users.tests.factories import UserFactory
 
 
-@pytest.fixture(name="spec")
-def fixture_spec() -> None:
-    spec = DragonStatueAwardSpec()
-    spec.requirements = {
-        1: [Requirement(count=1, rating=2), Requirement(count=3, rating=1)],
-        2: [Requirement(count=1, rating=3), Requirement(count=2, rating=2)],
-    }
-    spec.descriptions = {
-        tier: f"Tier {tier} description" for tier in spec.requirements.keys()
-    }
-    return spec
+@pytest.fixture(name="specs")
+def fixture_specs() -> None:
+    spec1 = list(dragon_statue())[0]
+    spec1.requirement = AuthoredLevelsRatingCountRequirement(
+        extrapolate_ratings=True, min_levels=1, min_rating=2
+    ) | AuthoredLevelsRatingCountRequirement(
+        extrapolate_ratings=True, min_levels=3, min_rating=1
+    )
+
+    spec2 = list(dragon_statue())[1]
+    spec2.requirement = AuthoredLevelsRatingCountRequirement(
+        extrapolate_ratings=True, min_levels=1, min_rating=3
+    ) | AuthoredLevelsRatingCountRequirement(
+        extrapolate_ratings=True, min_levels=2, min_rating=2
+    )
+
+    return [spec1, spec2]
 
 
 @pytest.mark.django_db
 @pytest.mark.parametrize(
     "level_ratings, expected_tier",
     [
-        ([1], 0),
+        ([1], -1),
         ([2], 1),
-        ([1, 1], 0),
+        ([1, 1], -1),
         ([1, 2], 1),
         ([1, 1, 1], 1),
         ([1, 1, 2], 1),
@@ -42,7 +49,7 @@ def fixture_spec() -> None:
     ],
 )
 def test_dragon_statue_award_spec(
-    spec: DragonStatueAwardSpec,
+    specs: list[AwardSpec],
     level_ratings: list[int],
     expected_tier: int,
 ) -> None:
@@ -52,9 +59,6 @@ def test_dragon_statue_award_spec(
         LevelFactory(authors=[user], rating_class=rating_class)
     assert user.authored_levels.count() == len(level_ratings)
 
-    max_eligible_tier = 0
-    for tier in spec.supported_tiers:
-        if spec.check_eligible(user, tier):
-            max_eligible_tier = tier
+    actual_tier, _actual_spec = get_max_eligible_spec(user, specs)
 
-    assert max_eligible_tier == expected_tier
+    assert actual_tier == expected_tier
