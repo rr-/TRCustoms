@@ -8,6 +8,9 @@ from trcustoms.users.models import User
 
 
 class PlaylistItemQuerySet(models.QuerySet):
+    def finished(self) -> models.QuerySet:
+        return self.filter(status=PlaylistStatus.FINISHED)
+
     def played(self) -> models.QuerySet:
         return self.filter(
             status__in=[
