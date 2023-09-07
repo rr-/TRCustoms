@@ -107,6 +107,26 @@ class AuthoredLevelsSustainableQualityRequirement(BaseAwardRequirement):
         )
 
 
+class AuthoredLevelsFarApartRequirement(BaseAwardRequirement):
+    def __init__(self, min_time_apart: timedelta) -> None:
+        self.min_time_apart = min_time_apart
+
+    def check_eligible(self, user: User) -> bool:
+        # User has released two approved levels that are more than
+        # min_time_apart
+        good_level_creation_times = sorted(
+            user.authored_levels.filter(
+                is_approved=True,
+            ).values_list("created", flat=True)
+        )
+        return any(
+            time2 - time1 >= self.min_time_apart
+            for time1, time2 in zip(
+                good_level_creation_times, good_level_creation_times[1:]
+            )
+        )
+
+
 class AuthoredWalkthroughsAwardRequirement(BaseAwardRequirement):
     def __init__(
         self,
@@ -207,17 +227,23 @@ class AuthoredReviewsTimingAwardRequirement(BaseAwardRequirement):
 
 
 class AuthoredReviewsPositionAwardRequirement(BaseAwardRequirement):
-    def __init__(self, max_position: int, min_reviews: int) -> None:
+    def __init__(
+        self,
+        min_reviews: int,
+        min_position: int | None = None,
+        max_position: int | None = None,
+    ) -> None:
+        self.min_position = min_position
         self.max_position = max_position
         self.min_reviews = min_reviews
 
     def check_eligible(self, user: User) -> bool:
-        return (
-            user.reviewed_levels.filter(
-                position__lte=self.max_position
-            ).count()
-            >= self.min_reviews
-        )
+        queryset = user.reviewed_levels
+        if self.min_position is not None:
+            queryset = queryset.filter(position__gte=self.min_position)
+        if self.max_position is not None:
+            queryset = queryset.filter(position__lte=self.max_position)
+        return queryset.count() >= self.min_reviews
 
 
 class AuthoredReviewsSameBuilderAwardRequirement(BaseAwardRequirement):
@@ -231,3 +257,35 @@ class AuthoredReviewsSameBuilderAwardRequirement(BaseAwardRequirement):
             .filter(total__gte=self.min_reviews)
             .exists()
         )
+
+
+class PlayedLevelsAwardRequirement(BaseAwardRequirement):
+    def __init__(self, min_levels: int) -> None:
+        self.min_levels = min_levels
+
+    def check_eligible(self, user: User) -> bool:
+        return user.playlist_items.finished().count() >= self.min_levels
+
+
+class PlayedLevelsWithRatingAwardRequirement(BaseAwardRequirement):
+    def __init__(
+        self,
+        min_levels: int,
+        min_rating: int | None = None,
+        max_rating: int | None = None,
+    ) -> None:
+        self.min_levels = min_levels
+        self.min_rating = min_rating
+        self.max_rating = max_rating
+
+    def check_eligible(self, user: User) -> bool:
+        queryset = user.playlist_items.played()
+        if self.max_rating is not None:
+            queryset = queryset.filter(
+                level__rating_class__position__lte=self.max_rating
+            )
+        if self.min_rating is not None:
+            queryset = queryset.filter(
+                level__rating_class__position__gte=self.min_rating
+            )
+        return queryset.count() >= self.min_levels
