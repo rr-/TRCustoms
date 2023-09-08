@@ -11,7 +11,7 @@ def chirugai() -> Iterable[AwardSpec]:
     min_time_apart = timedelta(days=10 * 365)
 
     yield AwardSpec(
-        code="Chirugai",
+        code="chirugai",
         title="Chirugai",
         description="You have returned after years of inactivity.",
         requirement=AuthoredLevelsFarApartRequirement(
