@@ -13,7 +13,7 @@ def dual_pistols() -> Iterable[AwardSpec]:
         code="dual_pistols",
         title="Dual Pistols",
         description=(
-            "You released {min_levels} levels that are up to standard."
+            f"You released {min_levels} levels that are up to standard."
         ),
         requirement=AuthoredLevelsRatingCountRequirement(
             min_rating=0,
