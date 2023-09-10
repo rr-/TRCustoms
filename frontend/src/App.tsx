@@ -6,6 +6,7 @@ import { NavBar } from "src/components/common/NavBar";
 import { PageMetadata } from "src/components/common/PageMetadata";
 import { ScrollToTop } from "src/components/common/ScrollToTop";
 import { AboutPage } from "src/components/pages/AboutPage";
+import { AwardsGuidePage } from "src/components/pages/AwardsGuidePage";
 import { EmailConfirmationPage } from "src/components/pages/EmailConfirmationPage";
 import { Error403Page } from "src/components/pages/ErrorPage";
 import { Error404Page } from "src/components/pages/ErrorPage";
@@ -35,7 +36,6 @@ import { SettingsPage } from "src/components/pages/SettingsPage";
 import { TagListPage } from "src/components/pages/TagListPage";
 import { TermsAndConditionsPage } from "src/components/pages/TermsAndConditionsPage";
 import { TextFormattingGuidelinesPage } from "src/components/pages/TextFormattingGuidelinesPage";
-import { TrophiesPage } from "src/components/pages/TrophiesPage";
 import { UserEditPage } from "src/components/pages/UserEditPage";
 import { UserListPage } from "src/components/pages/UserListPage";
 import { UserPage } from "src/components/pages/UserPage";
@@ -134,7 +134,7 @@ const App = () => {
               element={<TextFormattingGuidelinesPage />}
             />
             <Route path="/about" element={<AboutPage />} />
-            <Route path="/about/trophies" element={<TrophiesPage />} />
+            <Route path="/about/awards" element={<AwardsGuidePage />} />
             <Route path="/about/terms" element={<TermsAndConditionsPage />} />
             <Route path="/403" element={<Error403Page />} />
             <Route path="/404" element={<Error404Page />} />
