@@ -1,10 +1,8 @@
-import { useQueryClient } from "react-query";
 import { useQuery } from "react-query";
 import { ConfirmModal } from "src/components/modals/ConfirmModal";
 import { PlaylistItemStatus } from "src/services/PlaylistService";
 import { PlaylistService } from "src/services/PlaylistService";
 import type { PlaylistItemDetails } from "src/services/PlaylistService";
-import { resetQueries } from "src/utils/misc";
 import { showAlertOnError } from "src/utils/misc";
 
 interface PlaylistAddModalProps {
@@ -20,7 +18,6 @@ const PlaylistAddModal = ({
   userId,
   levelId,
 }: PlaylistAddModalProps) => {
-  const queryClient = useQueryClient();
   const playlistItemResult = useQuery<PlaylistItemDetails, Error>(
     ["playlists", PlaylistService.get, userId, levelId],
     async () => PlaylistService.get(userId, levelId)
@@ -44,7 +41,6 @@ const PlaylistAddModal = ({
       } else {
         await PlaylistService.create(userId, { levelId, status });
       }
-      //resetQueries(queryClient, ["playlists"]);
     });
   };
 
