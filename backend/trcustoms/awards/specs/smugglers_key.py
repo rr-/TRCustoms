@@ -9,17 +9,17 @@ from trcustoms.awards.specs.base import AwardSpec
 
 def smugglers_key() -> Iterable[AwardSpec]:
     min_levels = 5
-    max_review_age = timedelta(hours=24)
+    max_hours = 24
 
     yield AwardSpec(
         code="smugglers_key",
         title="Smuggler's Key",
         description=(
-            f"You reviewed {min_levels} levels on the same "
-            "or next day of release."
+            f"You reviewed {min_levels} levels within {max_hours} hours "
+            "of release."
         ),
         requirement=AuthoredReviewsTimingAwardRequirement(
             min_levels=min_levels,
-            max_review_age=max_review_age,
+            max_review_age=timedelta(hours=max_hours),
         ),
     )
