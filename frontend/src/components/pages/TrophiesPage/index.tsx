@@ -62,6 +62,76 @@ const StandartArtifacts = [
     description:
       "Build 3 levels, review 30 levels, and release 10 walkthroughs.",
   },
+  {
+    name: "Gate Key",
+    description: "50 users must add your level to their playlist.",
+  },
+  {
+    name: "Smuggler's Key",
+    description: "Review a level 24 hours from release.",
+  },
+  {
+    name: "Werner's Notebook",
+    description: "Review 5 levels belonging to one author.",
+  },
+  {
+    name: "Nightmare Stone",
+    description: "3 of your levels should have at least 1 tag.",
+  },
+  {
+    name: "Magic Stones",
+    description: "Top up 3 of your levels with tags.",
+  },
+  {
+    name: "Wraith Stone",
+    description: "Mark 20 levels in your playlist as Finished.",
+  },
+  {
+    name: "Excalibur",
+    description: "Mark 100 levels in your playlist as Finished.",
+  },
+  {
+    name: "Mjölnir",
+    description: "Mark 250 levels in your playlist as Finished.",
+  },
+  {
+    name: "Demon's Heart",
+    description:
+      "Mark 50 negatively reviewed levels in your playlist as Finished.",
+  },
+  {
+    name: "Spear of Destiny",
+    description:
+      "Mark 50 positively reviewed levels in your playlist as Finished.",
+  },
+  {
+    name: "Chirugai",
+    description:
+      "Released a level, and then release another level after 10 years.",
+  },
+  {
+    name: "First Obscura Painting",
+    description: "Review 20 levels that have a review amount between 1 and 5.",
+  },
+  {
+    name: "Second Obscura Painting",
+    description: "Review 20 levels that have a review amount between 6 and 10.",
+  },
+  {
+    name: "Third Obscura Painting",
+    description:
+      "Review 20 levels that have a review amount between 11 and 15.",
+  },
+  {
+    name: "Fourth Obscura Painting",
+    description:
+      "Review 20 levels that have a review amount between 16 and 20.",
+  },
+  {
+    name: "Fifth Obscura Painting",
+    description:
+      "Review 20 levels that have a review amount between 21 and 25.",
+  },
 ];
 
 const TrophiesPage = () => {
