@@ -134,7 +134,7 @@ const StandartArtifacts = [
   },
 ];
 
-const TrophiesPage = () => {
+const AwardsGuidePage = () => {
   usePageMetadata(
     () => ({
       ready: true,
@@ -235,4 +235,4 @@ const TrophiesPage = () => {
   );
 };
 
-export { TrophiesPage };
+export { AwardsGuidePage };

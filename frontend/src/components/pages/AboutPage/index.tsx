@@ -79,7 +79,7 @@ const About: LegaleseEntry = {
           description: (
             <>
               To find out how to collect items, click{" "}
-              <Link to={`/about/trophies`}>here</Link> for a guide.
+              <Link to={`/about/awards`}>here</Link> for a guide.
             </>
           ),
         },
