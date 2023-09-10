@@ -8,7 +8,7 @@ from trcustoms.awards.specs.base import AwardSpec
 
 
 def smugglers_key() -> Iterable[AwardSpec]:
-    min_levels = 50
+    min_levels = 5
     max_review_age = timedelta(hours=24)
 
     yield AwardSpec(
