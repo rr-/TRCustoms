@@ -6,26 +6,26 @@
   grid-template-columns: var(--layout-split, minmax(300px, 25%) 1fr);
 }
 .wrapper.reverse {
-  grid-template-columns: 1fr minmax(300px, 25%);
+  grid-template-columns: var(--layout-split, 1fr minmax(300px, 25%));
   grid-auto-flow: dense;
 }
 .wrapper.stacked {
-  grid-template-columns: 25%) 1fr;
+  grid-template-columns: 1fr;
 }
 
 .wrapper.regular .header {
   grid-column: span 2;
 }
 .wrapper.reverse .sidebar {
-  grid-column: 2;
+  order: 2;
 }
 .wrapper.reverse .content {
-  grid-column: 1;
+  order: 1;
 }
 
 @media (max-device-width: 640px) {
   .wrapper {
-    grid-template-columns: var(--layout-split, 1fr) !important;
+    --layout-split: 1fr;
   }
   .header {
     grid-column: 1 !important;
