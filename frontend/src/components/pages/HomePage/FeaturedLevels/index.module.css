@@ -26,6 +26,7 @@
   display: block;
   position: relative;
   transition: opacity 300ms;
+  flex: 1;
 }
 .coverLink:hover {
   opacity: 0.9;
@@ -39,9 +40,11 @@
 }
 
 .details {
-  display: grid;
-  grid-template-columns: 1fr 2fr;
+  display: flex;
   gap: 1rem;
+}
+.content {
+  flex: 2;
 }
 
 .levelTitle {

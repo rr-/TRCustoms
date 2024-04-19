@@ -61,7 +61,7 @@ const FeaturedLevelView = ({
             </LevelLink>
           )}
 
-          <div>
+          <div className={styles.content}>
             <h3 className={styles.levelTitle}>
               {level ? (
                 <>
