@@ -261,11 +261,13 @@ EMAIL_HOST_PASSWORD = get_setting("EMAIL_HOST_PASSWORD")
 EMAIL_USE_TLS = get_setting("EMAIL_USE_TLS") == "1"
 EMAIL_USE_SSL = get_setting("EMAIL_USE_SSL") == "1"
 
-AWS_ACCESS_KEY_ID = get_setting("AWS_ACCESS_KEY_ID")
-AWS_SECRET_ACCESS_KEY = get_setting("AWS_SECRET_ACCESS_KEY")
-AWS_STORAGE_BUCKET_NAME = get_setting("AWS_STORAGE_BUCKET_NAME")
-AWS_S3_ENDPOINT_URL = get_setting("AWS_S3_ENDPOINT_URL")
-AWS_S3_CUSTOM_DOMAIN = get_setting("AWS_S3_CUSTOM_DOMAIN")
+AWS_ACCESS_KEY_ID = get_setting("AWS_ACCESS_KEY_ID", allow_null=True)
+AWS_SECRET_ACCESS_KEY = get_setting("AWS_SECRET_ACCESS_KEY", allow_null=True)
+AWS_STORAGE_BUCKET_NAME = get_setting(
+    "AWS_STORAGE_BUCKET_NAME", allow_null=True
+)
+AWS_S3_ENDPOINT_URL = get_setting("AWS_S3_ENDPOINT_URL", allow_null=True)
+AWS_S3_CUSTOM_DOMAIN = get_setting("AWS_S3_CUSTOM_DOMAIN", allow_null=True)
 AWS_S3_OBJECT_PARAMETERS = {"CacheControl": "max-age=86400"}
 AWS_MEDIA_LOCATION = "media"
 USE_AWS_STORAGE = get_bool_setting("USE_AWS_STORAGE")
