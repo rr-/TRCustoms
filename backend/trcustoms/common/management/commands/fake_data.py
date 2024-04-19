@@ -118,23 +118,27 @@ def create_fake_level() -> Level:
 
 
 def create_fake_users(n: int) -> None:
-    for _i in range(n):
-        create_fake_user()
+    if n:
+        for _i in range(n):
+            create_fake_user()
 
 
 def create_fake_levels(n: int) -> None:
-    for _i in range(int(n * 0.3)):
-        create_fake_level_tag()
-    for _i in range(n):
-        create_fake_level()
+    ntags = int(n * 0.3)
+    if ntags:
+        for _i in range(ntags):
+            create_fake_level_tag()
+    if n:
+        for _i in range(n):
+            create_fake_level()
 
 
 class Command(BaseCommand):
     help = "Populate the database with random users and levels."
 
     def add_arguments(self, parser):
-        parser.add_argument("-u", "--users", type=int)
-        parser.add_argument("-l", "--levels", type=int)
+        parser.add_argument("-u", "--users", type=int, default=0)
+        parser.add_argument("-l", "--levels", type=int, default=0)
         parser.add_argument("--delete-users", action="store_true")
         parser.add_argument("--delete-levels", action="store_true")
 
