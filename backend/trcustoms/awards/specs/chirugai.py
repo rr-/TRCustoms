@@ -4,7 +4,7 @@ from datetime import timedelta
 from trcustoms.awards.requirements.impl import (
     AuthoredLevelsFarApartRequirement,
 )
-from trcustoms.awards.specs import AwardSpec
+from trcustoms.awards.specs.base import AwardSpec
 
 
 def chirugai() -> Iterable[AwardSpec]:
