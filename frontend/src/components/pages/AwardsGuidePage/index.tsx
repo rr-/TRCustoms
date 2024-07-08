@@ -68,7 +68,7 @@ const StandartArtifacts = [
   },
   {
     name: "Smuggler's Key",
-    description: "Review a level 24 hours from release.",
+    description: "Review 5 levels within 24 hours from their release.",
   },
   {
     name: "Werner's Notebook",
