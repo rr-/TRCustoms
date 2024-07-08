@@ -1,5 +1,5 @@
-var cacheManager = require('cache-manager');
-const fsStore = require('cache-manager-fs-hash');
+var cacheManager = require("cache-manager");
+const fsStore = require("cache-manager-fs-hash");
 
 const env = {
   CACHE_TTL: Number(process.env.CACHE_TTL),
@@ -12,7 +12,7 @@ module.exports = {
       store: fsStore,
       ttl: env.CACHE_TTL || 60,
       options: {
-        path: env.CACHE_DIR || '/tmp',
+        path: env.CACHE_DIR || "/tmp",
         ttl: env.CACHE_TTL || 60,
         subdirs: true,
         zip: true,

@@ -3,7 +3,7 @@ from collections.abc import Iterable
 from trcustoms.awards.requirements.impl import (
     AuthoredReviewsPositionAwardRequirement,
 )
-from trcustoms.awards.specs import AwardSpec
+from trcustoms.awards.specs.base import AwardSpec
 
 
 def obscura_paintings() -> Iterable[AwardSpec]:
