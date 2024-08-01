@@ -5,6 +5,7 @@ x-backend-environment: &base-backend-environment
   - DEBUG=${DEBUG}
   - DEBUG_SQL=${DEBUG_SQL}
   - HOST_SITE=${HOST_SITE}
+  - ADMIN_DIR=${ADMIN_DIR}
   - POSTGRES_DB=trcustoms
   - POSTGRES_USER=root
   - POSTGRES_PASSWORD=root
@@ -101,13 +102,13 @@ services:
   trcustoms-nginx:
     <<: *base-trcustoms
     image: nginx
+    environment: *base-backend-environment
     volumes:
       - ./services/nginx/nginx_prerender_map.conf:/etc/nginx/nginx_prerender_map.conf:ro
       - ./services/nginx/nginx_prerender_server.conf:/etc/nginx/nginx_prerender_server.conf:ro
-      - ./services/nginx/nginx_dev.conf:/etc/nginx/nginx.conf:ro
+      - ./services/nginx/nginx_dev.conf.template:/etc/nginx/nginx.conf.template:ro
       - ./backend/volumes/uploads/:/app/uploads/
       - ./backend/volumes/django_static/:/app/django_static/
-    command: ["nginx", "-g", "daemon off;"]
     networks:
       - trcustoms
     ports:
@@ -117,6 +118,7 @@ services:
         target: 8000
     depends_on:
       - trcustoms
+    command: /bin/bash -c 'envsubst "\$${ADMIN_DIR}" < /etc/nginx/nginx.conf.template > /etc/nginx/nginx.conf && nginx -g "daemon off;"'
 
   trcustoms-prerender:
     <<: *base-trcustoms-backend

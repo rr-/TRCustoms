@@ -52,7 +52,7 @@ router.register(r"walkthroughs", WalkthroughViewSet)
 urlpatterns = [
     path("api/auth/token/", TokenObtainPairView.as_view()),
     path("api/auth/token/refresh/", TokenRefreshView.as_view()),
-    path("admin/", admin.site.urls),
+    path(settings.ADMIN_DIR + "/", admin.site.urls),
     path("api/", include(router.urls)),
     path("api/level_genres/", GenreListView.as_view()),
     path("api/level_genres/<int:pk>/", GenreDetailView.as_view()),
