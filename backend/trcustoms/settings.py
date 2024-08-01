@@ -227,6 +227,7 @@ STATICFILES_DIRS = [
 ]
 STATIC_ROOT = BASE_DIR / "django_static"
 
+ADMIN_DIR = get_setting("ADMIN_DIR")
 MEDIA_URL = "/uploads/"
 MEDIA_ROOT = BASE_DIR / "uploads"
 

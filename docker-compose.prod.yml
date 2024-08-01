@@ -5,6 +5,7 @@ x-backend-environment: &base-backend-environment
   - DEBUG=0
   - DEBUG_SQL=0
   - HOST_SITE=${HOST_SITE}
+  - ADMIN_DIR=${ADMIN_DIR}
   - POSTGRES_DB=trcustoms
   - POSTGRES_USER=root
   - POSTGRES_PASSWORD=root
@@ -85,6 +86,7 @@ services:
         - BUILD_DATE=${BUILD_DATE}
         - BUILD_VERSION=${BUILD_VERSION}
         - HOST_SITE=${HOST_SITE}
+        - ADMIN_DIR=${ADMIN_DIR}
     networks:
       - trcustoms
     ports:

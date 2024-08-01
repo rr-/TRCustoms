@@ -4,6 +4,7 @@ pid       /tmp/nginx.pid;
 events { }
 
 http {
+  include /etc/nginx/mime.types;
   keepalive_timeout     65;
 
   client_body_temp_path /tmp/client_temp;
@@ -19,7 +20,7 @@ http {
     server_name                        _;
 
     proxy_redirect                     off;
-    proxy_set_header Host              $http_host;
+    proxy_set_header Host              $host;
     proxy_set_header X-Real-IP         $remote_addr;
     proxy_set_header X-Forwarded-For   $proxy_add_x_forwarded_for;
     proxy_set_header X-Forwarded-Proto $scheme;
@@ -38,11 +39,23 @@ http {
         rewrite (.*) /prerenderio last;
       }
 
-      proxy_pass http://trcustoms-frontend:3000;
+      root   /usr/share/nginx/html;
+      index  index.html index.htm;
+      try_files $uri $uri/ /index.html;
     }
 
-    location ~ ^/(admin|api|uploads|django_static)(/.*)?$ {
+    location ~ ^/(${ADMIN_DIR}|api)(/.*)?$ {
       proxy_pass http://trcustoms:8000;
+    }
+
+    location /uploads/ {
+      autoindex on;
+      alias /app/backend/django_uploads/;
+    }
+
+    location /django_static/ {
+      autoindex on;
+      alias /app/backend/django_static/;
     }
 
     include /etc/nginx/nginx_prerender_server.conf;
