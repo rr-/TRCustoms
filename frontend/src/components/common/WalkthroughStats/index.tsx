@@ -32,10 +32,6 @@ const WalkthroughStats = () => {
     },
   ];
 
-  const maxLevelCount = Math.max(
-    ...config.stats.reviews.map((item) => item.level_count)
-  );
-
   const handleMouseEnter = (item: typeof stats[0]) => {
     setTooltip(
       `${item.title}: ${item.count} (${reprPercentage(
@@ -71,7 +67,7 @@ const WalkthroughStats = () => {
             onMouseEnter={() => handleMouseEnter(item)}
             onMouseLeave={() => handleMouseLeave(item)}
             style={{
-              width: `${(item.count * 100) / maxLevelCount}%`,
+              width: `${(item.count * 100) / config.stats.total_levels}%`,
             }}
           >
             <div
