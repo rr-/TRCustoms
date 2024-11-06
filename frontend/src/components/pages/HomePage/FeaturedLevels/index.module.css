@@ -8,17 +8,19 @@
   top: 0;
   right: 0;
   bottom: 0;
-  opacity: 0.15;
   background-size: cover;
   background-position: center;
-  transition: opacity 300ms;
-}
-.container:hover .background {
-  opacity: 0.35;
 }
 
 .foreground {
-  position: relative;
+  transition: background 500ms, backdrop-filter 500ms;
+  background: color-mix(in srgb, var(--box-bg-color), transparent 15%);
+  backdrop-filter: blur(0.25rem);
+  paint-order: stroke fill;
+}
+.container:hover .foreground {
+  background: color-mix(in srgb, var(--box-bg-color), transparent 35%);
+  backdrop-filter: blur(0.05rem);
 }
 
 .coverLink {

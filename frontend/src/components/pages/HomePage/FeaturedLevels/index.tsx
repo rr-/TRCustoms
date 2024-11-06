@@ -42,12 +42,12 @@ const FeaturedLevelView = ({
   const background = level?.screenshots?.[0]?.file?.url;
 
   return (
-    <Box className={styles.container}>
+    <div className={styles.container}>
       <div
         className={styles.background}
         style={background ? { backgroundImage: `url('${background}')` } : {}}
       />
-      <div className={styles.foreground}>
+      <Box className={styles.foreground}>
         <SectionHeader>{heading}</SectionHeader>
 
         <div className={styles.details}>
@@ -79,8 +79,8 @@ const FeaturedLevelView = ({
             )}
           </div>
         </div>
-      </div>
-    </Box>
+      </Box>
+    </div>
   );
 };
 
