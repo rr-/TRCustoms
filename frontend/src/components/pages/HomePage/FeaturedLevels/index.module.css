@@ -42,6 +42,10 @@
 .details {
   display: flex;
   gap: 1rem;
+  align-items: stretch;
+  position: relative;
+  overflow: hidden;
+  height: 10rem;
 }
 .content {
   flex: 2;
@@ -54,8 +58,8 @@
 .synopsis {
   overflow: hidden;
   display: -webkit-box;
-  -webkit-line-clamp: 5;
-  line-clamp: 5;
+  -webkit-line-clamp: 4;
+  line-clamp: 4;
   -webkit-box-orient: vertical;
 }
 .synopsis img,
