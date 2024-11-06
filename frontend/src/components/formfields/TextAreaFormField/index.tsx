@@ -31,20 +31,21 @@ const TextAreaFormFieldTabbed = ({
             {
               label: "Compose",
               content: (
-                <Field
-                  name={name}
-                  validate={validate}
-                  readOnly={readonly}
-                  allowAttachments={allowAttachments}
-                  component={MarkdownComposer}
-                />
+                <div className={styles.tab}>
+                  <Field
+                    name={name}
+                    validate={validate}
+                    readOnly={readonly}
+                    allowAttachments={allowAttachments}
+                    component={MarkdownComposer}
+                  />
+                </div>
               ),
             },
             {
               label: "Preview",
               content: (
-                <div className={styles.header}>
-                  <div className={styles.previewHeader}>Preview</div>
+                <div className={styles.tab}>
                   <div className={styles.previewBody}>
                     <Markdown>{(values as any)[name]}</Markdown>
                   </div>
