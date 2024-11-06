@@ -36,7 +36,7 @@ def fixture_auth_api_client(api_client: APIClient) -> APIClient:
     user = UserFactory()
     refresh_token = RefreshToken.for_user(user)
     access_token = refresh_token.access_token
-    api_client.credentials(HTTP_AUTHORIZATION=f"Bearer {access_token}")
+    api_client.credentials(HTTP_X_ACCESS_TOKEN=f"Bearer {access_token}")
     api_client.user = user
     return api_client
 

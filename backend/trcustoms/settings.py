@@ -211,6 +211,7 @@ SIMPLE_JWT = {
     "USER_AUTHENTICATION_RULE": (
         "trcustoms.users.authentication.user_authentication_rule"
     ),
+    "AUTH_HEADER_NAME": "HTTP_X_ACCESS_TOKEN",
 }
 
 LANGUAGE_CODE = "en-us"

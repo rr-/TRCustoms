@@ -15,7 +15,7 @@ api.interceptors.request.use(
     const accessToken = AuthService.getAccessToken();
     if (accessToken) {
       config.headers = {
-        Authorization: `Bearer ${accessToken}`,
+        ["X-Access-Token"]: `Bearer ${accessToken}`,
       };
     }
     return config;
@@ -41,7 +41,7 @@ api.interceptors.response.use(
           const accessToken = await AuthService.getNewAccessToken();
           if (accessToken) {
             axios.defaults.headers.common[
-              "Authorization"
+              "X-Access-Token"
             ] = `Bearer ${accessToken}`;
           }
         } catch {
