@@ -9,7 +9,7 @@
 
 .item {
   flex-direction: column;
-  background: var(--box-bg-color);
+  background: var(--box-content-bg-color);
   padding: 0.5rem;
   text-align: center;
 }

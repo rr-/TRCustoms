@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { ButtonVariant } from "src/components/common/Button";
 import { Button } from "src/components/common/Button";
 import { ConfirmModal } from "src/components/modals/ConfirmModal";
 import { showAlertOnError } from "src/utils/misc";
@@ -8,6 +9,7 @@ interface ConfirmButtonProps {
   text: React.ReactElement | string;
   buttonLabel: string;
   buttonTooltip?: string | undefined;
+  buttonVariant?: ButtonVariant;
   onConfirm: () => Promise<void>;
 }
 
@@ -16,6 +18,7 @@ const ConfirmButton = ({
   text,
   buttonLabel,
   buttonTooltip,
+  buttonVariant,
   onConfirm,
 }: ConfirmButtonProps) => {
   const [isModalActive, setIsModalActive] = useState(false);
@@ -38,7 +41,12 @@ const ConfirmButton = ({
         {text}
       </ConfirmModal>
 
-      <Button icon={icon} onClick={handleButtonClick} tooltip={buttonTooltip}>
+      <Button
+        icon={icon}
+        onClick={handleButtonClick}
+        tooltip={buttonTooltip}
+        variant={buttonVariant}
+      >
         {buttonLabel}
       </Button>
     </>

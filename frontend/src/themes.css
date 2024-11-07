@@ -1,4 +1,33 @@
 [data-theme] {
+  --v2-bg-color-1: var(--primary-color);
+  --v2-bg-color-2: var(--label-bg-color);
+  --v2-bg-color-3: color-mix(
+    in srgb,
+    var(--primary-color),
+    var(--v2-fg-color-1) 10%
+  );
+  --v2-bg-color-4: color-mix(
+    in oklab,
+    var(--v2-bg-color-2),
+    var(--v2-bg-color-1) 50%
+  );
+  --v2-bg-color-5: color-mix(
+    in oklab,
+    var(--v2-bg-color-2),
+    var(--v2-bg-color-1) 70%
+  );
+  --v2-fg-color-1: var(--fg-color);
+  --v2-fg-color-2: color-mix(in srgb, var(--fg-color), transparent 40%);
+  --v2-accent-color-1: var(--secondary-color);
+  --v2-accent-color-2: color-mix(
+    in hsl,
+    var(--v2-accent-color-1),
+    var(--v2-bg-color-1) 40%
+  );
+  --v2-accent-color-3: lch(from var(--v2-accent-color-1) l 20% h / 0.3);
+}
+
+[data-theme] {
   --input-border-color: var(--button-bg-color);
   --input-invalid-border-color: red;
   --input-disabled-border-color: grey;
@@ -21,7 +50,12 @@
   --tab-switch-light-active-hover-border-color: var(--fg-color);
   --tab-switch-light-inactive-hover-border-color: var(--fg-color);
   --tab-switch-light-active-fg-color: var(--blockquote-border-color);
-  --box-bg-color: var(--label-bg-color);
+  --box-header-bg-color: var(--label-bg-color);
+  --box-content-bg-color: color-mix(
+    in oklab,
+    var(--box-header-bg-color),
+    var(--bg-color) 50%
+  );
   --section-border-color: var(--button-bg-color);
   --message-bg-color: var(--blockquote-bg-color);
   --message-accent-bg-color: var(--blockquote-border-color);
@@ -41,6 +75,7 @@
   --bg-color: var(--primary-color);
   --link-color: var(--secondary-color);
   --outline-color: var(--link-color);
+  --button-soft-bg-color: lch(from var(--button-bg-color) l 20% h / 0.3);
 }
 
 [data-theme="midnight_ocean"] {
@@ -63,7 +98,7 @@
   --navbar-bg-color: #171720;
   --navbar-active-tab-bg-color: #1c3160;
   --navbar-active-tab-fg-color: #d0e6ed;
-  --sidebar-bg-color: var(--navbar-bg-color);
+  --sidebar-bg-color: var(--v2-bg-color-2);
   --sidebar-padding: 1;
   --reviews-positive-bg-color: #213913;
   --reviews-neutral-bg-color: #3c3c17;
@@ -111,7 +146,7 @@
   --blockquote-bg-color: var(--bg-color);
   --blockquote-border-color: var(--button-bg-color);
   --message-accent-fg-color: var(--button-fg-color);
-  --message-bg-color: var(--box-bg-color);
+  --message-bg-color: var(--box-content-bg-color);
   --collapsible-bg-color: var(--navbar-active-tab-bg-color);
 }
 
@@ -147,7 +182,7 @@
   --input-disabled-bg-color: hsl(var(--primary-hue), 0%, var(--primary-light));
   --button-bg-color: var(--secondary-color);
   --button-fg-color: var(--fg-color);
-  --button-hovered-bg-color: var(--label-bg-color);
+  --button-hovered-bg-color: lch(from var(--button-bg-color) l c h / 0.6);
   --button-text-decoration: underline;
   --label-bg-color: hsl(var(--secondary-hue), 75%, 75%);
   --navbar-bg-color: var(--secondary-color);
@@ -169,10 +204,17 @@
   --collapsible-bg-color: var(--navbar-active-tab-bg-color);
   --pager-bg-color: transparent;
 
-  --tab-switch-light-active-fg-color: color-mix(
-    in srgb,
-    var(--secondary-color),
-    black 30%
+  --tab-switch-light-active-bg-color: var(--box-content-bg-color);
+  --tab-switch-light-active-fg-color: var(--fg-color);
+  --tab-switch-light-active-hover-bg-color: color-mix(
+    in oklab,
+    var(--box-content-bg-color),
+    var(--label-bg-color) 50%
+  );
+  --tab-switch-light-inactive-hover-bg-color: color-mix(
+    in oklab,
+    var(--box-content-bg-color),
+    var(--bg-color) 50%
   );
 }
 

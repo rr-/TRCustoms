@@ -62,14 +62,32 @@
 
 .secondary {
   background: var(--navbar-bg-color);
-}
-.secondary .listItem a {
-  padding: 0.3rem 1rem;
-  display: inline-block;
-}
-.secondary .listItem :global .active {
-  background: var(--navbar-active-tab-bg-color);
-  color: var(--navbar-active-tab-fg-color);
+  transition: background var(--transition-speed);
+
+  .listItem {
+    a {
+      padding: 0.3rem 1rem;
+      display: inline-block;
+      background: var(--my-bg-color);
+      transition: background var(--transition-speed),
+        color var(--transition-speed);
+
+      --my-bg-color: var(--navbar-bg-color);
+      &.active {
+        --my-bg-color: var(--navbar-active-tab-bg-color);
+        color: var(--navbar-active-tab-fg-color);
+        &:hover {
+          --my-bg-color: lch(
+            from var(--navbar-active-tab-bg-color) calc(l + 3) c h
+          );
+        }
+      }
+
+      &:hover {
+        --my-bg-color: lch(from var(--navbar-bg-color) calc(l + 5) c h);
+      }
+    }
+  }
 }
 
 .logo {

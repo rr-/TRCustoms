@@ -1,0 +1,6 @@
+.embed {
+  width: var(--video-embed-width, 640px);
+  height: var(--video-embed-height, 480px);
+  aspect-ratio: var(--video-embed-aspect-ratio);
+  border: 0;
+}

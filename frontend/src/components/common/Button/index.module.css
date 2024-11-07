@@ -4,8 +4,7 @@
   gap: 0.5rem;
   justify-content: center;
   align-items: center;
-  background: var(--button-bg-color);
-  border: 2px solid var(--input-border-color);
+  border: 2px solid transparent;
   color: var(--button-fg-color);
   font-size: var(--font-size);
   line-height: 1rem;
@@ -14,6 +13,14 @@
   box-sizing: border-box;
   cursor: pointer;
   transition: color var(--transition-speed), background var(--transition-speed);
+
+  &.important {
+    background: var(--button-bg-color);
+  }
+
+  &.soft {
+    background: var(--button-soft-bg-color);
+  }
 }
 .button:hover {
   background: var(--button-hovered-bg-color);

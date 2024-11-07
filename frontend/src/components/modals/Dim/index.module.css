@@ -1,4 +1,5 @@
 .dim {
+  contain: content;
   z-index: 99;
   position: fixed;
   display: flex;
@@ -13,6 +14,8 @@
   background: rgba(0, 0, 0, 0.8);
   transition: opacity 300ms, visibility 300ms;
   opacity: 0;
+
+  text-align: initial;
 }
 
 .active {

@@ -64,6 +64,7 @@ const extractNestedErrorText = (source: any): string[] => {
 };
 
 interface YoutubeLink {
+  fullUrl: string;
   videoID: string | null;
   playlistID: string | null;
 }
@@ -83,9 +84,9 @@ const parseYoutubeLink = (urlStr: string): YoutubeLink | null => {
     return null;
   }
   let videoID = url.searchParams.get("v");
-  let playlistID = url.searchParams.get("list");
+  const playlistID = url.searchParams.get("list");
   if (!videoID) {
-    let match = url.pathname.match(/\/embed\/([^/]+)\/?/);
+    const match = url.pathname.match(/\/embed\/([^/]+)\/?/);
     if (match) {
       videoID = match[1];
     }
@@ -95,7 +96,7 @@ const parseYoutubeLink = (urlStr: string): YoutubeLink | null => {
       videoID = url.pathname.replace("/", "");
     }
   }
-  return { videoID, playlistID };
+  return { fullUrl: urlStr, videoID, playlistID };
 };
 
 const extractErrorMessage = (error: unknown) => {
@@ -166,3 +167,4 @@ export {
   showAlertOnError,
   resetQueries,
 };
+export type { YoutubeLink };

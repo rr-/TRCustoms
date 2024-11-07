@@ -57,22 +57,18 @@
   }
 
   .navItem {
-    --my-fg-color: var(--tab-switch-light-inactive-fg-color);
-    --my-border-color: var(--tab-switch-light-inactive-border-color);
-    --my-bg-color: var(--tab-switch-light-inactive-bg-color);
+    --my-fg-color: var(--v2-fg-color-2);
+    --my-border-color: var(--v2-bg-color-3);
     &:hover {
-      --my-fg-color: var(--tab-switch-light-inactive-hover-fg-color);
-      --my-border-color: var(--tab-switch-light-inactive-hover-border-color);
-      --my-bg-color: var(--tab-switch-light-inactive-hover-bg-color);
+      --my-fg-color: var(--v2-fg-color-1);
+      --my-bg-color: var(--v2-bg-color-5);
     }
     &.active {
-      --my-fg-color: var(--tab-switch-light-active-fg-color);
-      --my-border-color: var(--tab-switch-light-active-border-color);
-      --my-bg-color: var(--tab-switch-light-active-bg-color);
+      --my-fg-color: var(--v2-fg-color-1);
+      --my-border-color: var(--v2-accent-color-1);
+      --my-bg-color: var(--v2-bg-color-4);
       &:hover {
-        --my-fg-color: var(--tab-switch-light-active-hover-fg-color);
-        --my-border-color: var(--tab-switch-light-active-hover-border-color);
-        --my-bg-color: var(--tab-switch-light-active-hover-bg-color);
+        --my-bg-color: var(--v2-bg-color-2);
       }
     }
   }

@@ -2,4 +2,10 @@
   display: flex;
   gap: 1rem;
   align-items: center;
+  justify-content: stretch;
+  margin-bottom: 1rem;
+  --input-width: 100%;
+}
+.input {
+  flex: 1;
 }

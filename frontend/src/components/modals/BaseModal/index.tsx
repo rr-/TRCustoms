@@ -2,6 +2,7 @@ import styles from "./index.module.css";
 import { useState } from "react";
 import { useEffect } from "react";
 import { forwardRef } from "react";
+import { createPortal } from "react-dom";
 import { Link } from "src/components/common/Link";
 import { IconX } from "src/components/icons";
 import { Dim } from "src/components/modals/Dim";
@@ -39,7 +40,7 @@ const BaseModal = forwardRef<HTMLDivElement, BaseModalProps>(
       }
     };
 
-    return (
+    return createPortal(
       <Dim
         isActive={isDimActive}
         onMouseDown={handleDimClick}
@@ -62,7 +63,8 @@ const BaseModal = forwardRef<HTMLDivElement, BaseModalProps>(
             {buttons}
           </footer>
         </div>
-      </Dim>
+      </Dim>,
+      document.getElementById("root") as Element
     );
   }
 );

@@ -73,13 +73,15 @@ const WalkthroughsBar = ({ level }: WalkthroughsBarProps) => {
         Write a text guide
       </Button>
       OR
-      <TextInput
-        type="url"
-        onChange={handleInputChange}
-        onKeyDown={handleInputKeyDown}
-        value={textInput}
-        placeholder="Youtube video/playlist link"
-      />
+      <div className={styles.input}>
+        <TextInput
+          type="url"
+          onChange={handleInputChange}
+          onKeyDown={handleInputKeyDown}
+          value={textInput}
+          placeholder="Youtube video/playlist link"
+        />
+      </div>
       <Button disableTimeout={true} onClick={handleVideoButtonClick}>
         Add a video guide
       </Button>

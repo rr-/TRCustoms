@@ -3,6 +3,11 @@ import { useEffect } from "react";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 
+enum ButtonVariant {
+  Important = "important",
+  Soft = "soft",
+}
+
 interface ButtonProps {
   className?: string | undefined;
   to?: string | null | undefined;
@@ -12,6 +17,7 @@ interface ButtonProps {
   icon?: React.ReactNode | undefined;
   children?: React.ReactNode | string | undefined;
   tooltip?: string | undefined;
+  variant?: ButtonVariant;
 }
 
 const Button = ({
@@ -23,6 +29,7 @@ const Button = ({
   children,
   disabled,
   tooltip,
+  variant,
 }: ButtonProps) => {
   const [timer, setTimer] = useState<number | null>(null);
   const [isTimeoutActive, setIsTimeoutActive] = useState(false);
@@ -58,6 +65,11 @@ const Button = ({
   }
   if (className) {
     classNames.push(className);
+  }
+  if (variant === ButtonVariant.Important) {
+    classNames.push(styles.important);
+  } else {
+    classNames.push(styles.soft);
   }
 
   const inside = (
@@ -97,4 +109,4 @@ const Button = ({
   );
 };
 
-export { Button };
+export { Button, ButtonVariant };

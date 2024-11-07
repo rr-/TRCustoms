@@ -2,6 +2,7 @@ import { useNavigate } from "react-router-dom";
 import { LevelApproveButton } from "src/components/buttons/LevelApproveButton";
 import { LevelDeleteButton } from "src/components/buttons/LevelDeleteButton";
 import { LevelRejectButton } from "src/components/buttons/LevelRejectButton";
+import { ButtonVariant } from "src/components/common/Button";
 import { Button } from "src/components/common/Button";
 import { HeaderWithButtons } from "src/components/common/HeaderWithButtons";
 import { PageHeader } from "src/components/common/PageHeader";
@@ -33,18 +34,26 @@ const LevelHeader = ({ level }: LevelHeaderProps) => {
           ...(level.uploader ? [level.uploader] : []),
         ]}
       >
-        <Button icon={<IconPencil />} to={`/levels/${level.id}/edit`}>
+        <Button
+          variant={ButtonVariant.Soft}
+          icon={<IconPencil />}
+          to={`/levels/${level.id}/edit`}
+        >
           Edit
         </Button>
       </PermissionGuard>
 
       <PermissionGuard require={UserPermission.editLevels}>
-        <LevelRejectButton level={level} />
+        <LevelRejectButton variant={ButtonVariant.Soft} level={level} />
         {!level.is_approved && <LevelApproveButton level={level} />}
       </PermissionGuard>
 
       <PermissionGuard require={UserPermission.deleteLevels}>
-        <LevelDeleteButton level={level} onComplete={handleDelete} />
+        <LevelDeleteButton
+          variant={ButtonVariant.Soft}
+          level={level}
+          onComplete={handleDelete}
+        />
       </PermissionGuard>
     </>
   );

@@ -1,3 +1,4 @@
+import styles from "./index.module.css";
 import { InfoMessage } from "src/components/common/InfoMessage";
 import { InfoMessageType } from "src/components/common/InfoMessage";
 import { MediumThumbnails } from "src/components/common/MediumThumbnails";
@@ -31,16 +32,16 @@ const LevelOverviewTab = ({ level }: LevelOverviewTabProps) => {
       )}
 
       {!!level.screenshots.length && (
-        <MediumThumbnails
-          displayMode={DisplayMode.Contain}
-          files={level.screenshots
-            .filter((screenshot) => !!screenshot.file)
-            .map((screenshot) => screenshot.file as UploadedFile)}
-          links={showcaseLinks}
-        />
+        <div className={styles.thumbnailsWrapper}>
+          <MediumThumbnails
+            displayMode={DisplayMode.Contain}
+            files={level.screenshots
+              .filter((screenshot) => !!screenshot.file)
+              .map((screenshot) => screenshot.file as UploadedFile)}
+            links={showcaseLinks}
+          />
+        </div>
       )}
-
-      <hr />
 
       <Markdown>
         {level.description || "This level has no description yet."}
