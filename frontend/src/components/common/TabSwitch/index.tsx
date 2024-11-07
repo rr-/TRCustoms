@@ -7,6 +7,7 @@ enum TabSwitchVariant {
 }
 
 interface TabPage {
+  name: string;
   label: string;
   content: React.ReactElement;
 }
@@ -14,13 +15,16 @@ interface TabPage {
 interface TabSwitchProps {
   variant: TabSwitchVariant;
   tabs: TabPage[];
+  tabName?: string;
+  onTabChange?: (tab: TabPage) => void;
 }
 
-const TabSwitch = ({ variant, tabs }: TabSwitchProps) => {
-  const [activeTab, setActiveTab] = useState(0);
+const TabSwitch = ({ variant, tabs, tabName, onTabChange }: TabSwitchProps) => {
+  const [activeTabName, setActiveTabName] = useState(tabName ?? tabs[0]?.name);
 
-  const handleTabClick = (tab: number) => {
-    setActiveTab(tab);
+  const handleTabClick = (tab: TabPage) => {
+    setActiveTabName(tab.name);
+    onTabChange?.(tab);
   };
 
   return (
@@ -32,17 +36,17 @@ const TabSwitch = ({ variant, tabs }: TabSwitchProps) => {
       >
         <nav>
           <ul className={styles.nav}>
-            {tabs.map((tab, i) => (
+            {tabs.map((tab) => (
               <li
                 className={`${styles.navItem} ${
-                  i === activeTab ? styles.active : ""
+                  tab.name === activeTabName ? styles.active : ""
                 }`}
-                key={i}
+                key={tab.name}
               >
                 <span
                   role="button"
                   className={styles.navItemLink}
-                  onClick={() => handleTabClick(i)}
+                  onClick={() => handleTabClick(tab)}
                 >
                   {tab.label}
                 </span>
@@ -51,12 +55,12 @@ const TabSwitch = ({ variant, tabs }: TabSwitchProps) => {
           </ul>
         </nav>
         <div className={styles.content}>
-          {tabs.map((tab, i) => (
+          {tabs.map((tab) => (
             <div
               className={`${styles.contentItem} ${
-                i === activeTab ? styles.active : ""
+                tab.name === activeTabName ? styles.active : ""
               } ChildMarginClear`}
-              key={i}
+              key={tab.name}
             >
               {tab.content}
             </div>
