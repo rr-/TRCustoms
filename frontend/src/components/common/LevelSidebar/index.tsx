@@ -1,9 +1,5 @@
 import styles from "./index.module.css";
 import { useContext } from "react";
-import { useNavigate } from "react-router-dom";
-import { LevelApproveButton } from "src/components/buttons/LevelApproveButton";
-import { LevelDeleteButton } from "src/components/buttons/LevelDeleteButton";
-import { LevelRejectButton } from "src/components/buttons/LevelRejectButton";
 import { PlaylistAddButton } from "src/components/buttons/PlaylistAddButton";
 import { Button } from "src/components/common/Button";
 import { DefinitionItemGroup } from "src/components/common/DefinitionList";
@@ -17,7 +13,6 @@ import { SectionHeader } from "src/components/common/Section";
 import { SidebarBox } from "src/components/common/SidebarBox";
 import { IconDownload } from "src/components/icons";
 import { IconGlobe } from "src/components/icons";
-import { IconPencil } from "src/components/icons";
 import { IconAnnotation } from "src/components/icons";
 import { EngineLink } from "src/components/links/EngineLink";
 import { GenreLink } from "src/components/links/GenreLink";
@@ -37,12 +32,7 @@ interface LevelSidebarProps {
 }
 
 const LevelSidebar = ({ level }: LevelSidebarProps) => {
-  const navigate = useNavigate();
   const { user } = useContext(UserContext);
-
-  const handleDelete = () => {
-    navigate("/");
-  };
 
   const showFileGoneAlert = () =>
     alert("This file is no longer available on our website.");
@@ -79,26 +69,6 @@ const LevelSidebar = ({ level }: LevelSidebarProps) => {
                 Website
               </Button>
             )}
-            <PermissionGuard
-              require={UserPermission.editLevels}
-              owningUsers={[
-                ...level.authors,
-                ...(level.uploader ? [level.uploader] : []),
-              ]}
-            >
-              <Button icon={<IconPencil />} to={`/levels/${level.id}/edit`}>
-                Edit
-              </Button>
-            </PermissionGuard>
-
-            <PermissionGuard require={UserPermission.editLevels}>
-              <LevelRejectButton level={level} />
-              {!level.is_approved && <LevelApproveButton level={level} />}
-            </PermissionGuard>
-
-            <PermissionGuard require={UserPermission.deleteLevels}>
-              <LevelDeleteButton level={level} onComplete={handleDelete} />
-            </PermissionGuard>
 
             {user && <PlaylistAddButton userId={user.id} level={level} />}
 

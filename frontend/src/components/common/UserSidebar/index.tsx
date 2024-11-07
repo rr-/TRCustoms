@@ -1,24 +1,17 @@
 import { useNavigate } from "react-router-dom";
-import { UserActivateButton } from "src/components/buttons/UserActivateButton";
-import { UserBanButton } from "src/components/buttons/UserBanButton";
-import { UserDeactivateButton } from "src/components/buttons/UserDeactivateButton";
-import { UserUnbanButton } from "src/components/buttons/UserUnbanButton";
 import { AwardList } from "src/components/common/AwardList";
 import { Button } from "src/components/common/Button";
 import { DefinitionItemGroup } from "src/components/common/DefinitionList";
 import { DefinitionItem } from "src/components/common/DefinitionList";
 import { DefinitionList } from "src/components/common/DefinitionList";
 import { Link } from "src/components/common/Link";
-import { PermissionGuard } from "src/components/common/PermissionGuard";
 import { SectionHeader } from "src/components/common/Section";
 import { SidebarBox } from "src/components/common/SidebarBox";
 import { UserPictureMode } from "src/components/common/UserPicture";
 import { UserPicture } from "src/components/common/UserPicture";
 import { IconGlobe } from "src/components/icons";
 import { IconHeart } from "src/components/icons";
-import { IconPencil } from "src/components/icons";
 import type { UserDetails } from "src/services/UserService";
-import { UserPermission } from "src/services/UserService";
 import { formatDate } from "src/utils/string";
 
 interface UserSidebarProps {
@@ -27,10 +20,6 @@ interface UserSidebarProps {
 
 const UserSidebar = ({ user }: UserSidebarProps) => {
   const navigate = useNavigate();
-
-  const handleUserRejection = () => {
-    navigate("/");
-  };
 
   const handleLevelCountClick = () => {
     const element = document.querySelector(".Anchor--userAuthoredLevels");
@@ -67,40 +56,6 @@ const UserSidebar = ({ user }: UserSidebarProps) => {
               Donate
             </Button>
           )}
-          {user.is_active ? (
-            <>
-              <PermissionGuard
-                require={UserPermission.editUsers}
-                owningUsers={[user]}
-              >
-                <Button icon={<IconPencil />} to={`/users/${user.id}/edit`}>
-                  Edit profile
-                </Button>
-              </PermissionGuard>
-              <PermissionGuard require={UserPermission.manageUsers}>
-                {user.is_banned ? (
-                  <UserUnbanButton user={user} />
-                ) : (
-                  !user.is_superuser && <UserBanButton user={user} />
-                )}
-                {!user.is_superuser && (
-                  <UserDeactivateButton user={user}>
-                    Deactivate
-                  </UserDeactivateButton>
-                )}
-              </PermissionGuard>
-            </>
-          ) : user.is_pending_activation ? (
-            <PermissionGuard require={UserPermission.manageUsers}>
-              <UserActivateButton user={user} />
-              {!user.is_superuser && (
-                <UserDeactivateButton
-                  onComplete={handleUserRejection}
-                  user={user}
-                />
-              )}
-            </PermissionGuard>
-          ) : undefined}
         </>
       }
     >

@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import { InfoMessage } from "src/components/common/InfoMessage";
 import { InfoMessageType } from "src/components/common/InfoMessage";
 import { Loader } from "src/components/common/Loader";
+import { PageHeader } from "src/components/common/PageHeader";
 import { PermissionGuard } from "src/components/common/PermissionGuard";
 import { SmartWrap } from "src/components/common/SmartWrap";
 import { WalkthroughSidebar } from "src/components/common/WalkthroughSidebar";
@@ -131,8 +132,7 @@ const WalkthroughPage = () => {
           ? SidebarLayoutVariant.Stacked
           : SidebarLayoutVariant.Regular
       }
-      header={header}
-      subheader={subheader}
+      header={<PageHeader header={header} subheader={subheader} />}
       sidebar={sidebar}
     >
       {content}

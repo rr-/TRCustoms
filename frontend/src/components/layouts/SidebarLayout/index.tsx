@@ -1,5 +1,4 @@
 import styles from "./index.module.css";
-import { PageHeader } from "src/components/common/PageHeader";
 
 enum SidebarLayoutVariant {
   Stacked = "stacked",
@@ -9,7 +8,6 @@ enum SidebarLayoutVariant {
 
 interface SidebarLayoutProps {
   header?: React.ReactNode;
-  subheader?: React.ReactNode;
   sidebar?: React.ReactNode;
   children: React.ReactNode;
   variant?: SidebarLayoutVariant;
@@ -17,7 +15,6 @@ interface SidebarLayoutProps {
 
 const SidebarLayout = ({
   header,
-  subheader,
   sidebar,
   children,
   variant,
@@ -26,11 +23,7 @@ const SidebarLayout = ({
 
   return (
     <div className={`${styles.wrapper} ${styles[variant]}`}>
-      {(header || subheader) && (
-        <div className={styles.header}>
-          <PageHeader header={header} subheader={subheader} />
-        </div>
-      )}
+      {header && <div className={styles.header}>{header}</div>}
 
       <aside className={styles.sidebar}>{sidebar}</aside>
 

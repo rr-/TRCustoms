@@ -4,10 +4,10 @@ import { InfoMessage } from "src/components/common/InfoMessage";
 import { InfoMessageType } from "src/components/common/InfoMessage";
 import { LevelSidebar } from "src/components/common/LevelSidebar";
 import { Loader } from "src/components/common/Loader";
-import { SmartWrap } from "src/components/common/SmartWrap";
 import { TabSwitch } from "src/components/common/TabSwitch";
 import { TabSwitchVariant } from "src/components/common/TabSwitch";
 import { SidebarLayout } from "src/components/layouts/SidebarLayout";
+import { LevelHeader } from "src/components/pages/LevelPage/LevelHeader";
 import { LevelOverviewTab } from "src/components/pages/LevelPage/LevelOverviewTab";
 import { LevelReviewsTab } from "src/components/pages/LevelPage/LevelReviewsTab";
 import { LevelWalkthroughsTab } from "src/components/pages/LevelPage/LevelWalkthroughsTab";
@@ -70,7 +70,7 @@ const LevelPage = () => {
 
   return (
     <SidebarLayout
-      header={<SmartWrap text={level.name} />}
+      header={<LevelHeader level={level} />}
       sidebar={<LevelSidebar level={level} />}
     >
       {level.is_approved || (
