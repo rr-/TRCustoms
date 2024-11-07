@@ -3,10 +3,24 @@
   --input-invalid-border-color: red;
   --input-disabled-border-color: grey;
   --button-hovered-fg-color: var(--button-fg-color);
-  --tab-switch-active-bg-color: var(--navbar-active-tab-bg-color);
-  --tab-switch-inactive-bg-color: var(--label-bg-color);
-  --tab-switch-active-fg-color: var(--navbar-active-tab-fg-color);
-  --tab-switch-inactive-fg-color: var(--fg-color);
+  --tab-switch-tabbed-active-bg-color: var(--navbar-active-tab-bg-color);
+  --tab-switch-tabbed-inactive-bg-color: var(--label-bg-color);
+  --tab-switch-tabbed-active-fg-color: var(--navbar-active-tab-fg-color);
+  --tab-switch-tabbed-inactive-fg-color: var(--fg-color);
+  --tab-switch-light-active-border-color: var(--secondary-color);
+  --tab-switch-light-inactive-border-color: color-mix(
+    in srgb,
+    var(--fg-color),
+    transparent 90%
+  );
+  --tab-switch-light-inactive-fg-color: color-mix(
+    in srgb,
+    var(--fg-color),
+    transparent 40%
+  );
+  --tab-switch-light-active-hover-border-color: var(--fg-color);
+  --tab-switch-light-inactive-hover-border-color: var(--fg-color);
+  --tab-switch-light-active-fg-color: var(--blockquote-border-color);
   --box-bg-color: var(--label-bg-color);
   --section-border-color: var(--button-bg-color);
   --message-bg-color: var(--blockquote-bg-color);
@@ -154,6 +168,12 @@
   --blockquote-border-color: var(--button-bg-color);
   --collapsible-bg-color: var(--navbar-active-tab-bg-color);
   --pager-bg-color: transparent;
+
+  --tab-switch-light-active-fg-color: color-mix(
+    in srgb,
+    var(--secondary-color),
+    black 30%
+  );
 }
 
 [data-theme="sundown"] {

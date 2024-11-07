@@ -15,7 +15,7 @@ api.interceptors.request.use(
     const accessToken = AuthService.getAccessToken();
     if (accessToken) {
       config.headers = {
-        ["X-Access-Token"]: `Bearer ${accessToken}`,
+        "X-Access-Token": `Bearer ${accessToken}`,
       };
     }
     return config;

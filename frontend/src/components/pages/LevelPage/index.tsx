@@ -1,25 +1,19 @@
-import { useState } from "react";
 import { useQuery } from "react-query";
 import { useParams } from "react-router-dom";
 import { InfoMessage } from "src/components/common/InfoMessage";
 import { InfoMessageType } from "src/components/common/InfoMessage";
 import { LevelSidebar } from "src/components/common/LevelSidebar";
 import { Loader } from "src/components/common/Loader";
-import { MediumThumbnails } from "src/components/common/MediumThumbnails";
-import { ReviewsList } from "src/components/common/ReviewsList";
-import { Section } from "src/components/common/Section";
-import { SectionHeader } from "src/components/common/Section";
 import { SmartWrap } from "src/components/common/SmartWrap";
+import { TabSwitch } from "src/components/common/TabSwitch";
+import { TabSwitchVariant } from "src/components/common/TabSwitch";
 import { SidebarLayout } from "src/components/layouts/SidebarLayout";
-import { Markdown } from "src/components/markdown/Markdown";
-import { DISABLE_PAGING } from "src/constants";
+import { LevelOverviewTab } from "src/components/pages/LevelPage/LevelOverviewTab";
+import { LevelReviewsTab } from "src/components/pages/LevelPage/LevelReviewsTab";
+import { LevelWalkthroughsTab } from "src/components/pages/LevelPage/LevelWalkthroughsTab";
 import { usePageMetadata } from "src/contexts/PageMetadataContext";
-import type { UploadedFile } from "src/services/FileService";
-import { ExternalLinkType } from "src/services/LevelService";
-import type { LevelDetails } from "src/services/LevelService";
 import { LevelService } from "src/services/LevelService";
-import type { ReviewSearchQuery } from "src/services/ReviewService";
-import { DisplayMode } from "src/types";
+import type { LevelDetails } from "src/services/LevelService";
 
 interface LevelPageParams {
   levelId: string;
@@ -27,15 +21,6 @@ interface LevelPageParams {
 
 const LevelPage = () => {
   const { levelId } = (useParams() as unknown) as LevelPageParams;
-  const [reviewCount, setReviewCount] = useState<number | undefined>();
-  const [reviewsSearchQuery, setReviewsSearchQuery] = useState<
-    ReviewSearchQuery
-  >({
-    levels: [+levelId],
-    page: DISABLE_PAGING,
-    sort: "-created",
-    search: "",
-  });
 
   const result = useQuery<LevelDetails, Error>(
     ["level", LevelService.getLevelById, levelId],
@@ -66,14 +51,27 @@ const LevelPage = () => {
 
   const level = result.data;
 
-  const showcaseLinks = level.external_links
-    .filter((link) => link.link_type === ExternalLinkType.Showcase)
-    .map((link) => link.url);
+  const tabs = [
+    {
+      label: "Overview",
+      content: <LevelOverviewTab level={level} />,
+    },
+
+    {
+      label: "Reviews",
+      content: <LevelReviewsTab level={level} />,
+    },
+
+    {
+      label: "Walkthroughs",
+      content: <LevelWalkthroughsTab level={level} />,
+    },
+  ];
 
   return (
     <SidebarLayout
       header={<SmartWrap text={level.name} />}
-      sidebar={<LevelSidebar level={level} reviewCount={reviewCount} />}
+      sidebar={<LevelSidebar level={level} />}
     >
       {level.is_approved || (
         <InfoMessage type={InfoMessageType.Warning}>
@@ -87,37 +85,7 @@ const LevelPage = () => {
         </InfoMessage>
       )}
 
-      {!!level.screenshots.length && (
-        <Section>
-          <MediumThumbnails
-            displayMode={DisplayMode.Contain}
-            files={level.screenshots
-              .filter((screenshot) => !!screenshot.file)
-              .map((screenshot) => screenshot.file as UploadedFile)}
-            links={showcaseLinks}
-          />
-        </Section>
-      )}
-
-      <Section>
-        <SectionHeader>About the game</SectionHeader>
-        {level.description ? (
-          <Markdown>{level.description}</Markdown>
-        ) : (
-          <p>This level has no description yet.</p>
-        )}
-      </Section>
-
-      <Section>
-        <div className="Anchor--levelReviews" />
-        <SectionHeader>Reviews</SectionHeader>
-        <ReviewsList
-          showLevels={false}
-          searchQuery={reviewsSearchQuery}
-          onResultCountChange={setReviewCount}
-          onSearchQueryChange={setReviewsSearchQuery}
-        />
-      </Section>
+      <TabSwitch variant={TabSwitchVariant.Light} tabs={tabs} />
     </SidebarLayout>
   );
 };

@@ -2,6 +2,7 @@ import styles from "./index.module.css";
 import { useFormikContext } from "formik";
 import { Field } from "formik";
 import { TabSwitch } from "src/components/common/TabSwitch";
+import { TabSwitchVariant } from "src/components/common/TabSwitch";
 import { BaseFormField } from "src/components/formfields/BaseFormField";
 import type { GenericFormFieldProps } from "src/components/formfields/BaseFormField";
 import { MarkdownComposer } from "src/components/markdown-composer/MarkdownComposer";
@@ -23,37 +24,39 @@ const TextAreaFormFieldTabbed = ({
   ...props
 }: TextAreaFormFieldProps) => {
   const { values } = useFormikContext();
+
+  const tabs = [
+    {
+      label: "Compose",
+      content: (
+        <div className={styles.tab}>
+          <Field
+            name={name}
+            validate={validate}
+            readOnly={readonly}
+            allowAttachments={allowAttachments}
+            component={MarkdownComposer}
+          />
+        </div>
+      ),
+    },
+
+    {
+      label: "Preview",
+      content: (
+        <div className={styles.tab}>
+          <div className={styles.previewBody}>
+            <Markdown>{(values as any)[name]}</Markdown>
+          </div>
+        </div>
+      ),
+    },
+  ];
+
   return (
     <BaseFormField name={name} readonly={readonly} {...props}>
       <div className={`${styles.wrapper} ${styles.tabbed}`}>
-        <TabSwitch
-          tabs={[
-            {
-              label: "Compose",
-              content: (
-                <div className={styles.tab}>
-                  <Field
-                    name={name}
-                    validate={validate}
-                    readOnly={readonly}
-                    allowAttachments={allowAttachments}
-                    component={MarkdownComposer}
-                  />
-                </div>
-              ),
-            },
-            {
-              label: "Preview",
-              content: (
-                <div className={styles.tab}>
-                  <div className={styles.previewBody}>
-                    <Markdown>{(values as any)[name]}</Markdown>
-                  </div>
-                </div>
-              ),
-            },
-          ]}
-        />
+        <TabSwitch variant={TabSwitchVariant.Boxed} tabs={tabs} />
       </div>
     </BaseFormField>
   );

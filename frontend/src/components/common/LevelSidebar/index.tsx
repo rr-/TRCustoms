@@ -1,6 +1,5 @@
 import styles from "./index.module.css";
 import { useContext } from "react";
-import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { LevelApproveButton } from "src/components/buttons/LevelApproveButton";
 import { LevelDeleteButton } from "src/components/buttons/LevelDeleteButton";
@@ -12,13 +11,11 @@ import { DefinitionItem } from "src/components/common/DefinitionList";
 import { DefinitionList } from "src/components/common/DefinitionList";
 import { LevelRating } from "src/components/common/LevelRating";
 import { Link } from "src/components/common/Link";
-import { Loader } from "src/components/common/Loader";
 import { MediumThumbnails } from "src/components/common/MediumThumbnails";
 import { PermissionGuard } from "src/components/common/PermissionGuard";
 import { SectionHeader } from "src/components/common/Section";
 import { SidebarBox } from "src/components/common/SidebarBox";
 import { IconDownload } from "src/components/icons";
-import { IconBook } from "src/components/icons";
 import { IconGlobe } from "src/components/icons";
 import { IconPencil } from "src/components/icons";
 import { IconAnnotation } from "src/components/icons";
@@ -26,7 +23,6 @@ import { EngineLink } from "src/components/links/EngineLink";
 import { GenreLink } from "src/components/links/GenreLink";
 import { TagLink } from "src/components/links/TagLink";
 import { UserLink } from "src/components/links/UserLink";
-import { WalkthroughsModal } from "src/components/modals/WalkthroughsModal";
 import { UserContext } from "src/contexts/UserContext";
 import { ExternalLinkType } from "src/services/LevelService";
 import type { LevelDetails } from "src/services/LevelService";
@@ -38,28 +34,14 @@ import { EMPTY_INPUT_PLACEHOLDER } from "src/utils/string";
 
 interface LevelSidebarProps {
   level: LevelDetails;
-  reviewCount: number | undefined;
 }
 
-const LevelSidebar = ({ level, reviewCount }: LevelSidebarProps) => {
-  const [isWalkthroughsModalActive, setIsWalkthroughsModalActive] = useState(
-    false
-  );
+const LevelSidebar = ({ level }: LevelSidebarProps) => {
   const navigate = useNavigate();
   const { user } = useContext(UserContext);
 
   const handleDelete = () => {
     navigate("/");
-  };
-
-  const handleReviewCountClick = () => {
-    document
-      .querySelector(".Anchor--levelReviews")
-      ?.scrollIntoView({ behavior: "smooth" });
-  };
-
-  const handleWalkthroughsButtonClick = () => {
-    setIsWalkthroughsModalActive(true);
   };
 
   const showFileGoneAlert = () =>
@@ -72,12 +54,6 @@ const LevelSidebar = ({ level, reviewCount }: LevelSidebarProps) => {
 
   return (
     <div>
-      <WalkthroughsModal
-        level={level}
-        isActive={isWalkthroughsModalActive}
-        onIsActiveChange={setIsWalkthroughsModalActive}
-      />
-
       <SidebarBox
         header={
           <div>
@@ -126,10 +102,6 @@ const LevelSidebar = ({ level, reviewCount }: LevelSidebarProps) => {
 
             {user && <PlaylistAddButton userId={user.id} level={level} />}
 
-            <Button icon={<IconBook />} onClick={handleWalkthroughsButtonClick}>
-              Walkthrough
-            </Button>
-
             {level.authors.every((author) => author.id !== user?.id) && (
               <PermissionGuard require={UserPermission.reviewLevels}>
                 <Button
@@ -163,13 +135,7 @@ const LevelSidebar = ({ level, reviewCount }: LevelSidebarProps) => {
               <LevelRating ratingClass={level.rating_class} />
             </DefinitionItem>
 
-            <DefinitionItem term="Reviews">
-              {reviewCount !== undefined ? (
-                <Link onClick={handleReviewCountClick}>{reviewCount}</Link>
-              ) : (
-                <Loader inline={true} />
-              )}
-            </DefinitionItem>
+            <DefinitionItem term="Reviews">{level.review_count}</DefinitionItem>
 
             <DefinitionItem term="Downloads">
               {level.download_count}
