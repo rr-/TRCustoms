@@ -27,6 +27,12 @@ up *args:
 down *args:
     docker-compose down {{args}}
 
+lint-frontend *args:
+    #!/bin/sh
+    set -xeuo pipefail
+    docker-compose run --rm trcustoms-frontend lint
+    docker-compose run --rm trcustoms-frontend tsc
+
 test *args:
     docker-compose run --rm trcustoms test -n auto {{args}}
 
