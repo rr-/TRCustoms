@@ -250,7 +250,7 @@ const InfiniteDataTable = <TItem extends {}, TQuery extends GenericSearchQuery>(
   );
 
   return (
-    <table className={`DataTable ${className}`}>
+    <table className={`${styles.table} ${className}`}>
       <DataTableHeader {...props} />
 
       {result.data?.pages?.map((result, i) => (
