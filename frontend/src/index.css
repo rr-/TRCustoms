@@ -113,6 +113,7 @@ hr {
   border: 0;
   height: 2px;
   background: var(--input-border-color);
+  margin: 1rem 0;
 }
 
 pre {

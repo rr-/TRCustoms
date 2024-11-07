@@ -3,34 +3,95 @@
   list-style-type: none;
   margin: 0 0 -1px 0;
   padding: 0;
-}
-.navItem {
-  margin: 0;
-  padding: 0;
-}
-.navItemLink {
-  display: inline-block;
-  padding: 0.5rem 1rem;
-  cursor: pointer;
-  background: var(--tab-switch-inactive-bg-color);
-  color: var(--tab-switch-inactive-fg-color);
-}
-.navItem.active .navItemLink {
-  background: var(--tab-switch-active-bg-color);
-  color: var(--tab-switch-active-fg-color);
-}
 
-.content {
-  padding: 0.5rem;
-  background: var(--tab-switch-active-bg-color);
+  .navItem {
+    margin: 0;
+    padding: 0;
+
+    .navItemLink {
+      display: inline-block;
+      cursor: pointer;
+    }
+  }
 }
 
 .contentItem {
   width: 100%;
-  overflow-y: auto;
-  display: flex;
-  min-height: var(--min-tab-height);
+  &:not(.active) {
+    display: none;
+  }
 }
-.contentItem:not(.active) {
-  display: none;
+
+.boxed {
+  .nav {
+    gap: 0.5rem;
+  }
+  .navItemLink {
+    padding: 0.5rem 1rem;
+    background: var(--tab-switch-tabbed-inactive-bg-color);
+    color: var(--tab-switch-tabbed-inactive-fg-color);
+  }
+
+  .navItem.active .navItemLink {
+    background: var(--tab-switch-tabbed-active-bg-color);
+    color: var(--tab-switch-tabbed-active-fg-color);
+  }
+
+  .content {
+    padding: 0.5rem;
+    background: var(--tab-switch-tabbed-active-bg-color);
+  }
+}
+
+.light {
+  .nav {
+    gap: 0.5rem;
+
+    /* filler */
+    &:after {
+      border-bottom: var(--tab-switch-light-inactive-border-color) 2px solid;
+      margin-bottom: -2px;
+      content: "";
+      flex: 1;
+    }
+  }
+
+  .navItem {
+    --my-fg-color: var(--tab-switch-light-inactive-fg-color);
+    --my-border-color: var(--tab-switch-light-inactive-border-color);
+    --my-bg-color: var(--tab-switch-light-inactive-bg-color);
+    &:hover {
+      --my-fg-color: var(--tab-switch-light-inactive-hover-fg-color);
+      --my-border-color: var(--tab-switch-light-inactive-hover-border-color);
+      --my-bg-color: var(--tab-switch-light-inactive-hover-bg-color);
+    }
+    &.active {
+      --my-fg-color: var(--tab-switch-light-active-fg-color);
+      --my-border-color: var(--tab-switch-light-active-border-color);
+      --my-bg-color: var(--tab-switch-light-active-bg-color);
+      &:hover {
+        --my-fg-color: var(--tab-switch-light-active-hover-fg-color);
+        --my-border-color: var(--tab-switch-light-active-hover-border-color);
+        --my-bg-color: var(--tab-switch-light-active-hover-bg-color);
+      }
+    }
+  }
+
+  .navItem {
+    margin-bottom: -2px;
+    border-bottom: 2px solid var(--my-border-color);
+    background: var(--my-bg-color);
+    transition: border-color var(--transition-speed),
+      background-color var(--transition-speed);
+
+    .navItemLink {
+      transition: color var(--transition-speed);
+      padding: 0.35rem 2rem;
+      color: var(--my-fg-color);
+    }
+  }
+
+  .content {
+    margin-top: 1rem;
+  }
 }

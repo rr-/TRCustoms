@@ -5,38 +5,19 @@ import { useQuery } from "react-query";
 import { useNavigate } from "react-router-dom";
 import { Button } from "src/components/common/Button";
 import { TextInput } from "src/components/common/TextInput";
-import { WalkthroughsTable } from "src/components/common/WalkthroughsTable";
-import { BaseModal } from "src/components/modals/BaseModal";
 import { KEY_RETURN } from "src/constants";
 import { UserContext } from "src/contexts/UserContext";
 import { LevelNested } from "src/services/LevelService";
 import { WalkthroughType } from "src/services/WalkthroughService";
-import type { WalkthroughSearchQuery } from "src/services/WalkthroughService";
 import type { WalkthroughDetails } from "src/services/WalkthroughService";
 import { WalkthroughService } from "src/services/WalkthroughService";
 import { showAlertOnError } from "src/utils/misc";
 
-interface WalkthroughsModalProps {
-  level: LevelNested;
-  isActive: boolean;
-  onIsActiveChange: (isActive: boolean) => void;
-}
-
-const getWalkthroughSearchQuery = (
-  levelId: number
-): WalkthroughSearchQuery => ({
-  levels: [levelId],
-  page: null,
-  sort: "-created",
-  search: "",
-  isApproved: true,
-});
-
-interface WalkthroughsModalFooterProps {
+interface WalkthroughsBarProps {
   level: LevelNested;
 }
 
-const WalkthroughsModalFooter = ({ level }: WalkthroughsModalFooterProps) => {
+const WalkthroughsBar = ({ level }: WalkthroughsBarProps) => {
   const navigate = useNavigate();
   const [textInput, setTextInput] = useState("");
 
@@ -106,32 +87,4 @@ const WalkthroughsModalFooter = ({ level }: WalkthroughsModalFooterProps) => {
   );
 };
 
-const WalkthroughsModal = ({
-  level,
-  isActive,
-  onIsActiveChange,
-}: WalkthroughsModalProps) => {
-  const [walkthroughSearchQuery, setWalkthroughSearchQuery] = useState<
-    WalkthroughSearchQuery
-  >(getWalkthroughSearchQuery(level.id));
-
-  return (
-    <BaseModal
-      title="Walkthroughs"
-      isActive={isActive}
-      onIsActiveChange={onIsActiveChange}
-      buttons={<WalkthroughsModalFooter level={level} />}
-    >
-      <WalkthroughsTable
-        showLevelNames={false}
-        showAuthors={true}
-        showWalkthroughType={false}
-        showStatus={false}
-        searchQuery={walkthroughSearchQuery}
-        onSearchQueryChange={setWalkthroughSearchQuery}
-      />
-    </BaseModal>
-  );
-};
-
-export { WalkthroughsModal };
+export { WalkthroughsBar };
