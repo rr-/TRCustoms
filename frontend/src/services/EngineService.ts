@@ -3,7 +3,6 @@ import { api } from "src/api";
 import { API_URL } from "src/constants";
 import type { GenericSearchQuery } from "src/types";
 import { GenericSearchResult } from "src/types";
-import { filterFalsyObjectValues } from "src/utils/misc";
 import { getGenericSearchQuery } from "src/utils/misc";
 
 interface EngineNested {
