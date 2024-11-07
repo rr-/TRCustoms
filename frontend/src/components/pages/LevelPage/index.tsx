@@ -1,8 +1,10 @@
 import { useQuery } from "react-query";
+import { useNavigate } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import { LevelSidebar } from "src/components/common/LevelSidebar";
 import { Loader } from "src/components/common/Loader";
 import { TabSwitch } from "src/components/common/TabSwitch";
+import type { TabPage } from "src/components/common/TabSwitch";
 import { TabSwitchVariant } from "src/components/common/TabSwitch";
 import { SidebarLayout } from "src/components/layouts/SidebarLayout";
 import { LevelHeader } from "src/components/pages/LevelPage/LevelHeader";
@@ -17,13 +19,26 @@ interface LevelPageParams {
   levelId: string;
 }
 
-const LevelPage = () => {
+interface LevelPageProps {
+  tabName?: string;
+}
+
+const LevelPage = ({ tabName }: LevelPageProps) => {
+  const navigate = useNavigate();
   const { levelId } = (useParams() as unknown) as LevelPageParams;
 
   const result = useQuery<LevelDetails, Error>(
     ["level", LevelService.getLevelById, levelId],
     async () => LevelService.getLevelById(+levelId)
   );
+
+  const handleTabChange = (tab: TabPage) => {
+    if (tab.name === "overview") {
+      navigate(`/levels/${level.id}`);
+    } else {
+      navigate(`/levels/${level.id}/${tab.name}`);
+    }
+  };
 
   usePageMetadata(
     () => ({
@@ -51,16 +66,19 @@ const LevelPage = () => {
 
   const tabs = [
     {
+      name: "overview",
       label: "Overview",
       content: <LevelOverviewTab level={level} />,
     },
 
     {
+      name: "reviews",
       label: "Reviews",
       content: <LevelReviewsTab level={level} />,
     },
 
     {
+      name: "walkthroughs",
       label: "Walkthroughs",
       content: <LevelWalkthroughsTab level={level} />,
     },
@@ -71,7 +89,12 @@ const LevelPage = () => {
       header={<LevelHeader level={level} />}
       sidebar={<LevelSidebar level={level} />}
     >
-      <TabSwitch variant={TabSwitchVariant.Light} tabs={tabs} />
+      <TabSwitch
+        onTabChange={handleTabChange}
+        variant={TabSwitchVariant.Light}
+        tabs={tabs}
+        tabName={tabName}
+      />
     </SidebarLayout>
   );
 };

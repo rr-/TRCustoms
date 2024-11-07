@@ -27,6 +27,7 @@ const TextAreaFormFieldTabbed = ({
 
   const tabs = [
     {
+      name: "compose",
       label: "Compose",
       content: (
         <div className={styles.tab}>
@@ -42,6 +43,7 @@ const TextAreaFormFieldTabbed = ({
     },
 
     {
+      name: "preview",
       label: "Preview",
       content: (
         <div className={styles.tab}>

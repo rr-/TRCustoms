@@ -69,6 +69,14 @@ const App = () => {
             <Route path="/levels" element={<LevelListPage />} />
             <Route path="/levels/:levelId" element={<LevelPage />} />
             <Route
+              path="/levels/:levelId/reviews"
+              element={<LevelPage tabName="reviews" />}
+            />
+            <Route
+              path="/levels/:levelId/walkthroughs"
+              element={<LevelPage tabName="walkthroughs" />}
+            />
+            <Route
               path="/levels/:levelId/review"
               element={<LevelReviewPage />}
             />
