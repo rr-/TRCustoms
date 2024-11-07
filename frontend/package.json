@@ -26,6 +26,8 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
+    "tsc": "tsc --strict",
+    "lint": "eslint .",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {

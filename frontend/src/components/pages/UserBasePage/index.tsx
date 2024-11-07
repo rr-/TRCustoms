@@ -2,9 +2,9 @@ import { useContext } from "react";
 import { useQuery } from "react-query";
 import { Loader } from "src/components/common/Loader";
 import { PageGuard } from "src/components/common/PermissionGuard";
-import { SmartWrap } from "src/components/common/SmartWrap";
 import { UserSidebar } from "src/components/common/UserSidebar";
 import { SidebarLayout } from "src/components/layouts/SidebarLayout";
+import { UserHeader } from "src/components/pages/UserBasePage/UserHeader";
 import { usePageMetadata } from "src/contexts/PageMetadataContext";
 import { UserContext } from "src/contexts/UserContext";
 import type { UserDetails } from "src/services/UserService";
@@ -51,13 +51,9 @@ const UserBasePageView = ({ userId, children }: UserBasePageViewProps) => {
 
   const user = userResult.data;
 
-  const subheader = `${user.first_name} ${user.last_name}`.trim();
-  const showSubheader =
-    user.is_active && subheader && subheader !== user.username;
   return (
     <SidebarLayout
-      header={<SmartWrap text={`${user.username}'s profile`} />}
-      subheader={showSubheader ? <SmartWrap text={subheader} /> : undefined}
+      header={<UserHeader user={user} />}
       sidebar={<UserSidebar user={user} />}
     >
       {children({
