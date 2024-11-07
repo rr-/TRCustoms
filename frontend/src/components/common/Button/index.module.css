@@ -13,6 +13,7 @@
   height: calc(2rem + 4px);
   box-sizing: border-box;
   cursor: pointer;
+  transition: color var(--transition-speed), background var(--transition-speed);
 }
 .button:hover {
   background: var(--button-hovered-bg-color);
