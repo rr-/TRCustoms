@@ -38,19 +38,23 @@
   display: block;
 }
 
+.mediumThumbnail {
+  background: grey;
+}
 .mediumThumbnailThumb {
   display: block;
   width: 100%;
   height: 100%;
   object-fit: contain;
   cursor: pointer;
+  transition: all var(--transition-speed);
 }
 .mediumThumbnail.cover .mediumThumbnailThumb {
   object-fit: cover;
   aspect-ratio: 4 / 3;
 }
 .mediumThumbnailThumb:hover {
-  opacity: 0.9;
+  filter: opacity(0.95) contrast(95%) brightness(110%);
 }
 
 .modal {

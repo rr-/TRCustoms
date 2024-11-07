@@ -2,7 +2,7 @@
   display: grid;
   margin-bottom: 3rem;
   grid-template-rows: auto auto auto;
-  background: var(--box-bg-color);
+  background: var(--box-content-bg-color);
 }
 .wrapper.positive .badge {
   background-color: var(--reviews-positive-bg-color);
@@ -41,6 +41,7 @@
 }
 
 .footer {
+  background: var(--box-header-bg-color);
   padding: 1rem;
   display: flex;
   flex-direction: row;

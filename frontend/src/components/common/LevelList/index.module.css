@@ -1,6 +1,6 @@
 .wrapper {
   padding: 0.5rem;
-  background: var(--box-bg-color);
+  background: var(--box-content-bg-color);
   display: flex;
   gap: 0.75rem;
   margin-bottom: 1rem;

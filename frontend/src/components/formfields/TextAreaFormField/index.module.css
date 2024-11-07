@@ -12,12 +12,12 @@
 
 .previewHeader {
   padding: 0.5rem;
-  background: var(--box-bg-color);
+  background: var(--label-bg-color);
   border-bottom: 2px solid var(--input-border-color);
 }
 
 .previewBody {
-  background: var(--box-bg-color);
+  background: var(--box-content-bg-color);
   padding: 0.5rem;
   height: var(--textarea-height);
   box-sizing: border-box;

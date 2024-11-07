@@ -13,7 +13,12 @@
   grid-template-columns: 1fr;
 }
 
-.wrapper.regular .header {
+.sidebar:empty {
+  display: none;
+}
+
+.wrapper.regular .header,
+.wrapper.reverse .header {
   grid-column: span 2;
 }
 .wrapper.reverse .sidebar {

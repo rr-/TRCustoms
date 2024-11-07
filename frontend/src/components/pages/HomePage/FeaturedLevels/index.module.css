@@ -14,12 +14,12 @@
 
 .foreground {
   transition: background 500ms, backdrop-filter 500ms;
-  background: color-mix(in srgb, var(--box-bg-color), transparent 15%);
+  background: color-mix(in srgb, var(--box-content-bg-color), transparent 15%);
   backdrop-filter: blur(0.25rem);
   paint-order: stroke fill;
 }
 .container:hover .foreground {
-  background: color-mix(in srgb, var(--box-bg-color), transparent 35%);
+  background: color-mix(in srgb, var(--box-content-bg-color), transparent 35%);
   backdrop-filter: blur(0.05rem);
 }
 

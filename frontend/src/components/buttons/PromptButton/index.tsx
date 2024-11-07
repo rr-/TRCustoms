@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Button } from "src/components/common/Button";
+import { ButtonVariant } from "src/components/common/Button";
 import { PromptModal } from "src/components/modals/PromptModal";
 import { showAlertOnError } from "src/utils/misc";
 
@@ -10,6 +11,7 @@ interface PromptButtonProps {
   buttonLabel: string;
   buttonTooltip: string;
   onConfirm: (result: string) => Promise<void>;
+  buttonVariant?: ButtonVariant;
   big?: boolean | undefined;
 }
 
@@ -19,6 +21,7 @@ const PromptButton = ({
   promptLabel,
   buttonLabel,
   buttonTooltip,
+  buttonVariant,
   onConfirm,
   big,
 }: PromptButtonProps) => {
@@ -49,6 +52,7 @@ const PromptButton = ({
         onClick={handleButtonClick}
         disableTimeout={true}
         tooltip={buttonTooltip}
+        variant={buttonVariant}
       >
         {buttonLabel}
       </Button>

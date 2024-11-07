@@ -2,6 +2,7 @@ import styles from "./index.module.css";
 import { useContext } from "react";
 import { PlaylistAddButton } from "src/components/buttons/PlaylistAddButton";
 import { Button } from "src/components/common/Button";
+import { ButtonVariant } from "src/components/common/Button";
 import { DefinitionItemGroup } from "src/components/common/DefinitionList";
 import { DefinitionItem } from "src/components/common/DefinitionList";
 import { DefinitionList } from "src/components/common/DefinitionList";
@@ -60,21 +61,36 @@ const LevelSidebar = ({ level }: LevelSidebarProps) => {
         actions={
           <>
             {level.last_file?.url && (
-              <Button to={level.last_file.url} icon={<IconDownload />}>
+              <Button
+                variant={ButtonVariant.Important}
+                to={level.last_file.url}
+                icon={<IconDownload />}
+              >
                 Download ({formatFileSize(level.last_file.size)})
               </Button>
             )}
             {mainLink && (
-              <Button to={mainLink} icon={<IconGlobe />}>
+              <Button
+                variant={ButtonVariant.Important}
+                to={mainLink}
+                icon={<IconGlobe />}
+              >
                 Website
               </Button>
             )}
 
-            {user && <PlaylistAddButton userId={user.id} level={level} />}
+            {user && (
+              <PlaylistAddButton
+                variant={ButtonVariant.Important}
+                userId={user.id}
+                level={level}
+              />
+            )}
 
             {level.authors.every((author) => author.id !== user?.id) && (
               <PermissionGuard require={UserPermission.reviewLevels}>
                 <Button
+                  variant={ButtonVariant.Important}
                   icon={<IconAnnotation />}
                   to={`/levels/${level.id}/review`}
                 >

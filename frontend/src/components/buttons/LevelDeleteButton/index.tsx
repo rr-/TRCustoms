@@ -1,5 +1,6 @@
 import { useQueryClient } from "react-query";
 import { ConfirmButton } from "src/components/buttons/ConfirmButton";
+import { ButtonVariant } from "src/components/common/Button";
 import { IconTrash } from "src/components/icons";
 import type { LevelNested } from "src/services/LevelService";
 import { LevelService } from "src/services/LevelService";
@@ -7,10 +8,15 @@ import { resetQueries } from "src/utils/misc";
 
 interface LevelDeleteButtonProps {
   level: LevelNested;
+  variant?: ButtonVariant;
   onComplete?: (() => void) | undefined;
 }
 
-const LevelDeleteButton = ({ level, onComplete }: LevelDeleteButtonProps) => {
+const LevelDeleteButton = ({
+  level,
+  variant,
+  onComplete,
+}: LevelDeleteButtonProps) => {
   const queryClient = useQueryClient();
 
   const handleConfirm = async () => {
@@ -30,6 +36,7 @@ const LevelDeleteButton = ({ level, onComplete }: LevelDeleteButtonProps) => {
       }
       buttonLabel="Delete"
       buttonTooltip="Deletes this level forever."
+      buttonVariant={variant}
       onConfirm={handleConfirm}
     />
   );

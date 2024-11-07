@@ -3,15 +3,17 @@ import { Link } from "src/components/common/Link";
 interface LevelLinkProps {
   className?: string | undefined;
   level: { id: number; name: string };
+  subPage?: "reviews" | "walkthroughs";
   children?: React.ReactNode | undefined;
 }
 
-const LevelLink = ({ level, children, ...props }: LevelLinkProps) => {
+const LevelLink = ({ level, subPage, children, ...props }: LevelLinkProps) => {
   const { id, name } = level;
 
   if (id) {
+    const to = subPage ? `/levels/${id}/${subPage}` : `/levels/${id}`;
     return (
-      <Link to={`/levels/${id}`} {...props}>
+      <Link to={to} {...props}>
         {children || name}
       </Link>
     );

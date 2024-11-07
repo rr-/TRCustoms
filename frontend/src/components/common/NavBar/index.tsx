@@ -11,6 +11,21 @@ import { UserPicture } from "src/components/common/UserPicture";
 import { UserContext } from "src/contexts/UserContext";
 import { UserPermission } from "src/services/UserService";
 
+const MyNavLink = ({ children, ...args }: any) => {
+  return (
+    <NavLink
+      {...args}
+      className={({ isActive, isPending }) =>
+        [isPending ? styles.pending : "", isActive ? styles.active : ""].join(
+          " "
+        )
+      }
+    >
+      {children}
+    </NavLink>
+  );
+};
+
 const LevelsNavLink = ({ children, to, ...rest }: LinkProps) => {
   let location = useLocation();
   let path = useResolvedPath(to);
@@ -25,7 +40,7 @@ const LevelsNavLink = ({ children, to, ...rest }: LinkProps) => {
     locationPathname.match(/^\/?levels(\/(?!upload)|$)/);
 
   let ariaCurrent: "page" | undefined = isActive ? "page" : undefined;
-  let className = [isActive ? "active" : null].filter(Boolean).join(" ");
+  let className = [isActive ? styles.active : null].filter(Boolean).join(" ");
 
   return (
     <Link to={to} aria-current={ariaCurrent} className={className} {...rest}>
@@ -79,38 +94,38 @@ const NavBar = () => {
         <nav className={styles.secondary}>
           <ul className={styles.list}>
             <li className={styles.listItem}>
-              <NavLink to={"/"}>Home</NavLink>
+              <MyNavLink to={"/"}>Home</MyNavLink>
             </li>
             <li className={styles.listItem}>
               <LevelsNavLink to={"/levels"}>Levels</LevelsNavLink>
             </li>
             <li className={styles.listItem}>
-              <NavLink to={"/genres"}>Genres</NavLink>
+              <MyNavLink to={"/genres"}>Genres</MyNavLink>
             </li>
             <li className={styles.listItem}>
-              <NavLink to={"/tags"}>Tags</NavLink>
+              <MyNavLink to={"/tags"}>Tags</MyNavLink>
             </li>
             <li className={styles.listItem}>
-              <NavLink to={"/reviews"}>Reviews</NavLink>
+              <MyNavLink to={"/reviews"}>Reviews</MyNavLink>
             </li>
             <li className={styles.listItem}>
-              <NavLink to={"/about"}>About</NavLink>
+              <MyNavLink to={"/about"}>About</MyNavLink>
             </li>
 
             <li className={`${styles.listItem} ${styles.grow}`} />
 
             <PermissionGuard require={UserPermission.uploadLevels}>
               <li className={styles.listItem}>
-                <NavLink to={"/levels/upload"}>Upload level</NavLink>
+                <MyNavLink to={"/levels/upload"}>Upload level</MyNavLink>
               </li>
             </PermissionGuard>
             <PermissionGuard require={UserPermission.editLevels}>
               <li className={styles.listItem}>
-                <NavLink to={"/mod"}>Moderate</NavLink>
+                <MyNavLink to={"/mod"}>Moderate</MyNavLink>
               </li>
             </PermissionGuard>
             <li className={styles.listItem}>
-              <NavLink to={"/settings"}>Settings</NavLink>
+              <MyNavLink to={"/settings"}>Settings</MyNavLink>
             </li>
           </ul>
         </nav>

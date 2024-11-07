@@ -1,3 +1,4 @@
+import { ButtonVariant } from "src/components/common/Button";
 import styles from "src/components/common/Button/index.module.css";
 
 interface SubmitButtonProps {
@@ -7,6 +8,7 @@ interface SubmitButtonProps {
   icon?: React.ReactNode | undefined;
   children?: React.ReactNode | string | undefined;
   tooltip?: string | undefined;
+  variant?: ButtonVariant;
 }
 
 const SubmitButton = ({
@@ -16,6 +18,7 @@ const SubmitButton = ({
   children,
   disabled,
   tooltip,
+  variant,
 }: SubmitButtonProps) => {
   const handleLinkClick = (event: React.MouseEvent) => {
     if (disabled) {
@@ -36,6 +39,11 @@ const SubmitButton = ({
   }
   if (className) {
     classNames.push(className);
+  }
+  if (variant === ButtonVariant.Important) {
+    classNames.push(styles.important);
+  } else {
+    classNames.push(styles.soft);
   }
 
   return (

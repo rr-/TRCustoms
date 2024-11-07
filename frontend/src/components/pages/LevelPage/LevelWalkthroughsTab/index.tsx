@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { WalkthroughsBar } from "src/components/common/WalkthroughsBar";
-import { WalkthroughsTable } from "src/components/common/WalkthroughsTable";
+import { WalkthroughsList } from "src/components/common/WalkthroughsList";
+import { DISABLE_PAGING } from "src/constants";
 import type { LevelDetails } from "src/services/LevelService";
 import type { WalkthroughSearchQuery } from "src/services/WalkthroughService";
 
@@ -8,7 +9,7 @@ const getWalkthroughSearchQuery = (
   levelId: number
 ): WalkthroughSearchQuery => ({
   levels: [levelId],
-  page: null,
+  page: DISABLE_PAGING,
   sort: "-created",
   search: "",
   isApproved: true,
@@ -26,12 +27,9 @@ const LevelWalkthroughsTab = ({ level }: LevelWalkthroughsTabProps) => {
   return (
     <>
       <WalkthroughsBar level={level} />
-      <hr />
-      <WalkthroughsTable
-        showLevelNames={false}
-        showAuthors={true}
-        showWalkthroughType={false}
-        showStatus={false}
+
+      <WalkthroughsList
+        showLevels={false}
         searchQuery={walkthroughSearchQuery}
         onSearchQueryChange={setWalkthroughSearchQuery}
       />

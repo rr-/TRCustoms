@@ -36,3 +36,12 @@
 .text.text50 {
   width: 50%;
 }
+
+.paletteBar {
+  display: flex;
+}
+.paletteBox {
+  width: 1rem;
+  height: 1rem;
+  flex: 1;
+}
