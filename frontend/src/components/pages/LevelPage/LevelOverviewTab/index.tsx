@@ -1,3 +1,5 @@
+import { InfoMessage } from "src/components/common/InfoMessage";
+import { InfoMessageType } from "src/components/common/InfoMessage";
 import { MediumThumbnails } from "src/components/common/MediumThumbnails";
 import { Markdown } from "src/components/markdown/Markdown";
 import type { UploadedFile } from "src/services/FileService";
@@ -16,6 +18,18 @@ const LevelOverviewTab = ({ level }: LevelOverviewTabProps) => {
 
   return (
     <>
+      {level.is_approved || (
+        <InfoMessage type={InfoMessageType.Warning}>
+          {level.rejection_reason ? (
+            <>
+              This level was rejected by staff. Reason: {level.rejection_reason}
+            </>
+          ) : (
+            <>This level is currently pending approval.</>
+          )}
+        </InfoMessage>
+      )}
+
       {!!level.screenshots.length && (
         <MediumThumbnails
           displayMode={DisplayMode.Contain}
