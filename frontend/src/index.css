@@ -5,6 +5,7 @@ html {
   --font-family: "Ubuntu", sans-serif;
   --font-size: 12pt;
   --line-height: calc(var(--font-size) * 1.5);
+  --transition-speed: 300ms;
 }
 
 body {
@@ -39,6 +40,7 @@ body.modal-open {
 a {
   color: var(--link-color);
   text-decoration: var(--link-text-decoration);
+  transition: color var(--transition-speed);
 }
 a:focus-visible {
   outline: 2px solid var(--outline-color);
