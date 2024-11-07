@@ -1,7 +1,5 @@
 import { useQuery } from "react-query";
 import { useParams } from "react-router-dom";
-import { InfoMessage } from "src/components/common/InfoMessage";
-import { InfoMessageType } from "src/components/common/InfoMessage";
 import { LevelSidebar } from "src/components/common/LevelSidebar";
 import { Loader } from "src/components/common/Loader";
 import { TabSwitch } from "src/components/common/TabSwitch";
@@ -73,18 +71,6 @@ const LevelPage = () => {
       header={<LevelHeader level={level} />}
       sidebar={<LevelSidebar level={level} />}
     >
-      {level.is_approved || (
-        <InfoMessage type={InfoMessageType.Warning}>
-          {level.rejection_reason ? (
-            <>
-              This level was rejected by staff. Reason: {level.rejection_reason}
-            </>
-          ) : (
-            <>This level is currently pending approval.</>
-          )}
-        </InfoMessage>
-      )}
-
       <TabSwitch variant={TabSwitchVariant.Light} tabs={tabs} />
     </SidebarLayout>
   );
