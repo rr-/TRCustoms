@@ -6,13 +6,13 @@ interface RadioboxesProps<TOption, TOptionId> {
   footer?: React.ReactNode;
   options: TOption[];
   value: TOptionId | null | undefined;
-  onChange: (value: TOptionId | null | undefined) => any;
+  onChange: (value: TOptionId) => any;
   getOptionId: (option: TOption) => TOptionId;
   getOptionName: (option: TOption) => string;
   getOptionSortPosition?: (option: TOption) => any;
 }
 
-const Radioboxes = <TOption extends {}, TOptionId extends {}>({
+const Radioboxes = <TOption extends {}, TOptionId extends {} | null>({
   header,
   footer,
   options,

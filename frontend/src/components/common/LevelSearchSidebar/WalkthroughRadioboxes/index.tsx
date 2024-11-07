@@ -1,21 +1,18 @@
 import { Radioboxes } from "src/components/common/Radioboxes";
 
+type NullableBoolean = boolean | null;
+
 interface WalkthroughRadioboxesProps {
-  videoWalkthroughs: boolean | null | undefined;
-  textWalkthroughs: boolean | null | undefined;
+  videoWalkthroughs?: NullableBoolean;
+  textWalkthroughs?: NullableBoolean;
   onChange: (
-    videoWalkthroughs: boolean | null,
-    textWalkthroughs: boolean | null
+    videoWalkthroughs: NullableBoolean,
+    textWalkthroughs: NullableBoolean
   ) => any;
 }
 
-interface OptionId {
-  videoWalkthroughs: boolean | null | undefined;
-  textWalkthroughs: boolean | null | undefined;
-}
-
-interface Option {
-  id: OptionId;
+interface RadioOption {
+  id: NullableBoolean;
   name: string;
 }
 
@@ -24,51 +21,46 @@ const WalkthroughRadioboxes = ({
   textWalkthroughs,
   onChange,
 }: WalkthroughRadioboxesProps) => {
-  const value: OptionId = { videoWalkthroughs, textWalkthroughs };
-
-  const options: Option[] = [
-    {
-      id: { videoWalkthroughs: null, textWalkthroughs: null },
-      name: "Show all",
-    },
-    {
-      id: { videoWalkthroughs: true, textWalkthroughs: false },
-      name: "Video only",
-    },
-    {
-      id: { videoWalkthroughs: false, textWalkthroughs: true },
-      name: "Text only",
-    },
-    {
-      id: { videoWalkthroughs: false, textWalkthroughs: null },
-      name: "No video",
-    },
-    {
-      id: { videoWalkthroughs: null, textWalkthroughs: false },
-      name: "No text",
-    },
-    {
-      id: { videoWalkthroughs: false, textWalkthroughs: false },
-      name: "No walkthroughs",
-    },
+  const videoOptions: RadioOption[] = [
+    { id: null, name: "Show all" },
+    { id: true, name: "With videos" },
+    { id: false, name: "Without videos" },
   ];
 
-  const onChangeInternal = (value: OptionId | null | undefined): void => {
-    if (value) {
-      onChange(value.videoWalkthroughs ?? null, value.textWalkthroughs ?? null);
-    } else {
-      onChange(null, null);
-    }
+  const textOptions: RadioOption[] = [
+    { id: null, name: "Show all" },
+    { id: true, name: "With text" },
+    { id: false, name: "Without text" },
+  ];
+
+  const onVideoRadioboxChange = (value: NullableBoolean): void => {
+    onChange(value ?? null, textWalkthroughs ?? null);
+  };
+
+  const onTextRadioboxChange = (value?: NullableBoolean): void => {
+    onChange(videoWalkthroughs ?? null, value ?? null);
   };
 
   return (
-    <Radioboxes
-      options={options}
-      value={value}
-      onChange={onChangeInternal}
-      getOptionId={(entity: Option) => entity.id}
-      getOptionName={(entity: Option) => entity.name}
-    />
+    <>
+      <p>Videos:</p>
+      <Radioboxes<RadioOption, NullableBoolean>
+        options={videoOptions}
+        value={videoWalkthroughs}
+        onChange={onVideoRadioboxChange}
+        getOptionId={(option: RadioOption) => option.id}
+        getOptionName={(option: RadioOption) => option.name}
+      />
+
+      <p>Text:</p>
+      <Radioboxes<RadioOption, NullableBoolean>
+        options={textOptions}
+        value={textWalkthroughs}
+        onChange={onTextRadioboxChange}
+        getOptionId={(option: RadioOption) => option.id}
+        getOptionName={(option: RadioOption) => option.name}
+      />
+    </>
   );
 };
 
