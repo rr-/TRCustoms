@@ -18,9 +18,19 @@
   z-index: 2;
   background: var(--v2-accent-color-3);
   transition: background var(--transition-speed);
+
+  /* zero children - no icon */
+  &:has(+ .content:empty) {
+    display: none;
+  }
+  /* single child - no icon */
+  &:has(+ .content > *:only-child) {
+    display: none;
+  }
 }
 
-.content {
+/* special styling only if there's more than one child */
+.content:not(:has(> :only-child)) {
   position: absolute;
   right: 0;
   background-color: var(--box-radius);
@@ -38,16 +48,13 @@
   transform: scaleY(0.5);
   transform-origin: top right;
   transition: all 0.2s ease;
-}
 
-.content.open {
-  opacity: 1;
-  transform: scaleY(1);
-}
+  &.open {
+    opacity: 1;
+    transform: scaleY(1);
+  }
 
-.content:empty {
-  display: none;
-}
-.icon:has(+ .content:empty) {
-  display: none;
+  &:empty {
+    display: none;
+  }
 }
