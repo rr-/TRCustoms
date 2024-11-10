@@ -376,11 +376,15 @@ class LevelDetailsSerializer(LevelListingSerializer):
     def update(self, instance, validated_data):
         func = super().update
 
+        prev_authors = list(instance.authors.all())
+
         def level_factory():
             return func(instance, validated_data)
 
         level = self.handle_m2m(level_factory, validated_data)
-        for author in level.authors.iterator():
+        current_authors = list(level.authors.all())
+
+        for author in [*prev_authors, *current_authors]:
             update_awards.delay(author.pk)
         return level
 

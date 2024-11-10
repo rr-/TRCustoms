@@ -14,5 +14,6 @@ def bone_dust() -> Iterable[AwardSpec]:
         code="bone_dust",
         title="Bone Dust",
         description="You have updated all your levels imported from TRLE.net.",
+        can_be_removed=True,
         requirement=EarlyLevelsEditedAwardRequirement(max_date=max_date),
     )
