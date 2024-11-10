@@ -17,10 +17,13 @@
 }
 
 .previewBody {
-  background: var(--box-content-bg-color);
-  padding: 0.5rem;
   height: var(--textarea-height);
   box-sizing: border-box;
+  background: var(--box-content-bg-color);
+}
+.markdownWrapper {
+  padding: 0.5rem;
+  background: var(--box-content-bg-color);
 }
 
 .wrapper.plain {

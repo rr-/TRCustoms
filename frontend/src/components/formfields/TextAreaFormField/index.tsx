@@ -48,7 +48,9 @@ const TextAreaFormFieldTabbed = ({
       content: (
         <div className={styles.tab}>
           <div className={styles.previewBody}>
-            <Markdown>{(values as any)[name]}</Markdown>
+            <div className={styles.markdownWrapper}>
+              <Markdown>{(values as any)[name]}</Markdown>
+            </div>
           </div>
         </div>
       ),
