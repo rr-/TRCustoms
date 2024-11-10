@@ -1,25 +1,16 @@
 .wrapper {
   display: flex;
-  margin-bottom: 1rem;
   flex-direction: column;
+  margin-bottom: 1rem;
   background: var(--box-content-bg-color);
 
   --video-embed-width: 100%;
   --video-embed-height: 100%;
-  --video-embed-aspect-ratio: 4 / 3;
+  --video-embed-aspect-ratio: 16 / 9;
 }
 
 .content {
   padding: 1rem;
-}
-
-.clampedContent {
-  display: -webkit-box;
-  -webkit-line-clamp: 8;
-  line-clamp: 8;
-  overflow: hidden;
-  -webkit-box-orient: vertical;
-  margin-bottom: 0.5rem;
 }
 
 .header {
