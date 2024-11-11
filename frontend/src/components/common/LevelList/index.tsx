@@ -31,13 +31,15 @@ const LevelView = ({ showStatus, level }: LevelViewProps) => {
   return (
     <article className={styles.wrapper}>
       <Link className={styles.coverLink} to={`/levels/${level.id}`}>
-        {level.cover ? (
-          <img
-            className={styles.coverImage}
-            src={level.cover.url}
-            alt={level.name}
-          />
-        ) : null}
+        <div className={styles.coverImageWrapper}>
+          {level.cover ? (
+            <img
+              className={styles.coverImage}
+              src={level.cover.url}
+              alt={level.name}
+            />
+          ) : null}
+        </div>
       </Link>
 
       <div className={styles.details}>
