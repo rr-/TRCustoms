@@ -10,7 +10,7 @@ const getWalkthroughSearchQuery = (
 ): WalkthroughSearchQuery => ({
   levels: [levelId],
   page: DISABLE_PAGING,
-  sort: "-created",
+  sort: "-last_updated",
   search: "",
   isApproved: true,
 });
