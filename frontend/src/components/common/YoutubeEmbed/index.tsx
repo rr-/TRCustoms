@@ -2,9 +2,16 @@ import styles from "./index.module.css";
 import { Link } from "src/components/common/Link";
 import type { YoutubeLink } from "src/utils/misc";
 
-interface YoutubeEmbedProps extends YoutubeLink {}
+interface YoutubeEmbedProps extends YoutubeLink {
+  showLink?: boolean;
+}
 
-const YoutubeEmbed = ({ fullUrl, playlistID, videoID }: YoutubeEmbedProps) => {
+const YoutubeEmbed = ({
+  fullUrl,
+  playlistID,
+  videoID,
+  showLink,
+}: YoutubeEmbedProps) => {
   const link = (
     <>
       <Link to={fullUrl}>Click here</Link> to see the full video/playlist.
@@ -15,8 +22,12 @@ const YoutubeEmbed = ({ fullUrl, playlistID, videoID }: YoutubeEmbedProps) => {
     return (
       <p>
         No video preview is available.
-        <br />
-        {link}
+        {showLink ? (
+          <>
+            <br />
+            {link}
+          </>
+        ) : null}
       </p>
     );
   }
@@ -29,7 +40,7 @@ const YoutubeEmbed = ({ fullUrl, playlistID, videoID }: YoutubeEmbedProps) => {
   return (
     <>
       <iframe title="YouTube video" className={styles.embed} src={url} />
-      {playlistID && link}
+      {playlistID && showLink ? link : null}
     </>
   );
 };

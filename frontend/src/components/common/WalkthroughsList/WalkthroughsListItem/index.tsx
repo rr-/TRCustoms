@@ -5,7 +5,6 @@ import { WalkthroughActions } from "src/components/common/WalkthroughActions";
 import { WalkthroughContent } from "src/components/common/WalkthroughContent";
 import { LevelLink } from "src/components/links/LevelLink";
 import { UserLink } from "src/components/links/UserLink";
-import { WalkthroughLink } from "src/components/links/WalkthroughLink";
 import type { WalkthroughListing } from "src/services/WalkthroughService";
 import { formatDate } from "src/utils/string";
 

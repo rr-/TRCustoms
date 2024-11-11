@@ -1,5 +1,6 @@
 import styles from "./index.module.css";
 import React from "react";
+import { Link } from "src/components/common/Link";
 import { YoutubeEmbed } from "src/components/common/YoutubeEmbed";
 import { WalkthroughLink } from "src/components/links/WalkthroughLink";
 import { Markdown } from "src/components/markdown/Markdown";
@@ -25,7 +26,25 @@ const WalkthroughContent: React.FC<WalkthroughContentProps> = ({
   if (youtubeVideo) {
     content = (
       <div className={`${styles.embedWrapper} ChildMarginClear`}>
-        <YoutubeEmbed {...youtubeVideo} />
+        <YoutubeEmbed {...youtubeVideo} showLink={!showExcerpts} />
+        {showExcerpts && (
+          <>
+            <WalkthroughLink
+              walkthrough={{
+                ...walkthrough,
+                levelName: walkthrough.level.name,
+              }}
+            >
+              Watch maximized
+            </WalkthroughLink>
+            {youtubeVideo.playlistID ? (
+              <>
+                {" or "}
+                <Link to={youtubeVideo.fullUrl}>View the full playlist</Link>
+              </>
+            ) : null}
+          </>
+        )}
       </div>
     );
   } else if (!walkthrough.text) {
