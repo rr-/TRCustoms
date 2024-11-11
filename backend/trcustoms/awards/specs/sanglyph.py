@@ -20,6 +20,7 @@ def sanglyph() -> Iterable[AwardSpec]:
             "You built levels, reviewed levels, and guided others through "
             "levels. Respect!"
         ),
+        can_be_removed=True,
         requirement=AuthoredLevelsAwardRequirement(
             min_levels=min_levels,
         )

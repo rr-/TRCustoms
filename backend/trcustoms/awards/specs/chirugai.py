@@ -14,6 +14,7 @@ def chirugai() -> Iterable[AwardSpec]:
         code="chirugai",
         title="Chirugai",
         description="You have returned after years of inactivity.",
+        can_be_removed=True,
         requirement=AuthoredLevelsFarApartRequirement(
             min_time_apart=min_time_apart
         ),

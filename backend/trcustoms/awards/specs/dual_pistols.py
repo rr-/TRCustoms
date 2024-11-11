@@ -15,6 +15,7 @@ def dual_pistols() -> Iterable[AwardSpec]:
         description=(
             f"You released {min_levels} levels that are up to standard."
         ),
+        can_be_removed=True,
         requirement=AuthoredLevelsRatingCountRequirement(
             min_rating=0,
             min_levels=min_levels,
