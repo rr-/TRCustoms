@@ -24,7 +24,7 @@ const WalkthroughContent: React.FC<WalkthroughContentProps> = ({
   let content: React.ReactNode;
   if (youtubeVideo) {
     content = (
-      <div className={styles.embedWrapper}>
+      <div className={`${styles.embedWrapper} ChildMarginClear`}>
         <YoutubeEmbed {...youtubeVideo} />
       </div>
     );
