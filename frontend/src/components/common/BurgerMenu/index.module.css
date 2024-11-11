@@ -16,7 +16,7 @@
   border: none;
   padding: 0;
   z-index: 2;
-  background: var(--v2-accent-color-3);
+  background: var(--button-soft-bg-color);
   transition: background var(--transition-speed);
 
   /* zero children - no icon */
@@ -33,7 +33,6 @@
 .content:not(:has(> :only-child)) {
   position: absolute;
   right: 0;
-  background-color: var(--box-radius);
   background: var(--v2-bg-color-1);
   border: 1px solid var(--v2-fg-color-2);
   border-radius: 5px;
