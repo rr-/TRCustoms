@@ -17,6 +17,7 @@ def philosophers_stone() -> Iterable[AwardSpec]:
             "You released two levels within the same year that got "
             "an overwhelmingly positive rating."
         ),
+        can_be_removed=True,
         requirement=AuthoredLevelsSustainableQualityRequirement(
             min_rating_class=4,
             max_time_apart=timedelta(days=365),
