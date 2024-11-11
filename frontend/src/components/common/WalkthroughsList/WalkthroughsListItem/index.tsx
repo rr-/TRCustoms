@@ -35,17 +35,7 @@ const WalkthroughListItem = ({
         )}
       </div>
 
-      <small>
-        <WalkthroughLink
-          walkthrough={{ ...walkthrough, levelName: walkthrough.level.name }}
-        >
-          Posted on: {formatDate(walkthrough.created)}
-        </WalkthroughLink>
-      </small>
-      {formatDate(walkthrough.created) !==
-        formatDate(walkthrough.last_updated) && (
-        <small>Updated on: {formatDate(walkthrough.last_updated)}</small>
-      )}
+      <small>Posted on: {formatDate(walkthrough.created)}</small>
 
       <BurgerMenu>
         <WalkthroughActions walkthrough={walkthrough} />
