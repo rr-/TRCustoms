@@ -18,8 +18,8 @@
 }
 
 .picture.small {
-  max-width: 2rem;
-  max-height: 2rem;
+  max-width: var(--user-pic-size, 2rem);
+  max-height: var(--user-pic-size, 2rem);
 }
 
 .picture {
