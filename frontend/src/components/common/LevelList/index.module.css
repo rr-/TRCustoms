@@ -13,17 +13,22 @@
 
 .coverLink {
   width: 15.5rem;
-  display: block;
-  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   transition: opacity 300ms;
 }
 .coverLink:hover {
   opacity: 0.9;
 }
+.coverImageWrapper {
+  aspect-ratio: 4/3;
+  width: 100%;
+  position: relative;
+}
 @media (max-device-width: 600px) {
   .coverLink {
     width: unset;
-    aspect-ratio: 4/3;
   }
 }
 
