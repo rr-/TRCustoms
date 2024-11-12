@@ -28,6 +28,80 @@ interface LevelViewProps {
 }
 
 const LevelView = ({ showStatus, level }: LevelViewProps) => {
+  const author = (
+    <>
+      <strong>
+        <LevelLink level={level} />
+      </strong>{" "}
+      by <LevelAuthorsLink authors={level.authors} />
+    </>
+  );
+
+  const status = (
+    <>
+      {level.is_approved ? (
+        <span className={`${styles.status} ${styles.approved}`}>
+          <IconBadgeCheck /> Approved!
+        </span>
+      ) : level.rejection_reason ? (
+        <span className={`${styles.status} ${styles.rejected}`}>
+          <IconXCircle /> Rejected
+        </span>
+      ) : (
+        <span className={`${styles.status} ${styles.pending}`}>
+          <IconClock /> Pending approval
+        </span>
+      )}
+      <br />
+    </>
+  );
+
+  const details = (
+    <small className={styles.details}>
+      Rating: <LevelRating ratingClass={level.rating_class} /> (
+      {level.review_count} {pluralize("review", level.review_count)})
+      <br />
+      Genres:{" "}
+      {level.genres.map((tag) => tag.name).join(", ") ||
+        EMPTY_INPUT_PLACEHOLDER}
+      <br />
+      Engine: {level.engine.name}
+      <br />
+      <span className={styles.publishedDate}>
+        Published: {formatDate(level.created)}
+      </span>
+      {level.last_user_content_updated &&
+      formatDate(level.created) !==
+        formatDate(level.last_user_content_updated) ? (
+        <span className={styles.updatedDate}>
+          Updated: {formatDate(level.last_user_content_updated)}
+        </span>
+      ) : null}
+    </small>
+  );
+
+  const download = (
+    <>
+      Download:
+      {level.last_file?.url ? (
+        <>
+          <span className={styles.downloadLink}>
+            <Link to={level.last_file.url}>
+              <strong>
+                <IconDownload />({formatFileSize(level.last_file?.size)})
+              </strong>
+            </Link>
+          </span>
+          <span className={styles.downloadCount}>
+            {level.download_count} downloads
+          </span>
+        </>
+      ) : (
+        <>No download available</>
+      )}
+    </>
+  );
+
   return (
     <article className={styles.wrapper}>
       <Link className={styles.coverLink} to={`/levels/${level.id}`}>
@@ -42,58 +116,14 @@ const LevelView = ({ showStatus, level }: LevelViewProps) => {
         </div>
       </Link>
 
-      <div className={styles.details}>
-        <strong>
-          <LevelLink level={level} />
-        </strong>{" "}
-        by <LevelAuthorsLink authors={level.authors} />
+      <div className={styles.description}>
+        {author}
         <br />
-        {showStatus && (
-          <>
-            {level.is_approved ? (
-              <span className={`${styles.status} ${styles.approved}`}>
-                <IconBadgeCheck /> Approved!
-              </span>
-            ) : level.rejection_reason ? (
-              <span className={`${styles.status} ${styles.rejected}`}>
-                <IconXCircle /> Rejected
-              </span>
-            ) : (
-              <span className={`${styles.status} ${styles.pending}`}>
-                <IconClock /> Pending approval
-              </span>
-            )}
-            <br />
-          </>
-        )}
-        <small>
-          Rating: <LevelRating ratingClass={level.rating_class} /> (
-          {level.review_count} {pluralize("review", level.review_count)})
-          <br />
-          Genres:{" "}
-          {level.genres.map((tag) => tag.name).join(", ") ||
-            EMPTY_INPUT_PLACEHOLDER}
-          <br />
-          Engine: {level.engine.name}
-          <br />
-          Published: {formatDate(level.created)}
-          <br />
-          Last update: {formatDate(level.last_user_content_updated)}
-        </small>
-        <br />
-        Download:{" "}
-        {level.last_file?.url ? (
-          <>
-            <Link to={level.last_file.url}>
-              <strong>
-                <IconDownload />({formatFileSize(level.last_file?.size)})
-              </strong>
-            </Link>{" "}
-            ({level.download_count} downloads)
-          </>
-        ) : (
-          <>No download available</>
-        )}
+        {showStatus && status}
+
+        {details}
+
+        {download}
       </div>
     </article>
   );

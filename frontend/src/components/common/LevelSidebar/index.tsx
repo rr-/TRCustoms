@@ -130,11 +130,13 @@ const LevelSidebar = ({ level }: LevelSidebarProps) => {
 
           <DefinitionItemGroup>
             <DefinitionItem term="Release date">
-              {formatDate(level.created) || "unknown"}
+              {level.created ? formatDate(level.created) : "unknown"}
             </DefinitionItem>
 
             <DefinitionItem term="Last updated">
-              {formatDate(level.last_user_content_updated) || "never"}
+              {level.last_user_content_updated
+                ? formatDate(level.last_user_content_updated)
+                : "never"}
             </DefinitionItem>
 
             {level.trle_id && (

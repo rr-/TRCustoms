@@ -12,7 +12,7 @@
 }
 
 .coverLink {
-  width: 15.5rem;
+  width: 14.5rem;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -39,12 +39,8 @@
   height: 100%;
 }
 
-.details {
+.description {
   width: 100%;
-}
-.details small {
-  line-height: 1.2rem;
-  display: inline-block;
 }
 
 .status.approved {
@@ -55,4 +51,33 @@
 }
 .status.rejected {
   color: var(--failure-fg-color);
+}
+
+.updatedDate {
+  margin-left: 0.5rem;
+  &:before {
+    content: "(";
+  }
+  &:after {
+    content: ")";
+  }
+}
+
+.details {
+  display: block;
+  margin: 0.35rem 0;
+  line-height: 1.2rem;
+}
+
+.downloadLink {
+  margin: 0 0.5rem;
+}
+
+.downloadCount {
+  &:before {
+    content: "(";
+  }
+  &:after {
+    content: ")";
+  }
 }
