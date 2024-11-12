@@ -78,7 +78,7 @@ const LevelView = ({ showStatus, level }: LevelViewProps) => {
           <br />
           Published: {formatDate(level.created)}
           <br />
-          Last update: {formatDate(level.last_updated)}
+          Last update: {formatDate(level.last_user_content_updated)}
         </small>
         <br />
         Download:{" "}

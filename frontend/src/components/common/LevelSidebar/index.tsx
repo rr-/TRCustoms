@@ -134,7 +134,7 @@ const LevelSidebar = ({ level }: LevelSidebarProps) => {
             </DefinitionItem>
 
             <DefinitionItem term="Last updated">
-              {formatDate(level.last_updated) || "never"}
+              {formatDate(level.last_user_content_updated) || "never"}
             </DefinitionItem>
 
             {level.trle_id && (
