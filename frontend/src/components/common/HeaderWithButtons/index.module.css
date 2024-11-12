@@ -4,7 +4,13 @@
   align-items: flex-start;
 }
 
+.text {
+  flex: 2;
+}
 .buttons {
   display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
   gap: 0.5rem;
+  flex: 1;
 }
