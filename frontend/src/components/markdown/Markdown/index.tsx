@@ -161,13 +161,22 @@ const transformLink = (link: any): any => {
 };
 
 interface MarkdownProps {
+  allowColors?: boolean;
   children: string;
 }
 
-const Markdown = ({ children }: MarkdownProps) => {
+const Markdown = ({ allowColors, children }: MarkdownProps) => {
+  allowColors ??= true;
+
+  const classNames: string[] = [
+    styles.wrapper,
+    allowColors ? styles.colors : styles.noColors,
+    "ChildMarginClear",
+  ];
+
   const rendered = useMemo(
     () => (
-      <div className={`${styles.wrapper} ChildMarginClear`}>
+      <div className={classNames.join(" ")}>
         <ReactMarkdown
           remarkPlugins={[
             remarkGfm,

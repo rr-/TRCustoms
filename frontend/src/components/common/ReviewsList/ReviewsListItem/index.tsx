@@ -128,13 +128,17 @@ const ReviewsListItem = ({
 
         {showExcerpts && shortText !== fullText ? (
           <>
-            <Markdown>{isExcerptExpanded ? fullText : shortText}</Markdown>
+            <Markdown allowColors={false}>
+              {isExcerptExpanded ? fullText : shortText}
+            </Markdown>
             <Link onClick={handleReadMoreClick}>
               ({isExcerptExpanded ? "Read less" : "Read more"})
             </Link>
           </>
         ) : (
-          <Markdown>{review.text || "No review text is available."}</Markdown>
+          <Markdown allowColors={false}>
+            {review.text || "No review text is available."}
+          </Markdown>
         )}
       </div>
     </div>

@@ -24,20 +24,25 @@
   border-bottom: 1px solid var(--fg-color);
 }
 
-.color.pickup {
-  color: var(--fg-color-pickup);
+.wrapper.noColors {
 }
-.color.trap {
-  color: var(--fg-color-trap);
-}
-.color.enemy {
-  color: var(--fg-color-enemy);
-}
-.color.secret {
-  color: var(--fg-color-secret);
-}
-.color.object {
-  color: var(--fg-color-object);
+
+.wrapper.colors {
+  .color.pickup {
+    color: var(--fg-color-pickup);
+  }
+  .color.trap {
+    color: var(--fg-color-trap);
+  }
+  .color.enemy {
+    color: var(--fg-color-enemy);
+  }
+  .color.secret {
+    color: var(--fg-color-secret);
+  }
+  .color.object {
+    color: var(--fg-color-object);
+  }
 }
 
 .center {
