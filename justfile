@@ -71,7 +71,7 @@ createsuperuser:
     docker-compose run --rm trcustoms manage createsuperuser
 
 chown:
-    sh -c 'shopt -s globstar; sudo chown rr-:rr- -R backend/**/migrations'
+    sh -c 'shopt -s globstar; sudo chown $(whoami):$(whoami) -R backend/**/migrations'
 
 dump-prod-to-local-file:
     #!/bin/sh
