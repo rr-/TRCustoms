@@ -4,7 +4,6 @@ import { Routes } from "react-router-dom";
 import { Route } from "react-router-dom";
 import { NavBar } from "src/components/common/NavBar";
 import { PageMetadata } from "src/components/common/PageMetadata";
-import { ScrollToTop } from "src/components/common/ScrollToTop";
 import { AboutPage } from "src/components/pages/AboutPage";
 import { AwardsGuidePage } from "src/components/pages/AwardsGuidePage";
 import { EmailConfirmationPage } from "src/components/pages/EmailConfirmationPage";
@@ -58,7 +57,6 @@ const App = () => {
     <ConfigContextProvider>
       <UserContextProvider>
         <PageMetadata />
-        <ScrollToTop />
         <NavBar />
         <main id="Content" className="MainContainer">
           <Routes>
