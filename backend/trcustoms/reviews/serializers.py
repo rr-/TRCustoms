@@ -1,3 +1,4 @@
+from django.utils import timezone
 from rest_framework import serializers
 
 from trcustoms.common.serializers import RatingClassNestedSerializer
@@ -40,6 +41,7 @@ class ReviewListingSerializer(serializers.ModelSerializer):
     )
     level = LevelNestedSerializer(read_only=True)
     rating_class = RatingClassNestedSerializer(read_only=True)
+    last_user_content_updated = serializers.ReadOnlyField()
 
     class Meta:
         model = Review
@@ -51,6 +53,7 @@ class ReviewListingSerializer(serializers.ModelSerializer):
             "created",
             "last_updated",
             "rating_class",
+            "last_user_content_updated",
         ]
 
 
@@ -150,7 +153,9 @@ class ReviewDetailsSerializer(ReviewListingSerializer):
         func = super().create
 
         def review_factory():
-            return func(validated_data)
+            review = func(validated_data)
+            review.last_user_content_updated = review.created
+            return review
 
         review = self.handle_m2m(review_factory, validated_data)
         send_review_submission_mail(review)
@@ -161,7 +166,9 @@ class ReviewDetailsSerializer(ReviewListingSerializer):
         func = super().update
 
         def review_factory():
-            return func(instance, validated_data)
+            review = func(instance, validated_data)
+            review.last_user_content_updated = timezone.now()
+            return review
 
         review = self.handle_m2m(review_factory, validated_data)
         send_review_update_mail(review)

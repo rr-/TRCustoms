@@ -1,3 +1,6 @@
+from datetime import datetime, timezone
+from unittest.mock import patch
+
 import pytest
 from django.core import mail
 from django.db.models import QuerySet
@@ -5,6 +8,7 @@ from rest_framework import status
 from rest_framework.test import APIClient
 
 from trcustoms.levels.tests.factories import LevelFactory
+from trcustoms.reviews.models import Review
 from trcustoms.reviews.tests.factories import (
     ReviewFactory,
     ReviewTemplateAnswerFactory,
@@ -33,22 +37,28 @@ def test_review_update_success(
         ReviewTemplateAnswerFactory(question=questions[1]),
     ]
 
-    response = auth_api_client.patch(
-        f"/api/reviews/{review.id}/",
-        format="json",
-        data={
-            "level_id": level.id,
-            "text": "test",
-            "answer_ids": [answers[0].id, answers[2].id],
-        },
-    )
-    data = response.json()
+    with patch(
+        "trcustoms.reviews.serializers.timezone.now",
+        **{"return_value": datetime(2024, 1, 1, tzinfo=timezone.utc)},
+    ):
+        response = auth_api_client.patch(
+            f"/api/reviews/{review.id}/",
+            format="json",
+            data={
+                "level_id": level.id,
+                "text": "test",
+                "answer_ids": [answers[0].id, answers[2].id],
+            },
+        )
 
-    assert response.status_code == status.HTTP_200_OK, data
-    assert data == {
+    review = Review.objects.first()
+
+    assert response.status_code == status.HTTP_200_OK, response.content
+    assert response.json() == {
         "id": any_integer(),
         "created": any_datetime(allow_strings=True),
         "last_updated": any_datetime(allow_strings=True),
+        "last_user_content_updated": any_datetime(allow_strings=True),
         "level": {"id": level.id, "name": level.name, "cover": any_object()},
         "author": {
             "id": auth_api_client.user.id,
@@ -62,6 +72,11 @@ def test_review_update_success(
         "answers": [answers[0].id, answers[2].id],
         "rating_class": None,
     }
+
+    assert review.last_user_content_updated == datetime(
+        2024, 1, 1, tzinfo=timezone.utc
+    )
+
     assert len(mail.outbox) == 1
     assert mail.outbox[0].subject == "[TRCustoms] Review edited"
 

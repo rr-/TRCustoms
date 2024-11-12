@@ -2,7 +2,11 @@ from django.db import models
 from django.db.models import UniqueConstraint
 
 from trcustoms.audit_logs import registry
-from trcustoms.common.models import DatesInfo, RatingClass
+from trcustoms.common.models import (
+    DatesInfo,
+    RatingClass,
+    UserContentDatesInfo,
+)
 from trcustoms.levels.models import Level
 from trcustoms.reviews.consts import ReviewType
 from trcustoms.users.models import User
@@ -49,7 +53,7 @@ class ReviewTemplateAnswer(DatesInfo):
         "level_name": instance.level.name,
     },
 )
-class Review(DatesInfo):
+class Review(UserContentDatesInfo, DatesInfo):
     position = models.IntegerField(default=0)
 
     level = models.ForeignKey(

@@ -55,13 +55,14 @@ def test_review_creation_success(
             "answer_ids": [answers[0].id, answers[2].id],
         },
     )
-    data = response.json()
+    review = Review.objects.first()
 
-    assert response.status_code == status.HTTP_201_CREATED, data
-    assert data == {
+    assert response.status_code == status.HTTP_201_CREATED, response.content
+    assert response.json() == {
         "id": any_integer(),
         "created": any_datetime(allow_strings=True),
         "last_updated": any_datetime(allow_strings=True),
+        "last_user_content_updated": any_datetime(allow_strings=True),
         "level": {"id": level.id, "name": level.name, "cover": any_object()},
         "author": {
             "id": auth_api_client.user.id,
@@ -75,6 +76,11 @@ def test_review_creation_success(
         "answers": [answers[0].id, answers[2].id],
         "rating_class": None,
     }
+
+    assert review
+    assert review.last_user_content_updated == review.created
+    assert review.last_user_content_updated is not None
+
     assert len(mail.outbox) == 1
     assert mail.outbox[0].subject == "[TRCustoms] New review"
 

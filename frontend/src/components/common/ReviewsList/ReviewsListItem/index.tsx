@@ -92,8 +92,11 @@ const ReviewsListItem = ({
 
       <div className={styles.badge}>{badge}</div>
 
-      {formatDate(review.created) !== formatDate(review.last_updated) && (
-        <small>Updated on: {formatDate(review.last_updated)}</small>
+      {formatDate(review.created) !==
+        formatDate(review.last_user_content_updated) && (
+        <small>
+          Updated on: {formatDate(review.last_user_content_updated)}
+        </small>
       )}
 
       <small>Posted on: {formatDate(review.created)}</small>
