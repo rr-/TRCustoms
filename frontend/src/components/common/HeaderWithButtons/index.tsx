@@ -9,7 +9,6 @@ const HeaderWithButtons = ({ header, buttons }: HeaderWithButtonsProps) => {
   return (
     <div className={styles.wrapper}>
       <div className={styles.text}>{header}</div>
-
       <div className={styles.buttons}>{buttons}</div>
     </div>
   );
