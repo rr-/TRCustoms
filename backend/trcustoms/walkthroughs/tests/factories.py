@@ -11,3 +11,9 @@ class WalkthroughFactory(factory.django.DjangoModelFactory):
 
     author = factory.SubFactory(UserFactory)
     level = factory.SubFactory(LevelFactory)
+
+    @factory.post_generation
+    def last_user_content_updated(self, create, extracted, **kwargs):
+        # pylint: disable=no-member
+        if create:
+            self.last_user_content_updated = self.created

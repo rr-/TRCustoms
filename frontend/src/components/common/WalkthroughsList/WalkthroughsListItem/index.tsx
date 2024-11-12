@@ -34,6 +34,13 @@ const WalkthroughListItem = ({
         )}
       </div>
 
+      {formatDate(walkthrough.created) !==
+        formatDate(walkthrough.last_user_content_updated) && (
+        <small>
+          Updated on: {formatDate(walkthrough.last_user_content_updated)}
+        </small>
+      )}
+
       <small>Posted on: {formatDate(walkthrough.created)}</small>
 
       <BurgerMenu>

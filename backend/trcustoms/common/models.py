@@ -17,6 +17,13 @@ class DatesInfo(models.Model):
         abstract = True
 
 
+class UserContentDatesInfo(models.Model):
+    last_user_content_updated = models.DateTimeField(null=True)
+
+    class Meta:
+        abstract = True
+
+
 class Country(models.Model):
     name = models.CharField(max_length=64)
     code = models.CharField(max_length=64)

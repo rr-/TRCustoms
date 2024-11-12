@@ -1,7 +1,7 @@
 from django.db import models
 
 from trcustoms.audit_logs import registry
-from trcustoms.common.models import DatesInfo
+from trcustoms.common.models import DatesInfo, UserContentDatesInfo
 from trcustoms.levels.models import Level
 from trcustoms.users.models import User
 from trcustoms.walkthroughs.consts import WalkthroughStatus, WalkthroughType
@@ -14,7 +14,7 @@ from trcustoms.walkthroughs.consts import WalkthroughStatus, WalkthroughType
         "level_name": instance.level.name,
     },
 )
-class Walkthrough(DatesInfo):
+class Walkthrough(UserContentDatesInfo, DatesInfo):
     level = models.ForeignKey(
         Level, on_delete=models.CASCADE, related_name="walkthroughs"
     )
