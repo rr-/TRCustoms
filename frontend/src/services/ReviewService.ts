@@ -23,6 +23,7 @@ interface ReviewListing {
   rating_class: RatingClass | null;
   created: string;
   last_updated: string;
+  last_user_content_updated: string;
 }
 
 interface ReviewDetails extends ReviewListing {

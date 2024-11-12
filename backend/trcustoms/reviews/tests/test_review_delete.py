@@ -21,7 +21,7 @@ def test_review_deletion_updates_level_review_count(
     )
     level.refresh_from_db()
 
-    assert response.status_code == status.HTTP_204_NO_CONTENT
+    assert response.status_code == status.HTTP_204_NO_CONTENT, response.content
     assert level.reviews.count() == 0  # pylint: disable=no-member
     assert level.review_count == 0
 
