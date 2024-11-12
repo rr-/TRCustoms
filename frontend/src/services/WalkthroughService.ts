@@ -36,6 +36,7 @@ interface WalkthroughListing {
   walkthrough_type: WalkthroughType;
   created: string;
   last_updated: string;
+  last_user_content_updated: string;
   status: WalkthroughStatus;
   rejection_reason: string | null;
 }
@@ -75,6 +76,11 @@ const searchWalkthroughs = async (
   const response = (await api.get(`${API_URL}/walkthroughs/`, {
     params,
   })) as AxiosResponse<WalkthroughSearchResult>;
+  if (searchQuery.sort === "random") {
+    response.data.results = response.data.results.sort(
+      () => Math.random() - 0.5
+    );
+  }
   return { ...response.data, searchQuery };
 };
 

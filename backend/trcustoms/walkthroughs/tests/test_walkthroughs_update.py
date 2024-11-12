@@ -1,3 +1,6 @@
+from datetime import datetime, timezone
+from unittest.mock import Mock, patch
+
 import pytest
 from django.core import mail
 from rest_framework import status
@@ -127,8 +130,27 @@ def test_walkthrough_update_ignores_spoofed_fields(
 
 
 @pytest.mark.django_db
+@pytest.mark.parametrize(
+    "test_data",
+    [
+        Mock(
+            status=WalkthroughStatus.APPROVED,
+            expected_mail=True,
+            expected_last_user_contend_updated_change=True,
+        ),
+        Mock(
+            status=WalkthroughStatus.PENDING_APPROVAL,
+            expected_mail=False,
+            expected_last_user_contend_updated_change=False,
+        ),
+    ],
+)
 def test_walkthrough_update_success(
-    any_object, any_integer, any_datetime, auth_api_client: APIClient
+    test_data: Mock,
+    any_object,
+    any_integer,
+    any_datetime,
+    auth_api_client: APIClient,
 ) -> None:
     level = LevelFactory(authors=[UserFactory(username="example")])
     walkthrough = WalkthroughFactory(
@@ -136,17 +158,22 @@ def test_walkthrough_update_success(
         author=auth_api_client.user,
         text="old text",
         walkthrough_type=WalkthroughType.TEXT,
-        status=WalkthroughStatus.APPROVED,
+        status=test_data.status,
     )
 
-    resp = auth_api_client.patch(
-        f"/api/walkthroughs/{walkthrough.id}/",
-        format="json",
-        data={
-            "text": "https://example.com/new/",
-            "walkthrough_type": WalkthroughType.LINK,
-        },
-    )
+    with patch(
+        "trcustoms.walkthroughs.serializers.timezone.now",
+        **{"return_value": datetime(2024, 1, 1, tzinfo=timezone.utc)},
+    ):
+        resp = auth_api_client.patch(
+            f"/api/walkthroughs/{walkthrough.id}/",
+            format="json",
+            data={
+                "text": "https://example.com/new/",
+                "walkthrough_type": WalkthroughType.LINK,
+            },
+        )
+
     walkthrough = Walkthrough.objects.first()
     audit_log = AuditLog.objects.first()
 
@@ -173,15 +200,26 @@ def test_walkthrough_update_success(
         "text": walkthrough.text,
         "created": any_datetime(allow_strings=True),
         "last_updated": any_datetime(allow_strings=True),
+        "last_user_content_updated": any_datetime(allow_strings=True),
     }
 
     assert walkthrough.level.id == level.id
     assert walkthrough.walkthrough_type == WalkthroughType.LINK
     assert walkthrough.text == "https://example.com/new/"
 
+    if test_data.expected_last_user_contend_updated_change:
+        assert walkthrough.last_user_content_updated == datetime(
+            2024, 1, 1, tzinfo=timezone.utc
+        )
+    else:
+        assert walkthrough.last_user_content_updated == walkthrough.created
+
     assert audit_log
     assert audit_log.change_type == ChangeType.UPDATE
     assert audit_log.object_id == str(walkthrough.id)
 
-    assert len(mail.outbox) == 1
-    assert mail.outbox[0].subject == "[TRCustoms] Walkthrough edited"
+    if test_data.expected_mail:
+        assert len(mail.outbox) == 1
+        assert mail.outbox[0].subject == "[TRCustoms] Walkthrough edited"
+    else:
+        assert len(mail.outbox) == 0

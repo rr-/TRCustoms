@@ -58,6 +58,7 @@ class WalkthroughViewSet(
         "author__username",
         "created",
         "last_updated",
+        "last_user_content_updated",
         "level__name",
         "level_id",
         "trle_rating_atmosphere",

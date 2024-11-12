@@ -188,6 +188,7 @@ def test_walkthrough_creation_success(
         "text": walkthrough.text,
         "created": any_datetime(allow_strings=True),
         "last_updated": any_datetime(allow_strings=True),
+        "last_user_content_updated": any_datetime(allow_strings=True),
     }
 
     assert walkthrough.author
@@ -198,6 +199,8 @@ def test_walkthrough_creation_success(
     assert walkthrough.rejection_reason is None
     assert walkthrough.walkthrough_type == WalkthroughType.TEXT
     assert walkthrough.text == payload["text"]
+    assert walkthrough.last_user_content_updated == walkthrough.created
+    assert walkthrough.last_user_content_updated is not None
 
     assert audit_log
     assert audit_log.change_type == ChangeType.CREATE

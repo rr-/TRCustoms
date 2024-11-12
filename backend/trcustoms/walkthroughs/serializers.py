@@ -1,5 +1,6 @@
 from django.core.exceptions import ValidationError
 from django.core.validators import MinLengthValidator, URLValidator
+from django.utils import timezone
 from rest_framework import serializers
 
 from trcustoms.common.fields import CustomCharField
@@ -35,6 +36,7 @@ class WalkthroughListingSerializer(serializers.ModelSerializer):
 
     status = serializers.ReadOnlyField()
     rejection_reason = serializers.ReadOnlyField()
+    last_user_content_updated = serializers.ReadOnlyField()
 
     class Meta:
         model = Walkthrough
@@ -49,6 +51,7 @@ class WalkthroughListingSerializer(serializers.ModelSerializer):
             "text",
             "created",
             "last_updated",
+            "last_user_content_updated",
         ]
 
 
@@ -111,7 +114,9 @@ class WalkthroughDetailsSerializer(WalkthroughListingSerializer):
         func = super().create
 
         def walkthrough_factory():
-            return func(validated_data)
+            walkthrough = func(validated_data)
+            walkthrough.last_user_content_updated = walkthrough.created
+            return walkthrough
 
         walkthrough = walkthrough_factory()
         walkthrough.save()
@@ -122,10 +127,14 @@ class WalkthroughDetailsSerializer(WalkthroughListingSerializer):
         func = super().update
 
         def walkthrough_factory():
-            return func(instance, validated_data)
+            walkthrough = func(instance, validated_data)
+            if walkthrough.status == WalkthroughStatus.APPROVED:
+                walkthrough.last_user_content_updated = timezone.now()
+            return walkthrough
 
         walkthrough = walkthrough_factory()
         walkthrough.save()
+
         if walkthrough.status == WalkthroughStatus.APPROVED:
             send_walkthrough_update_mail(walkthrough)
         update_awards.delay(walkthrough.author.pk)
