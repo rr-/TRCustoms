@@ -18,10 +18,14 @@ import { MarkdownColorTrapButton } from "src/components/markdown-composer/Markdo
 import { MarkdownHelpButton } from "src/components/markdown-composer/MarkdownButtons";
 
 interface MarkdownButtonStripProps {
+  allowColors?: boolean;
   textarea: HTMLTextAreaElement | null;
 }
 
-const MarkdownButtonStrip = ({ textarea }: MarkdownButtonStripProps) => {
+const MarkdownButtonStrip = ({
+  allowColors,
+  textarea,
+}: MarkdownButtonStripProps) => {
   const buttonProps = { textarea };
 
   return (
@@ -49,13 +53,15 @@ const MarkdownButtonStrip = ({ textarea }: MarkdownButtonStripProps) => {
         <MarkdownImageButton {...buttonProps} />
       </div>
 
-      <div className={styles.group}>
-        <MarkdownColorSecretButton {...buttonProps} />
-        <MarkdownColorPickupButton {...buttonProps} />
-        <MarkdownColorObjectButton {...buttonProps} />
-        <MarkdownColorEnemyButton {...buttonProps} />
-        <MarkdownColorTrapButton {...buttonProps} />
-      </div>
+      {allowColors && (
+        <div className={styles.group}>
+          <MarkdownColorSecretButton {...buttonProps} />
+          <MarkdownColorPickupButton {...buttonProps} />
+          <MarkdownColorObjectButton {...buttonProps} />
+          <MarkdownColorEnemyButton {...buttonProps} />
+          <MarkdownColorTrapButton {...buttonProps} />
+        </div>
+      )}
 
       <div className={styles.group}>
         <MarkdownHelpButton />

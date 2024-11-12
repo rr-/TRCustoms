@@ -229,6 +229,7 @@ const ReviewForm = ({ level, review, onGoBack, onSubmit }: ReviewFormProps) => {
                   validate={validateRequired}
                   rich={true}
                   required={true}
+                  allowColors={false}
                   label="Review text"
                   name="text"
                 />

@@ -5,7 +5,8 @@ import { MarkdownAttachmentStrip } from "src/components/markdown-composer/Markdo
 import { MarkdownButtonStrip } from "src/components/markdown-composer/MarkdownButtonStrip";
 
 interface MarkdownComposerProps {
-  allowAttachments?: boolean | undefined;
+  allowAttachments?: boolean;
+  allowColors?: boolean;
   field: FieldInputProps<string>;
   form: any;
 }
@@ -13,6 +14,7 @@ interface MarkdownComposerProps {
 const MarkdownComposer = ({
   field,
   form,
+  allowColors,
   allowAttachments,
   ...props
 }: MarkdownComposerProps) => {
@@ -20,7 +22,7 @@ const MarkdownComposer = ({
   const textarea = ref.current;
   return (
     <div className="MarkdownComposer">
-      <MarkdownButtonStrip textarea={textarea} />
+      <MarkdownButtonStrip allowColors={allowColors} textarea={textarea} />
       <textarea
         ref={ref}
         className="TextArea--input Input"

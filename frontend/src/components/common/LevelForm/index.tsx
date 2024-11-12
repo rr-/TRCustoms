@@ -383,6 +383,7 @@ const LevelForm = ({ level, onGoBack, onSubmit }: LevelFormProps) => {
                 <TextAreaFormField
                   rich={true}
                   required={true}
+                  allowColors={false}
                   label="Description"
                   name="description"
                 />

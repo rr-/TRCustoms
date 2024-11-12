@@ -43,7 +43,7 @@ const LevelOverviewTab = ({ level }: LevelOverviewTabProps) => {
         </div>
       )}
 
-      <Markdown>
+      <Markdown allowColors={false}>
         {level.description || "This level has no description yet."}
       </Markdown>
     </>
