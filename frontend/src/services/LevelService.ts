@@ -65,6 +65,7 @@ interface LevelListing {
   uploader: UserNested | null;
   created: string;
   last_updated: string;
+  last_user_content_updated: string;
   last_file: LevelFile | null;
   difficulty: LevelDifficulty;
   duration: LevelDuration;

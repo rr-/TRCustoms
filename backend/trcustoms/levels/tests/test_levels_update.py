@@ -118,6 +118,7 @@ def test_level_update_success(auth_api_client: APIClient) -> None:
     ]
     assert list(level.files.values_list("file__id", flat=True)) == [file.id]
     assert level.last_file.file.id == file.id
+    assert level.last_user_content_updated == level.last_file.created
 
 
 @pytest.mark.django_db

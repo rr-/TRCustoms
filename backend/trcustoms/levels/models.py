@@ -3,7 +3,11 @@ from django.db.models import F, UniqueConstraint, Value
 from django.db.models.functions import Coalesce, Lower
 
 from trcustoms.audit_logs import registry
-from trcustoms.common.models import DatesInfo, RatingClass
+from trcustoms.common.models import (
+    DatesInfo,
+    RatingClass,
+    UserContentDatesInfo,
+)
 from trcustoms.engines.models import Engine
 from trcustoms.genres.models import Genre
 from trcustoms.levels.consts import FeatureType, LevelLinkType
@@ -95,7 +99,7 @@ class LevelQuerySet(models.QuerySet):
 
 
 @registry.register_model(name_getter=lambda instance: instance.name)
-class Level(DatesInfo):
+class Level(UserContentDatesInfo, DatesInfo):
     objects = LevelQuerySet.as_manager()
     name = models.CharField(max_length=100)
     description = models.TextField(max_length=5000, null=True, blank=True)

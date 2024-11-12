@@ -165,6 +165,7 @@ class LevelListingSerializer(serializers.ModelSerializer):
     cover = UploadedFileNestedSerializer(read_only=True)
     screenshots = LevelScreenshotSerializer(read_only=True, many=True)
     external_links = LevelExternalLinkSerializer(required=False, many=True)
+    last_user_content_updated = serializers.ReadOnlyField()
 
     def get_last_file(self, instance: Level) -> dict[str, Any] | None:
         """Get last file ID from the LevelViewSet's annotated queryset."""
@@ -196,6 +197,7 @@ class LevelListingSerializer(serializers.ModelSerializer):
             "screenshots",
             "external_links",
             "last_updated",
+            "last_user_content_updated",
             "last_file",
             "download_count",
             "review_count",
@@ -357,7 +359,9 @@ class LevelDetailsSerializer(LevelListingSerializer):
         if file is not None and (
             not level.last_file or file != level.last_file.file
         ):
-            LevelFile.objects.create(level=level, file=file)
+            level_file = LevelFile.objects.create(level=level, file=file)
+            level.last_user_content_updated = level_file.created
+            level.save(update_fields=["last_user_content_updated"])
 
         return level
 
@@ -365,7 +369,8 @@ class LevelDetailsSerializer(LevelListingSerializer):
         func = super().create
 
         def level_factory():
-            return func(validated_data)
+            level = func(validated_data)
+            return level
 
         level = self.handle_m2m(level_factory, validated_data)
         send_level_submitted_mail(level)
@@ -379,7 +384,8 @@ class LevelDetailsSerializer(LevelListingSerializer):
         prev_authors = list(instance.authors.all())
 
         def level_factory():
-            return func(instance, validated_data)
+            level = func(instance, validated_data)
+            return level
 
         level = self.handle_m2m(level_factory, validated_data)
         current_authors = list(level.authors.all())
