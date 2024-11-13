@@ -133,11 +133,14 @@ const LevelSidebar = ({ level }: LevelSidebarProps) => {
               {level.created ? formatDate(level.created) : "unknown"}
             </DefinitionItem>
 
-            <DefinitionItem term="Last updated">
-              {level.last_user_content_updated
-                ? formatDate(level.last_user_content_updated)
-                : "never"}
-            </DefinitionItem>
+            {formatDate(level.created) !==
+            formatDate(level.last_user_content_updated) ? (
+              <DefinitionItem term="Last updated">
+                {level.last_user_content_updated
+                  ? formatDate(level.last_user_content_updated)
+                  : "never"}
+              </DefinitionItem>
+            ) : null}
 
             {level.trle_id && (
               <DefinitionItem term="Links">
