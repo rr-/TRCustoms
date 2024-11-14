@@ -24,9 +24,6 @@
   border-bottom: 1px solid var(--fg-color);
 }
 
-.wrapper.noColors {
-}
-
 .wrapper.colors {
   .color.pickup {
     color: var(--fg-color-pickup);
