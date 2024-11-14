@@ -39,16 +39,16 @@ test *args:
 bash:
     docker-compose run --rm trcustoms shell
 bash-prod:
-    ssh -t trcustoms 'cd ~/srv/website; docker-compose -f docker-compose.prod.yml run --rm trcustoms shell'
+    ssh -t trcustoms 'cd ~/srv/website; just bash'
 bash-staging:
-    ssh -t trcustoms 'cd ~/srv/website-staging; docker-compose -f docker-compose.yml run --rm trcustoms shell'
+    ssh -t trcustoms 'cd ~/srv/website-staging; just bash'
 
 shell:
     docker-compose run --rm trcustoms manage shell
 shell-prod:
-    ssh -t trcustoms 'cd ~/srv/website; docker-compose -f docker-compose.prod.yml run --rm trcustoms manage shell'
+    ssh -t trcustoms 'cd ~/srv/website; just shell'
 shell-staging:
-    ssh -t trcustoms 'cd ~/srv/website-staging; docker-compose -f docker-compose.yml run --rm trcustoms manage shell'
+    ssh -t trcustoms 'cd ~/srv/website-staging; just shell'
 
 snippet:
     docker-compose run -T --rm trcustoms manage shell

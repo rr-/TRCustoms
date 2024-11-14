@@ -1,11 +1,13 @@
 # The first stage
 # Build React static files
 
-FROM node:14-bullseye as build
+FROM node:23-alpine AS build
 
-ARG BUILD_VERSION
-ARG BUILD_DATE
-ARG HOST_SITE
+ARG ENVIRONMENT
+ENV REACT_APP_BUILD_VERSION=${BUILD_VERSION}
+ENV REACT_APP_BUILD_DATE=${BUILD_DATE}
+ENV REACT_APP_ENVIRONMENT=${ENVIRONMENT}
+ENV REACT_APP_HOST_SITE=${HOST_SITE}
 
 WORKDIR /app/frontend/
 COPY ./frontend/package.json ./
@@ -13,9 +15,6 @@ COPY ./frontend/package-lock.json ./
 RUN npm ci
 
 COPY ./frontend/ ./
-ENV REACT_APP_BUILD_VERSION=${BUILD_VERSION}
-ENV REACT_APP_BUILD_DATE=${BUILD_DATE}
-ENV REACT_APP_HOST_SITE=${HOST_SITE}
 RUN npm run build
 
 # The second stage

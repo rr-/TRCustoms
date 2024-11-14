@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 import { NavLink } from "react-router-dom";
 import { useLocation } from "react-router-dom";
 import { useResolvedPath } from "react-router-dom";
+import appStyles from "src/components/App/index.module.css";
 import { Logo } from "src/components/common/Logo";
 import { PermissionGuard } from "src/components/common/PermissionGuard";
 import { UserPicture } from "src/components/common/UserPicture";
@@ -53,7 +54,7 @@ const NavBar = () => {
   const { user } = useContext(UserContext);
 
   return (
-    <div className="MainContainer">
+    <div className={appStyles.mainContainer}>
       <div className={styles.wrapper}>
         <nav className={styles.primary}>
           <h1 className={styles.header}>

@@ -1,0 +1,5 @@
+<svg width="200" height="200" xmlns="http://www.w3.org/2000/svg">
+  <text x="50" y="100" transform="rotate(45, 50, 100)" font-family="Arial" font-size="30" fill="black">
+    staging
+  </text>
+</svg>
