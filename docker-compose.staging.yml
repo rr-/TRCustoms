@@ -1,0 +1,12 @@
+include:
+  - docker-compose.prod.yml
+
+services:
+  trcustoms-mailhog:
+    image: mailhog/mailhog:v1.0.0
+    expose:
+      - 1025
+    networks:
+      - trcustoms
+    ports:
+      - "8025:8025"

@@ -1,0 +1,5 @@
+trcustoms:
+  depends_on:
+    - trcustoms-redis
+    - trcustoms-db
+    - trcustoms-mailhog
