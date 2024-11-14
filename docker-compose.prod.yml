@@ -1,5 +1,3 @@
-version: "3.7"
-
 x-backend-environment: &base-backend-environment
   - SECRET_KEY=${SECRET_KEY}
   - DEBUG=0
@@ -83,6 +81,7 @@ services:
       context: .
       dockerfile: ./services/nginx/Dockerfile_prod
       args:
+        - ENVIRONMENT=prod
         - BUILD_DATE=${BUILD_DATE}
         - BUILD_VERSION=${BUILD_VERSION}
         - HOST_SITE=${HOST_SITE}

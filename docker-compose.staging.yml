@@ -1,7 +1,46 @@
-include:
-  - docker-compose.prod.yml
-
 services:
+  trcustoms:
+    extends:
+      file: docker-compose.prod.yml
+      service: trcustoms
+    depends_on:
+      - trcustoms-redis
+      - trcustoms-db
+      - trcustoms-mailhog
+
+  trcustoms-celery:
+    extends:
+      file: docker-compose.prod.yml
+      service: trcustoms-celery
+
+  trcustoms-celery-beat:
+    extends:
+      file: docker-compose.prod.yml
+      service: trcustoms-celery-beat
+
+  trcustoms-db:
+    extends:
+      file: docker-compose.prod.yml
+      service: trcustoms-db
+
+  trcustoms-redis:
+    extends:
+      file: docker-compose.prod.yml
+      service: trcustoms-redis
+
+  trcustoms-nginx:
+    extends:
+      file: docker-compose.prod.yml
+      service: trcustoms-nginx
+    build:
+      args:
+        - ENVIRONMENT=staging
+
+  trcustoms-prerender:
+    extends:
+      file: docker-compose.prod.yml
+      service: trcustoms-prerender
+
   trcustoms-mailhog:
     image: mailhog/mailhog:v1.0.0
     expose:
@@ -10,3 +49,7 @@ services:
       - trcustoms
     ports:
       - "8025:8025"
+
+networks:
+  trcustoms:
+    external: false

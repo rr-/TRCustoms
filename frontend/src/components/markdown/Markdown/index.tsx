@@ -168,14 +168,14 @@ interface MarkdownProps {
 const Markdown = ({ allowColors, children }: MarkdownProps) => {
   allowColors ??= true;
 
-  const classNames: string[] = [
-    styles.wrapper,
-    allowColors ? styles.colors : styles.noColors,
-    "ChildMarginClear",
-  ];
+  const rendered = useMemo(() => {
+    const classNames: string[] = [
+      styles.wrapper,
+      allowColors ? styles.colors : styles.noColors,
+      "ChildMarginClear",
+    ];
 
-  const rendered = useMemo(
-    () => (
+    return (
       <div className={classNames.join(" ")}>
         <ReactMarkdown
           remarkPlugins={[
@@ -190,9 +190,8 @@ const Markdown = ({ allowColors, children }: MarkdownProps) => {
           {children}
         </ReactMarkdown>
       </div>
-    ),
-    [children]
-  );
+    );
+  }, [children, allowColors]);
 
   return rendered;
 };
