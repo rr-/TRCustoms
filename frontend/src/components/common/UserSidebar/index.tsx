@@ -42,6 +42,9 @@ const UserSidebar = ({ user }: UserSidebarProps) => {
     }
   };
 
+  const isUserFromTrle = user.trle_reviewer_id || user.trle_author_id;
+  const showJoinDate = !isUserFromTrle || user.last_login;
+
   return (
     <SidebarBox
       header={<UserPicture user={user} mode={UserPictureMode.Full} />}
@@ -67,7 +70,9 @@ const UserSidebar = ({ user }: UserSidebarProps) => {
           </DefinitionItem>
 
           <DefinitionItem term="Joined">
-            {formatDate(user.date_joined) || "Unknown"}
+            {showJoinDate && user.date_joined
+              ? formatDate(user.date_joined)
+              : "Unknown"}
           </DefinitionItem>
 
           <DefinitionItem term="Country">
