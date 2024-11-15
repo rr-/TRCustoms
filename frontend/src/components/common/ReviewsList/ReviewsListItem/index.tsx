@@ -32,6 +32,7 @@ const ReviewsListItem = ({
   const [isExcerptExpanded, setIsExcerptExpanded] = useState(false);
   const classNames = [styles.wrapper];
 
+  /*
   const position = review.rating_class?.position || 0;
   let badge: React.ReactNode;
   if (position > 0) {
@@ -59,6 +60,7 @@ const ReviewsListItem = ({
       </>
     );
   }
+  */
 
   const handleReadMoreClick = () => {
     setIsExcerptExpanded((isExcerptExpanded) => !isExcerptExpanded);
@@ -90,7 +92,7 @@ const ReviewsListItem = ({
         </div>
       </div>
 
-      <div className={styles.badge}>{badge}</div>
+      {/*<div className={styles.badge}>{badge}</div>*/}
 
       {formatDate(review.created) !==
         formatDate(review.last_user_content_updated) && (

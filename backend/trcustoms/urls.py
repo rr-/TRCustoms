@@ -24,6 +24,7 @@ from trcustoms.genres.views import (
 from trcustoms.levels.views import LevelFileViewSet, LevelViewSet
 from trcustoms.news.views import NewsViewSet
 from trcustoms.playlists.views import PlaylistItemViewSet
+from trcustoms.ratings.views import RatingViewSet
 from trcustoms.reviews.views import ReviewViewSet
 from trcustoms.tags.views import (
     TagDetailView,
@@ -47,6 +48,7 @@ router.register(r"levels", LevelViewSet)
 router.register(r"level_engines", EngineViewSet)
 router.register(r"level_files", LevelFileViewSet)
 router.register(r"reviews", ReviewViewSet)
+router.register(r"ratings", RatingViewSet)
 router.register(r"walkthroughs", WalkthroughViewSet)
 
 urlpatterns = [

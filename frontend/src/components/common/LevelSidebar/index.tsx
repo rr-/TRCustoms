@@ -9,12 +9,10 @@ import { DefinitionList } from "src/components/common/DefinitionList";
 import { LevelRating } from "src/components/common/LevelRating";
 import { Link } from "src/components/common/Link";
 import { MediumThumbnails } from "src/components/common/MediumThumbnails";
-import { PermissionGuard } from "src/components/common/PermissionGuard";
 import { SectionHeader } from "src/components/common/Section";
 import { SidebarBox } from "src/components/common/SidebarBox";
 import { IconDownload } from "src/components/icons";
 import { IconGlobe } from "src/components/icons";
-import { IconAnnotation } from "src/components/icons";
 import { EngineLink } from "src/components/links/EngineLink";
 import { GenreLink } from "src/components/links/GenreLink";
 import { TagLink } from "src/components/links/TagLink";
@@ -22,7 +20,6 @@ import { UserLink } from "src/components/links/UserLink";
 import { UserContext } from "src/contexts/UserContext";
 import { ExternalLinkType } from "src/services/LevelService";
 import type { LevelDetails } from "src/services/LevelService";
-import { UserPermission } from "src/services/UserService";
 import { DisplayMode } from "src/types";
 import { formatFileSize } from "src/utils/string";
 import { formatDate } from "src/utils/string";
@@ -85,18 +82,6 @@ const LevelSidebar = ({ level }: LevelSidebarProps) => {
                 userId={user.id}
                 level={level}
               />
-            )}
-
-            {level.authors.every((author) => author.id !== user?.id) && (
-              <PermissionGuard require={UserPermission.reviewLevels}>
-                <Button
-                  variant={ButtonVariant.Important}
-                  icon={<IconAnnotation />}
-                  to={`/levels/${level.id}/review`}
-                >
-                  Review
-                </Button>
-              </PermissionGuard>
             )}
           </>
         }

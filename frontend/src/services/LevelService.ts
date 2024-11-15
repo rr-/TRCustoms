@@ -76,6 +76,7 @@ interface LevelListing {
   is_approved: boolean;
   rejection_reason: string | null;
   rating_class: RatingClass | null;
+  rating_count: number;
   review_count: number;
 }
 

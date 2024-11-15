@@ -136,6 +136,7 @@ class Level(UserContentDatesInfo, DatesInfo):
     )
 
     # denormalized fields for faster db lookups
+    rating_count = models.PositiveIntegerField(default=0)
     review_count = models.PositiveIntegerField(default=0)
     download_count = models.IntegerField(default=0)
     last_file = models.OneToOneField(
@@ -152,6 +153,12 @@ class Level(UserContentDatesInfo, DatesInfo):
 
     def __str__(self) -> str:
         return f"{self.name} (id={self.pk})"
+
+    def update_rating_count(self) -> None:
+        rating_count = self.ratings.count()
+        if rating_count != self.rating_count:
+            self.rating_count = rating_count
+            self.save(update_fields=["rating_count"])
 
     def update_review_count(self) -> None:
         review_count = self.reviews.count()

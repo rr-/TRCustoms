@@ -9,6 +9,7 @@ import { TabSwitchVariant } from "src/components/common/TabSwitch";
 import { SidebarLayout } from "src/components/layouts/SidebarLayout";
 import { LevelHeader } from "src/components/pages/LevelPage/LevelHeader";
 import { LevelOverviewTab } from "src/components/pages/LevelPage/LevelOverviewTab";
+import { LevelRatingsTab } from "src/components/pages/LevelPage/LevelRatingsTab";
 import { LevelReviewsTab } from "src/components/pages/LevelPage/LevelReviewsTab";
 import { LevelWalkthroughsTab } from "src/components/pages/LevelPage/LevelWalkthroughsTab";
 import { usePageMetadata } from "src/contexts/PageMetadataContext";
@@ -69,6 +70,12 @@ const LevelPage = ({ tabName }: LevelPageProps) => {
       name: "overview",
       label: "Overview",
       content: <LevelOverviewTab level={level} />,
+    },
+
+    {
+      name: "ratings",
+      label: "Ratings",
+      content: <LevelRatingsTab level={level} />,
     },
 
     {

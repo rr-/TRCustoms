@@ -3,7 +3,7 @@ import { Link } from "src/components/common/Link";
 interface LevelLinkProps {
   className?: string | undefined;
   level: { id: number; name: string };
-  subPage?: "reviews" | "walkthroughs";
+  subPage?: "ratings" | "reviews" | "walkthroughs";
   children?: React.ReactNode | undefined;
 }
 

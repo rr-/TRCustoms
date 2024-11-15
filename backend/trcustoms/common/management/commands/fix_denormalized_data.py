@@ -5,8 +5,8 @@ from django.core.management.base import BaseCommand
 from tqdm import tqdm
 
 from trcustoms.levels.models import Level
-from trcustoms.ratings import get_object_rating_class
 from trcustoms.reviews.models import Review
+from trcustoms.scoring import get_object_rating_class
 from trcustoms.signals import disable_signals
 from trcustoms.users.models import User
 
@@ -34,6 +34,7 @@ class Command(BaseCommand):
             for user in User.objects.iterator():
                 user.update_authored_level_count()
                 user.update_reviewed_level_count()
+                user.update_rated_level_count()
                 progress.update()
 
     def fix_level_ratings(self) -> None:

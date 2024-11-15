@@ -9,5 +9,5 @@ class RatingClassFactory(factory.django.DjangoModelFactory):
         model = RatingClass
         django_get_or_create = ("position", "target")
 
-    target = RatingClassSubject.REVIEW
+    target = RatingClassSubject.RATING
     min_rating_count = 0

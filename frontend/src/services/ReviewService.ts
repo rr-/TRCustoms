@@ -26,9 +26,7 @@ interface ReviewListing {
   last_user_content_updated: string;
 }
 
-interface ReviewDetails extends ReviewListing {
-  answers: number[];
-}
+interface ReviewDetails extends ReviewListing {}
 
 interface ReviewSearchQuery extends GenericSearchQuery {
   levels?: Array<number> | undefined;
@@ -41,7 +39,6 @@ interface ReviewSearchResult
 interface ReviewBaseChangePayload {
   levelId: number;
   text: string;
-  answerIds: number[];
 }
 
 interface ReviewUpdatePayload extends ReviewBaseChangePayload {}
@@ -89,7 +86,6 @@ const update = async (
   const data = {
     level_id: payload.levelId,
     text: payload.text,
-    answer_ids: payload.answerIds,
   };
   const response = (await api.patch(
     `${API_URL}/reviews/${reviewId}/`,
@@ -102,7 +98,6 @@ const create = async (payload: ReviewCreatePayload): Promise<ReviewDetails> => {
   const data = {
     level_id: payload.levelId,
     text: payload.text,
-    answer_ids: payload.answerIds,
   };
   const response = (await api.post(
     `${API_URL}/reviews/`,

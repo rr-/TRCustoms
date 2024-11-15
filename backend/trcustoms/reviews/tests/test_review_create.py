@@ -1,16 +1,11 @@
 import pytest
 from django.core import mail
-from django.db.models import QuerySet
 from rest_framework import status
 from rest_framework.test import APIClient
 
 from trcustoms.levels.tests.factories import LevelFactory
 from trcustoms.reviews.models import Review
-from trcustoms.reviews.tests.factories import (
-    ReviewFactory,
-    ReviewTemplateAnswerFactory,
-    ReviewTemplateQuestionFactory,
-)
+from trcustoms.reviews.tests.factories import ReviewFactory
 from trcustoms.users.tests.factories import UserFactory
 
 
@@ -23,7 +18,6 @@ def test_review_creation_missing_fields(auth_api_client: APIClient) -> None:
     assert data == {
         "level_id": ["This field is required."],
         "text": ["This field is required."],
-        "answer_ids": ["This field is required."],
     }
 
 
@@ -36,23 +30,12 @@ def test_review_creation_success(
 ) -> None:
     level = LevelFactory(authors=[UserFactory(username="example")])
 
-    questions = [
-        ReviewTemplateQuestionFactory(),
-        ReviewTemplateQuestionFactory(),
-    ]
-    answers = [
-        ReviewTemplateAnswerFactory(question=questions[0]),
-        ReviewTemplateAnswerFactory(question=questions[0]),
-        ReviewTemplateAnswerFactory(question=questions[1]),
-    ]
-
     response = auth_api_client.post(
         "/api/reviews/",
         format="json",
         data={
             "level_id": level.id,
             "text": "test",
-            "answer_ids": [answers[0].id, answers[2].id],
         },
     )
     review = Review.objects.first()
@@ -73,8 +56,6 @@ def test_review_creation_success(
             "reviewed_level_count": 1,
         },
         "text": "test",
-        "answers": [answers[0].id, answers[2].id],
-        "rating_class": None,
     }
 
     assert review
@@ -83,39 +64,6 @@ def test_review_creation_success(
 
     assert len(mail.outbox) == 1
     assert mail.outbox[0].subject == "[TRCustoms] New review"
-
-
-@pytest.mark.django_db
-def test_review_creation_rating_classes(
-    any_integer,
-    any_datetime,
-    review_rating_classes: QuerySet,
-    auth_api_client: APIClient,
-) -> None:
-    level = LevelFactory(authors=[UserFactory(username="example")])
-
-    question = ReviewTemplateQuestionFactory()
-    answers = [
-        ReviewTemplateAnswerFactory(question=question, points=0),
-        ReviewTemplateAnswerFactory(question=question, points=10),
-    ]
-
-    response = auth_api_client.post(
-        "/api/reviews/",
-        format="json",
-        data={
-            "level_id": level.id,
-            "text": "test",
-            "answer_ids": [answers[1].id],
-        },
-    )
-    data = response.json()
-    review = Review.objects.get(pk=data["id"])
-
-    assert review.answers.count() == 1
-    assert review.answers.first().points == 10
-    assert review.rating_class is not None
-    assert review.rating_class.name == "Positive"
 
 
 @pytest.mark.django_db
@@ -132,75 +80,12 @@ def test_review_creation_fails_when_reviewing_own_level(
         data={
             "level_id": level.id,
             "text": "test",
-            "answer_ids": [],
         },
     )
     data = response.json()
 
     assert response.status_code == status.HTTP_400_BAD_REQUEST, data
     assert data == {"detail": ["Cannot review own level."]}
-
-
-@pytest.mark.django_db
-def test_review_creation_fails_if_too_many_answers_for_single_question(
-    auth_api_client: APIClient,
-) -> None:
-    level = LevelFactory()
-
-    questions = [
-        ReviewTemplateQuestionFactory(),
-        ReviewTemplateQuestionFactory(),
-    ]
-    answers = [
-        ReviewTemplateAnswerFactory(question=questions[0]),
-        ReviewTemplateAnswerFactory(question=questions[0]),
-        ReviewTemplateAnswerFactory(question=questions[1]),
-    ]
-
-    response = auth_api_client.post(
-        "/api/reviews/",
-        format="json",
-        data={
-            "level_id": level.id,
-            "text": "test",
-            "answer_ids": [answers[0].id, answers[1].id, answers[2].id],
-        },
-    )
-    data = response.json()
-
-    assert response.status_code == status.HTTP_400_BAD_REQUEST, data
-    assert data == {"answer_ids": ["Malformed answers."]}
-
-
-@pytest.mark.django_db
-def test_review_creation_fails_if_question_has_no_answer(
-    auth_api_client: APIClient,
-) -> None:
-    level = LevelFactory()
-
-    questions = [
-        ReviewTemplateQuestionFactory(),
-        ReviewTemplateQuestionFactory(),
-    ]
-    answers = [
-        ReviewTemplateAnswerFactory(question=questions[0]),
-        ReviewTemplateAnswerFactory(question=questions[0]),
-        ReviewTemplateAnswerFactory(question=questions[1]),
-    ]
-
-    response = auth_api_client.post(
-        "/api/reviews/",
-        format="json",
-        data={
-            "level_id": level.id,
-            "text": "test",
-            "answer_ids": [answers[0].id],
-        },
-    )
-    data = response.json()
-
-    assert response.status_code == status.HTTP_400_BAD_REQUEST, data
-    assert data == {"answer_ids": ["Malformed answers."]}
 
 
 @pytest.mark.django_db
@@ -216,7 +101,6 @@ def test_review_creation_fails_if_already_reviewed(
         data={
             "level_id": level.id,
             "text": "test",
-            "answer_ids": [],
         },
     )
     data = response.json()
@@ -237,7 +121,6 @@ def test_review_creation_updates_level_review_count(
         data={
             "level_id": level.id,
             "text": "test",
-            "answer_ids": [],
         },
     )
     data = response.json()
@@ -264,7 +147,6 @@ def test_review_creation_updates_position(
         data={
             "level_id": level.id,
             "text": "test",
-            "answer_ids": [],
         },
     )
     data = response.json()

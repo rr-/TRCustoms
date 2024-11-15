@@ -123,6 +123,7 @@ class UserViewSet(
         "date_joined",
         "last_login",
         "authored_level_count",
+        "rated_level_count",
         "reviewed_level_count",
     ]
     search_fields = [
@@ -149,6 +150,13 @@ class UserViewSet(
 
     def get_queryset(self):
         queryset = super().get_queryset()
+
+        if (
+            ratings_min := parse_int(
+                self.request.query_params.get("ratings_min")
+            )
+        ) is not None:
+            queryset = queryset.filter(rated_level_count__gte=ratings_min)
 
         if (
             reviews_min := parse_int(

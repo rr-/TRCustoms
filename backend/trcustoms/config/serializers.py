@@ -10,7 +10,7 @@ from trcustoms.levels.serializers import (
     LevelDifficultyListingSerializer,
     LevelDurationListingSerializer,
 )
-from trcustoms.reviews.serializers import ReviewTemplateQuestionSerializer
+from trcustoms.ratings.serializers import RatingTemplateQuestionSerializer
 from trcustoms.tags.serializers import TagListingSerializer
 
 
@@ -42,6 +42,7 @@ class WalkthroughStatSerializer(serializers.Serializer):
 
 class GlobalStatsSerializer(serializers.Serializer):
     total_levels = serializers.IntegerField()
+    total_ratings = serializers.IntegerField()
     total_reviews = serializers.IntegerField()
     total_walkthroughs = serializers.IntegerField()
     total_downloads = serializers.IntegerField()
@@ -56,6 +57,6 @@ class ConfigSerializer(serializers.Serializer):
     engines = EngineListingSerializer(many=True)
     difficulties = LevelDifficultyListingSerializer(many=True)
     durations = LevelDurationListingSerializer(many=True)
-    review_questions = ReviewTemplateQuestionSerializer(many=True)
+    rating_questions = RatingTemplateQuestionSerializer(many=True)
     limits = GlobalLimitsSerializer()
     stats = GlobalStatsSerializer()

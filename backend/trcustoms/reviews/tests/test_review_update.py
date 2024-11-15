@@ -3,17 +3,12 @@ from unittest.mock import patch
 
 import pytest
 from django.core import mail
-from django.db.models import QuerySet
 from rest_framework import status
 from rest_framework.test import APIClient
 
 from trcustoms.levels.tests.factories import LevelFactory
 from trcustoms.reviews.models import Review
-from trcustoms.reviews.tests.factories import (
-    ReviewFactory,
-    ReviewTemplateAnswerFactory,
-    ReviewTemplateQuestionFactory,
-)
+from trcustoms.reviews.tests.factories import ReviewFactory
 from trcustoms.users.tests.factories import UserFactory
 
 
@@ -27,16 +22,6 @@ def test_review_update_success(
     level = LevelFactory(authors=[UserFactory(username="example")])
     review = ReviewFactory(level=level, author=auth_api_client.user)
 
-    questions = [
-        ReviewTemplateQuestionFactory(),
-        ReviewTemplateQuestionFactory(),
-    ]
-    answers = [
-        ReviewTemplateAnswerFactory(question=questions[0]),
-        ReviewTemplateAnswerFactory(question=questions[0]),
-        ReviewTemplateAnswerFactory(question=questions[1]),
-    ]
-
     with patch(
         "trcustoms.reviews.serializers.timezone.now",
         **{"return_value": datetime(2024, 1, 1, tzinfo=timezone.utc)},
@@ -47,7 +32,6 @@ def test_review_update_success(
             data={
                 "level_id": level.id,
                 "text": "test",
-                "answer_ids": [answers[0].id, answers[2].id],
             },
         )
 
@@ -69,8 +53,6 @@ def test_review_update_success(
             "reviewed_level_count": 1,
         },
         "text": "test",
-        "answers": [answers[0].id, answers[2].id],
-        "rating_class": None,
     }
 
     assert review.last_user_content_updated == datetime(
@@ -79,39 +61,6 @@ def test_review_update_success(
 
     assert len(mail.outbox) == 1
     assert mail.outbox[0].subject == "[TRCustoms] Review edited"
-
-
-@pytest.mark.django_db
-def test_review_update_rating_classes(
-    any_integer,
-    any_datetime,
-    review_rating_classes: QuerySet,
-    auth_api_client: APIClient,
-) -> None:
-    level = LevelFactory(authors=[UserFactory(username="example")])
-    review = ReviewFactory(level=level, author=auth_api_client.user)
-
-    question = ReviewTemplateQuestionFactory()
-    answers = [
-        ReviewTemplateAnswerFactory(question=question, points=0),
-        ReviewTemplateAnswerFactory(question=question, points=10),
-    ]
-    review.answers.set([answers[0]])
-
-    assert review.rating_class.name == "Negative"
-
-    auth_api_client.patch(
-        f"/api/reviews/{review.id}/",
-        format="json",
-        data={
-            "level_id": level.id,
-            "text": "test",
-            "answer_ids": [answers[1].id],
-        },
-    )
-
-    review.refresh_from_db()
-    assert review.rating_class.name == "Positive"
 
 
 @pytest.mark.django_db
@@ -128,7 +77,6 @@ def test_review_update_updates_level_review_count(
         data={
             "level_id": level2.id,
             "text": "test",
-            "answer_ids": [],
         },
     )
     data = response.json()

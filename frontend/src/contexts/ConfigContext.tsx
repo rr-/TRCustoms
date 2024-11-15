@@ -15,7 +15,7 @@ const defaultConfig = {
   engines: [],
   durations: [],
   difficulties: [],
-  review_questions: [],
+  rating_questions: [],
   limits: {
     min_tags: 0,
     max_tags: 0,

@@ -15,6 +15,8 @@ import { HomePage } from "src/components/pages/HomePage";
 import { LevelEditPage } from "src/components/pages/LevelEditPage";
 import { LevelListPage } from "src/components/pages/LevelListPage";
 import { LevelPage } from "src/components/pages/LevelPage";
+import { LevelRatePage } from "src/components/pages/LevelRatePage";
+import { LevelRatingEditPage } from "src/components/pages/LevelRatingEditPage";
 import { LevelReviewEditPage } from "src/components/pages/LevelReviewEditPage";
 import { LevelReviewPage } from "src/components/pages/LevelReviewPage";
 import { LevelUploadPage } from "src/components/pages/LevelUploadPage";
@@ -57,6 +59,10 @@ const AppRoutes = () => {
       <Route path="/levels" element={<LevelListPage />} />
       <Route path="/levels/:levelId" element={<LevelPage />} />
       <Route
+        path="/levels/:levelId/ratings"
+        element={<LevelPage tabName="ratings" />}
+      />
+      <Route
         path="/levels/:levelId/reviews"
         element={<LevelPage tabName="reviews" />}
       />
@@ -64,10 +70,15 @@ const AppRoutes = () => {
         path="/levels/:levelId/walkthroughs"
         element={<LevelPage tabName="walkthroughs" />}
       />
+      <Route path="/levels/:levelId/rate" element={<LevelRatePage />} />
       <Route path="/levels/:levelId/review" element={<LevelReviewPage />} />
       <Route
         path="/walkthroughs/:walkthroughId"
         element={<WalkthroughPage />}
+      />
+      <Route
+        path="/levels/:levelId/rating/:ratingId/edit"
+        element={<LevelRatingEditPage />}
       />
       <Route
         path="/levels/:levelId/review/:reviewId/edit"
