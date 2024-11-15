@@ -1,3 +1,4 @@
+import styles from "./index.module.css";
 import { useNavigate } from "react-router-dom";
 import { AwardList } from "src/components/common/AwardList";
 import { Button } from "src/components/common/Button";
@@ -73,23 +74,24 @@ const UserSidebar = ({ user }: UserSidebarProps) => {
             {user.country?.name || "Unknown"}
           </DefinitionItem>
 
-          {!!(user.trle_reviewer_id && user.trle_author_id) && (
+          {!!(user.trle_reviewer_id || user.trle_author_id) && (
             <DefinitionItem term="Links">
-              {user.trle_reviewer_id && (
-                <a
-                  href={`https://www.trle.net/sc/reviewerfeatures.php?rid=${user.trle_reviewer_id}`}
-                >
-                  TRLE.net (reviewer)
-                </a>
-              )}
-              <br />
-              {user.trle_author_id && (
-                <a
-                  href={`https://www.trle.net/sc/authorfeatures.php?aid=${user.trle_author_id}`}
-                >
-                  TRLE.net (author)
-                </a>
-              )}
+              <div className={styles.links}>
+                {user.trle_reviewer_id && (
+                  <a
+                    href={`https://www.trle.net/sc/reviewerfeatures.php?rid=${user.trle_reviewer_id}`}
+                  >
+                    TRLE.net (reviewer)
+                  </a>
+                )}
+                {user.trle_author_id && (
+                  <a
+                    href={`https://www.trle.net/sc/authorfeatures.php?aid=${user.trle_author_id}`}
+                  >
+                    TRLE.net (author)
+                  </a>
+                )}
+              </div>
             </DefinitionItem>
           )}
         </DefinitionItemGroup>
