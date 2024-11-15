@@ -1,29 +1,22 @@
 import styles from "./index.module.css";
-import { useState } from "react";
 import { RatingDeleteButton } from "src/components/buttons/RatingDeleteButton";
 import { RatingEditButton } from "src/components/buttons/RatingEditButton";
 import { BurgerMenu } from "src/components/common/BurgerMenu";
-import { Link } from "src/components/common/Link";
 import { PermissionGuard } from "src/components/common/PermissionGuard";
 import { UserPicture } from "src/components/common/UserPicture";
 import { IconThumbUp } from "src/components/icons";
 import { IconThumbDown } from "src/components/icons";
 import { IconDotsCircleHorizontal } from "src/components/icons";
-import { LevelLink } from "src/components/links/LevelLink";
 import { UserLink } from "src/components/links/UserLink";
-import { Markdown } from "src/components/markdown/Markdown";
 import type { RatingListing } from "src/services/RatingService";
 import { UserPermission } from "src/services/UserService";
 import { formatDate } from "src/utils/string";
-
-const rating_EXCERPT_CUTOFF = 1200;
 
 interface RatingsListItemProps {
   rating: RatingListing;
 }
 
 const RatingsListItem = ({ rating }: RatingsListItemProps) => {
-  const [isExcerptExpanded, setIsExcerptExpanded] = useState(false);
   const classNames = [styles.wrapper];
 
   const position = rating.rating_class?.position || 0;
@@ -53,10 +46,6 @@ const RatingsListItem = ({ rating }: RatingsListItemProps) => {
       </>
     );
   }
-
-  const handleReadMoreClick = () => {
-    setIsExcerptExpanded((isExcerptExpanded) => !isExcerptExpanded);
-  };
 
   const header = (
     <header className={styles.header}>

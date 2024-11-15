@@ -15,10 +15,6 @@ import { HomePage } from "src/components/pages/HomePage";
 import { LevelEditPage } from "src/components/pages/LevelEditPage";
 import { LevelListPage } from "src/components/pages/LevelListPage";
 import { LevelPage } from "src/components/pages/LevelPage";
-import { LevelRatePage } from "src/components/pages/LevelRatePage";
-import { LevelRatingEditPage } from "src/components/pages/LevelRatingEditPage";
-import { LevelReviewEditPage } from "src/components/pages/LevelReviewEditPage";
-import { LevelReviewPage } from "src/components/pages/LevelReviewPage";
 import { LevelUploadPage } from "src/components/pages/LevelUploadPage";
 import { LoginPage } from "src/components/pages/LoginPage";
 import { LogoutPage } from "src/components/pages/LogoutPage";
@@ -63,26 +59,32 @@ const AppRoutes = () => {
         element={<LevelPage tabName="ratings" />}
       />
       <Route
+        path="/levels/:levelId/rating"
+        element={<LevelPage tabName="ratings" action="addRating" />}
+      />
+      <Route
+        path="/levels/:levelId/rating/:ratingId/edit"
+        element={<LevelPage tabName="ratings" action="editRating" />}
+      />
+      <Route
         path="/levels/:levelId/reviews"
         element={<LevelPage tabName="reviews" />}
+      />
+      <Route
+        path="/levels/:levelId/review"
+        element={<LevelPage tabName="reviews" action="addReview" />}
+      />
+      <Route
+        path="/levels/:levelId/review/:reviewId/edit"
+        element={<LevelPage tabName="reviews" action="editReview" />}
       />
       <Route
         path="/levels/:levelId/walkthroughs"
         element={<LevelPage tabName="walkthroughs" />}
       />
-      <Route path="/levels/:levelId/rate" element={<LevelRatePage />} />
-      <Route path="/levels/:levelId/review" element={<LevelReviewPage />} />
       <Route
         path="/walkthroughs/:walkthroughId"
         element={<WalkthroughPage />}
-      />
-      <Route
-        path="/levels/:levelId/rating/:ratingId/edit"
-        element={<LevelRatingEditPage />}
-      />
-      <Route
-        path="/levels/:levelId/review/:reviewId/edit"
-        element={<LevelReviewEditPage />}
       />
       <Route
         path="/levels/:levelId/walkthrough"
