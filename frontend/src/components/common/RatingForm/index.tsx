@@ -16,7 +16,6 @@ import { InfoMessageType } from "src/components/common/InfoMessage";
 import { Loader } from "src/components/common/Loader";
 import { BaseFormField } from "src/components/formfields/BaseFormField";
 import { RadioboxFormField } from "src/components/formfields/RadioboxFormField";
-import { TextAreaFormField } from "src/components/formfields/TextAreaFormField";
 import { LevelLink } from "src/components/links/LevelLink";
 import { ConfigContext } from "src/contexts/ConfigContext";
 import type { RatingTemplateQuestion } from "src/services/ConfigService";
@@ -219,7 +218,7 @@ const RatingForm = ({ level, rating, onGoBack, onSubmit }: RatingFormProps) => {
         ) : (
           <Form>
             <FormGrid gridType={FormGridType.Column}>
-              <FormGridFieldSet title="Questionnaire">
+              <FormGridFieldSet>
                 <InfoMessage type={InfoMessageType.Info}>
                   The results of this questionnaire will aggregate a hidden
                   score that contributes to the average rating.

@@ -34,7 +34,7 @@ const LevelRatingsTab = ({ level }: LevelRatingsTabProps) => {
       <div className={styles.actions}>
         {level.authors.every((author) => author.id !== user?.id) && (
           <PermissionGuard require={UserPermission.rateLevels}>
-            <Button icon={<IconThumbUp />} to={`/levels/${level.id}/rate`}>
+            <Button icon={<IconThumbUp />} to={`/levels/${level.id}/rating`}>
               Rate this level
             </Button>
           </PermissionGuard>

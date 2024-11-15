@@ -6,9 +6,6 @@ import { BurgerMenu } from "src/components/common/BurgerMenu";
 import { Link } from "src/components/common/Link";
 import { PermissionGuard } from "src/components/common/PermissionGuard";
 import { UserPicture } from "src/components/common/UserPicture";
-import { IconThumbUp } from "src/components/icons";
-import { IconThumbDown } from "src/components/icons";
-import { IconDotsCircleHorizontal } from "src/components/icons";
 import { LevelLink } from "src/components/links/LevelLink";
 import { UserLink } from "src/components/links/UserLink";
 import { Markdown } from "src/components/markdown/Markdown";
@@ -31,36 +28,6 @@ const ReviewsListItem = ({
 }: ReviewsListItemProps) => {
   const [isExcerptExpanded, setIsExcerptExpanded] = useState(false);
   const classNames = [styles.wrapper];
-
-  /*
-  const position = review.rating_class?.position || 0;
-  let badge: React.ReactNode;
-  if (position > 0) {
-    classNames.push(styles.positive);
-    badge = (
-      <>
-        <IconThumbUp />
-        Positive
-      </>
-    );
-  } else if (position < 0) {
-    classNames.push(styles.negative);
-    badge = (
-      <>
-        <IconThumbDown />
-        Negative
-      </>
-    );
-  } else {
-    classNames.push(styles.neutral);
-    badge = (
-      <>
-        <IconDotsCircleHorizontal />
-        Neutral
-      </>
-    );
-  }
-  */
 
   const handleReadMoreClick = () => {
     setIsExcerptExpanded((isExcerptExpanded) => !isExcerptExpanded);
@@ -91,8 +58,6 @@ const ReviewsListItem = ({
           </div>
         </div>
       </div>
-
-      {/*<div className={styles.badge}>{badge}</div>*/}
 
       {formatDate(review.created) !==
         formatDate(review.last_user_content_updated) && (

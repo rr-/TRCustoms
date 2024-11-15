@@ -1,7 +1,6 @@
 import { AxiosError } from "axios";
 import axios from "axios";
 import type { FormikHelpers } from "formik";
-import { useFormikContext } from "formik";
 import { Formik } from "formik";
 import { Form } from "formik";
 import { useContext } from "react";
@@ -14,8 +13,6 @@ import { FormGridFieldSet } from "src/components/common/FormGrid";
 import { InfoMessage } from "src/components/common/InfoMessage";
 import { InfoMessageType } from "src/components/common/InfoMessage";
 import { Loader } from "src/components/common/Loader";
-import { BaseFormField } from "src/components/formfields/BaseFormField";
-import { RadioboxFormField } from "src/components/formfields/RadioboxFormField";
 import { TextAreaFormField } from "src/components/formfields/TextAreaFormField";
 import { LevelLink } from "src/components/links/LevelLink";
 import { ConfigContext } from "src/contexts/ConfigContext";
@@ -23,7 +20,6 @@ import type { LevelNested } from "src/services/LevelService";
 import type { ReviewDetails } from "src/services/ReviewService";
 import { ReviewService } from "src/services/ReviewService";
 import { filterFalsyObjectValues } from "src/utils/misc";
-import { extractNestedErrorText } from "src/utils/misc";
 import { resetQueries } from "src/utils/misc";
 import { makeSentence } from "src/utils/string";
 import { validateRequired } from "src/utils/validation";
@@ -145,7 +141,7 @@ const ReviewForm = ({ level, review, onGoBack, onSubmit }: ReviewFormProps) => {
         ) : (
           <Form>
             <FormGrid gridType={FormGridType.Column}>
-              <FormGridFieldSet title="Review">
+              <FormGridFieldSet>
                 <InfoMessage type={InfoMessageType.Info}>
                   Remember to stay respectful and constructive, and avoid
                   excessive profanity.

@@ -12,6 +12,10 @@ import { LevelOverviewTab } from "src/components/pages/LevelPage/LevelOverviewTa
 import { LevelRatingsTab } from "src/components/pages/LevelPage/LevelRatingsTab";
 import { LevelReviewsTab } from "src/components/pages/LevelPage/LevelReviewsTab";
 import { LevelWalkthroughsTab } from "src/components/pages/LevelPage/LevelWalkthroughsTab";
+import { RatingAddAction } from "src/components/pages/LevelPage/RatingAddAction";
+import { RatingEditAction } from "src/components/pages/LevelPage/RatingEditAction";
+import { ReviewAddAction } from "src/components/pages/LevelPage/ReviewAddAction";
+import { ReviewEditAction } from "src/components/pages/LevelPage/ReviewEditAction";
 import { usePageMetadata } from "src/contexts/PageMetadataContext";
 import { LevelService } from "src/services/LevelService";
 import type { LevelDetails } from "src/services/LevelService";
@@ -21,10 +25,11 @@ interface LevelPageParams {
 }
 
 interface LevelPageProps {
+  action?: string;
   tabName?: string;
 }
 
-const LevelPage = ({ tabName }: LevelPageProps) => {
+const LevelPage = ({ tabName, action }: LevelPageProps) => {
   const navigate = useNavigate();
   const { levelId } = (useParams() as unknown) as LevelPageParams;
 
@@ -75,13 +80,27 @@ const LevelPage = ({ tabName }: LevelPageProps) => {
     {
       name: "ratings",
       label: "Ratings",
-      content: <LevelRatingsTab level={level} />,
+      content:
+        action === "addRating" ? (
+          <RatingAddAction level={level} />
+        ) : action === "editRating" ? (
+          <RatingEditAction level={level} />
+        ) : (
+          <LevelRatingsTab level={level} />
+        ),
     },
 
     {
       name: "reviews",
       label: "Reviews",
-      content: <LevelReviewsTab level={level} />,
+      content:
+        action === "addReview" ? (
+          <ReviewAddAction level={level} />
+        ) : action === "editReview" ? (
+          <ReviewEditAction level={level} />
+        ) : (
+          <LevelReviewsTab level={level} />
+        ),
     },
 
     {
