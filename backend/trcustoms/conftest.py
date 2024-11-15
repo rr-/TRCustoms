@@ -1,4 +1,5 @@
 import tempfile
+from collections.abc import Callable
 from datetime import datetime
 from typing import Any
 
@@ -18,6 +19,7 @@ from trcustoms.ratings import (
     get_rating_class,
     get_rating_classes,
 )
+from trcustoms.users.models import User
 from trcustoms.users.tests.factories import UserFactory
 
 
@@ -31,14 +33,25 @@ def fixture_api_client() -> APIClient:
     return APIClient()
 
 
+@pytest.fixture(name="get_auth_api_client")
+def fixture_get_auth_api_client(
+    api_client: APIClient,
+) -> Callable[[User], APIClient]:
+    def factory(user: User) -> APIClient:
+        refresh_token = RefreshToken.for_user(user)
+        access_token = refresh_token.access_token
+        api_client.credentials(HTTP_X_ACCESS_TOKEN=f"Bearer {access_token}")
+        api_client.user = user
+        return api_client
+
+    return factory
+
+
 @pytest.fixture(name="auth_api_client")
-def fixture_auth_api_client(api_client: APIClient) -> APIClient:
-    user = UserFactory()
-    refresh_token = RefreshToken.for_user(user)
-    access_token = refresh_token.access_token
-    api_client.credentials(HTTP_X_ACCESS_TOKEN=f"Bearer {access_token}")
-    api_client.user = user
-    return api_client
+def fixture_auth_api_client(
+    get_auth_api_client: Callable[[User], APIClient]
+) -> APIClient:
+    return get_auth_api_client(UserFactory())
 
 
 @pytest.fixture(name="staff_api_client")
