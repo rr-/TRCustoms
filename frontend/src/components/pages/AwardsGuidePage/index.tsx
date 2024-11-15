@@ -28,11 +28,11 @@ const UpgradableArtifacts = [
   {
     name: "Scion",
     tiers: [
-      { name: "Bronze", description: "50+ walkthroughs" },
-      { name: "Silver", description: "100+ walkthroughs" },
-      { name: "Gold", description: "250+ walkthroughs" },
-      { name: "Jade", description: "500+ walkthroughs" },
-      { name: "Meteorite", description: "1000+ walkthroughs" },
+      { name: "Bronze", description: "10+ walkthroughs" },
+      { name: "Silver", description: "50+ walkthroughs" },
+      { name: "Gold", description: "100+ walkthroughs" },
+      { name: "Jade", description: "250+ walkthroughs" },
+      { name: "Meteorite", description: "500+ walkthroughs" },
     ],
   },
 ];
