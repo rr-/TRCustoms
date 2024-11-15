@@ -5,7 +5,7 @@ from django.core.management.base import BaseCommand
 from tqdm import tqdm
 
 from trcustoms.levels.models import Level
-from trcustoms.reviews.models import Review
+from trcustoms.ratings.models import Rating
 from trcustoms.scoring import get_object_rating_class
 from trcustoms.signals import disable_signals
 from trcustoms.users.models import User
@@ -20,8 +20,8 @@ class Command(BaseCommand):
         with disable_signals():
             self.fix_levels()
             self.fix_users()
+            self.fix_rating_ratings()
             self.fix_level_ratings()
-            self.fix_review_ratings()
 
     def fix_levels(self) -> None:
         with tqdm(desc="Levels", total=Level.objects.count()) as progress:
@@ -53,18 +53,18 @@ class Command(BaseCommand):
                 rating_class_id=rating_class_id
             )
 
-    def fix_review_ratings(self) -> None:
+    def fix_rating_ratings(self) -> None:
         with tqdm(
-            desc="Review ratings", total=Review.objects.count()
+            desc="Rating ratings", total=Rating.objects.count()
         ) as progress:
-            review_map = defaultdict(list)
-            for review in Review.objects.all():
-                rating_class = get_object_rating_class(review)
+            rating_map = defaultdict(list)
+            for rating in Rating.objects.all():
+                rating_class = get_object_rating_class(rating)
                 rating_class_id = rating_class.id if rating_class else None
-                review_map[rating_class_id].append(review.id)
+                rating_map[rating_class_id].append(rating.id)
                 progress.update()
 
-        for rating_class_id, review_ids in review_map.items():
-            Review.objects.filter(id__in=review_ids).update(
+        for rating_class_id, rating_ids in rating_map.items():
+            Rating.objects.filter(id__in=rating_ids).update(
                 rating_class_id=rating_class_id
             )
