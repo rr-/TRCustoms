@@ -38,17 +38,17 @@ interface DifficultyListing {
   position: number;
 }
 
-interface ReviewTemplateAnswer {
+interface RatingTemplateAnswer {
   position: number;
   id: number;
   answer_text: string;
 }
 
-interface ReviewTemplateQuestion {
+interface RatingTemplateQuestion {
   position: number;
   id: number;
   question_text: string;
-  answers: ReviewTemplateAnswer[];
+  answers: RatingTemplateAnswer[];
 }
 
 interface Config {
@@ -58,7 +58,7 @@ interface Config {
   engines: EngineListing[];
   durations: DurationListing[];
   difficulties: DifficultyListing[];
-  review_questions: ReviewTemplateQuestion[];
+  rating_questions: RatingTemplateQuestion[];
   limits: {
     min_tags: number;
     max_tags: number;
@@ -123,8 +123,8 @@ export type {
   FeaturedLevels,
   DurationListing,
   DifficultyListing,
-  ReviewTemplateAnswer,
-  ReviewTemplateQuestion,
+  RatingTemplateAnswer,
+  RatingTemplateQuestion,
   Config,
 };
 

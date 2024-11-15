@@ -19,8 +19,6 @@ import { RadioboxFormField } from "src/components/formfields/RadioboxFormField";
 import { TextAreaFormField } from "src/components/formfields/TextAreaFormField";
 import { LevelLink } from "src/components/links/LevelLink";
 import { ConfigContext } from "src/contexts/ConfigContext";
-import type { ReviewTemplateQuestion } from "src/services/ConfigService";
-import type { ReviewTemplateAnswer } from "src/services/ConfigService";
 import type { LevelNested } from "src/services/LevelService";
 import type { ReviewDetails } from "src/services/ReviewService";
 import { ReviewService } from "src/services/ReviewService";
@@ -39,86 +37,13 @@ interface ReviewFormProps {
 
 interface ReviewFormValues {
   text: string;
-  answers: Record<string, number | null>;
 }
-
-interface ReviewQuestionFormFieldProps {
-  name: string;
-  readonly?: boolean | undefined;
-  templateQuestion: ReviewTemplateQuestion;
-}
-
-const ReviewQuestionFormField = ({
-  templateQuestion,
-  name,
-  readonly,
-}: ReviewQuestionFormFieldProps) => {
-  const { setFieldValue } = useFormikContext();
-
-  const handleAnswerChange = (
-    templateAnswer: ReviewTemplateAnswer,
-    checked: boolean
-  ) => {
-    setFieldValue(name, checked ? templateAnswer.id : null);
-  };
-
-  return (
-    <BaseFormField
-      required={true}
-      name={name}
-      label={`${templateQuestion.position + 1}. ${
-        templateQuestion.question_text
-      }`}
-    >
-      {templateQuestion.answers.map((templateAnswer) => (
-        <div key={templateAnswer.id}>
-          <RadioboxFormField
-            label={templateAnswer.answer_text}
-            name={name}
-            required={true}
-            readonly={readonly}
-            hideErrors={true} /* handled by parent BaseFormField */
-            onChange={(checked: boolean) =>
-              handleAnswerChange(templateAnswer, checked)
-            }
-            id={templateAnswer.id}
-          />
-        </div>
-      ))}
-    </BaseFormField>
-  );
-};
 
 const ReviewForm = ({ level, review, onGoBack, onSubmit }: ReviewFormProps) => {
   const queryClient = useQueryClient();
   const { config } = useContext(ConfigContext);
   const initialValues: ReviewFormValues = {
     text: review?.text || "",
-    answers: Object.fromEntries(
-      config.review_questions.map((templateQuestion) => [
-        templateQuestion.id,
-        review?.answers?.filter((answerId) =>
-          templateQuestion.answers
-            .map((templateAnswer) => templateAnswer.id)
-            .includes(answerId)
-        )?.[0] || null,
-      ])
-    ),
-  };
-
-  const validate = (values: { [key: string]: any }) => {
-    const errors: Record<string, string> = {};
-
-    for (let templateQuestion of config.review_questions) {
-      const validator = validateRequired;
-      const value = values.answers?.[templateQuestion.id];
-      const error = validator(value);
-      if (error) {
-        errors[templateQuestion.id] = makeSentence(error);
-      }
-    }
-
-    return Object.keys(errors).length ? { answers: errors } : {};
   };
 
   const handleSubmitError = useCallback(
@@ -135,7 +60,6 @@ const ReviewForm = ({ level, review, onGoBack, onSubmit }: ReviewFormProps) => {
         }
         const errors = {
           text: data?.text,
-          answers: extractNestedErrorText(data?.answer_ids),
         };
         if (Object.keys(filterFalsyObjectValues(errors)).length) {
           setErrors(errors as any);
@@ -162,7 +86,6 @@ const ReviewForm = ({ level, review, onGoBack, onSubmit }: ReviewFormProps) => {
         const payload = {
           levelId: level.id,
           text: values.text,
-          answerIds: Object.values(values.answers) as number[],
         };
 
         if (review?.id) {
@@ -174,7 +97,10 @@ const ReviewForm = ({ level, review, onGoBack, onSubmit }: ReviewFormProps) => {
           setStatus({
             success: (
               <>
-                Review updated. <LevelLink level={level}>Click here</LevelLink>{" "}
+                Review updated.{" "}
+                <LevelLink subPage="reviews" level={level}>
+                  Click here
+                </LevelLink>{" "}
                 to see the changes.
               </>
             ),
@@ -187,7 +113,10 @@ const ReviewForm = ({ level, review, onGoBack, onSubmit }: ReviewFormProps) => {
           setStatus({
             success: (
               <>
-                Review posted. <LevelLink level={level}>Click here</LevelLink>{" "}
+                Review posted.{" "}
+                <LevelLink subPage="reviews" level={level}>
+                  Click here
+                </LevelLink>{" "}
                 to go back to the level page.
               </>
             ),
@@ -207,7 +136,6 @@ const ReviewForm = ({ level, review, onGoBack, onSubmit }: ReviewFormProps) => {
   return (
     <Formik
       initialValues={initialValues}
-      validate={validate}
       enableReinitialize={true}
       onSubmit={handleSubmit}
     >
@@ -233,21 +161,6 @@ const ReviewForm = ({ level, review, onGoBack, onSubmit }: ReviewFormProps) => {
                   label="Review text"
                   name="text"
                 />
-              </FormGridFieldSet>
-
-              <FormGridFieldSet title="Questionnaire">
-                <InfoMessage type={InfoMessageType.Info}>
-                  The results of this questionnaire will aggregate a hidden
-                  score that contributes to the average rating.
-                </InfoMessage>
-
-                {config.review_questions.map((templateQuestion) => (
-                  <ReviewQuestionFormField
-                    key={templateQuestion.id}
-                    name={`answers.${templateQuestion.id}`}
-                    templateQuestion={templateQuestion}
-                  />
-                ))}
               </FormGridFieldSet>
 
               <FormGridButtons status={status}>

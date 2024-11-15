@@ -69,13 +69,16 @@ class Review(UserContentDatesInfo, DatesInfo):
         choices=ReviewType.choices, max_length=2, default=ReviewType.TRLE
     )
 
+    # TODO: remove me
     trle_rating_gameplay = models.IntegerField(blank=True, null=True)
     trle_rating_enemies = models.IntegerField(blank=True, null=True)
     trle_rating_atmosphere = models.IntegerField(blank=True, null=True)
     trle_rating_lighting = models.IntegerField(blank=True, null=True)
 
+    # TODO: remove me
     answers = models.ManyToManyField(ReviewTemplateAnswer, related_name="+")
 
+    # TODO: remove me
     rating_class = models.ForeignKey(
         RatingClass, blank=True, null=True, on_delete=models.SET_NULL
     )

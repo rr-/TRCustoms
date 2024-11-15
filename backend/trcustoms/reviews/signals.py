@@ -1,12 +1,6 @@
-from django.db.models.signals import (
-    m2m_changed,
-    post_delete,
-    post_save,
-    pre_save,
-)
+from django.db.models.signals import post_delete, post_save, pre_save
 from django.dispatch import receiver
 
-from trcustoms.ratings import get_object_rating_class
 from trcustoms.reviews.models import Review
 from trcustoms.signals import disable_signals
 
@@ -20,15 +14,11 @@ def handle_review_pre_save(sender, instance, **kwargs):
 
 
 @receiver(post_save, sender=Review)
-@receiver(m2m_changed, sender=Review.answers.through)
 def handle_review_creation_and_updates(sender, instance, **kwargs):
     with disable_signals():
-        instance.rating_class = get_object_rating_class(instance)
-        instance.save(update_fields=["rating_class", "position"])
+        instance.save(update_fields=["position"])
         level = instance.level
-        level.rating_class = get_object_rating_class(level)
         level.update_review_count()
-        level.save(update_fields=["rating_class"])
         if old_level := getattr(instance, "_old_level", None):
             old_level.update_review_count()
         author = instance.author
@@ -38,9 +28,7 @@ def handle_review_creation_and_updates(sender, instance, **kwargs):
 @receiver(post_delete, sender=Review)
 def handle_review_deletion(sender, instance, **kwargs):
     level = instance.level
-    level.rating_class = get_object_rating_class(level)
     level.update_review_count()
-    level.save(update_fields=["rating_class"])
     author = instance.author
     author.update_reviewed_level_count()
 

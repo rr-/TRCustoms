@@ -1,48 +1,13 @@
 from functools import cache
 from statistics import mean
 
-from django.db.models import F, Max, Model, QuerySet, Sum
+from django.db.models import Model, QuerySet
 
 from trcustoms.common.consts import RatingClassSubject
 from trcustoms.common.models import RatingClass
 from trcustoms.levels.models import Level
-from trcustoms.reviews.consts import ReviewType
-from trcustoms.reviews.models import Review, ReviewTemplateQuestion
-
-
-@cache
-def get_max_review_score() -> int:
-    return ReviewTemplateQuestion.objects.annotate(
-        value=Max(F("answers__points")) * F("weight")
-    ).aggregate(Sum("value"))["value__sum"]
-
-
-def get_review_score(review: Review) -> float:
-    if review.review_type == ReviewType.TRLE:
-        return (
-            mean(
-                [
-                    review.trle_rating_gameplay or 0,
-                    review.trle_rating_enemies or 0,
-                    review.trle_rating_atmosphere or 0,
-                    review.trle_rating_lighting or 0,
-                ]
-            )
-            / 10.0
-        )
-
-    if review.review_type == ReviewType.TRC:
-        max_score = get_max_review_score()
-        if not max_score:
-            return 0
-        return (
-            review.answers.annotate(
-                value=F("points") * F("question__weight")
-            ).aggregate(Sum("value"))["value__sum"]
-            or 0
-        ) / max_score
-
-    assert False, "Invalid review type"
+from trcustoms.ratings.logic import get_rating_score
+from trcustoms.ratings.models import Rating
 
 
 @cache
@@ -85,19 +50,19 @@ class LevelScorer(BaseScorer):
 
     @classmethod
     def get_review_scores(cls, instance: Model) -> list[float]:
-        return [get_review_score(review) for review in instance.reviews.all()]
+        return [get_rating_score(rating) for rating in instance.ratings.all()]
 
 
-class ReviewScorer(BaseScorer):
-    target = RatingClassSubject.REVIEW
-    model = Review
+class RatingScorer(BaseScorer):
+    target = RatingClassSubject.RATING
+    model = Rating
 
     @classmethod
     def get_review_scores(cls, instance: Model) -> list[float]:
-        return [get_review_score(instance)]
+        return [get_rating_score(instance)]
 
 
-def get_object_rating_class(instance: Level | Review) -> RatingClass:
+def get_object_rating_class(instance: Level | Rating) -> RatingClass:
     for scorer in BaseScorer.__subclasses__():
         if isinstance(instance, scorer.model):
             ratings = scorer.get_review_scores(instance)

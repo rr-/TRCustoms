@@ -4,6 +4,7 @@ from rest_framework.test import APIClient
 
 from trcustoms.levels.models import Level
 from trcustoms.levels.tests.factories import LevelFactory
+from trcustoms.ratings.tests.factories import RatingFactory
 from trcustoms.reviews.tests.factories import ReviewFactory
 from trcustoms.users.tests.factories import UserFactory
 
@@ -82,3 +83,17 @@ def test_level_deletion_updates_reviewed_level_count(
     superuser_api_client.delete(f"/api/levels/{level.id}/")
     user.refresh_from_db()
     assert user.reviewed_level_count == 0
+
+
+@pytest.mark.django_db
+def test_level_deletion_updates_rated_level_count(
+    superuser_api_client: APIClient,
+) -> None:
+    user = UserFactory()
+    level = LevelFactory()
+    RatingFactory(level=level)
+    user.refresh_from_db()
+    assert user.rated_level_count == 1
+    superuser_api_client.delete(f"/api/levels/{level.id}/")
+    user.refresh_from_db()
+    assert user.rated_level_count == 0

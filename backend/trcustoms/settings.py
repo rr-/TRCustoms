@@ -54,6 +54,7 @@ INSTALLED_APPS = [
     "trcustoms.levels",
     "trcustoms.news",
     "trcustoms.playlists",
+    "trcustoms.ratings",
     "trcustoms.reviews",
     "trcustoms.tags",
     "trcustoms.uploads",

@@ -86,7 +86,7 @@ class Command(BaseCommand):
         data = self.read_json("rating_classes.json")
         for path, target in [
             ("levels", RatingClassSubject.LEVEL),
-            ("reviews", RatingClassSubject.REVIEW),
+            ("ratings", RatingClassSubject.RATING),
         ]:
             for item in data[path]:
                 RatingClass.objects.update_or_create(

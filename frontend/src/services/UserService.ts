@@ -19,10 +19,13 @@ enum UserPermission {
   viewUsers = "view_users",
   uploadLevels = "upload_levels",
   editLevels = "edit_levels",
+  rateLevels = "rate_levels",
   reviewLevels = "review_levels",
   deleteLevels = "delete_levels",
   editReviews = "edit_reviews",
   deleteReviews = "delete_reviews",
+  editRatings = "edit_ratings",
+  deleteRatings = "delete_ratings",
   editNews = "edit_news",
   reviewAuditLogs = "review_audit_logs",
   editTags = "edit_tags",
@@ -55,6 +58,7 @@ interface UserListing extends UserNested {
   is_pending_activation: boolean;
   played_level_count: number;
   authored_level_count: number;
+  rated_level_count: number;
   reviewed_level_count: number;
   authored_walkthrough_count: number;
   permissions: UserPermission[];

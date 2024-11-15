@@ -12,6 +12,7 @@ from trcustoms.levels.tests.factories import (
     DurationFactory,
     LevelFactory,
 )
+from trcustoms.ratings.tests.factories import RatingFactory
 from trcustoms.reviews.tests.factories import ReviewFactory
 from trcustoms.tags.tests.factories import TagFactory
 from trcustoms.uploads.consts import UploadType
@@ -134,6 +135,15 @@ def test_level_creation_updates_reviewed_level_count() -> None:
 
 
 @pytest.mark.django_db
+def test_level_creation_updates_rated_level_count() -> None:
+    user = UserFactory()
+    level = LevelFactory(is_approved=False)
+    RatingFactory(author=user, level=level)
+    user.refresh_from_db()
+    assert user.rated_level_count == 0
+
+
+@pytest.mark.django_db
 def test_approved_level_creation_updates_authored_level_count() -> None:
     user = UserFactory()
     LevelFactory(authors=[user], is_approved=True)
@@ -148,3 +158,12 @@ def test_approved_level_creation_updates_reviewed_level_count() -> None:
     ReviewFactory(author=user, level=level)
     user.refresh_from_db()
     assert user.reviewed_level_count == 1
+
+
+@pytest.mark.django_db
+def test_approved_level_creation_updates_rated_level_count() -> None:
+    user = UserFactory()
+    level = LevelFactory(is_approved=True)
+    RatingFactory(author=user, level=level)
+    user.refresh_from_db()
+    assert user.rated_level_count == 1

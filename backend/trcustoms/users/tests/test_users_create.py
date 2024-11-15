@@ -98,6 +98,7 @@ def test_user_creation(
         "played_level_count": 0,
         "authored_level_count": 0,
         "authored_walkthrough_count": 0,
+        "rated_level_count": 0,
         "reviewed_level_count": 0,
         "picture": None,
         "country": None,
@@ -106,6 +107,7 @@ def test_user_creation(
         "permissions": [
             "list_users",
             "post_walkthroughs",
+            "rate_levels",
             "review_levels",
             "upload_levels",
             "view_users",
@@ -291,6 +293,7 @@ def test_user_creation_acquiring_trle_account(
         "played_level_count": 0,
         "authored_level_count": 0,
         "authored_walkthrough_count": 0,
+        "rated_level_count": 0,
         "reviewed_level_count": 0,
         "picture": None,
         "country": None,
@@ -299,6 +302,7 @@ def test_user_creation_acquiring_trle_account(
         "permissions": [
             "list_users",
             "post_walkthroughs",
+            "rate_levels",
             "review_levels",
             "upload_levels",
             "view_users",

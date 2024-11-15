@@ -33,7 +33,6 @@ class ReviewViewSet(
     viewsets.GenericViewSet,
 ):
     queryset = Review.objects.all().prefetch_related(
-        "rating_class",
         "author",
         "author__picture",
         "level",
@@ -53,10 +52,6 @@ class ReviewViewSet(
         "last_user_content_updated",
         "level__name",
         "level_id",
-        "trle_rating_atmosphere",
-        "trle_rating_enemies",
-        "trle_rating_gameplay",
-        "trle_rating_lighting",
     ]
 
     permission_classes = [AllowNone]

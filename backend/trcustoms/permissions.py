@@ -6,6 +6,7 @@ from rest_framework.permissions import (
 
 from trcustoms.levels.models import Level
 from trcustoms.playlists.models import PlaylistItem
+from trcustoms.ratings.models import Rating
 from trcustoms.reviews.models import Review
 from trcustoms.users.models import User, UserPermission
 from trcustoms.walkthroughs.models import Walkthrough
@@ -58,6 +59,8 @@ class IsAccessingOwnResource(IsAuthenticated):
                 )
             case Review():
                 result = obj.author == request.user
+            case Rating():
+                result = obj.author == request.user
             case Walkthrough():
                 result = obj.author == request.user
             case PlaylistItem():
@@ -86,6 +89,7 @@ def get_permissions(user: User) -> set[UserPermission]:
 
     if not user.is_anonymous:
         perms |= {
+            UserPermission.RATE_LEVELS,
             UserPermission.REVIEW_LEVELS,
             UserPermission.UPLOAD_LEVELS,
             UserPermission.POST_WALKTHROUGHS,

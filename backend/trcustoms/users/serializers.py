@@ -45,6 +45,7 @@ class UserListingSerializer(serializers.ModelSerializer):
     played_level_count = serializers.ReadOnlyField()
     authored_level_count = serializers.ReadOnlyField()
     authored_walkthrough_count = serializers.ReadOnlyField()
+    rated_level_count = serializers.ReadOnlyField()
     reviewed_level_count = serializers.ReadOnlyField()
     is_active = serializers.ReadOnlyField()
     is_pending_activation = serializers.ReadOnlyField()
@@ -66,6 +67,7 @@ class UserListingSerializer(serializers.ModelSerializer):
             "played_level_count",
             "authored_level_count",
             "authored_walkthrough_count",
+            "rated_level_count",
             "reviewed_level_count",
             "picture",
             "permissions",

@@ -28,16 +28,19 @@ class PasswordResetToken(Token):
 class UserPermission(Enum):
     DELETE_LEVELS = "delete_levels"
     DELETE_REVIEWS = "delete_reviews"
+    DELETE_RATINGS = "delete_ratings"
     DELETE_WALKTHROUGHS = "delete_walkthroughs"
     EDIT_LEVELS = "edit_levels"
     EDIT_NEWS = "edit_news"
     EDIT_REVIEWS = "edit_reviews"
+    EDIT_RATINGS = "edit_ratings"
     EDIT_TAGS = "edit_tags"
     EDIT_USERS = "edit_users"
     MANAGE_USERS = "manage_users"
     LIST_USERS = "list_users"
     REVIEW_AUDIT_LOGS = "review_audit_logs"
     REVIEW_LEVELS = "review_levels"
+    RATE_LEVELS = "rate_levels"
     UPLOAD_LEVELS = "upload_levels"
     VIEW_USERS = "view_users"
     POST_WALKTHROUGHS = "post_walkthroughs"
@@ -65,12 +68,14 @@ class User(AbstractUser):
         permissions = [
             (UserPermission.DELETE_LEVELS.value, "Can delete levels"),
             (UserPermission.DELETE_REVIEWS.value, "Can delete reviews"),
+            (UserPermission.DELETE_RATINGS.value, "Can delete ratings"),
             (
                 UserPermission.DELETE_WALKTHROUGHS.value,
                 "Can delete walkthroughs",
             ),
             (UserPermission.EDIT_LEVELS.value, "Can edit levels"),
             (UserPermission.EDIT_REVIEWS.value, "Can edit reviews"),
+            (UserPermission.EDIT_RATINGS.value, "Can edit ratings"),
             (UserPermission.EDIT_WALKTHROUGHS.value, "Can edit walkthroughs"),
             (UserPermission.EDIT_TAGS.value, "Can edit tags"),
             (UserPermission.EDIT_NEWS.value, "Can edit news"),
@@ -80,6 +85,7 @@ class User(AbstractUser):
             (UserPermission.VIEW_USERS.value, "Can view users"),
             (UserPermission.REVIEW_AUDIT_LOGS.value, "Can review audit logs"),
             (UserPermission.REVIEW_LEVELS.value, "Can review levels"),
+            (UserPermission.RATE_LEVELS.value, "Can rate levels"),
             (UserPermission.UPLOAD_LEVELS.value, "Can upload levels"),
             (UserPermission.POST_WALKTHROUGHS.value, "Can post walkthroughs"),
             (UserPermission.EDIT_PLAYLISTS.value, "Can edit playlists"),
@@ -108,6 +114,7 @@ class User(AbstractUser):
 
     played_level_count = models.PositiveIntegerField(default=0)
     authored_level_count = models.PositiveIntegerField(default=0)
+    rated_level_count = models.PositiveIntegerField(default=0)
     reviewed_level_count = models.PositiveIntegerField(default=0)
     authored_walkthrough_count = models.PositiveIntegerField(default=0)
 
@@ -120,6 +127,12 @@ class User(AbstractUser):
 
     def generate_password_reset_token(self) -> str:
         return str(PasswordResetToken.for_user(self))
+
+    def update_rated_level_count(self) -> None:
+        self.rated_level_count = self.rated_levels.filter(
+            level__is_approved=True
+        ).count()
+        self.save(update_fields=["rated_level_count"])
 
     def update_reviewed_level_count(self) -> None:
         self.reviewed_level_count = self.reviewed_levels.filter(

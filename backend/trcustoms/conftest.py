@@ -14,11 +14,8 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from trcustoms.common.consts import RatingClassSubject
 from trcustoms.common.models import RatingClass
 from trcustoms.common.tests.factories import RatingClassFactory
-from trcustoms.ratings import (
-    get_max_review_score,
-    get_rating_class,
-    get_rating_classes,
-)
+from trcustoms.ratings.logic import get_max_rating_score
+from trcustoms.scoring import get_rating_class, get_rating_classes
 from trcustoms.users.models import User
 from trcustoms.users.tests.factories import UserFactory
 
@@ -104,10 +101,10 @@ def fixture_any_datetime() -> object:
     return AnyDatetime
 
 
-@pytest.fixture(name="review_rating_classes")
-def fixture_review_rating_classes() -> QuerySet:
+@pytest.fixture(name="rating_rating_classes")
+def fixture_rating_rating_classes() -> QuerySet:
     RatingClassFactory(
-        target=RatingClassSubject.REVIEW,
+        target=RatingClassSubject.RATING,
         position=1,
         min_rating_count=1,
         min_rating_average=None,
@@ -115,7 +112,7 @@ def fixture_review_rating_classes() -> QuerySet:
         name="Negative",
     )
     RatingClassFactory(
-        target=RatingClassSubject.REVIEW,
+        target=RatingClassSubject.RATING,
         position=-1,
         min_rating_count=1,
         min_rating_average=0.5,
@@ -127,7 +124,7 @@ def fixture_review_rating_classes() -> QuerySet:
 
 @pytest.fixture(name="clear_caches", autouse=True)
 def fixture_clear_caches() -> None:
-    get_max_review_score.cache_clear()
+    get_max_rating_score.cache_clear()
     get_rating_classes.cache_clear()
     get_rating_class.cache_clear()
 
