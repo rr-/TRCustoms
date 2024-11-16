@@ -3,9 +3,8 @@ import { useNavigate } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import { LevelSidebar } from "src/components/common/LevelSidebar";
 import { Loader } from "src/components/common/Loader";
-import { TabSwitch } from "src/components/common/TabSwitch";
+import { LightTabSwitch } from "src/components/common/TabSwitch";
 import type { TabPage } from "src/components/common/TabSwitch";
-import { TabSwitchVariant } from "src/components/common/TabSwitch";
 import { SidebarLayout } from "src/components/layouts/SidebarLayout";
 import { LevelHeader } from "src/components/pages/LevelPage/LevelHeader";
 import { LevelOverviewTab } from "src/components/pages/LevelPage/LevelOverviewTab";
@@ -115,11 +114,10 @@ const LevelPage = ({ tabName, action }: LevelPageProps) => {
       header={<LevelHeader level={level} />}
       sidebar={<LevelSidebar level={level} />}
     >
-      <TabSwitch
-        onTabChange={handleTabChange}
-        variant={TabSwitchVariant.Light}
+      <LightTabSwitch
         tabs={tabs}
         tabName={tabName}
+        onTabChange={handleTabChange}
       />
     </SidebarLayout>
   );
