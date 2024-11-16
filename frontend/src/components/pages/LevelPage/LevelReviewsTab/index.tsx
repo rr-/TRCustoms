@@ -1,13 +1,10 @@
 import styles from "./index.module.css";
 import { useState } from "react";
-import { useContext } from "react";
-import { Button } from "src/components/common/Button";
 import { Link } from "src/components/common/Link";
 import { PermissionGuard } from "src/components/common/PermissionGuard";
 import { ReviewsList } from "src/components/common/ReviewsList";
-import { IconAnnotation } from "src/components/icons";
+import { AddOrEditReviewButton } from "src/components/pages/LevelPage/LevelReviewsTab/AddOrEditReviewButton";
 import { DISABLE_PAGING } from "src/constants";
-import { UserContext } from "src/contexts/UserContext";
 import type { LevelDetails } from "src/services/LevelService";
 import type { ReviewSearchQuery } from "src/services/ReviewService";
 import { UserPermission } from "src/services/UserService";
@@ -24,8 +21,6 @@ const getReviewsSearchQuery = (levelId: number): ReviewSearchQuery => ({
 });
 
 const LevelReviewsTab = ({ level }: LevelReviewsTabProps) => {
-  const { user } = useContext(UserContext);
-
   const [reviewsSearchQuery, setReviewsSearchQuery] = useState<
     ReviewSearchQuery
   >(getReviewsSearchQuery(level.id));
@@ -33,13 +28,7 @@ const LevelReviewsTab = ({ level }: LevelReviewsTabProps) => {
   return (
     <>
       <div className={styles.actions}>
-        {level.authors.every((author) => author.id !== user?.id) && (
-          <PermissionGuard require={UserPermission.reviewLevels}>
-            <Button icon={<IconAnnotation />} to={`/levels/${level.id}/review`}>
-              Write a review
-            </Button>
-          </PermissionGuard>
-        )}
+        <AddOrEditReviewButton level={level} />
       </div>
 
       <ReviewsList

@@ -1,13 +1,10 @@
 import styles from "./index.module.css";
 import { useState } from "react";
-import { useContext } from "react";
-import { Button } from "src/components/common/Button";
 import { Link } from "src/components/common/Link";
 import { PermissionGuard } from "src/components/common/PermissionGuard";
 import { RatingsTable } from "src/components/common/RatingsTable";
-import { IconThumbUp } from "src/components/icons";
+import { AddOrEditRatingButton } from "src/components/pages/LevelPage/LevelRatingsTab/AddOrEditRatingButton";
 import { DISABLE_PAGING } from "src/constants";
-import { UserContext } from "src/contexts/UserContext";
 import type { LevelDetails } from "src/services/LevelService";
 import type { RatingSearchQuery } from "src/services/RatingService";
 import { UserPermission } from "src/services/UserService";
@@ -24,8 +21,6 @@ const getRatingsSearchQuery = (levelId: number): RatingSearchQuery => ({
 });
 
 const LevelRatingsTab = ({ level }: LevelRatingsTabProps) => {
-  const { user } = useContext(UserContext);
-
   const [ratingsSearchQuery, setRatingsSearchQuery] = useState<
     RatingSearchQuery
   >(getRatingsSearchQuery(level.id));
@@ -33,13 +28,7 @@ const LevelRatingsTab = ({ level }: LevelRatingsTabProps) => {
   return (
     <>
       <div className={styles.actions}>
-        {level.authors.every((author) => author.id !== user?.id) && (
-          <PermissionGuard require={UserPermission.rateLevels}>
-            <Button icon={<IconThumbUp />} to={`/levels/${level.id}/rating`}>
-              Rate this level
-            </Button>
-          </PermissionGuard>
-        )}
+        <AddOrEditRatingButton level={level} />
       </div>
 
       <RatingsTable
