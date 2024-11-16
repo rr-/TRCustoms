@@ -45,11 +45,11 @@ interface UserBasic {
 interface UserNested extends UserBasic {
   first_name: string;
   last_name: string;
+  picture: UploadedFile | null;
 }
 
 interface UserListing extends UserNested {
   email: string;
-  picture: UploadedFile | null;
   bio: string;
   date_joined: string;
   last_login: string;

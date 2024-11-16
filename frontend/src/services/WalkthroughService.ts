@@ -1,7 +1,6 @@
 import { AxiosResponse } from "axios";
 import { api } from "src/api";
 import { API_URL } from "src/constants";
-import type { UploadedFile } from "src/services/FileService";
 import type { LevelNested } from "src/services/LevelService";
 import type { UserNested } from "src/services/UserService";
 import type { GenericSearchQuery } from "src/types";
@@ -22,10 +21,7 @@ enum WalkthroughStatus {
   Rejected = "rej",
 }
 
-interface WalkthroughAuthor extends UserNested {
-  picture: UploadedFile | null;
-  reviewed_level_count: number;
-}
+interface WalkthroughAuthor extends UserNested {}
 
 interface WalkthroughListing {
   level: LevelNested;

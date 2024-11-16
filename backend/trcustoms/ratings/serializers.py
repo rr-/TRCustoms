@@ -12,18 +12,14 @@ from trcustoms.ratings.models import (
     RatingTemplateQuestion,
 )
 from trcustoms.tasks import update_awards
-from trcustoms.uploads.serializers import UploadedFileNestedSerializer
 from trcustoms.users.models import UserPermission
 from trcustoms.users.serializers import UserNestedSerializer
 
 
 class RatingAuthorSerializer(UserNestedSerializer):
-    picture = UploadedFileNestedSerializer(read_only=True)
-
     class Meta:
         model = UserNestedSerializer.Meta.model
         fields = UserNestedSerializer.Meta.fields + [
-            "picture",
             "rated_level_count",
         ]
 

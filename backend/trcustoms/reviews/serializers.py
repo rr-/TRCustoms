@@ -9,17 +9,13 @@ from trcustoms.mails import (
 )
 from trcustoms.reviews.models import Review
 from trcustoms.tasks import update_awards
-from trcustoms.uploads.serializers import UploadedFileNestedSerializer
 from trcustoms.users.serializers import UserNestedSerializer
 
 
 class ReviewAuthorSerializer(UserNestedSerializer):
-    picture = UploadedFileNestedSerializer(read_only=True)
-
     class Meta:
         model = UserNestedSerializer.Meta.model
         fields = UserNestedSerializer.Meta.fields + [
-            "picture",
             "reviewed_level_count",
         ]
 

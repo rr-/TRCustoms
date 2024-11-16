@@ -35,7 +35,9 @@ class PlaylistItemViewSet(
     mixins.ListModelMixin,
     viewsets.GenericViewSet,
 ):
-    queryset = PlaylistItem.objects.all().prefetch_related("level", "user")
+    queryset = PlaylistItem.objects.all().prefetch_related(
+        "level", "user", "user__picture"
+    )
     search_fields = ["level__name"]
     ordering_fields = ["level__name", "status", "created", "last_updated"]
 
