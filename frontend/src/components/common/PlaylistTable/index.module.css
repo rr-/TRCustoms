@@ -13,9 +13,9 @@
   color: var(--success-fg-color);
 }
 
-.table :global .status,
-.table :global .updated,
-.table :global .actions {
+.table .status,
+.table .updated,
+.table .actions {
   white-space: nowrap;
   width: 5%;
 }

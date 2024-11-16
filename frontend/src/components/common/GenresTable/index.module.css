@@ -1,8 +1,8 @@
-.table :global .name {
+.table .name {
   width: 40%;
 }
-.table :global .levelCount,
-.table :global .created,
-.table :global .updated {
+.table .levelCount,
+.table .created,
+.table .updated {
   width: 20%;
 }

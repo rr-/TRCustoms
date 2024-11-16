@@ -16,6 +16,7 @@ import type { GenericSearchQuery } from "src/types";
 
 interface DataTableColumn<TItem> {
   name: string;
+  className?: string;
   tooltip?: string | undefined;
   sortKey?: string | undefined;
   label: string;
@@ -56,7 +57,7 @@ const DataTableHeader = <TItem extends {}, TQuery extends GenericSearchQuery>({
       <tr>
         {columns.map((column) => (
           <th
-            className={column.name || ""}
+            className={column.className || column.name || ""}
             title={column.tooltip || undefined}
             key={`head-${column.name}`}
           >
@@ -122,7 +123,7 @@ const DataTableBody = <TItem extends {}, TQuery extends GenericSearchQuery>({
             <tr>
               {columns.map((column) => (
                 <td
-                  className={column.name || ""}
+                  className={column.className || column.name || ""}
                   title={column.itemTooltip?.(item) || undefined}
                   key={`${key}-${column.name}`}
                 >
@@ -157,7 +158,10 @@ const DataTableFooter = <TItem extends {}, TQuery extends GenericSearchQuery>({
         <tfoot>
           <tr>
             {columns.map((column) => (
-              <th key={`foot-${column.name}`} className={column.name || ""}>
+              <th
+                key={`foot-${column.name}`}
+                className={column.className || column.name || ""}
+              >
                 {column.footer?.()}
               </th>
             ))}

@@ -170,11 +170,13 @@ const AuditLogTable = ({
     {
       name: "created",
       label: "Created",
+      className: styles.created,
       itemElement: ({ item }) => formatDateTime(item.created),
     },
     {
       name: "author",
       label: "Author",
+      className: styles.author,
       itemElement: ({ item }) =>
         item.change_author ? (
           <UserLink user={item.change_author} />
@@ -185,6 +187,7 @@ const AuditLogTable = ({
     {
       name: "object",
       label: "Object",
+      className: styles.object,
       itemElement: ({ item }: { item: AuditLogListing }) => (
         <AuditLogTableObjectLink auditLog={item} />
       ),
@@ -192,6 +195,7 @@ const AuditLogTable = ({
     {
       name: "changes",
       label: "Changes",
+      className: styles.changes,
       itemElement: ({ item }) => (
         <span className={styles.changesWrapper}>
           {item.changes.join(" ")}

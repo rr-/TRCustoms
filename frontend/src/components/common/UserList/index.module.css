@@ -1,14 +1,14 @@
-.table :global .username {
+.table .username {
   width: 24%;
 }
-.table :global .firstName,
-.table :global .lastName {
+.table .firstName,
+.table .lastName {
   width: 18%;
 }
-.table :global .created,
-.table :global .lastLogin,
-.table :global .updated,
-.table :global .authoredLevelCount {
+.table .created,
+.table .lastLogin,
+.table .updated,
+.table .authoredLevelCount {
   width: 10%;
   white-space: nowrap;
 }
