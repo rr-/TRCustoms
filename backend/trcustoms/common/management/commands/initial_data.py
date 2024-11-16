@@ -9,9 +9,9 @@ from trcustoms.common.models import Country, RatingClass
 from trcustoms.engines.models import Engine
 from trcustoms.genres.models import Genre
 from trcustoms.levels.models import LevelDifficulty, LevelDuration
-from trcustoms.reviews.models import (
-    ReviewTemplateAnswer,
-    ReviewTemplateQuestion,
+from trcustoms.ratings.models import (
+    RatingTemplateAnswer,
+    RatingTemplateQuestion,
 )
 
 
@@ -60,19 +60,20 @@ class Command(BaseCommand):
             )
 
     def create_review_template(self) -> None:
-        for qitem in self.read_json("review_questions.json"):
+        for qitem in self.read_json("rating_questions.json"):
             (
                 question,
                 _created,
-            ) = ReviewTemplateQuestion.objects.update_or_create(
+            ) = RatingTemplateQuestion.objects.update_or_create(
                 position=qitem["position"],
                 defaults=dict(
                     weight=qitem["weight"],
                     question_text=qitem["question_text"],
+                    category=qitem["category"],
                 ),
             )
             for apos, aitem in enumerate(qitem["answers"]):
-                ReviewTemplateAnswer.objects.update_or_create(
+                RatingTemplateAnswer.objects.update_or_create(
                     question__position=qitem["position"],
                     position=apos,
                     defaults=dict(
