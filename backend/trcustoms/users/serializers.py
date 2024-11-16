@@ -26,6 +26,8 @@ from trcustoms.users.validators import UsernameValidator
 
 
 class UserNestedSerializer(serializers.ModelSerializer):
+    picture = UploadedFileNestedSerializer(read_only=True)
+
     class Meta:
         model = User
         fields = [
@@ -33,6 +35,7 @@ class UserNestedSerializer(serializers.ModelSerializer):
             "username",
             "first_name",
             "last_name",
+            "picture",
         ]
 
 

@@ -1,7 +1,6 @@
 import { AxiosResponse } from "axios";
 import { api } from "src/api";
 import { API_URL } from "src/constants";
-import type { UploadedFile } from "src/services/FileService";
 import type { LevelNested } from "src/services/LevelService";
 import type { UserNested } from "src/services/UserService";
 import type { GenericSearchQuery } from "src/types";
@@ -11,7 +10,6 @@ import { filterFalsyObjectValues } from "src/utils/misc";
 import { getGenericSearchQuery } from "src/utils/misc";
 
 interface RatingAuthor extends UserNested {
-  picture: UploadedFile | null;
   rated_level_count: number;
 }
 

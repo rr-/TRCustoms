@@ -8,20 +8,15 @@ from trcustoms.levels.models import Level
 from trcustoms.levels.serializers import LevelNestedSerializer
 from trcustoms.mails import send_walkthrough_update_mail
 from trcustoms.tasks import update_awards
-from trcustoms.uploads.serializers import UploadedFileNestedSerializer
 from trcustoms.users.serializers import UserNestedSerializer
 from trcustoms.walkthroughs.consts import WalkthroughStatus, WalkthroughType
 from trcustoms.walkthroughs.models import Walkthrough
 
 
 class WalkthroughAuthorSerializer(UserNestedSerializer):
-    picture = UploadedFileNestedSerializer(read_only=True)
-
     class Meta:
         model = UserNestedSerializer.Meta.model
-        fields = UserNestedSerializer.Meta.fields + [
-            "picture",
-        ]
+        fields = UserNestedSerializer.Meta.fields
 
 
 class WalkthroughListingSerializer(serializers.ModelSerializer):

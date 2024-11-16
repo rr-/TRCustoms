@@ -77,6 +77,9 @@ class LevelViewSet(
     queryset = Level.objects.prefetch_related(
         "engine",
         "authors",
+        "authors__picture",
+        "uploader",
+        "uploader__picture",
         "genres",
         "tags",
         "duration",

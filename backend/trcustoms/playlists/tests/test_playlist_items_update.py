@@ -128,6 +128,7 @@ def test_playlist_item_update_success(
             "username": playlist_item.user.username,
             "first_name": playlist_item.user.first_name,
             "last_name": playlist_item.user.last_name,
+            "picture": None,
         },
         "status": playlist_item.status,
         "created": any_datetime(allow_strings=True),

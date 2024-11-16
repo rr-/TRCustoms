@@ -112,6 +112,8 @@ class AuditLogViewSet(
         ) is not None:
             qs = qs.filter(is_action_required=is_action_required)
 
-        qs = qs.prefetch_related("change_author", "object_type")
+        qs = qs.prefetch_related(
+            "change_author", "change_author__picture", "object_type"
+        )
 
         return qs
