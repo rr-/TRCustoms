@@ -59,7 +59,9 @@ const LevelView = ({ showStatus, level }: LevelViewProps) => {
   const details = (
     <small className={styles.details}>
       Rating: <LevelRating ratingClass={level.rating_class} /> (
-      {level.rating_count} {pluralize("rating", level.rating_count)})
+      {level.rating_count} {pluralize("rating", level.rating_count)}
+      {" and "}
+      {level.review_count} {pluralize("review", level.review_count)})
       <br />
       Genres:{" "}
       {level.genres.map((tag) => tag.name).join(", ") ||
@@ -82,20 +84,21 @@ const LevelView = ({ showStatus, level }: LevelViewProps) => {
 
   const download = (
     <>
-      Download:
       {level.last_file?.url ? (
-        <>
+        <span className={styles.downloadBox}>
+          Download:
           <span className={styles.downloadLink}>
             <Link to={level.last_file.url}>
               <strong>
-                <IconDownload />({formatFileSize(level.last_file?.size)})
+                <IconDownload />
+                {formatFileSize(level.last_file?.size)}
               </strong>
             </Link>
           </span>
-          <span className={styles.downloadCount}>
+          <small className={styles.downloadCount}>
             {level.download_count} downloads
-          </span>
-        </>
+          </small>
+        </span>
       ) : (
         <>No download available</>
       )}

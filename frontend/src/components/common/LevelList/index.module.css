@@ -69,10 +69,6 @@
   line-height: 1.2rem;
 }
 
-.downloadLink {
-  margin: 0 0.5rem;
-}
-
 .downloadCount {
   &:before {
     content: "(";
@@ -80,4 +76,9 @@
   &:after {
     content: ")";
   }
+}
+
+.downloadBox {
+  display: flex;
+  gap: 0.5rem;
 }
