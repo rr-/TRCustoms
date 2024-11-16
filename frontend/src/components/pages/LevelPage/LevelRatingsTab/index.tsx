@@ -2,6 +2,7 @@ import styles from "./index.module.css";
 import { useState } from "react";
 import { useContext } from "react";
 import { Button } from "src/components/common/Button";
+import { Link } from "src/components/common/Link";
 import { PermissionGuard } from "src/components/common/PermissionGuard";
 import { RatingsTable } from "src/components/common/RatingsTable";
 import { IconThumbUp } from "src/components/icons";
@@ -46,6 +47,17 @@ const LevelRatingsTab = ({ level }: LevelRatingsTabProps) => {
         onSearchQueryChange={setRatingsSearchQuery}
         showLevels={false}
         showAuthors={true}
+        noItemsElement={
+          <>
+            There are no ratings for this level yet.
+            <PermissionGuard require={UserPermission.rateLevels}>
+              <br />
+              <Link to={`/levels/${level.id}/rating`}>
+                Be the first one to rate!
+              </Link>
+            </PermissionGuard>
+          </>
+        }
       />
     </>
   );

@@ -10,6 +10,7 @@ interface ReviewsListProps {
   searchQuery: ReviewSearchQuery;
   onResultCountChange?: ((count: number) => void) | undefined;
   onSearchQueryChange?: ((searchQuery: ReviewSearchQuery) => void) | undefined;
+  noItemsElement?: React.ReactNode;
 }
 
 const ReviewsList = ({
@@ -18,6 +19,7 @@ const ReviewsList = ({
   searchQuery,
   onResultCountChange,
   onSearchQueryChange,
+  noItemsElement,
 }: ReviewsListProps) => {
   return (
     <DataList
@@ -34,6 +36,7 @@ const ReviewsList = ({
           showExcerpts={showExcerpts ?? false}
         />
       )}
+      noItemsElement={noItemsElement}
     />
   );
 };

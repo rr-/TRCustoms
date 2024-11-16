@@ -2,6 +2,7 @@ import styles from "./index.module.css";
 import { useState } from "react";
 import { useContext } from "react";
 import { Button } from "src/components/common/Button";
+import { Link } from "src/components/common/Link";
 import { PermissionGuard } from "src/components/common/PermissionGuard";
 import { ReviewsList } from "src/components/common/ReviewsList";
 import { IconAnnotation } from "src/components/icons";
@@ -45,6 +46,17 @@ const LevelReviewsTab = ({ level }: LevelReviewsTabProps) => {
         showLevels={false}
         searchQuery={reviewsSearchQuery}
         onSearchQueryChange={setReviewsSearchQuery}
+        noItemsElement={
+          <>
+            There are no reviews for this level yet.
+            <PermissionGuard require={UserPermission.reviewLevels}>
+              <br />
+              <Link to={`/levels/${level.id}/review`}>
+                Be the first one to post!
+              </Link>
+            </PermissionGuard>
+          </>
+        }
       />
     </>
   );

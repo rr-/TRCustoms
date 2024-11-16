@@ -14,6 +14,8 @@ import { useSettings } from "src/contexts/SettingsContext";
 import type { GenericSearchResult } from "src/types";
 import type { GenericSearchQuery } from "src/types";
 
+const DefaultNoItemsElement = <p>There are no results to show.</p>;
+
 interface DataTableColumn<TItem> {
   name: string;
   className?: string;
@@ -37,6 +39,7 @@ interface DataTableProps<TItem, TQuery> {
   itemKey: (item: TItem) => string;
   columns: DataTableColumn<TItem>[];
 
+  noItemsElement?: React.ReactNode;
   detailsElement?: ((item: TItem) => React.ReactNode) | undefined;
 
   searchQuery: TQuery;
@@ -86,6 +89,7 @@ const DataTableBody = <TItem extends {}, TQuery extends GenericSearchQuery>({
   itemKey,
   columns,
   detailsElement,
+  noItemsElement,
 }: {
   result: {
     isLoading?: boolean | undefined;
@@ -101,7 +105,7 @@ const DataTableBody = <TItem extends {}, TQuery extends GenericSearchQuery>({
   } else if (result.isLoading || !result.data) {
     message = <Loader />;
   } else if (!result.data.results.length) {
-    message = "There are no results to show.";
+    message = noItemsElement || DefaultNoItemsElement;
   }
 
   if (message) {
@@ -181,12 +185,17 @@ const PagedDataTable = <TItem extends {}, TQuery extends GenericSearchQuery>(
     searchQuery,
     onSearchQueryChange,
     searchFunc,
+    noItemsElement,
   } = props;
 
   const result = useQuery<GenericSearchResult<TQuery, TItem> | null, Error>(
     [queryName, searchFunc, searchQuery],
     async () => searchFunc(searchQuery)
   );
+
+  if (!result?.data?.results?.length) {
+    return <>{noItemsElement || DefaultNoItemsElement}</>;
+  }
 
   return (
     <>

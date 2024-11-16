@@ -19,6 +19,7 @@ interface RatingsTableProps {
   onSearchQueryChange?: ((searchQuery: RatingSearchQuery) => void) | undefined;
   showLevels: boolean;
   showAuthors: boolean;
+  noItemsElement?: React.ReactNode;
 }
 
 const RatingsTable = ({
@@ -26,6 +27,7 @@ const RatingsTable = ({
   onSearchQueryChange,
   showLevels,
   showAuthors,
+  noItemsElement,
 }: RatingsTableProps) => {
   let columns: DataTableColumn<RatingListing>[] = [
     {
@@ -114,6 +116,7 @@ const RatingsTable = ({
       searchQuery={searchQuery}
       searchFunc={RatingService.searchRatings}
       onSearchQueryChange={onSearchQueryChange}
+      noItemsElement={noItemsElement}
     />
   );
 };
