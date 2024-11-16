@@ -12,12 +12,15 @@ import { useSettings } from "src/contexts/SettingsContext";
 import type { GenericSearchResult } from "src/types";
 import type { GenericSearchQuery } from "src/types";
 
+const DefaultNoItemsElement = <p>There are no results to show.</p>;
+
 interface DataListProps<TItem, TQuery> {
   className?: string | undefined;
   queryName: string;
   itemKey: (item: TItem) => string;
   itemView: (item: TItem) => React.ReactNode;
   pageView?: (children: React.ReactNode) => React.ReactNode;
+  noItemsElement?: React.ReactNode;
 
   searchQuery: TQuery;
   searchFunc: (
@@ -43,6 +46,7 @@ const PagedDataList = <TItem extends {}, TQuery extends GenericSearchQuery>({
   itemView,
   pageView,
   queryName,
+  noItemsElement,
 }: ConcreteDataListProps<TItem, TQuery>) => {
   const result = useQuery<GenericSearchResult<TQuery, TItem>, Error>(
     [queryName, searchFunc, searchQuery],
@@ -63,15 +67,13 @@ const PagedDataList = <TItem extends {}, TQuery extends GenericSearchQuery>({
 
   return (
     <div className={`ChildMarginClear ${className || ""}`}>
-      {result.data.results.length ? (
-        pageView(
-          result.data.results.map((item) => (
-            <Fragment key={itemKey(item)}>{itemView(item)}</Fragment>
-          ))
-        )
-      ) : (
-        <p>There are no results to show.</p>
-      )}
+      {result.data.results.length
+        ? pageView(
+            result.data.results.map((item) => (
+              <Fragment key={itemKey(item)}>{itemView(item)}</Fragment>
+            ))
+          )
+        : noItemsElement || DefaultNoItemsElement}
 
       {onSearchQueryChange &&
       result.data?.results?.length &&
@@ -96,6 +98,7 @@ const InfiniteDataList = <TItem extends {}, TQuery extends GenericSearchQuery>({
   itemView,
   pageView,
   queryName,
+  noItemsElement,
 }: ConcreteDataListProps<TItem, TQuery>) => {
   const result = useInfiniteQuery<GenericSearchResult<TQuery, TItem>, Error>(
     [queryName, searchQuery],
@@ -140,9 +143,8 @@ const InfiniteDataList = <TItem extends {}, TQuery extends GenericSearchQuery>({
 
   return (
     <div className={`ChildMarginClear ${className}`}>
-      {result.data?.pages?.[0]?.total_count === 0 && (
-        <p>There are no results to show.</p>
-      )}
+      {result.data?.pages?.[0]?.total_count === 0 &&
+        (noItemsElement || DefaultNoItemsElement)}
 
       {pageView(
         result.data?.pages?.map((result, i) => (
