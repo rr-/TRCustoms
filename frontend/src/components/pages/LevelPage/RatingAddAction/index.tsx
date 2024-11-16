@@ -7,6 +7,7 @@ import { Loader } from "src/components/common/Loader";
 import { PageGuard } from "src/components/common/PermissionGuard";
 import { RatingForm } from "src/components/common/RatingForm";
 import { PlaylistAddModal } from "src/components/modals/PlaylistAddModal";
+import { ConfigContext } from "src/contexts/ConfigContext";
 import { UserContext } from "src/contexts/UserContext";
 import type { LevelNested } from "src/services/LevelService";
 import type { RatingDetails } from "src/services/RatingService";
@@ -20,6 +21,7 @@ interface RatingAddActionProps {
 const RatingAddAction = ({ level }: RatingAddActionProps) => {
   const [isModalActive, setIsModalActive] = useState(false);
   const { user } = useContext(UserContext);
+  const { config } = useContext(ConfigContext);
   const navigate = useNavigate();
 
   const ratingResult = useQuery<RatingDetails | null, Error>(
@@ -39,7 +41,7 @@ const RatingAddAction = ({ level }: RatingAddActionProps) => {
     return <p>{ratingResult.error.message}</p>;
   }
 
-  if (ratingResult.isLoading) {
+  if (ratingResult.isLoading || !config) {
     return <Loader />;
   }
 
@@ -55,6 +57,7 @@ const RatingAddAction = ({ level }: RatingAddActionProps) => {
       />
 
       <RatingForm
+        config={config}
         onGoBack={handleGoBack}
         onSubmit={handleSubmit}
         rating={rating}

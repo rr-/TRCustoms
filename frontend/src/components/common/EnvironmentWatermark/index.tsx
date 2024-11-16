@@ -27,11 +27,11 @@ const EnvironmentWatermark = ({ children }: EnvironmentWatermarkProps) => {
       <text
         x="50%"
         y="50%"
-        font-family="sans-serif"
-        text-anchor="middle"
+        fontFamily="sans-serif"
+        textAnchor="middle"
         transform={`rotate(-45 ${size / 2} ${size / 2})`}
         fill={color}
-        font-size={fontSize}
+        fontSize={fontSize}
       >
         {text}
       </text>

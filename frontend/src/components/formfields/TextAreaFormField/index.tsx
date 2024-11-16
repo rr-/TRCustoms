@@ -1,8 +1,7 @@
 import styles from "./index.module.css";
 import { useFormikContext } from "formik";
 import { Field } from "formik";
-import { TabSwitch } from "src/components/common/TabSwitch";
-import { TabSwitchVariant } from "src/components/common/TabSwitch";
+import { BoxedTabSwitch } from "src/components/common/TabSwitch";
 import { BaseFormField } from "src/components/formfields/BaseFormField";
 import type { GenericFormFieldProps } from "src/components/formfields/BaseFormField";
 import { MarkdownComposer } from "src/components/markdown-composer/MarkdownComposer";
@@ -65,7 +64,7 @@ const TextAreaFormFieldTabbed = ({
   return (
     <BaseFormField name={name} readonly={readonly} {...props}>
       <div className={`${styles.wrapper} ${styles.tabbed}`}>
-        <TabSwitch variant={TabSwitchVariant.Boxed} tabs={tabs} />
+        <BoxedTabSwitch tabs={tabs} />
       </div>
     </BaseFormField>
   );
