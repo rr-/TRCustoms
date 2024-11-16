@@ -124,7 +124,7 @@ label {
 }
 
 .Input {
-  border: 2px solid var(--v2-accent-color-1);
+  border: 2px solid var(--input-border-color);
   background: var(--input-bg-color);
   color: var(--input-fg-color);
   line-height: 1.5rem;
