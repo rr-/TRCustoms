@@ -175,4 +175,4 @@ class RatingTemplateQuestionSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = RatingTemplateQuestion
-        fields = ["id", "position", "question_text", "answers"]
+        fields = ["id", "position", "question_text", "answers", "category"]

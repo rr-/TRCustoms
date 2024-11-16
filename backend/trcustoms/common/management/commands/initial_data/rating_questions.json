@@ -2,6 +2,7 @@
   {
     "position": 0,
     "weight": 20,
+    "category": "engagement",
     "question_text": "Do you plan on revisiting this game?",
     "answers": [
       {
@@ -30,6 +31,7 @@
   {
     "position": 1,
     "weight": 5,
+    "category": "engagement",
     "question_text": "What did you think of the length of the game?",
     "answers": [
       { "points": 1, "answer_text": "It ended sooner than expected" },
@@ -41,7 +43,8 @@
   {
     "position": 2,
     "weight": 15,
-    "question_text": "The visual quality was consistently good throughout the game.",
+    "category": "engagement",
+    "question_text": "The level lived up to the expectations set by the information on the level page.",
     "answers": [
       { "points": 0, "answer_text": "Strongly disagree" },
       { "points": 1, "answer_text": "Disagree" },
@@ -54,22 +57,24 @@
 
   {
     "position": 3,
-    "weight": 15,
-    "question_text": "The level featured enjoyable unique things I have never seen before.",
+    "weight": 10,
+    "question_text": "Ingame actions were random and lacked real sense; they felt unrelated to the story/context.",
+    "category": "engagement",
     "answers": [
-      { "points": 0, "answer_text": "Strongly disagree" },
-      { "points": 1, "answer_text": "Disagree" },
-      { "points": 2, "answer_text": "Slightly disagree" },
-      { "points": 3, "answer_text": "Slightly agree" },
-      { "points": 4, "answer_text": "Agree" },
-      { "points": 5, "answer_text": "Strongly agree" }
+      { "points": 5, "answer_text": "Strongly disagree" },
+      { "points": 4, "answer_text": "Disagree" },
+      { "points": 3, "answer_text": "Slightly disagree" },
+      { "points": 2, "answer_text": "Slightly agree" },
+      { "points": 1, "answer_text": "Agree" },
+      { "points": 0, "answer_text": "Strongly agree" }
     ]
   },
 
   {
     "position": 4,
     "weight": 15,
-    "question_text": "The sound design enhanced the game's environment and set pieces.",
+    "category": "uniqueness",
+    "question_text": "The level featured enjoyable unique things I have never seen before.",
     "answers": [
       { "points": 0, "answer_text": "Strongly disagree" },
       { "points": 1, "answer_text": "Disagree" },
@@ -83,7 +88,8 @@
   {
     "position": 5,
     "weight": 15,
-    "question_text": "The builder was able to set an atmospheric tone and immerse the player.",
+    "category": "quality",
+    "question_text": "The visual quality was consistently good throughout the game.",
     "answers": [
       { "points": 0, "answer_text": "Strongly disagree" },
       { "points": 1, "answer_text": "Disagree" },
@@ -97,7 +103,8 @@
   {
     "position": 6,
     "weight": 15,
-    "question_text": "The level lived up to the expectations set by the information on the level page.",
+    "category": "quality",
+    "question_text": "The sound design enhanced the game's environment and set pieces.",
     "answers": [
       { "points": 0, "answer_text": "Strongly disagree" },
       { "points": 1, "answer_text": "Disagree" },
@@ -111,6 +118,22 @@
   {
     "position": 7,
     "weight": 15,
+    "category": "quality",
+    "question_text": "The builder was able to set an atmospheric tone and immerse the player.",
+    "answers": [
+      { "points": 0, "answer_text": "Strongly disagree" },
+      { "points": 1, "answer_text": "Disagree" },
+      { "points": 2, "answer_text": "Slightly disagree" },
+      { "points": 3, "answer_text": "Slightly agree" },
+      { "points": 4, "answer_text": "Agree" },
+      { "points": 5, "answer_text": "Strongly agree" }
+    ]
+  },
+
+  {
+    "position": 8,
+    "weight": 15,
+    "category": "enjoyment",
     "question_text": "How often did you get bored due to unintuitive, messy, or repetitive game design?",
     "answers": [
       { "points": 0, "answer_text": "Almost always" },
@@ -121,22 +144,9 @@
   },
 
   {
-    "position": 8,
-    "weight": 10,
-    "question_text": "Ingame actions were random and lacked real sense; they felt unrelated to the story/context.",
-    "answers": [
-      { "points": 5, "answer_text": "Strongly disagree" },
-      { "points": 4, "answer_text": "Disagree" },
-      { "points": 3, "answer_text": "Slightly disagree" },
-      { "points": 2, "answer_text": "Slightly agree" },
-      { "points": 1, "answer_text": "Agree" },
-      { "points": 0, "answer_text": "Strongly agree" }
-    ]
-  },
-
-  {
     "position": 9,
     "weight": 15,
+    "category": "enjoyment",
     "question_text": "What did you think of the game's difficulty?",
     "answers": [
       { "points": 0, "answer_text": "Too easy for my taste" },
@@ -160,6 +170,7 @@
   {
     "position": 10,
     "weight": 20,
+    "category": "enjoyment",
     "question_text": "The level was overall fun and fulfilling in the end.",
     "answers": [
       { "points": 0, "answer_text": "Strongly disagree" },
@@ -174,6 +185,7 @@
   {
     "position": 11,
     "weight": 10,
+    "category": "stability",
     "question_text": "There were visual glitches.",
     "answers": [
       { "points": 3, "answer_text": "Did not notice any" },
@@ -186,6 +198,7 @@
   {
     "position": 12,
     "weight": 10,
+    "category": "stability",
     "question_text": "There were audio issues.",
     "answers": [
       { "points": 3, "answer_text": "Did not notice any" },
@@ -198,6 +211,7 @@
   {
     "position": 13,
     "weight": 10,
+    "category": "stability",
     "question_text": "There were gameplay bugs.",
     "answers": [
       { "points": 3, "answer_text": "Did not notice any" },
@@ -210,6 +224,7 @@
   {
     "position": 14,
     "weight": 20,
+    "category": "stability",
     "question_text": "There were bugs/problems that seriously ruined my experience.",
     "answers": [
       { "points": 5, "answer_text": "Strongly disagree" },

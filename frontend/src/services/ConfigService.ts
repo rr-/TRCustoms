@@ -48,6 +48,7 @@ interface RatingTemplateQuestion {
   position: number;
   id: number;
   question_text: string;
+  category: string;
   answers: RatingTemplateAnswer[];
 }
 
