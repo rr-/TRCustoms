@@ -3,7 +3,7 @@ import { useState } from "react";
 import { useContext } from "react";
 import { Button } from "src/components/common/Button";
 import { PermissionGuard } from "src/components/common/PermissionGuard";
-import { RatingsList } from "src/components/common/RatingsList";
+import { RatingsTable } from "src/components/common/RatingsTable";
 import { IconThumbUp } from "src/components/icons";
 import { DISABLE_PAGING } from "src/constants";
 import { UserContext } from "src/contexts/UserContext";
@@ -41,9 +41,11 @@ const LevelRatingsTab = ({ level }: LevelRatingsTabProps) => {
         )}
       </div>
 
-      <RatingsList
+      <RatingsTable
         searchQuery={ratingsSearchQuery}
         onSearchQueryChange={setRatingsSearchQuery}
+        showLevels={false}
+        showAuthors={true}
       />
     </>
   );
