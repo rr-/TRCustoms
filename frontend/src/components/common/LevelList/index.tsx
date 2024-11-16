@@ -59,7 +59,7 @@ const LevelView = ({ showStatus, level }: LevelViewProps) => {
   const details = (
     <small className={styles.details}>
       Rating: <LevelRating ratingClass={level.rating_class} /> (
-      {level.review_count} {pluralize("review", level.review_count)})
+      {level.rating_count} {pluralize("rating", level.rating_count)})
       <br />
       Genres:{" "}
       {level.genres.map((tag) => tag.name).join(", ") ||

@@ -74,10 +74,11 @@ interface Config {
   };
   stats: {
     total_levels: number;
+    total_ratings: number;
     total_reviews: number;
     total_downloads: number;
     total_walkthroughs: number;
-    reviews: {
+    ratings: {
       rating_class: {
         id: number;
         position: number;

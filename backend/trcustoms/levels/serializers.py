@@ -105,6 +105,7 @@ class LevelListingSerializer(serializers.ModelSerializer):
     )
 
     download_count = serializers.ReadOnlyField()
+    rating_count = serializers.ReadOnlyField()
     review_count = serializers.ReadOnlyField()
 
     is_approved = serializers.ReadOnlyField()
@@ -200,6 +201,7 @@ class LevelListingSerializer(serializers.ModelSerializer):
             "last_user_content_updated",
             "last_file",
             "download_count",
+            "rating_count",
             "review_count",
             "is_approved",
             "rejection_reason",

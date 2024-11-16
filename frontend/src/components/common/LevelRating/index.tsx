@@ -7,7 +7,7 @@ interface LevelRatingProps {
 
 const LevelRating = ({ ratingClass }: LevelRatingProps) => {
   if (!ratingClass) {
-    return <>Not enough reviews</>;
+    return <>Not enough ratings</>;
   }
   let style = styles.neutral;
   if (ratingClass.position > 0) {

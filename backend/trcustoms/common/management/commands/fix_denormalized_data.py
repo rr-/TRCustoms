@@ -14,19 +14,44 @@ from trcustoms.users.models import User
 class Command(BaseCommand):
     help = "Make sure any denormalized data is correct."
 
+    def add_arguments(self, parser):
+        parser.add_argument("-u", "--users", action="store_true")
+        parser.add_argument("-l", "--levels", action="store_true")
+        parser.add_argument("--level-ratings", action="store_true")
+        parser.add_argument("--rating-ratings", action="store_true")
+        parser.add_argument("-a", "--all", action="store_true")
+
     def handle(self, *args, **options):
         logging.disable(logging.WARNING)
 
+        fix_funcs = {
+            "levels": self.fix_levels,
+            "users": self.fix_users,
+            "level_ratings": self.fix_level_ratings,
+            "rating_ratings": self.fix_rating_ratings,
+        }
+
+        if not options["all"] and not any(
+            options[key] for key in fix_funcs.keys()
+        ):
+            self.stderr.write(
+                self.style.ERROR(
+                    "Must select target what to fix (use -a to fix everything)"
+                )
+            )
+            return
+
         with disable_signals():
-            self.fix_levels()
-            self.fix_users()
-            self.fix_rating_ratings()
-            self.fix_level_ratings()
+            for key, func in fix_funcs.items():
+                if options["all"] or options[key]:
+                    func()
 
     def fix_levels(self) -> None:
         with tqdm(desc="Levels", total=Level.objects.count()) as progress:
             for level in Level.objects.iterator():
                 level.update_last_file()
+                level.update_review_count()
+                level.update_rating_count()
                 progress.update()
 
     def fix_users(self) -> None:

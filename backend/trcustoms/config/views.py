@@ -31,7 +31,7 @@ def get_walkthrough_stats() -> dict[str, int]:
     )
 
 
-def get_review_stats() -> list[dict[str, Any]]:
+def get_rating_stats() -> list[dict[str, Any]]:
     qs = (
         Level.objects.all()
         .exclude(rating_class=None)
@@ -93,7 +93,7 @@ def get_config_data():
                 .get("total_download_count")
             ),
             walkthroughs=get_walkthrough_stats(),
-            reviews=get_review_stats(),
+            ratings=get_rating_stats(),
         ),
     )
     return ConfigSerializer(instance=context).data
