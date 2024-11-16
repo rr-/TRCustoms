@@ -34,26 +34,24 @@ const TabSwitch = ({ variant, tabs, tabName, onTabChange }: TabSwitchProps) => {
           variant === TabSwitchVariant.Light ? styles.light : styles.boxed
         }
       >
-        <nav>
-          <ul className={styles.nav}>
-            {tabs.map((tab) => (
-              <li
-                className={`${styles.navItem} ${
-                  tab.name === activeTabName ? styles.active : ""
-                }`}
-                key={tab.name}
+        <ul className={styles.nav}>
+          {tabs.map((tab) => (
+            <li
+              className={`${styles.navItem} ${
+                tab.name === activeTabName ? styles.active : ""
+              }`}
+              key={tab.name}
+            >
+              <span
+                role="button"
+                className={styles.navItemLink}
+                onClick={() => handleTabClick(tab)}
               >
-                <span
-                  role="button"
-                  className={styles.navItemLink}
-                  onClick={() => handleTabClick(tab)}
-                >
-                  {tab.label}
-                </span>
-              </li>
-            ))}
-          </ul>
-        </nav>
+                {tab.label}
+              </span>
+            </li>
+          ))}
+        </ul>
         <div className={styles.content}>
           {tabs.map((tab) => (
             <div

@@ -23,28 +23,29 @@
 }
 
 .boxed {
-  .nav {
+  & > .nav {
     gap: 0.5rem;
-  }
-  .navItemLink {
-    padding: 0.5rem 1rem;
-    background: var(--tab-switch-tabbed-inactive-bg-color);
-    color: var(--tab-switch-tabbed-inactive-fg-color);
+
+    & > .navItem > .navItemLink {
+      padding: 0.5rem 1rem;
+      background: var(--tab-switch-tabbed-inactive-bg-color);
+      color: var(--tab-switch-tabbed-inactive-fg-color);
+    }
+
+    & > .navItem.active > .navItemLink {
+      background: var(--tab-switch-tabbed-active-bg-color);
+      color: var(--tab-switch-tabbed-active-fg-color);
+    }
   }
 
-  .navItem.active .navItemLink {
-    background: var(--tab-switch-tabbed-active-bg-color);
-    color: var(--tab-switch-tabbed-active-fg-color);
-  }
-
-  .content {
+  & > .content {
     padding: 0.5rem;
     background: var(--tab-switch-tabbed-active-bg-color);
   }
 }
 
 .light {
-  .nav {
+  & > .nav {
     gap: 0.5rem;
 
     /* filler */
@@ -54,40 +55,38 @@
       content: "";
       flex: 1;
     }
-  }
 
-  .navItem {
-    --my-fg-color: var(--v2-fg-color-2);
-    --my-border-color: var(--v2-bg-color-3);
-    &:hover {
-      --my-fg-color: var(--v2-fg-color-1);
-      --my-bg-color: var(--v2-bg-color-5);
-    }
-    &.active {
-      --my-fg-color: var(--v2-fg-color-1);
-      --my-border-color: var(--v2-accent-color-1);
-      --my-bg-color: var(--v2-bg-color-4);
+    & > .navItem {
+      --my-fg-color: var(--v2-fg-color-2);
+      --my-border-color: var(--v2-bg-color-3);
+      margin-bottom: -2px;
+      border-bottom: 2px solid var(--my-border-color);
+      background: var(--my-bg-color);
+      transition: border-color var(--transition-speed),
+        background-color var(--transition-speed);
+
       &:hover {
-        --my-bg-color: var(--v2-bg-color-2);
+        --my-fg-color: var(--v2-fg-color-1);
+        --my-bg-color: var(--v2-bg-color-5);
+      }
+      &.active {
+        --my-fg-color: var(--v2-fg-color-1);
+        --my-border-color: var(--v2-accent-color-1);
+        --my-bg-color: var(--v2-bg-color-4);
+        &:hover {
+          --my-bg-color: var(--v2-bg-color-2);
+        }
+      }
+
+      & > .navItemLink {
+        transition: color var(--transition-speed);
+        padding: 0.35rem 2rem;
+        color: var(--my-fg-color);
       }
     }
   }
 
-  .navItem {
-    margin-bottom: -2px;
-    border-bottom: 2px solid var(--my-border-color);
-    background: var(--my-bg-color);
-    transition: border-color var(--transition-speed),
-      background-color var(--transition-speed);
-
-    .navItemLink {
-      transition: color var(--transition-speed);
-      padding: 0.35rem 2rem;
-      color: var(--my-fg-color);
-    }
-  }
-
-  .content {
+  & > .content {
     margin-top: 1rem;
   }
 }
