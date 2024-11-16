@@ -70,6 +70,7 @@ const TagsTable = ({ searchQuery, onSearchQueryChange }: TagsTableProps) => {
       name: "name",
       sortKey: "name",
       label: "Name",
+      className: styles.name,
       itemElement: ({ item, toggleActive }) => (
         <Link onClick={toggleActive}>{item.name}</Link>
       ),
@@ -78,18 +79,21 @@ const TagsTable = ({ searchQuery, onSearchQueryChange }: TagsTableProps) => {
       name: "levelCount",
       sortKey: "level_count",
       label: "Usages",
+      className: styles.levelCount,
       itemElement: ({ item }) => `${item.level_count}`,
     },
     {
       name: "created",
       sortKey: "created",
       label: "Created",
+      className: styles.created,
       itemElement: ({ item }) => formatDate(item.created),
     },
     {
       name: "updated",
       sortKey: "last_updated",
       label: "Updated",
+      className: styles.updated,
       itemElement: ({ item }) => formatDate(item.last_updated),
     },
   ];

@@ -34,6 +34,7 @@ const PlaylistTable = ({
       name: "status",
       sortKey: "status,-last_updated",
       label: "Status",
+      className: styles.status,
       itemElement: ({ item }) =>
         ({
           [PlaylistItemStatus.NotYetPlayed]: (
@@ -57,6 +58,7 @@ const PlaylistTable = ({
       name: "name",
       sortKey: "level__name",
       label: "Level name",
+      className: styles.name,
       itemElement: ({ item }) => (
         <LevelLink level={item.level}>{item.level.name}</LevelLink>
       ),
@@ -65,6 +67,7 @@ const PlaylistTable = ({
       name: "updated",
       sortKey: "last_updated",
       label: "Updated",
+      className: styles.updated,
       itemElement: ({ item }) => formatDate(item.last_updated),
     },
   ];
@@ -73,6 +76,7 @@ const PlaylistTable = ({
     columns.push({
       name: "actions",
       label: "Actions",
+      className: styles.actions,
       itemElement: ({ item }) => (
         <>
           <EditPlaylistItemButton

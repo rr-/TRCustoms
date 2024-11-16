@@ -2,16 +2,15 @@
   border-bottom: 1px solid var(--label-bg-color);
 }
 
-.table :global .created,
-.table :global .author {
+.table .created,
+.table .author {
   white-space: nowrap;
   width: 10%;
 }
-
-.table :global .object {
+.table .object {
   width: 40%;
 }
-.table :global .changes {
+.table .changes {
   width: 40%;
 }
 
