@@ -12,46 +12,16 @@ enum MarkdownPreviewMode {
 }
 
 const themes: Theme[] = [
-  {
-    name: "Midnight ocean",
-    stub: "midnight_ocean",
-  },
-  {
-    name: "Sepia flashback",
-    stub: "sepia_flashback",
-  },
-  {
-    name: "Diluted calico",
-    stub: "diluted_calico",
-  },
-  {
-    name: "Film noir",
-    stub: "film_noir",
-  },
-  {
-    name: "Mystic Forest",
-    stub: "mystic_forest",
-  },
-  {
-    name: "Candy",
-    stub: "candy",
-  },
-  {
-    name: "Metropolis",
-    stub: "metropolis",
-  },
-  {
-    name: "Robotic",
-    stub: "robotic",
-  },
-  {
-    name: "Lettuce",
-    stub: "lettuce",
-  },
-  {
-    name: "Sundown",
-    stub: "sundown",
-  },
+  { name: "Midnight ocean", stub: "midnight_ocean" },
+  { name: "Sepia flashback", stub: "sepia_flashback" },
+  { name: "Diluted calico", stub: "diluted_calico" },
+  { name: "Film noir", stub: "film_noir" },
+  { name: "Mystic Forest", stub: "mystic_forest" },
+  { name: "Lettuce", stub: "lettuce" },
+  { name: "Metropolis", stub: "metropolis" },
+  { name: "Robotic", stub: "robotic" },
+  { name: "Sundown", stub: "sundown" },
+  { name: "Candy", stub: "candy" },
 ];
 
 interface SettingsState {
