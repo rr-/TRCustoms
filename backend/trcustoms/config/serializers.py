@@ -28,7 +28,7 @@ class GlobalLimitsSerializer(serializers.Serializer):
     max_tag_length = serializers.IntegerField()
 
 
-class ReviewStatSerializer(serializers.Serializer):
+class RatingStatSerializer(serializers.Serializer):
     rating_class = RatingClassNestedSerializer()
     level_count = serializers.IntegerField()
 
@@ -46,7 +46,7 @@ class GlobalStatsSerializer(serializers.Serializer):
     total_reviews = serializers.IntegerField()
     total_walkthroughs = serializers.IntegerField()
     total_downloads = serializers.IntegerField()
-    reviews = ReviewStatSerializer(many=True)
+    ratings = RatingStatSerializer(many=True)
     walkthroughs = WalkthroughStatSerializer()
 
 

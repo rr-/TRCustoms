@@ -1,6 +1,6 @@
 import styles from "./index.module.css";
 import { Link } from "src/components/common/Link";
-import { ReviewStats } from "src/components/common/ReviewStats";
+import { RatingStats } from "src/components/common/RatingStats";
 import { Section } from "src/components/common/Section";
 import { SectionHeader } from "src/components/common/Section";
 import { SidebarBox } from "src/components/common/SidebarBox";
@@ -17,7 +17,7 @@ const StatsSidebar = () => {
       <Section>
         <SectionHeader>Statistics</SectionHeader>
         <LevelStats />
-        <ReviewStats />
+        <RatingStats />
         <WalkthroughStats />
       </Section>
 

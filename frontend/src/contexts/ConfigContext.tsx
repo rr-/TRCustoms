@@ -31,10 +31,11 @@ const defaultConfig = {
   },
   stats: {
     total_levels: 0,
+    total_ratings: 0,
     total_reviews: 0,
     total_downloads: 0,
     total_walkthroughs: 0,
-    reviews: [],
+    ratings: [],
     walkthroughs: {
       video_and_text: 0,
       video: 0,

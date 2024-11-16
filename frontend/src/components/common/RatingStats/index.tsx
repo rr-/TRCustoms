@@ -5,29 +5,29 @@ import { useContext } from "react";
 import { ConfigContext } from "src/contexts/ConfigContext";
 import { reprBigNumber } from "src/utils/string";
 
-const ReviewStats = () => {
+const RatingStats = () => {
   const { config } = useContext(ConfigContext);
   const [tooltip, setTooltip] = useState<string | undefined>();
 
   const maxLevelCount = Math.max(
-    ...config.stats.reviews.map((item) => item.level_count)
+    ...config.stats.ratings.map((item) => item.level_count)
   );
   const maxRatingClassPosition = Math.max(
-    ...config.stats.reviews.map((item) => item.rating_class.position)
+    ...config.stats.ratings.map((item) => item.rating_class.position)
   );
 
-  const handleMouseEnter = (item: typeof config.stats.reviews[0]) => {
+  const handleMouseEnter = (item: typeof config.stats.ratings[0]) => {
     setTooltip(`${item.rating_class.name}: ${item.level_count}`);
   };
 
-  const handleMouseLeave = (item: typeof config.stats.reviews[0]) => {
+  const handleMouseLeave = (item: typeof config.stats.ratings[0]) => {
     setTooltip(undefined);
   };
 
   const defaultTooltip = (
     <>
-      Reviews: {reprBigNumber(config.stats.total_reviews)} (
-      {reprBigNumber(config.stats.total_reviews / config.stats.total_levels)}{" "}
+      Ratings: {reprBigNumber(config.stats.total_ratings)} (
+      {reprBigNumber(config.stats.total_ratings / config.stats.total_levels)}{" "}
       per level)
     </>
   );
@@ -35,7 +35,7 @@ const ReviewStats = () => {
   return (
     <div className={styles.wrapper}>
       <ul className={styles.list}>
-        {sortBy(config.stats.reviews, (item) => item.rating_class.position).map(
+        {sortBy(config.stats.ratings, (item) => item.rating_class.position).map(
           (item) => (
             <li
               key={item.rating_class.name}
@@ -75,4 +75,4 @@ const ReviewStats = () => {
   );
 };
 
-export { ReviewStats };
+export { RatingStats };
