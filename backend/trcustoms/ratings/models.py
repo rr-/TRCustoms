@@ -15,6 +15,7 @@ from trcustoms.users.models import User
 class RatingTemplateQuestion(DatesInfo):
     position = models.IntegerField()
     weight = models.IntegerField()
+    category = models.CharField(max_length=30, null=True, blank=False)
     question_text = models.CharField(max_length=100)
 
     def __str__(self) -> str:
