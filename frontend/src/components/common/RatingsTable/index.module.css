@@ -1,0 +1,22 @@
+.levelName,
+.authorName {
+  width: 50%;
+}
+
+.rating {
+  white-space: nowrap;
+  width: 20%;
+  text-align: center;
+}
+
+.created,
+.updated,
+.actions {
+  white-space: nowrap;
+  width: 5%;
+}
+.actions {
+  white-space: nowrap;
+  width: 5%;
+  text-align: right;
+}

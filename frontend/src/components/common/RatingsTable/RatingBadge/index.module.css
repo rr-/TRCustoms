@@ -1,0 +1,14 @@
+.wrapper {
+  display: inline-flex;
+  gap: 0.25rem;
+  align-items: center;
+}
+.positive {
+  color: var(--success-fg-color);
+}
+.neutral {
+  color: var(--warning-fg-color);
+}
+.negative {
+  color: var(--failure-fg-color);
+}
