@@ -38,7 +38,7 @@
 }
 
 .paletteBar {
-  display: flex;
+  display: none;
 }
 .paletteBox {
   width: 1rem;
