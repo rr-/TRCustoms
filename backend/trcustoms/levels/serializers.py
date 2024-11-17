@@ -430,3 +430,10 @@ class FeaturedLevelsSerializer(serializers.Serializer):
     monthly_hidden_gem = FeaturedLevelListingSerializer()
     level_of_the_day = FeaturedLevelListingSerializer()
     best_in_genre = FeaturedLevelListingSerializer()
+
+
+class LevelCategoryRatingsSerializer(serializers.Serializer):
+    category = serializers.CharField()
+    total_points = serializers.IntegerField()
+    min_points = serializers.IntegerField()
+    max_points = serializers.IntegerField()

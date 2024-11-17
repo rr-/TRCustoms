@@ -4,6 +4,7 @@ import { Link } from "src/components/common/Link";
 import { PermissionGuard } from "src/components/common/PermissionGuard";
 import { RatingsTable } from "src/components/common/RatingsTable";
 import { AddOrEditRatingButton } from "src/components/pages/LevelPage/LevelRatingsTab/AddOrEditRatingButton";
+import { SpiderGraphWrapper } from "src/components/pages/LevelPage/LevelRatingsTab/SpiderGraph";
 import { DISABLE_PAGING } from "src/constants";
 import type { LevelDetails } from "src/services/LevelService";
 import type { RatingSearchQuery } from "src/services/RatingService";
@@ -27,6 +28,8 @@ const LevelRatingsTab = ({ level }: LevelRatingsTabProps) => {
 
   return (
     <>
+      <SpiderGraphWrapper levelId={level.id} />
+
       <div className={styles.actions}>
         <AddOrEditRatingButton level={level} />
       </div>

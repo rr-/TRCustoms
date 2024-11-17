@@ -1,0 +1,16 @@
+.legend {
+  font-size: calc(var(--font-size) * 1.2);
+  fill: var(--fg-color);
+  text-anchor: middle;
+  alignment-baseline: middle;
+}
+
+.axis {
+  fill: none;
+  stroke: var(--button-bg-color);
+}
+
+.value {
+  fill: lch(from var(--button-bg-color) l c h / 0.5);
+  stroke: var(--button-bg-color);
+}
