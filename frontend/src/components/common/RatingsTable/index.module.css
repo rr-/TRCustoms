@@ -16,6 +16,7 @@
   width: 5%;
 }
 .actions {
+  display: none;
   white-space: nowrap;
   width: 5%;
   text-align: right;
