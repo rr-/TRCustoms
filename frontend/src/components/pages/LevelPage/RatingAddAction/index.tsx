@@ -1,11 +1,12 @@
 import { useCallback } from "react";
+import { useRef } from "react";
 import { useContext } from "react";
-import { useState } from "react";
 import { useQuery } from "react-query";
 import { useNavigate } from "react-router-dom";
 import { Loader } from "src/components/common/Loader";
 import { PageGuard } from "src/components/common/PermissionGuard";
 import { RatingForm } from "src/components/common/RatingForm";
+import type { PlaylistAddModalHandle } from "src/components/modals/PlaylistAddModal";
 import { PlaylistAddModal } from "src/components/modals/PlaylistAddModal";
 import { ConfigContext } from "src/contexts/ConfigContext";
 import { UserContext } from "src/contexts/UserContext";
@@ -19,10 +20,10 @@ interface RatingAddActionProps {
 }
 
 const RatingAddAction = ({ level }: RatingAddActionProps) => {
-  const [isModalActive, setIsModalActive] = useState(false);
   const { user } = useContext(UserContext);
   const { config } = useContext(ConfigContext);
   const navigate = useNavigate();
+  const playlistModalRef = useRef<PlaylistAddModalHandle>(null);
 
   const ratingResult = useQuery<RatingDetails | null, Error>(
     ["rating", RatingService.getRatingByAuthorAndLevelIds, level.id, user?.id],
@@ -33,9 +34,11 @@ const RatingAddAction = ({ level }: RatingAddActionProps) => {
     navigate(`/levels/${level.id}/ratings`);
   }, [navigate, level]);
 
-  const handleSubmit = useCallback(() => {
-    setIsModalActive(true);
-  }, [setIsModalActive]);
+  const handleSubmit = () => {
+    if (playlistModalRef.current) {
+      playlistModalRef.current.trigger();
+    }
+  };
 
   if (ratingResult.error) {
     return <p>{ratingResult.error.message}</p>;
@@ -50,8 +53,7 @@ const RatingAddAction = ({ level }: RatingAddActionProps) => {
   return (
     <PageGuard require={UserPermission.rateLevels}>
       <PlaylistAddModal
-        isActive={isModalActive}
-        onIsActiveChange={setIsModalActive}
+        ref={playlistModalRef}
         levelId={level.id}
         userId={user.id}
       />

@@ -9,6 +9,7 @@ interface ConfirmModalProps {
   isActive: boolean;
   onIsActiveChange: (isActive: boolean) => void;
   onConfirm: () => void;
+  onCancel?: () => void;
   children: React.ReactNode;
   confirmedChildren?: React.ReactNode;
 }
@@ -18,6 +19,7 @@ const ConfirmModal = ({
   isActive,
   onIsActiveChange,
   onConfirm,
+  onCancel,
   children,
   confirmedChildren,
 }: ConfirmModalProps) => {
@@ -25,6 +27,7 @@ const ConfirmModal = ({
 
   const handleCancelClick = () => {
     onIsActiveChange(false);
+    onCancel?.();
   };
 
   const handleConfirmClick = () => {
