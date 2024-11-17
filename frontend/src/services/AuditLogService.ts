@@ -25,6 +25,7 @@ enum AuditLogObjectType {
   LevelReview = "review",
   Tag = "tag",
   News = "news",
+  Rating = "rating",
   User = "user",
   Walkthrough = "walkthrough",
 }

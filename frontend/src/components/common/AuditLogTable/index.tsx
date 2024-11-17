@@ -94,6 +94,19 @@ const AuditLogTableObjectLink = ({
         </TagLink>
       );
 
+    case AuditLogObjectType.Rating:
+      return (
+        <LevelLink
+          level={{
+            id: +auditLog.meta.level_id,
+            name: auditLog.meta.level_name,
+          }}
+          subPage="ratings"
+        >
+          Rating of {auditLog.object_name}
+        </LevelLink>
+      );
+
     case AuditLogObjectType.LevelReviewLegacy:
     case AuditLogObjectType.LevelReview:
       return (
@@ -102,6 +115,7 @@ const AuditLogTableObjectLink = ({
             id: +auditLog.meta.level_id,
             name: auditLog.meta.level_name,
           }}
+          subPage="reviews"
         >
           Review of {auditLog.object_name}
         </LevelLink>
