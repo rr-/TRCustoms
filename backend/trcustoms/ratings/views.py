@@ -51,6 +51,7 @@ class RatingViewSet(
         "created",
         "last_updated",
         "last_user_content_updated",
+        "rating_class__position",
         "level__name",
         "level_id",
         "trle_score_atmosphere",
