@@ -1,3 +1,5 @@
+import { Dispatch, SetStateAction, useLayoutEffect } from "react";
+import { useRef } from "react";
 import { useForm } from "react-hook-form";
 import { ErrorMessage } from "src/components/forms/ErrorMessage";
 import formStyles from "src/components/forms/index.module.css";
@@ -26,6 +28,8 @@ const unadj = (data: RatingFormValuesAdj): RatingFormValues => {
 };
 
 interface RatingFormPageProps {
+  navigationDirection: number;
+  setNavigationDirection: Dispatch<SetStateAction<number>>;
   category: string;
   questions: RatingTemplateQuestion[];
   formValues: RatingFormValues;
@@ -33,20 +37,42 @@ interface RatingFormPageProps {
 }
 
 const RatingFormPage = ({
+  navigationDirection,
+  setNavigationDirection,
   category,
   questions,
   formValues,
   onSubmit,
 }: RatingFormPageProps) => {
+  const formRef = useRef<HTMLFormElement>(null);
+
   const {
     register,
     formState: { errors },
     handleSubmit,
-  } = useForm<RatingFormValuesAdj>({ defaultValues: adj(formValues) });
+    getValues,
+  } = useForm<RatingFormValuesAdj>({
+    defaultValues: adj(formValues),
+    mode: "onChange",
+  });
+
+  useLayoutEffect(() => {
+    if (navigationDirection === 1) {
+      // validate and go to next page
+      formRef?.current?.requestSubmit();
+    } else if (navigationDirection === -1) {
+      // update the values with the current state
+      onSubmit(unadj(getValues()));
+    }
+    setNavigationDirection(0);
+  }, [navigationDirection]);
 
   return (
     <div className="ChildMarginClear">
-      <form onSubmit={handleSubmit((data) => onSubmit(unadj(data)))}>
+      <form
+        ref={formRef}
+        onSubmit={handleSubmit((data) => onSubmit(unadj(data)))}
+      >
         {questions.map((question) => (
           <div key={question.id} className={formStyles.field}>
             <label className={formStyles.label}>
