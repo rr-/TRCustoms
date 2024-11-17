@@ -90,7 +90,7 @@ const RatingsTable = ({
           <RatingEditButton rating={item} />
         </PermissionGuard>
         <PermissionGuard
-          require={UserPermission.editRatings}
+          require={UserPermission.deleteRatings}
           owningUsers={[item.author]}
         >
           <RatingDeleteButton rating={item} />

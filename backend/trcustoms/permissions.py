@@ -84,6 +84,8 @@ def get_permissions(user: User) -> set[UserPermission]:
             UserPermission.DELETE_WALKTHROUGHS,
             UserPermission.EDIT_USERS,
             UserPermission.EDIT_REVIEWS,
+            UserPermission.EDIT_RATINGS,
+            UserPermission.DELETE_RATINGS,
             UserPermission.EDIT_NEWS,
         }
 
