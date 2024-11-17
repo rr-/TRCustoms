@@ -48,10 +48,12 @@
   transform: scaleY(0.5);
   transform-origin: top right;
   transition: all 0.2s ease;
+  pointer-events: none;
 
   &.open {
     opacity: 1;
     transform: scaleY(1);
+    pointer-events: auto;
   }
 
   &:empty {
