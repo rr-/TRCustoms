@@ -6,6 +6,12 @@ interface Theme {
   stub: string;
 }
 
+enum AutoPlaylistChoice {
+  Ask = "ask",
+  No = "no",
+  Yes = "yes",
+}
+
 enum MarkdownPreviewMode {
   Tabbed = "tab",
   SideBySide = "side",
@@ -34,6 +40,9 @@ interface SettingsState {
 
   markdownPreviewMode: MarkdownPreviewMode;
   setMarkdownPreviewMode: (markdownPreviewMode: MarkdownPreviewMode) => void;
+
+  autoPlaylistChoice: AutoPlaylistChoice;
+  setAutoPlaylistChoice: (autoPlaylistChoice: AutoPlaylistChoice) => void;
 }
 
 const useSettings = create<SettingsState>((set, get) => ({
@@ -47,6 +56,13 @@ const useSettings = create<SettingsState>((set, get) => ({
   setTheme: (theme: Theme): void => {
     set((state) => ({ ...state, theme }));
     StorageService.setItem("theme", theme.name);
+  },
+
+  autoPlaylistChoice: (StorageService.getItem("autoPlaylistChoice") ??
+    AutoPlaylistChoice.Ask) as AutoPlaylistChoice,
+  setAutoPlaylistChoice: (autoPlaylistChoice: AutoPlaylistChoice): void => {
+    set((state) => ({ ...state, autoPlaylistChoice }));
+    StorageService.setItem("autoPlaylistChoice", autoPlaylistChoice);
   },
 
   infiniteScroll: StorageService.getItem("infiniteScroll") === "true" || false,
@@ -66,4 +82,4 @@ const useSettings = create<SettingsState>((set, get) => ({
 }));
 
 export type { Theme, SettingsState };
-export { MarkdownPreviewMode, useSettings };
+export { AutoPlaylistChoice, MarkdownPreviewMode, useSettings };

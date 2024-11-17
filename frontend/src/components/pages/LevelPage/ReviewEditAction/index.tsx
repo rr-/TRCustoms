@@ -1,11 +1,12 @@
 import { useCallback } from "react";
-import { useState } from "react";
+import { useRef } from "react";
 import { useQuery } from "react-query";
 import { useNavigate } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import { Loader } from "src/components/common/Loader";
 import { PageGuard } from "src/components/common/PermissionGuard";
 import { ReviewForm } from "src/components/common/ReviewForm";
+import type { PlaylistAddModalHandle } from "src/components/modals/PlaylistAddModal";
 import { PlaylistAddModal } from "src/components/modals/PlaylistAddModal";
 import type { LevelNested } from "src/services/LevelService";
 import type { ReviewDetails } from "src/services/ReviewService";
@@ -21,9 +22,9 @@ interface ReviewEditActionParams {
 }
 
 const ReviewEditAction = ({ level }: ReviewEditActionProps) => {
-  const [isModalActive, setIsModalActive] = useState(false);
-  const { reviewId } = (useParams() as unknown) as ReviewEditActionParams;
   const navigate = useNavigate();
+  const { reviewId } = (useParams() as unknown) as ReviewEditActionParams;
+  const playlistModalRef = useRef<PlaylistAddModalHandle>(null);
 
   const reviewResult = useQuery<ReviewDetails, Error>(
     ["review", ReviewService.getReviewById, reviewId],
@@ -34,9 +35,11 @@ const ReviewEditAction = ({ level }: ReviewEditActionProps) => {
     navigate(`/levels/${level.id}/reviews`);
   }, [navigate, level]);
 
-  const handleSubmit = useCallback(() => {
-    setIsModalActive(true);
-  }, [setIsModalActive]);
+  const handleSubmit = () => {
+    if (playlistModalRef.current) {
+      playlistModalRef.current.trigger();
+    }
+  };
 
   if (reviewResult.error) {
     return <p>{reviewResult.error.message}</p>;
@@ -54,8 +57,7 @@ const ReviewEditAction = ({ level }: ReviewEditActionProps) => {
       owningUserIds={[review.author.id]}
     >
       <PlaylistAddModal
-        isActive={isModalActive}
-        onIsActiveChange={setIsModalActive}
+        ref={playlistModalRef}
         levelId={level.id}
         userId={review.author.id}
       />
