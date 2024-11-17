@@ -3,8 +3,6 @@ import { AxiosError } from "axios";
 import axios from "axios";
 import { groupBy } from "lodash";
 import { last } from "lodash";
-import { useLayoutEffect } from "react";
-import { useRef } from "react";
 import { useState } from "react";
 import { useQueryClient } from "react-query";
 import { InfoMessage } from "src/components/common/InfoMessage";
@@ -56,7 +54,6 @@ const RatingForm = ({
   onGoBack,
   onSubmit,
 }: RatingFormProps) => {
-  const wrapperRef = useRef<HTMLDivElement>(null);
   const queryClient = useQueryClient();
   const [status, setStatus] = useState<{
     error?: React.ReactElement;
@@ -158,14 +155,6 @@ const RatingForm = ({
     }
   };
 
-  useLayoutEffect(() => {
-    if (navigationDirection !== 0) {
-      wrapperRef?.current?.querySelector("form")?.requestSubmit();
-      // Reset the navigation direction
-      setNavigationDirection(0);
-    }
-  }, [navigationDirection]);
-
   const handleBackClick = () => {
     setNavigationDirection(-1);
   };
@@ -190,6 +179,8 @@ const RatingForm = ({
       label: titleCase(category),
       content: (
         <RatingFormPage
+          navigationDirection={navigationDirection}
+          setNavigationDirection={setNavigationDirection}
           category={category}
           questions={groupedQuestions}
           formValues={formValues}
@@ -259,7 +250,7 @@ const RatingForm = ({
         contributes to the average rating.
       </InfoMessage>
 
-      <div ref={wrapperRef}>
+      <div>
         {header}
         {activeTab}
         {footer}
