@@ -34,14 +34,15 @@ const Radioboxes = <TOption extends {}, TOptionId extends {} | null>({
       {header && <>{header}:</>}
 
       {options.map((option) => (
-        <Radiobox
-          key={getOptionName(option)}
-          label={getOptionName(option)}
-          onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
-            handleOptionChange(event, option)
-          }
-          checked={isEqual(value, getOptionId(option))}
-        />
+        <div key={getOptionName(option)}>
+          <Radiobox
+            label={getOptionName(option)}
+            onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
+              handleOptionChange(event, option)
+            }
+            checked={isEqual(value, getOptionId(option))}
+          />
+        </div>
       ))}
 
       {footer}
