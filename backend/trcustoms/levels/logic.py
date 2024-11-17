@@ -1,3 +1,6 @@
+from collections import defaultdict
+
+from django.db.models import F, Max, Min, Sum, Value
 from rest_framework.request import Request
 
 from trcustoms.audit_logs.utils import (
@@ -6,6 +9,7 @@ from trcustoms.audit_logs.utils import (
 )
 from trcustoms.levels.models import Level
 from trcustoms.mails import send_level_approved_mail, send_level_rejected_mail
+from trcustoms.ratings.models import RatingTemplateQuestion
 from trcustoms.tasks import update_awards
 
 
@@ -37,3 +41,50 @@ def reject_level(level: Level, request: Request | None, reason: str) -> None:
         level.is_approved = False
         level.rejection_reason = reason
         level.save()
+
+
+def get_category_ratings(level: Level) -> None:
+
+    category_to_min_points = defaultdict(int)
+    category_to_max_points = defaultdict(int)
+    for question in (
+        RatingTemplateQuestion.objects.annotate(
+            min_points=Min(F("answers__points") * F("weight")),
+            max_points=Max(F("answers__points") * F("weight")),
+        )
+        .order_by("position")
+        .values_list(
+            "category", "min_points", "max_points", "weight", named=True
+        )
+    ):
+        category_to_min_points[question.category] += question.min_points
+        category_to_max_points[question.category] += question.max_points
+
+    category_to_total_points = {
+        entry.category: entry.category_sum
+        for entry in (
+            level.ratings.annotate(category=F("answers__question__category"))
+            .values("category")
+            .annotate(
+                category_sum=Sum(
+                    F("answers__points") * F("answers__question__weight")
+                )
+                / Value(level.ratings.count())
+            )
+            .values_list("category", "category_sum", named=True)
+        )
+    }
+
+    categories = category_to_max_points.keys()
+
+    data = [
+        {
+            "category": category,
+            "total_points": category_to_total_points.get(category, 0),
+            "min_points": category_to_min_points[category],
+            "max_points": category_to_max_points[category],
+        }
+        for category in categories
+    ]
+
+    return data

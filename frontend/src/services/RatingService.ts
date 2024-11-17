@@ -13,6 +13,13 @@ interface RatingAuthor extends UserNested {
   rated_level_count: number;
 }
 
+interface CategoryRating {
+  category: string;
+  total_points: number;
+  min_points: number;
+  max_points: number;
+}
+
 interface RatingListing {
   level: LevelNested;
   id: number;
@@ -109,6 +116,15 @@ const deleteRating = async (ratingId: number): Promise<void> => {
   await api.delete(`${API_URL}/ratings/${ratingId}/`);
 };
 
+const getCategoryRatingsByLevelId = async (
+  levelId: number
+): Promise<CategoryRating[]> => {
+  const response = (await api.get(
+    `${API_URL}/levels/${levelId}/category_ratings/`
+  )) as AxiosResponse<CategoryRating[]>;
+  return response.data;
+};
+
 const RatingService = {
   searchRatings,
   getRatingById,
@@ -116,6 +132,7 @@ const RatingService = {
   create,
   update,
   delete: deleteRating,
+  getCategoryRatingsByLevelId,
 };
 
 export type {
@@ -123,6 +140,7 @@ export type {
   RatingListing,
   RatingSearchQuery,
   RatingSearchResult,
+  CategoryRating,
 };
 
 export { RatingService };

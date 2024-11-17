@@ -15,9 +15,14 @@ from storages.utils import clean_name
 
 from trcustoms.common.serializers import EmptySerializer
 from trcustoms.levels.filters import filter_levels_queryset
-from trcustoms.levels.logic import approve_level, reject_level
+from trcustoms.levels.logic import (
+    approve_level,
+    get_category_ratings,
+    reject_level,
+)
 from trcustoms.levels.models import Level, LevelFile
 from trcustoms.levels.serializers import (
+    LevelCategoryRatingsSerializer,
     LevelDetailsSerializer,
     LevelListingSerializer,
     LevelRejectionSerializer,
@@ -71,6 +76,7 @@ class LevelViewSet(
         "destroy": [HasPermission(UserPermission.DELETE_LEVELS)],
         "approve": [HasPermission(UserPermission.EDIT_LEVELS)],
         "reject": [HasPermission(UserPermission.EDIT_LEVELS)],
+        "category_ratings": [AllowAny],
     }
     audit_log_review_create = True
 
@@ -137,6 +143,14 @@ class LevelViewSet(
         reason = serializer.data["reason"]
         reject_level(level, request, reason)
         return Response({})
+
+    @action(detail=True, methods=["get"])
+    def category_ratings(self, request, pk: int) -> Response:
+        level = self.get_object()
+        data = get_category_ratings(level)
+        serializer = LevelCategoryRatingsSerializer(data=data, many=True)
+        serializer.is_valid(raise_exception=True)
+        return Response(serializer.data)
 
 
 class LevelFileViewSet(viewsets.GenericViewSet):

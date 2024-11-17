@@ -4,7 +4,6 @@ import { useForm } from "react-hook-form";
 import { ErrorMessage } from "src/components/forms/ErrorMessage";
 import formStyles from "src/components/forms/index.module.css";
 import type { RatingTemplateQuestion } from "src/services/ConfigService";
-import { titleCase } from "src/utils/string";
 
 interface RatingFormValues extends Record<number, number | null> {}
 type RatingFormValuesAdj = { [key: string]: string | null };
@@ -65,7 +64,7 @@ const RatingFormPage = ({
       onSubmit(unadj(getValues()));
     }
     setNavigationDirection(0);
-  }, [navigationDirection]);
+  }, [navigationDirection, setNavigationDirection, getValues, onSubmit]);
 
   return (
     <div className="ChildMarginClear">
