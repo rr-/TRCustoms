@@ -5,10 +5,11 @@ import { IconDotsCircleHorizontal } from "src/components/icons";
 import type { RatingClass } from "src/types";
 
 interface RatingBadgeProps {
+  isLegacy: boolean;
   ratingClass: RatingClass;
 }
 
-const RatingBadge = ({ ratingClass }: RatingBadgeProps) => {
+const RatingBadge = ({ isLegacy, ratingClass }: RatingBadgeProps) => {
   const position = ratingClass.position || 0;
 
   const badges = [
@@ -30,10 +31,15 @@ const RatingBadge = ({ ratingClass }: RatingBadgeProps) => {
     badge = badges[2];
   }
 
+  let text = badge.text;
+  if (isLegacy) {
+    text += " (Legacy)";
+  }
+
   return (
     <span className={[styles.wrapper, badge.style].join(" ")}>
       {badge.icon}
-      {badge.text}
+      {text}
     </span>
   );
 };
