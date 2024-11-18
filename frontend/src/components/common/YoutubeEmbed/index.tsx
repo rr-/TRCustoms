@@ -18,7 +18,7 @@ const YoutubeEmbed = ({
     </>
   );
 
-  if (!videoID) {
+  if (!videoID && !playlistID) {
     return (
       <p>
         No video preview is available.
