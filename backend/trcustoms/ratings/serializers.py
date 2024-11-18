@@ -134,7 +134,6 @@ class RatingDetailsSerializer(RatingListingSerializer):
 
         rating = rating_factory()
         rating.rating_type = RatingType.TRC
-        rating.last_user_content_updated = timezone.now()
         rating.save()
 
         if answers is not None:
@@ -146,7 +145,9 @@ class RatingDetailsSerializer(RatingListingSerializer):
         func = super().create
 
         def rating_factory():
-            return func(validated_data)
+            rating = func(validated_data)
+            rating.last_user_content_updated = rating.created
+            return rating
 
         rating = self.handle_m2m(rating_factory, validated_data)
         update_awards.delay(rating.author.pk)
@@ -156,7 +157,9 @@ class RatingDetailsSerializer(RatingListingSerializer):
         func = super().update
 
         def rating_factory():
-            return func(instance, validated_data)
+            rating = func(instance, validated_data)
+            rating.last_user_content_updated = timezone.now()
+            return rating
 
         rating = self.handle_m2m(rating_factory, validated_data)
         update_awards.delay(rating.author.pk)
