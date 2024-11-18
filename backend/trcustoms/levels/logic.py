@@ -9,6 +9,7 @@ from trcustoms.audit_logs.utils import (
 )
 from trcustoms.levels.models import Level
 from trcustoms.mails import send_level_approved_mail, send_level_rejected_mail
+from trcustoms.ratings.consts import RatingType
 from trcustoms.ratings.models import RatingTemplateQuestion
 from trcustoms.tasks import update_awards
 
@@ -62,13 +63,16 @@ def get_category_ratings(level: Level) -> None:
     category_to_total_points = {
         entry.category: entry.category_sum
         for entry in (
-            level.ratings.annotate(category=F("answers__question__category"))
+            level.ratings.filter(rating_type=RatingType.TRC)
+            .annotate(category=F("answers__question__category"))
             .values("category")
             .annotate(
                 category_sum=Sum(
                     F("answers__points") * F("answers__question__weight")
                 )
-                / Value(level.ratings.count())
+                / Value(
+                    level.ratings.filter(rating_type=RatingType.TRC).count()
+                )
             )
             .values_list("category", "category_sum", named=True)
         )
