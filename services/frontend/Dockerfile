@@ -1,4 +1,4 @@
-FROM node:20-bullseye
+FROM node:20-bookworm
 
 WORKDIR /app/
 COPY ./frontend/package.json ./
