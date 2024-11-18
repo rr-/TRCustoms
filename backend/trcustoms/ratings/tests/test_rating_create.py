@@ -72,6 +72,7 @@ def test_rating_creation_success(
         },
         "answers": [answers[0].id, answers[2].id],
         "rating_class": None,
+        "rating_type": "mo",
     }
 
     assert rating
