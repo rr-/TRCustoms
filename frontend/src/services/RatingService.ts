@@ -13,11 +13,22 @@ interface RatingAuthor extends UserNested {
   rated_level_count: number;
 }
 
-interface CategoryRating {
+interface CategoryRatingStats {
   category: string;
   total_points: number;
   min_points: number;
   max_points: number;
+}
+
+interface RatingStats {
+  trc_rating_count: number;
+  trle_rating_count: number;
+  categories: CategoryRatingStats[];
+}
+
+enum RatingType {
+  TRLE = "le",
+  TRC = "mo",
 }
 
 interface RatingListing {
@@ -26,6 +37,7 @@ interface RatingListing {
   author: RatingAuthor;
   rating_class: RatingClass | null;
   created: string;
+  rating_type: RatingType;
   last_updated: string;
   last_user_content_updated: string;
 }
@@ -116,12 +128,12 @@ const deleteRating = async (ratingId: number): Promise<void> => {
   await api.delete(`${API_URL}/ratings/${ratingId}/`);
 };
 
-const getCategoryRatingsByLevelId = async (
+const getRatingStatsByLevelId = async (
   levelId: number
-): Promise<CategoryRating[]> => {
+): Promise<RatingStats> => {
   const response = (await api.get(
-    `${API_URL}/levels/${levelId}/category_ratings/`
-  )) as AxiosResponse<CategoryRating[]>;
+    `${API_URL}/levels/${levelId}/rating_stats/`
+  )) as AxiosResponse<RatingStats>;
   return response.data;
 };
 
@@ -132,7 +144,7 @@ const RatingService = {
   create,
   update,
   delete: deleteRating,
-  getCategoryRatingsByLevelId,
+  getRatingStatsByLevelId,
 };
 
 export type {
@@ -140,7 +152,7 @@ export type {
   RatingListing,
   RatingSearchQuery,
   RatingSearchResult,
-  CategoryRating,
+  RatingStats,
 };
 
-export { RatingService };
+export { RatingType, RatingService };

@@ -44,7 +44,6 @@ def reject_level(level: Level, request: Request | None, reason: str) -> None:
 
 
 def get_category_ratings(level: Level) -> None:
-
     category_to_min_points = defaultdict(int)
     category_to_max_points = defaultdict(int)
     for question in (
