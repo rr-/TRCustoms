@@ -8,6 +8,7 @@ import { PermissionGuard } from "src/components/common/PermissionGuard";
 import { RatingBadge } from "src/components/common/RatingsTable/RatingBadge";
 import { LevelLink } from "src/components/links/LevelLink";
 import { UserPicLink } from "src/components/links/UserPicLink";
+import { RatingType } from "src/services/RatingService";
 import type { RatingListing } from "src/services/RatingService";
 import type { RatingSearchQuery } from "src/services/RatingService";
 import { RatingService } from "src/services/RatingService";
@@ -55,7 +56,10 @@ const RatingsTable = ({
       className: styles.rating,
       itemElement: ({ item }) =>
         item.rating_class ? (
-          <RatingBadge ratingClass={item.rating_class} />
+          <RatingBadge
+            isLegacy={item.rating_type !== RatingType.TRC}
+            ratingClass={item.rating_class}
+          />
         ) : (
           "Unknown"
         ),
