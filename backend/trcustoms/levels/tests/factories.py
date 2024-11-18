@@ -5,6 +5,7 @@ from trcustoms.levels.models import (
     Level,
     LevelDifficulty,
     LevelDuration,
+    LevelFile,
     LevelScreenshot,
 )
 from trcustoms.uploads.consts import UploadType
@@ -36,6 +37,17 @@ class ScreenshotFactory(factory.django.DjangoModelFactory):
         upload_type=UploadType.LEVEL_SCREENSHOT,
     )
     position = factory.Sequence(lambda n: n)
+
+
+class LevelFileFactory(factory.django.DjangoModelFactory):
+    class Meta:
+        model = LevelFile
+
+    file = factory.SubFactory(
+        UploadedFileFactory,
+        upload_type=UploadType.LEVEL_FILE,
+    )
+    version = factory.Sequence(lambda n: n)
 
 
 class LevelFactory(factory.django.DjangoModelFactory):

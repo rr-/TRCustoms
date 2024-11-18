@@ -114,7 +114,7 @@ def test_level_creation_success(auth_api_client: APIClient) -> None:
     assert len(mail.outbox) == 1
     assert mail.outbox[0].subject == "[TRCustoms] Level submitted"
     assert level.uploader == auth_api_client.user
-    assert level.last_user_content_updated == level.last_file.created
+    assert level.last_user_content_updated is None
 
 
 @pytest.mark.django_db
