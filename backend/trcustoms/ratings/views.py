@@ -65,7 +65,10 @@ class RatingViewSet(
         "retrieve": [AllowAny],
         "list": [AllowAny],
         "create": [IsAuthenticated],
-        "destroy": [HasPermission(UserPermission.DELETE_RATINGS)],
+        "destroy": [
+            HasPermission(UserPermission.DELETE_RATINGS)
+            | IsAccessingOwnResource
+        ],
         "update": [
             HasPermission(UserPermission.EDIT_RATINGS) | IsAccessingOwnResource
         ],

@@ -9,15 +9,44 @@ from trcustoms.users.tests.factories import UserFactory
 
 
 @pytest.mark.django_db
+@pytest.mark.parametrize(
+    "my_api_client,test_own,expected",
+    [
+        (pytest.lazy_fixture("auth_api_client"), False, False),
+        (pytest.lazy_fixture("auth_api_client"), True, True),
+        (pytest.lazy_fixture("staff_api_client"), False, False),
+        (pytest.lazy_fixture("staff_api_client"), True, True),
+        (pytest.lazy_fixture("superuser_api_client"), False, True),
+        (pytest.lazy_fixture("superuser_api_client"), True, True),
+    ],
+)
+def test_rating_deletion_permissions(
+    my_api_client: APIClient, test_own: bool, expected: bool
+) -> None:
+    rating = RatingFactory(
+        level=LevelFactory(),
+        author=my_api_client.user if test_own else UserFactory(username="foo"),
+    )
+    response = my_api_client.delete(
+        f"/api/ratings/{rating.id}/", format="json"
+    )
+    if expected:
+        assert response.status_code == status.HTTP_204_NO_CONTENT
+        assert not Rating.objects.filter(pk=rating.pk).exists()
+    else:
+        assert response.status_code == status.HTTP_403_FORBIDDEN
+        assert Rating.objects.filter(pk=rating.pk).exists()
+
+
+@pytest.mark.django_db
 def test_rating_deletion_updates_level_rating_count(
-    staff_api_client: APIClient,
+    superuser_api_client: APIClient,
 ) -> None:
     level = LevelFactory()
     rating = RatingFactory(level=level)
 
-    response = staff_api_client.delete(
-        f"/api/ratings/{rating.id}/",
-        format="json",
+    response = superuser_api_client.delete(
+        f"/api/ratings/{rating.id}/", format="json"
     )
     level.refresh_from_db()
 
@@ -28,7 +57,7 @@ def test_rating_deletion_updates_level_rating_count(
 
 @pytest.mark.django_db
 def test_rating_deletion_updates_position(
-    staff_api_client: APIClient,
+    superuser_api_client: APIClient,
 ) -> None:
     level = LevelFactory()
     rating1 = RatingFactory(
@@ -43,7 +72,7 @@ def test_rating_deletion_updates_position(
     rating1_last_updated = rating1.last_updated
     rating3_last_updated = rating3.last_updated
 
-    staff_api_client.delete(
+    superuser_api_client.delete(
         f"/api/ratings/{rating2.id}/",
         format="json",
     )
