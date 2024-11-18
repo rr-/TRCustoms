@@ -26,11 +26,9 @@ def forward_func(apps, schema_editor):
         "ratings", "RatingTemplateQuestion"
     )
     for old_position, new_position, category in MAPPING:
-        RatingTemplateQuestion.objects.update_or_create(
-            position=old_position,
-            category__isnull=True,
-            defaults={"position": new_position, "category": category},
-        )
+        RatingTemplateQuestion.objects.filter(
+            position=old_position, category__isnull=True
+        ).update(position=new_position, category=category)
 
 
 def reverse_func(apps, schema_editor):
@@ -38,11 +36,9 @@ def reverse_func(apps, schema_editor):
         "ratings", "RatingTemplateQuestion"
     )
     for old_position, new_position, _category in MAPPING:
-        RatingTemplateQuestion.objects.update_or_create(
-            position=new_position,
-            category__isnull=False,
-            defaults={"position": old_position, "category": None},
-        )
+        RatingTemplateQuestion.objects.filter(
+            position=new_position, category__isnull=False
+        ).update(position=old_position, category=None)
 
 
 class Migration(migrations.Migration):

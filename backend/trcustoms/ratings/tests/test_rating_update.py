@@ -69,6 +69,7 @@ def test_rating_update_success(
         },
         "answers": [answers[0].id, answers[2].id],
         "rating_class": None,
+        "rating_type": "mo",
     }
 
     assert rating.last_user_content_updated == datetime(
