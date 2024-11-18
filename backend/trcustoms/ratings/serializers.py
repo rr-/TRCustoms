@@ -34,6 +34,7 @@ class RatingListingSerializer(serializers.ModelSerializer):
     level = LevelNestedSerializer(read_only=True)
     rating_class = RatingClassNestedSerializer(read_only=True)
     last_user_content_updated = serializers.ReadOnlyField()
+    rating_type = serializers.ReadOnlyField()
 
     class Meta:
         model = Rating
@@ -42,6 +43,7 @@ class RatingListingSerializer(serializers.ModelSerializer):
             "author",
             "level",
             "created",
+            "rating_type",
             "last_updated",
             "rating_class",
             "last_user_content_updated",
@@ -132,6 +134,7 @@ class RatingDetailsSerializer(RatingListingSerializer):
 
         rating = rating_factory()
         rating.rating_type = RatingType.TRC
+        rating.last_user_content_updated = timezone.now()
         rating.save()
 
         if answers is not None:
@@ -143,9 +146,7 @@ class RatingDetailsSerializer(RatingListingSerializer):
         func = super().create
 
         def rating_factory():
-            rating = func(validated_data)
-            rating.last_user_content_updated = rating.created
-            return rating
+            return func(validated_data)
 
         rating = self.handle_m2m(rating_factory, validated_data)
         update_awards.delay(rating.author.pk)
@@ -155,9 +156,7 @@ class RatingDetailsSerializer(RatingListingSerializer):
         func = super().update
 
         def rating_factory():
-            rating = func(instance, validated_data)
-            rating.last_user_content_updated = timezone.now()
-            return rating
+            return func(instance, validated_data)
 
         rating = self.handle_m2m(rating_factory, validated_data)
         update_awards.delay(rating.author.pk)

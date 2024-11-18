@@ -85,7 +85,6 @@ const SpiderGraph = ({ data }: SpiderGraphProps) => {
   const maxX = Math.max(...legendPoints.map((p) => p.x)) + 75;
   const minY = Math.min(...legendPoints.map((p) => p.y)) - 25;
   const maxY = Math.max(...legendPoints.map((p) => p.y)) + 25;
-  console.log(minX, maxX, minY, maxY);
 
   return (
     <svg

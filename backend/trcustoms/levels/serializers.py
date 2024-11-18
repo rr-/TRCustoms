@@ -437,3 +437,9 @@ class LevelCategoryRatingsSerializer(serializers.Serializer):
     total_points = serializers.IntegerField()
     min_points = serializers.IntegerField()
     max_points = serializers.IntegerField()
+
+
+class LevelRatingStatsSerializer(serializers.Serializer):
+    trc_rating_count = serializers.IntegerField()
+    trle_rating_count = serializers.IntegerField()
+    categories = LevelCategoryRatingsSerializer(many=True)

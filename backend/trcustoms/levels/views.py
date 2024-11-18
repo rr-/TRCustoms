@@ -22,9 +22,9 @@ from trcustoms.levels.logic import (
 )
 from trcustoms.levels.models import Level, LevelFile
 from trcustoms.levels.serializers import (
-    LevelCategoryRatingsSerializer,
     LevelDetailsSerializer,
     LevelListingSerializer,
+    LevelRatingStatsSerializer,
     LevelRejectionSerializer,
 )
 from trcustoms.mixins import (
@@ -37,6 +37,7 @@ from trcustoms.permissions import (
     HasPermission,
     IsAccessingOwnResource,
 )
+from trcustoms.ratings.consts import RatingType
 from trcustoms.users.models import UserPermission
 from trcustoms.utils import slugify, stream_file_field
 
@@ -76,7 +77,7 @@ class LevelViewSet(
         "destroy": [HasPermission(UserPermission.DELETE_LEVELS)],
         "approve": [HasPermission(UserPermission.EDIT_LEVELS)],
         "reject": [HasPermission(UserPermission.EDIT_LEVELS)],
-        "category_ratings": [AllowAny],
+        "rating_stats": [AllowAny],
     }
     audit_log_review_create = True
 
@@ -145,10 +146,20 @@ class LevelViewSet(
         return Response({})
 
     @action(detail=True, methods=["get"])
-    def category_ratings(self, request, pk: int) -> Response:
+    def rating_stats(self, request, pk: int) -> Response:
         level = self.get_object()
-        data = get_category_ratings(level)
-        serializer = LevelCategoryRatingsSerializer(data=data, many=True)
+
+        data = {
+            "trc_rating_count": level.ratings.filter(
+                rating_type=RatingType.TRC
+            ).count(),
+            "trle_rating_count": level.ratings.filter(
+                rating_type=RatingType.TRLE
+            ).count(),
+            "categories": get_category_ratings(level),
+        }
+
+        serializer = LevelRatingStatsSerializer(data=data)
         serializer.is_valid(raise_exception=True)
         return Response(serializer.data)
 
