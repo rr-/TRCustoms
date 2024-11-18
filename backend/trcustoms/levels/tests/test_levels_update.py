@@ -1,5 +1,6 @@
 import pytest
 from django.core import mail
+from django.test import override_settings
 from rest_framework import status
 from rest_framework.test import APIClient
 
@@ -10,6 +11,7 @@ from trcustoms.levels.tests.factories import (
     DifficultyFactory,
     DurationFactory,
     LevelFactory,
+    LevelFileFactory,
     ScreenshotFactory,
 )
 from trcustoms.ratings.tests.factories import RatingFactory
@@ -119,7 +121,7 @@ def test_level_update_success(auth_api_client: APIClient) -> None:
     ]
     assert list(level.files.values_list("file__id", flat=True)) == [file.id]
     assert level.last_file.file.id == file.id
-    assert level.last_user_content_updated == level.last_file.created
+    assert level.last_user_content_updated is None
 
 
 @pytest.mark.django_db
@@ -209,3 +211,31 @@ def test_approving_level_updates_rated_level_count() -> None:
     level.save()
     user.refresh_from_db()
     assert user.rated_level_count == 1
+
+
+@pytest.mark.django_db
+@override_settings(MIN_SCREENSHOTS=0, MIN_GENRES=0, MIN_TAGS=0, MIN_AUTHORS=0)
+def test_submitting_new_file_updates_last_user_content_updated_date(
+    auth_api_client: APIClient,
+) -> None:
+    level = LevelFactory(authors=[auth_api_client.user])
+    prev_file = LevelFileFactory(level=level)
+
+    file = UploadedFileFactory(upload_type=UploadType.LEVEL_FILE)
+
+    response = auth_api_client.patch(
+        f"/api/levels/{level.id}/",
+        format="json",
+        data={
+            "file_id": file.id,
+        },
+    )
+
+    data = response.json()
+    level.refresh_from_db()
+
+    assert file != prev_file.file
+    assert response.status_code == status.HTTP_200_OK, data
+    assert level.files.count() == 2
+    assert level.last_user_content_updated is not None
+    assert level.last_user_content_updated == level.last_file.created

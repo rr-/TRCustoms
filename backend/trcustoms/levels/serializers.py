@@ -362,7 +362,11 @@ class LevelDetailsSerializer(LevelListingSerializer):
             not level.last_file or file != level.last_file.file
         ):
             level_file = LevelFile.objects.create(level=level, file=file)
-            level.last_user_content_updated = level_file.created
+            level.last_user_content_updated = (
+                max(level_file.created, level_file.created)
+                if level.files.count() > 1
+                else None
+            )
             level.save(update_fields=["last_user_content_updated"])
 
         return level

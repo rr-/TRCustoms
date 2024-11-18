@@ -118,8 +118,9 @@ const LevelSidebar = ({ level }: LevelSidebarProps) => {
               {level.created ? formatDate(level.created) : "unknown"}
             </DefinitionItem>
 
-            {formatDate(level.created) !==
-            formatDate(level.last_user_content_updated) ? (
+            {level.last_user_content_updated &&
+            formatDate(level.created) !==
+              formatDate(level.last_user_content_updated) ? (
               <DefinitionItem term="Last updated">
                 {level.last_user_content_updated
                   ? formatDate(level.last_user_content_updated)
