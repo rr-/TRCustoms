@@ -29,10 +29,6 @@ const SpiderGraphWrapper = ({ levelId }: SpiderGraphProps) => {
     value: item.total_points,
   }));
 
-  if (data.every((item) => item.value === 0)) {
-    return null;
-  }
-
   return (
     <div>
       <div className={styles.wrapper}>
