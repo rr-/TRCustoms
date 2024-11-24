@@ -53,7 +53,7 @@ interface WalkthroughSearchQuery extends GenericSearchQuery {
   levels?: Array<number> | undefined;
   authors?: Array<number> | undefined;
   walkthroughType?: WalkthroughType | undefined;
-  isApproved?: boolean | undefined;
+  isApproved?: boolean | null;
 }
 
 interface WalkthroughSearchResult

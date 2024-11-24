@@ -3,6 +3,7 @@ import { BurgerMenu } from "src/components/common/BurgerMenu";
 import { UserPicture } from "src/components/common/UserPicture";
 import { WalkthroughActions } from "src/components/common/WalkthroughActions";
 import { WalkthroughContent } from "src/components/common/WalkthroughContent";
+import { WalkthroughStatusBox } from "src/components/common/WalkthroughStatusBox";
 import { LevelLink } from "src/components/links/LevelLink";
 import { UserLink } from "src/components/links/UserLink";
 import type { WalkthroughListing } from "src/services/WalkthroughService";
@@ -53,6 +54,7 @@ const WalkthroughListItem = ({
     <div className={styles.wrapper}>
       {header}
       <div className={styles.content}>
+        <WalkthroughStatusBox walkthrough={walkthrough} showSubmitCta={false} />
         {showLevels ? (
           <p>
             Walkthrough on <LevelLink level={walkthrough.level} />

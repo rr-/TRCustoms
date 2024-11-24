@@ -1,5 +1,7 @@
+from django.db.models import Q
 from rest_framework import mixins, status, viewsets
 from rest_framework.decorators import action
+from rest_framework.exceptions import PermissionDenied
 from rest_framework.generics import get_object_or_404
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
@@ -13,6 +15,7 @@ from trcustoms.permissions import (
     AllowNone,
     HasPermission,
     IsAccessingOwnResource,
+    has_permission,
 )
 from trcustoms.users.models import UserPermission
 from trcustoms.utils import parse_bool, parse_ints
@@ -97,6 +100,7 @@ class WalkthroughViewSet(
     }
 
     def get_queryset(self):
+        auth_user = self.request.user
         queryset = super().get_queryset()
 
         if walkthrough_type := self.request.query_params.get(
@@ -122,11 +126,27 @@ class WalkthroughViewSet(
             else:
                 queryset = queryset.exclude(status=WalkthroughStatus.APPROVED)
 
+        if not has_permission(auth_user, UserPermission.EDIT_WALKTHROUGHS):
+            queryset = queryset.filter(
+                Q(status=WalkthroughStatus.APPROVED)
+                | (
+                    Q(author=auth_user)
+                    if (auth_user and not auth_user.is_anonymous)
+                    else Q()
+                )
+            )
+
         return queryset
 
     def get_object(self):
-        obj = get_object_or_404(self.get_queryset(), pk=self.kwargs["pk"])
+        auth_user = self.request.user
+        obj = get_object_or_404(self.queryset, pk=self.kwargs["pk"])
         self.check_object_permissions(self.request, obj)
+
+        is_author = auth_user and obj.author == auth_user
+        if obj.status != WalkthroughStatus.APPROVED and (not is_author):
+            raise PermissionDenied
+
         return obj
 
     @action(detail=True, methods=["post"])
