@@ -106,4 +106,18 @@ const Error404Page = () => {
   );
 };
 
-export { Error403Page, Error404Page };
+interface ResponseErrorPageProps {
+  error: any;
+}
+
+const ResponseErrorPage = ({ error }: ResponseErrorPageProps) => {
+  if (error.response?.status === 404) {
+    return <Error404Page />;
+  } else if (error.response?.status === 403) {
+    return <Error403Page />;
+  } else {
+    return <p>{error.message}</p>;
+  }
+};
+
+export { Error403Page, Error404Page, ResponseErrorPage };

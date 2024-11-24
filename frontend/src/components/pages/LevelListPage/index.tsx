@@ -31,7 +31,7 @@ const deserializeSearchQuery = (qp: {
   durations: (qp.durations?.split(/,/g) || []).map((item) => +item),
   ratings: (qp.ratings?.split(/,/g) || []).map((item) => +item),
   authors: [],
-  isApproved: searchStringToBool(qp.approved) ?? true,
+  isApproved: searchStringToBool(qp.approved) ?? null,
   videoWalkthroughs: searchStringToBool(qp.video_walkthroughs),
   textWalkthroughs: searchStringToBool(qp.text_walkthroughs),
   date: qp.date,

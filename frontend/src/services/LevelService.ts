@@ -73,7 +73,7 @@ interface LevelListing {
   cover: UploadedFile | null;
   screenshots: Screenshot[];
   external_links: ExternalLink[];
-  is_approved: boolean;
+  is_approved: boolean | null;
   rejection_reason: string | null;
   rating_class: RatingClass | null;
   rating_count: number;

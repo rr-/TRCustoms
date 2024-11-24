@@ -4,10 +4,12 @@ import boto3
 from botocore.config import Config
 from django.conf import settings
 from django.db import models
+from django.db.models import Q
 from django.http import HttpResponseRedirect
 from drf_spectacular.utils import extend_schema, extend_schema_view
 from rest_framework import mixins, status, viewsets
 from rest_framework.decorators import action
+from rest_framework.exceptions import PermissionDenied
 from rest_framework.generics import get_object_or_404
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
@@ -36,6 +38,7 @@ from trcustoms.permissions import (
     AllowNone,
     HasPermission,
     IsAccessingOwnResource,
+    has_permission,
 )
 from trcustoms.ratings.consts import RatingType
 from trcustoms.users.models import UserPermission
@@ -120,13 +123,35 @@ class LevelViewSet(
     ]
 
     def get_object(self):
-        obj = get_object_or_404(self.get_queryset(), pk=self.kwargs["pk"])
+        auth_user = self.request.user
+        obj = get_object_or_404(self.queryset, pk=self.kwargs["pk"])
         self.check_object_permissions(self.request, obj)
+
+        is_author = auth_user and obj.authors.filter(pk=auth_user.pk).exists()
+        if (
+            not obj.is_approved
+            and (not is_author)
+            and not has_permission(
+                auth_user, UserPermission.VIEW_PENDING_LEVELS
+            )
+        ):
+            raise PermissionDenied
+
         return obj
 
     def get_queryset(self):
+        auth_user = self.request.user
         queryset = super().get_queryset()
         queryset = filter_levels_queryset(queryset, self.request.query_params)
+        if not has_permission(auth_user, UserPermission.VIEW_PENDING_LEVELS):
+            queryset = queryset.filter(
+                Q(is_approved=True)
+                | (
+                    Q(authors__pk=auth_user.pk)
+                    if (auth_user and not auth_user.is_anonymous)
+                    else Q()
+                )
+            )
         return queryset
 
     @action(detail=True, methods=["post"])

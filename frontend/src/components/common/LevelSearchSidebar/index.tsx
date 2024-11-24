@@ -209,7 +209,7 @@ const LevelSearchSidebar = ({
               </span>
             </SectionHeader>
 
-            <PermissionGuard require={UserPermission.editLevels}>
+            <PermissionGuard require={UserPermission.viewPendingLevels}>
               <div className={styles.section}>
                 <CheckboxFormField
                   onChange={() => {
