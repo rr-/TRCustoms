@@ -37,8 +37,6 @@ import { TextFormattingGuidelinesPage } from "src/components/pages/TextFormattin
 import { UserEditPage } from "src/components/pages/UserEditPage";
 import { UserListPage } from "src/components/pages/UserListPage";
 import { UserPage } from "src/components/pages/UserPage";
-import { UserPlaylistPage } from "src/components/pages/UserPlaylistPage";
-import { UserWalkthroughsPage } from "src/components/pages/UserWalkthroughsPage";
 import { WalkthroughEditPage } from "src/components/pages/WalkthroughEditPage";
 import { WalkthroughPage } from "src/components/pages/WalkthroughPage";
 import { ConfigContextProvider } from "src/contexts/ConfigContext";
@@ -122,12 +120,27 @@ const AppRoutes = () => {
       />
       <Route path="/settings" element={<SettingsPage />} />
       <Route path="/users/:userId" element={<UserPage />} />
-      <Route path="/users/:userId/edit" element={<UserEditPage />} />
+      <Route
+        path="/users/:userId/playlist"
+        element={<UserPage tabName="playlist" />}
+      />
+      <Route
+        path="/users/:userId/authored_levels"
+        element={<UserPage tabName="authored_levels" />}
+      />
+      <Route
+        path="/users/:userId/reviews"
+        element={<UserPage tabName="reviews" />}
+      />
+      <Route
+        path="/users/:userId/ratings"
+        element={<UserPage tabName="ratings" />}
+      />
       <Route
         path="/users/:userId/walkthroughs"
-        element={<UserWalkthroughsPage />}
+        element={<UserPage tabName="walkthroughs" />}
       />
-      <Route path="/users/:userId/playlist" element={<UserPlaylistPage />} />
+      <Route path="/users/:userId/edit" element={<UserEditPage />} />
       <Route
         path="/email-confirmation/:token"
         element={<EmailConfirmationPage />}
