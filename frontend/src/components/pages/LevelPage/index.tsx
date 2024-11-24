@@ -6,6 +6,7 @@ import { Loader } from "src/components/common/Loader";
 import { LightTabSwitch } from "src/components/common/TabSwitch";
 import type { TabPage } from "src/components/common/TabSwitch";
 import { SidebarLayout } from "src/components/layouts/SidebarLayout";
+import { ResponseErrorPage } from "src/components/pages/ErrorPage";
 import { LevelHeader } from "src/components/pages/LevelPage/LevelHeader";
 import { LevelOverviewTab } from "src/components/pages/LevelPage/LevelOverviewTab";
 import { LevelRatingsTab } from "src/components/pages/LevelPage/LevelRatingsTab";
@@ -60,7 +61,7 @@ const LevelPage = ({ tabName, action }: LevelPageProps) => {
   );
 
   if (result.error) {
-    return <p>{result.error.message}</p>;
+    return <ResponseErrorPage error={result.error} />;
   }
 
   if (result.isLoading || !result.data) {

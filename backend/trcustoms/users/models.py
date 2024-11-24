@@ -26,26 +26,34 @@ class PasswordResetToken(Token):
 
 
 class UserPermission(Enum):
-    DELETE_LEVELS = "delete_levels"
-    DELETE_REVIEWS = "delete_reviews"
-    DELETE_RATINGS = "delete_ratings"
-    DELETE_WALKTHROUGHS = "delete_walkthroughs"
-    EDIT_LEVELS = "edit_levels"
-    EDIT_NEWS = "edit_news"
-    EDIT_REVIEWS = "edit_reviews"
-    EDIT_RATINGS = "edit_ratings"
-    EDIT_TAGS = "edit_tags"
-    EDIT_USERS = "edit_users"
-    MANAGE_USERS = "manage_users"
-    LIST_USERS = "list_users"
-    REVIEW_AUDIT_LOGS = "review_audit_logs"
-    REVIEW_LEVELS = "review_levels"
-    RATE_LEVELS = "rate_levels"
     UPLOAD_LEVELS = "upload_levels"
+    EDIT_LEVELS = "edit_levels"
+    DELETE_LEVELS = "delete_levels"
+    VIEW_PENDING_LEVELS = "view_pending_levels"
+
+    DELETE_WALKTHROUGHS = "delete_walkthroughs"
+
     VIEW_USERS = "view_users"
+    LIST_USERS = "list_users"
+    MANAGE_USERS = "manage_users"
+    EDIT_USERS = "edit_users"
+
+    REVIEW_LEVELS = "review_levels"
+    EDIT_REVIEWS = "edit_reviews"
+    DELETE_REVIEWS = "delete_reviews"
+
+    RATE_LEVELS = "rate_levels"
+    EDIT_RATINGS = "edit_ratings"
+    DELETE_RATINGS = "delete_ratings"
+
+    EDIT_PLAYLISTS = "edit_playlists"
+
     POST_WALKTHROUGHS = "post_walkthroughs"
     EDIT_WALKTHROUGHS = "edit_walkthroughs"
-    EDIT_PLAYLISTS = "edit_playlists"
+
+    EDIT_NEWS = "edit_news"
+    EDIT_TAGS = "edit_tags"
+    REVIEW_AUDIT_LOGS = "review_audit_logs"
 
 
 class UserManager(BaseUserManager):
@@ -89,6 +97,10 @@ class User(AbstractUser):
             (UserPermission.UPLOAD_LEVELS.value, "Can upload levels"),
             (UserPermission.POST_WALKTHROUGHS.value, "Can post walkthroughs"),
             (UserPermission.EDIT_PLAYLISTS.value, "Can edit playlists"),
+            (
+                UserPermission.VIEW_PENDING_LEVELS.value,
+                "Can view pending levels",
+            ),
         ]
 
     trle_reviewer_id = models.IntegerField(blank=True, null=True)
