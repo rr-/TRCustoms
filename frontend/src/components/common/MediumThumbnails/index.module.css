@@ -16,45 +16,61 @@
   align-items: center;
   position: relative;
   color: black;
-}
-.mediumThumbnailOverlay {
-  position: absolute;
-  left: 0;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  pointer-events: none;
-  filter: drop-shadow(0 0 2px rgba(255, 255, 255, 0.7));
-}
-.mediumThumbnail:hover .mediumThumbnailOverlay {
-  filter: drop-shadow(0 0 4px rgba(255, 255, 255, 0.5))
-    drop-shadow(0 0 2px rgba(255, 255, 255, 0.5));
-}
+  position: relative;
+  overflow: hidden;
 
-.mediumThumbnail :global img {
-  display: block;
-}
+  :global img {
+    display: block;
+  }
 
-.mediumThumbnail {
-  background: grey;
-}
-.mediumThumbnailThumb {
-  display: block;
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-  cursor: pointer;
-  transition: all var(--transition-speed);
-}
-.mediumThumbnail.cover .mediumThumbnailThumb {
-  object-fit: cover;
-  aspect-ratio: 4 / 3;
-}
-.mediumThumbnailThumb:hover {
-  filter: opacity(0.95) contrast(95%) brightness(110%);
+  .mediumThumbnailThumb {
+    z-index: 2;
+    display: block;
+    width: 100%;
+    height: 100%;
+    cursor: pointer;
+    transition: all var(--transition-speed);
+
+    &:hover {
+      filter: opacity(0.95) contrast(95%) brightness(110%);
+    }
+  }
+
+  &.contain .mediumThumbnailThumb {
+    object-fit: contain;
+  }
+  &.cover .mediumThumbnailThumb {
+    object-fit: cover;
+    aspect-ratio: 4 / 3;
+  }
+
+  .backgroundBlur {
+    position: absolute;
+    width: calc(100% + 10px);
+    height: calc(100% + 10px);
+    object-fit: cover;
+    z-index: 1;
+    filter: blur(5px);
+  }
+
+  .mediumThumbnailOverlay {
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    pointer-events: none;
+    filter: drop-shadow(0 0 2px rgba(255, 255, 255, 0.7));
+    z-index: 3;
+  }
+
+  &:hover .mediumThumbnailOverlay {
+    filter: drop-shadow(0 0 4px rgba(255, 255, 255, 0.5))
+      drop-shadow(0 0 2px rgba(255, 255, 255, 0.5));
+  }
 }
 
 .modal {

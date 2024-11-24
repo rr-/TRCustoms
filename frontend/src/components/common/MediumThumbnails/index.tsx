@@ -144,6 +144,7 @@ const MediumThumbnail = ({
   if (file) {
     return (
       <div className={classNames.join(" ")}>
+        <img className={styles.backgroundBlur} src={file.url} />
         <img
           alt="Thumbnail"
           className={styles.mediumThumbnailThumb}
@@ -165,6 +166,7 @@ const MediumThumbnail = ({
           rel="noreferrer noopener"
           href={link}
         >
+          <img className={styles.backgroundBlur} src={thumbnailUrl} />
           <img
             alt="Thumbnail"
             className={styles.mediumThumbnailThumb}
