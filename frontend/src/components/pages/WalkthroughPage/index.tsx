@@ -1,64 +1,18 @@
 import { useQuery } from "react-query";
 import { useParams } from "react-router-dom";
-import { InfoMessage } from "src/components/common/InfoMessage";
-import { InfoMessageType } from "src/components/common/InfoMessage";
 import { Loader } from "src/components/common/Loader";
-import { PermissionGuard } from "src/components/common/PermissionGuard";
 import { SidebarBox } from "src/components/common/SidebarBox";
 import { WalkthroughContent } from "src/components/common/WalkthroughContent";
+import { WalkthroughStatusBox } from "src/components/common/WalkthroughStatusBox";
 import { SidebarLayout } from "src/components/layouts/SidebarLayout";
 import { SidebarLayoutVariant } from "src/components/layouts/SidebarLayout";
 import { MarkdownTOC } from "src/components/markdown/MarkdownTOC";
+import { ResponseErrorPage } from "src/components/pages/ErrorPage";
 import { WalkthroughHeader } from "src/components/pages/WalkthroughPage/WalkthroughHeader";
 import { usePageMetadata } from "src/contexts/PageMetadataContext";
-import { UserPermission } from "src/services/UserService";
 import { WalkthroughType } from "src/services/WalkthroughService";
-import { WalkthroughStatus } from "src/services/WalkthroughService";
 import type { WalkthroughDetails } from "src/services/WalkthroughService";
 import { WalkthroughService } from "src/services/WalkthroughService";
-
-interface WalkthroughStatusBoxProps {
-  walkthrough: WalkthroughDetails;
-}
-
-const WalkthroughStatusBox = ({ walkthrough }: WalkthroughStatusBoxProps) => {
-  switch (walkthrough.status) {
-    case WalkthroughStatus.Draft:
-      return (
-        <InfoMessage type={InfoMessageType.Info}>
-          This walkthrough is a draft.
-          <PermissionGuard
-            require={UserPermission.editWalkthroughs}
-            owningUsers={walkthrough.author ? [walkthrough.author] : []}
-          >
-            <br />
-            To mark it as ready for approval, please click the "Submit for
-            approval" button.
-          </PermissionGuard>
-        </InfoMessage>
-      );
-    case WalkthroughStatus.PendingApproval:
-      return (
-        <InfoMessage type={InfoMessageType.Info}>
-          This walkthrough is currently pending approval.
-        </InfoMessage>
-      );
-    case WalkthroughStatus.Rejected:
-      return (
-        <InfoMessage type={InfoMessageType.Warning}>
-          This walkthrough was rejected by staff.
-          {walkthrough.rejection_reason && (
-            <>
-              <br />
-              Reason: {walkthrough.rejection_reason}
-            </>
-          )}
-        </InfoMessage>
-      );
-  }
-
-  return null;
-};
 
 interface WalkthroughPageParams {
   walkthroughId: string;
@@ -89,7 +43,7 @@ const WalkthroughPage = () => {
   );
 
   if (result.error) {
-    return <p>{result.error.message}</p>;
+    return <ResponseErrorPage error={result.error} />;
   }
 
   if (result.isLoading || !result.data) {
@@ -108,7 +62,7 @@ const WalkthroughPage = () => {
 
   const content = (
     <>
-      <WalkthroughStatusBox walkthrough={walkthrough} />
+      <WalkthroughStatusBox walkthrough={walkthrough} showSubmitCta={true} />
       <WalkthroughContent walkthrough={walkthrough} showExcerpts={false} />
     </>
   );

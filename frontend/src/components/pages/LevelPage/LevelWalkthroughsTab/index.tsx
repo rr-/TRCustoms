@@ -12,7 +12,6 @@ const getWalkthroughSearchQuery = (
   page: DISABLE_PAGING,
   sort: "-last_updated",
   search: "",
-  isApproved: true,
 });
 
 interface LevelWalkthroughsTabProps {

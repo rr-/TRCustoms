@@ -4,15 +4,11 @@ import { WalkthroughsTable } from "src/components/common/WalkthroughsTable";
 import type { UserDetails } from "src/services/UserService";
 import type { WalkthroughSearchQuery } from "src/services/WalkthroughService";
 
-const getWalkthroughSearchQuery = (
-  userId: number,
-  isLoggedIn: boolean
-): WalkthroughSearchQuery => ({
+const getWalkthroughSearchQuery = (userId: number): WalkthroughSearchQuery => ({
   authors: [userId],
   page: null,
   sort: "-created",
   search: "",
-  isApproved: isLoggedIn ? undefined : true,
 });
 
 interface WalkthroughsTabProps {
@@ -23,11 +19,11 @@ interface WalkthroughsTabProps {
 const WalkthroughsTab = ({ user, isLoggedIn }: WalkthroughsTabProps) => {
   const [walkthroughSearchQuery, setWalkthroughSearchQuery] = useState<
     WalkthroughSearchQuery
-  >(getWalkthroughSearchQuery(user.id, isLoggedIn));
+  >(getWalkthroughSearchQuery(user.id));
 
   useEffect(() => {
-    setWalkthroughSearchQuery(getWalkthroughSearchQuery(user.id, isLoggedIn));
-  }, [user.id, isLoggedIn]);
+    setWalkthroughSearchQuery(getWalkthroughSearchQuery(user.id));
+  }, [user.id]);
 
   return (
     <WalkthroughsTable
