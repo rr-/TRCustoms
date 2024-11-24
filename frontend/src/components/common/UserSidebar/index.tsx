@@ -1,11 +1,9 @@
 import styles from "./index.module.css";
-import { useNavigate } from "react-router-dom";
 import { AwardList } from "src/components/common/AwardList";
 import { Button } from "src/components/common/Button";
 import { DefinitionItemGroup } from "src/components/common/DefinitionList";
 import { DefinitionItem } from "src/components/common/DefinitionList";
 import { DefinitionList } from "src/components/common/DefinitionList";
-import { Link } from "src/components/common/Link";
 import { SectionHeader } from "src/components/common/Section";
 import { SidebarBox } from "src/components/common/SidebarBox";
 import { UserPictureMode } from "src/components/common/UserPicture";
@@ -20,28 +18,6 @@ interface UserSidebarProps {
 }
 
 const UserSidebar = ({ user }: UserSidebarProps) => {
-  const navigate = useNavigate();
-
-  const handleLevelCountClick = () => {
-    const element = document.querySelector(".Anchor--userAuthoredLevels");
-    if (element) {
-      element.scrollIntoView({ behavior: "smooth" });
-    } else {
-      // XXX: should scroll after navigation
-      navigate(`/users/${user.id}`);
-    }
-  };
-
-  const handleReviewCountClick = () => {
-    const element = document.querySelector(".Anchor--userReviewedLevels");
-    if (element) {
-      element.scrollIntoView({ behavior: "smooth" });
-    } else {
-      // XXX: should scroll after navigation
-      navigate(`/users/${user.id}`);
-    }
-  };
-
   const isUserFromTrle = user.trle_reviewer_id || user.trle_author_id;
   const showJoinDate = !isUserFromTrle || user.last_login;
 
@@ -107,27 +83,19 @@ const UserSidebar = ({ user }: UserSidebarProps) => {
           </DefinitionItem>
 
           <DefinitionItem term="Levels authored">
-            <Link onClick={handleLevelCountClick}>
-              {user.authored_level_count}
-            </Link>
+            {user.authored_level_count}
           </DefinitionItem>
 
           <DefinitionItem term="Reviews posted">
-            <Link onClick={handleReviewCountClick}>
-              {user.reviewed_level_count}
-            </Link>
+            {user.reviewed_level_count}
           </DefinitionItem>
 
           <DefinitionItem term="Walkthroughs">
-            <Link to={`/users/${user.id}/walkthroughs`}>
-              {user.authored_walkthrough_count}
-            </Link>
+            {user.authored_walkthrough_count}
           </DefinitionItem>
 
           <DefinitionItem term="Levels played">
-            <Link to={`/users/${user.id}/playlist`}>
-              {user.played_level_count}
-            </Link>
+            {user.played_level_count}
           </DefinitionItem>
         </DefinitionItemGroup>
 
