@@ -1,4 +1,5 @@
 import styles from "./index.module.css";
+import { useContext } from "react";
 import { DataList } from "src/components/common/DataList";
 import { LevelRating } from "src/components/common/LevelRating";
 import { Link } from "src/components/common/Link";
@@ -8,6 +9,7 @@ import { IconXCircle } from "src/components/icons";
 import { IconDownload } from "src/components/icons";
 import { LevelAuthorsLink } from "src/components/links/LevelAuthorsLink";
 import { LevelLink } from "src/components/links/LevelLink";
+import { UserContext } from "src/contexts/UserContext";
 import type { LevelListing } from "src/services/LevelService";
 import type { LevelSearchQuery } from "src/services/LevelService";
 import { LevelService } from "src/services/LevelService";
@@ -16,44 +18,34 @@ import { formatFileSize } from "src/utils/string";
 import { EMPTY_INPUT_PLACEHOLDER } from "src/utils/string";
 import { pluralize } from "src/utils/string";
 
-interface LevelListProps {
-  showStatus?: boolean | undefined;
-  searchQuery: LevelSearchQuery;
-  onSearchQueryChange?: ((searchQuery: LevelSearchQuery) => void) | undefined;
-}
-
 interface LevelViewProps {
-  showStatus?: boolean | undefined;
   level: LevelListing;
 }
 
-const LevelView = ({ showStatus, level }: LevelViewProps) => {
+const LevelView = ({ level }: LevelViewProps) => {
+  const loggedInUser = useContext(UserContext).user;
+
   const author = (
-    <>
+    <span>
       <strong>
         <LevelLink level={level} />
       </strong>{" "}
       by <LevelAuthorsLink authors={level.authors} />
-    </>
+    </span>
   );
 
-  const status = (
-    <>
-      {level.is_approved ? (
-        <span className={`${styles.status} ${styles.approved}`}>
-          <IconBadgeCheck /> Approved!
-        </span>
-      ) : level.rejection_reason ? (
-        <span className={`${styles.status} ${styles.rejected}`}>
-          <IconXCircle /> Rejected
-        </span>
-      ) : (
-        <span className={`${styles.status} ${styles.pending}`}>
-          <IconClock /> Pending approval
-        </span>
-      )}
-      <br />
-    </>
+  const status = level.is_approved ? (
+    <span className={`${styles.status} ${styles.approved}`}>
+      <IconBadgeCheck /> Approved!
+    </span>
+  ) : level.rejection_reason ? (
+    <span className={`${styles.status} ${styles.rejected}`}>
+      <IconXCircle /> Rejected
+    </span>
+  ) : (
+    <span className={`${styles.status} ${styles.pending}`}>
+      <IconClock /> Pending approval
+    </span>
   );
 
   const details = (
@@ -120,9 +112,13 @@ const LevelView = ({ showStatus, level }: LevelViewProps) => {
       </Link>
 
       <div className={styles.description}>
-        {author}
-        <br />
-        {showStatus && status}
+        <header className={styles.header}>
+          {author}
+          {!level.is_approved ||
+          level.authors.map((author) => author.id).includes(loggedInUser?.id)
+            ? status
+            : null}
+        </header>
 
         {details}
 
@@ -132,15 +128,14 @@ const LevelView = ({ showStatus, level }: LevelViewProps) => {
   );
 };
 
-const LevelList = ({
-  showStatus,
-  searchQuery,
-  onSearchQueryChange,
-}: LevelListProps) => {
+interface LevelListProps {
+  searchQuery: LevelSearchQuery;
+  onSearchQueryChange?: ((searchQuery: LevelSearchQuery) => void) | undefined;
+}
+
+const LevelList = ({ searchQuery, onSearchQueryChange }: LevelListProps) => {
   const itemKey = (level: LevelListing) => `${level.id}`;
-  const itemView = (level: LevelListing) => (
-    <LevelView showStatus={showStatus} level={level} />
-  );
+  const itemView = (level: LevelListing) => <LevelView level={level} />;
 
   return (
     <DataList

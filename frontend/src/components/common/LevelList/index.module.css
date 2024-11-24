@@ -43,6 +43,9 @@
   width: 100%;
 }
 
+.status {
+  margin-right: 0.75rem;
+}
 .status.approved {
   color: var(--success-fg-color);
 }
@@ -81,4 +84,11 @@
 .downloadBox {
   display: flex;
   gap: 0.5rem;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
 }

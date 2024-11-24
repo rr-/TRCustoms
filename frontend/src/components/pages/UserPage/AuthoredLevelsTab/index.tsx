@@ -30,7 +30,6 @@ const AuthoredLevelsTab = ({ user, isLoggedIn }: AuthoredLevelsTabProps) => {
 
   return (
     <LevelList
-      showStatus={isLoggedIn}
       searchQuery={levelSearchQuery}
       onSearchQueryChange={setLevelSearchQuery}
     />
