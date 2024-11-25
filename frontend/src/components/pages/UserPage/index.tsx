@@ -17,6 +17,7 @@ import { ReviewsTab } from "src/components/pages/UserPage/ReviewsTab";
 import { UserHeader } from "src/components/pages/UserPage/UserHeader";
 import { WalkthroughsTab } from "src/components/pages/UserPage/WalkthroughsTab";
 import { usePageMetadata } from "src/contexts/PageMetadataContext";
+import { useScrollStore } from "src/contexts/ScrollContext";
 import { UserContext } from "src/contexts/UserContext";
 import type { UserDetails } from "src/services/UserService";
 import { UserPermission } from "src/services/UserService";
@@ -35,6 +36,7 @@ const UserPage = ({ tabName }: UserPageProps) => {
   const { userId } = (useParams() as unknown) as UserPageParams;
   const loggedInUser = useContext(UserContext).user;
   const isLoggedIn = +userId === loggedInUser?.id;
+  const { setShouldScroll } = useScrollStore((state) => state);
 
   const userResult = useQuery<UserDetails, Error>(
     ["user", UserService.getUserById, userId],
@@ -62,6 +64,7 @@ const UserPage = ({ tabName }: UserPageProps) => {
   }
 
   const handleTabChange = (tab: TabPage) => {
+    setShouldScroll(false);
     navigate(`/users/${user.id}/${tab.name}`);
   };
 

@@ -17,6 +17,7 @@ import { RatingEditAction } from "src/components/pages/LevelPage/RatingEditActio
 import { ReviewAddAction } from "src/components/pages/LevelPage/ReviewAddAction";
 import { ReviewEditAction } from "src/components/pages/LevelPage/ReviewEditAction";
 import { usePageMetadata } from "src/contexts/PageMetadataContext";
+import { useScrollStore } from "src/contexts/ScrollContext";
 import { LevelService } from "src/services/LevelService";
 import type { LevelDetails } from "src/services/LevelService";
 
@@ -32,6 +33,7 @@ interface LevelPageProps {
 const LevelPage = ({ tabName, action }: LevelPageProps) => {
   const navigate = useNavigate();
   const { levelId } = (useParams() as unknown) as LevelPageParams;
+  const { setShouldScroll } = useScrollStore((state) => state);
 
   const result = useQuery<LevelDetails, Error>(
     ["level", LevelService.getLevelById, levelId],
@@ -39,6 +41,7 @@ const LevelPage = ({ tabName, action }: LevelPageProps) => {
   );
 
   const handleTabChange = (tab: TabPage) => {
+    setShouldScroll(false);
     if (tab.name === "overview") {
       navigate(`/levels/${level.id}`);
     } else {
