@@ -13,6 +13,7 @@ import { GenresCheckboxes } from "src/components/common/GenresCheckboxes";
 import { WalkthroughRadioboxes } from "src/components/common/LevelSearchSidebar/WalkthroughRadioboxes";
 import { Link } from "src/components/common/Link";
 import { PermissionGuard } from "src/components/common/PermissionGuard";
+import { Radioboxes } from "src/components/common/Radioboxes";
 import { RatingsCheckboxes } from "src/components/common/RatingsCheckboxes";
 import { SectionHeader } from "src/components/common/Section";
 import { SidebarBox } from "src/components/common/SidebarBox";
@@ -85,6 +86,13 @@ const LevelSearchSidebar = ({
         videoWalkthroughs: values.videoWalkthroughs,
         textWalkthroughs: values.textWalkthroughs,
       });
+    },
+    [searchQuery, onSearchQueryChange]
+  );
+
+  const handleIsApprovedChange = useCallback(
+    (value: boolean | null) => {
+      onSearchQueryChange({ ...searchQuery, isApproved: value });
     },
     [searchQuery, onSearchQueryChange]
   );
@@ -191,6 +199,7 @@ const LevelSearchSidebar = ({
     [searchQuery, defaultSearchQuery]
   );
 
+  console.log(searchQuery.isApproved);
   return (
     <SidebarBox>
       <Formik
@@ -211,12 +220,17 @@ const LevelSearchSidebar = ({
 
             <PermissionGuard require={UserPermission.viewPendingLevels}>
               <div className={styles.section}>
-                <CheckboxFormField
-                  onChange={() => {
-                    submitForm();
-                  }}
-                  label="Approved"
-                  name="isApproved"
+                <Radioboxes
+                  header="Approval status"
+                  options={[
+                    { id: null, name: "Show all" },
+                    { id: true, name: "Approved only" },
+                    { id: false, name: "Unapproved only" },
+                  ]}
+                  value={searchQuery.isApproved}
+                  onChange={handleIsApprovedChange}
+                  getOptionId={(option) => option.id}
+                  getOptionName={(option) => option.name}
                 />
               </div>
             </PermissionGuard>

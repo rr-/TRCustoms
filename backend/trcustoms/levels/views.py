@@ -129,11 +129,9 @@ class LevelViewSet(
 
         is_author = auth_user and obj.authors.filter(pk=auth_user.pk).exists()
         if (
-            not obj.is_approved
+            not has_permission(auth_user, UserPermission.VIEW_PENDING_LEVELS)
+            and not obj.is_approved
             and (not is_author)
-            and not has_permission(
-                auth_user, UserPermission.VIEW_PENDING_LEVELS
-            )
         ):
             raise PermissionDenied
 

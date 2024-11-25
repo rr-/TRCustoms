@@ -144,7 +144,11 @@ class WalkthroughViewSet(
         self.check_object_permissions(self.request, obj)
 
         is_author = auth_user and obj.author == auth_user
-        if obj.status != WalkthroughStatus.APPROVED and (not is_author):
+        if (
+            not has_permission(auth_user, UserPermission.EDIT_WALKTHROUGHS)
+            and obj.status != WalkthroughStatus.APPROVED
+            and (not is_author)
+        ):
             raise PermissionDenied
 
         return obj

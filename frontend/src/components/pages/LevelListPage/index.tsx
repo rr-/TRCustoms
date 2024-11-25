@@ -31,7 +31,7 @@ const deserializeSearchQuery = (qp: {
   durations: (qp.durations?.split(/,/g) || []).map((item) => +item),
   ratings: (qp.ratings?.split(/,/g) || []).map((item) => +item),
   authors: [],
-  isApproved: searchStringToBool(qp.approved) ?? null,
+  isApproved: searchStringToBool(qp.approved),
   videoWalkthroughs: searchStringToBool(qp.video_walkthroughs),
   textWalkthroughs: searchStringToBool(qp.text_walkthroughs),
   date: qp.date,
@@ -48,10 +48,7 @@ const serializeSearchQuery = (
     difficulties: searchQuery?.difficulties?.join(","),
     durations: searchQuery.durations?.join(","),
     ratings: searchQuery.ratings?.join(","),
-    approved:
-      searchQuery.isApproved === true
-        ? null
-        : boolToSearchString(searchQuery.isApproved),
+    approved: boolToSearchString(searchQuery.isApproved),
     date: searchQuery.date,
     video_walkthroughs: boolToSearchString(searchQuery.videoWalkthroughs),
     text_walkthroughs: boolToSearchString(searchQuery.textWalkthroughs),
