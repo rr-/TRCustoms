@@ -118,10 +118,9 @@ const MediumThumbnailModal = ({
   );
 };
 
-interface MediumThumbnailProps {
+interface MediumThumbnailProps extends BaseThumbnailProps {
   file?: UploadedFile | undefined;
   link?: string | undefined;
-  displayMode: DisplayMode;
   onActivate: (file: UploadedFile) => void;
 }
 
@@ -129,6 +128,7 @@ const MediumThumbnail = ({
   file,
   link,
   displayMode,
+  useBackgroundBlur,
   onActivate,
 }: MediumThumbnailProps) => {
   const classNames = [styles.mediumThumbnail];
@@ -144,11 +144,13 @@ const MediumThumbnail = ({
   if (file) {
     return (
       <div className={classNames.join(" ")}>
-        <img
-          alt="Background"
-          className={styles.backgroundBlur}
-          src={file.url}
-        />
+        {useBackgroundBlur && (
+          <img
+            alt="Background"
+            className={styles.backgroundBlur}
+            src={file.url}
+          />
+        )}
         <img
           alt="Thumbnail"
           className={styles.mediumThumbnailThumb}
@@ -170,11 +172,13 @@ const MediumThumbnail = ({
           rel="noreferrer noopener"
           href={link}
         >
-          <img
-            alt="Background"
-            className={styles.backgroundBlur}
-            src={thumbnailUrl}
-          />
+          {useBackgroundBlur && (
+            <img
+              alt="Background"
+              className={styles.backgroundBlur}
+              src={thumbnailUrl}
+            />
+          )}
           <img
             alt="Thumbnail"
             className={styles.mediumThumbnailThumb}
@@ -197,15 +201,20 @@ const MediumThumbnail = ({
 
 export { MediumThumbnail };
 
-interface MediumThumbnailsProps {
+interface BaseThumbnailProps {
+  displayMode: DisplayMode;
+  useBackgroundBlur?: boolean;
+}
+
+interface MediumThumbnailsProps extends BaseThumbnailProps {
   files: UploadedFile[];
   links: string[];
-  displayMode: DisplayMode;
   className?: string | undefined;
 }
 
 const MediumThumbnails = ({
   displayMode,
+  useBackgroundBlur,
   files,
   links,
   className,
@@ -279,6 +288,7 @@ const MediumThumbnails = ({
       {links.map((link) => (
         <MediumThumbnail
           displayMode={displayMode}
+          useBackgroundBlur={useBackgroundBlur}
           key={link}
           link={link}
           onActivate={handleActivate}
@@ -287,6 +297,7 @@ const MediumThumbnails = ({
       {files.map((file) => (
         <MediumThumbnail
           displayMode={displayMode}
+          useBackgroundBlur={useBackgroundBlur}
           key={file.id}
           file={file}
           onActivate={handleActivate}
