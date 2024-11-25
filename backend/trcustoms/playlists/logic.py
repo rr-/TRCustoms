@@ -1,21 +1,25 @@
+from datetime import datetime
+
 from trcustoms.playlists.consts import PlaylistStatus
 from trcustoms.playlists.models import PlaylistItem
 from trcustoms.users.models import User
 
 
-def sync_playlist_with_reviews(user: User) -> int:
-    existing_level_ids = list(
+def sync_playlist_with_dates_and_level_ids(
+    user: User, entries: list[tuple[int, datetime]]
+) -> int:
+    existing_level_ids = set(
         user.playlist_items.values_list("level_id", flat=True)
     )
-    reviews = user.reviewed_levels.exclude(level__pk__in=existing_level_ids)
 
     playlist_items_to_create = [
         PlaylistItem(
             user_id=user.pk,
-            level_id=review.level_id,
+            level_id=level_id,
             status=PlaylistStatus.FINISHED,
         )
-        for review in reviews.order_by("created").iterator()
+        for (level_id, created) in sorted(entries, key=lambda item: item[1])
+        if level_id not in existing_level_ids
     ]
 
     created_playlist_items = PlaylistItem.objects.bulk_create(
@@ -28,11 +32,11 @@ def sync_playlist_with_reviews(user: User) -> int:
     }
     playlist_items_to_update = [
         PlaylistItem(
-            pk=level_id_to_item_id[review.level_id],
-            created=review.created,
-            last_updated=review.created,
+            pk=level_id_to_item_id[level_id],
+            created=created,
+            last_updated=created,
         )
-        for review in reviews.iterator()
+        for (level_id, created) in entries
     ]
 
     PlaylistItem.objects.bulk_update(
@@ -40,5 +44,24 @@ def sync_playlist_with_reviews(user: User) -> int:
     )
 
     user.update_played_level_count()
-
     return len(playlist_items_to_create)
+
+
+def sync_playlist_with_reviews(user: User) -> int:
+    return sync_playlist_with_dates_and_level_ids(
+        user,
+        [
+            (review.level_id, review.created)
+            for review in user.reviewed_levels.iterator()
+        ],
+    )
+
+
+def sync_playlist_with_ratings(user: User) -> int:
+    return sync_playlist_with_dates_and_level_ids(
+        user,
+        [
+            (rating.level_id, rating.created)
+            for rating in user.rated_levels.iterator()
+        ],
+    )
