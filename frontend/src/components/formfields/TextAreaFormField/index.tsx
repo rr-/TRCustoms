@@ -1,6 +1,8 @@
 import styles from "./index.module.css";
 import { useFormikContext } from "formik";
 import { Field } from "formik";
+import { useState } from "react";
+import type { TabPage } from "src/components/common/TabSwitch";
 import { BoxedTabSwitch } from "src/components/common/TabSwitch";
 import { BaseFormField } from "src/components/formfields/BaseFormField";
 import type { GenericFormFieldProps } from "src/components/formfields/BaseFormField";
@@ -25,6 +27,11 @@ const TextAreaFormFieldTabbed = ({
   ...props
 }: TextAreaFormFieldProps) => {
   const { values } = useFormikContext();
+  const [tabName, setTabName] = useState("compose");
+
+  const handleTabChange = (tab: TabPage) => {
+    setTabName(tab.name);
+  };
 
   const tabs = [
     {
@@ -64,7 +71,11 @@ const TextAreaFormFieldTabbed = ({
   return (
     <BaseFormField name={name} readonly={readonly} {...props}>
       <div className={`${styles.wrapper} ${styles.tabbed}`}>
-        <BoxedTabSwitch tabs={tabs} />
+        <BoxedTabSwitch
+          tabs={tabs}
+          tabName={tabName}
+          onTabChange={handleTabChange}
+        />
       </div>
     </BaseFormField>
   );
