@@ -34,6 +34,7 @@ const LevelOverviewTab = ({ level }: LevelOverviewTabProps) => {
       {!!level.screenshots.length && (
         <div className={styles.thumbnailsWrapper}>
           <MediumThumbnails
+            useBackgroundBlur={true}
             displayMode={DisplayMode.Contain}
             files={level.screenshots
               .filter((screenshot) => !!screenshot.file)
