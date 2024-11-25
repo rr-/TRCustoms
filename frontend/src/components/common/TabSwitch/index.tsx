@@ -1,5 +1,4 @@
 import styles from "./index.module.css";
-import { useState } from "react";
 
 interface TabPage {
   name: string;
@@ -59,8 +58,8 @@ const TabSwitch = ({ tabs, activeTabName, onTabClick }: TabSwitchProps) => {
 
 interface ConcreteTabSwitchProps {
   tabs: TabPage[];
-  tabName?: string;
-  onTabChange?: (tab: TabPage) => void;
+  tabName: string;
+  onTabChange: (tab: TabPage) => void;
 }
 
 const ConcreteTabSwitch = ({
@@ -69,18 +68,15 @@ const ConcreteTabSwitch = ({
   onTabChange,
   style,
 }: ConcreteTabSwitchProps & { style: string }) => {
-  const [activeTabName, setActiveTabName] = useState(tabName);
-
   const handleTabClick = (tab: TabPage) => {
     onTabChange?.(tab);
-    setActiveTabName(tab.name);
   };
 
   return (
     <div className={style}>
       <TabSwitch
         tabs={tabs}
-        activeTabName={activeTabName}
+        activeTabName={tabName}
         onTabClick={handleTabClick}
       />
     </div>

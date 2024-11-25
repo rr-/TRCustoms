@@ -2,7 +2,7 @@ import "./forms.css";
 import "./index.css";
 import "./themes.css";
 import React from "react";
-import ReactDOM from "react-dom";
+import ReactDOM from "react-dom/client";
 import { QueryClient } from "react-query";
 import { QueryClientProvider } from "react-query";
 import { BrowserRouter } from "react-router-dom";
@@ -13,7 +13,9 @@ const queryClient = new QueryClient({
   defaultOptions: { queries: { retry: false } },
 });
 
-ReactDOM.render(
+const root = document.getElementById("root");
+
+ReactDOM.createRoot(root!).render(
   <React.StrictMode>
     <BrowserRouter>
       <ScrollToTop />
@@ -21,6 +23,5 @@ ReactDOM.render(
         <App />
       </QueryClientProvider>
     </BrowserRouter>
-  </React.StrictMode>,
-  document.getElementById("root")
+  </React.StrictMode>
 );

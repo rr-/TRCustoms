@@ -110,6 +110,8 @@ const LevelPage = ({ tabName, action }: LevelPageProps) => {
     },
   ];
 
+  tabName ??= "overview";
+
   return (
     <SidebarLayout
       header={<LevelHeader level={level} />}

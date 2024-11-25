@@ -106,6 +106,8 @@ const UserPage = ({ tabName }: UserPageProps) => {
     content: <PlaylistTab user={user} />,
   });
 
+  tabName ??= tabs[0].name;
+
   return (
     <PageGuard require={UserPermission.viewUsers} owningUserIds={[+userId]}>
       <SidebarLayout
