@@ -12,7 +12,10 @@ from trcustoms.permissions import (
     HasPermission,
     IsAccessingOwnResource,
 )
-from trcustoms.playlists.logic import sync_playlist_with_reviews
+from trcustoms.playlists.logic import (
+    sync_playlist_with_ratings,
+    sync_playlist_with_reviews,
+)
 from trcustoms.playlists.models import PlaylistItem
 from trcustoms.playlists.serializers import (
     PlaylistImportResultSerializer,
@@ -92,6 +95,7 @@ class PlaylistItemViewSet(
     def import_(self, request, user_id: int):
         user = get_object_or_404(User, pk=user_id)
         updated_items = sync_playlist_with_reviews(user)
+        updated_items += sync_playlist_with_ratings(user)
         return Response(
             {"updated_items": updated_items}, status=status.HTTP_200_OK
         )

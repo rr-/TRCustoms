@@ -41,7 +41,8 @@ const PlaylistImportButton = ({ userId }: PlaylistImportButtonProps) => {
           )
         }
       >
-        This action will populate the playlist with the levels you reviewed.
+        This action will import levels from your reviews and ratings into your
+        playlist.
         <br />
         Existing levels will not be updated.
         <br />
@@ -50,7 +51,7 @@ const PlaylistImportButton = ({ userId }: PlaylistImportButtonProps) => {
       </ConfirmModal>
 
       <Button disableTimeout={true} onClick={handleButtonClick}>
-        Import from reviews
+        Import from reviews and ratings
       </Button>
     </>
   );
