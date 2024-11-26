@@ -198,7 +198,6 @@ const LevelSearchSidebar = ({
     [searchQuery, defaultSearchQuery]
   );
 
-  console.log(searchQuery.isApproved);
   return (
     <SidebarBox>
       <Formik
