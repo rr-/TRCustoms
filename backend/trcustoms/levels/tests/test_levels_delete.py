@@ -65,10 +65,12 @@ def test_level_deletion_updates_authored_level_count(
     user = UserFactory()
     level = LevelFactory(authors=[user])
     user.refresh_from_db()
-    assert user.authored_level_count == 1
+    assert user.authored_level_count_all == 1
+    assert user.authored_level_count_approved == 1
     superuser_api_client.delete(f"/api/levels/{level.id}/")
     user.refresh_from_db()
-    assert user.authored_level_count == 0
+    assert user.authored_level_count_all == 0
+    assert user.authored_level_count_approved == 0
 
 
 @pytest.mark.django_db

@@ -70,7 +70,9 @@ def test_walkthrough_deletion_updates_authored_walkthrough_count(
         author=user, status=WalkthroughStatus.APPROVED
     )
     user.refresh_from_db()
-    assert user.authored_walkthrough_count == 1
+    assert user.authored_walkthrough_count_all == 1
+    assert user.authored_walkthrough_count_approved == 1
     superuser_api_client.delete(f"/api/walkthroughs/{walkthrough.id}/")
     user.refresh_from_db()
-    assert user.authored_walkthrough_count == 0
+    assert user.authored_walkthrough_count_all == 0
+    assert user.authored_walkthrough_count_approved == 0

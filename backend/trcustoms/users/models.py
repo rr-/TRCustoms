@@ -125,10 +125,14 @@ class User(AbstractUser):
     )
 
     played_level_count = models.PositiveIntegerField(default=0)
-    authored_level_count = models.PositiveIntegerField(default=0)
+    authored_level_count_all = models.PositiveIntegerField(default=0)
+    authored_level_count_approved = models.PositiveIntegerField(default=0)
     rated_level_count = models.PositiveIntegerField(default=0)
     reviewed_level_count = models.PositiveIntegerField(default=0)
-    authored_walkthrough_count = models.PositiveIntegerField(default=0)
+    authored_walkthrough_count_all = models.PositiveIntegerField(default=0)
+    authored_walkthrough_count_approved = models.PositiveIntegerField(
+        default=0
+    )
 
     @property
     def is_placeholder(self) -> bool:
@@ -157,13 +161,29 @@ class User(AbstractUser):
         self.save(update_fields=["played_level_count"])
 
     def update_authored_level_count(self) -> None:
-        self.authored_level_count = self.authored_levels.filter(
+        self.authored_level_count_all = self.authored_levels.count()
+        self.authored_level_count_approved = self.authored_levels.filter(
             is_approved=True
         ).count()
-        self.save(update_fields=["authored_level_count"])
+        self.save(
+            update_fields=[
+                "authored_level_count_all",
+                "authored_level_count_approved",
+            ]
+        )
 
     def update_authored_walkthrough_count(self) -> None:
-        self.authored_walkthrough_count = self.authored_walkthroughs.filter(
-            status=WalkthroughStatus.APPROVED
-        ).count()
-        self.save(update_fields=["authored_walkthrough_count"])
+        self.authored_walkthrough_count_all = (
+            self.authored_walkthroughs.count()
+        )
+        self.authored_walkthrough_count_approved = (
+            self.authored_walkthroughs.filter(
+                status=WalkthroughStatus.APPROVED
+            ).count()
+        )
+        self.save(
+            update_fields=[
+                "authored_walkthrough_count_all",
+                "authored_walkthrough_count_approved",
+            ]
+        )

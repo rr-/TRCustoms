@@ -210,16 +210,20 @@ def test_walkthrough_creation_success(
 
 
 @pytest.mark.django_db
-def test_walkthrough_creation_does_not_update_authored_level_count() -> None:
+@pytest.mark.parametrize(
+    "walkthrough_status,expected_all_count,expected_approved_count",
+    [
+        (WalkthroughStatus.DRAFT, 1, 0),
+        (WalkthroughStatus.APPROVED, 1, 1),
+    ],
+)
+def test_walkthrough_creation_updates_authored_walkthrough_count(
+    walkthrough_status: WalkthroughStatus,
+    expected_all_count: int,
+    expected_approved_count: int,
+) -> None:
     user = UserFactory()
-    WalkthroughFactory(author=user, status=WalkthroughStatus.DRAFT)
+    WalkthroughFactory(author=user, status=walkthrough_status)
     user.refresh_from_db()
-    assert user.authored_walkthrough_count == 0
-
-
-@pytest.mark.django_db
-def test_walkthrough_creation_updates_authored_level_count() -> None:
-    user = UserFactory()
-    WalkthroughFactory(author=user, status=WalkthroughStatus.APPROVED)
-    user.refresh_from_db()
-    assert user.authored_walkthrough_count == 1
+    assert user.authored_walkthrough_count_all == expected_all_count
+    assert user.authored_walkthrough_count_approved == expected_approved_count
