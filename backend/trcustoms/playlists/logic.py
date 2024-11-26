@@ -27,16 +27,14 @@ def sync_playlist_with_dates_and_level_ids(
     )
 
     # force update auto_now and auto_now_add
-    level_id_to_item_id = {
-        item.level_id: item.pk for item in created_playlist_items
-    }
+    level_id_to_created = dict(entries)
     playlist_items_to_update = [
         PlaylistItem(
-            pk=level_id_to_item_id[level_id],
-            created=created,
-            last_updated=created,
+            pk=item.pk,
+            created=level_id_to_created[item.level_id],
+            last_updated=level_id_to_created[item.level_id],
         )
-        for (level_id, created) in entries
+        for item in created_playlist_items
     ]
 
     PlaylistItem.objects.bulk_update(
