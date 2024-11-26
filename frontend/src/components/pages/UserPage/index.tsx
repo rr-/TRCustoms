@@ -131,11 +131,13 @@ const UserPage = ({ tabName }: UserPageProps) => {
           </Section>
         ) : null}
 
-        <LightTabSwitch
-          tabs={tabs}
-          tabName={tabName}
-          onTabChange={handleTabChange}
-        />
+        <div style={{ minHeight: "33vh" }}>
+          <LightTabSwitch
+            tabs={tabs}
+            tabName={tabName}
+            onTabChange={handleTabChange}
+          />
+        </div>
       </SidebarLayout>
     </PageGuard>
   );
