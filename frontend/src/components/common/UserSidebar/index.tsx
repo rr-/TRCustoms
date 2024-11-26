@@ -83,7 +83,7 @@ const UserSidebar = ({ user }: UserSidebarProps) => {
           </DefinitionItem>
 
           <DefinitionItem term="Levels authored">
-            {user.authored_level_count}
+            {user.authored_level_count_approved}
           </DefinitionItem>
 
           <DefinitionItem term="Reviews posted">
@@ -91,7 +91,7 @@ const UserSidebar = ({ user }: UserSidebarProps) => {
           </DefinitionItem>
 
           <DefinitionItem term="Walkthroughs">
-            {user.authored_walkthrough_count}
+            {user.authored_walkthrough_count_all}
           </DefinitionItem>
 
           <DefinitionItem term="Levels played">

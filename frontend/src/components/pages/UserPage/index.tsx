@@ -71,7 +71,11 @@ const UserPage = ({ tabName }: UserPageProps) => {
   const user = userResult.data;
   const tabs = [];
 
-  if (user.authored_level_count > 0) {
+  if (
+    (isLoggedIn
+      ? user.authored_level_count_all
+      : user.authored_level_count_approved) > 0
+  ) {
     tabs.push({
       name: "authored_levels",
       label: "Levels",
@@ -95,7 +99,11 @@ const UserPage = ({ tabName }: UserPageProps) => {
     });
   }
 
-  if (user.authored_walkthrough_count > 0) {
+  if (
+    (isLoggedIn
+      ? user.authored_walkthrough_count_all
+      : user.authored_walkthrough_count_approved) > 0
+  ) {
     tabs.push({
       name: "walkthroughs",
       label: "Walkthroughs",

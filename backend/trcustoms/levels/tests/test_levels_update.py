@@ -138,9 +138,9 @@ def test_level_update_updates_authored_level_count(
     user1.refresh_from_db()
     user2.refresh_from_db()
     user3.refresh_from_db()
-    assert user1.authored_level_count == 1
-    assert user2.authored_level_count == 0
-    assert user3.authored_level_count == 1
+    assert user1.authored_level_count_approved == 1
+    assert user2.authored_level_count_approved == 0
+    assert user3.authored_level_count_approved == 1
 
     response = staff_api_client.patch(
         f"/api/levels/{level.id}/",
@@ -154,9 +154,9 @@ def test_level_update_updates_authored_level_count(
     user1.refresh_from_db()
     user2.refresh_from_db()
     user3.refresh_from_db()
-    assert user1.authored_level_count == 0
-    assert user2.authored_level_count == 1
-    assert user3.authored_level_count == 1
+    assert user1.authored_level_count_approved == 0
+    assert user2.authored_level_count_approved == 1
+    assert user3.authored_level_count_approved == 1
 
 
 @pytest.mark.django_db
@@ -188,7 +188,7 @@ def test_approving_level_updates_authored_level_count() -> None:
     level.is_approved = True
     level.save()
     user.refresh_from_db()
-    assert user.authored_level_count == 1
+    assert user.authored_level_count_approved == 1
 
 
 @pytest.mark.django_db

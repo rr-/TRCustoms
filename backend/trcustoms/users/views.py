@@ -122,7 +122,8 @@ class UserViewSet(
         "last_name",
         "date_joined",
         "last_login",
-        "authored_level_count",
+        "authored_level_count_all",
+        "authored_level_count_approved",
         "rated_level_count",
         "reviewed_level_count",
     ]

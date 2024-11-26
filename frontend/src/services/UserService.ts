@@ -58,10 +58,12 @@ interface UserListing extends UserNested {
   is_banned: boolean;
   is_pending_activation: boolean;
   played_level_count: number;
-  authored_level_count: number;
+  authored_level_count_all: number;
+  authored_level_count_approved: number;
   rated_level_count: number;
   reviewed_level_count: number;
-  authored_walkthrough_count: number;
+  authored_walkthrough_count_all: number;
+  authored_walkthrough_count_approved: number;
   permissions: UserPermission[];
   trle_author_id: number | null;
   trle_reviewer_id: number | null;

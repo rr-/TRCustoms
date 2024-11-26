@@ -118,11 +118,12 @@ def test_level_creation_success(auth_api_client: APIClient) -> None:
 
 
 @pytest.mark.django_db
-def test_level_creation_does_not_update_authored_level_count() -> None:
+def test_unapproved_level_creation_updates_authored_level_count() -> None:
     user = UserFactory()
     LevelFactory(authors=[user], is_approved=False)
     user.refresh_from_db()
-    assert user.authored_level_count == 0
+    assert user.authored_level_count_approved == 0
+    assert user.authored_level_count_all == 1
 
 
 @pytest.mark.django_db
@@ -148,7 +149,8 @@ def test_approved_level_creation_updates_authored_level_count() -> None:
     user = UserFactory()
     LevelFactory(authors=[user], is_approved=True)
     user.refresh_from_db()
-    assert user.authored_level_count == 1
+    assert user.authored_level_count_approved == 1
+    assert user.authored_level_count_all == 1
 
 
 @pytest.mark.django_db

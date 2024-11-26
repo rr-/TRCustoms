@@ -52,10 +52,10 @@ const UserList = ({ searchQuery, onSearchQueryChange }: UserListProps) => {
     },
     {
       name: "authoredLevelCount",
-      sortKey: "authored_level_count",
+      sortKey: "authored_level_count_approved",
       label: "Authored levels",
       className: styles.authoredLevelCount,
-      itemElement: ({ item }) => `${item.authored_level_count}`,
+      itemElement: ({ item }) => `${item.authored_level_count_approved}`,
     },
     {
       name: "reviewedLevelCount",
