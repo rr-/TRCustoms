@@ -1,6 +1,8 @@
 import { useQuery } from "react-query";
 import { useNavigate } from "react-router-dom";
 import { useParams } from "react-router-dom";
+import { InfoMessage } from "src/components/common/InfoMessage";
+import { InfoMessageType } from "src/components/common/InfoMessage";
 import { LevelSidebar } from "src/components/common/LevelSidebar";
 import { Loader } from "src/components/common/Loader";
 import { LightTabSwitch } from "src/components/common/TabSwitch";
@@ -115,11 +117,23 @@ const LevelPage = ({ tabName, action }: LevelPageProps) => {
 
   tabName ??= "overview";
 
+  const status = level.is_approved ? null : (
+    <InfoMessage type={InfoMessageType.Warning}>
+      {level.rejection_reason ? (
+        <>This level was rejected by staff. Reason: {level.rejection_reason}</>
+      ) : (
+        <>This level is currently pending approval.</>
+      )}
+    </InfoMessage>
+  );
+
   return (
     <SidebarLayout
       header={<LevelHeader level={level} />}
       sidebar={<LevelSidebar level={level} />}
     >
+      {status}
+
       <LightTabSwitch
         tabs={tabs}
         tabName={tabName}
