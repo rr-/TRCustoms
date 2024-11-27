@@ -37,6 +37,7 @@ class RatingViewSet(
         "author",
         "author__picture",
         "level",
+        "level__cover",
     )
 
     search_fields = [

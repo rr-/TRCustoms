@@ -36,6 +36,7 @@ class ReviewViewSet(
         "author",
         "author__picture",
         "level",
+        "level__cover",
     )
 
     search_fields = [
