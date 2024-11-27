@@ -1,6 +1,7 @@
 from datetime import datetime
 
 import pytest
+from django.core import mail
 from mimesis import Generic
 from rest_framework import status
 from rest_framework.test import APIClient
@@ -27,6 +28,7 @@ def test_user_creation_missing_fields(api_client: APIClient) -> None:
         "password": ["This field is required."],
         "email": ["This field is required."],
     }
+    assert len(mail.outbox) == 0
 
 
 @pytest.mark.parametrize(
@@ -64,6 +66,7 @@ def test_user_creation_weak_password(
 
     assert response.status_code == status.HTTP_400_BAD_REQUEST, data
     assert data == {"password": [expected_message]}
+    assert len(mail.outbox) == 0
 
 
 @pytest.mark.django_db
@@ -124,6 +127,8 @@ def test_user_creation(
     user = User.objects.get(id=data["id"])
     assert user.check_password(VALID_PASSWORD)
     assert user.source == UserSource.trcustoms
+    assert len(mail.outbox) == 1
+    assert mail.outbox[0].subject == "[TRCustoms] Confirm your registration"
 
     # create a log only after confirming the account
     assert AuditLog.objects.count() == 0
@@ -147,6 +152,7 @@ def test_user_creation_duplicate_username_active_user(
 
     assert response.status_code == status.HTTP_400_BAD_REQUEST, data
     assert data == {"username": ["Another account exists with this name."]}
+    assert len(mail.outbox) == 0
 
 
 @pytest.mark.django_db
@@ -171,6 +177,7 @@ def test_user_creation_duplicate_username_inactive_user(
             "An account with this name is currently awaiting activation."
         ]
     }
+    assert len(mail.outbox) == 0
 
 
 @pytest.mark.django_db
@@ -191,6 +198,7 @@ def test_user_creation_duplicate_username_case_sensitivity(
 
     assert response.status_code == status.HTTP_400_BAD_REQUEST, data
     assert data == {"username": ["Another account exists with this name."]}
+    assert len(mail.outbox) == 0
 
 
 @pytest.mark.django_db
@@ -211,6 +219,7 @@ def test_user_creation_duplicate_email_active_user(
 
     assert response.status_code == status.HTTP_400_BAD_REQUEST, data
     assert data == {"email": ["Another account exists with this email."]}
+    assert len(mail.outbox) == 0
 
 
 @pytest.mark.django_db
@@ -235,6 +244,7 @@ def test_user_creation_duplicate_email_inactive_user(
             "An account with this email is currently awaiting activation."
         ]
     }
+    assert len(mail.outbox) == 0
 
 
 @pytest.mark.django_db
@@ -255,6 +265,7 @@ def test_user_creation_duplicate_email_case_sensitivity(
 
     assert response.status_code == status.HTTP_400_BAD_REQUEST, data
     assert data == {"email": ["Another account exists with this email."]}
+    assert len(mail.outbox) == 0
 
 
 @pytest.mark.django_db
@@ -322,6 +333,8 @@ def test_user_creation_acquiring_trle_account(
     assert user.email == payload["email"]
     assert user.source == UserSource.trle
     assert user.date_joined != datetime(1990, 1, 1)
+    assert len(mail.outbox) == 1
+    assert mail.outbox[0].subject == "[TRCustoms] Confirm your registration"
 
 
 @pytest.mark.django_db

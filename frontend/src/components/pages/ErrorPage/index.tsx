@@ -1,6 +1,8 @@
 import styles from "./index.module.css";
 import { CenterLayout } from "src/components/layouts/CenterLayout";
+import { PlainLayout } from "src/components/layouts/PlainLayout";
 import { usePageMetadata } from "src/contexts/PageMetadataContext";
+import { extractErrorMessage } from "src/utils/misc";
 
 const Error403Page = () => {
   const images = [
@@ -116,7 +118,11 @@ const ResponseErrorPage = ({ error }: ResponseErrorPageProps) => {
   } else if (error.response?.status === 403) {
     return <Error403Page />;
   } else {
-    return <p>{error.message}</p>;
+    return (
+      <PlainLayout>
+        <p>{extractErrorMessage(error)}</p>
+      </PlainLayout>
+    );
   }
 };
 

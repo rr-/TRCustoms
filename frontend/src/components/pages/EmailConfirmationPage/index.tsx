@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import { Loader } from "src/components/common/Loader";
 import { PlainLayout } from "src/components/layouts/PlainLayout";
+import { ResponseErrorPage } from "src/components/pages/ErrorPage";
 import { usePageMetadata } from "src/contexts/PageMetadataContext";
 import { UserService } from "src/services/UserService";
 import { UserDetails } from "src/services/UserService";
@@ -54,12 +55,7 @@ const EmailConfirmationPage = () => {
       </PlainLayout>
     );
   } else if (error) {
-    return (
-      <PlainLayout>
-        <p>There was something wrong with email confirmation.</p>
-        <p>{error}</p>
-      </PlainLayout>
-    );
+    return <ResponseErrorPage error={error} />;
   } else {
     return <Loader />;
   }

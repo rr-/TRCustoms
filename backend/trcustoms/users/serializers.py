@@ -16,12 +16,8 @@ from trcustoms.uploads.consts import UploadType
 from trcustoms.uploads.models import UploadedFile
 from trcustoms.uploads.serializers import UploadedFileNestedSerializer
 from trcustoms.users.consts import UserSource
-from trcustoms.users.models import (
-    ConfirmEmailToken,
-    PasswordResetToken,
-    User,
-    UserPermission,
-)
+from trcustoms.users.models import User, UserPermission
+from trcustoms.users.tokens import ConfirmEmailToken, PasswordResetToken
 from trcustoms.users.validators import UsernameValidator
 
 
