@@ -39,7 +39,10 @@ class PlaylistItemViewSet(
     viewsets.GenericViewSet,
 ):
     queryset = PlaylistItem.objects.all().prefetch_related(
-        "level", "user", "user__picture"
+        "level",
+        "level__cover",
+        "user",
+        "user__picture",
     )
     search_fields = ["level__name"]
     ordering_fields = ["level__name", "status", "created", "last_updated"]
