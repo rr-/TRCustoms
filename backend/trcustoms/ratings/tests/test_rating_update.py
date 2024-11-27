@@ -26,6 +26,8 @@ def test_rating_update_success(
 ) -> None:
     level = LevelFactory(authors=[UserFactory(username="example")])
     rating = RatingFactory(level=level, author=auth_api_client.user)
+    rating.created = datetime(2023, 12, 29, tzinfo=timezone.utc)
+    rating.save(update_fields=["created"])
 
     questions = [
         RatingTemplateQuestionFactory(),
@@ -38,7 +40,7 @@ def test_rating_update_success(
     ]
 
     with patch(
-        "trcustoms.ratings.serializers.timezone.now",
+        "trcustoms.common.models.timezone.now",
         **{"return_value": datetime(2024, 1, 1, tzinfo=timezone.utc)},
     ):
         response = auth_api_client.patch(
@@ -57,7 +59,9 @@ def test_rating_update_success(
         "id": any_integer(),
         "created": any_datetime(allow_strings=True),
         "last_updated": any_datetime(allow_strings=True),
-        "last_user_content_updated": any_datetime(allow_strings=True),
+        "last_user_content_updated": any_datetime(
+            allow_strings=True, allow_none=True
+        ),
         "level": {"id": level.id, "name": level.name, "cover": any_object()},
         "author": {
             "id": auth_api_client.user.id,

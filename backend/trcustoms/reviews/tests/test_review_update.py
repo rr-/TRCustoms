@@ -7,7 +7,6 @@ from rest_framework import status
 from rest_framework.test import APIClient
 
 from trcustoms.levels.tests.factories import LevelFactory
-from trcustoms.reviews.models import Review
 from trcustoms.reviews.tests.factories import ReviewFactory
 from trcustoms.users.tests.factories import UserFactory
 
@@ -21,9 +20,11 @@ def test_review_update_success(
 ) -> None:
     level = LevelFactory(authors=[UserFactory(username="example")])
     review = ReviewFactory(level=level, author=auth_api_client.user)
+    review.created = datetime(2023, 12, 29, tzinfo=timezone.utc)
+    review.save(update_fields=["created"])
 
     with patch(
-        "trcustoms.reviews.serializers.timezone.now",
+        "trcustoms.common.models.timezone.now",
         **{"return_value": datetime(2024, 1, 1, tzinfo=timezone.utc)},
     ):
         response = auth_api_client.patch(
@@ -35,14 +36,16 @@ def test_review_update_success(
             },
         )
 
-    review = Review.objects.first()
+    review.refresh_from_db()
 
     assert response.status_code == status.HTTP_200_OK, response.content
     assert response.json() == {
         "id": any_integer(),
         "created": any_datetime(allow_strings=True),
         "last_updated": any_datetime(allow_strings=True),
-        "last_user_content_updated": any_datetime(allow_strings=True),
+        "last_user_content_updated": any_datetime(
+            allow_strings=True, allow_none=True
+        ),
         "level": {"id": level.id, "name": level.name, "cover": any_object()},
         "author": {
             "id": auth_api_client.user.id,

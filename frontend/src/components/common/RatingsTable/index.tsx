@@ -13,7 +13,7 @@ import type { RatingListing } from "src/services/RatingService";
 import type { RatingSearchQuery } from "src/services/RatingService";
 import { RatingService } from "src/services/RatingService";
 import { UserPermission } from "src/services/UserService";
-import { formatDate, formatChangeDate } from "src/utils/string";
+import { formatDate } from "src/utils/string";
 
 interface RatingsTableProps {
   searchQuery: RatingSearchQuery;
@@ -77,7 +77,9 @@ const RatingsTable = ({
       label: "Updated",
       className: styles.updated,
       itemElement: ({ item }) =>
-        formatChangeDate(item.last_user_content_updated, item.created),
+        item.last_user_content_updated
+          ? formatDate(item.last_user_content_updated)
+          : "Never",
     },
   ];
 

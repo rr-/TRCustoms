@@ -80,7 +80,10 @@ const WalkthroughsTable = ({
       name: "updated",
       sortKey: "last_user_content_updated",
       label: "Updated",
-      itemElement: ({ item }) => formatDate(item.last_user_content_updated),
+      itemElement: ({ item }) =>
+        item.last_user_content_updated
+          ? formatDate(item.last_user_content_updated)
+          : "Never",
     },
     {
       name: "status",

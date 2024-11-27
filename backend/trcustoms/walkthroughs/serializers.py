@@ -1,6 +1,5 @@
 from django.core.exceptions import ValidationError
 from django.core.validators import MinLengthValidator, URLValidator
-from django.utils import timezone
 from rest_framework import serializers
 
 from trcustoms.common.fields import CustomCharField
@@ -110,7 +109,8 @@ class WalkthroughDetailsSerializer(WalkthroughListingSerializer):
 
         def walkthrough_factory():
             walkthrough = func(validated_data)
-            walkthrough.last_user_content_updated = walkthrough.created
+            if walkthrough.status == WalkthroughStatus.APPROVED:
+                walkthrough.bump_last_user_content_updated()
             return walkthrough
 
         walkthrough = walkthrough_factory()
@@ -124,7 +124,7 @@ class WalkthroughDetailsSerializer(WalkthroughListingSerializer):
         def walkthrough_factory():
             walkthrough = func(instance, validated_data)
             if walkthrough.status == WalkthroughStatus.APPROVED:
-                walkthrough.last_user_content_updated = timezone.now()
+                walkthrough.bump_last_user_content_updated()
             return walkthrough
 
         walkthrough = walkthrough_factory()

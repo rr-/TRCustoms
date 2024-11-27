@@ -160,9 +160,11 @@ def test_walkthrough_update_success(
         walkthrough_type=WalkthroughType.TEXT,
         status=test_data.status,
     )
+    walkthrough.created = datetime(2023, 12, 29, tzinfo=timezone.utc)
+    walkthrough.save(update_fields=["created"])
 
     with patch(
-        "trcustoms.walkthroughs.serializers.timezone.now",
+        "trcustoms.common.models.timezone.now",
         **{"return_value": datetime(2024, 1, 1, tzinfo=timezone.utc)},
     ):
         resp = auth_api_client.patch(
@@ -174,7 +176,7 @@ def test_walkthrough_update_success(
             },
         )
 
-    walkthrough = Walkthrough.objects.first()
+    walkthrough.refresh_from_db()
     audit_log = AuditLog.objects.first()
 
     assert resp.status_code == status.HTTP_200_OK, resp.content
@@ -200,7 +202,9 @@ def test_walkthrough_update_success(
         "text": walkthrough.text,
         "created": any_datetime(allow_strings=True),
         "last_updated": any_datetime(allow_strings=True),
-        "last_user_content_updated": any_datetime(allow_strings=True),
+        "last_user_content_updated": any_datetime(
+            allow_strings=True, allow_none=True
+        ),
     }
 
     assert walkthrough.level.id == level.id
@@ -212,7 +216,7 @@ def test_walkthrough_update_success(
             2024, 1, 1, tzinfo=timezone.utc
         )
     else:
-        assert walkthrough.last_user_content_updated == walkthrough.created
+        assert walkthrough.last_user_content_updated is None
 
     assert audit_log
     assert audit_log.change_type == ChangeType.UPDATE

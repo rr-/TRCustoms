@@ -64,9 +64,7 @@ const LevelView = ({ level }: LevelViewProps) => {
       <span className={styles.publishedDate}>
         Published: {formatDate(level.created)}
       </span>
-      {level.last_user_content_updated &&
-      formatDate(level.created) !==
-        formatDate(level.last_user_content_updated) ? (
+      {level.last_user_content_updated ? (
         <span className={styles.updatedDate}>
           Updated: {formatDate(level.last_user_content_updated)}
         </span>
