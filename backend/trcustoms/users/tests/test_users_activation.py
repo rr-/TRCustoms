@@ -1,4 +1,7 @@
+import re
+
 import pytest
+from django.core import mail
 from mimesis import Generic
 from rest_framework import status
 from rest_framework.test import APIClient
@@ -13,29 +16,63 @@ VALID_PASSWORD = "Test123!"
 
 
 @pytest.mark.django_db
-def test_user_email_activation(
-    staff_api_client: APIClient, fake: Generic
-) -> None:
-    user = UserFactory(
-        email=fake.person.email(),
-        username=fake.person.username(),
-        is_pending_activation=True,
-        is_active=False,
-        is_email_confirmed=False,
-    )
+def test_user_email_activation(api_client: APIClient, fake: Generic) -> None:
+    payload = {
+        "email": fake.person.email(),
+        "username": fake.person.username(),
+        "password": VALID_PASSWORD,
+        "first_name": fake.person.first_name(),
+        "last_name": fake.person.last_name(),
+        "bio": fake.text.sentence(),
+    }
+    response = api_client.post("/api/users/", data=payload)
+    data = response.json()
+    user_id = data["id"]
+    match = re.search(r'/email-confirmation/([^">\s]+)', mail.outbox[0].body)
+    token = match.group(1)
 
-    response = staff_api_client.post(
-        "/api/users/confirm_email/",
-        data={"token": user.generate_email_token()},
+    response = api_client.post(
+        "/api/users/confirm_email/", data={"token": token}
     )
+    user = User.objects.get(pk=user_id)
+
     assert response.status_code == status.HTTP_200_OK, response.content
-
-    user.refresh_from_db()
     assert user.is_pending_activation
     assert not user.is_active
     assert user.is_email_confirmed
     assert AuditLog.objects.count() == 1
     assert AuditLog.objects.first().is_action_required
+
+
+@pytest.mark.django_db
+def test_user_email_activation_reusing_token(
+    api_client: APIClient, fake: Generic
+) -> None:
+    payload = {
+        "email": fake.person.email(),
+        "username": fake.person.username(),
+        "password": VALID_PASSWORD,
+        "first_name": fake.person.first_name(),
+        "last_name": fake.person.last_name(),
+        "bio": fake.text.sentence(),
+    }
+    api_client.post("/api/users/", data=payload)
+    match = re.search(r'/email-confirmation/([^">\s]+)', mail.outbox[0].body)
+    token = match.group(1)
+
+    response = api_client.post(
+        "/api/users/confirm_email/", data={"token": token}
+    )
+    response = api_client.post(
+        "/api/users/confirm_email/", data={"token": token}
+    )
+
+    assert (
+        response.status_code == status.HTTP_400_BAD_REQUEST
+    ), response.content
+    assert response.json() == {
+        "detail": "This token was already used. Please try again."
+    }
 
 
 @pytest.mark.django_db

@@ -1,4 +1,3 @@
-from datetime import timedelta
 from enum import Enum
 
 from django.contrib.auth.models import AbstractUser
@@ -6,23 +5,12 @@ from django.contrib.auth.models import UserManager as BaseUserManager
 from django.db import models
 from django.db.models import UniqueConstraint
 from django.db.models.functions import Lower
-from rest_framework_simplejwt.tokens import Token
 
 from trcustoms.audit_logs import registry
 from trcustoms.common.models import Country
 from trcustoms.uploads.models import UploadedFile
 from trcustoms.users.consts import UserSource
 from trcustoms.walkthroughs.consts import WalkthroughStatus
-
-
-class ConfirmEmailToken(Token):
-    token_type = "access"
-    lifetime = timedelta(hours=6)
-
-
-class PasswordResetToken(Token):
-    token_type = "password_reset"
-    lifetime = timedelta(hours=1)
 
 
 class UserPermission(Enum):
@@ -137,12 +125,6 @@ class User(AbstractUser):
     @property
     def is_placeholder(self) -> bool:
         return not self.has_usable_password() and not self.is_active
-
-    def generate_email_token(self) -> str:
-        return str(ConfirmEmailToken.for_user(self))
-
-    def generate_password_reset_token(self) -> str:
-        return str(PasswordResetToken.for_user(self))
 
     def update_rated_level_count(self) -> None:
         self.rated_level_count = self.rated_levels.filter(

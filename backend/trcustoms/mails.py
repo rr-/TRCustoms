@@ -12,6 +12,7 @@ from trcustoms.celery import app as celery_app
 from trcustoms.levels.models import Level
 from trcustoms.reviews.models import Review
 from trcustoms.users.models import User
+from trcustoms.users.tokens import ConfirmEmailToken, PasswordResetToken
 from trcustoms.walkthroughs.models import Walkthrough
 
 FROM = "admin@trcustoms.org"
@@ -62,7 +63,7 @@ def send_mail(
 def send_email_confirmation_mail(user: User) -> None:
     if not user.email:
         return
-    token = user.generate_email_token()
+    token = ConfirmEmailToken.for_user(user)
     link = f"{settings.HOST_SITE}/email-confirmation/{token}"
     send_mail.delay(
         template_name="email_confirmation",
@@ -78,7 +79,7 @@ def send_email_confirmation_mail(user: User) -> None:
 def send_password_reset_mail(user: User) -> None:
     if not user.email:
         return
-    token = user.generate_password_reset_token()
+    token = PasswordResetToken.for_user(user)
     link = f"{settings.HOST_SITE}/password-reset/{token}"
     send_mail.delay(
         template_name="password_reset",

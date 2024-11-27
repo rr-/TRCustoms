@@ -1,3 +1,5 @@
+import re
+
 import pytest
 from django.core import mail
 from mimesis import Generic
@@ -5,6 +7,7 @@ from rest_framework import status
 from rest_framework.test import APIClient
 
 from trcustoms.users.tests.factories import UserFactory
+from trcustoms.users.tokens import PasswordResetToken
 
 VALID_PASSWORD = "Test123!"
 
@@ -24,6 +27,39 @@ def test_user_request_password_reset(
 
 
 @pytest.mark.django_db
+def test_user_request_password_reset_reusing_token(
+    api_client: APIClient, fake: Generic
+) -> None:
+    user = UserFactory(email=fake.person.email())
+    response = api_client.post(
+        "/api/users/request_password_reset/",
+        data={"email": user.email},
+    )
+    match = re.search(r'/password-reset/([^">\s]+)', mail.outbox[0].body)
+    token = match.group(1)
+    other_password = VALID_PASSWORD + "2"
+
+    api_client.post(
+        "/api/users/complete_password_reset/",
+        data={"token": token, "password": VALID_PASSWORD},
+    )
+    response = api_client.post(
+        "/api/users/complete_password_reset/",
+        data={"token": token, "password": other_password},
+    )
+    user.refresh_from_db()
+
+    assert (
+        response.status_code == status.HTTP_400_BAD_REQUEST
+    ), response.content
+    assert response.json() == {
+        "detail": "This token was already used. Please try again."
+    }
+    assert user.check_password(VALID_PASSWORD)
+    assert not user.check_password(other_password)
+
+
+@pytest.mark.django_db
 def test_user_complete_password_reset(
     api_client: APIClient, fake: Generic
 ) -> None:
@@ -31,7 +67,7 @@ def test_user_complete_password_reset(
     response = api_client.post(
         "/api/users/complete_password_reset/",
         data={
-            "token": user.generate_password_reset_token(),
+            "token": str(PasswordResetToken.for_user(user)),
             "password": VALID_PASSWORD,
         },
     )

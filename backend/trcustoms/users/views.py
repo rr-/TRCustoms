@@ -8,7 +8,6 @@ from rest_framework.decorators import action
 from rest_framework.generics import get_object_or_404
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
-from rest_framework_simplejwt.settings import api_settings as jwt_settings
 
 from trcustoms.common.serializers import EmptySerializer
 from trcustoms.mails import (
@@ -44,6 +43,7 @@ from trcustoms.users.serializers import (
     UsernameSerializer,
     UserRequestPasswordResetSerializer,
 )
+from trcustoms.users.tokens import get_user_from_token
 from trcustoms.utils import parse_int
 
 
@@ -222,9 +222,7 @@ class UserViewSet(
         serializer = UserConfirmEmailSerializer(data=request.data)
         if not serializer.is_valid():
             return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
-        token = serializer.validated_data["token"]
-        user_id = token[jwt_settings.USER_ID_CLAIM]
-        user = get_object_or_404(User, id=user_id)
+        user = get_user_from_token(serializer.validated_data["token"])
         confirm_user_email(user, request)
         return Response(
             UserDetailsSerializer(
@@ -297,9 +295,7 @@ class UserViewSet(
         serializer = UserCompletePasswordResetSerializer(data=request.data)
         if not serializer.is_valid():
             return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
-        token = serializer.validated_data["token"]
-        user_id = token[jwt_settings.USER_ID_CLAIM]
-        user = get_object_or_404(User, id=user_id)
+        user = get_user_from_token(serializer.validated_data["token"])
         user.set_password(serializer.validated_data["password"])
         user.save()
         return Response({}, status.HTTP_200_OK)
