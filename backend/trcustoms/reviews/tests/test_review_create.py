@@ -45,7 +45,9 @@ def test_review_creation_success(
         "id": any_integer(),
         "created": any_datetime(allow_strings=True),
         "last_updated": any_datetime(allow_strings=True),
-        "last_user_content_updated": any_datetime(allow_strings=True),
+        "last_user_content_updated": any_datetime(
+            allow_strings=True, allow_none=True
+        ),
         "level": {"id": level.id, "name": level.name, "cover": any_object()},
         "author": {
             "id": auth_api_client.user.id,
@@ -59,8 +61,7 @@ def test_review_creation_success(
     }
 
     assert review
-    assert review.last_user_content_updated == review.created
-    assert review.last_user_content_updated is not None
+    assert review.last_user_content_updated is None
 
     assert len(mail.outbox) == 1
     assert mail.outbox[0].subject == "[TRCustoms] New review"

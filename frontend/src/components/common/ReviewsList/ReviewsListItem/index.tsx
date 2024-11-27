@@ -59,12 +59,11 @@ const ReviewsListItem = ({
         </div>
       </div>
 
-      {formatDate(review.created) !==
-        formatDate(review.last_user_content_updated) && (
+      {review.last_user_content_updated ? (
         <small>
           Updated on: {formatDate(review.last_user_content_updated)}
         </small>
-      )}
+      ) : null}
 
       <small>Posted on: {formatDate(review.created)}</small>
 

@@ -1,4 +1,7 @@
+from datetime import timedelta
+
 from django.db import models
+from django.utils import timezone
 
 from trcustoms.common.consts import RatingClassSubject
 
@@ -19,6 +22,20 @@ class DatesInfo(models.Model):
 
 class UserContentDatesInfo(models.Model):
     last_user_content_updated = models.DateTimeField(null=True)
+
+    def bump_last_user_content_updated(self, save: bool = False) -> None:
+        self.last_user_content_updated = timezone.now()
+
+        one_day = timedelta(hours=24)
+        if (
+            self.created is not None
+            and self.last_user_content_updated is not None
+            and (self.last_user_content_updated - self.created) < one_day
+        ):
+            self.last_user_content_updated = None
+
+        if save:
+            self.save(update_fields=["last_user_content_updated"])
 
     class Meta:
         abstract = True

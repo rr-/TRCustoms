@@ -86,10 +86,15 @@ def fixture_any_integer() -> object:
 @pytest.fixture(name="any_datetime")
 def fixture_any_datetime() -> object:
     class AnyDatetime:
-        def __init__(self, allow_strings: bool) -> None:
+        def __init__(
+            self, allow_strings: bool, allow_none: bool = False
+        ) -> None:
             self.allow_strings = allow_strings
+            self.allow_none = allow_none
 
         def __eq__(self, other: Any) -> bool:
+            if self.allow_none and other is None:
+                return True
             if self.allow_strings:
                 try:
                     dateutil.parser.parse(other)

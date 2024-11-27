@@ -1,4 +1,3 @@
-from django.utils import timezone
 from rest_framework import serializers
 
 from trcustoms.levels.models import Level
@@ -84,7 +83,7 @@ class ReviewDetailsSerializer(ReviewListingSerializer):
 
     def create(self, validated_data):
         review = super().create(validated_data)
-        review.last_user_content_updated = review.created
+        review.bump_last_user_content_updated()
         review.save()
         send_review_submission_mail(review)
         update_awards.delay(review.author.pk)
@@ -92,7 +91,7 @@ class ReviewDetailsSerializer(ReviewListingSerializer):
 
     def update(self, instance, validated_data):
         review = super().update(instance, validated_data)
-        review.last_user_content_updated = timezone.now()
+        review.bump_last_user_content_updated()
         review.save()
         send_review_update_mail(review)
         update_awards.delay(review.author.pk)

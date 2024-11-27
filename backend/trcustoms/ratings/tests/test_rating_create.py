@@ -60,7 +60,9 @@ def test_rating_creation_success(
         "id": any_integer(),
         "created": any_datetime(allow_strings=True),
         "last_updated": any_datetime(allow_strings=True),
-        "last_user_content_updated": any_datetime(allow_strings=True),
+        "last_user_content_updated": any_datetime(
+            allow_strings=True, allow_none=True
+        ),
         "level": {"id": level.id, "name": level.name, "cover": any_object()},
         "author": {
             "id": auth_api_client.user.id,
@@ -76,8 +78,7 @@ def test_rating_creation_success(
     }
 
     assert rating
-    assert rating.last_user_content_updated == rating.created
-    assert rating.last_user_content_updated is not None
+    assert rating.last_user_content_updated is None
 
     assert len(mail.outbox) == 0
 

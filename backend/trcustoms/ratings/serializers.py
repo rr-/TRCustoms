@@ -1,4 +1,3 @@
-from django.utils import timezone
 from rest_framework import serializers
 
 from trcustoms.common.serializers import RatingClassNestedSerializer
@@ -146,7 +145,7 @@ class RatingDetailsSerializer(RatingListingSerializer):
 
         def rating_factory():
             rating = func(validated_data)
-            rating.last_user_content_updated = rating.created
+            rating.bump_last_user_content_updated()
             return rating
 
         rating = self.handle_m2m(rating_factory, validated_data)
@@ -158,7 +157,7 @@ class RatingDetailsSerializer(RatingListingSerializer):
 
         def rating_factory():
             rating = func(instance, validated_data)
-            rating.last_user_content_updated = timezone.now()
+            rating.bump_last_user_content_updated()
             return rating
 
         rating = self.handle_m2m(rating_factory, validated_data)

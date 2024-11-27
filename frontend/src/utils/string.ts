@@ -39,15 +39,6 @@ const formatDate = (input: string | null): string => {
   });
 };
 
-const formatChangeDate = (
-  updated: string | null,
-  created: string | null
-): string => {
-  return updated && formatDate(updated) !== formatDate(created)
-    ? formatDate(updated)
-    : "Never";
-};
-
 const formatDateTime = (input: string | null): string => {
   if (!input) {
     return EMPTY_INPUT_PLACEHOLDER;
@@ -93,7 +84,6 @@ export {
   makeSentence,
   formatDate,
   formatDateTime,
-  formatChangeDate,
   formatFileSize,
   reprBigNumber,
   reprPercentage,
