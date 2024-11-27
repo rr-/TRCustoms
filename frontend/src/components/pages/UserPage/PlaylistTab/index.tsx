@@ -19,6 +19,7 @@ const PlaylistTab = ({ user }: PlaylistTabProps) => {
     PlaylistSearchQuery
   >({
     page: null,
+    pageSize: 100,
     sort: "-status,-last_updated",
   });
   const queryClient = useQueryClient();
