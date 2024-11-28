@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { Helmet } from "react-helmet";
+import { Helmet, HelmetProvider } from "react-helmet-async";
 import { usePageMetadataStore } from "src/contexts/PageMetadataContext";
 
 const BASE_TITLE = "TRCustoms";
@@ -20,11 +20,13 @@ const PageMetadata = () => {
   const imageUrl = baseUrl ? new URL(image || BASE_IMAGE, baseUrl).href : null;
 
   return (
-    <Helmet>
-      <title>{title ? `${BASE_TITLE} - ${title}` : BASE_TITLE}</title>
-      <meta name="description" content={description || BASE_DESCRIPTION} />
-      {!!imageUrl && <meta name="og:image" content={imageUrl} />}
-    </Helmet>
+    <HelmetProvider>
+      <Helmet>
+        <title>{title ? `${BASE_TITLE} - ${title}` : BASE_TITLE}</title>
+        <meta name="description" content={description || BASE_DESCRIPTION} />
+        {!!imageUrl && <meta name="og:image" content={imageUrl} />}
+      </Helmet>
+    </HelmetProvider>
   );
 };
 

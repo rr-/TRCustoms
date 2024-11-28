@@ -270,7 +270,7 @@ const AuditLogSearch = ({
           </div>
 
           {StateSearches.map((section, sectionNum) => (
-            <div className={styles.section}>
+            <div className={styles.section} key={sectionNum}>
               <Collapsible
                 key={section.storageKey}
                 storageKey={section.storageKey}
