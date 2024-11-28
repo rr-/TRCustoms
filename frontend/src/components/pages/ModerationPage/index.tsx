@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { AuditLogSearch } from "src/components/common/AuditLogSearch";
+import { VerticalList } from "src/components/common/VerticalList";
 import { AuditLogTable } from "src/components/common/AuditLogTable";
 import { Button } from "src/components/common/Button";
 import { InfoMessage } from "src/components/common/InfoMessage";
@@ -56,19 +57,17 @@ const ModerationPageView = () => {
     []
   );
 
+  const header = <VerticalList>
+    <Button to={"/mod/how-to"} disableTimeout={true}>
+      Moderating guidelines
+    </Button>
+    <Button to={"/users"} disableTimeout={true}>
+      User list
+    </Button>
+  </VerticalList>;
+
   const sidebar = (
-    <SidebarBox
-      actions={
-        <>
-          <Button to={"/mod/how-to"} disableTimeout={true}>
-            Moderating guidelines
-          </Button>
-          <Button to={"/users"} disableTimeout={true}>
-            User list
-          </Button>
-        </>
-      }
-    >
+    <SidebarBox header={ header } >
       <AuditLogSearch
         defaultSearchQuery={defaultSearchQuery}
         searchQuery={searchQuery}

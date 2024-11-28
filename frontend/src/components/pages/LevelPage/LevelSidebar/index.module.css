@@ -20,3 +20,13 @@
 .fileTableTerm:after {
   content: unset;
 }
+
+.nowrap {
+  white-space: nowrap;
+}
+
+@media (min-width: 600px) and (max-width: 800px) {
+  .wrapper {
+    columns: 2;
+  }
+}

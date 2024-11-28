@@ -3,7 +3,7 @@
   gap: 0.5rem 2rem;
 }
 
-@media (max-device-width: 1280px) {
+@media (max-width: 1280px) {
   .wrapper {
     flex-wrap: wrap;
   }

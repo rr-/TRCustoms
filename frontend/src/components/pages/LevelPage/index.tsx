@@ -1,18 +1,18 @@
+import styles from "./index.module.css";
 import { useQuery } from "react-query";
 import { useNavigate } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import { InfoMessage } from "src/components/common/InfoMessage";
 import { InfoMessageType } from "src/components/common/InfoMessage";
-import { LevelSidebar } from "src/components/common/LevelSidebar";
 import { Loader } from "src/components/common/Loader";
 import { LightTabSwitch } from "src/components/common/TabSwitch";
 import type { TabPage } from "src/components/common/TabSwitch";
-import { SidebarLayout } from "src/components/layouts/SidebarLayout";
 import { ResponseErrorPage } from "src/components/pages/ErrorPage";
 import { LevelHeader } from "src/components/pages/LevelPage/LevelHeader";
 import { LevelOverviewTab } from "src/components/pages/LevelPage/LevelOverviewTab";
 import { LevelRatingsTab } from "src/components/pages/LevelPage/LevelRatingsTab";
 import { LevelReviewsTab } from "src/components/pages/LevelPage/LevelReviewsTab";
+import { LevelSidebar } from "src/components/pages/LevelPage/LevelSidebar";
 import { LevelWalkthroughsTab } from "src/components/pages/LevelPage/LevelWalkthroughsTab";
 import { RatingAddAction } from "src/components/pages/LevelPage/RatingAddAction";
 import { RatingEditAction } from "src/components/pages/LevelPage/RatingEditAction";
@@ -128,18 +128,23 @@ const LevelPage = ({ tabName, action }: LevelPageProps) => {
   );
 
   return (
-    <SidebarLayout
-      header={<LevelHeader level={level} />}
-      sidebar={<LevelSidebar level={level} />}
-    >
-      {status}
+    <div className={styles.wrapper}>
+      <div className={styles.header}>
+        <LevelHeader level={level} />
+      </div>
+      <div className={styles.sidebar}>
+        <LevelSidebar level={level} />
+      </div>
 
-      <LightTabSwitch
-        tabs={tabs}
-        tabName={tabName}
-        onTabChange={handleTabChange}
-      />
-    </SidebarLayout>
+      <div className={styles.content}>
+        {status}
+        <LightTabSwitch
+          tabs={tabs}
+          tabName={tabName}
+          onTabChange={handleTabChange}
+        />
+      </div>
+    </div>
   );
 };
 

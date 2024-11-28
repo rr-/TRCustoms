@@ -3,7 +3,7 @@
   --layout-split: min-content 6fr;
 }
 
-@media (max-device-width: 800px) {
+@media (max-width: 800px) {
   .wrapper {
     --layout-split: 1fr;
   }

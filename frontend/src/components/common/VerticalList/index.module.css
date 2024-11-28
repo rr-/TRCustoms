@@ -1,0 +1,16 @@
+.wrapper {
+  display: flex;
+  flex-direction: column;
+}
+.wrapper.none {
+  gap: 0;
+}
+.wrapper.medium {
+  gap: 0.5rem;
+}
+.wrapper.big {
+  gap: 1rem;
+}
+.wrapper:empty {
+  display: none;
+}

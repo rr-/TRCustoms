@@ -19,7 +19,7 @@
   margin: 0;
 }
 
-@media (max-device-width: 800px) {
+@media (max-width: 800px) {
   .section {
     grid-template-columns: 1fr;
   }
