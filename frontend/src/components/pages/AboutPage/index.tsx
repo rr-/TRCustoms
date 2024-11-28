@@ -4,8 +4,8 @@ import { NestedLegalese } from "src/components/common/NestedLegalese";
 import { PlainLayout } from "src/components/layouts/PlainLayout";
 import { usePageMetadata } from "src/contexts/PageMetadataContext";
 
-const buildVersion = process.env.REACT_APP_BUILD_VERSION;
-const buildDate = process.env.REACT_APP_BUILD_DATE;
+const buildVersion = import.meta.env.VITE_BUILD_VERSION;
+const buildDate = import.meta.env.VITE_BUILD_DATE;
 
 const About: LegaleseEntry = {
   children: [

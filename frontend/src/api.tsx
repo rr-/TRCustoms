@@ -1,9 +1,9 @@
 import { AxiosResponse } from "axios";
 import { AxiosError } from "axios";
 import { AxiosRequestConfig } from "axios";
+import axios from "axios";
 import { AuthService } from "src/services/AuthService";
 
-const axios = require("axios");
 const api = axios.create();
 
 interface AxiosRequestConfigWithRetry extends AxiosRequestConfig {

@@ -7,7 +7,7 @@ interface EnvironmentWatermarkProps {
 }
 
 const EnvironmentWatermark = ({ children }: EnvironmentWatermarkProps) => {
-  const environment = process.env.REACT_APP_ENVIRONMENT;
+  const environment = import.meta.env.VITE_ENVIRONMENT;
   if (!environment || environment === "prod") {
     return <>{children}</>;
   }

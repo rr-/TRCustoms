@@ -63,13 +63,14 @@ services:
       context: .
       dockerfile: ./services/frontend/Dockerfile
     environment:
-      - REACT_APP_ENVIRONMENT=dev
-      - REACT_APP_HOST_SITE=${HOST_SITE}
+      - VITE_ENVIRONMENT=dev
+      - VITE_HOST_SITE=${HOST_SITE}
     volumes:
       - ./frontend/public/:/app/public/
       - ./frontend/src/:/app/src/
       - ./frontend/tsconfig.json:/app/tsconfig.json
       - ./frontend/package.json:/app/package.json
+      - ./frontend/index.html:/app/index.html
       - ./services/frontend/entrypoint.sh:/usr/local/bin/entrypoint.sh
     networks:
       - trcustoms
