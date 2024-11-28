@@ -1,5 +1,5 @@
 import { StorageService } from "src/services/StorageService";
-import create from "zustand";
+import { create } from "zustand";
 
 interface Theme {
   name: string;
