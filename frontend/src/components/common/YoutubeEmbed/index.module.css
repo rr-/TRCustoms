@@ -1,5 +1,5 @@
 .embed {
-  width: var(--video-embed-width, 640px);
+  width: var(--video-embed-width, 100%);
   max-width: 100%;
   aspect-ratio: var(--video-embed-aspect-ratio, 16 / 9);
   border: 0;
