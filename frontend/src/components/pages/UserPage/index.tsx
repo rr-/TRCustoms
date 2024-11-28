@@ -1,3 +1,4 @@
+import styles from "./index.module.css";
 import { useContext } from "react";
 import { useQuery } from "react-query";
 import { useNavigate } from "react-router-dom";
@@ -7,14 +8,13 @@ import { PageGuard } from "src/components/common/PermissionGuard";
 import { Section } from "src/components/common/Section";
 import type { TabPage } from "src/components/common/TabSwitch";
 import { LightTabSwitch } from "src/components/common/TabSwitch";
-import { UserSidebar } from "src/components/common/UserSidebar";
-import { SidebarLayout } from "src/components/layouts/SidebarLayout";
 import { Markdown } from "src/components/markdown/Markdown";
 import { AuthoredLevelsTab } from "src/components/pages/UserPage/AuthoredLevelsTab";
 import { PlaylistTab } from "src/components/pages/UserPage/PlaylistTab";
 import { RatingsTab } from "src/components/pages/UserPage/RatingsTab";
 import { ReviewsTab } from "src/components/pages/UserPage/ReviewsTab";
 import { UserHeader } from "src/components/pages/UserPage/UserHeader";
+import { UserSidebar } from "src/components/pages/UserPage/UserSidebar";
 import { WalkthroughsTab } from "src/components/pages/UserPage/WalkthroughsTab";
 import { usePageMetadata } from "src/contexts/PageMetadataContext";
 import { useScrollStore } from "src/contexts/ScrollContext";
@@ -121,24 +121,29 @@ const UserPage = ({ tabName }: UserPageProps) => {
 
   return (
     <PageGuard require={UserPermission.viewUsers} owningUserIds={[+userId]}>
-      <SidebarLayout
-        header={<UserHeader user={user} />}
-        sidebar={<UserSidebar user={user} />}
-      >
-        {user.is_active && user.bio ? (
-          <Section>
-            <Markdown>{user.bio}</Markdown>
-          </Section>
-        ) : null}
-
-        <div style={{ minHeight: "33vh" }}>
-          <LightTabSwitch
-            tabs={tabs}
-            tabName={tabName}
-            onTabChange={handleTabChange}
-          />
+      <div className={styles.wrapper}>
+        <div className={styles.header}>
+          <UserHeader user={user} />
         </div>
-      </SidebarLayout>
+        <div className={styles.sidebar}>
+          <UserSidebar user={user} />
+        </div>
+        <div className={styles.content}>
+          {user.is_active && user.bio ? (
+            <Section>
+              <Markdown>{user.bio}</Markdown>
+            </Section>
+          ) : null}
+
+          <div className={styles.tabContent}>
+            <LightTabSwitch
+              tabs={tabs}
+              tabName={tabName}
+              onTabChange={handleTabChange}
+            />
+          </div>
+        </div>
+      </div>
     </PageGuard>
   );
 };

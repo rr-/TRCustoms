@@ -5,7 +5,7 @@
   grid-template-columns: 2fr 5fr 2fr;
 }
 
-@media (max-device-width: 1000px) {
+@media (max-width: 1000px) {
   .wrapper {
     grid-template-columns: 1fr 1fr;
     grid-template-rows: min-content auto;
@@ -15,7 +15,7 @@
   }
 }
 
-@media (max-device-width: 600px) {
+@media (max-width: 600px) {
   .wrapper {
     grid-template-columns: 1fr;
     grid-template-areas:

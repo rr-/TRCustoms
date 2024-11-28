@@ -21,24 +21,26 @@ const TabSwitch = ({ tabs, activeTabName, onTabClick }: TabSwitchProps) => {
 
   return (
     <div className={styles.wrapper}>
-      <ul className={styles.nav}>
-        {tabs.map((tab) => (
-          <li
-            className={`${styles.navItem} ${
-              tab.name === activeTabName ? styles.active : ""
-            }`}
-            key={tab.name}
-          >
-            <span
-              role="button"
-              className={styles.navItemLink}
-              onClick={() => handleTabClick(tab)}
+      <div className={styles.navWrapper}>
+        <ul className={styles.nav}>
+          {tabs.map((tab) => (
+            <li
+              className={`${styles.navItem} ${
+                tab.name === activeTabName ? styles.active : ""
+              }`}
+              key={tab.name}
             >
-              {tab.label}
-            </span>
-          </li>
-        ))}
-      </ul>
+              <span
+                role="button"
+                className={styles.navItemLink}
+                onClick={() => handleTabClick(tab)}
+              >
+                {tab.label}
+              </span>
+            </li>
+          ))}
+        </ul>
+      </div>
 
       <div className={styles.content}>
         {tabs.map((tab) => (

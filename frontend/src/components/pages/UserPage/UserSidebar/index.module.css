@@ -1,0 +1,14 @@
+.links {
+  display: flex;
+  flex-direction: column;
+}
+
+@media (min-width: 500px) and (max-width: 800px) {
+  .wrapper {
+    columns: 2;
+  }
+}
+
+.potentialColumn {
+  break-inside: avoid;
+}

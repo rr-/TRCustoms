@@ -8,13 +8,13 @@
   text-align: center;
 }
 
-@media (max-device-width: 1280px) {
+@media (max-width: 1280px) {
   .list {
     grid-template-columns: repeat(3, auto);
   }
 }
 
-@media (max-device-width: 800px) {
+@media (max-width: 800px) {
   .list {
     grid-template-columns: repeat(2, auto);
   }

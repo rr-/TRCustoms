@@ -1,19 +1,16 @@
+.wrapper {
+  display: flex;
+  flex-direction: column;
+}
+
 .box {
   padding: calc(var(--sidebar-padding) * 1rem);
   background: var(--sidebar-bg-color);
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
+  break-inside: avoid;
+  &:not(:last-of-type) {
+    margin-bottom: calc(var(--sidebar-padding) * -1rem);
+  }
 }
 .box:empty {
-  display: none;
-}
-
-.actions {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-}
-.actions:empty {
   display: none;
 }

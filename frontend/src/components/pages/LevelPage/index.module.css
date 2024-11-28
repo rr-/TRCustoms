@@ -1,0 +1,23 @@
+.wrapper {
+  display: grid;
+  gap: var(--layout-gap, 1rem 1.5rem);
+  grid-template-columns: var(--layout-split, minmax(200px, 25%) 1fr);
+}
+
+.header {
+  grid-column: span 2;
+}
+
+@media (max-width: 800px) {
+  .wrapper {
+    --layout-split: 1fr;
+  }
+  .header {
+    grid-column: 1 !important;
+  }
+}
+@media (max-width: 600px) {
+  .wrapper {
+    --layout-split: 1fr;
+  }
+}

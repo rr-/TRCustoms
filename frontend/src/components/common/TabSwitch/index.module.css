@@ -1,8 +1,16 @@
-.nav {
+.navWrapper {
   display: flex;
+  align-items: flex-end;
+}
+
+.nav {
+  --my-gap: 0.5rem;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
   list-style-type: none;
-  margin: 0 0 -1px 0;
-  padding: 0;
+  margin: 0;
+  padding: 0 var(--my-gap) 0 0;
 
   .navItem {
     margin: 0;
@@ -24,8 +32,8 @@
 
 .boxed {
   & > .wrapper {
-    & > .nav {
-      gap: 0.5rem;
+    & > .navWrapper > .nav {
+      gap: var(--my-gap);
 
       & > .navItem > .navItemLink {
         padding: 0.5rem 1rem;
@@ -48,21 +56,22 @@
 
 .light {
   & > .wrapper {
-    & > .nav {
-      gap: 0.5rem;
-
+    & > .navWrapper {
       /* filler */
       &:after {
         border-bottom: var(--tab-switch-light-inactive-border-color) 2px solid;
-        margin-bottom: -2px;
         content: "";
         flex: 1;
       }
+    }
+
+    & > .navWrapper > .nav {
+      gap: var(--my-gap);
 
       & > .navItem {
         --my-fg-color: var(--v2-fg-color-2);
         --my-border-color: var(--v2-bg-color-3);
-        margin-bottom: -2px;
+        margin-bottom: 0;
         border-bottom: 2px solid var(--my-border-color);
         background: var(--my-bg-color);
         transition: border-color var(--transition-speed),
@@ -85,6 +94,10 @@
           transition: color var(--transition-speed);
           padding: 0.35rem 2rem;
           color: var(--my-fg-color);
+        }
+
+        &:not(:last-of-type) {
+          border-collapse: collapse;
         }
       }
     }
