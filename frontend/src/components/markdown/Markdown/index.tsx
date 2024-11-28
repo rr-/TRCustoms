@@ -154,7 +154,7 @@ const remarkTRCustomColors = () => {
 
 const transformLink = (link: any): any => {
   const youtubeVideo = parseYoutubeLink(link.href);
-  if (youtubeVideo?.playlistID || youtubeVideo?.playlistID) {
+  if (youtubeVideo?.videoID || youtubeVideo?.playlistID) {
     return <YoutubeEmbed {...youtubeVideo} />;
   }
   return <a href={link.href}>{link.children}</a>;
