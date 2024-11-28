@@ -118,12 +118,23 @@ const StateSearches: StateSearchSection[] = [
     ],
   },
   {
-    title: "Review States",
-    storageKey: `auditLogReviewStatus`,
-    searchModel: "levelreview",
+    title: "Rating States",
+    storageKey: `auditLogRatingStatus`,
+    searchModel: "rating",
     searchList: [
       { title: "Posted", searchState: "created" },
       { title: "Updated", searchState: "updated" },
+      { title: "Deleted", searchState: "deleted" },
+    ],
+  },
+  {
+    title: "Review States",
+    storageKey: `auditLogReviewStatus`,
+    searchModel: "review",
+    searchList: [
+      { title: "Posted", searchState: "created" },
+      { title: "Updated", searchState: "updated" },
+      { title: "Deleted", searchState: "deleted" },
     ],
   },
   {
