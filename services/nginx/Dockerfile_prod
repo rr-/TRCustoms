@@ -7,15 +7,15 @@ ARG ENVIRONMENT
 ARG BUILD_DATE
 ARG BUILD_VERSION
 
-ENV REACT_APP_BUILD_VERSION=${BUILD_VERSION}
-ENV REACT_APP_BUILD_DATE=${BUILD_DATE}
-ENV REACT_APP_ENVIRONMENT=${ENVIRONMENT}
-ENV REACT_APP_HOST_SITE=${HOST_SITE}
+ENV VITE_BUILD_VERSION=${BUILD_VERSION}
+ENV VITE_BUILD_DATE=${BUILD_DATE}
+ENV VITE_ENVIRONMENT=${ENVIRONMENT}
+ENV VITE_HOST_SITE=${HOST_SITE}
 
 WORKDIR /app/frontend/
 COPY ./frontend/package.json ./
 COPY ./frontend/package-lock.json ./
-RUN npm ci
+RUN npm ci --include=dev
 
 COPY ./frontend/ ./
 RUN npm run build
@@ -28,5 +28,5 @@ COPY services/nginx/nginx_prerender_map.conf /etc/nginx/nginx_prerender_map.conf
 COPY services/nginx/nginx_prerender_server.conf /etc/nginx/nginx_prerender_server.conf
 COPY services/nginx/nginx_prod.conf.template /etc/nginx/nginx.conf.template
 RUN envsubst '${ADMIN_DIR}' < /etc/nginx/nginx.conf.template > /etc/nginx/nginx.conf
-COPY --from=build /app/frontend/build /usr/share/nginx/html
+COPY --from=build /app/frontend/dist /usr/share/nginx/html
 CMD ["nginx", "-g", "daemon off;"]

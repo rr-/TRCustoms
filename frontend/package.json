@@ -16,20 +16,16 @@
     "react-markdown": "^8.0.7",
     "react-query": "^3.39.3",
     "react-router-dom": "^6.14.0",
-    "react-scripts": "^5.0.1",
     "remark-breaks": "^3.0.3",
     "remark-gfm": "^3.0.1",
     "typescript": "^4",
-    "update": "^0.7.4",
-    "web-vitals": "^3.3.2",
     "zustand": "^4.3.8"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
+    "start": "vite serve --host 0.0.0.0 --port 3000",
+    "build": "vite build",
     "tsc": "tsc --strict",
-    "lint": "eslint .",
-    "eject": "react-scripts eject"
+    "lint": "eslint ."
   },
   "eslintConfig": {
     "extends": [
@@ -65,7 +61,9 @@
     "@types/react": "^18.2.14",
     "@types/react-dom": "^18.2.6",
     "@types/react-helmet": "^6.1.6",
-    "@types/react-router-dom": "^5.3.3"
+    "@types/react-router-dom": "^5.3.3",
+    "@vitejs/plugin-react": "^4.3.4",
+    "vite": "^6.0.1"
   },
   "prettier": {
     "plugins": [

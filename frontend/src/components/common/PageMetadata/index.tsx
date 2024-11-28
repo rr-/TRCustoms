@@ -16,7 +16,7 @@ const PageMetadata = () => {
     (window as any).prerenderReady = ready;
   }, [ready]);
 
-  const baseUrl = process.env.REACT_APP_HOST_SITE;
+  const baseUrl = import.meta.env.VITE_HOST_SITE;
   const imageUrl = baseUrl ? new URL(image || BASE_IMAGE, baseUrl).href : null;
 
   return (
