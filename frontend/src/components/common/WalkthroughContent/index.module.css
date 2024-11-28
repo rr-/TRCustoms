@@ -6,8 +6,3 @@
   -webkit-box-orient: vertical;
   margin-bottom: 0.5rem;
 }
-
-.embedWrapper {
-  --video-embed-width: 100%;
-  --video-embed-aspect-ratio: 16 / 9;
-}

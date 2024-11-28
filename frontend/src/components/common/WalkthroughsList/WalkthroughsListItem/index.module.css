@@ -3,9 +3,6 @@
   flex-direction: column;
   margin-bottom: 1rem;
   background: var(--box-content-bg-color);
-
-  --video-embed-width: 100%;
-  --video-embed-aspect-ratio: 16 / 9;
 }
 
 .content {
