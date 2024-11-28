@@ -7,8 +7,6 @@ import { Loader } from "src/components/common/Loader";
 import { NewsSidebar } from "src/components/common/NewsSidebar";
 import { PermissionGuard } from "src/components/common/PermissionGuard";
 import { SectionHeader } from "src/components/common/Section";
-import { SidebarLayout } from "src/components/layouts/SidebarLayout";
-import { SidebarLayoutVariant } from "src/components/layouts/SidebarLayout";
 import { Markdown } from "src/components/markdown/Markdown";
 import { usePageMetadata } from "src/contexts/PageMetadataContext";
 import type { NewsDetails } from "src/services/NewsService";
@@ -47,30 +45,34 @@ const NewsPage = () => {
 
   const news: NewsDetails = newsResult.data;
 
+  const content = (
+    <Box>
+      {news.subject && (
+        <SectionHeader>
+          <Markdown>{news.subject}</Markdown>
+        </SectionHeader>
+      )}
+
+      <div className={`${styles.mainText} ChildMarginClear`}>
+        <Markdown>{news.text || "No news text is available."}</Markdown>
+      </div>
+
+      <footer className={styles.footer}>
+        <em>Posted on {formatDate(news.created)}</em>
+        <PermissionGuard require={UserPermission.editNews}>
+          <Button to={`/news/${newsId}/edit`}>Edit news</Button>
+        </PermissionGuard>
+      </footer>
+    </Box>
+  );
+
   return (
-    <SidebarLayout
-      variant={SidebarLayoutVariant.Reverse}
-      sidebar={<NewsSidebar />}
-    >
-      <Box>
-        {news.subject && (
-          <SectionHeader>
-            <Markdown>{news.subject}</Markdown>
-          </SectionHeader>
-        )}
-
-        <div className={`${styles.content} ChildMarginClear`}>
-          <Markdown>{news.text || "No news text is available."}</Markdown>
-        </div>
-
-        <footer className={styles.footer}>
-          <em>Posted on {formatDate(news.created)}</em>
-          <PermissionGuard require={UserPermission.editNews}>
-            <Button to={`/news/${newsId}/edit`}>Edit news</Button>
-          </PermissionGuard>
-        </footer>
-      </Box>
-    </SidebarLayout>
+    <div className={styles.wrapper}>
+      <div className={styles.sidebar}>
+        <NewsSidebar />
+      </div>
+      <div className={styles.content}>{content}</div>
+    </div>
   );
 };
 
