@@ -89,6 +89,10 @@ const UserSidebar = ({ user }: UserSidebarProps) => {
           {user.authored_level_count_approved}
         </DefinitionItem>
 
+        <DefinitionItem term="Ratings added">
+          {user.rated_level_count}
+        </DefinitionItem>
+
         <DefinitionItem term="Reviews posted">
           {user.reviewed_level_count}
         </DefinitionItem>
