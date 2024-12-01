@@ -46,9 +46,9 @@ bash-staging:
 shell:
     docker-compose run --rm trcustoms manage shell
 shell-prod:
-    ssh -t trcustoms 'cd ~/srv/website; just shell'
+    ssh -t trcustoms 'cd ~/srv/website; docker-compose -f docker-compose.prod.yml run --rm trcustoms manage shell_plus'
 shell-staging:
-    ssh -t trcustoms 'cd ~/srv/website-staging; just shell'
+    ssh -t trcustoms 'cd ~/srv/website-staging; docker-compose -f docker-compose.prod.yml run --rm trcustoms manage shell'
 
 snippet:
     docker-compose run -T --rm trcustoms manage shell
