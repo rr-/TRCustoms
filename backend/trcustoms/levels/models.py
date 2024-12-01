@@ -154,31 +154,44 @@ class Level(UserContentDatesInfo, DatesInfo):
     def __str__(self) -> str:
         return f"{self.name} (id={self.pk})"
 
-    def update_rating_count(self) -> None:
+    def update_rating_count(self, save: bool = True) -> None:
         rating_count = self.ratings.count()
         if rating_count != self.rating_count:
             self.rating_count = rating_count
-            self.save(update_fields=["rating_count"])
+            if save:
+                self.save(update_fields=["rating_count"])
 
-    def update_review_count(self) -> None:
+    def update_review_count(self, save: bool = True) -> None:
         review_count = self.reviews.count()
         if review_count != self.review_count:
             self.review_count = review_count
-            self.save(update_fields=["review_count"])
+            if save:
+                self.save(update_fields=["review_count"])
 
-    def update_download_count(self) -> None:
+    def update_download_count(self, save: bool = True) -> None:
         download_count = sum(
             list(self.files.values_list("download_count", flat=True)) + [0]
         )
         if download_count != self.download_count:
             self.download_count = download_count
-            self.save(update_fields=["download_count"])
+            if save:
+                self.save(update_fields=["download_count"])
 
-    def update_last_file(self) -> None:
+    def update_last_file(self, save: bool = True) -> None:
         last_file = self.files.active().order_by("-version").first()
         if last_file != self.last_file:
             self.last_file = last_file
-            self.save()
+            if save:
+                self.save()
+
+    def update_last_user_content_updated(self, save: bool = True) -> None:
+        self.last_user_content_updated = (
+            max(self.files.values_list("created", flat=True))
+            if self.files.count() > 1
+            else None
+        )
+        if save:
+            self.save(update_fields=["last_user_content_updated"])
 
 
 class LevelScreenshot(DatesInfo):

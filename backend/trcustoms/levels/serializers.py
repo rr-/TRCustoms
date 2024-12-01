@@ -361,13 +361,7 @@ class LevelDetailsSerializer(LevelListingSerializer):
         if file is not None and (
             not level.last_file or file != level.last_file.file
         ):
-            level_file = LevelFile.objects.create(level=level, file=file)
-            level.last_user_content_updated = (
-                max(level_file.created, level_file.created)
-                if level.files.count() > 1
-                else None
-            )
-            level.save(update_fields=["last_user_content_updated"])
+            LevelFile.objects.create(level=level, file=file)
 
         return level
 
