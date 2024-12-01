@@ -80,6 +80,7 @@ interface UserDetails extends UserListing {
 
 interface UserAward {
   created: string;
+  last_updated: string;
   code: string;
   title: string;
   description: string;

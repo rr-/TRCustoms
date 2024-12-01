@@ -33,7 +33,9 @@ const AwardModal = ({ isActive, onIsActiveChange, award }: AwardModalProps) => {
             {reprPercentage(award.rarity / 100)}
           </dd>
           <dt className={styles.term}>Awarded:</dt>
-          <dd className={styles.definition}>{formatDate(award.created)}</dd>
+          <dd className={styles.definition}>
+            {formatDate(award.last_updated ?? award.created)}
+          </dd>
         </dl>
       </div>
     </BaseModal>
