@@ -40,6 +40,12 @@ def update_level_author_info_on_level_change(sender, instance, **kwargs):
         author.update_authored_level_count()
 
 
+@receiver(post_save, sender=LevelFile)
+@receiver(post_delete, sender=LevelFile)
+def update_level_update_date_on_files_change(sender, instance, **kwargs):
+    instance.level.update_last_user_content_updated()
+
+
 @receiver(m2m_changed, sender=Level.authors.through)
 def update_level_author_info_on_authors_change(
     sender, instance, pk_set, **kwargs
