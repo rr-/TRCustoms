@@ -57,9 +57,12 @@ class Command(BaseCommand):
     def fix_users(self) -> None:
         with tqdm(desc="Users", total=User.objects.count()) as progress:
             for user in User.objects.iterator():
-                user.update_authored_level_count()
-                user.update_reviewed_level_count()
-                user.update_rated_level_count()
+                user.update_authored_level_count(save=False)
+                user.update_rated_level_count(save=False)
+                user.update_reviewed_level_count(save=False)
+                user.update_authored_walkthrough_count(save=False)
+                user.update_played_level_count(save=False)
+                user.save()
                 progress.update()
 
     def fix_level_ratings(self) -> None:
