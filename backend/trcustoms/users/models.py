@@ -126,35 +126,39 @@ class User(AbstractUser):
     def is_placeholder(self) -> bool:
         return not self.has_usable_password() and not self.is_active
 
-    def update_rated_level_count(self) -> None:
+    def update_rated_level_count(self, save: bool = True) -> None:
         self.rated_level_count = self.rated_levels.filter(
             level__is_approved=True
         ).count()
-        self.save(update_fields=["rated_level_count"])
+        if save:
+            self.save(update_fields=["rated_level_count"])
 
-    def update_reviewed_level_count(self) -> None:
+    def update_reviewed_level_count(self, save: bool = True) -> None:
         self.reviewed_level_count = self.reviewed_levels.filter(
             level__is_approved=True
         ).count()
-        self.save(update_fields=["reviewed_level_count"])
+        if save:
+            self.save(update_fields=["reviewed_level_count"])
 
-    def update_played_level_count(self) -> None:
+    def update_played_level_count(self, save: bool = True) -> None:
         self.played_level_count = self.playlist_items.played().count()
-        self.save(update_fields=["played_level_count"])
+        if save:
+            self.save(update_fields=["played_level_count"])
 
-    def update_authored_level_count(self) -> None:
+    def update_authored_level_count(self, save: bool = True) -> None:
         self.authored_level_count_all = self.authored_levels.count()
         self.authored_level_count_approved = self.authored_levels.filter(
             is_approved=True
         ).count()
-        self.save(
-            update_fields=[
-                "authored_level_count_all",
-                "authored_level_count_approved",
-            ]
-        )
+        if save:
+            self.save(
+                update_fields=[
+                    "authored_level_count_all",
+                    "authored_level_count_approved",
+                ]
+            )
 
-    def update_authored_walkthrough_count(self) -> None:
+    def update_authored_walkthrough_count(self, save: bool = True) -> None:
         self.authored_walkthrough_count_all = (
             self.authored_walkthroughs.count()
         )
@@ -163,9 +167,10 @@ class User(AbstractUser):
                 status=WalkthroughStatus.APPROVED
             ).count()
         )
-        self.save(
-            update_fields=[
-                "authored_walkthrough_count_all",
-                "authored_walkthrough_count_approved",
-            ]
-        )
+        if save:
+            self.save(
+                update_fields=[
+                    "authored_walkthrough_count_all",
+                    "authored_walkthrough_count_approved",
+                ]
+            )
