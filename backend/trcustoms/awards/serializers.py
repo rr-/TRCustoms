@@ -14,6 +14,7 @@ class UserAwardSerializer(serializers.ModelSerializer):
         model = UserAward
         fields = [
             "created",
+            "last_updated",
             "position",
             "code",
             "title",
