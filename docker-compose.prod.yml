@@ -99,16 +99,6 @@ services:
       - ./backend/volumes/django_static:/app/backend/django_static
       - ./backend/volumes/uploads:/app/backend/django_uploads
 
-  trcustoms-prerender:
-    <<: *base-trcustoms-backend
-    build:
-      context: ./services/prerender/
-    volumes:
-      - ./services/prerender/plugins/:/app/plugins/
-      - ./services/prerender/server.js:/app/server.js
-    networks:
-      - trcustoms
-
 networks:
   trcustoms:
     external: false

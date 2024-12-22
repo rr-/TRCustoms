@@ -24,8 +24,6 @@ RUN npm run build
 # Copy React static files and start nginx
 FROM nginx:stable-alpine
 ARG ADMIN_DIR
-COPY services/nginx/nginx_prerender_map.conf /etc/nginx/nginx_prerender_map.conf
-COPY services/nginx/nginx_prerender_server.conf /etc/nginx/nginx_prerender_server.conf
 COPY services/nginx/nginx_prod.conf.template /etc/nginx/nginx.conf.template
 RUN envsubst '${ADMIN_DIR}' < /etc/nginx/nginx.conf.template > /etc/nginx/nginx.conf
 COPY --from=build /app/frontend/dist /usr/share/nginx/html

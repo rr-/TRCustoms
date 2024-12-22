@@ -36,11 +36,6 @@ services:
       args:
         - ENVIRONMENT=staging
 
-  trcustoms-prerender:
-    extends:
-      file: docker-compose.prod.yml
-      service: trcustoms-prerender
-
   trcustoms-mailhog:
     image: mailhog/mailhog:v1.0.0
     expose:

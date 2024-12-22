@@ -104,8 +104,6 @@ services:
     image: nginx
     environment: *base-backend-environment
     volumes:
-      - ./services/nginx/nginx_prerender_map.conf:/etc/nginx/nginx_prerender_map.conf:ro
-      - ./services/nginx/nginx_prerender_server.conf:/etc/nginx/nginx_prerender_server.conf:ro
       - ./services/nginx/nginx_dev.conf.template:/etc/nginx/nginx.conf.template:ro
       - ./backend/volumes/uploads/:/app/uploads/
       - ./backend/volumes/django_static/:/app/django_static/
@@ -119,16 +117,6 @@ services:
     depends_on:
       - trcustoms
     command: /bin/bash -c 'envsubst "\$${ADMIN_DIR}" < /etc/nginx/nginx.conf.template > /etc/nginx/nginx.conf && nginx -g "daemon off;"'
-
-  trcustoms-prerender:
-    <<: *base-trcustoms-backend
-    build:
-      context: ./services/prerender/
-    volumes:
-      - ./services/prerender/plugins/:/app/plugins/
-      - ./services/prerender/server.js:/app/server.js
-    networks:
-      - trcustoms
 
   trcustoms-mailhog:
     image: mailhog/mailhog:v1.0.0
