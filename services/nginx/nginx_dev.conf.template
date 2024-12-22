@@ -12,8 +12,6 @@ http {
   uwsgi_temp_path       /tmp/uwsgi_temp;
   scgi_temp_path        /tmp/scgi_temp;
 
-  include /etc/nginx/nginx_prerender_map.conf;
-
   server {
     listen                             8000 default_server;
     server_name                        _;
@@ -34,17 +32,11 @@ http {
     proxy_set_header Connection "upgrade";
 
     location / {
-      if ($prerender = 1) {
-        rewrite (.*) /prerenderio last;
-      }
-
       proxy_pass http://trcustoms-frontend:3000;
     }
 
     location ~ ^/(${ADMIN_DIR}|api|uploads|django_static)(/.*)?$ {
       proxy_pass http://trcustoms:8000;
     }
-
-    include /etc/nginx/nginx_prerender_server.conf;
   }
 }
