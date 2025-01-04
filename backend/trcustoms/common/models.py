@@ -21,7 +21,7 @@ class DatesInfo(models.Model):
 
 
 class UserContentDatesInfo(models.Model):
-    last_user_content_updated = models.DateTimeField(null=True)
+    last_user_content_updated = models.DateTimeField(null=True, blank=True)
 
     def bump_last_user_content_updated(self, save: bool = False) -> None:
         self.last_user_content_updated = timezone.now()
