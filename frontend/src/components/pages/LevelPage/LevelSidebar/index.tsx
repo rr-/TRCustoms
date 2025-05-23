@@ -105,6 +105,7 @@ const LevelSidebar = ({ level }: LevelSidebarProps) => {
 
         <DefinitionItem term="Rating">
           <LevelRating ratingClass={level.rating_class} />
+          {" "}({level.rating_count})
         </DefinitionItem>
 
         <DefinitionItem term="Reviews">{level.review_count}</DefinitionItem>
