@@ -27,7 +27,7 @@ const getURLRegexp = () => {
       "(?::\\d{2,5})?" +
       "(?:[/?#][^\\s]*)?" +
       "$",
-    "i"
+    "i",
   );
 };
 
@@ -90,7 +90,7 @@ const validatePassword = (password: string): string | null => {
 
 const validatePassword2 = (
   password: string,
-  password2: string
+  password2: string,
 ): string | null => {
   if ((password || password2) && password !== password2) {
     return "Passwords do not match";

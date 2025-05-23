@@ -22,13 +22,13 @@ const deserializeSearchQuery = (qp: {
 }): UserSearchQuery => deserializeGenericSearchQuery(qp, defaultSearchQuery);
 
 const serializeSearchQuery = (
-  searchQuery: UserSearchQuery
+  searchQuery: UserSearchQuery,
 ): { [key: string]: any } =>
   serializeGenericSearchQuery(searchQuery, defaultSearchQuery);
 
 const UserListPageView = () => {
   const [searchQuery, setSearchQuery] = useState<UserSearchQuery>(
-    deserializeSearchQuery(getCurrentSearchParams())
+    deserializeSearchQuery(getCurrentSearchParams()),
   );
 
   usePageMetadata(() => ({ ready: true, title: "Users" }), []);

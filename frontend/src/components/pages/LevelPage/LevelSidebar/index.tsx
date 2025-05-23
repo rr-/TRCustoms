@@ -38,7 +38,7 @@ const LevelSidebar = ({ level }: LevelSidebarProps) => {
 
   const mainLink =
     level.external_links.filter(
-      (link) => link.link_type === ExternalLinkType.Main
+      (link) => link.link_type === ExternalLinkType.Main,
     )[0]?.url || null;
 
   const header = (
@@ -104,8 +104,8 @@ const LevelSidebar = ({ level }: LevelSidebarProps) => {
         </DefinitionItem>
 
         <DefinitionItem term="Rating">
-          <LevelRating ratingClass={level.rating_class} />
-          {" "}({level.rating_count})
+          <LevelRating ratingClass={level.rating_class} /> ({level.rating_count}
+          )
         </DefinitionItem>
 
         <DefinitionItem term="Reviews">{level.review_count}</DefinitionItem>

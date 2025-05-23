@@ -20,14 +20,12 @@ interface WalkthroughEditPageParams {
 }
 
 const WalkthroughEditPage = () => {
-  const {
-    levelId,
-    walkthroughId,
-  } = (useParams() as unknown) as WalkthroughEditPageParams;
+  const { levelId, walkthroughId } =
+    useParams() as unknown as WalkthroughEditPageParams;
 
   const levelResult = useQuery<LevelDetails | undefined, Error>(
     ["level", LevelService.getLevelById, levelId],
-    async () => (levelId ? LevelService.getLevelById(+levelId) : undefined)
+    async () => (levelId ? LevelService.getLevelById(+levelId) : undefined),
   );
 
   const walkthroughResult = useQuery<WalkthroughDetails | undefined, Error>(
@@ -35,7 +33,7 @@ const WalkthroughEditPage = () => {
     async () =>
       walkthroughId
         ? WalkthroughService.getWalkthroughById(+walkthroughId)
-        : undefined
+        : undefined,
   );
 
   usePageMetadata(
@@ -45,7 +43,7 @@ const WalkthroughEditPage = () => {
         ? `Walkthrough for ${levelResult.data.name}`
         : "Walkthrough",
     }),
-    [walkthroughResult, levelResult]
+    [walkthroughResult, levelResult],
   );
 
   if (levelResult.error) {

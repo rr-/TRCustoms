@@ -32,11 +32,11 @@ const WalkthroughsBar = ({ level }: WalkthroughsBarProps) => {
       });
       if (walkthroughs.results.length) {
         return await WalkthroughService.getWalkthroughById(
-          walkthroughs.results[0].id
+          walkthroughs.results[0].id,
         );
       }
       return null;
-    }
+    },
   );
 
   const handleVideoButtonClick = () => {

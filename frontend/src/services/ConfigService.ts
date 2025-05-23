@@ -101,15 +101,15 @@ type FeaturedLevels = {
 };
 
 const getConfig = async (): Promise<Config> => {
-  const response = (await api.get(`${API_URL}/config/`)) as AxiosResponse<
-    Config
-  >;
+  const response = (await api.get(
+    `${API_URL}/config/`,
+  )) as AxiosResponse<Config>;
   return response.data;
 };
 
 const getFeaturedLevels = async (): Promise<FeaturedLevels> => {
   const response = (await api.get(
-    `${API_URL}/config/featured_levels`
+    `${API_URL}/config/featured_levels`,
   )) as AxiosResponse<FeaturedLevels>;
   return response.data;
 };

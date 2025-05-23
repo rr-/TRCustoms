@@ -30,7 +30,7 @@ const LevelStats = () => {
         <DefinitionItem term="Downloads">
           {reprBigNumber(config.stats.total_downloads)} (
           {reprBigNumber(
-            config.stats.total_downloads / config.stats.total_levels
+            config.stats.total_downloads / config.stats.total_levels,
           )}{" "}
           per level)
         </DefinitionItem>

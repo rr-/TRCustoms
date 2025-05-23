@@ -17,7 +17,7 @@ interface UserPageParams {
 const EmailConfirmationPage = () => {
   const [user, setUser] = useState<UserDetails | undefined>();
   const [error, setError] = useState<string | undefined>();
-  const { token } = (useParams() as unknown) as UserPageParams;
+  const { token } = useParams() as unknown as UserPageParams;
 
   useEffect(() => {
     const run = async () => {

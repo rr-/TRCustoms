@@ -15,7 +15,7 @@ interface SpiderGraphProps {
 const SpiderGraphWrapper = ({ levelId }: SpiderGraphProps) => {
   const result = useQuery<RatingStats, Error>(
     ["levelRatingStats", RatingService.getRatingStatsByLevelId, levelId],
-    async () => RatingService.getRatingStatsByLevelId(+levelId)
+    async () => RatingService.getRatingStatsByLevelId(+levelId),
   );
 
   if (result.isLoading || !result.data) {

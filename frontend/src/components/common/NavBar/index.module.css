@@ -69,7 +69,8 @@
       padding: 0.3rem 1rem;
       display: inline-block;
       background: var(--my-bg-color);
-      transition: background var(--transition-speed),
+      transition:
+        background var(--transition-speed),
         color var(--transition-speed);
 
       --my-bg-color: var(--navbar-bg-color);

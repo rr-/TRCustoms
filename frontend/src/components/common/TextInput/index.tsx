@@ -3,7 +3,7 @@ interface TextInputProps {
   maxLength?: number | undefined;
   onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void | undefined;
   onKeyDown?: (
-    event: React.KeyboardEvent<HTMLInputElement>
+    event: React.KeyboardEvent<HTMLInputElement>,
   ) => void | undefined;
   value?: string | undefined;
   placeholder?: string | undefined;

@@ -13,7 +13,7 @@ const adj = (data: RatingFormValues): RatingFormValuesAdj => {
     Object.entries(data).map(([key, value]) => [
       `${key}`,
       value !== null ? String(value) : null,
-    ])
+    ]),
   );
 };
 
@@ -22,7 +22,7 @@ const unadj = (data: RatingFormValuesAdj): RatingFormValues => {
     Object.entries(data).map(([key, value]) => [
       +key,
       value !== null ? +value : null,
-    ])
+    ]),
   );
 };
 

@@ -27,7 +27,7 @@ interface PasswordResetFinishFormValues {
 }
 
 const PasswordResetFinishPage = () => {
-  const { token } = (useParams() as unknown) as PasswordResetFinishPageParams;
+  const { token } = useParams() as unknown as PasswordResetFinishPageParams;
   const [isComplete, setIsComplete] = useState(false);
 
   const initialValues: PasswordResetFinishFormValues = {
@@ -38,7 +38,10 @@ const PasswordResetFinishPage = () => {
   const handleSubmit = useCallback(
     async (
       values: PasswordResetFinishFormValues,
-      { setSubmitting, setStatus }: FormikHelpers<PasswordResetFinishFormValues>
+      {
+        setSubmitting,
+        setStatus,
+      }: FormikHelpers<PasswordResetFinishFormValues>,
     ) => {
       setStatus({});
       try {
@@ -50,7 +53,7 @@ const PasswordResetFinishPage = () => {
         setStatus({ error: <>Unknown error.</> });
       }
     },
-    [setIsComplete, token]
+    [setIsComplete, token],
   );
 
   usePageMetadata(() => ({ ready: true, title: "Password Reset" }), []);

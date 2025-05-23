@@ -35,12 +35,12 @@ const UserSearch = ({
   showInactiveReviewersCheckbox,
 }: UserSearchProps) => {
   const [formikValues, setFormikValues] = useState<any>(
-    convertSearchQueryToFormikValues(searchQuery)
+    convertSearchQueryToFormikValues(searchQuery),
   );
 
   useEffect(
     () => setFormikValues(convertSearchQueryToFormikValues(searchQuery)),
-    [searchQuery]
+    [searchQuery],
   );
 
   const handleSubmit = useCallback(
@@ -52,12 +52,12 @@ const UserSearch = ({
         hideInactiveReviewers: values.hideInactiveReviewers,
       });
     },
-    [searchQuery, onSearchQueryChange]
+    [searchQuery, onSearchQueryChange],
   );
 
   const handleClear = useCallback(
     () => onSearchQueryChange(defaultSearchQuery),
-    [onSearchQueryChange, defaultSearchQuery]
+    [onSearchQueryChange, defaultSearchQuery],
   );
 
   return (

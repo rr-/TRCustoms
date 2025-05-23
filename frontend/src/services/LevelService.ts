@@ -106,7 +106,7 @@ interface LevelSearchResult
 interface ScreenshotList extends Array<Screenshot> {}
 
 const searchLevels = async (
-  searchQuery: LevelSearchQuery
+  searchQuery: LevelSearchQuery,
 ): Promise<LevelSearchResult> => {
   const params = filterFalsyObjectValues({
     ...getGenericSearchQuery(searchQuery),
@@ -131,7 +131,7 @@ const searchLevels = async (
 
 const getLevelById = async (levelId: number): Promise<LevelDetails> => {
   const response = (await api.get(
-    `${API_URL}/levels/${levelId}/`
+    `${API_URL}/levels/${levelId}/`,
   )) as AxiosResponse<LevelDetails>;
   return response.data;
 };
@@ -155,12 +155,12 @@ interface LevelCreatePayload extends LevelBaseChangePayload {}
 
 const update = async (
   levelId: number,
-  payload: LevelUpdatePayload
+  payload: LevelUpdatePayload,
 ): Promise<LevelDetails> => {
   const data: { [key: string]: any } = filterFalsyObjectValues(payload);
   const response = (await api.patch(
     `${API_URL}/levels/${levelId}/`,
-    data
+    data,
   )) as AxiosResponse<LevelDetails>;
   return response.data;
 };
@@ -169,7 +169,7 @@ const create = async (payload: LevelCreatePayload): Promise<LevelDetails> => {
   const data: { [key: string]: any } = filterFalsyObjectValues(payload);
   const response = (await api.post(
     `${API_URL}/levels/`,
-    data
+    data,
   )) as AxiosResponse<LevelDetails>;
   return response.data;
 };

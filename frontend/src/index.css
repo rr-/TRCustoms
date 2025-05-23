@@ -27,7 +27,9 @@ html {
   font-size: var(--font-size);
 }
 body {
-  transition: background var(--transition-speed), color var(--transition-speed);
+  transition:
+    background var(--transition-speed),
+    color var(--transition-speed);
   background: var(--bg-color);
   color: var(--fg-color);
   margin: 0;

@@ -31,7 +31,7 @@ const MarkdownAttachmentStrip = ({
             prefix: "[",
             suffix: `download](${uploadedFiles[0].url})`,
             replaceNext: "download",
-          }
+          },
     );
   };
 

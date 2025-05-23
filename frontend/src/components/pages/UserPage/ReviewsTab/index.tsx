@@ -18,7 +18,7 @@ interface ReviewsTabProps {
 
 const ReviewsTab = ({ user, isLoggedIn }: ReviewsTabProps) => {
   const [reviewSearchQuery, setReviewSearchQuery] = useState<ReviewSearchQuery>(
-    getReviewSearchQuery(user.id)
+    getReviewSearchQuery(user.id),
   );
 
   useEffect(() => {

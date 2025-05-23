@@ -6,7 +6,7 @@ import { DISABLE_PAGING } from "src/constants";
 import type { GenericSearchQuery } from "src/types";
 
 const getGenericSearchQuery = (
-  searchQuery: GenericSearchQuery
+  searchQuery: GenericSearchQuery,
 ): { [key: string]: any } => {
   return filterFalsyObjectValues({
     page:
@@ -28,18 +28,18 @@ const filterFalsyObjectValues = <T extends any>(source: {
   [key: string]: T | null;
 }): { [key: string]: T } => {
   return Object.fromEntries(
-    Object.entries(source).filter(([_key, value]) => !!value)
+    Object.entries(source).filter(([_key, value]) => !!value),
   ) as { [key: string]: T };
 };
 
 const boolToSearchString = (
-  value: boolean | null | undefined
+  value: boolean | null | undefined,
 ): string | null => {
   return value === true ? "1" : value === false ? "0" : null;
 };
 
 const searchStringToBool = (
-  value: string | null | undefined
+  value: string | null | undefined,
 ): boolean | null => {
   return value === "1" ? true : value === "0" ? false : null;
 };
@@ -51,7 +51,7 @@ const extractNestedErrorText = (source: any): string[] => {
   if (isArray(source)) {
     return source.reduce(
       (acc: string[], item: any) => [...acc, ...extractNestedErrorText(item)],
-      []
+      [],
     );
   }
   if (isString(source)) {
@@ -59,7 +59,7 @@ const extractNestedErrorText = (source: any): string[] => {
   }
   return Object.values(source).reduce(
     (acc: string[], item: any) => [...acc, ...extractNestedErrorText(item)],
-    []
+    [],
   );
 };
 
@@ -78,7 +78,7 @@ const parseYoutubeLink = (urlStr: string): YoutubeLink | null => {
   }
   if (
     !["youtube.com", "youtu.be", "www.youtube.com", "www.youtu.be"].includes(
-      url.hostname
+      url.hostname,
     )
   ) {
     return null;
@@ -142,7 +142,7 @@ const showAlertOnError = async (func: () => Promise<void>): Promise<void> => {
 const resetQueries = (
   queryClient: any,
   queryFilters: any,
-  soft?: boolean | undefined
+  soft?: boolean | undefined,
 ) => {
   for (let queryFilter of queryFilters) {
     if (!soft) {

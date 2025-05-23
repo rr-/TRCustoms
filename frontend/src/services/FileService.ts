@@ -20,7 +20,7 @@ interface UploadedFile {
 
 const getFileById = async (fileId: number): Promise<UploadedFile> => {
   const response = (await api.get(
-    `${API_URL}/uploads/${fileId}/`
+    `${API_URL}/uploads/${fileId}/`,
   )) as AxiosResponse<UploadedFile>;
   return response.data;
 };
@@ -28,7 +28,7 @@ const getFileById = async (fileId: number): Promise<UploadedFile> => {
 const uploadFile = async (
   file: File,
   type: UploadType,
-  onUploadProgress?: (progressEvent: ProgressEvent) => void
+  onUploadProgress?: (progressEvent: ProgressEvent) => void,
 ): Promise<UploadedFile> => {
   const formData = new FormData();
   formData.append("content", file);
@@ -37,7 +37,7 @@ const uploadFile = async (
   const response = (await api.post(
     `${API_URL}/uploads/`,
     formData,
-    config
+    config,
   )) as AxiosResponse<UploadedFile>;
   return response.data;
 };

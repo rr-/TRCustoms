@@ -25,13 +25,13 @@ const deserializeSearchQuery = (qp: {
 }): ReviewSearchQuery => deserializeGenericSearchQuery(qp, defaultSearchQuery);
 
 const serializeSearchQuery = (
-  searchQuery: ReviewSearchQuery
+  searchQuery: ReviewSearchQuery,
 ): { [key: string]: any } =>
   serializeGenericSearchQuery(searchQuery, defaultSearchQuery);
 
 const ReviewListPage = () => {
   const [searchQuery, setSearchQuery] = useState<ReviewSearchQuery>(
-    deserializeSearchQuery(getCurrentSearchParams())
+    deserializeSearchQuery(getCurrentSearchParams()),
   );
 
   usePageMetadata(
@@ -42,7 +42,7 @@ const ReviewListPage = () => {
         "Read the latest reviews posted for custom Tomb Raider games.",
       image: "card-reviewer_catalogue.jpg",
     }),
-    []
+    [],
   );
 
   return (

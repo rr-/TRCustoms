@@ -18,7 +18,7 @@ interface FeaturedLevelViewProps {
 
 const getHeading = (
   featuredLevel: FeaturedLevel | null,
-  featureType: FeatureType
+  featureType: FeatureType,
 ): string => {
   switch (featuredLevel?.feature_type || featureType) {
     case FeatureType.NewRelease:
@@ -87,7 +87,7 @@ const FeaturedLevelView = ({
 const FeaturedLevelsView = () => {
   const result = useQuery<FeaturedLevels, Error>(
     ["featuredLevels", ConfigService.getFeaturedLevels],
-    async () => ConfigService.getFeaturedLevels()
+    async () => ConfigService.getFeaturedLevels(),
   );
 
   if (result.error) {

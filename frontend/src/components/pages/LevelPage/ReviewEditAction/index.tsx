@@ -23,12 +23,12 @@ interface ReviewEditActionParams {
 
 const ReviewEditAction = ({ level }: ReviewEditActionProps) => {
   const navigate = useNavigate();
-  const { reviewId } = (useParams() as unknown) as ReviewEditActionParams;
+  const { reviewId } = useParams() as unknown as ReviewEditActionParams;
   const playlistModalRef = useRef<PlaylistAddModalHandle>(null);
 
   const reviewResult = useQuery<ReviewDetails, Error>(
     ["review", ReviewService.getReviewById, reviewId],
-    async () => ReviewService.getReviewById(+reviewId)
+    async () => ReviewService.getReviewById(+reviewId),
   );
 
   const handleGoBack = useCallback(() => {

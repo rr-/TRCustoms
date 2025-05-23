@@ -9,7 +9,7 @@ const BASE_IMAGE = "/logo.png";
 
 const PageMetadata = () => {
   const { title, ready, description, image } = usePageMetadataStore(
-    (state) => state.metadata
+    (state) => state.metadata,
   );
 
   useEffect(() => {

@@ -48,7 +48,7 @@ const AwardList = ({ awards }: AwardListProps) => {
           <li key={`${i}`} className={styles.listItem}>
             <AwardListItem award={award} />
           </li>
-        )
+        ),
       )}
     </ul>
   );

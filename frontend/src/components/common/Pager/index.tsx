@@ -13,7 +13,7 @@ interface PagerProps<TCollection> {
 const getPagesShown = (
   firstPage: number,
   currentPage: number,
-  lastPage: number
+  lastPage: number,
 ): number[] => {
   let pages: Set<number> = new Set();
   for (let i = -PAGES_AROUND; i <= PAGES_AROUND; i++) {
@@ -30,7 +30,7 @@ const getPagesShown = (
         ...((last(acc) || 0) + 2 === page ? [page - 1] : []),
         page,
       ],
-      []
+      [],
     )
     .filter((page) => page >= 1 && page <= lastPage);
 };
@@ -40,7 +40,7 @@ const addEllipsisMarkers = (pages: number[]): (number | null)[] => {
   return pages.reduce(
     (acc: (number | null)[], item: number) =>
       (last(acc) || 0) + 1 < item ? [...acc, null, item] : [...acc, item],
-    []
+    [],
   );
 };
 
@@ -103,7 +103,7 @@ const Pager = <TCollection extends {}>({
   const prevPage = currentPage - 1;
   const nextPage = currentPage + 1;
   const pagesShown = addEllipsisMarkers(
-    getPagesShown(firstPage, currentPage, lastPage)
+    getPagesShown(firstPage, currentPage, lastPage),
   );
 
   const pagerLinkProps = { onPageChange, firstPage, lastPage };
@@ -138,7 +138,7 @@ const Pager = <TCollection extends {}>({
                 {page}
               </PagerLink>
             </li>
-          )
+          ),
         )}
 
         <li className={styles.listItem}>

@@ -17,9 +17,8 @@ interface WalkthroughsTabProps {
 }
 
 const WalkthroughsTab = ({ user, isLoggedIn }: WalkthroughsTabProps) => {
-  const [walkthroughSearchQuery, setWalkthroughSearchQuery] = useState<
-    WalkthroughSearchQuery
-  >(getWalkthroughSearchQuery(user.id));
+  const [walkthroughSearchQuery, setWalkthroughSearchQuery] =
+    useState<WalkthroughSearchQuery>(getWalkthroughSearchQuery(user.id));
 
   useEffect(() => {
     setWalkthroughSearchQuery(getWalkthroughSearchQuery(user.id));

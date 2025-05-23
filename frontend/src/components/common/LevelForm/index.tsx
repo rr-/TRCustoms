@@ -55,7 +55,7 @@ const validateRange = <T extends Object>(
   value: T[],
   noun: string,
   minCount: number | null,
-  maxCount: number | null
+  maxCount: number | null,
 ): string | null => {
   if (minCount !== null && value.length < minCount) {
     return `At least ${minCount} ${pluralize(noun, minCount)} must be added`;
@@ -123,7 +123,7 @@ const LevelForm = ({ level, onGoBack, onSubmit }: LevelFormProps) => {
       value,
       "genre",
       config.limits.min_genres,
-      config.limits.max_genres
+      config.limits.max_genres,
     );
   };
 
@@ -133,13 +133,13 @@ const LevelForm = ({ level, onGoBack, onSubmit }: LevelFormProps) => {
         value.filter((link) => link.link_type === ExternalLinkType.Showcase),
         "YouTube link",
         config.limits.min_showcase_links,
-        config.limits.max_showcase_links
+        config.limits.max_showcase_links,
       ) ||
       validateRange(
         value.filter((link) => link.link_type === ExternalLinkType.Main),
         "website link",
         0,
-        1
+        1,
       )
     );
   };
@@ -149,7 +149,7 @@ const LevelForm = ({ level, onGoBack, onSubmit }: LevelFormProps) => {
       value,
       "author",
       config.limits.min_authors,
-      config.limits.max_authors
+      config.limits.max_authors,
     );
   };
 
@@ -158,7 +158,7 @@ const LevelForm = ({ level, onGoBack, onSubmit }: LevelFormProps) => {
       value,
       "tag",
       config.limits.min_tags,
-      config.limits.max_tags
+      config.limits.max_tags,
     );
   };
 
@@ -167,14 +167,14 @@ const LevelForm = ({ level, onGoBack, onSubmit }: LevelFormProps) => {
       value,
       "screnshot",
       config.limits.min_screenshots,
-      config.limits.max_screenshots
+      config.limits.max_screenshots,
     );
   };
 
   const handleSubmitError = useCallback(
     (
       error: unknown,
-      { setSubmitting, setStatus, setErrors }: FormikHelpers<LevelFormValues>
+      { setSubmitting, setStatus, setErrors }: FormikHelpers<LevelFormValues>,
     ) => {
       setSubmitting(false);
       if (axios.isAxiosError(error)) {
@@ -208,13 +208,13 @@ const LevelForm = ({ level, onGoBack, onSubmit }: LevelFormProps) => {
         setStatus({ error: <>Unknown error.</> });
       }
     },
-    []
+    [],
   );
 
   const handleSubmit = useCallback(
     async (
       values: LevelFormValues,
-      helpers: FormikHelpers<LevelFormValues>
+      helpers: FormikHelpers<LevelFormValues>,
     ) => {
       const { setStatus } = helpers;
       setStatus({});
@@ -227,7 +227,7 @@ const LevelForm = ({ level, onGoBack, onSubmit }: LevelFormProps) => {
           difficulty_id: values.difficulty_id,
           genre_ids: values.genres.map((genre: GenreNested) => genre.id),
           external_links: values.external_links.map(
-            (link: ExternalLink, i: number) => ({ ...link, position: i })
+            (link: ExternalLink, i: number) => ({ ...link, position: i }),
           ),
           author_ids: values.authors.map((author: UserNested) => author.id),
           tag_ids: values.tags.map((tag: TagNested) => tag.id),
@@ -259,7 +259,7 @@ const LevelForm = ({ level, onGoBack, onSubmit }: LevelFormProps) => {
         handleSubmitError(error, helpers);
       }
     },
-    [level, onSubmit, handleSubmitError, queryClient]
+    [level, onSubmit, handleSubmitError, queryClient],
   );
 
   const validate = (values: { [key: string]: any }) => {
@@ -298,12 +298,13 @@ const LevelForm = ({ level, onGoBack, onSubmit }: LevelFormProps) => {
         [
           ...values.screenshot_ids,
           ...values.external_links?.filter(
-            (link: ExternalLink) => link.link_type === ExternalLinkType.Showcase
+            (link: ExternalLink) =>
+              link.link_type === ExternalLinkType.Showcase,
           ),
         ],
         "media",
         config.limits.min_screenshots,
-        config.limits.max_screenshots
+        config.limits.max_screenshots,
       );
       if (error) {
         if (!errors.screenshot_ids) {
@@ -432,7 +433,7 @@ const LevelForm = ({ level, onGoBack, onSubmit }: LevelFormProps) => {
                               .filter((screenshot) => screenshot.file)
                               .map(
                                 (screenshot) =>
-                                  (screenshot.file as UploadedFile).id
+                                  (screenshot.file as UploadedFile).id,
                               ),
                           ]
                         : []

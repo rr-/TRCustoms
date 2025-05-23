@@ -35,28 +35,28 @@ const UsersFormField = ({
         if (response.results) {
           setSuggestions(
             response.results.filter((user) =>
-              value.every((u) => u.id !== user.id)
-            )
+              value.every((u) => u.id !== user.id),
+            ),
           );
         }
       } catch (error) {
         console.error(error);
       }
     },
-    [value]
+    [value],
   );
 
   const handleResultApply = useCallback(
     (user: UserNested) =>
       onChange(
-        value.map((u) => u.id).includes(user.id) ? value : [...value, user]
+        value.map((u) => u.id).includes(user.id) ? value : [...value, user],
       ),
-    [onChange, value]
+    [onChange, value],
   );
 
   const handleRemoveUser = useCallback(
     (user: UserNested) => onChange(value.filter((u) => u.id !== user.id)),
-    [onChange, value]
+    [onChange, value],
   );
 
   return (

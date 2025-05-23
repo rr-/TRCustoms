@@ -18,10 +18,10 @@ const Collapsible = ({
   ...props
 }: CollapsibleProps) => {
   const collapseStatus: { [storageKey: string]: boolean } = JSON.parse(
-    StorageService.getItem("collapse") || "{}"
+    StorageService.getItem("collapse") || "{}",
   );
   const [isExpanded, setIsExpanded] = useState(
-    collapseStatus[storageKey] !== false
+    collapseStatus[storageKey] !== false,
   );
 
   const handleLinkClick = () => {

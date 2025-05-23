@@ -64,9 +64,9 @@ const BaseModal = forwardRef<HTMLDivElement, BaseModalProps>(
           </footer>
         </div>
       </Dim>,
-      document.getElementById("root") as Element
+      document.getElementById("root") as Element,
     );
-  }
+  },
 );
 
 export { BaseModal };

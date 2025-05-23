@@ -33,14 +33,14 @@ interface UserPageProps {
 
 const UserPage = ({ tabName }: UserPageProps) => {
   const navigate = useNavigate();
-  const { userId } = (useParams() as unknown) as UserPageParams;
+  const { userId } = useParams() as unknown as UserPageParams;
   const loggedInUser = useContext(UserContext).user;
   const isLoggedIn = +userId === loggedInUser?.id;
   const { setShouldScroll } = useScrollStore((state) => state);
 
   const userResult = useQuery<UserDetails, Error>(
     ["user", UserService.getUserById, userId],
-    async () => UserService.getUserById(+userId)
+    async () => UserService.getUserById(+userId),
   );
 
   usePageMetadata(
@@ -52,7 +52,7 @@ const UserPage = ({ tabName }: UserPageProps) => {
         : null,
       image: userResult?.data?.picture?.url || "/anonymous.svg",
     }),
-    [userResult]
+    [userResult],
   );
 
   if (userResult.error) {

@@ -56,7 +56,7 @@ const PlaylistItemFormView = ({
         setSubmitting,
         setStatus,
         setErrors,
-      }: FormikHelpers<PlaylistItemFormValues>
+      }: FormikHelpers<PlaylistItemFormValues>,
     ) => {
       setSubmitting(false);
       if (axios.isAxiosError(error)) {
@@ -79,7 +79,7 @@ const PlaylistItemFormView = ({
         setStatus({ error: <>Unknown error.</> });
       }
     },
-    []
+    [],
   );
 
   const validate = (values: { [key: string]: any }) => {
@@ -117,7 +117,7 @@ const PlaylistItemFormView = ({
   const handleSubmit = useCallback(
     async (
       values: PlaylistItemFormValues,
-      helpers: FormikHelpers<PlaylistItemFormValues>
+      helpers: FormikHelpers<PlaylistItemFormValues>,
     ) => {
       const { setStatus } = helpers;
       setStatus({});
@@ -159,7 +159,7 @@ const PlaylistItemFormView = ({
       onSubmit,
       handleSubmitError,
       handleNavigateToPlaylist,
-    ]
+    ],
   );
 
   const statusOptions = [
@@ -216,7 +216,7 @@ const PlaylistItemForm = ({
 }: PlaylistItemFormProps) => {
   const playlistItemResult = useQuery<PlaylistItemDetails, Error>(
     ["playlists", PlaylistService.get, userId, level.id],
-    async () => PlaylistService.get(userId, level.id)
+    async () => PlaylistService.get(userId, level.id),
   );
 
   if (playlistItemResult.isLoading) {

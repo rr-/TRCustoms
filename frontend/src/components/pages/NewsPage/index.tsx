@@ -19,11 +19,11 @@ interface NewsPageParams {
 }
 
 const NewsPage = () => {
-  const { newsId } = (useParams() as unknown) as NewsPageParams;
+  const { newsId } = useParams() as unknown as NewsPageParams;
 
   const newsResult = useQuery<NewsDetails, Error>(
     ["news", NewsService.getNewsById, newsId],
-    async () => NewsService.getNewsById(+newsId)
+    async () => NewsService.getNewsById(+newsId),
   );
 
   usePageMetadata(
@@ -32,7 +32,7 @@ const NewsPage = () => {
       title: newsResult?.data?.subject,
       description: "Read the latest news articles.",
     }),
-    [newsResult]
+    [newsResult],
   );
 
   if (newsResult.error) {

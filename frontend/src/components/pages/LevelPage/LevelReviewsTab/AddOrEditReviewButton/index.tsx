@@ -18,7 +18,7 @@ const AddOrEditReviewButton = ({ level }: AddOrEditReviewButtonProps) => {
 
   const reviewResult = useQuery<ReviewDetails | null, Error>(
     ["review", ReviewService.getReviewByAuthorAndLevelIds, level.id, user?.id],
-    async () => ReviewService.getReviewByAuthorAndLevelIds(level.id, user?.id)
+    async () => ReviewService.getReviewByAuthorAndLevelIds(level.id, user?.id),
   );
 
   if (level.authors.some((author) => author.id === user?.id)) {

@@ -68,7 +68,7 @@ const WalkthroughsTable = ({
         ({
           [WalkthroughType.Link]: "Video",
           [WalkthroughType.Text]: "Text",
-        }[item.walkthrough_type] || "Unknown"),
+        })[item.walkthrough_type] || "Unknown",
     },
     {
       name: "created",
@@ -94,7 +94,7 @@ const WalkthroughsTable = ({
           [WalkthroughStatus.PendingApproval]: "Pending approval",
           [WalkthroughStatus.Approved]: "Approved",
           [WalkthroughStatus.Rejected]: `Rejected (reason: ${item.rejection_reason})`,
-        }[item.status]),
+        })[item.status],
     },
   ];
 

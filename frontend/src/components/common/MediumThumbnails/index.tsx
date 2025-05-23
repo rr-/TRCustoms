@@ -86,8 +86,8 @@ const MediumThumbnailModal = ({
               canNavigateLeft
                 ? ""
                 : canNavigateRight
-                ? styles.disabled
-                : styles.hidden
+                  ? styles.disabled
+                  : styles.hidden
             }`}
             onClick={() => onNavigate(file, -1)}
           >
@@ -105,8 +105,8 @@ const MediumThumbnailModal = ({
               canNavigateRight
                 ? ""
                 : canNavigateLeft
-                ? styles.disabled
-                : styles.hidden
+                  ? styles.disabled
+                  : styles.hidden
             }`}
             onClick={() => onNavigate(file, +1)}
           >
@@ -226,7 +226,7 @@ const MediumThumbnails = ({
   useEffect(() => {
     setCanNavigateLeft(activeFile ? files.indexOf(activeFile) > 0 : false);
     setCanNavigateRight(
-      activeFile ? files.indexOf(activeFile) < files.length - 1 : false
+      activeFile ? files.indexOf(activeFile) < files.length - 1 : false,
     );
   }, [files, activeFile]);
 
@@ -250,7 +250,7 @@ const MediumThumbnails = ({
       const newIndex = (curIndex + direction + files.length) % files.length;
       setActiveFile(files[newIndex]);
     },
-    [files, canNavigateLeft, canNavigateRight]
+    [files, canNavigateLeft, canNavigateRight],
   );
 
   const handleKeypress = useCallback(
@@ -265,7 +265,7 @@ const MediumThumbnails = ({
         }
       }
     },
-    [handleClose, handleNavigate, activeFile]
+    [handleClose, handleNavigate, activeFile],
   );
 
   const handleLoad = () => {

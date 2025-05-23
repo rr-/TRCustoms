@@ -18,7 +18,7 @@ interface RatingsTabProps {
 
 const RatingsTab = ({ user, isLoggedIn }: RatingsTabProps) => {
   const [ratingSearchQuery, setRatingSearchQuery] = useState<RatingSearchQuery>(
-    getRatingSearchQuery(user.id)
+    getRatingSearchQuery(user.id),
   );
 
   useEffect(() => {

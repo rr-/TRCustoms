@@ -6,7 +6,7 @@ import type { UserDetails } from "src/services/UserService";
 
 const getLevelSearchQuery = (
   userId: number,
-  isLoggedIn: boolean
+  isLoggedIn: boolean,
 ): LevelSearchQuery => ({
   page: null,
   sort: "-created",
@@ -21,7 +21,7 @@ interface AuthoredLevelsTabProps {
 
 const AuthoredLevelsTab = ({ user, isLoggedIn }: AuthoredLevelsTabProps) => {
   const [levelSearchQuery, setLevelSearchQuery] = useState<LevelSearchQuery>(
-    getLevelSearchQuery(user.id, isLoggedIn)
+    getLevelSearchQuery(user.id, isLoggedIn),
   );
 
   useEffect(() => {

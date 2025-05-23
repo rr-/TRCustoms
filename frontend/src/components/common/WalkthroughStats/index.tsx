@@ -32,15 +32,15 @@ const WalkthroughStats = () => {
     },
   ];
 
-  const handleMouseEnter = (item: typeof stats[0]) => {
+  const handleMouseEnter = (item: (typeof stats)[0]) => {
     setTooltip(
       `${item.title}: ${item.count} (${reprPercentage(
-        item.count / config.stats.total_levels
-      )})`
+        item.count / config.stats.total_levels,
+      )})`,
     );
   };
 
-  const handleMouseLeave = (item: typeof stats[0]) => {
+  const handleMouseLeave = (item: (typeof stats)[0]) => {
     setTooltip(undefined);
   };
 
@@ -51,7 +51,7 @@ const WalkthroughStats = () => {
         (config.stats.walkthroughs.video_and_text +
           config.stats.walkthroughs.video +
           config.stats.walkthroughs.text) /
-          config.stats.total_levels
+          config.stats.total_levels,
       )}
       )
     </>

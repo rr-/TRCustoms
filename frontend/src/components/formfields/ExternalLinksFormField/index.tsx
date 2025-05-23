@@ -72,14 +72,14 @@ const ExternalLinksFormField = ({
   };
 
   const handleTextInputChange = (
-    event: React.ChangeEvent<HTMLInputElement>
+    event: React.ChangeEvent<HTMLInputElement>,
   ) => {
     setTextInput(event.target.value);
     setTextInputIsValid(event.target.checkValidity());
   };
 
   const handleTextInputKeyDown = (
-    event: React.KeyboardEvent<HTMLInputElement>
+    event: React.KeyboardEvent<HTMLInputElement>,
   ) => {
     if (event.keyCode === KEY_RETURN) {
       event.preventDefault();

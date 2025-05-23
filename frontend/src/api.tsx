@@ -20,7 +20,7 @@ api.interceptors.request.use(
     }
     return config;
   },
-  (error: AxiosError) => Promise.reject(error)
+  (error: AxiosError) => Promise.reject(error),
 );
 
 api.interceptors.response.use(
@@ -40,9 +40,8 @@ api.interceptors.response.use(
         try {
           const accessToken = await AuthService.getNewAccessToken();
           if (accessToken) {
-            axios.defaults.headers.common[
-              "X-Access-Token"
-            ] = `Bearer ${accessToken}`;
+            axios.defaults.headers.common["X-Access-Token"] =
+              `Bearer ${accessToken}`;
           }
         } catch {
           AuthService.logout();
@@ -52,7 +51,7 @@ api.interceptors.response.use(
       }
     }
     return Promise.reject(error);
-  }
+  },
 );
 
 export { api };

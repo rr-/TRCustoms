@@ -19,11 +19,11 @@ interface WalkthroughPageParams {
 }
 
 const WalkthroughPage = () => {
-  const { walkthroughId } = (useParams() as unknown) as WalkthroughPageParams;
+  const { walkthroughId } = useParams() as unknown as WalkthroughPageParams;
 
   const result = useQuery<WalkthroughDetails | null, Error>(
     ["walkthrough", WalkthroughService.getWalkthroughById, walkthroughId],
-    async () => WalkthroughService.getWalkthroughById(+walkthroughId)
+    async () => WalkthroughService.getWalkthroughById(+walkthroughId),
   );
 
   usePageMetadata(
@@ -35,11 +35,11 @@ const WalkthroughPage = () => {
       description: result.data?.author?.username
         ? `A walkthrough by ${result.data.author.username}`
         : result.data?.level.name
-        ? `A walkthrough for ${result.data.level.name}`
-        : null,
+          ? `A walkthrough for ${result.data.level.name}`
+          : null,
       image: result.data?.level.cover?.url,
     }),
-    [result]
+    [result],
   );
 
   if (result.error) {

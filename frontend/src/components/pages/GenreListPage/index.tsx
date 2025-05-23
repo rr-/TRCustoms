@@ -20,13 +20,13 @@ const deserializeSearchQuery = (qp: {
 }): GenreSearchQuery => deserializeGenericSearchQuery(qp, defaultSearchQuery);
 
 const serializeSearchQuery = (
-  searchQuery: GenreSearchQuery
+  searchQuery: GenreSearchQuery,
 ): { [key: string]: any } =>
   serializeGenericSearchQuery(searchQuery, defaultSearchQuery);
 
 const GenreListPage = () => {
   const [searchQuery, setSearchQuery] = useState<GenreSearchQuery>(
-    deserializeSearchQuery(getCurrentSearchParams())
+    deserializeSearchQuery(getCurrentSearchParams()),
   );
 
   usePageMetadata(
@@ -35,7 +35,7 @@ const GenreListPage = () => {
       title: "Genres",
       description: "Search for custom Tomb Raider games by genres.",
     }),
-    []
+    [],
   );
 
   return (

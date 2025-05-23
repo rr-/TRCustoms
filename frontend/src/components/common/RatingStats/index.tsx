@@ -10,17 +10,17 @@ const RatingStats = () => {
   const [tooltip, setTooltip] = useState<string | undefined>();
 
   const maxLevelCount = Math.max(
-    ...config.stats.ratings.map((item) => item.level_count)
+    ...config.stats.ratings.map((item) => item.level_count),
   );
   const maxRatingClassPosition = Math.max(
-    ...config.stats.ratings.map((item) => item.rating_class.position)
+    ...config.stats.ratings.map((item) => item.rating_class.position),
   );
 
-  const handleMouseEnter = (item: typeof config.stats.ratings[0]) => {
+  const handleMouseEnter = (item: (typeof config.stats.ratings)[0]) => {
     setTooltip(`${item.rating_class.name}: ${item.level_count}`);
   };
 
-  const handleMouseLeave = (item: typeof config.stats.ratings[0]) => {
+  const handleMouseLeave = (item: (typeof config.stats.ratings)[0]) => {
     setTooltip(undefined);
   };
 
@@ -60,14 +60,14 @@ const RatingStats = () => {
                   style={{
                     opacity: `${
                       Math.abs(
-                        item.rating_class.position / maxRatingClassPosition
+                        item.rating_class.position / maxRatingClassPosition,
                       ) * 100
                     }%`,
                   }}
                 />
               </div>
             </li>
-          )
+          ),
         )}
       </ul>
       <footer className={styles.footer}>{tooltip || defaultTooltip}</footer>

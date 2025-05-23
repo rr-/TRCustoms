@@ -43,14 +43,14 @@ const EntitiesCheckboxes = <TEntity extends {}>({
   useEffect(() => {
     setFilteredEntities(
       sortBy(entitiesPool, (entity) =>
-        (getEntitySortPosition || getEntityName)(entity)
+        (getEntitySortPosition || getEntityName)(entity),
       ).filter(
         (entity, i) =>
           getEntityName(entity)
             .toLowerCase()
             .includes(searchFilter.toLowerCase()) ||
-          value.includes(getEntityId(entity))
-      )
+          value.includes(getEntityId(entity)),
+      ),
     );
   }, [
     entitiesPool,
@@ -69,8 +69,8 @@ const EntitiesCheckboxes = <TEntity extends {}>({
           isExpanded ||
           !useCollapsing ||
           i < maxVisibleEntities ||
-          value.includes(getEntityId(entity))
-      )
+          value.includes(getEntityId(entity)),
+      ),
     );
   }, [
     isExpanded,
@@ -83,13 +83,13 @@ const EntitiesCheckboxes = <TEntity extends {}>({
   ]);
 
   const handleSearchInputChange = (
-    event: React.ChangeEvent<HTMLInputElement>
+    event: React.ChangeEvent<HTMLInputElement>,
   ) => {
     setSearchFilter(event.target.value);
   };
 
   const handleSearchInputKeyDown = (
-    event: React.KeyboardEvent<HTMLInputElement>
+    event: React.KeyboardEvent<HTMLInputElement>,
   ) => {
     if (event.keyCode === KEY_RETURN) {
       event.preventDefault();
@@ -98,14 +98,14 @@ const EntitiesCheckboxes = <TEntity extends {}>({
 
   const handleEntityChange = (
     event: React.ChangeEvent<HTMLInputElement>,
-    entity: TEntity
+    entity: TEntity,
   ) => {
     onChange(
       event.target.checked
         ? !useFiltering || value.length < maxFilteredEntities
           ? [...value, getEntityId(entity)]
           : value
-        : value.filter((entityId) => entityId !== getEntityId(entity))
+        : value.filter((entityId) => entityId !== getEntityId(entity)),
     );
   };
 

@@ -15,7 +15,8 @@ const remarkAlignment = () => {
   };
 
   const transformInline = (root: any) => {
-    const regex = /^(?<prefix>.*?)\[center\](?<content>.*?)\[\/center\](?<suffix>.*)$/i;
+    const regex =
+      /^(?<prefix>.*?)\[center\](?<content>.*?)\[\/center\](?<suffix>.*)$/i;
 
     let middle = null;
     let match = null;

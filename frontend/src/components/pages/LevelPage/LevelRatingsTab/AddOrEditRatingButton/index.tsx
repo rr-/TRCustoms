@@ -18,7 +18,7 @@ const AddOrEditRatingButton = ({ level }: AddOrEditRatingButtonProps) => {
 
   const ratingResult = useQuery<RatingDetails | null, Error>(
     ["rating", RatingService.getRatingByAuthorAndLevelIds, level.id, user?.id],
-    async () => RatingService.getRatingByAuthorAndLevelIds(level.id, user?.id)
+    async () => RatingService.getRatingByAuthorAndLevelIds(level.id, user?.id),
   );
 
   if (level.authors.some((author) => author.id === user?.id)) {

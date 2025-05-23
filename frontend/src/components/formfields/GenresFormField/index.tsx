@@ -24,18 +24,18 @@ const GenresFormField = ({
   const { config } = useContext(ConfigContext);
   const { setFieldTouched } = useFormikContext();
   const genreMap: { [genreId: string]: GenreListing } = Object.fromEntries(
-    config.genres.map(({ id, ...rest }) => [id, { id, ...rest }])
+    config.genres.map(({ id, ...rest }) => [id, { id, ...rest }]),
   );
 
   const handleChange = (
     event: React.ChangeEvent<HTMLInputElement>,
-    genre: GenreListing
+    genre: GenreListing,
   ) => {
     setFieldTouched(name);
     onChange(
       event.target.checked
         ? [...value, genre]
-        : [...value.filter((g) => g.id !== genre.id)]
+        : [...value.filter((g) => g.id !== genre.id)],
     );
   };
 

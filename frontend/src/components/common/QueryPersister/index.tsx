@@ -8,7 +8,7 @@ import { getCurrentSearchParams } from "src/utils/misc";
 
 const deserializeGenericSearchQuery = (
   qp: { [key: string]: string },
-  defaults?: GenericSearchQuery | undefined
+  defaults?: GenericSearchQuery | undefined,
 ): GenericSearchQuery => {
   return {
     page: +qp.page || defaults?.page || undefined,
@@ -20,7 +20,7 @@ const deserializeGenericSearchQuery = (
 
 const serializeGenericSearchQuery = (
   searchQuery: GenericSearchQuery,
-  defaults?: GenericSearchQuery
+  defaults?: GenericSearchQuery,
 ): { [key: string]: any } => {
   return filterFalsyObjectValues({
     page: searchQuery.page === defaults?.page ? undefined : searchQuery.page,

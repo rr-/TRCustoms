@@ -29,12 +29,12 @@ const TagSearch = ({
   onSearchQueryChange,
 }: TagSearchProps) => {
   const [formikValues, setFormikValues] = useState<any>(
-    convertSearchQueryToFormikValues(searchQuery)
+    convertSearchQueryToFormikValues(searchQuery),
   );
 
   useEffect(
     () => setFormikValues(convertSearchQueryToFormikValues(searchQuery)),
-    [searchQuery]
+    [searchQuery],
   );
 
   const handleSubmit = useCallback(
@@ -45,12 +45,12 @@ const TagSearch = ({
         search: values.search || null,
       });
     },
-    [searchQuery, onSearchQueryChange]
+    [searchQuery, onSearchQueryChange],
   );
 
   const handleClear = useCallback(
     () => onSearchQueryChange(defaultSearchQuery),
-    [onSearchQueryChange, defaultSearchQuery]
+    [onSearchQueryChange, defaultSearchQuery],
   );
 
   return (

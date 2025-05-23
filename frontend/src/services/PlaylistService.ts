@@ -53,7 +53,7 @@ interface PlaylistImportResult {
 
 const search = async (
   userId: number,
-  searchQuery: PlaylistSearchQuery
+  searchQuery: PlaylistSearchQuery,
 ): Promise<PlaylistSearchResult> => {
   const params = filterFalsyObjectValues({
     ...getGenericSearchQuery(searchQuery),
@@ -66,17 +66,17 @@ const search = async (
 
 const get = async (
   userId: number,
-  levelId: number
+  levelId: number,
 ): Promise<PlaylistItemDetails> => {
   const response = (await api.get(
-    `${API_URL}/users/${userId}/playlist/by_level_id/${levelId}/`
+    `${API_URL}/users/${userId}/playlist/by_level_id/${levelId}/`,
   )) as AxiosResponse<PlaylistItemDetails>;
   return { ...response.data };
 };
 
 const create = async (
   userId: number,
-  { levelId, status }: PlaylistItemCreatePayload
+  { levelId, status }: PlaylistItemCreatePayload,
 ): Promise<PlaylistItemListing> => {
   const data: { [key: string]: any } = {
     level_id: levelId,
@@ -84,7 +84,7 @@ const create = async (
   };
   const response = (await api.post(
     `${API_URL}/users/${userId}/playlist/`,
-    data
+    data,
   )) as AxiosResponse<PlaylistItemListing>;
   return response.data;
 };
@@ -92,26 +92,26 @@ const create = async (
 const update = async (
   userId: number,
   playlistItemId: number,
-  { status }: PlaylistItemUpdatePayload
+  { status }: PlaylistItemUpdatePayload,
 ): Promise<PlaylistItemListing> => {
   const data = { status };
   const response = (await api.patch(
     `${API_URL}/users/${userId}/playlist/${playlistItemId}/`,
-    data
+    data,
   )) as AxiosResponse<PlaylistItemListing>;
   return response.data;
 };
 
 const import_ = async (userId: number): Promise<PlaylistImportResult> => {
   const response = (await api.post(
-    `${API_URL}/users/${userId}/playlist/import/`
+    `${API_URL}/users/${userId}/playlist/import/`,
   )) as AxiosResponse<PlaylistImportResult>;
   return response.data;
 };
 
 const delete_ = async (
   userId: number,
-  playlistItemId: number
+  playlistItemId: number,
 ): Promise<void> => {
   await api.delete(`${API_URL}/users/${userId}/playlist/${playlistItemId}/`);
 };

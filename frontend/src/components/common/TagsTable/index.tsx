@@ -27,7 +27,7 @@ interface TagsTableDetailsProps {
 const TagsTableDetails = ({ tag }: TagsTableDetailsProps) => {
   const result = useQuery<TagListing[], Error>(
     ["tag", TagService.getStats, tag.id],
-    async () => TagService.getStats(+tag.id)
+    async () => TagService.getStats(+tag.id),
   );
 
   if (result.isLoading || !result.data) {

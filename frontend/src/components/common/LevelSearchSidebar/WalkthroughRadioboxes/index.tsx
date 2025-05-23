@@ -7,7 +7,7 @@ interface WalkthroughRadioboxesProps {
   textWalkthroughs?: NullableBoolean;
   onChange: (
     videoWalkthroughs: NullableBoolean,
-    textWalkthroughs: NullableBoolean
+    textWalkthroughs: NullableBoolean,
   ) => any;
 }
 

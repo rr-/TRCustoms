@@ -12,7 +12,9 @@
   right: 0;
   bottom: 0;
   background: rgba(0, 0, 0, 0.8);
-  transition: opacity 300ms, visibility 300ms;
+  transition:
+    opacity 300ms,
+    visibility 300ms;
   opacity: 0;
 
   text-align: initial;

@@ -142,7 +142,7 @@ const AwardsGuidePage = () => {
       description:
         "A guide on how to collect item awards for your profile inventory.",
     }),
-    []
+    [],
   );
 
   const tiers = UpgradableArtifacts[0].tiers;

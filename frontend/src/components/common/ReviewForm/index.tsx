@@ -45,7 +45,7 @@ const ReviewForm = ({ level, review, onGoBack, onSubmit }: ReviewFormProps) => {
   const handleSubmitError = useCallback(
     (
       error: unknown,
-      { setSubmitting, setStatus, setErrors }: FormikHelpers<ReviewFormValues>
+      { setSubmitting, setStatus, setErrors }: FormikHelpers<ReviewFormValues>,
     ) => {
       setSubmitting(false);
       if (axios.isAxiosError(error)) {
@@ -68,13 +68,13 @@ const ReviewForm = ({ level, review, onGoBack, onSubmit }: ReviewFormProps) => {
         setStatus({ error: <>Unknown error.</> });
       }
     },
-    []
+    [],
   );
 
   const handleSubmit = useCallback(
     async (
       values: ReviewFormValues,
-      helpers: FormikHelpers<ReviewFormValues>
+      helpers: FormikHelpers<ReviewFormValues>,
     ) => {
       const { setStatus } = helpers;
       setStatus({});
@@ -122,7 +122,7 @@ const ReviewForm = ({ level, review, onGoBack, onSubmit }: ReviewFormProps) => {
         handleSubmitError(error, helpers);
       }
     },
-    [level, review, onSubmit, handleSubmitError, queryClient]
+    [level, review, onSubmit, handleSubmitError, queryClient],
   );
 
   if (!config) {

@@ -89,7 +89,8 @@
         top: 0;
         left: calc(50% - calc(var(--step-size) / 2));
         background: var(--step-bg-color);
-        transition: background var(--transition-speed),
+        transition:
+          background var(--transition-speed),
           border var(--transition-speed);
         border: 4px solid var(--step-border-color);
         border-radius: 50%;

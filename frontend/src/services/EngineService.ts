@@ -22,7 +22,7 @@ interface EngineSearchResult
   extends GenericSearchResult<EngineSearchQuery, EngineListing> {}
 
 const searchEngines = async (
-  searchQuery: EngineSearchQuery
+  searchQuery: EngineSearchQuery,
 ): Promise<EngineSearchResult> => {
   const params = getGenericSearchQuery(searchQuery);
   const response = (await api.get(`${API_URL}/level_engines/`, {

@@ -60,7 +60,7 @@ interface WalkthroughSearchResult
   extends GenericSearchResult<WalkthroughSearchQuery, WalkthroughListing> {}
 
 const searchWalkthroughs = async (
-  searchQuery: WalkthroughSearchQuery
+  searchQuery: WalkthroughSearchQuery,
 ): Promise<WalkthroughSearchResult> => {
   const params = filterFalsyObjectValues({
     ...getGenericSearchQuery(searchQuery),
@@ -74,17 +74,17 @@ const searchWalkthroughs = async (
   })) as AxiosResponse<WalkthroughSearchResult>;
   if (searchQuery.sort === "random") {
     response.data.results = response.data.results.sort(
-      () => Math.random() - 0.5
+      () => Math.random() - 0.5,
     );
   }
   return { ...response.data, searchQuery };
 };
 
 const getWalkthroughById = async (
-  walkthroughId: number
+  walkthroughId: number,
 ): Promise<WalkthroughDetails> => {
   const response = (await api.get(
-    `${API_URL}/walkthroughs/${walkthroughId}/`
+    `${API_URL}/walkthroughs/${walkthroughId}/`,
   )) as AxiosResponse<WalkthroughDetails>;
   return response.data;
 };
@@ -101,19 +101,19 @@ const create = async ({
   };
   const response = (await api.post(
     `${API_URL}/walkthroughs/`,
-    data
+    data,
   )) as AxiosResponse<WalkthroughListing>;
   return response.data;
 };
 
 const update = async (
   walkthroughId: number,
-  { text }: WalkthroughUpdatePayload
+  { text }: WalkthroughUpdatePayload,
 ): Promise<WalkthroughListing> => {
   const data = { text };
   const response = (await api.patch(
     `${API_URL}/walkthroughs/${walkthroughId}/`,
-    data
+    data,
   )) as AxiosResponse<WalkthroughListing>;
   return response.data;
 };

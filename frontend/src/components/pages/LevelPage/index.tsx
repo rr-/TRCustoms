@@ -34,12 +34,12 @@ interface LevelPageProps {
 
 const LevelPage = ({ tabName, action }: LevelPageProps) => {
   const navigate = useNavigate();
-  const { levelId } = (useParams() as unknown) as LevelPageParams;
+  const { levelId } = useParams() as unknown as LevelPageParams;
   const { setShouldScroll } = useScrollStore((state) => state);
 
   const result = useQuery<LevelDetails, Error>(
     ["level", LevelService.getLevelById, levelId],
-    async () => LevelService.getLevelById(+levelId)
+    async () => LevelService.getLevelById(+levelId),
   );
 
   const handleTabChange = (tab: TabPage) => {
@@ -58,11 +58,11 @@ const LevelPage = ({ tabName, action }: LevelPageProps) => {
       image: result.data?.cover?.url,
       description: result.data?.authors
         ? `A custom Tomb Raider level by ${result.data?.authors.map(
-            (author) => author.username
+            (author) => author.username,
           )}`
         : `A custom Tomb Raider level.`,
     }),
-    [result]
+    [result],
   );
 
   if (result.error) {

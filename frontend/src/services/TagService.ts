@@ -22,7 +22,7 @@ interface TagSearchResult
   extends GenericSearchResult<TagSearchQuery, TagListing> {}
 
 const searchTags = async (
-  searchQuery: TagSearchQuery
+  searchQuery: TagSearchQuery,
 ): Promise<TagSearchResult> => {
   const params = getGenericSearchQuery(searchQuery);
   const response = (await api.get(`${API_URL}/level_tags/`, {
@@ -33,7 +33,7 @@ const searchTags = async (
 
 const getByName = async (name: string): Promise<TagListing> => {
   const response = (await api.get(
-    `${API_URL}/level_tags/by_name/${name}/`
+    `${API_URL}/level_tags/by_name/${name}/`,
   )) as AxiosResponse<TagListing>;
   return response.data;
 };
@@ -46,7 +46,7 @@ interface TagUpdatePayload extends TagCreatePayload {}
 
 const getStats = async (tagId: number): Promise<TagListing[]> => {
   const response = (await api.get(
-    `${API_URL}/level_tags/${tagId}/stats/`
+    `${API_URL}/level_tags/${tagId}/stats/`,
   )) as AxiosResponse<TagListing[]>;
   return response.data;
 };
@@ -55,21 +55,21 @@ const create = async (payload: TagCreatePayload): Promise<TagListing> => {
   const data: { [key: string]: any } = filterFalsyObjectValues(payload);
   const response = (await api.post(
     `${API_URL}/level_tags/`,
-    data
+    data,
   )) as AxiosResponse<TagListing>;
   return response.data;
 };
 
 const update = async (
   tagId: number,
-  { name }: TagUpdatePayload
+  { name }: TagUpdatePayload,
 ): Promise<TagListing> => {
   const data: { [key: string]: any } = {
     name: name,
   };
   const response = (await api.patch(
     `${API_URL}/level_tags/${tagId}/`,
-    data
+    data,
   )) as AxiosResponse<TagListing>;
   return response.data;
 };
@@ -80,7 +80,7 @@ const deleteTag = async (tagId: number): Promise<void> => {
 
 const merge = async (
   sourceTagId: number,
-  targetTagId: number
+  targetTagId: number,
 ): Promise<void> => {
   const data = { target_tag_id: targetTagId };
   await api.post(`${API_URL}/level_tags/${sourceTagId}/merge/`, data);

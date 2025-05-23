@@ -63,20 +63,20 @@ Example text.`,
   const handleSubmitError = useCallback(
     (
       error: unknown,
-      { setSubmitting, setStatus }: FormikHelpers<WalkthroughFormValues>
+      { setSubmitting, setStatus }: FormikHelpers<WalkthroughFormValues>,
     ) => {
       console.error(error);
       const message = extractErrorMessage(error);
       setSubmitting(false);
       setStatus({ error: message });
     },
-    []
+    [],
   );
 
   const handleSubmit = useCallback(
     async (
       values: WalkthroughFormValues,
-      helpers: FormikHelpers<WalkthroughFormValues>
+      helpers: FormikHelpers<WalkthroughFormValues>,
     ) => {
       const { setStatus } = helpers;
       setStatus({});
@@ -84,7 +84,7 @@ Example text.`,
         if (walkthrough?.id) {
           const outWalkthrough = await WalkthroughService.update(
             walkthrough.id,
-            { text: values.text }
+            { text: values.text },
           );
           setStatus({
             final: false,
@@ -131,7 +131,7 @@ Example text.`,
         handleSubmitError(error, helpers);
       }
     },
-    [level, walkthrough, handleSubmitError]
+    [level, walkthrough, handleSubmitError],
   );
 
   return (
@@ -154,8 +154,8 @@ Example text.`,
                   {walkthrough?.status === WalkthroughStatus.Draft
                     ? "Update draft"
                     : walkthrough
-                    ? "Update walkthrough"
-                    : "Save draft"}
+                      ? "Update walkthrough"
+                      : "Save draft"}
                 </button>
               </FormGridButtons>
             </FormGrid>

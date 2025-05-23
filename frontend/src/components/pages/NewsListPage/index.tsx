@@ -25,7 +25,7 @@ const NewsListPage = () => {
 
   const result = useQuery<NewsSearchResult, Error>(
     ["news", NewsService.searchNews, newsSearchQuery],
-    async () => NewsService.searchNews(newsSearchQuery)
+    async () => NewsService.searchNews(newsSearchQuery),
   );
 
   usePageMetadata(
@@ -34,7 +34,7 @@ const NewsListPage = () => {
       title: "News archive",
       description: "Read the latest news articles.",
     }),
-    []
+    [],
   );
 
   if (result.error) {
@@ -48,10 +48,10 @@ const NewsListPage = () => {
   const resultsByYear = sortBy(
     Object.entries(
       groupBy(result.data.results, (news) =>
-        new Date(news.created).getFullYear()
-      )
+        new Date(news.created).getFullYear(),
+      ),
     ),
-    ([year, items]) => -year
+    ([year, items]) => -year,
   );
 
   return (
