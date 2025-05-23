@@ -92,7 +92,7 @@ const UserForm = ({ user, onGoBack, onSubmit }: UserFormProps) => {
   const handleSubmitError = useCallback(
     (
       error: unknown,
-      { setSubmitting, setStatus, setErrors }: FormikHelpers<UserFormValues>
+      { setSubmitting, setStatus, setErrors }: FormikHelpers<UserFormValues>,
     ) => {
       setSubmitting(false);
       if (axios.isAxiosError(error)) {
@@ -125,7 +125,7 @@ const UserForm = ({ user, onGoBack, onSubmit }: UserFormProps) => {
         setStatus({ error: <>Unknown error.</> });
       }
     },
-    []
+    [],
   );
 
   const handleSubmit = useCallback(
@@ -182,7 +182,7 @@ const UserForm = ({ user, onGoBack, onSubmit }: UserFormProps) => {
         handleSubmitError(error, helpers);
       }
     },
-    [user, setUser, onSubmit, handleSubmitError]
+    [user, setUser, onSubmit, handleSubmitError],
   );
 
   const validate = (values: { [key: string]: any }) => {

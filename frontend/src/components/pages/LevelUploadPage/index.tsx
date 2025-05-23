@@ -15,7 +15,7 @@ const LevelUploadPageView = () => {
     async (level: LevelDetails) => {
       setIsComplete(true);
     },
-    [setIsComplete]
+    [setIsComplete],
   );
 
   usePageMetadata(
@@ -24,7 +24,7 @@ const LevelUploadPageView = () => {
       title: "Upload a level",
       description: "Upload your custom Tomb Raider game on our website!",
     }),
-    []
+    [],
   );
 
   return (

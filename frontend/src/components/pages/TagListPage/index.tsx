@@ -20,13 +20,13 @@ const deserializeSearchQuery = (qp: {
 }): TagSearchQuery => deserializeGenericSearchQuery(qp, defaultSearchQuery);
 
 const serializeSearchQuery = (
-  searchQuery: TagSearchQuery
+  searchQuery: TagSearchQuery,
 ): { [key: string]: any } =>
   serializeGenericSearchQuery(searchQuery, defaultSearchQuery);
 
 const TagListPage = () => {
   const [searchQuery, setSearchQuery] = useState<TagSearchQuery>(
-    deserializeSearchQuery(getCurrentSearchParams())
+    deserializeSearchQuery(getCurrentSearchParams()),
   );
 
   usePageMetadata(
@@ -35,7 +35,7 @@ const TagListPage = () => {
       title: "Tags",
       description: "Search for custom Tomb Raider games by tags.",
     }),
-    []
+    [],
   );
 
   return (

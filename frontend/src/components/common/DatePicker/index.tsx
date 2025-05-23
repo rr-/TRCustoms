@@ -31,7 +31,7 @@ const DatePicker = ({ value, onChange }: DatePickerProps) => {
 
   const yearOptions: DropdownOption[] = range(
     1999,
-    new Date().getFullYear() + 1
+    new Date().getFullYear() + 1,
   ).map((year) => ({ label: `${year}`, value: `${year}` }));
 
   let [selectedYear, selectedMonth]: string[] = (value || "").split(/-/);

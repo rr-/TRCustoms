@@ -62,7 +62,7 @@ const wordSelectionStart = (text: string, i: number): number => {
 const wordSelectionEnd = (
   text: string,
   i: number,
-  multiline: boolean
+  multiline: boolean,
 ): number => {
   let index = i;
   const breakpoint = multiline ? /\n/ : /\s/;
@@ -74,7 +74,7 @@ const wordSelectionEnd = (
 
 const insertText = (
   textarea: HTMLTextAreaElement,
-  { text, selectionStart, selectionEnd }: MarkdownSelection
+  { text, selectionStart, selectionEnd }: MarkdownSelection,
 ): void => {
   const originalSelectionStart = textarea.selectionStart;
   const before = textarea.value.slice(0, originalSelectionStart);
@@ -84,7 +84,7 @@ const insertText = (
   // that triggers the change event listeners, so that Formik can keep up
   const setValue = Object.getOwnPropertyDescriptor(
     HTMLTextAreaElement.prototype,
-    "value"
+    "value",
   )?.set;
   const event = new Event("input", { bubbles: true });
   setValue?.call(textarea, before + text + after);
@@ -99,11 +99,11 @@ const insertText = (
 
 const styleSelectedText = (
   textarea: HTMLTextAreaElement,
-  style: MarkdownStyle
+  style: MarkdownStyle,
 ): void => {
   const text = textarea.value.slice(
     textarea.selectionStart,
-    textarea.selectionEnd
+    textarea.selectionEnd,
   );
   let result;
   if (style.orderedList || style.unorderedList) {
@@ -141,17 +141,17 @@ const expandSelectedText = (
   textarea: HTMLTextAreaElement,
   prefixToUse: string,
   suffixToUse: string,
-  multiline: boolean = false
+  multiline: boolean = false,
 ): string => {
   if (textarea.selectionStart === textarea.selectionEnd) {
     textarea.selectionStart = wordSelectionStart(
       textarea.value,
-      textarea.selectionStart
+      textarea.selectionStart,
     );
     textarea.selectionEnd = wordSelectionEnd(
       textarea.value,
       textarea.selectionEnd,
-      multiline
+      multiline,
     );
   } else {
     const expandedSelectionStart = textarea.selectionStart - prefixToUse.length;
@@ -171,7 +171,7 @@ const expandSelectedText = (
 };
 
 const newlinesToSurroundSelectedText = (
-  textarea: HTMLTextAreaElement
+  textarea: HTMLTextAreaElement,
 ): { newlinesToAppend: string; newlinesToPrepend: string } => {
   const beforeSelection = textarea.value.slice(0, textarea.selectionStart);
   const afterSelection = textarea.value.slice(textarea.selectionEnd);
@@ -198,7 +198,7 @@ const newlinesToSurroundSelectedText = (
 
 const blockStyle = (
   textarea: HTMLTextAreaElement,
-  style: MarkdownStyle
+  style: MarkdownStyle,
 ): MarkdownSelection => {
   let newlinesToAppend;
   let newlinesToPrepend;
@@ -216,7 +216,7 @@ const blockStyle = (
   const originalSelectionEnd = textarea.selectionEnd;
   let selectedText = textarea.value.slice(
     textarea.selectionStart,
-    textarea.selectionEnd
+    textarea.selectionEnd,
   );
   let prefixToUse =
     isMultipleLines(selectedText) && blockPrefix.length > 0
@@ -240,7 +240,7 @@ const blockStyle = (
     textarea,
     prefixToUse,
     suffixToUse,
-    style.multiline
+    style.multiline,
   );
   let selectionStart = textarea.selectionStart;
   let selectionEnd = textarea.selectionEnd;
@@ -261,7 +261,7 @@ const blockStyle = (
   ) {
     const replacementText = selectedText.slice(
       prefixToUse.length,
-      selectedText.length - suffixToUse.length
+      selectedText.length - suffixToUse.length,
     );
     if (originalSelectionStart === originalSelectionEnd) {
       let position = originalSelectionStart - prefixToUse.length;
@@ -309,18 +309,18 @@ const blockStyle = (
 
 const multilineStyle = (
   textarea: HTMLTextAreaElement,
-  style: MarkdownStyle
+  style: MarkdownStyle,
 ): MarkdownSelection => {
   const { prefix, suffix, surroundWithNewlines } = style;
   let text = textarea.value.slice(
     textarea.selectionStart,
-    textarea.selectionEnd
+    textarea.selectionEnd,
   );
   let selectionStart = textarea.selectionStart;
   let selectionEnd = textarea.selectionEnd;
   const lines = text.split("\n");
   const undoStyle = lines.every(
-    (line) => line.startsWith(prefix) && line.endsWith(suffix)
+    (line) => line.startsWith(prefix) && line.endsWith(suffix),
   );
   if (undoStyle) {
     text = lines
@@ -330,10 +330,8 @@ const multilineStyle = (
   } else {
     text = lines.map((line) => prefix + line + suffix).join("\n");
     if (surroundWithNewlines) {
-      const {
-        newlinesToAppend,
-        newlinesToPrepend,
-      } = newlinesToSurroundSelectedText(textarea);
+      const { newlinesToAppend, newlinesToPrepend } =
+        newlinesToSurroundSelectedText(textarea);
       selectionStart += newlinesToAppend.length;
       selectionEnd = selectionStart + text.length;
       text = newlinesToAppend + text + newlinesToPrepend;
@@ -346,7 +344,7 @@ const undoOrderedListStyle = (text: string): MarkdownListResult => {
   const lines = text.split("\n");
   const orderedListRegex = /^\d+\.\s+/;
   const shouldUndoOrderedList = lines.every((line) =>
-    orderedListRegex.test(line)
+    orderedListRegex.test(line),
   );
   let result = lines;
   if (shouldUndoOrderedList) {
@@ -362,12 +360,12 @@ const undoUnorderedListStyle = (text: string): MarkdownListResult => {
   const lines = text.split("\n");
   const unorderedListPrefix = "- ";
   const shouldUndoUnorderedList = lines.every((line) =>
-    line.startsWith(unorderedListPrefix)
+    line.startsWith(unorderedListPrefix),
   );
   let result = lines;
   if (shouldUndoUnorderedList) {
     result = lines.map((line) =>
-      line.slice(unorderedListPrefix.length, line.length)
+      line.slice(unorderedListPrefix.length, line.length),
     );
   }
   return {
@@ -386,7 +384,7 @@ const makePrefix = (index: number, unorderedList: boolean): string => {
 
 const clearExistingListStyle = (
   style: MarkdownStyle,
-  selectedText: string
+  selectedText: string,
 ): [MarkdownListResult, MarkdownListResult, string] => {
   let undoResultOpositeList;
   let undoResult: MarkdownListResult;
@@ -405,7 +403,7 @@ const clearExistingListStyle = (
 
 const listStyle = (
   textarea: HTMLTextAreaElement,
-  style: MarkdownStyle
+  style: MarkdownStyle,
 ): MarkdownSelection => {
   const noInitialSelection = textarea.selectionStart === textarea.selectionEnd;
   let selectionStart = textarea.selectionStart;
@@ -413,13 +411,10 @@ const listStyle = (
   expandSelectionToLine(textarea);
   const selectedText = textarea.value.slice(
     textarea.selectionStart,
-    textarea.selectionEnd
+    textarea.selectionEnd,
   );
-  const [
-    undoResult,
-    undoResultOpositeList,
-    pristineText,
-  ] = clearExistingListStyle(style, selectedText);
+  const [undoResult, undoResultOpositeList, pristineText] =
+    clearExistingListStyle(style, selectedText);
   const prefixedLines = pristineText.split("\n").map((value, index) => {
     return `${makePrefix(index, style.unorderedList)}${value}`;
   });
@@ -429,7 +424,7 @@ const listStyle = (
         previousValue + makePrefix(currentIndex, style.unorderedList).length
       );
     },
-    0
+    0,
   );
   const totalPrefixLengthOpositeList = prefixedLines.reduce(
     (previousValue: number, _currentValue: string, currentIndex: number) => {
@@ -437,13 +432,13 @@ const listStyle = (
         previousValue + makePrefix(currentIndex, !style.unorderedList).length
       );
     },
-    0
+    0,
   );
   if (undoResult.processed) {
     if (noInitialSelection) {
       selectionStart = Math.max(
         selectionStart - makePrefix(0, style.unorderedList).length,
-        0
+        0,
       );
       selectionEnd = selectionStart;
     } else {
@@ -452,24 +447,22 @@ const listStyle = (
     }
     return { text: pristineText, selectionStart, selectionEnd };
   }
-  const {
-    newlinesToAppend,
-    newlinesToPrepend,
-  } = newlinesToSurroundSelectedText(textarea);
+  const { newlinesToAppend, newlinesToPrepend } =
+    newlinesToSurroundSelectedText(textarea);
   const text = newlinesToAppend + prefixedLines.join("\n") + newlinesToPrepend;
   if (noInitialSelection) {
     selectionStart = Math.max(
       selectionStart +
         makePrefix(0, style.unorderedList).length +
         newlinesToAppend.length,
-      0
+      0,
     );
     selectionEnd = selectionStart;
   } else {
     if (undoResultOpositeList.processed) {
       selectionStart = Math.max(
         textarea.selectionStart + newlinesToAppend.length,
-        0
+        0,
       );
       selectionEnd =
         textarea.selectionEnd +
@@ -479,7 +472,7 @@ const listStyle = (
     } else {
       selectionStart = Math.max(
         textarea.selectionStart + newlinesToAppend.length,
-        0
+        0,
       );
       selectionEnd =
         textarea.selectionEnd + newlinesToAppend.length + totalPrefixLength;
@@ -490,7 +483,7 @@ const listStyle = (
 
 const applyStyle = (
   field: HTMLTextAreaElement,
-  stylesToApply: MarkdownInputStyle
+  stylesToApply: MarkdownInputStyle,
 ): void => {
   const defaults = {
     prefix: "",

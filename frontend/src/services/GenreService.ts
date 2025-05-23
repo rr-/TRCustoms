@@ -24,7 +24,7 @@ interface GenreSearchResult
   extends GenericSearchResult<GenreSearchQuery, GenreListing> {}
 
 const searchGenres = async (
-  searchQuery: GenreSearchQuery
+  searchQuery: GenreSearchQuery,
 ): Promise<GenreSearchResult> => {
   const params = getGenericSearchQuery(searchQuery);
   const response = (await api.get(`${API_URL}/level_genres/`, {
@@ -35,7 +35,7 @@ const searchGenres = async (
 
 const getStats = async (genreId: number): Promise<GenreListing[]> => {
   const response = (await api.get(
-    `${API_URL}/level_genres/${genreId}/stats/`
+    `${API_URL}/level_genres/${genreId}/stats/`,
   )) as AxiosResponse<GenreListing[]>;
   return response.data;
 };

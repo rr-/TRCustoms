@@ -15,13 +15,12 @@ interface PlaylistTabProps {
 }
 
 const PlaylistTab = ({ user }: PlaylistTabProps) => {
-  const [playlistSearchQuery, setPlaylistSearchQuery] = useState<
-    PlaylistSearchQuery
-  >({
-    page: null,
-    pageSize: 100,
-    sort: "-status,-last_updated",
-  });
+  const [playlistSearchQuery, setPlaylistSearchQuery] =
+    useState<PlaylistSearchQuery>({
+      page: null,
+      pageSize: 100,
+      sort: "-status,-last_updated",
+    });
   const queryClient = useQueryClient();
 
   const handleAdd = () => {

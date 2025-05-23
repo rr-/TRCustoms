@@ -6,7 +6,7 @@ import type { LevelDetails } from "src/services/LevelService";
 import type { WalkthroughSearchQuery } from "src/services/WalkthroughService";
 
 const getWalkthroughSearchQuery = (
-  levelId: number
+  levelId: number,
 ): WalkthroughSearchQuery => ({
   levels: [levelId],
   page: DISABLE_PAGING,
@@ -19,9 +19,8 @@ interface LevelWalkthroughsTabProps {
 }
 
 const LevelWalkthroughsTab = ({ level }: LevelWalkthroughsTabProps) => {
-  const [walkthroughSearchQuery, setWalkthroughSearchQuery] = useState<
-    WalkthroughSearchQuery
-  >(getWalkthroughSearchQuery(level.id));
+  const [walkthroughSearchQuery, setWalkthroughSearchQuery] =
+    useState<WalkthroughSearchQuery>(getWalkthroughSearchQuery(level.id));
 
   return (
     <>

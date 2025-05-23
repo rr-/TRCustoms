@@ -8,7 +8,7 @@ interface UseInfiniteScrollProps {
 
 const useInfiniteScroll = (
   { element, fetch }: UseInfiniteScrollProps,
-  dependencies?: any[] | undefined
+  dependencies?: any[] | undefined,
 ) => {
   const loader = useRef(fetch);
 
@@ -20,8 +20,8 @@ const useInfiniteScroll = (
           loader.current();
         }
       },
-      { threshold: 0.5 }
-    )
+      { threshold: 0.5 },
+    ),
   );
 
   useEffect(() => {
@@ -43,7 +43,7 @@ const useInfiniteScroll = (
       };
     },
     // eslint-disable-next-line
-    [element, ...(dependencies || [])]
+    [element, ...(dependencies || [])],
   );
 };
 

@@ -33,7 +33,7 @@ const splitTerms = (searchQuery: string | null | undefined): string[] => {
 const addSearchTerm = (
   searchQuery: string | null | undefined,
   model: string,
-  changes: string
+  changes: string,
 ) => {
   const terms = splitTerms(searchQuery);
   const newTerms = [];
@@ -58,7 +58,7 @@ const addSearchTerm = (
 const deleteSearchTerm = (
   searchQuery: string | null | undefined,
   model: string,
-  changes: string
+  changes: string,
 ) => {
   const terms = splitTerms(searchQuery);
   const newTerms = [];
@@ -78,7 +78,7 @@ const deleteSearchTerm = (
 const isSearchTermPresent = (
   searchQuery: string | null | undefined,
   model: string,
-  changes: string
+  changes: string,
 ) => {
   const terms = splitTerms(searchQuery);
   for (const term of terms) {
@@ -182,12 +182,12 @@ const AuditLogSearch = ({
   onSearchQueryChange,
 }: AuditLogSearchProps) => {
   const [formikValues, setFormikValues] = useState<any>(
-    convertSearchQueryToFormikValues(searchQuery)
+    convertSearchQueryToFormikValues(searchQuery),
   );
 
   useEffect(
     () => setFormikValues(convertSearchQueryToFormikValues(searchQuery)),
-    [searchQuery]
+    [searchQuery],
   );
 
   const handleSubmit = useCallback(
@@ -201,7 +201,7 @@ const AuditLogSearch = ({
         isActionRequired: values.isActionRequired,
       });
     },
-    [searchQuery, onSearchQueryChange]
+    [searchQuery, onSearchQueryChange],
   );
 
   const handleClear = useCallback(
@@ -209,36 +209,36 @@ const AuditLogSearch = ({
       onSearchQueryChange(defaultSearchQuery);
       resetForm();
     },
-    [onSearchQueryChange, defaultSearchQuery]
+    [onSearchQueryChange, defaultSearchQuery],
   );
 
   const handleStateSearchCheckboxChange = (
     event: React.ChangeEvent<HTMLInputElement>,
     section: StateSearchSection,
-    sectionItem: StateSearchSectionItem
+    sectionItem: StateSearchSectionItem,
   ) => {
     const newSearch = event.target.checked
       ? addSearchTerm(
           searchQuery.search,
           section.searchModel,
-          sectionItem.searchState
+          sectionItem.searchState,
         )
       : deleteSearchTerm(
           searchQuery.search,
           section.searchModel,
-          sectionItem.searchState
+          sectionItem.searchState,
         );
     onSearchQueryChange({ ...searchQuery, search: newSearch });
   };
 
   const isStateSearchCheckboxChecked = (
     section: StateSearchSection,
-    sectionItem: StateSearchSectionItem
+    sectionItem: StateSearchSectionItem,
   ): boolean => {
     return isSearchTermPresent(
       searchQuery.search,
       section.searchModel,
-      sectionItem.searchState
+      sectionItem.searchState,
     );
   };
 
@@ -295,7 +295,7 @@ const AuditLogSearch = ({
                       handleStateSearchCheckboxChange(
                         event,
                         section,
-                        sectionItem
+                        sectionItem,
                       )
                     }
                     checked={isStateSearchCheckboxChecked(section, sectionItem)}

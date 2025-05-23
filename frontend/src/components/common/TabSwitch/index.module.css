@@ -74,7 +74,8 @@
         margin-bottom: 0;
         border-bottom: 2px solid var(--my-border-color);
         background: var(--my-bg-color);
-        transition: border-color var(--transition-speed),
+        transition:
+          border-color var(--transition-speed),
           background-color var(--transition-speed);
 
         &:hover {

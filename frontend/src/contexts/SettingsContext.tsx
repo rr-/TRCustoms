@@ -73,7 +73,7 @@ const useSettings = create<SettingsState>((set, get) => ({
 
   markdownPreviewMode:
     (StorageService.getItem(
-      "markdownPreviewMode"
+      "markdownPreviewMode",
     ) as MarkdownPreviewMode | null) || MarkdownPreviewMode.SideBySide,
   setMarkdownPreviewMode: (markdownPreviewMode: MarkdownPreviewMode): void => {
     set((state) => ({ ...state, markdownPreviewMode }));

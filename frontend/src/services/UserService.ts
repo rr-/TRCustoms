@@ -102,9 +102,9 @@ const getCurrentUser = async (): Promise<UserDetails | null> => {
     return null;
   }
   try {
-    const response = (await api.get(`${API_URL}/users/me/`)) as AxiosResponse<
-      UserDetails
-    >;
+    const response = (await api.get(
+      `${API_URL}/users/me/`,
+    )) as AxiosResponse<UserDetails>;
     return response.data;
   } catch (error) {
     return null;
@@ -113,14 +113,14 @@ const getCurrentUser = async (): Promise<UserDetails | null> => {
 
 const getUserById = async (userId: number): Promise<UserDetails> => {
   const response = (await api.get(
-    `${API_URL}/users/${userId}/`
+    `${API_URL}/users/${userId}/`,
   )) as AxiosResponse<UserDetails>;
   return response.data;
 };
 
 const getUserByUsername = async (username: string): Promise<UserDetails> => {
   const response = (await api.get(
-    `${API_URL}/users/by_username/${username}/`
+    `${API_URL}/users/by_username/${username}/`,
   )) as AxiosResponse<UserDetails>;
   return response.data;
 };
@@ -156,7 +156,7 @@ const update = async (
     countryCode,
     websiteUrl,
     donationUrl,
-  }: UserUpdatePayload
+  }: UserUpdatePayload,
 ): Promise<UserDetails> => {
   const data: { [key: string]: any } = {
     username: username,
@@ -177,7 +177,7 @@ const update = async (
   }
   const response = (await api.patch(
     `${API_URL}/users/${userId}/`,
-    data
+    data,
   )) as AxiosResponse<UserDetails>;
   return response.data;
 };
@@ -206,20 +206,21 @@ const register = async ({
     website_url: websiteUrl,
     donation_url: donationUrl,
   };
-  const response = (await api.post(`${API_URL}/users/`, data)) as AxiosResponse<
-    UserDetails
-  >;
+  const response = (await api.post(
+    `${API_URL}/users/`,
+    data,
+  )) as AxiosResponse<UserDetails>;
   return response.data;
 };
 
 const searchUsers = async (
-  searchQuery: UserSearchQuery
+  searchQuery: UserSearchQuery,
 ): Promise<UserSearchResult> => {
   const params = filterFalsyObjectValues({
     ...getGenericSearchQuery(searchQuery),
     reviews_min: searchQuery.reviewsMin,
     hide_inactive_reviewers: boolToSearchString(
-      searchQuery.hideInactiveReviewers
+      searchQuery.hideInactiveReviewers,
     ),
   });
   const response = (await api.get(`${API_URL}/users/`, {
@@ -255,7 +256,7 @@ const confirmEmail = async (token: string): Promise<UserDetails> => {
   const data = { token };
   const response = (await api.post(
     `${API_URL}/users/confirm_email/`,
-    data
+    data,
   )) as AxiosResponse<UserDetails>;
   return response.data;
 };
@@ -267,7 +268,7 @@ const requestPasswordReset = async (email: string): Promise<void> => {
 
 const completePasswordReset = async (
   password: string,
-  token: string
+  token: string,
 ): Promise<void> => {
   const data = { password, token };
   await api.post(`${API_URL}/users/complete_password_reset/`, data);

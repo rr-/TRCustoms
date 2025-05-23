@@ -105,13 +105,13 @@ const AutoComplete = <TItem extends Object>({
   };
 
   const handleSuggestionMouseDown = (
-    event: React.MouseEvent<HTMLLIElement>
+    event: React.MouseEvent<HTMLLIElement>,
   ) => {
     if (!suggestions.length) {
       return;
     }
     setActiveResultIdx(
-      +((event.target as HTMLLIElement).getAttribute("data-index") || "")
+      +((event.target as HTMLLIElement).getAttribute("data-index") || ""),
     );
   };
 

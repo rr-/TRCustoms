@@ -43,7 +43,7 @@ interface ReviewUpdatePayload extends ReviewBaseChangePayload {}
 interface ReviewCreatePayload extends ReviewBaseChangePayload {}
 
 const searchReviews = async (
-  searchQuery: ReviewSearchQuery
+  searchQuery: ReviewSearchQuery,
 ): Promise<ReviewSearchResult> => {
   const params = filterFalsyObjectValues({
     ...getGenericSearchQuery(searchQuery),
@@ -58,14 +58,14 @@ const searchReviews = async (
 
 const getReviewById = async (reviewId: number): Promise<ReviewDetails> => {
   const response = (await api.get(
-    `${API_URL}/reviews/${reviewId}/`
+    `${API_URL}/reviews/${reviewId}/`,
   )) as AxiosResponse<ReviewDetails>;
   return response.data;
 };
 
 const getReviewByAuthorAndLevelIds = async (
   levelId: number,
-  authorId: number
+  authorId: number,
 ): Promise<ReviewDetails | null> => {
   const reviews = await searchReviews({
     authors: [authorId],
@@ -79,7 +79,7 @@ const getReviewByAuthorAndLevelIds = async (
 
 const update = async (
   reviewId: number,
-  payload: ReviewUpdatePayload
+  payload: ReviewUpdatePayload,
 ): Promise<ReviewDetails> => {
   const data = {
     level_id: payload.levelId,
@@ -87,7 +87,7 @@ const update = async (
   };
   const response = (await api.patch(
     `${API_URL}/reviews/${reviewId}/`,
-    data
+    data,
   )) as AxiosResponse<ReviewDetails>;
   return response.data;
 };
@@ -99,7 +99,7 @@ const create = async (payload: ReviewCreatePayload): Promise<ReviewDetails> => {
   };
   const response = (await api.post(
     `${API_URL}/reviews/`,
-    data
+    data,
   )) as AxiosResponse<ReviewDetails>;
   return response.data;
 };

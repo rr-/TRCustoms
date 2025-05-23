@@ -44,7 +44,7 @@ interface DataTableProps<TItem, TQuery> {
 
   searchQuery: TQuery;
   searchFunc: (
-    searchQuery: TQuery
+    searchQuery: TQuery,
   ) => Promise<GenericSearchResult<TQuery, TItem>>;
 
   onSearchQueryChange?: ((searchQuery: TQuery) => void) | undefined;
@@ -177,7 +177,7 @@ const DataTableFooter = <TItem extends {}, TQuery extends GenericSearchQuery>({
 };
 
 const PagedDataTable = <TItem extends {}, TQuery extends GenericSearchQuery>(
-  props: DataTableProps<TItem, TQuery>
+  props: DataTableProps<TItem, TQuery>,
 ) => {
   const {
     className,
@@ -190,7 +190,7 @@ const PagedDataTable = <TItem extends {}, TQuery extends GenericSearchQuery>(
 
   const result = useQuery<GenericSearchResult<TQuery, TItem> | null, Error>(
     [queryName, searchFunc, searchQuery],
-    async () => searchFunc(searchQuery)
+    async () => searchFunc(searchQuery),
   );
 
   if (!result?.data?.results?.length) {
@@ -220,7 +220,7 @@ const PagedDataTable = <TItem extends {}, TQuery extends GenericSearchQuery>(
 };
 
 const InfiniteDataTable = <TItem extends {}, TQuery extends GenericSearchQuery>(
-  props: DataTableProps<TItem, TQuery>
+  props: DataTableProps<TItem, TQuery>,
 ) => {
   const { className, queryName, searchQuery, searchFunc } = props;
 
@@ -236,8 +236,8 @@ const InfiniteDataTable = <TItem extends {}, TQuery extends GenericSearchQuery>(
           searchQuery.page === DISABLE_PAGING
             ? DISABLE_PAGING
             : pageParam === undefined
-            ? 1
-            : pageParam,
+              ? 1
+              : pageParam,
       });
     },
     {
@@ -253,13 +253,13 @@ const InfiniteDataTable = <TItem extends {}, TQuery extends GenericSearchQuery>(
           : undefined;
       },
       refetchOnWindowFocus: false,
-    }
+    },
   );
 
   const infiniteScrollRef = useRef(null);
   useInfiniteScroll(
     { element: infiniteScrollRef, fetch: () => result.fetchNextPage() },
-    [result]
+    [result],
   );
 
   return (
@@ -302,7 +302,7 @@ const InfiniteDataTable = <TItem extends {}, TQuery extends GenericSearchQuery>(
 };
 
 const DataTable = <TItem extends {}, TQuery extends GenericSearchQuery>(
-  props: DataTableProps<TItem, TQuery>
+  props: DataTableProps<TItem, TQuery>,
 ) => {
   const { infiniteScroll } = useSettings();
   if (infiniteScroll) {

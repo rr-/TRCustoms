@@ -31,7 +31,7 @@ const deserializeSearchQuery = (qp: {
 });
 
 const serializeSearchQuery = (
-  searchQuery: UserSearchQuery
+  searchQuery: UserSearchQuery,
 ): { [key: string]: any } =>
   filterFalsyObjectValues({
     ...serializeGenericSearchQuery(searchQuery, defaultSearchQuery),
@@ -40,7 +40,7 @@ const serializeSearchQuery = (
 
 const ReviewAuthorsPage = () => {
   const [searchQuery, setSearchQuery] = useState<UserSearchQuery>(
-    deserializeSearchQuery(getCurrentSearchParams())
+    deserializeSearchQuery(getCurrentSearchParams()),
   );
 
   usePageMetadata(
@@ -50,7 +50,7 @@ const ReviewAuthorsPage = () => {
       description: "Search for custom level critics.",
       image: "card-reviewer_catalogue.jpg",
     }),
-    []
+    [],
   );
 
   return (

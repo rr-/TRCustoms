@@ -38,7 +38,7 @@ const sortOptions = [
 
 const convertSearchQueryToFormikValues = (
   searchQuery: LevelSearchQuery,
-  defaultSearchQuery: LevelSearchQuery
+  defaultSearchQuery: LevelSearchQuery,
 ) => {
   return {
     sort: searchQuery.sort || defaultSearchQuery.sort,
@@ -67,7 +67,7 @@ const LevelSearchSidebar = ({
   onSearchQueryChange,
 }: LevelSearchProps) => {
   const [formikValues, setFormikValues] = useState<any>(
-    convertSearchQueryToFormikValues(searchQuery, defaultSearchQuery)
+    convertSearchQueryToFormikValues(searchQuery, defaultSearchQuery),
   );
 
   const handleSubmit = useCallback(
@@ -86,14 +86,14 @@ const LevelSearchSidebar = ({
         textWalkthroughs: values.textWalkthroughs,
       });
     },
-    [searchQuery, onSearchQueryChange]
+    [searchQuery, onSearchQueryChange],
   );
 
   const handleIsApprovedChange = useCallback(
     (value: boolean | null) => {
       onSearchQueryChange({ ...searchQuery, isApproved: value });
     },
-    [searchQuery, onSearchQueryChange]
+    [searchQuery, onSearchQueryChange],
   );
 
   const handleEnginesChange = useCallback(
@@ -104,7 +104,7 @@ const LevelSearchSidebar = ({
         engines: values,
       });
     },
-    [searchQuery, onSearchQueryChange]
+    [searchQuery, onSearchQueryChange],
   );
 
   const handleGenresChange = useCallback(
@@ -115,7 +115,7 @@ const LevelSearchSidebar = ({
         genres: values,
       });
     },
-    [searchQuery, onSearchQueryChange]
+    [searchQuery, onSearchQueryChange],
   );
 
   const handleDateChange = useCallback(
@@ -126,7 +126,7 @@ const LevelSearchSidebar = ({
         date: value,
       });
     },
-    [searchQuery, onSearchQueryChange]
+    [searchQuery, onSearchQueryChange],
   );
 
   const handleTagsChange = useCallback(
@@ -137,7 +137,7 @@ const LevelSearchSidebar = ({
         tags: values,
       });
     },
-    [searchQuery, onSearchQueryChange]
+    [searchQuery, onSearchQueryChange],
   );
 
   const handleDurationsChange = useCallback(
@@ -148,7 +148,7 @@ const LevelSearchSidebar = ({
         durations: values,
       });
     },
-    [searchQuery, onSearchQueryChange]
+    [searchQuery, onSearchQueryChange],
   );
 
   const handleDifficultiesChange = useCallback(
@@ -159,7 +159,7 @@ const LevelSearchSidebar = ({
         difficulties: values,
       });
     },
-    [searchQuery, onSearchQueryChange]
+    [searchQuery, onSearchQueryChange],
   );
 
   const handleWalkthroughsChange = useCallback(
@@ -171,7 +171,7 @@ const LevelSearchSidebar = ({
         textWalkthroughs: textWalkthroughs,
       });
     },
-    [searchQuery, onSearchQueryChange]
+    [searchQuery, onSearchQueryChange],
   );
 
   const handleRatingsChange = useCallback(
@@ -182,20 +182,20 @@ const LevelSearchSidebar = ({
         ratings: values,
       });
     },
-    [searchQuery, onSearchQueryChange]
+    [searchQuery, onSearchQueryChange],
   );
 
   const handleClear = useCallback(
     () => onSearchQueryChange(defaultSearchQuery),
-    [onSearchQueryChange, defaultSearchQuery]
+    [onSearchQueryChange, defaultSearchQuery],
   );
 
   useEffect(
     () =>
       setFormikValues(
-        convertSearchQueryToFormikValues(searchQuery, defaultSearchQuery)
+        convertSearchQueryToFormikValues(searchQuery, defaultSearchQuery),
       ),
-    [searchQuery, defaultSearchQuery]
+    [searchQuery, defaultSearchQuery],
   );
 
   return (

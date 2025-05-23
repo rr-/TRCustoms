@@ -44,7 +44,7 @@ const NewsForm = ({ news, onGoBack, onSubmit }: NewsFormProps) => {
   const handleSubmitError = useCallback(
     (
       error: unknown,
-      { setSubmitting, setStatus, setErrors }: FormikHelpers<NewsFormValues>
+      { setSubmitting, setStatus, setErrors }: FormikHelpers<NewsFormValues>,
     ) => {
       setSubmitting(false);
       if (axios.isAxiosError(error)) {
@@ -68,7 +68,7 @@ const NewsForm = ({ news, onGoBack, onSubmit }: NewsFormProps) => {
         setStatus({ error: <>Unknown error.</> });
       }
     },
-    []
+    [],
   );
 
   const handleSubmit = useCallback(
@@ -112,7 +112,7 @@ const NewsForm = ({ news, onGoBack, onSubmit }: NewsFormProps) => {
         handleSubmitError(error, helpers);
       }
     },
-    [news, onSubmit, handleSubmitError, queryClient]
+    [news, onSubmit, handleSubmitError, queryClient],
   );
 
   if (!config) {

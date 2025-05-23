@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { AuditLogSearch } from "src/components/common/AuditLogSearch";
-import { VerticalList } from "src/components/common/VerticalList";
 import { AuditLogTable } from "src/components/common/AuditLogTable";
 import { Button } from "src/components/common/Button";
 import { InfoMessage } from "src/components/common/InfoMessage";
@@ -11,6 +10,7 @@ import { deserializeGenericSearchQuery } from "src/components/common/QueryPersis
 import { serializeGenericSearchQuery } from "src/components/common/QueryPersister";
 import { SectionHeader } from "src/components/common/Section";
 import { SidebarBox } from "src/components/common/SidebarBox";
+import { VerticalList } from "src/components/common/VerticalList";
 import { SidebarLayout } from "src/components/layouts/SidebarLayout";
 import { usePageMetadata } from "src/contexts/PageMetadataContext";
 import type { AuditLogSearchQuery } from "src/services/AuditLogService";
@@ -34,7 +34,7 @@ const deserializeSearchQuery = (qp: {
 });
 
 const serializeSearchQuery = (
-  searchQuery: AuditLogSearchQuery
+  searchQuery: AuditLogSearchQuery,
 ): { [key: string]: any } =>
   filterFalsyObjectValues({
     ...serializeGenericSearchQuery(searchQuery, defaultSearchQuery),
@@ -45,7 +45,7 @@ const serializeSearchQuery = (
 
 const ModerationPageView = () => {
   const [searchQuery, setSearchQuery] = useState<AuditLogSearchQuery>(
-    deserializeSearchQuery(getCurrentSearchParams())
+    deserializeSearchQuery(getCurrentSearchParams()),
   );
 
   usePageMetadata(
@@ -54,20 +54,22 @@ const ModerationPageView = () => {
       title: "Moderate",
       description: "A page for managing and monitoring user actions.",
     }),
-    []
+    [],
   );
 
-  const header = <VerticalList>
-    <Button to={"/mod/how-to"} disableTimeout={true}>
-      Moderating guidelines
-    </Button>
-    <Button to={"/users"} disableTimeout={true}>
-      User list
-    </Button>
-  </VerticalList>;
+  const header = (
+    <VerticalList>
+      <Button to={"/mod/how-to"} disableTimeout={true}>
+        Moderating guidelines
+      </Button>
+      <Button to={"/users"} disableTimeout={true}>
+        User list
+      </Button>
+    </VerticalList>
+  );
 
   const sidebar = (
-    <SidebarBox header={ header } >
+    <SidebarBox header={header}>
       <AuditLogSearch
         defaultSearchQuery={defaultSearchQuery}
         searchQuery={searchQuery}

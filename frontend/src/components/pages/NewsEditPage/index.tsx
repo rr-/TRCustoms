@@ -25,12 +25,12 @@ const NewsEditPageView = ({ newsId }: NewsEditPageViewProps) => {
 
   const result = useQuery<NewsDetails, Error>(
     ["news", NewsService.getNewsById, newsId],
-    async () => NewsService.getNewsById(+newsId)
+    async () => NewsService.getNewsById(+newsId),
   );
 
   const handleGoBack = useCallback(
     () => navigate(result?.data?.id ? `/news/${result?.data?.id}` : "/"),
-    [navigate, result]
+    [navigate, result],
   );
 
   usePageMetadata(() => ({ ready: true, title: "News" }), []);
@@ -55,7 +55,7 @@ const NewsEditPageView = ({ newsId }: NewsEditPageViewProps) => {
 };
 
 const NewsEditPage = () => {
-  const { newsId } = (useParams() as unknown) as NewsEditPageParams;
+  const { newsId } = useParams() as unknown as NewsEditPageParams;
   return (
     <PageGuard require={UserPermission.editNews}>
       <NewsEditPageView newsId={newsId} />

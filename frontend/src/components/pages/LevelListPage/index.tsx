@@ -38,7 +38,7 @@ const deserializeSearchQuery = (qp: {
 });
 
 const serializeSearchQuery = (
-  searchQuery: LevelSearchQuery
+  searchQuery: LevelSearchQuery,
 ): { [key: string]: any } =>
   filterFalsyObjectValues({
     ...serializeGenericSearchQuery(searchQuery, defaultSearchQuery),
@@ -56,7 +56,7 @@ const serializeSearchQuery = (
 
 const LevelListPage = () => {
   const [searchQuery, setSearchQuery] = useState<LevelSearchQuery>(
-    deserializeSearchQuery(getCurrentSearchParams())
+    deserializeSearchQuery(getCurrentSearchParams()),
   );
 
   usePageMetadata(
@@ -66,7 +66,7 @@ const LevelListPage = () => {
       description:
         "Search our database for thousands of custom Tomb Raider games.",
     }),
-    []
+    [],
   );
 
   const sidebar = (

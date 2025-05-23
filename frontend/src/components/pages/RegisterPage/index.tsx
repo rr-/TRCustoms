@@ -27,7 +27,7 @@ const RegisterPage = () => {
         setIsComplete(true);
       }
     },
-    [setIsComplete, navigate, setUser]
+    [setIsComplete, navigate, setUser],
   );
 
   usePageMetadata(
@@ -37,7 +37,7 @@ const RegisterPage = () => {
       description:
         "Sign up as a user on our website to be able to upload levels, post reviews, and more!",
     }),
-    []
+    [],
   );
 
   return (

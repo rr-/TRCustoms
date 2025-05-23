@@ -20,7 +20,7 @@ const NewsSidebar = () => {
   };
   const result = useQuery<NewsSearchResult, Error>(
     ["news", searchQuery],
-    async () => NewsService.searchNews(searchQuery)
+    async () => NewsService.searchNews(searchQuery),
   );
 
   if (result.error) {

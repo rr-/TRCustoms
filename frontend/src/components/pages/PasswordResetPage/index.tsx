@@ -24,7 +24,7 @@ const PasswordResetPage = () => {
   const handleSubmit = useCallback(
     async (
       values: PasswordResetFormValues,
-      { setSubmitting, setStatus }: FormikHelpers<PasswordResetFormValues>
+      { setSubmitting, setStatus }: FormikHelpers<PasswordResetFormValues>,
     ) => {
       setStatus({});
       try {
@@ -36,7 +36,7 @@ const PasswordResetPage = () => {
         setStatus({ error: <>Unknown error.</> });
       }
     },
-    [setIsComplete]
+    [setIsComplete],
   );
 
   usePageMetadata(
@@ -45,7 +45,7 @@ const PasswordResetPage = () => {
       title: "Password Reset",
       description: "Forgot your password? Reset it here!",
     }),
-    []
+    [],
   );
 
   const validate = (values: Record<string, any>) => {

@@ -25,7 +25,7 @@ const ReviewAddAction = ({ level }: ReviewAddActionProps) => {
 
   const reviewResult = useQuery<ReviewDetails | null, Error>(
     ["review", ReviewService.getReviewByAuthorAndLevelIds, level.id, user?.id],
-    async () => ReviewService.getReviewByAuthorAndLevelIds(level.id, user?.id)
+    async () => ReviewService.getReviewByAuthorAndLevelIds(level.id, user?.id),
   );
 
   const handleGoBack = useCallback(() => {

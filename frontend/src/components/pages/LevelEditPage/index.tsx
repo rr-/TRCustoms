@@ -18,12 +18,12 @@ interface LevelEditPageParams {
 }
 
 const LevelEditPage = () => {
-  const { levelId } = (useParams() as unknown) as LevelEditPageParams;
+  const { levelId } = useParams() as unknown as LevelEditPageParams;
   const navigate = useNavigate();
 
   const result = useQuery<LevelDetails, Error>(
     ["level", LevelService.getLevelById, levelId],
-    async () => LevelService.getLevelById(+levelId)
+    async () => LevelService.getLevelById(+levelId),
   );
 
   const handleGoBack = useCallback(() => {
@@ -35,7 +35,7 @@ const LevelEditPage = () => {
       ready: !result.isLoading,
       title: result?.data?.name,
     }),
-    [result]
+    [result],
   );
 
   if (result.error) {

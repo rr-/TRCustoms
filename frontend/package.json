@@ -54,6 +54,7 @@
     ]
   },
   "devDependencies": {
+    "@trivago/prettier-plugin-sort-imports": "^5.2.2",
     "@types/github-slugger": "^2.0.0",
     "@types/lodash": "^4.14.195",
     "@types/node": "^20.3.2",
@@ -64,10 +65,5 @@
     "@types/react-router-dom": "^5.3.3",
     "@vitejs/plugin-react": "^4.3.4",
     "vite": "^6.0.1"
-  },
-  "prettier": {
-    "plugins": [
-      "@trivago/prettier-plugin-sort-imports"
-    ]
   }
 }

@@ -31,7 +31,7 @@ const PlaylistAddModal = forwardRef<
 
   const playlistItemResult = useQuery<PlaylistItemDetails, Error>(
     ["playlists", PlaylistService.get, userId, levelId],
-    async () => PlaylistService.get(userId, levelId)
+    async () => PlaylistService.get(userId, levelId),
   );
 
   useImperativeHandle(ref, () => ({

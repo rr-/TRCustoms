@@ -52,7 +52,7 @@ const PlaylistTable = ({
           [PlaylistItemStatus.Finished]: (
             <span className={styles.finished}>Finished</span>
           ),
-        }[item.status] || "Unknown"),
+        })[item.status] || "Unknown",
     },
     {
       name: "name",

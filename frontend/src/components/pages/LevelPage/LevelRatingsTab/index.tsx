@@ -22,9 +22,8 @@ const getRatingsSearchQuery = (levelId: number): RatingSearchQuery => ({
 });
 
 const LevelRatingsTab = ({ level }: LevelRatingsTabProps) => {
-  const [ratingsSearchQuery, setRatingsSearchQuery] = useState<
-    RatingSearchQuery
-  >(getRatingsSearchQuery(level.id));
+  const [ratingsSearchQuery, setRatingsSearchQuery] =
+    useState<RatingSearchQuery>(getRatingsSearchQuery(level.id));
 
   return (
     <>

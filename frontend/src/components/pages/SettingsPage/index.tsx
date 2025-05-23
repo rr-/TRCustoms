@@ -23,7 +23,7 @@ const SettingsPage = () => {
       title: "Settings",
       description: "Manage the website's settings to your personal preference.",
     }),
-    []
+    [],
   );
 
   return (
@@ -45,7 +45,7 @@ const SettingsPage = () => {
           setMarkdownPreviewMode(
             markdownPreviewMode === MarkdownPreviewMode.Tabbed
               ? MarkdownPreviewMode.SideBySide
-              : MarkdownPreviewMode.Tabbed
+              : MarkdownPreviewMode.Tabbed,
           )
         }
         checked={markdownPreviewMode === MarkdownPreviewMode.SideBySide}

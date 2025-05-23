@@ -18,7 +18,7 @@ const MyNavLink = ({ children, ...args }: any) => {
       {...args}
       className={({ isActive, isPending }) =>
         [isPending ? styles.pending : "", isActive ? styles.active : ""].join(
-          " "
+          " ",
         )
       }
     >

@@ -28,7 +28,7 @@ const UserEditPageView = ({ userId }: UserEditViewProps) => {
 
   const result = useQuery<UserDetails, Error>(
     ["user", UserService.getUserById, userId],
-    async () => await UserService.getUserById(+userId)
+    async () => await UserService.getUserById(+userId),
   );
 
   const handleSubmit = useCallback(
@@ -37,7 +37,7 @@ const UserEditPageView = ({ userId }: UserEditViewProps) => {
         userContext.setUser(outUser);
       }
     },
-    [userContext]
+    [userContext],
   );
 
   usePageMetadata(() => ({ ready: true, title: "Editing user profile" }), []);
@@ -66,7 +66,7 @@ const UserEditPageView = ({ userId }: UserEditViewProps) => {
 };
 
 const UserEditPage = () => {
-  const { userId } = (useParams() as unknown) as UserEditPageParams;
+  const { userId } = useParams() as unknown as UserEditPageParams;
 
   return (
     <PageGuard require={UserPermission.editUsers} owningUserIds={[+userId]}>

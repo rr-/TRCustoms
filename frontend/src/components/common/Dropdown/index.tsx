@@ -33,7 +33,7 @@ const Dropdown = ({
         ? [].slice
             .call(event.target.selectedOptions)
             .map((option: HTMLOptionElement) => option.value)
-        : event.target.selectedOptions?.[0].value
+        : event.target.selectedOptions?.[0].value,
     );
   };
 

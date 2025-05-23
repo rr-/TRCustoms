@@ -24,7 +24,7 @@ const Radioboxes = <TOption extends {}, TOptionId extends {} | null>({
 }: RadioboxesProps<TOption, TOptionId>) => {
   const handleOptionChange = (
     event: React.ChangeEvent<HTMLInputElement>,
-    option: TOption
+    option: TOption,
   ) => {
     onChange(getOptionId(option));
   };

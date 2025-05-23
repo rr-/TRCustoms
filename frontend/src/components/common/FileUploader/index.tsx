@@ -36,7 +36,7 @@ const FileUploader = ({
     (error: unknown) => {
       onUploadError?.(error);
     },
-    [onUploadError]
+    [onUploadError],
   );
 
   const addFiles = useCallback(
@@ -53,14 +53,14 @@ const FileUploader = ({
                 ((uploadedFiles.length +
                   progressEvent.loaded / progressEvent.total) *
                   100) /
-                  files.length
+                  files.length,
               );
             };
 
             const uploadedFile = await FileService.uploadFile(
               file,
               uploadType,
-              handleUploadProgress
+              handleUploadProgress,
             );
 
             uploadedFiles.push(uploadedFile);
@@ -81,7 +81,7 @@ const FileUploader = ({
       setPercentCompleted,
       onUploadFinish,
       onUploadError,
-    ]
+    ],
   );
 
   useEffect(() => {

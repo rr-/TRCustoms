@@ -56,7 +56,7 @@ interface AuditLogSearchResult
   extends GenericSearchResult<AuditLogSearchQuery, AuditLogListing> {}
 
 const searchAuditLogs = async (
-  searchQuery: AuditLogSearchQuery
+  searchQuery: AuditLogSearchQuery,
 ): Promise<AuditLogSearchResult> => {
   const params = filterFalsyObjectValues({
     ...getGenericSearchQuery(searchQuery),

@@ -24,14 +24,14 @@ interface RatingEditActionProps {
 }
 
 const RatingEditAction = ({ level }: RatingEditActionProps) => {
-  const { ratingId } = (useParams() as unknown) as LevelRatingEditPageParams;
+  const { ratingId } = useParams() as unknown as LevelRatingEditPageParams;
   const { config } = useContext(ConfigContext);
   const navigate = useNavigate();
   const playlistModalRef = useRef<PlaylistAddModalHandle>(null);
 
   const ratingResult = useQuery<RatingDetails, Error>(
     ["rating", RatingService.getRatingById, ratingId],
-    async () => RatingService.getRatingById(+ratingId)
+    async () => RatingService.getRatingById(+ratingId),
   );
 
   const handleGoBack = useCallback(() => {

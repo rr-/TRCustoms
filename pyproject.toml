@@ -25,6 +25,7 @@ disable = [
     "invalid-name",  # migrations
     "too-many-instance-attributes",  # models
     "too-many-arguments",  # pytest fixtures
+    "too-many-positional-arguments",  # pytest fixtures
     "too-many-locals",  # pytest fixtures
     "broad-except",  # this does more harm than good
     "unexpected-keyword-arg",  # badly implemented in decorators…

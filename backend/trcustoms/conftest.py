@@ -46,7 +46,7 @@ def fixture_get_auth_api_client(
 
 @pytest.fixture(name="auth_api_client")
 def fixture_auth_api_client(
-    get_auth_api_client: Callable[[User], APIClient]
+    get_auth_api_client: Callable[[User], APIClient],
 ) -> APIClient:
     return get_auth_api_client(UserFactory())
 

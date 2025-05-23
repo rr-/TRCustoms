@@ -24,7 +24,7 @@ interface DataListProps<TItem, TQuery> {
 
   searchQuery: TQuery;
   searchFunc: (
-    searchQuery: TQuery
+    searchQuery: TQuery,
   ) => Promise<GenericSearchResult<TQuery, TItem>>;
 
   onResultCountChange?: ((count: number) => void) | undefined;
@@ -50,7 +50,7 @@ const PagedDataList = <TItem extends {}, TQuery extends GenericSearchQuery>({
 }: ConcreteDataListProps<TItem, TQuery>) => {
   const result = useQuery<GenericSearchResult<TQuery, TItem>, Error>(
     [queryName, searchFunc, searchQuery],
-    async () => searchFunc(searchQuery)
+    async () => searchFunc(searchQuery),
   );
 
   if (result.error) {
@@ -71,7 +71,7 @@ const PagedDataList = <TItem extends {}, TQuery extends GenericSearchQuery>({
         ? pageView(
             result.data.results.map((item) => (
               <Fragment key={itemKey(item)}>{itemView(item)}</Fragment>
-            ))
+            )),
           )
         : noItemsElement || DefaultNoItemsElement}
 
@@ -109,8 +109,8 @@ const InfiniteDataList = <TItem extends {}, TQuery extends GenericSearchQuery>({
           searchQuery.page === DISABLE_PAGING
             ? DISABLE_PAGING
             : pageParam === undefined
-            ? 1
-            : pageParam,
+              ? 1
+              : pageParam,
       });
     },
     {
@@ -126,13 +126,13 @@ const InfiniteDataList = <TItem extends {}, TQuery extends GenericSearchQuery>({
           : undefined;
       },
       refetchOnWindowFocus: false,
-    }
+    },
   );
 
   const infiniteScrollRef = useRef(null);
   useInfiniteScroll(
     { element: infiniteScrollRef, fetch: () => result.fetchNextPage() },
-    [result]
+    [result],
   );
 
   useEffect(() => {
@@ -153,7 +153,7 @@ const InfiniteDataList = <TItem extends {}, TQuery extends GenericSearchQuery>({
               <Fragment key={itemKey(item)}>{itemView(item)}</Fragment>
             ))}
           </div>
-        ))
+        )),
       )}
 
       <span ref={infiniteScrollRef} />

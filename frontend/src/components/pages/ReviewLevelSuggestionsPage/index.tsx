@@ -28,13 +28,13 @@ const deserializeSearchQuery = (qp: {
 });
 
 const serializeSearchQuery = (
-  searchQuery: LevelSearchQuery
+  searchQuery: LevelSearchQuery,
 ): { [key: string]: any } =>
   serializeGenericSearchQuery(searchQuery, defaultSearchQuery);
 
 const ReviewLevelSuggestionsPage = () => {
   const [searchQuery, setSearchQuery] = useState<LevelSearchQuery>(
-    deserializeSearchQuery(getCurrentSearchParams())
+    deserializeSearchQuery(getCurrentSearchParams()),
   );
 
   usePageMetadata(
@@ -45,7 +45,7 @@ const ReviewLevelSuggestionsPage = () => {
         "Find levels that don't have a lot of reviews, there might be a hidden gem somewhere.",
       image: "card-least_reviewed_levels.jpg",
     }),
-    []
+    [],
   );
 
   return (

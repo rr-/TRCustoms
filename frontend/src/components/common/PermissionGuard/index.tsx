@@ -44,7 +44,7 @@ const GenericGuard = ({
 const hasPermission = (
   loggedInUser: UserDetails,
   require: UserPermission | string,
-  owningUserIds?: number[]
+  owningUserIds?: number[],
 ): boolean => {
   return (
     anonymousPermissions.some((r) => r === require) ||
@@ -70,8 +70,8 @@ const PermissionGuard = ({
       hasPermission(
         user,
         require,
-        owningUsers?.map((u) => u.id)
-      )
+        owningUsers?.map((u) => u.id),
+      ),
     );
   }, [user, owningUsers, require]);
 

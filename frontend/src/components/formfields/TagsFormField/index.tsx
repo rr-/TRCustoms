@@ -34,21 +34,21 @@ const TagsFormField = ({
         allTags.filter(
           (tag) =>
             value.every((t) => t.id !== tag.id) &&
-            tag.name.toLowerCase().indexOf(userInput.toLowerCase()) > -1
-        )
+            tag.name.toLowerCase().indexOf(userInput.toLowerCase()) > -1,
+        ),
       );
     },
-    [value, config]
+    [value, config],
   );
 
   const handleResultApply = useCallback(
     (tag: TagNested) => {
       setFieldTouched(name);
       onChange(
-        value.map((t) => t.id).includes(tag.id) ? value : [...value, tag]
+        value.map((t) => t.id).includes(tag.id) ? value : [...value, tag],
       );
     },
-    [setFieldTouched, onChange, name, value]
+    [setFieldTouched, onChange, name, value],
   );
 
   const handleNewResultApply = useCallback(
@@ -63,7 +63,7 @@ const TagsFormField = ({
       onChange([...value, tag]);
       await refetchConfig();
     },
-    [setFieldTouched, onChange, refetchConfig, name, value]
+    [setFieldTouched, onChange, refetchConfig, name, value],
   );
 
   const removeTag = useCallback(
@@ -71,7 +71,7 @@ const TagsFormField = ({
       setFieldTouched(name);
       onChange(value.filter((t) => t.id !== tag.id));
     },
-    [setFieldTouched, onChange, name, value]
+    [setFieldTouched, onChange, name, value],
   );
 
   return (

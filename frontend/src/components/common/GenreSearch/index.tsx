@@ -29,7 +29,7 @@ const GenreSearch = ({
   onSearchQueryChange,
 }: GenreSearchProps) => {
   const [formikValues, setFormikValues] = useState<any>(
-    convertSearchQueryToFormikValues(searchQuery)
+    convertSearchQueryToFormikValues(searchQuery),
   );
 
   const handleSubmit = useCallback(
@@ -40,17 +40,17 @@ const GenreSearch = ({
         search: values.search || null,
       });
     },
-    [searchQuery, onSearchQueryChange]
+    [searchQuery, onSearchQueryChange],
   );
 
   const handleClear = useCallback(
     () => onSearchQueryChange(defaultSearchQuery),
-    [onSearchQueryChange, defaultSearchQuery]
+    [onSearchQueryChange, defaultSearchQuery],
   );
 
   useEffect(
     () => setFormikValues(convertSearchQueryToFormikValues(searchQuery)),
-    [searchQuery]
+    [searchQuery],
   );
 
   return (

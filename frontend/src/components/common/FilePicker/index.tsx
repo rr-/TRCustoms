@@ -48,7 +48,7 @@ const FilePicker = ({
       setCurrentFileIds(newFileIds);
       onChange?.(newFileIds);
     },
-    [setErrorMessage, setCurrentFileIds, onChange, currentFileIds]
+    [setErrorMessage, setCurrentFileIds, onChange, currentFileIds],
   );
 
   const reorderFiles = (oldIndex: number, newIndex: number) => {
@@ -67,7 +67,7 @@ const FilePicker = ({
     (error: unknown) => {
       setErrorMessage(extractErrorMessage(error));
     },
-    [setErrorMessage]
+    [setErrorMessage],
   );
 
   const handleUploadFinish = useCallback(
@@ -79,7 +79,7 @@ const FilePicker = ({
       setCurrentFileIds(newFileIds);
       onChange?.(newFileIds);
     },
-    [allowMultiple, onChange, currentFileIds]
+    [allowMultiple, onChange, currentFileIds],
   );
 
   return (

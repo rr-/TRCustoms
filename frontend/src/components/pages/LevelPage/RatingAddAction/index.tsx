@@ -1,6 +1,6 @@
 import { useCallback } from "react";
-import { useRef } from "react";
 import { useContext } from "react";
+import { useRef } from "react";
 import { useQuery } from "react-query";
 import { useNavigate } from "react-router-dom";
 import { Loader } from "src/components/common/Loader";
@@ -27,7 +27,7 @@ const RatingAddAction = ({ level }: RatingAddActionProps) => {
 
   const ratingResult = useQuery<RatingDetails | null, Error>(
     ["rating", RatingService.getRatingByAuthorAndLevelIds, level.id, user?.id],
-    async () => RatingService.getRatingByAuthorAndLevelIds(level.id, user?.id)
+    async () => RatingService.getRatingByAuthorAndLevelIds(level.id, user?.id),
   );
 
   const handleGoBack = useCallback(() => {

@@ -49,7 +49,7 @@ const PlaylistAddForm = ({ userId, onAdd }: PlaylistAddFormProps) => {
         }
       }
     },
-    [userId, onAdd]
+    [userId, onAdd],
   );
 
   return (

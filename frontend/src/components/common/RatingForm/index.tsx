@@ -32,7 +32,7 @@ interface RatingFormProps {
 
 const mapQuestionsToAnswers = (
   templateQuestions: RatingTemplateQuestion[],
-  userAnswerIds: number[]
+  userAnswerIds: number[],
 ): RatingFormValues => {
   const questionToAnswer: RatingFormValues = {};
 
@@ -63,7 +63,9 @@ const RatingForm = ({
   const [isSubmitting, setIsSubmitting] = useState(false);
   let [activeTabName, setActiveTabName] = useState<string>();
   const [formValues, setFormValues] = useState<RatingFormValues>(
-    rating ? mapQuestionsToAnswers(config.rating_questions, rating.answers) : {}
+    rating
+      ? mapQuestionsToAnswers(config.rating_questions, rating.answers)
+      : {},
   );
 
   const handleSubmitError = (error: any) => {
@@ -142,14 +144,14 @@ const RatingForm = ({
         return;
       }
       setActiveTabName(
-        categories[categories?.indexOf(activeTabName || "") - 1]
+        categories[categories?.indexOf(activeTabName || "") - 1],
       );
     } else if (navigationDirection === +1) {
       if (activeTabName === last(categories)) {
         submit(data);
       } else {
         setActiveTabName(
-          categories[categories?.indexOf(activeTabName || "") + 1]
+          categories[categories?.indexOf(activeTabName || "") + 1],
         );
       }
     }
@@ -169,7 +171,7 @@ const RatingForm = ({
 
   const questionGroups = groupBy(
     config.rating_questions,
-    (question) => question.category
+    (question) => question.category,
   );
   const categories = Object.keys(questionGroups);
 
@@ -187,7 +189,7 @@ const RatingForm = ({
           onSubmit={handlePageSubmit}
         />
       ),
-    })
+    }),
   );
 
   activeTabName ??= tabs[0]?.name;

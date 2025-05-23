@@ -35,8 +35,8 @@ const LegaleseItem = ({
   const formattedNumber = parent?.bullets
     ? "\u25cf"
     : currentNumber.length
-    ? currentNumber.join(".") + "."
-    : "";
+      ? currentNumber.join(".") + "."
+      : "";
 
   return (
     <div

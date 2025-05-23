@@ -169,7 +169,7 @@ const AuditLogTable = ({
 }: AuditLogTableProps) => {
   const result = useQuery<AuditLogSearchResult, Error>(
     ["auditLogs", AuditLogService.searchAuditLogs, searchQuery],
-    async () => AuditLogService.searchAuditLogs(searchQuery)
+    async () => AuditLogService.searchAuditLogs(searchQuery),
   );
 
   if (result.error) {

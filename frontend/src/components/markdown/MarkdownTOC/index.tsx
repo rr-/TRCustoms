@@ -66,7 +66,7 @@ const handlerTOC = (h: any, node: any) => {
     node,
     "div",
     { class: "MarkdownTOC ChildMarginClear" },
-    h.wrap(all(h, node), true)
+    h.wrap(all(h, node), true),
   );
 };
 

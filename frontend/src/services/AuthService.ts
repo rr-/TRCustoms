@@ -21,7 +21,7 @@ const login = async (username: string, password: string) => {
   };
   const response = (await api.post(
     `${API_URL}/auth/token/`,
-    data
+    data,
   )) as AxiosResponse<AccessTokenResponse>;
   StorageService.setItem("accessToken", response.data.access);
   StorageService.setItem("refreshToken", response.data.refresh);
@@ -43,7 +43,7 @@ const getNewAccessToken = async (): Promise<string> => {
   const data = { refresh: refreshToken };
   const response = (await api.post(
     `${API_URL}/auth/token/refresh/`,
-    data
+    data,
   )) as AxiosResponse<RefreshTokenResponse>;
   StorageService.setItem("accessToken", response.data.access);
   return response.data.access;

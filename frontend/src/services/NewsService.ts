@@ -30,7 +30,7 @@ interface NewsUpdatePayload extends NewsBaseChangePayload {}
 interface NewsCreatePayload extends NewsBaseChangePayload {}
 
 const searchNews = async (
-  searchQuery: NewsSearchQuery
+  searchQuery: NewsSearchQuery,
 ): Promise<NewsSearchResult> => {
   const params = filterFalsyObjectValues(getGenericSearchQuery(searchQuery));
   const response = (await api.get(`${API_URL}/news/`, {
@@ -41,14 +41,14 @@ const searchNews = async (
 
 const getNewsById = async (newsId: number): Promise<NewsDetails> => {
   const response = (await api.get(
-    `${API_URL}/news/${newsId}/`
+    `${API_URL}/news/${newsId}/`,
   )) as AxiosResponse<NewsDetails>;
   return response.data;
 };
 
 const update = async (
   newsId: number,
-  payload: NewsUpdatePayload
+  payload: NewsUpdatePayload,
 ): Promise<NewsDetails> => {
   const data = {
     subject: payload.subject,
@@ -56,7 +56,7 @@ const update = async (
   };
   const response = (await api.patch(
     `${API_URL}/news/${newsId}/`,
-    data
+    data,
   )) as AxiosResponse<NewsDetails>;
   return response.data;
 };
@@ -66,9 +66,10 @@ const create = async (payload: NewsCreatePayload): Promise<NewsDetails> => {
     subject: payload.subject,
     text: payload.text,
   };
-  const response = (await api.post(`${API_URL}/news/`, data)) as AxiosResponse<
-    NewsDetails
-  >;
+  const response = (await api.post(
+    `${API_URL}/news/`,
+    data,
+  )) as AxiosResponse<NewsDetails>;
   return response.data;
 };
 

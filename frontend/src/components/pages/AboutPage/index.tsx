@@ -107,7 +107,7 @@ const AboutPage = () => {
       description:
         "TRCustoms.org is a website that hosts custom Tomb Raider games created by the Tomb Raider Level Editor.",
     }),
-    []
+    [],
   );
 
   return (

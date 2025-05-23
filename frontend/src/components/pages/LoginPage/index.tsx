@@ -34,7 +34,7 @@ const LoginPage = () => {
   const handleSubmit = useCallback(
     async (
       values: LoginFormValues,
-      { setSubmitting, setStatus, setErrors }: FormikHelpers<LoginFormValues>
+      { setSubmitting, setStatus, setErrors }: FormikHelpers<LoginFormValues>,
     ) => {
       setStatus({});
       try {
@@ -82,7 +82,7 @@ const LoginPage = () => {
         }
       }
     },
-    [navigate, setUser]
+    [navigate, setUser],
   );
 
   usePageMetadata(() => ({ ready: true, title: "Login" }), []);
