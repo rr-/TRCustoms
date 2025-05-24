@@ -13,3 +13,6 @@ class UserAward(DatesInfo):
     description = models.CharField(max_length=100)
     tier = models.IntegerField(null=True, blank=True)
     position = models.IntegerField(default=0)
+
+    class Meta:
+        unique_together = ("user", "code")
