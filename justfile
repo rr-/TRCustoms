@@ -35,6 +35,8 @@ lint-frontend *args:
 
 test *args:
     docker-compose run --rm trcustoms test -n auto {{args}}
+qtest *args:
+    docker-compose run --rm trcustoms test -n 0 --no-cov {{args}}
 
 bash:
     docker-compose run --rm trcustoms shell
