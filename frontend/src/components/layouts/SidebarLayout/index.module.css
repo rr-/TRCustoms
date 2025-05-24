@@ -1,12 +1,12 @@
 .wrapper {
   display: grid;
-  gap: var(--layout-gap, 1rem 1.5rem);
+  gap: var(--layout-gap, 1rem 1rem);
 }
 .wrapper.regular {
-  grid-template-columns: var(--layout-split, minmax(300px, 25%) 1fr);
+  grid-template-columns: var(--layout-split, 300px 1fr);
 }
 .wrapper.reverse {
-  grid-template-columns: var(--layout-split, 1fr minmax(300px, 25%));
+  grid-template-columns: var(--layout-split, 1fr 300px);
   grid-auto-flow: dense;
 }
 .wrapper.stacked {

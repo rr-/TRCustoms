@@ -8,31 +8,3 @@
   justify-content: space-between;
   margin-top: 1rem;
 }
-
-.wrapper {
-  display: grid;
-  gap: 1rem;
-  grid-template-areas: "content sidebar";
-  grid-template-columns: auto 300px;
-}
-
-@media (max-width: 1000px) {
-  .wrapper {
-    grid-template-columns: 1fr 1fr;
-    grid-template-rows: min-content auto;
-  }
-}
-
-@media (max-width: 600px) {
-  .wrapper {
-    grid-template-columns: 1fr;
-    grid-template-areas: "sidebar" "content";
-  }
-}
-
-.content {
-  grid-area: content;
-}
-.sidebar {
-  grid-area: sidebar;
-}
