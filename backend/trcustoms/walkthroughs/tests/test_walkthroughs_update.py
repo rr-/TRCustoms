@@ -152,7 +152,10 @@ def test_walkthrough_update_success(
     any_datetime,
     auth_api_client: APIClient,
 ) -> None:
-    level = LevelFactory(authors=[UserFactory(username="example")])
+    builder = UserFactory(username="example")
+    builder.settings.email_walkthrough_updated = True
+    builder.settings.save()
+    level = LevelFactory(authors=[builder])
     walkthrough = WalkthroughFactory(
         level=level,
         author=auth_api_client.user,

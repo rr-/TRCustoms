@@ -21,19 +21,16 @@ PREFIX = "[TRCustoms]"
 STATIC_DIR = Path(__file__).parent / "common" / "static"
 
 
-def get_level_authors(level: Level) -> Iterable[tuple[str, str]]:
+def get_level_authors(level: Level) -> Iterable[User]:
+    """
+    Return distinct users who authored or uploaded the level for notification.
+    """
     q_obj = Q(uploaded_levels=level)
     if not level.is_pending_approval:
         q_obj |= Q(authored_levels=level)
 
-    for item in (
-        User.objects.filter(q_obj)
-        .values("username", "email")
-        .distinct("email")
-    ):
-        username = item["username"]
-        email = item["email"]
-        yield username, email
+    # Return distinct User instances for this level
+    return User.objects.filter(q_obj).distinct()
 
 
 @celery_app.task(autoretry_for=(Exception,), retry_backoff=2)
@@ -194,13 +191,15 @@ def send_level_rejected_mail(level: Level, reason: str) -> None:
 
 def send_review_submission_mail(review: Review) -> None:
     link = f"{settings.HOST_SITE}/levels/{review.level.id}"
-    for username, email in get_level_authors(review.level):
+    for user in get_level_authors(review.level):
+        if not user.settings.email_review_posted:
+            continue
         send_mail.delay(
             template_name="review_submission",
             subject=f"{PREFIX} New review",
-            recipients=[email],
+            recipients=[user.email],
             context={
-                "username": username,
+                "username": user.username,
                 "reviewer_username": review.author.username,
                 "level_name": review.level.name,
                 "link": link,
@@ -210,13 +209,15 @@ def send_review_submission_mail(review: Review) -> None:
 
 def send_review_update_mail(review: Review) -> None:
     link = f"{settings.HOST_SITE}/levels/{review.level.id}"
-    for username, email in get_level_authors(review.level):
+    for user in get_level_authors(review.level):
+        if not user.settings.email_review_updated:
+            continue
         send_mail.delay(
             template_name="review_update",
             subject=f"{PREFIX} Review edited",
-            recipients=[email],
+            recipients=[user.email],
             context={
-                "username": username,
+                "username": user.username,
                 "reviewer_username": review.author.username,
                 "level_name": review.level.name,
                 "link": link,
@@ -226,13 +227,15 @@ def send_review_update_mail(review: Review) -> None:
 
 def send_rating_submission_mail(rating: Rating) -> None:
     link = f"{settings.HOST_SITE}/levels/{rating.level.id}"
-    for username, email in get_level_authors(rating.level):
+    for user in get_level_authors(rating.level):
+        if not user.settings.email_rating_posted:
+            continue
         send_mail.delay(
             template_name="rating_submission",
             subject=f"{PREFIX} New rating",
-            recipients=[email],
+            recipients=[user.email],
             context={
-                "username": username,
+                "username": user.username,
                 "rater_username": rating.author.username,
                 "level_name": rating.level.name,
                 "link": link,
@@ -242,13 +245,15 @@ def send_rating_submission_mail(rating: Rating) -> None:
 
 def send_rating_update_mail(rating: Rating) -> None:
     link = f"{settings.HOST_SITE}/levels/{rating.level.id}"
-    for username, email in get_level_authors(rating.level):
+    for user in get_level_authors(rating.level):
+        if not user.settings.email_rating_updated:
+            continue
         send_mail.delay(
             template_name="rating_update",
             subject=f"{PREFIX} Rating edited",
-            recipients=[email],
+            recipients=[user.email],
             context={
-                "username": username,
+                "username": user.username,
                 "rater_username": rating.author.username,
                 "level_name": rating.level.name,
                 "link": link,
@@ -291,13 +296,15 @@ def send_walkthrough_rejected_mail(
 
 def send_walkthrough_submission_mail(walkthrough: Walkthrough) -> None:
     link = f"{settings.HOST_SITE}/walkthroughs/{walkthrough.id}"
-    for username, email in get_level_authors(walkthrough.level):
+    for user in get_level_authors(walkthrough.level):
+        if not user.settings.email_walkthrough_posted:
+            continue
         send_mail.delay(
             template_name="walkthrough_submission",
             subject=f"{PREFIX} New walkthrough",
-            recipients=[email],
+            recipients=[user.email],
             context={
-                "username": username,
+                "username": user.username,
                 "author_username": walkthrough.author.username,
                 "level_name": walkthrough.level.name,
                 "link": link,
@@ -307,13 +314,15 @@ def send_walkthrough_submission_mail(walkthrough: Walkthrough) -> None:
 
 def send_walkthrough_update_mail(walkthrough: Walkthrough) -> None:
     link = f"{settings.HOST_SITE}/walkthroughs/{walkthrough.id}"
-    for username, email in get_level_authors(walkthrough.level):
+    for user in get_level_authors(walkthrough.level):
+        if not user.settings.email_walkthrough_updated:
+            continue
         send_mail.delay(
             template_name="walkthrough_update",
             subject=f"{PREFIX} Walkthrough edited",
-            recipients=[email],
+            recipients=[user.email],
             context={
-                "username": username,
+                "username": user.username,
                 "author_username": walkthrough.author.username,
                 "level_name": walkthrough.level.name,
                 "link": link,

@@ -121,6 +121,14 @@ def test_user_creation(
         "trle_reviewer_id": None,
         "is_staff": False,
         "is_superuser": False,
+        "settings": {
+            "email_review_posted": True,
+            "email_rating_posted": True,
+            "email_walkthrough_posted": True,
+            "email_review_updated": False,
+            "email_rating_updated": False,
+            "email_walkthrough_updated": False,
+        },
         "awards": [],
     }
 
@@ -326,6 +334,14 @@ def test_user_creation_acquiring_trle_account(
         "trle_reviewer_id": None,
         "is_staff": False,
         "is_superuser": False,
+        "settings": {
+            "email_review_posted": True,
+            "email_rating_posted": True,
+            "email_walkthrough_posted": True,
+            "email_review_updated": False,
+            "email_rating_updated": False,
+            "email_walkthrough_updated": False,
+        },
         "awards": [],
     }
 

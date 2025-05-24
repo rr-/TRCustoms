@@ -76,6 +76,14 @@ interface UserDetails extends UserListing {
   is_staff: boolean;
   is_superuser: boolean;
   awards: UserAward[];
+  settings: {
+    email_review_posted: boolean;
+    email_rating_posted: boolean;
+    email_walkthrough_posted: boolean;
+    email_review_updated: boolean;
+    email_rating_updated: boolean;
+    email_walkthrough_updated: boolean;
+  };
 }
 
 interface UserAward {
@@ -140,6 +148,7 @@ interface UserCreatePayload {
 
 interface UserUpdatePayload extends UserCreatePayload {
   oldPassword: string;
+  settings?: UserDetails["settings"];
 }
 
 const update = async (
@@ -156,6 +165,7 @@ const update = async (
     countryCode,
     websiteUrl,
     donationUrl,
+    settings,
   }: UserUpdatePayload,
 ): Promise<UserDetails> => {
   const data: { [key: string]: any } = {
@@ -174,6 +184,9 @@ const update = async (
   }
   if (password) {
     data.password = password;
+  }
+  if (settings) {
+    data.settings = settings;
   }
   const response = (await api.patch(
     `${API_URL}/users/${userId}/`,
