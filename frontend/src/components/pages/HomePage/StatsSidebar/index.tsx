@@ -36,7 +36,7 @@ const StatsSidebar = () => {
           </Link>
 
           <Link icon={<IconReddit />} to="https://www.reddit.com/r/trle/">
-            Browse the TRLE Subreddit
+            Browse the TRLE subreddit
           </Link>
 
           <Link icon={<IconKofi />} to="https://ko-fi.com/trcustomsorg">
