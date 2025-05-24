@@ -7,9 +7,11 @@ import { NavBar } from "src/components/common/NavBar";
 import { PageMetadata } from "src/components/common/PageMetadata";
 import { AboutPage } from "src/components/pages/AboutPage";
 import { AwardsGuidePage } from "src/components/pages/AwardsGuidePage";
+import { BuilderLocationsPage } from "src/components/pages/BuilderLocationsPage";
 import { EmailConfirmationPage } from "src/components/pages/EmailConfirmationPage";
 import { Error403Page } from "src/components/pages/ErrorPage";
 import { Error404Page } from "src/components/pages/ErrorPage";
+import { EventCataloguePage } from "src/components/pages/EventCataloguePage";
 import { GenreListPage } from "src/components/pages/GenreListPage";
 import { HomePage } from "src/components/pages/HomePage";
 import { LevelEditPage } from "src/components/pages/LevelEditPage";
@@ -34,6 +36,7 @@ import { SettingsPage } from "src/components/pages/SettingsPage";
 import { TagListPage } from "src/components/pages/TagListPage";
 import { TermsAndConditionsPage } from "src/components/pages/TermsAndConditionsPage";
 import { TextFormattingGuidelinesPage } from "src/components/pages/TextFormattingGuidelinesPage";
+import { TreasureVaultPage } from "src/components/pages/TreasureVaultPage";
 import { UserEditPage } from "src/components/pages/UserEditPage";
 import { UserListPage } from "src/components/pages/UserListPage";
 import { UserPage } from "src/components/pages/UserPage";
@@ -108,6 +111,13 @@ const AppRoutes = () => {
       <Route
         path="/reviews/level_suggestions"
         element={<ReviewLevelSuggestionsPage />}
+      />
+      <Route path="/extras" element={<TreasureVaultPage />} />
+      <Route path="/extras/treasure_vault" element={<TreasureVaultPage />} />
+      <Route path="/extras/event_catalogue" element={<EventCataloguePage />} />
+      <Route
+        path="/extras/builder_locations"
+        element={<BuilderLocationsPage />}
       />
       <Route path="/users" element={<UserListPage />} />
       <Route path="/login" element={<LoginPage />} />

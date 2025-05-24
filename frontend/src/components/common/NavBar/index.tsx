@@ -110,6 +110,9 @@ const NavBar = () => {
               <MyNavLink to={"/reviews"}>Reviews</MyNavLink>
             </li>
             <li className={styles.listItem}>
+              <MyNavLink to={"/extras"}>Extras</MyNavLink>
+            </li>
+            <li className={styles.listItem}>
               <MyNavLink to={"/about"}>About</MyNavLink>
             </li>
 
