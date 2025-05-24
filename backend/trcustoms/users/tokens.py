@@ -19,13 +19,14 @@ class PasswordResetToken(Token):
     lifetime = timedelta(hours=1)
 
 
-def get_user_from_token(token: Token, mark_used: bool = False) -> User:
+def get_user_from_token(token: Token, mark_used: bool = True) -> User:
     cache_key = f"token_{token!s}"
     if cache.get(cache_key, None):
         raise ValidationError(
             {"detail": "This token was already used. Please try again."}
         )
     user_id = token[jwt_settings.USER_ID_CLAIM]
-    user = get_object_or_404(User, pk=user_id)
-    cache.set(cache_key, True)
+    user = get_object_or_404(User.objects.exclude(email=""), pk=user_id)
+    if mark_used:
+        cache.set(cache_key, True)
     return user
