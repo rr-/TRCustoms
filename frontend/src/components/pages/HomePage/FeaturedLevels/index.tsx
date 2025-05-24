@@ -74,7 +74,9 @@ const FeaturedLevelView = ({
             </h3>
             {level && (
               <div className={styles.synopsis}>
-                <Markdown allowColors={false}>{level.description}</Markdown>
+                <Markdown allowEmbeds={false} allowColors={false}>
+                  {level.description}
+                </Markdown>
               </div>
             )}
           </div>

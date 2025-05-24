@@ -1,6 +1,6 @@
 import styles from "./index.module.css";
+import type { Element, Node } from "hast";
 import { findAndReplace } from "mdast-util-find-and-replace";
-import { toHast } from "mdast-util-to-hast";
 import { useMemo } from "react";
 import ReactMarkdown from "react-markdown";
 import remarkBreaks from "remark-breaks";
@@ -8,6 +8,7 @@ import remarkGfm from "remark-gfm";
 import { YoutubeEmbed } from "src/components/common/YoutubeEmbed";
 import { remarkTransformHeaders } from "src/components/markdown/MarkdownTOC";
 import { parseYoutubeLink } from "src/utils/misc";
+import { visit } from "unist-util-visit";
 
 const remarkAlignment = () => {
   const filterEmpty = (root: any) => {
@@ -38,10 +39,10 @@ const remarkAlignment = () => {
       { type: "text", value: match.groups.prefix },
       {
         type: "alignment",
+        children: [{ type: "text", value: match.groups.content }],
         data: {
           hName: "div",
           hProperties: { class: styles.center },
-          hChildren: [{ type: "text", value: match.groups.content }],
         },
       },
       { type: "text", value: match.groups.suffix },
@@ -50,7 +51,7 @@ const remarkAlignment = () => {
     return true;
   };
 
-  const transformBlock = (root: any) => {
+  const transformBlock = (root: any, index) => {
     const startRegex = /^(?<prefix>.*?)\[center\](?<suffix>.*)$/i;
     const endRegex = /^(?<prefix>.*?)\[\/center\](?<suffix>.*)$/i;
     let startMatch = null;
@@ -76,35 +77,34 @@ const remarkAlignment = () => {
 
     const startIdx = root.children.indexOf(startNode);
     const endIdx = root.children.indexOf(endNode);
-    const content: any = filterEmpty([
+    const contentNodes: any = filterEmpty([
       { type: "text", value: startMatch.groups.suffix },
       ...root.children.slice(startIdx + 1, endIdx),
       { type: "text", value: endMatch.groups.prefix },
     ]);
-    const contentHast = content.map(toHast);
 
     const newContent: any = filterEmpty([
       { type: "text", value: startMatch.groups.prefix },
-      {
-        type: "alignment",
-        value: "",
-        data: {
-          hName: "div",
-          hProperties: { class: styles.center },
-          hChildren: contentHast,
-        },
-      },
+      contentNodes.length
+        ? {
+            type: "alignment",
+            children: contentNodes,
+            data: {
+              hName: "div",
+              hProperties: { class: styles.center },
+            },
+          }
+        : { type: "text", value: "" },
       { type: "text", value: endMatch.groups.suffix },
     ]);
 
     if (startIdx === 0 && endIdx === root.children.length - 1) {
       Object.assign(root, {
         type: "alignment",
-        value: "",
+        children: newContent,
         data: {
           hName: "p",
           hProperties: { class: styles.center },
-          hChildren: newContent.map(toHast),
         },
       });
     } else {
@@ -114,17 +114,48 @@ const remarkAlignment = () => {
     return true;
   };
 
-  const visit = (root: any) => {
-    transformInline(root);
-    transformBlock(root);
-    for (let node of root.children || []) {
-      visit(node);
-    }
-    return root;
-  };
-
   return (tree: any) => {
-    return visit(tree);
+    visit(tree, (node: Element, index: number | undefined, parent: Node) => {
+      transformInline(node);
+      transformBlock(node);
+    });
+  };
+};
+
+const squeezeParagraphs = (tree: any) => {
+  visit(tree, (node: Element, index: number | undefined, parent: Node) => {
+    if (
+      index !== undefined &&
+      parent &&
+      (node.type === "paragraph" || node.type === "alignment") &&
+      node.children.every(function (child) {
+        return child.type === "text" && /^\s*$/.test(child.value);
+      })
+    ) {
+      parent.children.splice(index, 1);
+      return index;
+    }
+  });
+};
+
+const remarkSqueezeParagraphs = () => {
+  return (tree: any) => {
+    squeezeParagraphs(tree);
+  };
+};
+
+const remarkTRRemoveEmbeds = () => {
+  return (tree: any) => {
+    visit(tree, (node: Element, index: number | undefined, parent: Node) => {
+      if (
+        index !== undefined &&
+        parent &&
+        (node.type === "image" || node.type === "iframe")
+      ) {
+        parent.children.splice(index, 1);
+        return index;
+      }
+    });
   };
 };
 
@@ -163,10 +194,12 @@ const transformLink = (link: any): any => {
 
 interface MarkdownProps {
   allowColors?: boolean;
+  allowEmbeds?: boolean;
   children: string;
 }
 
-const Markdown = ({ allowColors, children }: MarkdownProps) => {
+const Markdown = ({ allowEmbeds, allowColors, children }: MarkdownProps) => {
+  allowEmbeds ??= true;
   allowColors ??= true;
 
   const rendered = useMemo(() => {
@@ -176,16 +209,20 @@ const Markdown = ({ allowColors, children }: MarkdownProps) => {
       "ChildMarginClear",
     ];
 
+    const plugins = [
+      ...(allowEmbeds ? [] : [remarkTRRemoveEmbeds]),
+      remarkAlignment,
+      remarkSqueezeParagraphs,
+      remarkGfm,
+      remarkBreaks,
+      remarkTransformHeaders,
+      remarkTRCustomColors,
+    ];
+
     return (
       <div className={classNames.join(" ")}>
         <ReactMarkdown
-          remarkPlugins={[
-            remarkGfm,
-            remarkBreaks,
-            remarkTransformHeaders,
-            remarkTRCustomColors,
-            remarkAlignment,
-          ]}
+          remarkPlugins={plugins}
           components={{ a: transformLink }}
         >
           {children}
