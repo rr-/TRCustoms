@@ -51,6 +51,7 @@ class Command(BaseCommand):
             for level in Level.objects.iterator():
                 level.update_rating_count(save=False)
                 level.update_review_count(save=False)
+                level.update_walkthrough_count(save=False)
                 level.update_download_count(save=False)
                 level.update_last_file(save=False)
                 level.update_last_user_content_updated(save=False)

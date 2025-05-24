@@ -138,6 +138,7 @@ class Level(UserContentDatesInfo, DatesInfo):
     # denormalized fields for faster db lookups
     rating_count = models.PositiveIntegerField(default=0)
     review_count = models.PositiveIntegerField(default=0)
+    walkthrough_count = models.PositiveIntegerField(default=0)
     download_count = models.IntegerField(default=0)
     last_file = models.OneToOneField(
         "LevelFile",
@@ -167,6 +168,15 @@ class Level(UserContentDatesInfo, DatesInfo):
             self.review_count = review_count
             if save:
                 self.save(update_fields=["review_count"])
+
+    def update_walkthrough_count(self, save: bool = True) -> None:
+        walkthrough_count = self.walkthroughs.filter(
+            status=WalkthroughStatus.APPROVED
+        ).count()
+        if walkthrough_count != self.walkthrough_count:
+            self.walkthrough_count = walkthrough_count
+            if save:
+                self.save(update_fields=["walkthrough_count"])
 
     def update_download_count(self, save: bool = True) -> None:
         download_count = sum(
