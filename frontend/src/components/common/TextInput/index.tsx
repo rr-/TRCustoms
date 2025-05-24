@@ -1,12 +1,5 @@
-interface TextInputProps {
+interface TextInputProps extends React.HTMLAttributes<HTMLInputElement> {
   type?: string | undefined;
-  maxLength?: number | undefined;
-  onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void | undefined;
-  onKeyDown?: (
-    event: React.KeyboardEvent<HTMLInputElement>,
-  ) => void | undefined;
-  value?: string | undefined;
-  placeholder?: string | undefined;
 }
 
 const TextInput = ({ type, ...props }: TextInputProps) => {

@@ -51,6 +51,10 @@ shell-prod:
     ssh -t trcustoms 'cd ~/srv/website; docker-compose -f docker-compose.prod.yml run --rm trcustoms manage shell'
 shell-staging:
     ssh -t trcustoms 'cd ~/srv/website-staging; docker-compose -f docker-compose.prod.yml run --rm trcustoms manage shell'
+manage-prod *args:
+    ssh -t trcustoms 'cd ~/srv/website; docker-compose -f docker-compose.prod.yml run --rm trcustoms manage {{args}}'
+manage-staging *args:
+    ssh -t trcustoms 'cd ~/srv/website-staging; docker-compose -f docker-compose.prod.yml run --rm trcustoms manage {{args}}'
 
 snippet:
     docker-compose run -T --rm trcustoms manage shell

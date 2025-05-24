@@ -84,7 +84,7 @@ const UserForm = ({ user, onGoBack, onSubmit }: UserFormProps) => {
     password2: "",
     bio: user?.bio || "",
     pictureId: user?.picture?.id || undefined,
-    countryCode: user?.country?.code || "",
+    countryCode: user?.country?.iso_3166_1_alpha2 || "",
     websiteUrl: user?.website_url || "",
     donationUrl: user?.donation_url || "",
   };
@@ -225,7 +225,7 @@ const UserForm = ({ user, onGoBack, onSubmit }: UserFormProps) => {
 
   const countryOptions = config.countries.map((country) => ({
     label: country.name,
-    value: country.code,
+    value: country.iso_3166_1_alpha2,
   }));
 
   return (

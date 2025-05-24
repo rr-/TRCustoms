@@ -8,7 +8,8 @@ import { LevelListing } from "src/services/LevelService";
 import { TagListing } from "src/services/TagService";
 
 interface CountryListing {
-  code: string;
+  iso_3166_1_alpha2: string;
+  iso_3166_1_numeric: string;
   name: string;
 }
 
