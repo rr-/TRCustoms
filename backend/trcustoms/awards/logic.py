@@ -2,6 +2,7 @@ from collections.abc import Iterable
 from itertools import groupby
 
 from django.core.cache import cache
+from django.db import IntegrityError
 
 from trcustoms.awards.models import UserAward
 from trcustoms.awards.specs import ALL_AWARD_SPECS
@@ -44,16 +45,21 @@ def update_user_award_tier(
         UserAward.objects.filter(user=user, code=award_code).delete()
         return
 
-    UserAward.objects.update_or_create(
-        user=user,
-        code=award_spec.code,
-        defaults=dict(
-            tier=award_spec.tier,
-            title=award_spec.title,
-            position=ALL_AWARD_SPECS.index(award_spec),
-            description=award_spec.description,
-        ),
-    )
+    for attempt in range(2):
+        try:
+            UserAward.objects.update_or_create(
+                user=user,
+                code=award_spec.code,
+                defaults=dict(
+                    tier=award_spec.tier,
+                    title=award_spec.title,
+                    position=ALL_AWARD_SPECS.index(award_spec),
+                    description=award_spec.description,
+                ),
+            )
+        except IntegrityError:
+            if attempt == 1:
+                raise
 
 
 def get_max_eligible_spec(
