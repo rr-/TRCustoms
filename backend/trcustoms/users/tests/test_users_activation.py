@@ -1,4 +1,5 @@
 import re
+from datetime import datetime
 
 import pytest
 from django.core import mail
@@ -9,6 +10,8 @@ from rest_framework.test import APIClient
 from trcustoms.audit_logs.consts import ChangeType
 from trcustoms.audit_logs.models import AuditLog
 from trcustoms.audit_logs.utils import make_audit_log
+from trcustoms.levels.tests.factories import LevelFactory
+from trcustoms.users.consts import UserSource
 from trcustoms.users.models import User
 from trcustoms.users.tests.factories import UserFactory
 
@@ -178,3 +181,54 @@ def test_user_deactivation(staff_api_client: APIClient) -> None:
     assert User.objects.get(username=user.username).is_pending_activation
     assert not User.objects.get(username=user.username).is_active
     assert not AuditLog.objects.first().is_action_required
+
+
+@pytest.mark.django_db
+def test_important_user_email_late_or_uncached_activation(
+    api_client: APIClient, staff_api_client: APIClient, fake: Generic
+) -> None:
+    # Create a TRLE user
+    user = UserFactory(
+        username=fake.person.username(),
+        source=UserSource.trle,
+        is_active=False,
+    )
+    user.date_joined = datetime(1990, 1, 1)
+    user.set_unusable_password()
+    user.save()
+    # Add some asset to this user, ensuring rejection will trigger a wipe
+    # instead of deletion
+    LevelFactory(authors=[user])
+
+    # Claim the TRLE user
+    payload = {
+        "email": fake.person.email(),
+        "username": user.username,
+        "password": VALID_PASSWORD,
+    }
+    response = api_client.post("/api/users/", data=payload)
+    data = response.json()
+    assert response.status_code == status.HTTP_201_CREATED, data
+    assert len(mail.outbox) == 1
+    match = re.search(r'/email-confirmation/([^">\s]+)', mail.outbox[0].body)
+    token = match.group(1)
+
+    # Reject the user BEFORE they activate the account
+    response = staff_api_client.post(
+        f"/api/users/{user.pk}/deactivate/",
+        data={"reason": "no reason"},
+    )
+    data = response.json()
+    assert response.status_code == status.HTTP_200_OK, data
+    assert data == {}
+
+    # Assert the account is still out there even after rejection
+    assert User.objects.filter(pk=user.pk).exists()
+
+    # NOW activate the account - assert it failed
+    response = api_client.post(
+        "/api/users/confirm_email/", data={"token": token}
+    )
+    assert AuditLog.objects.filter(is_action_required=True).count() == 0
+    assert response.status_code == status.HTTP_404_NOT_FOUND, response.content
+    assert response.json() == {"detail": "Not found."}
