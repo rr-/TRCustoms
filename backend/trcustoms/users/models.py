@@ -174,3 +174,15 @@ class User(AbstractUser):
                     "authored_walkthrough_count_approved",
                 ]
             )
+
+
+class UserSettings(models.Model):
+    user = models.OneToOneField(
+        User, related_name="settings", on_delete=models.CASCADE
+    )
+    email_review_posted = models.BooleanField(default=True)
+    email_rating_posted = models.BooleanField(default=True)
+    email_walkthrough_posted = models.BooleanField(default=True)
+    email_review_updated = models.BooleanField(default=False)
+    email_rating_updated = models.BooleanField(default=False)
+    email_walkthrough_updated = models.BooleanField(default=False)

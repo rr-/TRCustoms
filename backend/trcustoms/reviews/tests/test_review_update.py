@@ -18,7 +18,10 @@ def test_review_update_success(
     any_datetime,
     auth_api_client: APIClient,
 ) -> None:
-    level = LevelFactory(authors=[UserFactory(username="example")])
+    builder = UserFactory(username="example")
+    builder.settings.email_review_updated = True
+    builder.settings.save()
+    level = LevelFactory(authors=[builder])
     review = ReviewFactory(level=level, author=auth_api_client.user)
     review.created = datetime(2023, 12, 29, tzinfo=timezone.utc)
     review.save(update_fields=["created"])

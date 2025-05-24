@@ -16,7 +16,7 @@ from trcustoms.uploads.consts import UploadType
 from trcustoms.uploads.models import UploadedFile
 from trcustoms.uploads.serializers import UploadedFileNestedSerializer
 from trcustoms.users.consts import UserSource
-from trcustoms.users.models import User, UserPermission
+from trcustoms.users.models import User, UserPermission, UserSettings
 from trcustoms.users.tokens import ConfirmEmailToken, PasswordResetToken
 from trcustoms.users.validators import UsernameValidator
 
@@ -124,6 +124,19 @@ class CustomEmailField(serializers.EmailField):
         return instance.email
 
 
+class UserSettingsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = UserSettings
+        fields = [
+            "email_review_posted",
+            "email_rating_posted",
+            "email_walkthrough_posted",
+            "email_review_updated",
+            "email_rating_updated",
+            "email_walkthrough_updated",
+        ]
+
+
 class UserDetailsSerializer(UserListingSerializer):
     is_superuser = serializers.ReadOnlyField()
     is_staff = serializers.ReadOnlyField()
@@ -133,6 +146,7 @@ class UserDetailsSerializer(UserListingSerializer):
 
     email = CustomEmailField()
     awards = UserAwardSerializer(read_only=True, many=True)
+    settings = UserSettingsSerializer(required=False)
 
     picture_id = serializers.PrimaryKeyRelatedField(
         write_only=True,
@@ -233,11 +247,18 @@ class UserDetailsSerializer(UserListingSerializer):
 
     @transaction.atomic
     def update(self, instance, validated_data):
+        settings_data = validated_data.pop("settings", None)
         password = validated_data.pop("password", None)
         old_email = instance.email
         is_acquiring = self.instance.is_placeholder
 
         instance = super().update(instance, validated_data)
+
+        if settings_data is not None:
+            settings_obj, _ = UserSettings.objects.get_or_create(user=instance)
+            for key, value in settings_data.items():
+                setattr(settings_obj, key, value)
+            settings_obj.save()
 
         if password:
             instance.set_password(password)
@@ -284,6 +305,7 @@ class UserDetailsSerializer(UserListingSerializer):
             "picture_id",
             "is_staff",
             "is_superuser",
+            "settings",
             "awards",
         ]
 

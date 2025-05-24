@@ -24,7 +24,10 @@ def test_rating_update_success(
     any_datetime,
     auth_api_client: APIClient,
 ) -> None:
-    level = LevelFactory(authors=[UserFactory(username="example")])
+    builder = UserFactory(username="example")
+    builder.settings.email_rating_updated = True
+    builder.settings.save()
+    level = LevelFactory(authors=[builder])
     rating = RatingFactory(level=level, author=auth_api_client.user)
     rating.created = datetime(2023, 12, 29, tzinfo=timezone.utc)
     rating.save(update_fields=["created"])
