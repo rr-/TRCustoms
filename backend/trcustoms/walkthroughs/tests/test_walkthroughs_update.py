@@ -227,3 +227,41 @@ def test_walkthrough_update_success(
         assert mail.outbox[0].subject == "[TRCustoms] Walkthrough edited"
     else:
         assert len(mail.outbox) == 0
+
+
+@pytest.mark.django_db
+def test_walkthrough_update_updates_level_walkthrough_count(
+    auth_api_client: APIClient,
+) -> None:
+    # create walkthrough on first level
+    level1 = LevelFactory()
+    level2 = LevelFactory()
+    walkthrough = WalkthroughFactory(
+        level=level1,
+        author=auth_api_client.user,
+        text="test",
+        status=WalkthroughStatus.APPROVED,
+    )
+
+    # initial counts
+    level1.refresh_from_db()
+    assert level1.walkthroughs.count() == 1
+    assert level1.walkthrough_count == 1
+    assert level2.walkthroughs.count() == 0
+    assert level2.walkthrough_count == 0
+
+    # move walkthrough to second level
+    response = auth_api_client.patch(
+        f"/api/walkthroughs/{walkthrough.id}/",
+        format="json",
+        data={"level_id": level2.id, "text": walkthrough.text},
+    )
+    assert response.status_code == status.HTTP_200_OK, response.content
+
+    # updated counts on both levels
+    level1.refresh_from_db()
+    level2.refresh_from_db()
+    assert level1.walkthroughs.count() == 0
+    assert level1.walkthrough_count == 0
+    assert level2.walkthroughs.count() == 1
+    assert level2.walkthrough_count == 1

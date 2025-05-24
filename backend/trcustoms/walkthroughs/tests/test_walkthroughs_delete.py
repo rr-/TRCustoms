@@ -76,3 +76,21 @@ def test_walkthrough_deletion_updates_authored_walkthrough_count(
     user.refresh_from_db()
     assert user.authored_walkthrough_count_all == 0
     assert user.authored_walkthrough_count_approved == 0
+
+
+@pytest.mark.django_db
+def test_walkthrough_deletion_updates_level_walkthrough_count(
+    superuser_api_client: APIClient,
+) -> None:
+    # create and ensure a walkthrough exists
+    walkthrough = WalkthroughFactory(status=WalkthroughStatus.APPROVED)
+    level = walkthrough.level
+    # initial counts set by signals
+    assert level.walkthroughs.count() == 1
+    assert level.walkthrough_count == 1
+    # delete via API
+    superuser_api_client.delete(f"/api/walkthroughs/{walkthrough.id}/")
+    level.refresh_from_db()
+    # walkthrough count should be decremented
+    assert level.walkthroughs.count() == 0
+    assert level.walkthrough_count == 0

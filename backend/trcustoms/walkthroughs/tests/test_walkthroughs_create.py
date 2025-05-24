@@ -228,3 +228,33 @@ def test_walkthrough_creation_updates_authored_walkthrough_count(
     user.refresh_from_db()
     assert user.authored_walkthrough_count_all == expected_all_count
     assert user.authored_walkthrough_count_approved == expected_approved_count
+
+
+@pytest.mark.django_db
+def test_walkthrough_creation_updates_level_walkthrough_count(
+    auth_api_client: APIClient,
+) -> None:
+    level = LevelFactory()
+    response = auth_api_client.post(
+        "/api/walkthroughs/",
+        format="json",
+        data={
+            "level_id": level.id,
+            "walkthrough_type": WalkthroughType.TEXT,
+            "text": "test walkthrough",
+        },
+    )
+    data = response.json()
+    level.refresh_from_db()
+    walkthrough = level.walkthroughs.first()
+
+    assert response.status_code == status.HTTP_201_CREATED, data
+    # walkthroughs need to be approved first
+    assert walkthrough is not None
+    assert level.walkthrough_count == 0
+
+    # after approving, the backend count should match actual walkthroughs
+    walkthrough.status = WalkthroughStatus.APPROVED
+    walkthrough.save(update_fields=["status"])
+    level.refresh_from_db()
+    assert level.walkthrough_count == 1
