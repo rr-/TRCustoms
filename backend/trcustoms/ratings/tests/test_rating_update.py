@@ -80,7 +80,8 @@ def test_rating_update_success(
         2024, 1, 1, tzinfo=timezone.utc
     )
 
-    assert len(mail.outbox) == 0
+    assert len(mail.outbox) == 1
+    assert mail.outbox[0].subject == "[TRCustoms] Rating edited"
 
 
 @pytest.mark.django_db

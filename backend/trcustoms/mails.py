@@ -10,6 +10,7 @@ from premailer import transform
 
 from trcustoms.celery import app as celery_app
 from trcustoms.levels.models import Level
+from trcustoms.ratings.models import Rating
 from trcustoms.reviews.models import Review
 from trcustoms.users.models import User
 from trcustoms.users.tokens import ConfirmEmailToken, PasswordResetToken
@@ -218,6 +219,38 @@ def send_review_update_mail(review: Review) -> None:
                 "username": username,
                 "reviewer_username": review.author.username,
                 "level_name": review.level.name,
+                "link": link,
+            },
+        )
+
+
+def send_rating_submission_mail(rating: Rating) -> None:
+    link = f"{settings.HOST_SITE}/levels/{rating.level.id}"
+    for username, email in get_level_authors(rating.level):
+        send_mail.delay(
+            template_name="rating_submission",
+            subject=f"{PREFIX} New rating",
+            recipients=[email],
+            context={
+                "username": username,
+                "rater_username": rating.author.username,
+                "level_name": rating.level.name,
+                "link": link,
+            },
+        )
+
+
+def send_rating_update_mail(rating: Rating) -> None:
+    link = f"{settings.HOST_SITE}/levels/{rating.level.id}"
+    for username, email in get_level_authors(rating.level):
+        send_mail.delay(
+            template_name="rating_update",
+            subject=f"{PREFIX} Rating edited",
+            recipients=[email],
+            context={
+                "username": username,
+                "rater_username": rating.author.username,
+                "level_name": rating.level.name,
                 "link": link,
             },
         )

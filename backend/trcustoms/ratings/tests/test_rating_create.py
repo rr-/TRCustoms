@@ -80,7 +80,8 @@ def test_rating_creation_success(
     assert rating
     assert rating.last_user_content_updated is None
 
-    assert len(mail.outbox) == 0
+    assert len(mail.outbox) == 1
+    assert mail.outbox[0].subject == "[TRCustoms] New rating"
 
 
 @pytest.mark.django_db

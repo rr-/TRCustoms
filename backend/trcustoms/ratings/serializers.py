@@ -3,6 +3,10 @@ from rest_framework import serializers
 from trcustoms.common.serializers import RatingClassNestedSerializer
 from trcustoms.levels.models import Level
 from trcustoms.levels.serializers import LevelNestedSerializer
+from trcustoms.mails import (
+    send_rating_submission_mail,
+    send_rating_update_mail,
+)
 from trcustoms.permissions import get_permissions
 from trcustoms.ratings.consts import RatingType
 from trcustoms.ratings.models import (
@@ -149,6 +153,7 @@ class RatingDetailsSerializer(RatingListingSerializer):
             return rating
 
         rating = self.handle_m2m(rating_factory, validated_data)
+        send_rating_submission_mail(rating)
         update_awards.delay(rating.author.pk)
         return rating
 
@@ -161,6 +166,7 @@ class RatingDetailsSerializer(RatingListingSerializer):
             return rating
 
         rating = self.handle_m2m(rating_factory, validated_data)
+        send_rating_update_mail(rating)
         update_awards.delay(rating.author.pk)
         return rating
 
