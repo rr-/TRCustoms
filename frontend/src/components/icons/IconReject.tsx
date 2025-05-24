@@ -1,4 +1,4 @@
-import { IconX } from "../IconX";
+import { IconX } from "./IconX";
 
 const IconReject = () => {
   return <IconX />;
