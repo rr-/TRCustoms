@@ -1,0 +1,14 @@
+{% extends "email_base.html" %}
+
+{% block content %}
+<p>Hi {{username}},</p>
+
+<p>
+  {{rater_username}} has submitted a rating for your level {{level_name}}.
+</p>
+
+<p>
+  <a href="{{link}}">Click here</a> to go to the level page if you want to see
+  it.
+</p>
+{% endblock %}
