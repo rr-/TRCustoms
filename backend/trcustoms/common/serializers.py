@@ -6,7 +6,7 @@ from trcustoms.common.models import Country, RatingClass
 class CountryListingSerializer(serializers.ModelSerializer):
     class Meta:
         model = Country
-        fields = ["code", "name"]
+        fields = ["iso_3166_1_alpha2", "name", "iso_3166_1_numeric"]
 
 
 class CountryNestedSerializer(CountryListingSerializer):

@@ -1,0 +1,25 @@
+.geography {
+  outline: none;
+  fill: var(--v2-bg-color-3);
+  cursor: pointer;
+
+  &:hover {
+    fill: var(--v2-bg-color-4);
+  }
+
+  &.selected {
+    fill: var(--v2-accent-color-1);
+    cursor: pointer;
+    &:hover {
+      fill: var(--v2-accent-color-2);
+    }
+  }
+}
+
+.border {
+  fill: none;
+  stroke: var(--fg-color);
+  stroke-width: 0.75px;
+  outline: none;
+  pointer-events: none;
+}

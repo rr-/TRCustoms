@@ -43,7 +43,8 @@ class UserContentDatesInfo(models.Model):
 
 class Country(models.Model):
     name = models.CharField(max_length=64)
-    code = models.CharField(max_length=64)
+    iso_3166_1_alpha2 = models.CharField(max_length=2)
+    iso_3166_1_numeric = models.CharField(max_length=3, null=True)
 
     class Meta:
         default_permissions = []

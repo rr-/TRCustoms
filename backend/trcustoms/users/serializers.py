@@ -163,7 +163,7 @@ class UserDetailsSerializer(UserListingSerializer):
         allow_null=True,
         write_only=True,
         source="country",
-        slug_field="code",
+        slug_field="iso_3166_1_alpha2",
         queryset=Country.objects.all(),
     )
 

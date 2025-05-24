@@ -31,7 +31,10 @@ class Command(BaseCommand):
     def create_countries(self) -> None:
         for item in self.read_csv("countries.csv"):
             Country.objects.update_or_create(
-                code=item["Code"], defaults=dict(name=item["Name"])
+                iso_3166_1_alpha2=item["Alpha2"],
+                defaults=dict(
+                    name=item["Name"], iso_3166_1_numeric=item["Numeric"]
+                ),
             )
 
     def create_genres(self) -> None:
