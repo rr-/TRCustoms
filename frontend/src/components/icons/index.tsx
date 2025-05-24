@@ -49,3 +49,5 @@ export * from "src/components/icons/IconTrash";
 export * from "src/components/icons/IconTwitter";
 export * from "src/components/icons/IconX";
 export * from "src/components/icons/IconXCircle";
+export * from "src/components/icons/IconReddit";
+export * from "src/components/icons/IconSocials";
