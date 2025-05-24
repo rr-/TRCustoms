@@ -122,40 +122,38 @@ const remarkAlignment = () => {
   };
 };
 
-const squeezeParagraphs = (tree: any) => {
-  visit(tree, (node: Element, index: number | undefined, parent: Node) => {
-    if (
-      index !== undefined &&
-      parent &&
-      (node.type === "paragraph" || node.type === "alignment") &&
-      node.children.every(function (child) {
-        return child.type === "text" && /^\s*$/.test(child.value);
-      })
-    ) {
-      parent.children.splice(index, 1);
-      return index;
-    }
-  });
-};
-
 const remarkSqueezeParagraphs = () => {
-  return (tree: any) => {
-    squeezeParagraphs(tree);
-  };
-};
-
-const remarkTRRemoveEmbeds = () => {
   return (tree: any) => {
     visit(tree, (node: Element, index: number | undefined, parent: Node) => {
       if (
         index !== undefined &&
         parent &&
-        (node.type === "image" || node.type === "iframe")
+        (node.type === "paragraph" || node.type === "alignment") &&
+        node.children.every(function (child) {
+          return child.type === "text" && /^\s*$/.test(child.value);
+        })
       ) {
         parent.children.splice(index, 1);
         return index;
       }
     });
+  };
+};
+
+const remarkRemoveElements = (allowedTags: string[]) => {
+  return () => {
+    return (tree: any) => {
+      visit(tree, (node: Element, index: number | undefined, parent: Node) => {
+        if (
+          index !== undefined &&
+          parent &&
+          allowedTags.some((tag) => node.type === tag)
+        ) {
+          parent.children.splice(index, 1);
+          return index;
+        }
+      });
+    };
   };
 };
 
@@ -195,11 +193,18 @@ const transformLink = (link: any): any => {
 interface MarkdownProps {
   allowColors?: boolean;
   allowEmbeds?: boolean;
+  allowLines?: boolean;
   children: string;
 }
 
-const Markdown = ({ allowEmbeds, allowColors, children }: MarkdownProps) => {
+const Markdown = ({
+  allowEmbeds,
+  allowLines,
+  allowColors,
+  children,
+}: MarkdownProps) => {
   allowEmbeds ??= true;
+  allowLines ??= true;
   allowColors ??= true;
 
   const rendered = useMemo(() => {
@@ -210,7 +215,8 @@ const Markdown = ({ allowEmbeds, allowColors, children }: MarkdownProps) => {
     ];
 
     const plugins = [
-      ...(allowEmbeds ? [] : [remarkTRRemoveEmbeds]),
+      ...(allowEmbeds ? [] : [remarkRemoveElements(["image", "iframe"])]),
+      ...(allowLines ? [] : [remarkRemoveElements(["thematicBreak"])]),
       remarkAlignment,
       remarkSqueezeParagraphs,
       remarkGfm,
