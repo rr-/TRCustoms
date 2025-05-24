@@ -7,6 +7,8 @@ import { Loader } from "src/components/common/Loader";
 import { NewsSidebar } from "src/components/common/NewsSidebar";
 import { PermissionGuard } from "src/components/common/PermissionGuard";
 import { SectionHeader } from "src/components/common/Section";
+import { SidebarLayout } from "src/components/layouts/SidebarLayout";
+import { SidebarLayoutVariant } from "src/components/layouts/SidebarLayout";
 import { Markdown } from "src/components/markdown/Markdown";
 import { usePageMetadata } from "src/contexts/PageMetadataContext";
 import type { NewsDetails } from "src/services/NewsService";
@@ -67,12 +69,12 @@ const NewsPage = () => {
   );
 
   return (
-    <div className={styles.wrapper}>
-      <div className={styles.sidebar}>
-        <NewsSidebar />
-      </div>
-      <div className={styles.content}>{content}</div>
-    </div>
+    <SidebarLayout
+      variant={SidebarLayoutVariant.Reverse}
+      sidebar={<NewsSidebar />}
+    >
+      <Box>{content}</Box>
+    </SidebarLayout>
   );
 };
 
