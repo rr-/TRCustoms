@@ -9,6 +9,8 @@ import { IconDiscord } from "src/components/icons";
 import { IconGitHub } from "src/components/icons";
 import { IconKofi } from "src/components/icons";
 import { IconTwitter } from "src/components/icons";
+import { IconReddit } from "src/components/icons";
+import { IconSocials } from "src/components/icons";
 import { LevelStats } from "src/components/pages/HomePage/LevelStats";
 
 const StatsSidebar = () => {
@@ -29,8 +31,12 @@ const StatsSidebar = () => {
             Join our Discord
           </Link>
 
-          <Link icon={<IconTwitter />} to="https://twitter.com/trcustomsorg">
-            Follow us on Twitter
+          <Link icon={<IconSocials />} to="https://linktr.ee/trcustomsorg">
+            Follow our socials
+          </Link>
+
+          <Link icon={<IconReddit />} to="https://www.reddit.com/r/trle/">
+            Browse the TRLE Subreddit
           </Link>
 
           <Link icon={<IconKofi />} to="https://ko-fi.com/trcustomsorg">
