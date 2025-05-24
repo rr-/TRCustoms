@@ -84,7 +84,7 @@ const LevelPage = ({ tabName, action }: LevelPageProps) => {
 
     {
       name: "ratings",
-      label: "Ratings",
+      label: `Ratings (${level.rating_count})`,
       content:
         action === "addRating" ? (
           <RatingAddAction level={level} />
@@ -97,7 +97,7 @@ const LevelPage = ({ tabName, action }: LevelPageProps) => {
 
     {
       name: "reviews",
-      label: "Reviews",
+      label: `Reviews (${level.review_count})`,
       content:
         action === "addReview" ? (
           <ReviewAddAction level={level} />
@@ -110,7 +110,7 @@ const LevelPage = ({ tabName, action }: LevelPageProps) => {
 
     {
       name: "walkthroughs",
-      label: "Walkthroughs",
+      label: `Walkthroughs (${level.walkthrough_count})`,
       content: <LevelWalkthroughsTab level={level} />,
     },
   ];
