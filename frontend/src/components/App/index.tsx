@@ -7,7 +7,7 @@ import { NavBar } from "src/components/common/NavBar";
 import { PageMetadata } from "src/components/common/PageMetadata";
 import { AboutPage } from "src/components/pages/AboutPage";
 import { AwardsGuidePage } from "src/components/pages/AwardsGuidePage";
-import { BuilderLocationsPage } from "src/components/pages/BuilderLocationsPage";
+import { CommunityLocationsPage } from "src/components/pages/CommunityLocationsPage";
 import { EmailConfirmationPage } from "src/components/pages/EmailConfirmationPage";
 import { Error403Page } from "src/components/pages/ErrorPage";
 import { Error404Page } from "src/components/pages/ErrorPage";
@@ -116,8 +116,8 @@ const AppRoutes = () => {
       <Route path="/extras/treasure_vault" element={<TreasureVaultPage />} />
       <Route path="/extras/event_catalogue" element={<EventCataloguePage />} />
       <Route
-        path="/extras/builder_locations"
-        element={<BuilderLocationsPage />}
+        path="/extras/community_locations"
+        element={<CommunityLocationsPage />}
       />
       <Route path="/users" element={<UserListPage />} />
       <Route path="/login" element={<LoginPage />} />

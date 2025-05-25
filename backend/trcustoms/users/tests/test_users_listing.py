@@ -6,7 +6,7 @@ from trcustoms.users.tests.factories import UserFactory
 
 
 @pytest.mark.django_db
-def test_builder_locations_filters_users_by_country_and_min_authored(
+def test_user_listing_filters_users_by_country_and_min_authored(
     auth_api_client,
 ):
     country = Country.objects.create(
