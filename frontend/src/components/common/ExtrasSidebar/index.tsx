@@ -22,9 +22,9 @@ const ExtrasSidebar = () => {
           </GFXCard>
         </Link>
 
-        <Link to={`/extras/builder_locations`}>
-          <GFXCard name="builder_locations" variant="big">
-            Builder locations
+        <Link to={`/extras/community_locations`}>
+          <GFXCard name="community_locations" variant="big">
+            Community locations
           </GFXCard>
         </Link>
       </Section>

@@ -45,13 +45,6 @@ const LocationUserTable = ({
       itemElement: ({ item }) => <UserPicLink user={item} />,
     },
     {
-      name: "authored_level_count_approved",
-      sortKey: "authored_level_count_approved",
-      className: styles.levelsAuthored,
-      label: "Levels authored",
-      itemElement: ({ item }) => `${item.authored_level_count_approved}`,
-    },
-    {
       name: "date_joined",
       sortKey: "date_joined",
       className: styles.dateJoined,
@@ -69,7 +62,7 @@ const LocationUserTable = ({
   return (
     <Section>
       <SectionHeader>
-        Builders from{" "}
+        Users from{" "}
         {selectedCountry.name === "Unknown"
           ? "unknown country"
           : selectedCountry.name}
@@ -77,7 +70,7 @@ const LocationUserTable = ({
       </SectionHeader>
       <DataTable
         className={styles.table}
-        queryName="builder_locations_users"
+        queryName="community_locations_users"
         columns={columns}
         itemKey={(item) => `${item.id}`}
         searchQuery={searchQuery}
@@ -88,13 +81,13 @@ const LocationUserTable = ({
   );
 };
 
-const BuilderLocationsPage = () => {
+const CommunityLocationsPage = () => {
   usePageMetadata(
     () => ({
       ready: true,
-      title: "Builder locations",
-      description: "Find builder locations.",
-      image: "card-builder_locations.jpg",
+      title: "Community locations",
+      description: "Find user locations.",
+      image: "card-community_locations.jpg",
     }),
     [],
   );
@@ -111,21 +104,19 @@ const BuilderLocationsPage = () => {
     name: "Unknown",
   };
 
-  const [builderSearchQuery, setBuilderSearchQuery] = useState<UserSearchQuery>(
-    {
-      page: null,
-      sort: "-authored_level_count_approved",
-      countryCode: undefined,
-      authoredLevelsMin: undefined,
-    },
-  );
+  const [searchQuery, setSearchQuery] = useState<UserSearchQuery>({
+    page: null,
+    sort: "-authored_level_count_approved",
+    countryCode: undefined,
+    authoredLevelsMin: undefined,
+  });
 
-  const builderUsersResult = useQuery<
+  const usersResult = useQuery<
     GenericSearchResult<UserSearchQuery, UserListing>,
     Error
   >(
-    ["builder_locations_users", UserService.searchUsers, builderSearchQuery],
-    () => UserService.searchUsers(builderSearchQuery),
+    ["community_locations_users", UserService.searchUsers, searchQuery],
+    () => UserService.searchUsers(searchQuery),
     { enabled: !!selectedCountry },
   );
 
@@ -147,14 +138,14 @@ const BuilderLocationsPage = () => {
     (country: CountryListing | null) => {
       setSelectedCountry(country);
       if (country) {
-        setBuilderSearchQuery({
+        setSearchQuery({
           page: null,
           sort: "-authored_level_count_approved",
           countryCode: country.iso_3166_1_alpha2,
           authoredLevelsMin: 1,
         });
       } else {
-        setBuilderSearchQuery({
+        setSearchQuery({
           page: null,
           sort: "-authored_level_count_approved",
           countryCode: undefined,
@@ -162,13 +153,13 @@ const BuilderLocationsPage = () => {
         });
       }
     },
-    [setSelectedCountry, setBuilderSearchQuery],
+    [setSelectedCountry, setSearchQuery],
   );
 
   return (
     <SidebarLayout sidebar={<ExtrasSidebar />}>
       <Section>
-        <SectionHeader>Builder locations</SectionHeader>
+        <SectionHeader>Community locations</SectionHeader>
 
         <FormGrid gridType={FormGridType.Row}>
           <FormGridFieldSet>
@@ -203,12 +194,12 @@ const BuilderLocationsPage = () => {
       </Section>
       <LocationUserTable
         selectedCountry={selectedCountry}
-        usersResult={builderUsersResult}
-        searchQuery={builderSearchQuery}
-        setSearchQuery={setBuilderSearchQuery}
+        usersResult={usersResult}
+        searchQuery={searchQuery}
+        setSearchQuery={setSearchQuery}
       />
     </SidebarLayout>
   );
 };
 
-export { BuilderLocationsPage };
+export { CommunityLocationsPage };
