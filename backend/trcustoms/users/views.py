@@ -152,6 +152,24 @@ class UserViewSet(
     def get_queryset(self):
         queryset = super().get_queryset()
 
+        country_code = self.request.query_params.get("country_code")
+        if country_code is not None:
+            if country_code == "":
+                queryset = queryset.filter(country__isnull=True)
+            else:
+                queryset = queryset.filter(
+                    country__iso_3166_1_alpha2=country_code
+                )
+
+        if (
+            authored_min := parse_int(
+                self.request.query_params.get("authored_levels_min")
+            )
+        ) is not None:
+            queryset = queryset.filter(
+                authored_level_count_approved__gte=authored_min
+            )
+
         if (
             ratings_min := parse_int(
                 self.request.query_params.get("ratings_min")

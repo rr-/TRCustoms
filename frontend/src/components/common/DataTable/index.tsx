@@ -14,7 +14,9 @@ import { useSettings } from "src/contexts/SettingsContext";
 import type { GenericSearchResult } from "src/types";
 import type { GenericSearchQuery } from "src/types";
 
-const DefaultNoItemsElement = <p>There are no results to show.</p>;
+const DefaultNoItemsElement = (
+  <p className={styles.noResults}>There are no results to show.</p>
+);
 
 interface DataTableColumn<TItem> {
   name: string;
