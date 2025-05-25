@@ -17,3 +17,6 @@
 .table :global td:last-child {
   padding-right: 0;
 }
+.noResults {
+  margin: 0;
+}

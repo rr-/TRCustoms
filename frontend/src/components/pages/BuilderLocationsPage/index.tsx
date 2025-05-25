@@ -1,17 +1,92 @@
-import { useContext, useState, useEffect } from "react";
-import { useCallback } from "react";
+import styles from "./index.module.css";
+import { useContext, useState, useCallback } from "react";
+import { useQuery } from "react-query";
 import { AutoComplete } from "src/components/common/AutoComplete";
+import {
+  DataTable,
+  type DataTableColumn,
+} from "src/components/common/DataTable";
 import { ExtrasSidebar } from "src/components/common/ExtrasSidebar";
 import { FormGrid } from "src/components/common/FormGrid";
 import { FormGridFieldSet } from "src/components/common/FormGrid";
 import { FormGridType } from "src/components/common/FormGrid";
+import { Loader } from "src/components/common/Loader";
 import { MapWidget } from "src/components/common/MapWidget";
-import { Section } from "src/components/common/Section";
-import { SectionHeader } from "src/components/common/Section";
+import { Section, SectionHeader } from "src/components/common/Section";
 import { SidebarLayout } from "src/components/layouts/SidebarLayout";
+import { UserPicLink } from "src/components/links/UserPicLink";
 import { ConfigContext } from "src/contexts/ConfigContext";
 import { usePageMetadata } from "src/contexts/PageMetadataContext";
 import type { CountryListing } from "src/services/ConfigService";
+import type { UserListing, UserSearchQuery } from "src/services/UserService";
+import { UserService } from "src/services/UserService";
+import type { GenericSearchResult } from "src/types";
+import { formatDate } from "src/utils/string";
+
+interface LocationUserTableProps {
+  selectedCountry: CountryListing | null;
+  searchQuery: UserSearchQuery;
+  setSearchQuery: (query: UserSearchQuery) => void;
+  usersResult: GenericSearchResult<UserSearchQuery, UserListing>;
+}
+
+const LocationUserTable = ({
+  selectedCountry,
+  usersResult,
+  searchQuery,
+  setSearchQuery,
+}: LocationUserTableProps) => {
+  const columns: DataTableColumn<UserListing>[] = [
+    {
+      name: "username",
+      className: styles.username,
+      sortKey: "username",
+      label: "Username",
+      itemElement: ({ item }) => <UserPicLink user={item} />,
+    },
+    {
+      name: "authored_level_count_approved",
+      sortKey: "authored_level_count_approved",
+      className: styles.levelsAuthored,
+      label: "Levels authored",
+      itemElement: ({ item }) => `${item.authored_level_count_approved}`,
+    },
+    {
+      name: "date_joined",
+      sortKey: "date_joined",
+      className: styles.dateJoined,
+      label: "Join date",
+      itemElement: ({ item }) => formatDate(item.date_joined),
+    },
+  ];
+
+  if (!selectedCountry) {
+    return null;
+  }
+  if (usersResult.isLoading || !usersResult.data) {
+    return <Loader />;
+  }
+  return (
+    <Section>
+      <SectionHeader>
+        Builders from{" "}
+        {selectedCountry.name === "Unknown"
+          ? "unknown country"
+          : selectedCountry.name}
+        {` (${usersResult.data.total_count})`}
+      </SectionHeader>
+      <DataTable
+        className={styles.table}
+        queryName="builder_locations_users"
+        columns={columns}
+        itemKey={(item) => `${item.id}`}
+        searchQuery={searchQuery}
+        searchFunc={UserService.searchUsers}
+        onSearchQueryChange={setSearchQuery}
+      />
+    </Section>
+  );
+};
 
 const BuilderLocationsPage = () => {
   usePageMetadata(
@@ -28,21 +103,31 @@ const BuilderLocationsPage = () => {
   const [selectedCountry, setSelectedCountry] = useState<CountryListing | null>(
     null,
   );
-  const [countryInput, setCountryInput] = useState<string>("");
   const [suggestions, setSuggestions] = useState<CountryListing[]>([]);
 
-  useEffect(() => {
-    setCountryInput(selectedCountry?.name ?? "");
-  }, [selectedCountry]);
-
-  const handleCountryInputChange = (
-    event: React.ChangeEvent<HTMLInputElement>,
-  ) => {
-    const name = event.target.value;
-    setCountryInput(name);
-    const match = config.countries.find((c) => c.name === name);
-    setSelectedCountry(match || null);
+  const unknownCountry: CountryListing = {
+    iso_3166_1_alpha2: "",
+    iso_3166_1_numeric: "",
+    name: "Unknown",
   };
+
+  const [builderSearchQuery, setBuilderSearchQuery] = useState<UserSearchQuery>(
+    {
+      page: null,
+      sort: "-authored_level_count_approved",
+      countryCode: undefined,
+      authoredLevelsMin: undefined,
+    },
+  );
+
+  const builderUsersResult = useQuery<
+    GenericSearchResult<UserSearchQuery, UserListing>,
+    Error
+  >(
+    ["builder_locations_users", UserService.searchUsers, builderSearchQuery],
+    () => UserService.searchUsers(builderSearchQuery),
+    { enabled: !!selectedCountry },
+  );
 
   const handleSearchTrigger = useCallback(
     async (userInput: string) => {
@@ -50,21 +135,34 @@ const BuilderLocationsPage = () => {
         setSuggestions([]);
         return;
       }
-      setSuggestions(
-        config.countries.filter((country) =>
-          country.name.toLowerCase().includes(userInput.toLowerCase()),
-        ),
+      const filtered = config.countries.filter((country) =>
+        country.name.toLowerCase().includes(userInput.toLowerCase()),
       );
-      0;
+      setSuggestions([...filtered, unknownCountry]);
     },
     [setSuggestions, config],
   );
 
-  const handleResultApply = useCallback(
-    async (country: CountryListing) => {
+  const handleCountryChange = useCallback(
+    (country: CountryListing | null) => {
       setSelectedCountry(country);
+      if (country) {
+        setBuilderSearchQuery({
+          page: null,
+          sort: "-authored_level_count_approved",
+          countryCode: country.iso_3166_1_alpha2,
+          authoredLevelsMin: 1,
+        });
+      } else {
+        setBuilderSearchQuery({
+          page: null,
+          sort: "-authored_level_count_approved",
+          countryCode: undefined,
+          authoredLevelsMin: undefined,
+        });
+      }
     },
-    [setSelectedCountry],
+    [setSelectedCountry, setBuilderSearchQuery],
   );
 
   return (
@@ -79,13 +177,14 @@ const BuilderLocationsPage = () => {
               getResultText={(country) => country.name}
               getResultKey={(country) => country.iso_3166_1_alpha2}
               onSearchTrigger={handleSearchTrigger}
-              onResultApply={handleResultApply}
+              onResultApply={handleCountryChange}
               placeholder="Find a country..."
             />
             {selectedCountry && (
               <>
-                Selected Country: {selectedCountry.name} (
-                {selectedCountry.iso_3166_1_alpha2})
+                Selected country: {selectedCountry.name}{" "}
+                {selectedCountry.iso_3166_1_alpha2 &&
+                  `(${selectedCountry.iso_3166_1_alpha2})`}
               </>
             )}
           </FormGridFieldSet>
@@ -99,9 +198,15 @@ const BuilderLocationsPage = () => {
             msUserSelect: "none",
           }}
         >
-          <MapWidget country={selectedCountry} onChange={setSelectedCountry} />
+          <MapWidget country={selectedCountry} onChange={handleCountryChange} />
         </div>
       </Section>
+      <LocationUserTable
+        selectedCountry={selectedCountry}
+        usersResult={builderUsersResult}
+        searchQuery={builderSearchQuery}
+        setSearchQuery={setBuilderSearchQuery}
+      />
     </SidebarLayout>
   );
 };

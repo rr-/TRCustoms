@@ -98,8 +98,10 @@ interface UserAward {
 }
 
 interface UserSearchQuery extends GenericSearchQuery {
-  reviewsMin?: number | undefined;
-  hideInactiveReviewers?: boolean | undefined;
+  reviewsMin?: number;
+  hideInactiveReviewers?: boolean;
+  countryCode?: string;
+  authoredLevelsMin?: number;
 }
 
 interface UserSearchResult
@@ -235,6 +237,8 @@ const searchUsers = async (
     hide_inactive_reviewers: boolToSearchString(
       searchQuery.hideInactiveReviewers,
     ),
+    country_code: searchQuery.countryCode,
+    authored_levels_min: searchQuery.authoredLevelsMin,
   });
   const response = (await api.get(`${API_URL}/users/`, {
     params,

@@ -1,0 +1,11 @@
+.table {
+  table-layout: fixed;
+  width: 100%;
+}
+.username {
+  width: 50%;
+}
+.dateJoined,
+.levelsAuthored {
+  width: 25%;
+}
