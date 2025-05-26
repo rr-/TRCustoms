@@ -15,3 +15,16 @@
 .box:empty {
   display: none;
 }
+
+.header {
+  border-bottom: 2px solid var(--section-border-color);
+  margin-bottom: 0.5rem;
+  &.alignToTabSwitch {
+    --my-margin-if-zero: calc(2rem - 1em);
+    --my-margin-if-one: calc(1rem - 1em);
+    margin-top: calc(
+      var(--my-margin-if-zero) * (1 - var(--sidebar-padding)) +
+        var(--my-margin-if-one) * var(--sidebar-padding)
+    );
+  }
+}

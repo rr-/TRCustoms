@@ -3,11 +3,10 @@ import { Form } from "formik";
 import { useEffect } from "react";
 import { useCallback } from "react";
 import { useState } from "react";
-import { Button } from "src/components/common/Button";
-import { FormGrid } from "src/components/common/FormGrid";
-import { FormGridButtons } from "src/components/common/FormGrid";
-import { FormGridFieldSet } from "src/components/common/FormGrid";
-import { FormGridType } from "src/components/common/FormGrid";
+import styles from "src/components/common/LevelSearchSidebar/index.module.css";
+import { Link } from "src/components/common/Link";
+import { SidebarBox } from "src/components/common/SidebarBox";
+import { SidebarBoxHeader } from "src/components/common/SidebarBox";
 import { SubmitButton } from "src/components/formfields/SubmitButton";
 import { TextFormField } from "src/components/formfields/TextFormField";
 import { IconSearch } from "src/components/icons";
@@ -23,7 +22,7 @@ interface TagSearchProps {
   onSearchQueryChange: (searchQuery: TagSearchQuery) => void;
 }
 
-const TagSearch = ({
+const TagSearchSidebar = ({
   defaultSearchQuery,
   searchQuery,
   onSearchQueryChange,
@@ -53,33 +52,43 @@ const TagSearch = ({
     [onSearchQueryChange, defaultSearchQuery],
   );
 
+  useEffect(
+    () => setFormikValues(convertSearchQueryToFormikValues(searchQuery)),
+    [searchQuery],
+  );
+
   return (
-    <Formik
-      enableReinitialize={true}
-      initialValues={formikValues}
-      onSubmit={handleSubmit}
-    >
-      {({ submitForm, resetForm }) => (
-        <Form>
-          <FormGrid gridType={FormGridType.Row}>
-            <FormGridFieldSet>
-              <TextFormField label="Search" name="search" />
-            </FormGridFieldSet>
+    <SidebarBox>
+      <Formik
+        enableReinitialize={true}
+        initialValues={formikValues}
+        onSubmit={handleSubmit}
+      >
+        {({ submitForm, resetForm }) => (
+          <Form className={`${styles.wrapper} ChildMarginClear`}>
+            <SidebarBoxHeader alignToTabSwitch={true}>
+              <span className={styles.header}>
+                Search filter
+                <Link className={styles.resetButton} onClick={handleClear}>
+                  (reset)
+                </Link>
+              </span>
+            </SidebarBoxHeader>
 
-            <FormGridButtons>
-              <SubmitButton onClick={() => submitForm()} icon={<IconSearch />}>
-                Search
-              </SubmitButton>
-
-              <Button disableTimeout={true} onClick={handleClear}>
-                Reset
-              </Button>
-            </FormGridButtons>
-          </FormGrid>
-        </Form>
-      )}
-    </Formik>
+            <div className={`${styles.section} ${styles.searchBar}`}>
+              <TextFormField label="Tag name" name="search" />
+              <div className="FormField">
+                <SubmitButton
+                  onClick={() => submitForm()}
+                  icon={<IconSearch />}
+                />
+              </div>
+            </div>
+          </Form>
+        )}
+      </Formik>
+    </SidebarBox>
   );
 };
 
-export { TagSearch };
+export { TagSearchSidebar };

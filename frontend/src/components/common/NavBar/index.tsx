@@ -38,7 +38,7 @@ const LevelsNavLink = ({ children, to, ...rest }: LinkProps) => {
 
   let isActive =
     locationPathname === toPathname ||
-    locationPathname.match(/^\/?levels(\/(?!upload)|$)/);
+    locationPathname.match(/^\/?(genres|tags|levels(\/(?!upload)|$))/);
 
   let ariaCurrent: "page" | undefined = isActive ? "page" : undefined;
   let className = [isActive ? styles.active : null].filter(Boolean).join(" ");
@@ -99,12 +99,6 @@ const NavBar = () => {
             </li>
             <li className={styles.listItem}>
               <LevelsNavLink to={"/levels"}>Levels</LevelsNavLink>
-            </li>
-            <li className={styles.listItem}>
-              <MyNavLink to={"/genres"}>Genres</MyNavLink>
-            </li>
-            <li className={styles.listItem}>
-              <MyNavLink to={"/tags"}>Tags</MyNavLink>
             </li>
             <li className={styles.listItem}>
               <MyNavLink to={"/reviews"}>Reviews</MyNavLink>
