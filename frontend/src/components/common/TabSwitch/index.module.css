@@ -34,6 +34,7 @@
   & > .wrapper {
     & > .navWrapper > .nav {
       gap: var(--my-gap);
+      line-height: var(--line-height);
 
       & > .navItem > .navItemLink {
         padding: 0.5rem 1rem;
@@ -67,6 +68,7 @@
 
     & > .navWrapper > .nav {
       gap: var(--my-gap);
+      line-height: var(--line-height);
 
       & > .navItem {
         --my-fg-color: var(--v2-fg-color-2);

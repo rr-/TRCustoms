@@ -15,7 +15,7 @@ import { Link } from "src/components/common/Link";
 import { PermissionGuard } from "src/components/common/PermissionGuard";
 import { Radioboxes } from "src/components/common/Radioboxes";
 import { RatingsCheckboxes } from "src/components/common/RatingsCheckboxes";
-import { SectionHeader } from "src/components/common/Section";
+import { SidebarBoxHeader } from "src/components/common/SidebarBox";
 import { SidebarBox } from "src/components/common/SidebarBox";
 import { TagsCheckboxes } from "src/components/common/TagsCheckboxes";
 import { DropDownFormField } from "src/components/formfields/DropDownFormField";
@@ -207,14 +207,14 @@ const LevelSearchSidebar = ({
       >
         {({ submitForm, resetForm }) => (
           <Form className={`${styles.wrapper} ChildMarginClear`}>
-            <SectionHeader>
+            <SidebarBoxHeader alignToTabSwitch={true}>
               <span className={styles.header}>
                 Search filter
                 <Link className={styles.resetButton} onClick={handleClear}>
                   (reset)
                 </Link>
               </span>
-            </SectionHeader>
+            </SidebarBoxHeader>
 
             <PermissionGuard require={UserPermission.viewPendingLevels}>
               <div className={styles.section}>

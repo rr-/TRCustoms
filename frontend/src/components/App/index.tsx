@@ -12,7 +12,6 @@ import { EmailConfirmationPage } from "src/components/pages/EmailConfirmationPag
 import { Error403Page } from "src/components/pages/ErrorPage";
 import { Error404Page } from "src/components/pages/ErrorPage";
 import { EventCataloguePage } from "src/components/pages/EventCataloguePage";
-import { GenreListPage } from "src/components/pages/GenreListPage";
 import { HomePage } from "src/components/pages/HomePage";
 import { LevelEditPage } from "src/components/pages/LevelEditPage";
 import { LevelListPage } from "src/components/pages/LevelListPage";
@@ -33,7 +32,6 @@ import { ReviewAuthorsPage } from "src/components/pages/ReviewAuthorsPage";
 import { ReviewLevelSuggestionsPage } from "src/components/pages/ReviewLevelSuggestionsPage";
 import { ReviewListPage } from "src/components/pages/ReviewListPage";
 import { SettingsPage } from "src/components/pages/SettingsPage";
-import { TagListPage } from "src/components/pages/TagListPage";
 import { TermsAndConditionsPage } from "src/components/pages/TermsAndConditionsPage";
 import { TextFormattingGuidelinesPage } from "src/components/pages/TextFormattingGuidelinesPage";
 import { TreasureVaultPage } from "src/components/pages/TreasureVaultPage";
@@ -53,7 +51,10 @@ const AppRoutes = () => {
       <Route path="/mod" element={<ModerationPage />} />
       <Route path="/mod/how-to" element={<ModerationGuidelinesPage />} />
       <Route path="/levels/upload" element={<LevelUploadPage />} />
-      <Route path="/levels" element={<LevelListPage />} />
+      <Route
+        path="/levels"
+        element={<LevelListPage initialTabName="levels" />}
+      />
       <Route path="/levels/:levelId" element={<LevelPage />} />
       <Route
         path="/levels/:levelId/ratings"
@@ -104,8 +105,11 @@ const AppRoutes = () => {
       <Route path="/news/:newsId" element={<NewsPage />} />
       <Route path="/news/:newsId/edit" element={<NewsEditPage />} />
       <Route path="/levels/:levelId/edit" element={<LevelEditPage />} />
-      <Route path="/tags" element={<TagListPage />} />
-      <Route path="/genres" element={<GenreListPage />} />
+      <Route path="/tags" element={<LevelListPage initialTabName="tags" />} />
+      <Route
+        path="/genres"
+        element={<LevelListPage initialTabName="genres" />}
+      />
       <Route path="/reviews" element={<ReviewListPage />} />
       <Route path="/reviews/authors" element={<ReviewAuthorsPage />} />
       <Route
