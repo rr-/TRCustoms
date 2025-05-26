@@ -16,7 +16,7 @@
 }
 
 .listItem {
-  margin: 0.5rem 0;
+  margin: 0 1rem;
 }
 .list {
   list-style: none;
