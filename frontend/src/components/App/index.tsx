@@ -7,7 +7,6 @@ import { NavBar } from "src/components/common/NavBar";
 import { PageMetadata } from "src/components/common/PageMetadata";
 import { AboutPage } from "src/components/pages/AboutPage";
 import { AwardsGuidePage } from "src/components/pages/AwardsGuidePage";
-import { CommunityLocationsPage } from "src/components/pages/CommunityLocationsPage";
 import { EmailConfirmationPage } from "src/components/pages/EmailConfirmationPage";
 import { Error403Page } from "src/components/pages/ErrorPage";
 import { Error404Page } from "src/components/pages/ErrorPage";
@@ -36,6 +35,7 @@ import { TermsAndConditionsPage } from "src/components/pages/TermsAndConditionsP
 import { TextFormattingGuidelinesPage } from "src/components/pages/TextFormattingGuidelinesPage";
 import { TreasureVaultPage } from "src/components/pages/TreasureVaultPage";
 import { UserEditPage } from "src/components/pages/UserEditPage";
+import { UserFinderPage } from "src/components/pages/UserFinderPage";
 import { UserListPage } from "src/components/pages/UserListPage";
 import { UserPage } from "src/components/pages/UserPage";
 import { WalkthroughEditPage } from "src/components/pages/WalkthroughEditPage";
@@ -119,10 +119,7 @@ const AppRoutes = () => {
       <Route path="/extras" element={<TreasureVaultPage />} />
       <Route path="/extras/treasure_vault" element={<TreasureVaultPage />} />
       <Route path="/extras/event_catalogue" element={<EventCataloguePage />} />
-      <Route
-        path="/extras/community_locations"
-        element={<CommunityLocationsPage />}
-      />
+      <Route path="/extras/user_finder" element={<UserFinderPage />} />
       <Route path="/users" element={<UserListPage />} />
       <Route path="/login" element={<LoginPage />} />
       <Route path="/logout" element={<LogoutPage />} />
