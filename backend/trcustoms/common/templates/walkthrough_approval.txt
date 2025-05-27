@@ -5,6 +5,6 @@ Hi {{username}},
 
 Congratulations!
 
-Your walkthrough for the level {{level_name}} has been approved and is now available for public download on TRCustoms.org.
+Your walkthrough for the level {{level_name}} has been approved and can be viewed on the level page.
 
 {% endblock %}
