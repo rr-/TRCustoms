@@ -8,11 +8,15 @@ import type { UserSearchQuery } from "src/services/UserService";
 import { UserService } from "src/services/UserService";
 import { formatDate } from "src/utils/string";
 
-interface UserViewProps {
+interface UserFancyListItemSettings {
+  showReviews?: boolean;
+}
+
+interface UserViewProps extends UserFancyListItemSettings {
   user: UserListing;
 }
 
-const UserView = ({ user }: UserViewProps) => {
+const UserView = ({ user, showReviews }: UserViewProps) => {
   return (
     <article className={styles.item}>
       <UserLink className={styles.link} user={user}>
@@ -21,15 +25,19 @@ const UserView = ({ user }: UserViewProps) => {
       </UserLink>
 
       <div>
-        Reviews posted: {user.reviewed_level_count}
-        <br />
+        {showReviews && (
+          <>
+            Reviews posted: {user.reviewed_level_count}
+            <br />
+          </>
+        )}
         Joined: {formatDate(user.date_joined)}
       </div>
     </article>
   );
 };
 
-interface UserFancyListProps {
+interface UserFancyListProps extends UserFancyListItemSettings {
   searchQuery: UserSearchQuery;
   onSearchQueryChange?: ((searchQuery: UserSearchQuery) => void) | undefined;
 }
@@ -37,9 +45,12 @@ interface UserFancyListProps {
 const UserFancyList = ({
   searchQuery,
   onSearchQueryChange,
+  showReviews,
 }: UserFancyListProps) => {
   const itemKey = (user: UserListing) => `${user.id}`;
-  const itemView = (user: UserListing) => <UserView user={user} />;
+  const itemView = (user: UserListing) => (
+    <UserView showReviews={showReviews} user={user} />
+  );
   const pageView = (children: React.ReactNode) => (
     <div className={styles.page}>{children}</div>
   );
