@@ -1,65 +1,35 @@
-import styles from "./index.module.css";
 import { useContext, useState, useCallback } from "react";
-import { useQuery } from "react-query";
 import { useNavigate } from "react-router-dom";
 import { AutoComplete } from "src/components/common/AutoComplete";
-import {
-  DataTable,
-  type DataTableColumn,
-} from "src/components/common/DataTable";
 import { ExtrasSidebar } from "src/components/common/ExtrasSidebar";
 import { FormGrid } from "src/components/common/FormGrid";
 import { FormGridFieldSet } from "src/components/common/FormGrid";
 import { FormGridType } from "src/components/common/FormGrid";
-import { Loader } from "src/components/common/Loader";
 import { MapWidget } from "src/components/common/MapWidget";
 import { Section, SectionHeader } from "src/components/common/Section";
+import { UserFancyList } from "src/components/common/UserFancyList";
 import { SidebarLayout } from "src/components/layouts/SidebarLayout";
-import { UserPicLink } from "src/components/links/UserPicLink";
 import { ConfigContext } from "src/contexts/ConfigContext";
 import { usePageMetadata } from "src/contexts/PageMetadataContext";
 import type { CountryListing } from "src/services/ConfigService";
 import type { UserListing, UserSearchQuery } from "src/services/UserService";
 import { UserService } from "src/services/UserService";
-import type { GenericSearchResult } from "src/types";
-import { formatDate } from "src/utils/string";
 
 interface LocationUserTableProps {
   selectedCountry: CountryListing | null;
   searchQuery: UserSearchQuery;
   setSearchQuery: (query: UserSearchQuery) => void;
-  usersResult: GenericSearchResult<UserSearchQuery, UserListing>;
 }
 
 const LocationUserTable = ({
   selectedCountry,
-  usersResult,
   searchQuery,
   setSearchQuery,
 }: LocationUserTableProps) => {
-  const columns: DataTableColumn<UserListing>[] = [
-    {
-      name: "username",
-      className: styles.username,
-      sortKey: "username",
-      label: "Username",
-      itemElement: ({ item }) => <UserPicLink user={item} />,
-    },
-    {
-      name: "date_joined",
-      sortKey: "date_joined",
-      className: styles.dateJoined,
-      label: "Join date",
-      itemElement: ({ item }) => formatDate(item.date_joined),
-    },
-  ];
-
   if (!selectedCountry) {
     return null;
   }
-  if (usersResult.isLoading || !usersResult.data) {
-    return <Loader />;
-  }
+
   return (
     <Section>
       <SectionHeader>
@@ -67,15 +37,10 @@ const LocationUserTable = ({
         {selectedCountry.name === "Unknown"
           ? "unknown country"
           : selectedCountry.name}
-        {` (${usersResult.data.total_count})`}
       </SectionHeader>
-      <DataTable
-        className={styles.table}
-        queryName="user_finder_users"
-        columns={columns}
-        itemKey={(item) => `${item.id}`}
+
+      <UserFancyList
         searchQuery={searchQuery}
-        searchFunc={UserService.searchUsers}
         onSearchQueryChange={setSearchQuery}
       />
     </Section>
@@ -111,15 +76,6 @@ const UserFinderPage = () => {
     countryCode: undefined,
     authoredLevelsMin: undefined,
   });
-
-  const usersResult = useQuery<
-    GenericSearchResult<UserSearchQuery, UserListing>,
-    Error
-  >(
-    ["user_finder_users", UserService.searchUsers, searchQuery],
-    () => UserService.searchUsers(searchQuery),
-    { enabled: !!selectedCountry },
-  );
 
   const handleSearchTrigger = useCallback(
     async (userInput: string) => {
@@ -229,7 +185,6 @@ const UserFinderPage = () => {
       </Section>
       <LocationUserTable
         selectedCountry={selectedCountry}
-        usersResult={usersResult}
         searchQuery={searchQuery}
         setSearchQuery={setSearchQuery}
       />

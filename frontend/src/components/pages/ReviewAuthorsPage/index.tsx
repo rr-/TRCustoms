@@ -73,6 +73,7 @@ const ReviewAuthorsPage = () => {
         />
 
         <UserFancyList
+          showReviews={true}
           searchQuery={searchQuery}
           onSearchQueryChange={setSearchQuery}
         />
