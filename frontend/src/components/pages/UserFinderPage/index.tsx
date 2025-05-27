@@ -70,7 +70,7 @@ const LocationUserTable = ({
       </SectionHeader>
       <DataTable
         className={styles.table}
-        queryName="community_locations_users"
+        queryName="user_finder_users"
         columns={columns}
         itemKey={(item) => `${item.id}`}
         searchQuery={searchQuery}
@@ -81,13 +81,13 @@ const LocationUserTable = ({
   );
 };
 
-const CommunityLocationsPage = () => {
+const UserFinderPage = () => {
   usePageMetadata(
     () => ({
       ready: true,
-      title: "Community locations",
-      description: "Find user locations.",
-      image: "card-community_locations.jpg",
+      title: "User finder",
+      description: "Find users and see theri locations around the world.",
+      image: "card-user_finder.jpg",
     }),
     [],
   );
@@ -115,7 +115,7 @@ const CommunityLocationsPage = () => {
     GenericSearchResult<UserSearchQuery, UserListing>,
     Error
   >(
-    ["community_locations_users", UserService.searchUsers, searchQuery],
+    ["user_finder_users", UserService.searchUsers, searchQuery],
     () => UserService.searchUsers(searchQuery),
     { enabled: !!selectedCountry },
   );
@@ -159,7 +159,7 @@ const CommunityLocationsPage = () => {
   return (
     <SidebarLayout sidebar={<ExtrasSidebar />}>
       <Section>
-        <SectionHeader>Community locations</SectionHeader>
+        <SectionHeader>User finder</SectionHeader>
 
         <FormGrid gridType={FormGridType.Row}>
           <FormGridFieldSet>
@@ -202,4 +202,4 @@ const CommunityLocationsPage = () => {
   );
 };
 
-export { CommunityLocationsPage };
+export { UserFinderPage };
