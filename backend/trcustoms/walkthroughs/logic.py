@@ -37,9 +37,8 @@ def approve_walkthrough(
     with track_model_update(
         obj=walkthrough, request=request, changes=["Approved"]
     ):
-        if walkthrough.status == WalkthroughStatus.DRAFT:
-            send_walkthrough_submission_mail(walkthrough)
         if walkthrough.status != WalkthroughStatus.APPROVED:
+            send_walkthrough_submission_mail(walkthrough)
             send_walkthrough_approved_mail(walkthrough)
         walkthrough.status = WalkthroughStatus.APPROVED
         walkthrough.rejection_reason = None
