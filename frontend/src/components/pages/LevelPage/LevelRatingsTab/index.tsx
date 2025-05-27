@@ -1,5 +1,6 @@
 import styles from "./index.module.css";
 import { useState } from "react";
+import { ExcludeUsers } from "src/components/common/ExcludeUsers";
 import { Link } from "src/components/common/Link";
 import { PermissionGuard } from "src/components/common/PermissionGuard";
 import { RatingsTable } from "src/components/common/RatingsTable";
@@ -41,12 +42,14 @@ const LevelRatingsTab = ({ level }: LevelRatingsTabProps) => {
         noItemsElement={
           <>
             There are no ratings for this level yet.
-            <PermissionGuard require={UserPermission.rateLevels}>
-              <br />
-              <Link to={`/levels/${level.id}/rating`}>
-                Be the first one to rate!
-              </Link>
-            </PermissionGuard>
+            <ExcludeUsers users={level.authors}>
+              <PermissionGuard require={UserPermission.rateLevels}>
+                <br />
+                <Link to={`/levels/${level.id}/rating`}>
+                  Be the first one to rate!
+                </Link>
+              </PermissionGuard>
+            </ExcludeUsers>
           </>
         }
       />
