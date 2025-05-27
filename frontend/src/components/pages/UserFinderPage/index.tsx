@@ -1,6 +1,7 @@
 import styles from "./index.module.css";
 import { useContext, useState, useCallback } from "react";
 import { useQuery } from "react-query";
+import { useNavigate } from "react-router-dom";
 import { AutoComplete } from "src/components/common/AutoComplete";
 import {
   DataTable,
@@ -156,12 +157,46 @@ const UserFinderPage = () => {
     [setSelectedCountry, setSearchQuery],
   );
 
+  const [userSuggestions, setUserSuggestions] = useState<UserListing[]>([]);
+  const navigate = useNavigate();
+  const handleUserSearchTrigger = useCallback(async (userInput: string) => {
+    if (!userInput) {
+      setUserSuggestions([]);
+      return;
+    }
+    try {
+      const response = await UserService.searchUsers({ search: userInput });
+      if (response.results) {
+        setUserSuggestions(response.results);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  }, []);
+  const handleUserResultApply = useCallback(
+    (user: UserListing) => {
+      navigate(`/users/${user.id}`);
+    },
+    [navigate],
+  );
+
   return (
     <SidebarLayout sidebar={<ExtrasSidebar />}>
       <Section>
         <SectionHeader>User finder</SectionHeader>
 
         <FormGrid gridType={FormGridType.Row}>
+          <FormGridFieldSet>
+            <AutoComplete
+              suggestions={userSuggestions}
+              getResultText={(user) => user.username}
+              getResultKey={(user) => user.id}
+              onSearchTrigger={handleUserSearchTrigger}
+              onResultApply={handleUserResultApply}
+              placeholder="Find a user..."
+            />
+          </FormGridFieldSet>
+          OR
           <FormGridFieldSet>
             <AutoComplete
               suggestions={suggestions}
