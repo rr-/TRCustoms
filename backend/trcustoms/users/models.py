@@ -190,7 +190,10 @@ class UserSettings(models.Model):
 
 # Auto-create UserSettings on access if it doesn't exist
 def _get_user_settings(self):
-    settings, _ = UserSettings.objects.get_or_create(user=self)
+    if getattr(self, "__settings", None) is not None:
+        return self.__settings
+    settings, _created = UserSettings.objects.get_or_create(user=self)
+    self.__settings = settings
     return settings
 
 
