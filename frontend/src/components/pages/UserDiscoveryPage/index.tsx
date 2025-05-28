@@ -47,13 +47,13 @@ const LocationUserTable = ({
   );
 };
 
-const UserFinderPage = () => {
+const UserDiscoveryPage = () => {
   usePageMetadata(
     () => ({
       ready: true,
-      title: "User finder",
+      title: "User discovery",
       description: "Find users and see theri locations around the world.",
-      image: "card-user_finder.jpg",
+      image: "card-user_discovery.jpg",
     }),
     [],
   );
@@ -139,7 +139,7 @@ const UserFinderPage = () => {
   return (
     <SidebarLayout sidebar={<ExtrasSidebar />}>
       <Section>
-        <SectionHeader>User finder</SectionHeader>
+        <SectionHeader>User discovery</SectionHeader>
 
         <FormGrid gridType={FormGridType.Row}>
           <FormGridFieldSet>
@@ -192,4 +192,4 @@ const UserFinderPage = () => {
   );
 };
 
-export { UserFinderPage };
+export { UserDiscoveryPage };
