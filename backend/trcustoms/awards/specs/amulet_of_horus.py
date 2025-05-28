@@ -6,7 +6,7 @@ from trcustoms.awards.requirements.impl import (
 )
 from trcustoms.awards.specs.base import AwardSpec
 
-SPECS: list[tuple[str, int, int]] = [
+SPECS: list[tuple[str, int, int, int, str]] = [
     ("You have started your journey as a critic.", 25, 5, 5),
     ("You have quite a lot of level reviews under your belt.", 100, 15, 5),
     ("You are an avid critic, striving to be the first reviewer.", 200, 50, 5),
@@ -27,6 +27,10 @@ def amulet_of_horus() -> Iterable[AwardSpec]:
             title="Amulet of Horus",
             tier=tier,
             description=description,
+            guide_description=(
+                f"{min_total_reviews} reviews + "
+                f"first {min_early_reviews} reviews"
+            ),
             requirement=(
                 AuthoredReviewsAwardRequirement(min_reviews=min_total_reviews)
                 & AuthoredReviewsPositionAwardRequirement(

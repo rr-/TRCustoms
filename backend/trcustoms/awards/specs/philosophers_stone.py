@@ -18,6 +18,10 @@ def philosophers_stone() -> Iterable[AwardSpec]:
             "an overwhelmingly positive rating."
         ),
         can_be_removed=True,
+        guide_description=(
+            "Release two levels within the same year that have "
+            "an overwhelmingly positive rating."
+        ),
         requirement=AuthoredLevelsSustainableQualityRequirement(
             min_rating_class=4,
             max_time_apart=timedelta(days=365),

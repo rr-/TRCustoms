@@ -16,6 +16,7 @@ class TestAwardSpec(AwardSpec):
             code=self.code,
             title="Test Award",
             description="Test Award description",
+            guide_description="Test Award guide to get",
             requirement=lambda user: grant,
             **kwargs,
         )

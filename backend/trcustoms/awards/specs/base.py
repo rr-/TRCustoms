@@ -9,6 +9,7 @@ class AwardSpec:
     code: str
     title: str
     description: str
+    guide_description: str | None
     requirement: Callable[[User], bool]
 
     tier: int = 0

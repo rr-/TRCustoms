@@ -14,9 +14,12 @@ def nightmare_stone() -> Iterable[AwardSpec]:
         code="nightmare_stone",
         title="Nightmare Stone",
         description=(
-            f"{min_levels} of your levels have " f"at least {min_tags} tag."
+            f"{min_levels} of your levels have at least {min_tags} tag."
         ),
         can_be_removed=True,
+        guide_description=(
+            f"{min_levels} of your levels should have at least {min_tags} tag."
+        ),
         requirement=AuthoredLevelsTagCountRequirement(
             min_levels=min_levels,
             min_tags=min_tags,

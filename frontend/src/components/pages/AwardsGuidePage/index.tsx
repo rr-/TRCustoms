@@ -1,138 +1,35 @@
 import styles from "./index.module.css";
+import { groupBy } from "lodash";
+import { useState, useEffect } from "react";
 import { Section } from "src/components/common/Section";
 import { SectionHeader } from "src/components/common/Section";
 import { PlainLayout } from "src/components/layouts/PlainLayout";
 import { usePageMetadata } from "src/contexts/PageMetadataContext";
+import { AwardService, AwardSpec } from "src/services/AwardService";
 
-const UpgradableArtifacts = [
-  {
-    name: "Dragon Statue",
-    tiers: [
-      { name: "Bronze", description: "1+ Positive OR 3+ S. Positive levels" },
-      { name: "Silver", description: "1+ V. Positive OR 3+ Positive levels" },
-      { name: "Gold", description: "1+ O. Positive OR 5+ V. Positive levels" },
-      { name: "Jade", description: "1+ Masterpiece OR 5+ O. Positive levels" },
-      { name: "Meteorite", description: "3+ Masterpiece level" },
-    ],
-  },
-  {
-    name: "Amulet of Horus",
-    tiers: [
-      { name: "Bronze", description: "25 reviews + first 5 reviews" },
-      { name: "Silver", description: "100 reviews + first 15 reviews" },
-      { name: "Gold", description: "200 reviews + first 50 reviews" },
-      { name: "Jade", description: "400 + first 100 reviews" },
-      { name: "Meteorite", description: "800 + first 200 reviews" },
-    ],
-  },
-  {
-    name: "Scion",
-    tiers: [
-      { name: "Bronze", description: "10+ walkthroughs" },
-      { name: "Silver", description: "50+ walkthroughs" },
-      { name: "Gold", description: "100+ walkthroughs" },
-      { name: "Jade", description: "250+ walkthroughs" },
-      { name: "Meteorite", description: "500+ walkthroughs" },
-    ],
-  },
-];
+// Mapping of tier numbers to human-readable names
+const tierNames: { [tier: number]: string } = {
+  1: "Bronze",
+  2: "Silver",
+  3: "Gold",
+  4: "Jade",
+  5: "Meteorite",
+};
 
-const StandartArtifacts = [
-  {
-    name: "Dual Pistols",
-    description: "Release 10 or more levels with at least mixed rating.",
-  },
-  { name: "Iris", description: "Submit 25 video walkthroughs." },
-  { name: "Bestiary", description: "Submit 25 written walkthroughs." },
-  {
-    name: "Werner's Broken Glasses",
-    description: "Be one of the first 20 reviewers for 500 levels.",
-  },
-  {
-    name: "Philosopher's Stone",
-    description:
-      "Release two levels within the same year that have an overwhelmingly positive rating.",
-  },
-  {
-    name: "Bone Dust",
-    description: "Update all of your levels that were imported from TRLE.net.",
-  },
-  {
-    name: "The Sanglyph",
-    description:
-      "Build 3 levels, review 30 levels, and release 10 walkthroughs.",
-  },
-  {
-    name: "Gate Key",
-    description: "50 users must add your level to their playlist.",
-  },
-  {
-    name: "Smuggler's Key",
-    description: "Review 5 levels within 24 hours from their release.",
-  },
-  {
-    name: "Werner's Notebook",
-    description: "Review 5 levels belonging to one author.",
-  },
-  {
-    name: "Nightmare Stone",
-    description: "3 of your levels should have at least 1 tag.",
-  },
-  {
-    name: "Magic Stones",
-    description: "Top up 3 of your levels with tags.",
-  },
-  {
-    name: "Wraith Stone",
-    description: "Mark 20 levels in your playlist as Finished.",
-  },
-  {
-    name: "Excalibur",
-    description: "Mark 100 levels in your playlist as Finished.",
-  },
-  {
-    name: "Mjölnir",
-    description: "Mark 250 levels in your playlist as Finished.",
-  },
-  {
-    name: "Demon's Heart",
-    description:
-      "Mark 50 negatively reviewed levels in your playlist as Finished.",
-  },
-  {
-    name: "Spear of Destiny",
-    description:
-      "Mark 50 positively reviewed levels in your playlist as Finished.",
-  },
-  {
-    name: "Chirugai",
-    description:
-      "Released a level, and then release another level after 10 years.",
-  },
-  {
-    name: "First Obscura Painting",
-    description: "Review 20 levels that have a review amount between 1 and 5.",
-  },
-  {
-    name: "Second Obscura Painting",
-    description: "Review 20 levels that have a review amount between 6 and 10.",
-  },
-  {
-    name: "Third Obscura Painting",
-    description:
-      "Review 20 levels that have a review amount between 11 and 15.",
-  },
-  {
-    name: "Fourth Obscura Painting",
-    description:
-      "Review 20 levels that have a review amount between 16 and 20.",
-  },
-  {
-    name: "Fifth Obscura Painting",
-    description:
-      "Review 20 levels that have a review amount between 21 and 25.",
-  },
-];
+interface UpgradableArtifact {
+  code: string;
+  name: string;
+  tiers: { tier: number; description: string }[];
+}
+
+interface StandardArtifact {
+  code: string;
+  name: string;
+  description: string;
+}
+
+const getArtifactImageSrc = (code: string, tier?: number) =>
+  tier && tier > 0 ? `/awards/${code}_${tier}.svg` : `/awards/${code}.svg`;
 
 const AwardsGuidePage = () => {
   usePageMetadata(
@@ -145,7 +42,40 @@ const AwardsGuidePage = () => {
     [],
   );
 
-  const tiers = UpgradableArtifacts[0].tiers;
+  const [specs, setSpecs] = useState<AwardSpec[]>([]);
+
+  useEffect(() => {
+    AwardService.getAwardSpecs().then(setSpecs);
+  }, []);
+
+  const specsByCode = groupBy(
+    specs.filter((spec) => !!spec.guide_description),
+    (spec) => spec.code,
+  );
+  const upgradableArtifacts: UpgradableArtifact[] = Object.values(specsByCode)
+    .filter((group) => group.length > 1)
+    .map((group) => ({
+      code: group[0].code,
+      name: group[0].title,
+      tiers: group
+        .sort((a, b) => a.tier - b.tier)
+        .map((spec) => ({
+          tier: spec.tier,
+          description: spec.guide_description,
+        })),
+    }));
+
+  const standardArtifacts: StandardArtifact[] = Object.values(specsByCode)
+    .filter((group) => group.length === 1)
+    .map((group) => ({
+      code: group[0].code,
+      name: group[0].title,
+      description: group[0].guide_description,
+    }));
+
+  const tierList = Array.from(
+    new Set(upgradableArtifacts.flatMap((a) => a.tiers.map((t) => t.tier))),
+  ).sort((a, b) => a - b);
 
   return (
     <PlainLayout header="Item collection guide">
@@ -177,36 +107,41 @@ const AwardsGuidePage = () => {
           <thead>
             <tr className={styles.upgradableArtifactsTableHeader}>
               <th className={styles.upgradableArtifactsTableCell}>Tiers</th>
-              {UpgradableArtifacts.map((artifact) => (
+              {upgradableArtifacts.map((artifact) => (
                 <th
                   className={styles.upgradableArtifactsTableCell}
-                  key={artifact.name}
+                  key={artifact.code}
                 >
+                  <img
+                    className={styles.artifactIcon}
+                    src={getArtifactImageSrc(
+                      artifact.code,
+                      artifact.tiers[0].tier,
+                    )}
+                    alt={artifact.name}
+                  />
                   {artifact.name}
                 </th>
               ))}
             </tr>
           </thead>
           <tbody>
-            {tiers.map((tier) => (
-              <tr
-                className={styles.upgradableArtifactsTableRow}
-                key={tier.name}
-              >
+            {tierList.map((tier) => (
+              <tr className={styles.upgradableArtifactsTableRow} key={tier}>
                 <td className={styles.upgradableArtifactsTableCell}>
-                  {tier.name} tier
+                  {tierNames[tier]} tier
                 </td>
-                {UpgradableArtifacts.map((artifact) => (
-                  <td
-                    className={styles.upgradableArtifactsTableCell}
-                    key={artifact.name}
-                  >
-                    {
-                      artifact.tiers.filter((t) => t.name === tier.name)[0]
-                        .description
-                    }
-                  </td>
-                ))}
+                {upgradableArtifacts.map((artifact) => {
+                  const tierInfo = artifact.tiers.find((t) => t.tier === tier);
+                  return (
+                    <td
+                      className={styles.upgradableArtifactsTableCell}
+                      key={artifact.code}
+                    >
+                      {tierInfo?.description}
+                    </td>
+                  );
+                })}
               </tr>
             ))}
           </tbody>
@@ -222,13 +157,20 @@ const AwardsGuidePage = () => {
           outstanding accomplishment.
         </p>
 
-        {StandartArtifacts.map((artifact) => (
-          <>
-            <h3 className={styles.standardArtifactHeader}>{artifact.name}</h3>
+        {standardArtifacts.map((artifact) => (
+          <div key={artifact.code}>
+            <h3 className={styles.standardArtifactHeader}>
+              <img
+                className={styles.artifactIcon}
+                src={getArtifactImageSrc(artifact.code)}
+                alt={artifact.name}
+              />
+              {artifact.name}
+            </h3>
             <p className={styles.standardArtifactDescription}>
               {artifact.description}
             </p>
-          </>
+          </div>
         ))}
       </Section>
     </PlainLayout>

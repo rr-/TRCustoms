@@ -1,0 +1,31 @@
+.artifactIcon {
+  &.small {
+    height: 1.5rem;
+    vertical-align: middle;
+    margin-right: 0.5rem;
+  }
+  &.big {
+    height: 5rem;
+    display: block;
+    margin: 1rem;
+  }
+}
+
+.artifactName {
+  margin: 0;
+}
+
+.list {
+  list-style-type: none;
+  margin: 1rem 0 0 0;
+  padding: 0;
+}
+
+.tier + .guide {
+  margin-bottom: 0.5rem;
+}
+.guide {
+  font-size: 0.85rem;
+  line-height: calc(var(--font-size) * 1.3);
+  margin: 0;
+}

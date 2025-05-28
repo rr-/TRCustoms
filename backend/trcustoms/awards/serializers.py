@@ -22,3 +22,15 @@ class UserAwardSerializer(serializers.ModelSerializer):
             "tier",
             "rarity",
         ]
+
+
+class AwardSpecSerializer(serializers.Serializer):
+    code = serializers.CharField()
+    title = serializers.CharField()
+    description = serializers.CharField()
+    guide_description = serializers.SerializerMethodField()
+    tier = serializers.IntegerField()
+    can_be_removed = serializers.BooleanField()
+
+    def get_guide_description(self, obj):
+        return obj.guide_description

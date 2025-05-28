@@ -17,6 +17,7 @@ def magic_stones() -> Iterable[AwardSpec]:
         title="Magic Stones",
         description=f"You topped up {min_levels} of your levels with tags!",
         can_be_removed=True,
+        guide_description=f"Top up {min_levels} of your levels with tags.",
         requirement=AuthoredLevelsTagCountRequirement(
             min_levels=min_levels,
             min_tags=min_tags,

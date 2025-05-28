@@ -12,6 +12,7 @@ def dragon_statue() -> Iterable[AwardSpec]:
         title="Dragon Statue",
         tier=1,
         description="You are a fine builder, so keep it up!",
+        guide_description="1+ Positive OR 3+ S. Positive levels",
         can_be_removed=True,
         requirement=(
             AuthoredLevelsRatingCountRequirement(
@@ -28,6 +29,7 @@ def dragon_statue() -> Iterable[AwardSpec]:
         title="Dragon Statue",
         tier=2,
         description="You are a reliable builder.",
+        guide_description="1+ V. Positive OR 3+ Positive levels",
         can_be_removed=True,
         requirement=(
             AuthoredLevelsRatingCountRequirement(
@@ -44,6 +46,7 @@ def dragon_statue() -> Iterable[AwardSpec]:
         title="Dragon Statue",
         tier=3,
         description="You are a veteran builder.",
+        guide_description="1+ O. Positive OR 5+ V. Positive levels",
         can_be_removed=True,
         requirement=(
             AuthoredLevelsRatingCountRequirement(
@@ -60,6 +63,7 @@ def dragon_statue() -> Iterable[AwardSpec]:
         title="Dragon Statue",
         tier=4,
         description="You are an exceptional builder.",
+        guide_description="1+ Masterpiece OR 5+ O. Positive levels",
         can_be_removed=True,
         requirement=(
             AuthoredLevelsRatingCountRequirement(
@@ -76,6 +80,7 @@ def dragon_statue() -> Iterable[AwardSpec]:
         title="Dragon Statue",
         tier=5,
         description="You have proven to be an extraordinary builder.",
+        guide_description="3+ Masterpiece level",
         can_be_removed=True,
         requirement=AuthoredLevelsRatingCountRequirement(
             extrapolate_ratings=True, min_levels=3, min_rating=5

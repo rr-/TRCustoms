@@ -16,6 +16,7 @@ def bestiary() -> Iterable[AwardSpec]:
         description=(
             f"You have submitted {min_walkthroughs} text walkthroughs."
         ),
+        guide_description="Submit 25 written walkthroughs.",
         requirement=AuthoredWalkthroughsAwardRequirement(
             min_walkthroughs=min_walkthroughs,
             walkthrough_type=WalkthroughType.TEXT,

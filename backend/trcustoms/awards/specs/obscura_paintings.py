@@ -10,7 +10,7 @@ def obscura_paintings() -> Iterable[AwardSpec]:
     positions: list[tuple[int, int]] = [
         (20, 1, 5, "First Obscura Painting"),
         (20, 6, 10, "Second Obscura Painting"),
-        (20, 11, 15, "Thrid Obscura Painting"),
+        (20, 11, 15, "Third Obscura Painting"),
         (20, 16, 20, "Fourth Obscura Painting"),
         (20, 21, 25, "Fifth Obscura Painting"),
     ]
@@ -24,6 +24,10 @@ def obscura_paintings() -> Iterable[AwardSpec]:
             description=(
                 f"You reviewed {min_reviews} levels with a review amount "
                 f"between {min_position} and {max_position}!"
+            ),
+            guide_description=(
+                f"Review {min_reviews} levels that have a review amount "
+                f"between {min_position} and {max_position}."
             ),
             requirement=AuthoredReviewsPositionAwardRequirement(
                 min_reviews=min_reviews,
