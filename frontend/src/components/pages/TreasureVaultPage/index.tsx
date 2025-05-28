@@ -8,6 +8,7 @@ import { SectionHeader } from "src/components/common/Section";
 import { SidebarLayout } from "src/components/layouts/SidebarLayout";
 import { usePageMetadata } from "src/contexts/PageMetadataContext";
 import { AwardService, AwardSpec } from "src/services/AwardService";
+import { reprPercentage } from "src/utils/string";
 
 // Mapping of tier numbers to human-readable names
 const tierNames: { [tier: number]: string } = {
@@ -21,13 +22,14 @@ const tierNames: { [tier: number]: string } = {
 interface UpgradableArtifact {
   code: string;
   name: string;
-  tiers: { tier: number; description: string }[];
+  tiers: { tier: number; description: string; rarity: number }[];
 }
 
 interface StandardArtifact {
   code: string;
   name: string;
   description: string;
+  rarity: number;
 }
 
 const getArtifactImageSrc = (code: string, tier?: number) =>
@@ -48,6 +50,20 @@ const ArtifactIcon = ({
       src={getArtifactImageSrc(artifact.code, tier)}
       alt={artifact.name}
     />
+  );
+};
+
+const RarityBar = ({ rarity }: { rarity: number }) => {
+  return (
+    <div className={styles.rarityBarContainer}>
+      <div
+        className={styles.rarityBarFill}
+        style={{ width: `${(1 - rarity) * 100}%` }}
+      />
+      <span className={styles.rarityBarLabel}>
+        {reprPercentage(1 - rarity, 2)} users got this award
+      </span>
+    </div>
   );
 };
 
@@ -79,6 +95,7 @@ const TreasureVaultPage = () => {
         .map((spec) => ({
           tier: spec.tier,
           description: spec.guide_description,
+          rarity: spec.rarity,
         })),
     }));
 
@@ -88,6 +105,7 @@ const TreasureVaultPage = () => {
       code: group[0].code,
       name: group[0].title,
       description: group[0].guide_description,
+      rarity: group[0].rarity,
     }));
 
   return (
@@ -106,16 +124,17 @@ const TreasureVaultPage = () => {
               <h3 className={styles.artifactName}>{artifact.name}</h3>
               <ul className={styles.list}>
                 {artifact.tiers.map((tier) => (
-                  <li key={tier.tier}>
+                  <li key={tier.tierItem}>
                     <ArtifactIcon
                       artifact={artifact}
                       tier={tier.tier}
                       variant="small"
                     />
-                    <strong className={styles.tier}>
+                    <strong className={styles.tierName}>
                       {tierNames[tier.tier]} tier
                     </strong>
                     <p className={styles.guide}>{tier.description}</p>
+                    <RarityBar rarity={tier.rarity / 100} />
                   </li>
                 ))}
               </ul>
@@ -130,9 +149,12 @@ const TreasureVaultPage = () => {
         <CardGrid>
           {standardArtifacts.map((artifact) => (
             <Card key={artifact.code}>
-              <h3 className={styles.artifactName}>{artifact.name}</h3>
-              <ArtifactIcon artifact={artifact} variant="big" />
-              <p className={styles.guide}>{artifact.description}</p>
+              <div className={styles.standardItem}>
+                <h3 className={styles.artifactName}>{artifact.name}</h3>
+                <ArtifactIcon artifact={artifact} variant="big" />
+                <p className={styles.guide}>{artifact.description}</p>
+                <RarityBar rarity={artifact.rarity / 100} />
+              </div>
             </Card>
           ))}
         </CardGrid>

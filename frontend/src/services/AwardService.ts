@@ -12,6 +12,7 @@ export interface AwardSpec {
   guide_description: string;
   tier: number;
   can_be_removed: boolean;
+  rarity: number;
 }
 
 /**

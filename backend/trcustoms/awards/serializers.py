@@ -31,6 +31,10 @@ class AwardSpecSerializer(serializers.Serializer):
     guide_description = serializers.SerializerMethodField()
     tier = serializers.IntegerField()
     can_be_removed = serializers.BooleanField()
+    rarity = serializers.SerializerMethodField()
 
     def get_guide_description(self, obj):
         return obj.guide_description
+
+    def get_rarity(self, obj) -> int:
+        return get_award_rarity(obj.code, obj.tier)
