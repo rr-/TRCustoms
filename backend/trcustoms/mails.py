@@ -21,11 +21,15 @@ PREFIX = "[TRCustoms]"
 STATIC_DIR = Path(__file__).parent / "common" / "static"
 
 
-def get_level_authors(level: Level) -> Iterable[User]:
+def get_level_authors(
+    level: Level, include_uploader: bool = True
+) -> Iterable[User]:
     """
     Return distinct users who authored or uploaded the level for notification.
     """
-    q_obj = Q(uploaded_levels=level)
+    q_obj = Q()
+    if include_uploader:
+        q_obj |= Q(uploaded_levels=level)
     if not level.is_pending_approval:
         q_obj |= Q(authored_levels=level)
 
@@ -160,13 +164,13 @@ def send_level_submitted_mail(level: Level) -> None:
 
 def send_level_approved_mail(level: Level) -> None:
     link = f"{settings.HOST_SITE}/levels/{level.id}"
-    for username, email in get_level_authors(level):
+    for user in get_level_authors(level):
         send_mail.delay(
             template_name="level_approval",
             subject=f"{PREFIX} Level approved",
-            recipients=[email],
+            recipients=[user.email],
             context={
-                "username": username,
+                "username": user.username,
                 "level_name": level.name,
                 "link": link,
             },
@@ -174,14 +178,14 @@ def send_level_approved_mail(level: Level) -> None:
 
 
 def send_level_rejected_mail(level: Level, reason: str) -> None:
-    for username, email in get_level_authors(level):
+    for user in get_level_authors(level):
         link = f"{settings.HOST_SITE}/levels/{level.id}"
         send_mail.delay(
             template_name="level_rejection",
             subject=f"{PREFIX} Level rejected",
-            recipients=[email],
+            recipients=[user.email],
             context={
-                "username": username,
+                "username": user.username,
                 "level_name": level.name,
                 "reason": reason,
                 "link": link,
@@ -191,7 +195,7 @@ def send_level_rejected_mail(level: Level, reason: str) -> None:
 
 def send_review_submission_mail(review: Review) -> None:
     link = f"{settings.HOST_SITE}/levels/{review.level.id}"
-    for user in get_level_authors(review.level):
+    for user in get_level_authors(review.level, include_uploader=False):
         if not user.settings.email_review_posted:
             continue
         send_mail.delay(
@@ -209,7 +213,7 @@ def send_review_submission_mail(review: Review) -> None:
 
 def send_review_update_mail(review: Review) -> None:
     link = f"{settings.HOST_SITE}/levels/{review.level.id}"
-    for user in get_level_authors(review.level):
+    for user in get_level_authors(review.level, include_uploader=False):
         if not user.settings.email_review_updated:
             continue
         send_mail.delay(
@@ -227,7 +231,7 @@ def send_review_update_mail(review: Review) -> None:
 
 def send_rating_submission_mail(rating: Rating) -> None:
     link = f"{settings.HOST_SITE}/levels/{rating.level.id}"
-    for user in get_level_authors(rating.level):
+    for user in get_level_authors(rating.level, include_uploader=False):
         if not user.settings.email_rating_posted:
             continue
         send_mail.delay(
@@ -245,7 +249,7 @@ def send_rating_submission_mail(rating: Rating) -> None:
 
 def send_rating_update_mail(rating: Rating) -> None:
     link = f"{settings.HOST_SITE}/levels/{rating.level.id}"
-    for user in get_level_authors(rating.level):
+    for user in get_level_authors(rating.level, include_uploader=False):
         if not user.settings.email_rating_updated:
             continue
         send_mail.delay(
@@ -296,7 +300,7 @@ def send_walkthrough_rejected_mail(
 
 def send_walkthrough_submission_mail(walkthrough: Walkthrough) -> None:
     link = f"{settings.HOST_SITE}/walkthroughs/{walkthrough.id}"
-    for user in get_level_authors(walkthrough.level):
+    for user in get_level_authors(walkthrough.level, include_uploader=False):
         if not user.settings.email_walkthrough_posted:
             continue
         send_mail.delay(
@@ -314,7 +318,7 @@ def send_walkthrough_submission_mail(walkthrough: Walkthrough) -> None:
 
 def send_walkthrough_update_mail(walkthrough: Walkthrough) -> None:
     link = f"{settings.HOST_SITE}/walkthroughs/{walkthrough.id}"
-    for user in get_level_authors(walkthrough.level):
+    for user in get_level_authors(walkthrough.level, include_uploader=False):
         if not user.settings.email_walkthrough_updated:
             continue
         send_mail.delay(
