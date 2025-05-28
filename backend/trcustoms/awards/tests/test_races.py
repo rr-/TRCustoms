@@ -20,6 +20,7 @@ def fixture_tmp_award_spec() -> AwardSpec:
         tier=0,
         title="Dummy award",
         description="Dummy award",
+        guide_description=None,
         can_be_removed=False,
         requirement=lambda user: True,
     )

@@ -17,6 +17,9 @@ def gate_key() -> Iterable[AwardSpec]:
             "to their playlist."
         ),
         can_be_removed=True,
+        guide_description=(
+            f"{min_players} users must add your level to their playlist."
+        ),
         requirement=AuthoredLevelPlayersAwardRequirement(
             min_players=min_players
         ),

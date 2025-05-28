@@ -18,6 +18,10 @@ def smugglers_key() -> Iterable[AwardSpec]:
             f"You reviewed {min_levels} levels within {max_hours} hours "
             "of release."
         ),
+        guide_description=(
+            f"Review {min_levels} levels within {max_hours} hours "
+            "from their release."
+        ),
         requirement=AuthoredReviewsTimingAwardRequirement(
             min_levels=min_levels,
             max_review_age=timedelta(hours=max_hours),

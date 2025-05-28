@@ -1,4 +1,5 @@
 import styles from "./index.module.css";
+import { Card, CardGrid } from "src/components/common/Card";
 import { DataList } from "src/components/common/DataList";
 import { UserPictureMode } from "src/components/common/UserPicture";
 import { UserPicture } from "src/components/common/UserPicture";
@@ -16,26 +17,24 @@ interface UserViewProps extends UserFancyListItemSettings {
   user: UserListing;
 }
 
-const UserView = ({ user, showReviews }: UserViewProps) => {
-  return (
-    <article className={styles.item}>
-      <UserLink className={styles.link} user={user}>
-        <UserPicture user={user} mode={UserPictureMode.Medium} />
-        <span className={styles.username}>{user.username}</span>
-      </UserLink>
+const UserView = ({ user, showReviews }: UserViewProps) => (
+  <Card>
+    <UserLink className={styles.link} user={user}>
+      <UserPicture user={user} mode={UserPictureMode.Medium} />
+      <span className={styles.username}>{user.username}</span>
+    </UserLink>
 
-      <div>
-        {showReviews && (
-          <>
-            Reviews posted: {user.reviewed_level_count}
-            <br />
-          </>
-        )}
-        Joined: {formatDate(user.date_joined)}
-      </div>
-    </article>
-  );
-};
+    <div>
+      {showReviews && (
+        <>
+          Reviews posted: {user.reviewed_level_count}
+          <br />
+        </>
+      )}
+      Joined: {formatDate(user.date_joined)}
+    </div>
+  </Card>
+);
 
 interface UserFancyListProps extends UserFancyListItemSettings {
   searchQuery: UserSearchQuery;
@@ -52,7 +51,7 @@ const UserFancyList = ({
     <UserView showReviews={showReviews} user={user} />
   );
   const pageView = (children: React.ReactNode) => (
-    <div className={styles.page}>{children}</div>
+    <CardGrid>{children}</CardGrid>
   );
 
   return (

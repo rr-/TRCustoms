@@ -13,6 +13,7 @@ def seraph() -> Iterable[AwardSpec]:
         code="seraph",
         title="Seraph",
         description="You've joined the site in its first year.",
+        guide_description="Join the site in its first year.",
         requirement=JoinDateAwardRequirement(
             min_date=min_date, max_date=max_date
         ),
