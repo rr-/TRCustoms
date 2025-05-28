@@ -3,7 +3,7 @@
 {% block content %}
 Hi {{username}},
 
-{{reviewer_username}} has submitted a walkthrough for your level {{level_name}}.
+{{author_username}} has submitted a walkthrough for your level {{level_name}}.
 
 Click on the link below to go to the walkthrough page if you want to read it.
 
