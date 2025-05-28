@@ -22,9 +22,9 @@ const ExtrasSidebar = () => {
           </GFXCard>
         </Link>
 
-        <Link to={`/extras/user_finder`}>
-          <GFXCard name="user_finder" variant="big">
-            User finder
+        <Link to={`/extras/user_discovery`}>
+          <GFXCard name="user_discovery" variant="big">
+            User discovery
           </GFXCard>
         </Link>
       </Section>

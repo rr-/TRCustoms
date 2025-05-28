@@ -34,8 +34,8 @@ import { SettingsPage } from "src/components/pages/SettingsPage";
 import { TermsAndConditionsPage } from "src/components/pages/TermsAndConditionsPage";
 import { TextFormattingGuidelinesPage } from "src/components/pages/TextFormattingGuidelinesPage";
 import { TreasureVaultPage } from "src/components/pages/TreasureVaultPage";
+import { UserDiscoveryPage } from "src/components/pages/UserDiscoveryPage";
 import { UserEditPage } from "src/components/pages/UserEditPage";
-import { UserFinderPage } from "src/components/pages/UserFinderPage";
 import { UserListPage } from "src/components/pages/UserListPage";
 import { UserPage } from "src/components/pages/UserPage";
 import { WalkthroughEditPage } from "src/components/pages/WalkthroughEditPage";
@@ -119,7 +119,7 @@ const AppRoutes = () => {
       <Route path="/extras" element={<TreasureVaultPage />} />
       <Route path="/extras/treasure_vault" element={<TreasureVaultPage />} />
       <Route path="/extras/event_catalogue" element={<EventCataloguePage />} />
-      <Route path="/extras/user_finder" element={<UserFinderPage />} />
+      <Route path="/extras/user_discovery" element={<UserDiscoveryPage />} />
       <Route path="/users" element={<UserListPage />} />
       <Route path="/login" element={<LoginPage />} />
       <Route path="/logout" element={<LogoutPage />} />
