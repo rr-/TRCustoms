@@ -16,7 +16,9 @@ def iris() -> Iterable[AwardSpec]:
         description=(
             f"You have submitted {min_walkthroughs} video walkthroughs."
         ),
-        guide_description=f"Submit {min_walkthroughs} video walkthroughs.",
+        guide_description=(
+            f"Obtained by submitting {min_walkthroughs} video walkthroughs."
+        ),
         requirement=AuthoredWalkthroughsAwardRequirement(
             min_walkthroughs=min_walkthroughs,
             walkthrough_type=WalkthroughType.LINK,

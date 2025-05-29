@@ -17,7 +17,7 @@ def chirugai() -> Iterable[AwardSpec]:
         description="You have returned after years of inactivity.",
         can_be_removed=True,
         guide_description=(
-            f"Release a level, and then release another level "
+            f"Obtained by releasing a level, and then releasing another level "
             f"after {years} years."
         ),
         requirement=AuthoredLevelsFarApartRequirement(

@@ -18,7 +18,7 @@ def werners_broken_glasses() -> Iterable[AwardSpec]:
             f"for {min_reviews} levels."
         ),
         guide_description=(
-            f"Be one of the first {max_position} reviewers "
+            f"Obtained by being one of the first {max_position} reviewers "
             f"for {min_reviews} levels."
         ),
         requirement=AuthoredReviewsPositionAwardRequirement(

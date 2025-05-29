@@ -16,7 +16,8 @@ def werners_notebook() -> Iterable[AwardSpec]:
             f"You reviewed {min_reviews} levels belonging to one author."
         ),
         guide_description=(
-            f"Review {min_reviews} levels belonging to one author."
+            f"Obtained by reviewing {min_reviews} levels "
+            "belonging to one author."
         ),
         requirement=AuthoredReviewsSameBuilderAwardRequirement(min_reviews),
     )

@@ -19,8 +19,8 @@ def philosophers_stone() -> Iterable[AwardSpec]:
         ),
         can_be_removed=True,
         guide_description=(
-            "Release two levels within the same year that have "
-            "an overwhelmingly positive rating."
+            "Obtained by releasing two levels within the same year "
+            "that have an overwhelmingly positive rating."
         ),
         requirement=AuthoredLevelsSustainableQualityRequirement(
             min_rating_class=4,

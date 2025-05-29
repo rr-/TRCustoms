@@ -5,54 +5,31 @@ from trcustoms.awards.requirements.impl import (
 )
 from trcustoms.awards.specs.base import AwardSpec
 
+SPECS: list[tuple[str, int]] = [
+    (
+        "A baseline of quality guides has been set, "
+        "will you be able to surpass it?",
+        10,
+    ),
+    ("Your work as a guide is proving to be more than just a hobby.", 50),
+    ("Your dedication to the community is impressive.", 100),
+    ("You have saved others countless hours.", 250),
+    ("Being a guide is simply your way of life.", 500),
+]
+
 
 def scion() -> Iterable[AwardSpec]:
-    yield AwardSpec(
-        code="scion",
-        title="Scion",
-        tier=1,
-        description=(
-            "A baseline of quality guides has been set, "
-            "will you be able to surpass it?"
-        ),
-        guide_description="10+ walkthroughs",
-        requirement=AuthoredWalkthroughsAwardRequirement(min_walkthroughs=10),
-    )
-
-    yield AwardSpec(
-        code="scion",
-        title="Scion",
-        tier=2,
-        description=(
-            "Your work as a guide is proving to be more than just a hobby."
-        ),
-        guide_description="50+ walkthroughs",
-        requirement=AuthoredWalkthroughsAwardRequirement(min_walkthroughs=50),
-    )
-
-    yield AwardSpec(
-        code="scion",
-        title="Scion",
-        tier=3,
-        description="Your dedication to the community is impressive.",
-        guide_description="100+ walkthroughs",
-        requirement=AuthoredWalkthroughsAwardRequirement(min_walkthroughs=100),
-    )
-
-    yield AwardSpec(
-        code="scion",
-        title="Scion",
-        tier=4,
-        description="You have saved others countless hours.",
-        guide_description="250+ walkthroughs",
-        requirement=AuthoredWalkthroughsAwardRequirement(min_walkthroughs=250),
-    )
-
-    yield AwardSpec(
-        code="scion",
-        title="Scion",
-        tier=5,
-        description="Being a guide is simply your way of life.",
-        guide_description="500+ walkthroughs",
-        requirement=AuthoredWalkthroughsAwardRequirement(min_walkthroughs=500),
-    )
+    for i, (description, min_walkthroughs) in enumerate(SPECS, 1):
+        yield AwardSpec(
+            code="scion",
+            title="Scion",
+            tier=i,
+            description=description,
+            guide_description=(
+                f"Obtained by submitting {min_walkthroughs} "
+                "or more walkthroughs."
+            ),
+            requirement=AuthoredWalkthroughsAwardRequirement(
+                min_walkthroughs=min_walkthroughs
+            ),
+        )

@@ -26,8 +26,8 @@ def obscura_paintings() -> Iterable[AwardSpec]:
                 f"between {min_position} and {max_position}!"
             ),
             guide_description=(
-                f"Review {min_reviews} levels that have a review amount "
-                f"between {min_position} and {max_position}."
+                f"Obtained by reviewing {min_reviews} levels that have "
+                f"between {min_position} and {max_position} reviews."
             ),
             requirement=AuthoredReviewsPositionAwardRequirement(
                 min_reviews=min_reviews,

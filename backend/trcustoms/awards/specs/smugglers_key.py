@@ -19,8 +19,8 @@ def smugglers_key() -> Iterable[AwardSpec]:
             "of release."
         ),
         guide_description=(
-            f"Review {min_levels} levels within {max_hours} hours "
-            "from their release."
+            f"Obtained by reviewing {min_levels} levels "
+            f"within {max_hours} hours from their release."
         ),
         requirement=AuthoredReviewsTimingAwardRequirement(
             min_levels=min_levels,
