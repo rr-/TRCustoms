@@ -6,6 +6,7 @@ import { EnvironmentWatermark } from "src/components/common/EnvironmentWatermark
 import { NavBar } from "src/components/common/NavBar";
 import { PageMetadata } from "src/components/common/PageMetadata";
 import { AboutPage } from "src/components/pages/AboutPage";
+import { AwardRecipientsPage } from "src/components/pages/AwardRecipientsPage";
 import { AwardsGuidePage } from "src/components/pages/AwardsGuidePage";
 import { EmailConfirmationPage } from "src/components/pages/EmailConfirmationPage";
 import { Error403Page } from "src/components/pages/ErrorPage";
@@ -118,6 +119,10 @@ const AppRoutes = () => {
       />
       <Route path="/extras" element={<TreasureVaultPage />} />
       <Route path="/extras/treasure_vault" element={<TreasureVaultPage />} />
+      <Route
+        path="/extras/treasure_vault/award_recipients"
+        element={<AwardRecipientsPage />}
+      />
       <Route path="/extras/event_catalogue" element={<EventCataloguePage />} />
       <Route path="/extras/user_discovery" element={<UserDiscoveryPage />} />
       <Route path="/users" element={<UserListPage />} />

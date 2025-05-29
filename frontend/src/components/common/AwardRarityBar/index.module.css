@@ -1,0 +1,24 @@
+.rarityBarContainer {
+  text-align: center;
+  width: 100%;
+  border-radius: 0.5rem;
+  line-height: var(--award-rarity-bar-height, 1rem);
+  position: relative;
+  overflow: hidden;
+  background: var(--label-bg-color);
+  color: var(--label-fg-color);
+}
+
+.rarityBarFill {
+  height: 100%;
+  background: var(--input-border-color);
+  border-radius: 0.5rem 0 0 0.5rem;
+  position: absolute;
+  z-index: 1;
+}
+
+.rarityBarLabel {
+  position: relative;
+  z-index: 2;
+  font-size: calc(var(--award-rarity-bar-height, 1rem) * 0.75);
+}

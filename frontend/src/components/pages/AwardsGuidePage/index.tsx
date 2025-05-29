@@ -1,20 +1,12 @@
 import styles from "./index.module.css";
 import { groupBy } from "lodash";
 import { useState, useEffect } from "react";
+import AwardIcon from "src/components/common/AwardIcon";
 import { Section } from "src/components/common/Section";
 import { SectionHeader } from "src/components/common/Section";
 import { PlainLayout } from "src/components/layouts/PlainLayout";
 import { usePageMetadata } from "src/contexts/PageMetadataContext";
 import { AwardService, AwardSpec } from "src/services/AwardService";
-
-// Mapping of tier numbers to human-readable names
-const tierNames: { [tier: number]: string } = {
-  1: "Bronze",
-  2: "Silver",
-  3: "Gold",
-  4: "Jade",
-  5: "Meteorite",
-};
 
 interface UpgradableArtifact {
   code: string;
@@ -27,9 +19,6 @@ interface StandardArtifact {
   name: string;
   description: string;
 }
-
-const getArtifactImageSrc = (code: string, tier?: number) =>
-  tier && tier > 0 ? `/awards/${code}_${tier}.svg` : `/awards/${code}.svg`;
 
 const AwardsGuidePage = () => {
   usePageMetadata(
@@ -112,13 +101,10 @@ const AwardsGuidePage = () => {
                   className={styles.upgradableArtifactsTableCell}
                   key={artifact.code}
                 >
-                  <img
-                    className={styles.artifactIcon}
-                    src={getArtifactImageSrc(
-                      artifact.code,
-                      artifact.tiers[0].tier,
-                    )}
-                    alt={artifact.name}
+                  <AwardIcon
+                    code={artifact.code}
+                    tier={artifact.tiers[0].tier}
+                    size="small"
                   />
                   {artifact.name}
                 </th>
@@ -129,7 +115,7 @@ const AwardsGuidePage = () => {
             {tierList.map((tier) => (
               <tr className={styles.upgradableArtifactsTableRow} key={tier}>
                 <td className={styles.upgradableArtifactsTableCell}>
-                  {tierNames[tier]} tier
+                  {AwardService.getTierNames()[tier]} tier
                 </td>
                 {upgradableArtifacts.map((artifact) => {
                   const tierInfo = artifact.tiers.find((t) => t.tier === tier);
@@ -160,11 +146,7 @@ const AwardsGuidePage = () => {
         {standardArtifacts.map((artifact) => (
           <div key={artifact.code}>
             <h3 className={styles.standardArtifactHeader}>
-              <img
-                className={styles.artifactIcon}
-                src={getArtifactImageSrc(artifact.code)}
-                alt={artifact.name}
-              />
+              <AwardIcon code={artifact.code} size="small" />
               {artifact.name}
             </h3>
             <p className={styles.standardArtifactDescription}>
