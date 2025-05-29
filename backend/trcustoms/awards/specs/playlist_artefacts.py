@@ -9,7 +9,9 @@ def playlist_artefacts() -> Iterable[AwardSpec]:
         code="wraith_stone",
         title="Wraith Stone",
         description="You completed 20 levels in your playlist.",
-        guide_description="Mark 20 levels in your playlist as Finished.",
+        guide_description=(
+            "Obtained by marking 20 levels in your playlist as Finished."
+        ),
         requirement=PlayedLevelsAwardRequirement(min_levels=20),
         can_be_removed=True,
     )
@@ -18,7 +20,9 @@ def playlist_artefacts() -> Iterable[AwardSpec]:
         code="excalibur",
         title="Excalibur",
         description="You completed 100 levels in your playlist.",
-        guide_description="Mark 100 levels in your playlist as Finished.",
+        guide_description=(
+            "Obtained by marking 100 levels in your playlist as Finished."
+        ),
         requirement=PlayedLevelsAwardRequirement(min_levels=100),
         can_be_removed=True,
     )
@@ -27,7 +31,9 @@ def playlist_artefacts() -> Iterable[AwardSpec]:
         code="mjolnir",
         title="Mjölnir",
         description="You completed 250 levels in your playlist.",
-        guide_description="Mark 250 levels in your playlist as Finished.",
+        guide_description=(
+            "Obtained by marking 250 levels in your playlist as Finished."
+        ),
         requirement=PlayedLevelsAwardRequirement(min_levels=250),
         can_be_removed=True,
     )

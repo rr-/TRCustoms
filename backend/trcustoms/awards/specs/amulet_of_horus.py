@@ -28,8 +28,8 @@ def amulet_of_horus() -> Iterable[AwardSpec]:
             tier=tier,
             description=description,
             guide_description=(
-                f"{min_total_reviews} reviews + "
-                f"first {min_early_reviews} reviews"
+                f"Obtained by writing {min_total_reviews} reviews "
+                f"and being the first reviewer on {min_early_reviews} levels."
             ),
             requirement=(
                 AuthoredReviewsAwardRequirement(min_reviews=min_total_reviews)

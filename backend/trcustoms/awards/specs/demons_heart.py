@@ -33,10 +33,11 @@ def spear_of_destiny() -> Iterable[AwardSpec]:
         code="spear_of_destiny",
         title="Spear of Destiny",
         description=(
-            f"You finished {min_levels} levels with a positive rating."
+            f"Obtained by marking {min_levels} positively reviewed levels "
+            "in your playlist as Finished."
         ),
         guide_description=(
-            f"Mark {min_levels} positively reviewed levels "
+            f"Obtained by marking {min_levels} negatively reviewed levels "
             "in your playlist as Finished."
         ),
         requirement=PlayedLevelsWithRatingAwardRequirement(

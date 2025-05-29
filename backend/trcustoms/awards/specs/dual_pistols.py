@@ -17,7 +17,8 @@ def dual_pistols() -> Iterable[AwardSpec]:
         ),
         can_be_removed=True,
         guide_description=(
-            f"Release {min_levels} or more levels with at least mixed rating."
+            f"Obtained by releasing {min_levels} or more levels "
+            "with at least mixed rating."
         ),
         requirement=AuthoredLevelsRatingCountRequirement(
             min_rating=0,

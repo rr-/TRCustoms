@@ -18,7 +18,8 @@ def nightmare_stone() -> Iterable[AwardSpec]:
         ),
         can_be_removed=True,
         guide_description=(
-            f"{min_levels} of your levels should have at least {min_tags} tag."
+            f"Obtained by having {min_levels} of your levels include "
+            f"at least {min_tags} tag."
         ),
         requirement=AuthoredLevelsTagCountRequirement(
             min_levels=min_levels,
