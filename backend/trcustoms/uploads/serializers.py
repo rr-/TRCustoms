@@ -18,7 +18,7 @@ MAX_SIZE_MAP = {
         (".*", MEGABYTE),
     ],
     UploadType.LEVEL_FILE: [
-        (".*", GIGABYTE),
+        (".*", 2 * GIGABYTE),
     ],
     UploadType.ATTACHMENT: [
         (".*", 0.5 * MEGABYTE),
