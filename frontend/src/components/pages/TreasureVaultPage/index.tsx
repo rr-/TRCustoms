@@ -99,7 +99,6 @@ const TreasureVaultPage = () => {
         .sort((a, b) => a.tier - b.tier)
         .map((spec) => ({
           tier: spec.tier,
-          description: spec.guide_description,
           rarity: spec.rarity,
         })),
     }));
@@ -109,7 +108,6 @@ const TreasureVaultPage = () => {
     .map((group) => ({
       code: group[0].code,
       name: group[0].title,
-      description: group[0].guide_description,
       rarity: group[0].rarity,
     }));
 
@@ -131,15 +129,14 @@ const TreasureVaultPage = () => {
                 {artifact.tiers.map((tier) => (
                   <li key={tier.tier}>
                     <ArtifactLink artifact={artifact} tier={tier.tier}>
-                      <AwardIcon
-                        code={artifact.code}
-                        tier={tier.tier}
-                        size="small"
-                      />
                       <strong className={styles.tierName}>
-                        {tierNames[tier.tier]} tier
+                        <AwardIcon
+                          code={artifact.code}
+                          tier={tier.tier}
+                          size="small"
+                        />
+                        <span>{tierNames[tier.tier]} tier</span>
                       </strong>
-                      <p className={styles.guide}>{tier.description}</p>
                       <AwardRarityBar rarity={tier.rarity / 100} />
                     </ArtifactLink>
                   </li>
@@ -158,9 +155,8 @@ const TreasureVaultPage = () => {
             <Card key={artifact.code}>
               <ArtifactLink artifact={artifact}>
                 <div className={styles.standardItem}>
-                  <h3 className={styles.artifactName}>{artifact.name}</h3>
                   <AwardIcon code={artifact.code} size="big" />
-                  <p className={styles.guide}>{artifact.description}</p>
+                  <h3 className={styles.artifactName}>{artifact.name}</h3>
                   <AwardRarityBar rarity={artifact.rarity / 100} />
                 </div>
               </ArtifactLink>
