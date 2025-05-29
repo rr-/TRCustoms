@@ -6,6 +6,7 @@ import { ExtrasSidebar } from "src/components/common/ExtrasSidebar";
 import { Section } from "src/components/common/Section";
 import { SectionHeader } from "src/components/common/Section";
 import { SidebarLayout } from "src/components/layouts/SidebarLayout";
+import { AwardRecipientsModal } from "src/components/modals/AwardRecipientsModal";
 import { usePageMetadata } from "src/contexts/PageMetadataContext";
 import { AwardService, AwardSpec } from "src/services/AwardService";
 import { reprPercentage } from "src/utils/string";
@@ -53,17 +54,45 @@ const ArtifactIcon = ({
   );
 };
 
-const RarityBar = ({ rarity }: { rarity: number }) => {
+const RarityBar = ({
+  code,
+  tier,
+  rarity,
+}: {
+  code: string;
+  tier?: number;
+  rarity: number;
+}) => {
+  const [isModalActive, setIsModalActive] = useState(false);
+
   return (
-    <div className={styles.rarityBarContainer}>
-      <div
-        className={styles.rarityBarFill}
-        style={{ width: `${(1 - rarity) * 100}%` }}
+    <>
+      <AwardRecipientsModal
+        code={code}
+        tier={tier}
+        isActive={isModalActive}
+        onIsActiveChange={setIsModalActive}
       />
-      <span className={styles.rarityBarLabel}>
-        {reprPercentage(1 - rarity, 2)} users got this award
-      </span>
-    </div>
+      <div
+        className={styles.rarityBarContainer}
+        onClick={() => setIsModalActive(true)}
+        role="button"
+        tabIndex={0}
+        onKeyPress={(e) => {
+          if (e.key === "Enter") {
+            setIsModalActive(true);
+          }
+        }}
+      >
+        <div
+          className={styles.rarityBarFill}
+          style={{ width: `${(1 - rarity) * 100}%` }}
+        />
+        <span className={styles.rarityBarLabel}>
+          {reprPercentage(1 - rarity, 2)} users got this award
+        </span>
+      </div>
+    </>
   );
 };
 
@@ -134,7 +163,11 @@ const TreasureVaultPage = () => {
                       {tierNames[tier.tier]} tier
                     </strong>
                     <p className={styles.guide}>{tier.description}</p>
-                    <RarityBar rarity={tier.rarity / 100} />
+                    <RarityBar
+                      code={artifact.code}
+                      tier={tier.tier}
+                      rarity={tier.rarity / 100}
+                    />
                   </li>
                 ))}
               </ul>
@@ -153,7 +186,10 @@ const TreasureVaultPage = () => {
                 <h3 className={styles.artifactName}>{artifact.name}</h3>
                 <ArtifactIcon artifact={artifact} variant="big" />
                 <p className={styles.guide}>{artifact.description}</p>
-                <RarityBar rarity={artifact.rarity / 100} />
+                <RarityBar
+                  code={artifact.code}
+                  rarity={artifact.rarity / 100}
+                />
               </div>
             </Card>
           ))}
