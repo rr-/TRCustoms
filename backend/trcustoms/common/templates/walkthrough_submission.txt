@@ -5,7 +5,7 @@ Hi {{username}},
 
 {{author_username}} has submitted a walkthrough for your level {{level_name}}.
 
-Click on the link below to go to the walkthrough page if you want to read it.
+Click on the link below to go to the walkthrough page if you want to view it.
 
 {{link}}
 {% endblock %}
