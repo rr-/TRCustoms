@@ -7,7 +7,6 @@ import { NavBar } from "src/components/common/NavBar";
 import { PageMetadata } from "src/components/common/PageMetadata";
 import { AboutPage } from "src/components/pages/AboutPage";
 import { AwardRecipientsPage } from "src/components/pages/AwardRecipientsPage";
-import { AwardsGuidePage } from "src/components/pages/AwardsGuidePage";
 import { EmailConfirmationPage } from "src/components/pages/EmailConfirmationPage";
 import { Error403Page } from "src/components/pages/ErrorPage";
 import { Error404Page } from "src/components/pages/ErrorPage";
@@ -166,7 +165,6 @@ const AppRoutes = () => {
         element={<TextFormattingGuidelinesPage />}
       />
       <Route path="/about" element={<AboutPage />} />
-      <Route path="/about/awards" element={<AwardsGuidePage />} />
       <Route path="/about/terms" element={<TermsAndConditionsPage />} />
       <Route path="/403" element={<Error403Page />} />
       <Route path="/404" element={<Error404Page />} />
