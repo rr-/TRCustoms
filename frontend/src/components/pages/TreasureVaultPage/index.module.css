@@ -1,16 +1,3 @@
-.artifactIcon {
-  &.small {
-    height: 1.5rem;
-    vertical-align: middle;
-    margin-right: 0.5rem;
-  }
-  &.big {
-    height: 5rem;
-    display: block;
-    margin: 1rem;
-  }
-}
-
 .artifactName {
   margin: 0;
 }
@@ -30,39 +17,15 @@
   margin: 0.25rem;
 }
 
-.rarityBarContainer {
-  width: 100%;
-  border-radius: 0.5rem;
-  line-height: 1rem;
-  position: relative;
-  overflow: hidden;
-  background: var(--label-bg-color);
-  color: var(--label-fg-color);
-  cursor: pointer;
-}
-
-.rarityBarFill {
-  height: 100%;
-  background: var(--input-border-color);
-  border-radius: 0.5rem 0 0 0.5rem;
-  position: absolute;
-  z-index: 1;
-}
-
-.rarityBarLabel {
-  position: relative;
-  z-index: 2;
-  font-size: 0.75rem;
-}
-
-.rarityLabel {
-  font-size: 0.85rem;
-  margin: 0.25rem 0 0;
-}
-
 .standardItem {
+  text-align: center;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  height: 100%;
+}
+
+.artifactLink {
+  cursor: pointer;
   height: 100%;
 }

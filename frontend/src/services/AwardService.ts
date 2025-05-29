@@ -62,9 +62,32 @@ const searchAwardRecipients = async (
   return { ...response.data, searchQuery };
 };
 
+/**
+ * Returns the URL for an award's image.
+ */
+const getArtifactImageSrc = (code: string, tier?: number): string =>
+  tier && tier > 0 ? `/awards/${code}_${tier}.svg` : `/awards/${code}.svg`;
+
+/**
+ * Mapping of tier numbers to human-readable names
+ */
+const tierNames: { [tier: number]: string } = {
+  1: "Bronze",
+  2: "Silver",
+  3: "Gold",
+  4: "Jade",
+  5: "Meteorite",
+};
+
+const getTierNames = (): { [tier: number]: string } => {
+  return tierNames;
+};
+
 const AwardService = {
   getAwardSpecs,
   searchAwardRecipients,
+  getArtifactImageSrc,
+  getTierNames,
 };
 
 export { AwardService };

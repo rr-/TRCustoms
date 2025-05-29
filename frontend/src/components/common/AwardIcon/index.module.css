@@ -1,0 +1,14 @@
+.icon {
+  vertical-align: middle;
+}
+
+.small {
+  height: 1.5rem;
+  margin-right: 0.5rem;
+}
+
+.big {
+  height: 5rem;
+  display: block;
+  margin: 1rem;
+}

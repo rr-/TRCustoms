@@ -1,12 +1,14 @@
 import styles from "./index.module.css";
 import { groupBy } from "lodash";
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import AwardIcon from "src/components/common/AwardIcon";
+import AwardRarityBar from "src/components/common/AwardRarityBar";
 import { Card, CardGrid } from "src/components/common/Card";
 import { ExtrasSidebar } from "src/components/common/ExtrasSidebar";
 import { Section } from "src/components/common/Section";
 import { SectionHeader } from "src/components/common/Section";
 import { SidebarLayout } from "src/components/layouts/SidebarLayout";
-import { AwardRecipientsModal } from "src/components/modals/AwardRecipientsModal";
 import { usePageMetadata } from "src/contexts/PageMetadataContext";
 import { AwardService, AwardSpec } from "src/services/AwardService";
 import { reprPercentage } from "src/utils/string";
@@ -33,66 +35,40 @@ interface StandardArtifact {
   rarity: number;
 }
 
-const getArtifactImageSrc = (code: string, tier?: number) =>
-  tier && tier > 0 ? `/awards/${code}_${tier}.svg` : `/awards/${code}.svg`;
-
-const ArtifactIcon = ({
+const ArtifactLink = ({
   artifact,
   tier,
-  variant,
+  children,
 }: {
   artifact: UpgradableArtifact | StandardArtifact;
   tier?: number;
-  variant: "big" | "small";
+  children: React.ReactNode;
 }) => {
-  return (
-    <img
-      className={`${styles.artifactIcon} ${styles[variant]}`}
-      src={getArtifactImageSrc(artifact.code, tier)}
-      alt={artifact.name}
-    />
-  );
-};
+  const navigate = useNavigate();
 
-const RarityBar = ({
-  code,
-  tier,
-  rarity,
-}: {
-  code: string;
-  tier?: number;
-  rarity: number;
-}) => {
-  const [isModalActive, setIsModalActive] = useState(false);
+  const handleClick = () =>
+    navigate(
+      `/extras/treasure_vault/award_recipients?code=${artifact.code}${
+        tier ? `&tier=${tier}` : ""
+      }`,
+    );
+
+  const handleKeyPress = (e) => {
+    if (e.key === "Enter") {
+      handleClick();
+    }
+  };
 
   return (
-    <>
-      <AwardRecipientsModal
-        code={code}
-        tier={tier}
-        isActive={isModalActive}
-        onIsActiveChange={setIsModalActive}
-      />
-      <div
-        className={styles.rarityBarContainer}
-        onClick={() => setIsModalActive(true)}
-        role="button"
-        tabIndex={0}
-        onKeyPress={(e) => {
-          if (e.key === "Enter") {
-            setIsModalActive(true);
-          }
-        }}
-      >
-        <div
-          className={styles.rarityBarFill}
-          style={{ width: `${(1 - rarity) * 100}%` }}
-        />
-        <span className={styles.rarityBarLabel}>
-          {reprPercentage(1 - rarity, 2)} users got this award
-        </span>
-      </div>
-    </>
+    <div
+      className={styles.artifactLink}
+      role="button"
+      tabIndex={0}
+      onKeyPress={handleKeyPress}
+      onClick={handleClick}
+    >
+      {children}
+    </div>
   );
 };
 
@@ -145,29 +121,27 @@ const TreasureVaultPage = () => {
         <CardGrid>
           {upgradableArtifacts.map((artifact) => (
             <Card key={artifact.code}>
-              <ArtifactIcon
-                artifact={artifact}
+              <AwardIcon
+                code={artifact.code}
                 tier={artifact.tiers[0].tier}
-                variant="big"
+                size="big"
               />
               <h3 className={styles.artifactName}>{artifact.name}</h3>
               <ul className={styles.list}>
                 {artifact.tiers.map((tier) => (
-                  <li key={tier.tierItem}>
-                    <ArtifactIcon
-                      artifact={artifact}
-                      tier={tier.tier}
-                      variant="small"
-                    />
-                    <strong className={styles.tierName}>
-                      {tierNames[tier.tier]} tier
-                    </strong>
-                    <p className={styles.guide}>{tier.description}</p>
-                    <RarityBar
-                      code={artifact.code}
-                      tier={tier.tier}
-                      rarity={tier.rarity / 100}
-                    />
+                  <li key={tier.tier}>
+                    <ArtifactLink artifact={artifact} tier={tier.tier}>
+                      <AwardIcon
+                        code={artifact.code}
+                        tier={tier.tier}
+                        size="small"
+                      />
+                      <strong className={styles.tierName}>
+                        {tierNames[tier.tier]} tier
+                      </strong>
+                      <p className={styles.guide}>{tier.description}</p>
+                      <AwardRarityBar rarity={tier.rarity / 100} />
+                    </ArtifactLink>
                   </li>
                 ))}
               </ul>
@@ -182,15 +156,14 @@ const TreasureVaultPage = () => {
         <CardGrid>
           {standardArtifacts.map((artifact) => (
             <Card key={artifact.code}>
-              <div className={styles.standardItem}>
-                <h3 className={styles.artifactName}>{artifact.name}</h3>
-                <ArtifactIcon artifact={artifact} variant="big" />
-                <p className={styles.guide}>{artifact.description}</p>
-                <RarityBar
-                  code={artifact.code}
-                  rarity={artifact.rarity / 100}
-                />
-              </div>
+              <ArtifactLink artifact={artifact}>
+                <div className={styles.standardItem}>
+                  <h3 className={styles.artifactName}>{artifact.name}</h3>
+                  <AwardIcon code={artifact.code} size="big" />
+                  <p className={styles.guide}>{artifact.description}</p>
+                  <AwardRarityBar rarity={artifact.rarity / 100} />
+                </div>
+              </ArtifactLink>
             </Card>
           ))}
         </CardGrid>
