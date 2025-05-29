@@ -55,7 +55,7 @@ case "$action" in
         celery -A trcustoms beat -l INFO
     ;;
     test)
-        pytest --cov=trcustoms --cov-report=term-missing --reuse-db "$@"
+        pytest --cov=trcustoms --cov-report=term-missing:skip-covered --reuse-db "$@"
     ;;
     uwsgi)
         echo "Running App (uWSGI)..."
