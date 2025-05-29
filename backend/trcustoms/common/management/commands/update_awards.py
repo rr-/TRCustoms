@@ -1,7 +1,7 @@
 from django.core.management.base import BaseCommand
 from tqdm import tqdm
 
-from trcustoms.awards.logic import update_award_rarities
+from trcustoms.awards.logic import update_all_awards_stats
 from trcustoms.awards.models import UserAward
 from trcustoms.tasks import update_awards
 from trcustoms.users.models import User
@@ -22,4 +22,4 @@ class Command(BaseCommand):
                 update_awards(user.pk, update_rarity=False)
                 progress.update()
 
-        update_award_rarities()
+        update_all_awards_stats()

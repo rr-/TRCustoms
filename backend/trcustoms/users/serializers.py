@@ -53,6 +53,7 @@ class UserAwardSerializer(serializers.ModelSerializer):
             "description",
             "tier",
             "rarity",
+            "user_percentage",
         ]
 
 

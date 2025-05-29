@@ -25,14 +25,14 @@ const tierNames: { [tier: number]: string } = {
 interface UpgradableArtifact {
   code: string;
   name: string;
-  tiers: { tier: number; description: string; rarity: number }[];
+  tiers: { tier: number; description: string; userPercentage: number }[];
 }
 
 interface StandardArtifact {
   code: string;
   name: string;
   description: string;
-  rarity: number;
+  userPercentage: number;
 }
 
 const ArtifactLink = ({
@@ -99,7 +99,7 @@ const TreasureVaultPage = () => {
         .sort((a, b) => a.tier - b.tier)
         .map((spec) => ({
           tier: spec.tier,
-          rarity: spec.rarity,
+          userPercentage: spec.user_percentage,
         })),
     }));
 
@@ -108,7 +108,7 @@ const TreasureVaultPage = () => {
     .map((group) => ({
       code: group[0].code,
       name: group[0].title,
-      rarity: group[0].rarity,
+      userPercentage: group[0].user_percentage,
     }));
 
   return (
@@ -137,7 +137,7 @@ const TreasureVaultPage = () => {
                         />
                         <span>{tierNames[tier.tier]} tier</span>
                       </strong>
-                      <AwardRarityBar rarity={tier.rarity / 100} />
+                      <AwardRarityBar userPercentage={tier.userPercentage} />
                     </ArtifactLink>
                   </li>
                 ))}
@@ -157,7 +157,7 @@ const TreasureVaultPage = () => {
                 <div className={styles.standardItem}>
                   <AwardIcon code={artifact.code} size="big" />
                   <h3 className={styles.artifactName}>{artifact.name}</h3>
-                  <AwardRarityBar rarity={artifact.rarity / 100} />
+                  <AwardRarityBar userPercentage={artifact.userPercentage} />
                 </div>
               </ArtifactLink>
             </Card>

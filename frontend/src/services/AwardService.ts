@@ -16,6 +16,7 @@ export interface AwardSpec {
   tier: number;
   can_be_removed: boolean;
   rarity: number;
+  user_percentage: number;
 }
 
 /**
