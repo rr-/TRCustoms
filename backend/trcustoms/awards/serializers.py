@@ -2,26 +2,7 @@ from rest_framework import serializers
 
 from trcustoms.awards.logic import get_award_rarity
 from trcustoms.awards.models import UserAward
-
-
-class UserAwardSerializer(serializers.ModelSerializer):
-    rarity = serializers.SerializerMethodField()
-
-    def get_rarity(self, instance: UserAward) -> int:
-        return get_award_rarity(instance.code, instance.tier)
-
-    class Meta:
-        model = UserAward
-        fields = [
-            "created",
-            "last_updated",
-            "position",
-            "code",
-            "title",
-            "description",
-            "tier",
-            "rarity",
-        ]
+from trcustoms.users.serializers import UserNestedSerializer
 
 
 class AwardSpecSerializer(serializers.Serializer):
@@ -38,3 +19,11 @@ class AwardSpecSerializer(serializers.Serializer):
 
     def get_rarity(self, obj) -> int:
         return get_award_rarity(obj.code, obj.tier)
+
+
+class AwardRecipientSerializer(serializers.ModelSerializer):
+    user = UserNestedSerializer(read_only=True)
+
+    class Meta:
+        model = UserAward
+        fields = ["user", "created"]

@@ -14,7 +14,7 @@ from rest_framework_simplejwt.views import (
 )
 
 from trcustoms.audit_logs.views import AuditLogViewSet
-from trcustoms.awards.views import AwardSpecListView
+from trcustoms.awards.views import AwardRecipientListView, AwardSpecListView
 from trcustoms.config.views import ConfigViewSet, FeaturedLevelsView
 from trcustoms.engines.views import EngineViewSet
 from trcustoms.genres.views import (
@@ -84,6 +84,10 @@ urlpatterns = [
         as_view(PlaylistItemViewSet, actions={"get": "by_level_id"}),
     ),
     path("api/award_specs/", AwardSpecListView.as_view()),
+    path(
+        "api/award_specs/<str:code>/recipients/",
+        AwardRecipientListView.as_view(),
+    ),
     path("api/schema/", SpectacularAPIView.as_view(), name="schema"),
     path("api/swagger/", SpectacularSwaggerView.as_view(url_name="schema")),
     path("api/redoc/", SpectacularRedocView.as_view(url_name="schema")),

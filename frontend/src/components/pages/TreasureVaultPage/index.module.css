@@ -38,6 +38,7 @@
   overflow: hidden;
   background: var(--label-bg-color);
   color: var(--label-fg-color);
+  cursor: pointer;
 }
 
 .rarityBarFill {
