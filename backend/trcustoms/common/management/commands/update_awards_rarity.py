@@ -1,6 +1,6 @@
 from django.core.management.base import BaseCommand
 
-from trcustoms.awards.logic import get_award_rarity, update_award_rarities
+from trcustoms.awards.logic import get_award_rarity, update_all_awards_stats
 from trcustoms.awards.specs import ALL_AWARD_SPECS
 
 
@@ -8,7 +8,7 @@ class Command(BaseCommand):
     help = "Update awards rarity."
 
     def handle(self, *args, **options):
-        update_award_rarities()
+        update_all_awards_stats()
 
         align = 30
         for spec in sorted(ALL_AWARD_SPECS, key=lambda cls: cls.position):

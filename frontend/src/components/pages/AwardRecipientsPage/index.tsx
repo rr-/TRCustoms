@@ -95,7 +95,7 @@ const AwardRecipientsPage = () => {
               {makeSentence(currentSpec.guide_description)}
             </p>
             <div className={styles.rarityBar}>
-              <AwardRarityBar rarity={currentSpec.rarity / 100} />
+              <AwardRarityBar userPercentage={currentSpec.user_percentage} />
             </div>
           </>
         )}

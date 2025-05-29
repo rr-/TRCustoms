@@ -10,30 +10,35 @@ from trcustoms.awards.specs.base import AwardSpec
 from trcustoms.users.models import User
 
 
-def calculate_award_rarity(award_code: str, tier: int) -> int:
+def update_award_stats(award_code: str, tier: int) -> int:
     awarded = User.objects.filter(
         awards__code=award_code, awards__tier=tier
     ).count()
     total = User.objects.count()
-    return min(100, 100 - ((awarded - 1) / total) * 100)
-
-
-def update_award_rarity(award_code: str, tier: int) -> int:
-    rarity = calculate_award_rarity(award_code, tier)
+    rarity = min(100, 100 - ((awarded - 1) / total) * 100)
+    user_percentage = awarded * 100 / total
     cache.set(f"award_rarity__{award_code}_{tier}", rarity)
+    cache.set(f"award_user_percentage__{award_code}_{tier}", user_percentage)
     return rarity
 
 
-def update_award_rarities() -> None:
+def update_all_awards_stats() -> None:
     for spec in ALL_AWARD_SPECS:
-        update_award_rarity(spec.code, spec.tier)
+        update_award_stats(spec.code, spec.tier)
 
 
 def get_award_rarity(award_code: str, tier: int) -> int:
-    rarity = cache.get("award_rarity__{award_code}_{tier}")
+    rarity = cache.get(f"award_rarity__{award_code}_{tier}")
     if rarity is None:
-        rarity = update_award_rarity(award_code, tier)
+        rarity = update_award_stats(award_code, tier)
     return rarity
+
+
+def get_award_user_percentage(award_code: str, tier: int) -> int:
+    user_percentage = cache.get(f"award_user_percentage__{award_code}_{tier}")
+    if user_percentage is None:
+        user_percentage = update_award_stats(award_code, tier)
+    return user_percentage
 
 
 def update_user_award_tier(
@@ -102,5 +107,5 @@ def update_awards(user: User, update_rarity: bool = True) -> None:
                 award_spec=max_eligible_spec,
             )
             if update_rarity:
-                update_award_rarity(code, tier=current_tier)
-                update_award_rarity(code, tier=max_eligible_tier)
+                update_award_stats(code, tier=current_tier)
+                update_award_stats(code, tier=max_eligible_tier)
