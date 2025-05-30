@@ -1,6 +1,6 @@
 import styles from "./index.module.css";
 import { groupBy } from "lodash";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import AwardIcon from "src/components/common/AwardIcon";
 import AwardRarityBar from "src/components/common/AwardRarityBar";
@@ -72,6 +72,63 @@ const ArtifactLink = ({
   );
 };
 
+// Card for an upgradable artifact: render all tier icons overlapped and
+// control opacity via container dataset
+const UpgradableArtifactCard = ({
+  artifact,
+}: {
+  artifact: UpgradableArtifact;
+}) => {
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  const handleMouseEnter = (tierValue: number) => {
+    if (containerRef.current) {
+      containerRef.current.dataset.hoveredTier = tierValue.toString();
+    }
+  };
+  const handleMouseLeave = () => {
+    if (containerRef.current) {
+      delete containerRef.current.dataset.hoveredTier;
+    }
+  };
+
+  return (
+    <Card>
+      <div ref={containerRef} className={styles.awardStackContainer}>
+        <div className={styles.awardStackInContainer}>
+          {artifact.tiers.map(({ tier }) => (
+            <AwardIcon
+              key={tier}
+              code={artifact.code}
+              tier={tier}
+              size="big"
+              className={styles.stackedAward}
+            />
+          ))}
+        </div>
+      </div>
+      <h3 className={styles.artifactName}>{artifact.name}</h3>
+      <ul className={styles.list}>
+        {artifact.tiers.map((tier) => (
+          <li
+            key={tier.tier}
+            onMouseEnter={() => handleMouseEnter(tier.tier)}
+            onMouseLeave={handleMouseLeave}
+          >
+            <ArtifactLink artifact={artifact} tier={tier.tier}>
+              <strong className={styles.tierName}>
+                <AwardIcon code={artifact.code} tier={tier.tier} size="small" />
+                <span>{tierNames[tier.tier]} tier</span>
+              </strong>
+              <AwardRarityBar userPercentage={tier.userPercentage} />
+            </ArtifactLink>
+          </li>
+        ))}
+      </ul>
+    </Card>
+  );
+};
+
 const TreasureVaultPage = () => {
   usePageMetadata(
     () => ({
@@ -118,31 +175,7 @@ const TreasureVaultPage = () => {
 
         <CardGrid>
           {upgradableArtifacts.map((artifact) => (
-            <Card key={artifact.code}>
-              <AwardIcon
-                code={artifact.code}
-                tier={artifact.tiers[0].tier}
-                size="big"
-              />
-              <h3 className={styles.artifactName}>{artifact.name}</h3>
-              <ul className={styles.list}>
-                {artifact.tiers.map((tier) => (
-                  <li key={tier.tier}>
-                    <ArtifactLink artifact={artifact} tier={tier.tier}>
-                      <strong className={styles.tierName}>
-                        <AwardIcon
-                          code={artifact.code}
-                          tier={tier.tier}
-                          size="small"
-                        />
-                        <span>{tierNames[tier.tier]} tier</span>
-                      </strong>
-                      <AwardRarityBar userPercentage={tier.userPercentage} />
-                    </ArtifactLink>
-                  </li>
-                ))}
-              </ul>
-            </Card>
+            <UpgradableArtifactCard key={artifact.code} artifact={artifact} />
           ))}
         </CardGrid>
       </Section>
