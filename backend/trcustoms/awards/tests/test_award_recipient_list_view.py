@@ -6,13 +6,10 @@ from trcustoms.users.tests.factories import UserFactory
 
 
 @pytest.mark.django_db
-def test_award_recipient_list_requires_auth(api_client):
-    """GET on AwardRecipientListView requires authentication."""
+def test_award_recipient_list_allows_anonymous(api_client):
+    """GET on AwardRecipientListView allows anonymous access."""
     resp = api_client.get("/api/award_specs/foo/recipients/")
-    assert resp.status_code == status.HTTP_401_UNAUTHORIZED
-    assert resp.json() == {
-        "detail": "Authentication credentials were not provided."
-    }
+    assert resp.status_code == status.HTTP_200_OK
 
 
 @pytest.mark.django_db

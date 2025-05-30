@@ -16,10 +16,21 @@ interface CardGridProps {
   className?: string;
 }
 
+interface CardListProps {
+  children: React.ReactNode;
+  className?: string;
+}
+
 const CardGrid = ({ children, className }: CardGridProps) => (
   <div className={`${styles.grid}${className ? ` ${className}` : ""}`}>
     {children}
   </div>
 );
 
-export { Card, CardGrid };
+const CardList = ({ children, className }: CardListProps) => (
+  <div className={`${styles.list}${className ? ` ${className}` : ""}`}>
+    {children}
+  </div>
+);
+
+export { Card, CardGrid, CardList };

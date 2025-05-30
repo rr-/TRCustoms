@@ -1,0 +1,9 @@
+.coverImage {
+  width: 100%;
+  object-fit: cover;
+  margin-bottom: 1rem;
+}
+
+.winnerItem {
+  margin-bottom: 0.5rem;
+}

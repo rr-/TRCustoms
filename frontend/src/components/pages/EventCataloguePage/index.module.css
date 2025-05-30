@@ -1,0 +1,22 @@
+.coverImageWrapper {
+  aspect-ratio: 4/3;
+  width: 100%;
+  position: relative;
+}
+
+.coverImage {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.card {
+  align-items: start;
+}
+
+.title {
+  margin: 0.5rem 0;
+}

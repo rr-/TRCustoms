@@ -11,6 +11,7 @@ import { EmailConfirmationPage } from "src/components/pages/EmailConfirmationPag
 import { Error403Page } from "src/components/pages/ErrorPage";
 import { Error404Page } from "src/components/pages/ErrorPage";
 import { EventCataloguePage } from "src/components/pages/EventCataloguePage";
+import { EventPage } from "src/components/pages/EventPage";
 import { HomePage } from "src/components/pages/HomePage";
 import { LevelEditPage } from "src/components/pages/LevelEditPage";
 import { LevelListPage } from "src/components/pages/LevelListPage";
@@ -123,6 +124,7 @@ const AppRoutes = () => {
         element={<AwardRecipientsPage />}
       />
       <Route path="/extras/event_catalogue" element={<EventCataloguePage />} />
+      <Route path="/extras/event/:eventId" element={<EventPage />} />
       <Route path="/extras/user_discovery" element={<UserDiscoveryPage />} />
       <Route path="/users" element={<UserListPage />} />
       <Route path="/login" element={<LoginPage />} />

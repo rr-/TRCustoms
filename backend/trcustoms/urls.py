@@ -15,6 +15,7 @@ from rest_framework_simplejwt.views import (
 
 from trcustoms.audit_logs.views import AuditLogViewSet
 from trcustoms.awards.views import AwardRecipientListView, AwardSpecListView
+from trcustoms.community_events.views import EventViewSet
 from trcustoms.config.views import ConfigViewSet, FeaturedLevelsView
 from trcustoms.engines.views import EngineViewSet
 from trcustoms.genres.views import (
@@ -51,6 +52,7 @@ router.register(r"level_files", LevelFileViewSet)
 router.register(r"reviews", ReviewViewSet)
 router.register(r"ratings", RatingViewSet)
 router.register(r"walkthroughs", WalkthroughViewSet)
+router.register(r"events", EventViewSet)
 
 urlpatterns = [
     path("api/auth/token/", TokenObtainPairView.as_view()),
