@@ -4,10 +4,12 @@ import { useState } from "react";
 import { useQuery } from "react-query";
 import { useNavigate } from "react-router-dom";
 import { Button } from "src/components/common/Button";
+import { PermissionGuard } from "src/components/common/PermissionGuard";
 import { TextInput } from "src/components/common/TextInput";
 import { KEY_RETURN } from "src/constants";
 import { UserContext } from "src/contexts/UserContext";
 import { LevelNested } from "src/services/LevelService";
+import { UserPermission } from "src/services/UserService";
 import { WalkthroughType } from "src/services/WalkthroughService";
 import type { WalkthroughDetails } from "src/services/WalkthroughService";
 import { WalkthroughService } from "src/services/WalkthroughService";
@@ -62,30 +64,32 @@ const WalkthroughsBar = ({ level }: WalkthroughsBarProps) => {
   };
 
   return (
-    <div className={styles.footer}>
-      <Button
-        to={
-          ownWalkthroughResult?.data
-            ? `/walkthroughs/${ownWalkthroughResult.data.id}/edit`
-            : `/levels/${level.id}/walkthrough`
-        }
-      >
-        Write a text guide
-      </Button>
-      OR
-      <div className={styles.input}>
-        <TextInput
-          type="url"
-          onChange={handleInputChange}
-          onKeyDown={handleInputKeyDown}
-          value={textInput}
-          placeholder="Youtube video/playlist link"
-        />
+    <PermissionGuard require={UserPermission.postWalkthroughs}>
+      <div className={styles.footer}>
+        <Button
+          to={
+            ownWalkthroughResult?.data
+              ? `/walkthroughs/${ownWalkthroughResult.data.id}/edit`
+              : `/levels/${level.id}/walkthrough`
+          }
+        >
+          Write a text guide
+        </Button>
+        OR
+        <div className={styles.input}>
+          <TextInput
+            type="url"
+            onChange={handleInputChange}
+            onKeyDown={handleInputKeyDown}
+            value={textInput}
+            placeholder="Youtube video/playlist link"
+          />
+        </div>
+        <Button disableTimeout={true} onClick={handleVideoButtonClick}>
+          Add a video guide
+        </Button>
       </div>
-      <Button disableTimeout={true} onClick={handleVideoButtonClick}>
-        Add a video guide
-      </Button>
-    </div>
+    </PermissionGuard>
   );
 };
 
