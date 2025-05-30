@@ -1,7 +1,6 @@
 import styles from "./index.module.css";
 import { useQuery } from "react-query";
 import { useParams } from "react-router-dom";
-import { Box } from "src/components/common/Box";
 import { DefaultNoItemsElement } from "src/components/common/DataList";
 import { EventSidebar } from "src/components/common/EventSidebar";
 import { LevelView } from "src/components/common/LevelList";
@@ -57,12 +56,12 @@ const EventPage = () => {
       sidebar={<EventSidebar event={event} />}
       header={<PageHeader header={<SmartWrap text={fullTitle} />} />}
     >
-      <Box>
+      <Section>
         <SectionHeader>About</SectionHeader>
         <div className={styles.mainText}>
           <Markdown>{event.about || "No description available."}</Markdown>
         </div>
-      </Box>
+      </Section>
 
       {event.levels.length > 0 && (
         <Section>
