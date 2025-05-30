@@ -1,5 +1,5 @@
 import { isEqual } from "lodash";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { useLocation } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import type { GenericSearchQuery } from "src/types";
@@ -50,23 +50,41 @@ const QueryPersister = <TQuery extends GenericSearchQuery>({
   const location = useLocation();
   const navigate = useNavigate();
 
+  // Skip state->URL sync on initial mount (e.g. when switching tabs),
+  // so we don't reapply stale query parameters from a previous tab.
+  const initialMount = useRef(true);
+  // Skip the very next state->URL sync after responding to a URL->state update,
+  // preventing ping-pong redirects / double-sync after navigating.
+  const skipNextSync = useRef(false);
+
+  // Sync local searchQuery → URL on changes, but:
+  // - Skip on initial mount to avoid reapplying stale params (e.g. when switching tabs)
+  // - Skip one update after URL→state sync to prevent ping-pong redirects
   useEffect(() => {
-    // synchronize searchQuery changes to URL
+    if (initialMount.current) {
+      initialMount.current = false;
+      return;
+    }
+    if (skipNextSync.current) {
+      skipNextSync.current = false;
+      return;
+    }
     if (
       !isEqual(deserializeSearchQuery(getCurrentSearchParams()), searchQuery)
     ) {
-      const location =
+      const newLocation =
         "?" + new URLSearchParams(serializeSearchQuery(searchQuery)).toString();
-      navigate(location);
+      navigate(newLocation);
     }
   }, [searchQuery, navigate, serializeSearchQuery, deserializeSearchQuery]);
 
   useEffect(() => {
     // synchronize URL changes to searchQuery
-    if (
-      !isEqual(deserializeSearchQuery(getCurrentSearchParams()), searchQuery)
-    ) {
-      setSearchQuery(deserializeSearchQuery(getCurrentSearchParams()));
+    const current = getCurrentSearchParams();
+    const nextQuery = deserializeSearchQuery(current);
+    if (!isEqual(nextQuery, searchQuery)) {
+      skipNextSync.current = true;
+      setSearchQuery(nextQuery);
     }
   }, [location, searchQuery, deserializeSearchQuery, setSearchQuery]);
 
