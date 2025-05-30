@@ -30,3 +30,36 @@
   cursor: pointer;
   height: 100%;
 }
+
+/* Overlapped big icons, default greyscale, opacity and filter transition */
+.awardStackContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 0 0.5rem 0;
+}
+.awardStackInContainer {
+  display: grid;
+}
+.stackedAward {
+  grid-area: 1/1;
+  margin: 0;
+  transition:
+    opacity 0.3s ease-in-out,
+    filter 0.3s ease-in-out;
+  opacity: 1;
+  filter: grayscale(100%);
+}
+
+/* Control icon opacity and color via container dataset for hovered tier */
+.awardStackContainer[data-hovered-tier] .stackedAward {
+  opacity: 0;
+}
+.awardStackContainer[data-hovered-tier="1"] .stackedAward:nth-child(1),
+.awardStackContainer[data-hovered-tier="2"] .stackedAward:nth-child(2),
+.awardStackContainer[data-hovered-tier="3"] .stackedAward:nth-child(3),
+.awardStackContainer[data-hovered-tier="4"] .stackedAward:nth-child(4),
+.awardStackContainer[data-hovered-tier="5"] .stackedAward:nth-child(5) {
+  opacity: 1;
+  filter: grayscale(0%);
+}
