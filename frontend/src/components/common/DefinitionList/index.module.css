@@ -33,3 +33,6 @@
   margin: 0;
   text-align: left;
 }
+.value > * {
+  vertical-align: top;
+}

@@ -6,4 +6,5 @@
 
 .winnerItem {
   margin-bottom: 0.5rem;
+  --user-pic-size: 1.25rem;
 }
