@@ -4,7 +4,6 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("uploads", "0003_alter_uploadedfile_upload_type"),
     ]

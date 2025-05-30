@@ -42,7 +42,6 @@ def reverse_func(apps, schema_editor):
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("ratings", "0004_ratingtemplatequestion_category"),
     ]

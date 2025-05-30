@@ -31,7 +31,6 @@ def update_reviews_forward(apps, schema_editor):
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("reviews", "0006_review_last_user_content_updated"),
     ]

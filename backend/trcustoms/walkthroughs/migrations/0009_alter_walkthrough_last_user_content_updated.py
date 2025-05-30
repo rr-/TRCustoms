@@ -4,7 +4,6 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("walkthroughs", "0008_auto_20241112_1209"),
     ]

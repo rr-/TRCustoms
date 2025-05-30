@@ -27,7 +27,6 @@ def forward_func(apps, schema_editor):
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("common", "0003_alter_ratingclass_target"),
         ("ratings", "0005_auto_20241116_1651"),

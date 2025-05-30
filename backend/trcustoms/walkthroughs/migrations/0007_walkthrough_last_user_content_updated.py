@@ -4,7 +4,6 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("walkthroughs", "0006_alter_walkthrough_rejection_reason"),
     ]
