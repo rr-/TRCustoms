@@ -6,7 +6,9 @@ import { DefaultNoItemsElement } from "src/components/common/DataList";
 import { EventSidebar } from "src/components/common/EventSidebar";
 import { LevelView } from "src/components/common/LevelList";
 import { Loader } from "src/components/common/Loader";
+import { PageHeader } from "src/components/common/PageHeader";
 import { Section, SectionHeader } from "src/components/common/Section";
+import { SmartWrap } from "src/components/common/SmartWrap";
 import { SidebarLayout } from "src/components/layouts/SidebarLayout";
 import { SidebarLayoutVariant } from "src/components/layouts/SidebarLayout";
 import { Markdown } from "src/components/markdown/Markdown";
@@ -25,12 +27,13 @@ const EventPage = () => {
     async () => EventService.getEventById(Number(eventId)),
   );
 
+  const event = result.data;
   usePageMetadata(
     () => ({
       ready: !result.isLoading,
-      title: result.data?.name || "Community event",
-      description: result.data?.subtitle || "",
-      image: result.data?.cover_image?.url || undefined,
+      title: event?.name || "Community event",
+      description: event?.subtitle || "",
+      image: event?.cover_image?.url || undefined,
     }),
     [result],
   );
@@ -42,12 +45,17 @@ const EventPage = () => {
     return <Loader />;
   }
 
-  const event = result.data;
-
+  const fullTitle =
+    event?.name && event?.subtitle
+      ? `${event.name} - ${event.subtitle}`
+      : event?.name
+        ? event?.name
+        : "Community event";
   return (
     <SidebarLayout
       variant={SidebarLayoutVariant.Normal}
       sidebar={<EventSidebar event={event} />}
+      header={<PageHeader header={<SmartWrap text={fullTitle} />} />}
     >
       <Box>
         <SectionHeader>About</SectionHeader>
