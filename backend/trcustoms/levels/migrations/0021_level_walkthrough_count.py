@@ -4,7 +4,6 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("levels", "0020_alter_level_last_user_content_updated"),
     ]

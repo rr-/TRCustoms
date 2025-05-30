@@ -22,7 +22,6 @@ def update_levels_forward(apps, schema_editor):
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("levels", "0016_level_last_user_content_updated"),
     ]

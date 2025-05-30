@@ -13,7 +13,6 @@ COMMIT;
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("ratings", "0002_auto_20241115_1135"),
     ]

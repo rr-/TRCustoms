@@ -24,7 +24,6 @@ def update_walkthroughs_foward(apps, schema_editor):
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("walkthroughs", "0007_walkthrough_last_user_content_updated"),
     ]
