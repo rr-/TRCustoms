@@ -136,18 +136,10 @@ const LevelListPage = ({ initialTabName }: LevelListPageProps) => {
       name: "levels",
       label: "Levels",
       content: (
-        <>
-          <QueryPersister
-            serializeSearchQuery={serializeSearchQuery}
-            deserializeSearchQuery={deserializeSearchQuery}
-            searchQuery={searchQuery}
-            setSearchQuery={setSearchQuery}
-          />
-          <LevelList
-            searchQuery={searchQuery}
-            onSearchQueryChange={setSearchQuery}
-          />
-        </>
+        <LevelList
+          searchQuery={searchQuery}
+          onSearchQueryChange={setSearchQuery}
+        />
       ),
     },
 
@@ -155,18 +147,10 @@ const LevelListPage = ({ initialTabName }: LevelListPageProps) => {
       name: "genres",
       label: "Genres",
       content: (
-        <>
-          <QueryPersister
-            serializeSearchQuery={serializeGenreSearchQuery}
-            deserializeSearchQuery={deserializeGenreSearchQuery}
-            searchQuery={genreSearchQuery}
-            setSearchQuery={setGenreSearchQuery}
-          />
-          <GenresTable
-            searchQuery={genreSearchQuery}
-            onSearchQueryChange={setGenreSearchQuery}
-          />
-        </>
+        <GenresTable
+          searchQuery={genreSearchQuery}
+          onSearchQueryChange={setGenreSearchQuery}
+        />
       ),
     },
 
@@ -174,18 +158,10 @@ const LevelListPage = ({ initialTabName }: LevelListPageProps) => {
       name: "tags",
       label: "Tags",
       content: (
-        <>
-          <QueryPersister
-            serializeSearchQuery={serializeTagSearchQuery}
-            deserializeSearchQuery={deserializeTagSearchQuery}
-            searchQuery={tagSearchQuery}
-            setSearchQuery={setTagSearchQuery}
-          />
-          <TagsTable
-            searchQuery={tagSearchQuery}
-            onSearchQueryChange={setTagSearchQuery}
-          />
-        </>
+        <TagsTable
+          searchQuery={tagSearchQuery}
+          onSearchQueryChange={setTagSearchQuery}
+        />
       ),
     },
   ];
@@ -220,6 +196,30 @@ const LevelListPage = ({ initialTabName }: LevelListPageProps) => {
   return (
     <div className={styles.wrapper}>
       <SidebarLayout sidebar={sidebar}>
+        {tabName === "levels" && (
+          <QueryPersister
+            serializeSearchQuery={serializeSearchQuery}
+            deserializeSearchQuery={deserializeSearchQuery}
+            searchQuery={searchQuery}
+            setSearchQuery={setSearchQuery}
+          />
+        )}
+        {tabName === "genres" && (
+          <QueryPersister
+            serializeSearchQuery={serializeGenreSearchQuery}
+            deserializeSearchQuery={deserializeGenreSearchQuery}
+            searchQuery={genreSearchQuery}
+            setSearchQuery={setGenreSearchQuery}
+          />
+        )}
+        {tabName === "tags" && (
+          <QueryPersister
+            serializeSearchQuery={serializeTagSearchQuery}
+            deserializeSearchQuery={deserializeTagSearchQuery}
+            searchQuery={tagSearchQuery}
+            setSearchQuery={setTagSearchQuery}
+          />
+        )}
         <LightTabSwitch
           tabs={tabs}
           tabName={tabName}
