@@ -7,6 +7,15 @@
   gap: 1rem;
 }
 
+.list {
+  display: grid;
+  grid-template-columns: repeat(
+    auto-fill,
+    minmax(min(100% / 3), max(12rem, 100% / 6))
+  );
+  gap: 1rem;
+}
+
 .card {
   display: flex;
   flex-direction: column;

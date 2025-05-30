@@ -147,4 +147,4 @@ const LevelList = ({ searchQuery, onSearchQueryChange }: LevelListProps) => {
   );
 };
 
-export { LevelList };
+export { LevelList, LevelView };

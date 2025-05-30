@@ -176,4 +176,4 @@ const DataList = <TItem extends {}, TQuery extends GenericSearchQuery>({
   return <PagedDataList pageView={pageView} {...props} />;
 };
 
-export { PagedDataList, InfiniteDataList, DataList };
+export { PagedDataList, InfiniteDataList, DataList, DefaultNoItemsElement };

@@ -8,7 +8,7 @@ from trcustoms.awards.tests.factories import UserAwardFactory
 from trcustoms.users.tests.factories import UserFactory
 
 
-class TestAwardSpec(AwardSpec):
+class DummyAwardSpec(AwardSpec):
     code = "test-award"
 
     def __init__(self, grant: bool, **kwargs) -> None:
@@ -27,91 +27,91 @@ class TestAwardSpec(AwardSpec):
     "all_award_specs, existing_awards, expected_awards",
     [
         pytest.param(
-            [TestAwardSpec(tier=-1, grant=True)],
+            [DummyAwardSpec(tier=-1, grant=True)],
             [],
             [],
             id="not granting an one-shot award",
         ),
         pytest.param(
-            [TestAwardSpec(tier=0, grant=True)],
+            [DummyAwardSpec(tier=0, grant=True)],
             [],
-            [(TestAwardSpec.code, 0)],
+            [(DummyAwardSpec.code, 0)],
             id="granting an one-shot award if it doesn't exist",
         ),
         pytest.param(
             [
-                TestAwardSpec(tier=1, grant=True),
-                TestAwardSpec(tier=2, grant=False),
+                DummyAwardSpec(tier=1, grant=True),
+                DummyAwardSpec(tier=2, grant=False),
             ],
             [],
-            [(TestAwardSpec.code, 1)],
+            [(DummyAwardSpec.code, 1)],
             id="granting an updatable award if it doesn't exist",
         ),
         pytest.param(
-            [TestAwardSpec(tier=0, grant=True)],
-            [(TestAwardSpec.code, 1)],
-            [(TestAwardSpec.code, 1)],
+            [DummyAwardSpec(tier=0, grant=True)],
+            [(DummyAwardSpec.code, 1)],
+            [(DummyAwardSpec.code, 1)],
             id="updating existing tier to a new tier",
         ),
         pytest.param(
             [
-                TestAwardSpec(tier=1, grant=True),
-                TestAwardSpec(tier=2, grant=False),
+                DummyAwardSpec(tier=1, grant=True),
+                DummyAwardSpec(tier=2, grant=False),
             ],
-            [(TestAwardSpec.code, 1)],
-            [(TestAwardSpec.code, 1)],
+            [(DummyAwardSpec.code, 1)],
+            [(DummyAwardSpec.code, 1)],
             id="ignoring the same existing tier",
         ),
         pytest.param(
             [
-                TestAwardSpec(tier=1, grant=False),
-                TestAwardSpec(tier=2, grant=True),
+                DummyAwardSpec(tier=1, grant=False),
+                DummyAwardSpec(tier=2, grant=True),
             ],
-            [(TestAwardSpec.code, 1)],
-            [(TestAwardSpec.code, 2)],
+            [(DummyAwardSpec.code, 1)],
+            [(DummyAwardSpec.code, 2)],
             id="ignoring the same higher tier",
         ),
         pytest.param(
             [
-                TestAwardSpec(tier=2, grant=True),
-                TestAwardSpec(tier=1, grant=True),
+                DummyAwardSpec(tier=2, grant=True),
+                DummyAwardSpec(tier=1, grant=True),
             ],
-            [(TestAwardSpec.code, 1)],
-            [(TestAwardSpec.code, 2)],
+            [(DummyAwardSpec.code, 1)],
+            [(DummyAwardSpec.code, 2)],
             id="choosing maximum tier",
         ),
         pytest.param(
             [
-                TestAwardSpec(tier=1, can_be_removed=True, grant=False),
-                TestAwardSpec(tier=2, can_be_removed=True, grant=False),
+                DummyAwardSpec(tier=1, can_be_removed=True, grant=False),
+                DummyAwardSpec(tier=2, can_be_removed=True, grant=False),
             ],
-            [(TestAwardSpec.code, 1)],
+            [(DummyAwardSpec.code, 1)],
             [],
             id="revoking an updatable award",
         ),
         pytest.param(
             [
-                TestAwardSpec(tier=1, grant=True),
-                TestAwardSpec(tier=2, grant=False),
+                DummyAwardSpec(tier=1, grant=True),
+                DummyAwardSpec(tier=2, grant=False),
             ],
-            [(TestAwardSpec.code, 1)],
-            [(TestAwardSpec.code, 1)],
+            [(DummyAwardSpec.code, 1)],
+            [(DummyAwardSpec.code, 1)],
             id="skipping revoking an updatable award",
         ),
         pytest.param(
             [
-                TestAwardSpec(tier=1, can_be_removed=True, grant=True),
-                TestAwardSpec(tier=2, can_be_removed=True, grant=False),
+                DummyAwardSpec(tier=1, can_be_removed=True, grant=True),
+                DummyAwardSpec(tier=2, can_be_removed=True, grant=False),
             ],
-            [(TestAwardSpec.code, 2)],
-            [(TestAwardSpec.code, 1)],
+            [(DummyAwardSpec.code, 2)],
+            [(DummyAwardSpec.code, 1)],
             id="downgrading an updatable award",
         ),
         pytest.param(
             [
-                TestAwardSpec(tier=0, can_be_removed=True, grant=False),
+                DummyAwardSpec(tier=0, can_be_removed=True, grant=False),
             ],
-            [(TestAwardSpec.code, 0)],
+            [(DummyAwardSpec.code, 0)],
             [],
             id="revoking an one-shot award",
         ),

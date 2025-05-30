@@ -58,6 +58,7 @@ INSTALLED_APPS = [
     "trcustoms.reviews",
     "trcustoms.tags",
     "trcustoms.uploads",
+    "trcustoms.community_events",
     "trcustoms.users",
     "trcustoms.walkthroughs",
 ]

@@ -26,6 +26,8 @@ class UploadedFile(DatesInfo):
                 return "levels"
             case UploadType.ATTACHMENT:
                 return "attachments"
+            case UploadType.EVENT_COVER:
+                return "event_covers"
             case _:
                 raise ValueError("unknown upload type")
 

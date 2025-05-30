@@ -11,3 +11,4 @@ class UploadType(models.TextChoices):
     LEVEL_SCREENSHOT = ("ls", "Level screenshot")
     LEVEL_FILE = ("lf", "Level file")
     ATTACHMENT = ("at", "Post attachment")
+    EVENT_COVER = ("ec", "Event cover image")
