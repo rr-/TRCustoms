@@ -1,5 +1,6 @@
 from rest_framework import generics
 from rest_framework.exceptions import ValidationError
+from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
@@ -12,6 +13,8 @@ from trcustoms.awards.specs import ALL_AWARD_SPECS
 
 
 class AwardSpecListView(APIView):
+    permission_classes = [AllowAny]
+
     def get(self, request):
         serializer = AwardSpecSerializer(ALL_AWARD_SPECS, many=True)
         return Response(serializer.data)
@@ -23,6 +26,7 @@ class AwardRecipientListView(generics.ListAPIView):
     tier), with pagination.
     """
 
+    permission_classes = [AllowAny]
     serializer_class = AwardRecipientSerializer
 
     def get_queryset(self):
