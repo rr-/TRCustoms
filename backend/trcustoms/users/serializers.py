@@ -6,7 +6,7 @@ from django.utils import timezone
 from rest_framework import serializers
 from rest_framework_simplejwt.exceptions import TokenError
 
-from trcustoms.awards.logic import get_award_rarity
+from trcustoms.awards.logic import get_award_rarity, get_award_user_percentage
 from trcustoms.awards.models import UserAward
 from trcustoms.common.fields import CustomCharField
 from trcustoms.common.models import Country
@@ -38,9 +38,13 @@ class UserNestedSerializer(serializers.ModelSerializer):
 
 class UserAwardSerializer(serializers.ModelSerializer):
     rarity = serializers.SerializerMethodField()
+    user_percentage = serializers.SerializerMethodField()
 
     def get_rarity(self, instance: UserAward) -> int:
         return get_award_rarity(instance.code, instance.tier)
+
+    def get_user_percentage(self, instance: UserAward) -> int:
+        return get_award_user_percentage(instance.code, instance.tier)
 
     class Meta:
         model = UserAward
