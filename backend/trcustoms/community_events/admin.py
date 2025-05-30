@@ -1,7 +1,10 @@
 from django import forms
-from django.contrib import admin
+from django.contrib import admin, messages
+from django.shortcuts import redirect, render
+from django.urls import path
 
 from trcustoms.audit_logs.mixins import AuditLogAdminMixin
+from trcustoms.community_events.importer import import_events_from_string
 from trcustoms.community_events.models import Event, Winner
 from trcustoms.uploads.consts import UploadType
 from trcustoms.uploads.models import UploadedFile
@@ -62,3 +65,47 @@ class EventAdmin(AuditLogAdminMixin, admin.ModelAdmin):
         return obj.levels.count()
 
     level_count.short_description = "Level count"
+
+    def get_urls(self):
+        urls = super().get_urls()
+        custom_urls = [
+            path(
+                "import-csv/",
+                self.admin_site.admin_view(self.import_csv),
+                name="community_events_event_import_csv",
+            ),
+        ]
+        return custom_urls + urls
+
+    def changelist_view(self, request, extra_context=None):
+        if extra_context is None:
+            extra_context = {}
+        extra_context["import_csv_url"] = "import-csv/"
+        return super().changelist_view(request, extra_context=extra_context)
+
+    def import_csv(self, request):
+        if request.method != "POST":
+            context = dict(self.admin_site.each_context(request))
+            return render(
+                request,
+                "admin/community_events/event/import_csv.html",
+                context,
+            )
+
+        csv_file = request.FILES.get("csv_file")
+        if not csv_file:
+            messages.error(request, "No file selected for upload.")
+            return redirect("..")
+
+        try:
+            data = csv_file.read().decode("utf-8")
+        except Exception:
+            messages.error(
+                request,
+                "Could not read uploaded file. Ensure it is UTF-8 encoded.",
+            )
+            return redirect("..")
+
+        created_count = import_events_from_string(data, request)
+        messages.success(request, f"Imported {created_count} events.")
+        return redirect("..")
