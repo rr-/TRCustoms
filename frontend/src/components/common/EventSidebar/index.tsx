@@ -4,6 +4,7 @@ import {
   DefinitionItemGroup,
   DefinitionItem,
 } from "src/components/common/DefinitionList";
+import { Link } from "src/components/common/Link";
 import { SectionHeader } from "src/components/common/Section";
 import { SidebarBox } from "src/components/common/SidebarBox";
 import { UserPicLink } from "src/components/links/UserPicLink";
@@ -46,7 +47,15 @@ const EventSidebar = ({ event }: EventSidebarProps) => {
           <DefinitionItem span>
             <SectionHeader>Details</SectionHeader>
           </DefinitionItem>
-          <DefinitionItem term="Name">{event.name}</DefinitionItem>
+          <DefinitionItem term="Name">
+            <Link
+              to={`/extras/event_catalogue?search=${encodeURIComponent(
+                event.name,
+              )}`}
+            >
+              {event.name}
+            </Link>
+          </DefinitionItem>
           {event.year != null && (
             <DefinitionItem term="Year">{event.year}</DefinitionItem>
           )}
