@@ -14,10 +14,8 @@ const UserPicLink = ({ user, fallback }: UserPicLinkProps) => {
   }
 
   return (
-    <UserLink user={user}>
-      <span className={styles.wrapper}>
-        <UserPicture user={user} /> {user.username}
-      </span>
+    <UserLink user={user} className={styles.wrapper}>
+      <UserPicture user={user} /> {user.username}
     </UserLink>
   );
 };
