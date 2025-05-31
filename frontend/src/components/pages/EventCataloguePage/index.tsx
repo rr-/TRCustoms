@@ -38,13 +38,15 @@ const EventView = ({ event }: EventViewProps) => {
             <img
               className={styles.coverImage}
               src={event.cover_image.url}
-              alt={event.name}
+              alt={EventService.getFullTitle(event)}
             />
           </Link>
         </div>
       )}
       <h3 className={styles.title}>
-        <Link to={`/extras/event/${event.id}`}>{event.name}</Link>
+        <Link to={`/extras/event/${event.id}`}>
+          {EventService.getFullTitle(event)}
+        </Link>
       </h3>
       {event.year && <div>{event.year}</div>}
       {event.level_count != null && <div>{event.level_count} levels</div>}

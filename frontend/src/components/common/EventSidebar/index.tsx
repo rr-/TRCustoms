@@ -14,21 +14,30 @@ interface EventSidebarProps {
   event: EventDetails;
 }
 
-const getOrdinal = (n: number): string => {
+const getOrdinalPostfix = (n: number): string => {
   const v = n % 100;
   if (v >= 11 && v <= 13) {
-    return `${n}th`;
+    return "th";
   }
   switch (n % 10) {
     case 1:
-      return `${n}st`;
+      return "st";
     case 2:
-      return `${n}nd`;
+      return "nd";
     case 3:
-      return `${n}rd`;
+      return "rd";
     default:
-      return `${n}th`;
+      return "th";
   }
+};
+
+const FormatPlace = ({ place }: { place: number }) => {
+  return (
+    <>
+      {place}
+      <sup>{getOrdinalPostfix(place)}</sup> place
+    </>
+  );
 };
 
 const EventSidebar = ({ event }: EventSidebarProps) => {
@@ -47,7 +56,7 @@ const EventSidebar = ({ event }: EventSidebarProps) => {
           <DefinitionItem span>
             <SectionHeader>Details</SectionHeader>
           </DefinitionItem>
-          <DefinitionItem term="Name">
+          <DefinitionItem term="Event">
             <Link
               to={`/extras/event_catalogue?search=${encodeURIComponent(
                 event.name,
@@ -62,9 +71,11 @@ const EventSidebar = ({ event }: EventSidebarProps) => {
           <DefinitionItem term="Level count">
             {event.level_count}
           </DefinitionItem>
-          <DefinitionItem term="Host">
-            <UserPicLink user={event.host} />
-          </DefinitionItem>
+          {event.host && (
+            <DefinitionItem term="Host">
+              <UserPicLink user={event.host} />
+            </DefinitionItem>
+          )}
         </DefinitionItemGroup>
 
         {event.winners.length > 0 && (
@@ -73,7 +84,7 @@ const EventSidebar = ({ event }: EventSidebarProps) => {
               <SectionHeader>Winners</SectionHeader>
             </DefinitionItem>
             {event.winners.map(({ place, user }) => (
-              <DefinitionItem key={place} term={`${getOrdinal(place)} place`}>
+              <DefinitionItem key={place} term={<FormatPlace place={place} />}>
                 <UserPicLink user={user} />
               </DefinitionItem>
             ))}
