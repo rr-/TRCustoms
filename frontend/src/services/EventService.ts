@@ -48,9 +48,18 @@ const getEventById = async (eventId: number): Promise<EventDetails> => {
   return response.data;
 };
 
+const getFullTitle = (event: EventListing): string => {
+  return event?.name && event?.subtitle
+    ? `${event.name} - ${event.subtitle}`
+    : event?.name
+      ? event?.name
+      : "Community event";
+};
+
 const EventService = {
   searchEvents,
   getEventById,
+  getFullTitle,
 };
 
 export type { EventListing, EventSearchQuery, EventSearchResult, EventDetails };

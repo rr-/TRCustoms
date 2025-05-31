@@ -2,6 +2,7 @@
   display: grid;
   grid-template-columns: minmax(30%, min-content) auto;
   gap: 0 1rem;
+  align-items: center;
 }
 
 .group {

@@ -44,17 +44,15 @@ const EventPage = () => {
     return <Loader />;
   }
 
-  const fullTitle =
-    event?.name && event?.subtitle
-      ? `${event.name} - ${event.subtitle}`
-      : event?.name
-        ? event?.name
-        : "Community event";
   return (
     <SidebarLayout
       variant={SidebarLayoutVariant.Normal}
       sidebar={<EventSidebar event={event} />}
-      header={<PageHeader header={<SmartWrap text={fullTitle} />} />}
+      header={
+        <PageHeader
+          header={<SmartWrap text={EventService.getFullTitle(event)} />}
+        />
+      }
     >
       <Section>
         <SectionHeader>About</SectionHeader>
