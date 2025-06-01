@@ -1,4 +1,5 @@
 import styles from "./index.module.css";
+import { Fragment } from "react";
 import {
   DefinitionList,
   DefinitionItemGroup,
@@ -41,6 +42,20 @@ const FormatPlace = ({ place }: { place: number }) => {
 };
 
 const EventSidebar = ({ event }: EventSidebarProps) => {
+  const winnersByPlace = event.winners.reduce(
+    (acc, { place, user }) => {
+      if (!acc[place]) {
+        acc[place] = [];
+      }
+      acc[place].push(user);
+      return acc;
+    },
+    {} as Record<number, (typeof event.winners)[number]["user"][]>,
+  );
+  const sortedPlaces = Object.keys(winnersByPlace)
+    .map(Number)
+    .sort((a, b) => a - b);
+
   return (
     <SidebarBox>
       {event.cover_image?.url && (
@@ -83,9 +98,14 @@ const EventSidebar = ({ event }: EventSidebarProps) => {
             <DefinitionItem span>
               <SectionHeader>Winners</SectionHeader>
             </DefinitionItem>
-            {event.winners.map(({ place, user }) => (
+            {sortedPlaces.map((place) => (
               <DefinitionItem key={place} term={<FormatPlace place={place} />}>
-                <UserPicLink user={user} />
+                {winnersByPlace[place].map((user, index, array) => (
+                  <Fragment key={user.id}>
+                    <UserPicLink user={user} />
+                    {index < array.length - 1 && ", "}
+                  </Fragment>
+                ))}
               </DefinitionItem>
             ))}
           </DefinitionItemGroup>
