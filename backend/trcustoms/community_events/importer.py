@@ -19,11 +19,17 @@ USER_AGENT = "trcustoms-csv-importer/1.0"
 
 def import_events_from_string(data: str, request) -> int:
     """
-    Import events from a tab-delimited CSV string.
+    Import events from a tab-delimited CSV string (TSV).
+    Supports quoted fields, including multiline values.
     Reports warnings and errors via django.contrib.messages on the request.
     Returns the number of events processed (created or updated).
     """
-    reader = csv.DictReader(io.StringIO(data), delimiter="\t")
+    reader = csv.DictReader(
+        io.StringIO(data, newline=""),
+        delimiter="\t",
+        quotechar='"',
+        quoting=csv.QUOTE_MINIMAL,
+    )
     imported = 0
     for row in reader:
         if not _has_name(row):
@@ -38,11 +44,18 @@ def _has_name(row: dict) -> bool:
 
 
 def _process_row(row: dict, request) -> bool:
-    name = row.get("Name", "").strip()
-    subtitle = row.get("Subtitle", "").strip() or None
-    year_str = row.get("Year", "").strip()
+    print(row)
+    name = (row.get("Name") or "").strip()
+    subtitle_raw = row.get("Subtitle") or ""
+    subtitle = subtitle_raw.strip() or None
+    if subtitle is not None:
+        subtitle = subtitle.replace("\\n", "\n")
+    year_str = (row.get("Year") or "").strip() or None
     year = int(year_str) if year_str else None
-    about = row.get("About", "").strip() or None
+    about_raw = row.get("About") or ""
+    about = about_raw.strip() or None
+    if about is not None:
+        about = about.replace("\\n", "\n")
     collection_release = _parse_collection_release(row, request, name)
     if not collection_release:
         return False
@@ -67,8 +80,8 @@ def _process_row(row: dict, request) -> bool:
 
 
 def _parse_collection_release(row: dict, request, name: str):
-    date_str = row.get("Collection R Date", "").strip()
-    time_str = row.get("Collection R Time", "").strip()
+    date_str = (row.get("Collection R Date") or "").strip()
+    time_str = (row.get("Collection R Time") or "").strip()
     if date_str and time_str:
         try:
             return datetime.strptime(
