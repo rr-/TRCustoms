@@ -36,6 +36,7 @@ const searchEvents = async (
   const params = filterFalsyObjectValues({
     ...getGenericSearchQuery(searchQuery),
     year: searchQuery.year != null ? `${searchQuery.year}` : null,
+    page_size: 15,
   });
   const response = (await api.get(`${API_URL}/events/`, {
     params,
