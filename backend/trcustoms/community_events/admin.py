@@ -1,10 +1,14 @@
 from django import forms
 from django.contrib import admin, messages
+from django.http import HttpResponse
 from django.shortcuts import redirect, render
 from django.urls import path
 
 from trcustoms.audit_logs.mixins import AuditLogAdminMixin
-from trcustoms.community_events.importer import import_events_from_string
+from trcustoms.community_events.importer import (
+    export_events_to_string,
+    import_events_from_string,
+)
 from trcustoms.community_events.models import Event, Winner
 from trcustoms.uploads.consts import UploadType
 from trcustoms.uploads.models import UploadedFile
@@ -70,6 +74,11 @@ class EventAdmin(AuditLogAdminMixin, admin.ModelAdmin):
         urls = super().get_urls()
         custom_urls = [
             path(
+                "export-csv/",
+                self.admin_site.admin_view(self.export_csv),
+                name="community_events_event_export_csv",
+            ),
+            path(
                 "import-csv/",
                 self.admin_site.admin_view(self.import_csv),
                 name="community_events_event_import_csv",
@@ -80,6 +89,7 @@ class EventAdmin(AuditLogAdminMixin, admin.ModelAdmin):
     def changelist_view(self, request, extra_context=None):
         if extra_context is None:
             extra_context = {}
+        extra_context["export_csv_url"] = "export-csv/"
         extra_context["import_csv_url"] = "import-csv/"
         return super().changelist_view(request, extra_context=extra_context)
 
@@ -109,3 +119,11 @@ class EventAdmin(AuditLogAdminMixin, admin.ModelAdmin):
         created_count = import_events_from_string(data, request)
         messages.success(request, f"Imported {created_count} events.")
         return redirect("..")
+
+    def export_csv(self, request):
+        content = export_events_to_string(self.get_queryset(request))
+        response = HttpResponse(
+            content, content_type="text/tab-separated-values"
+        )
+        response["Content-Disposition"] = "attachment; filename=events.tsv"
+        return response
