@@ -4,6 +4,9 @@
 {% block object-tools-items %}
 {{ block.super }}
 <li>
+    <a href="{{ export_csv_url }}" class="addlink">{% trans "Export CSV" %}</a>
+</li>
+<li>
     <a href="{{ import_csv_url }}" class="addlink">{% trans "Import CSV" %}</a>
 </li>
 {% endblock %}

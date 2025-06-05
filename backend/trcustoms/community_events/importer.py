@@ -2,8 +2,10 @@ import csv
 import io
 import time
 from datetime import datetime
+from urllib.parse import urljoin
 
 import requests
+from django.conf import settings
 from django.contrib import messages
 from django.core.files.base import ContentFile
 
@@ -186,3 +188,58 @@ def _add_winners(row: dict, request, event: Event, name: str):
                 f"Winner user id {user_id} not found for event '{name}'. "
                 "Skipping winner.",
             )
+
+
+def export_events_to_string(queryset) -> str:
+    """
+    Export events queryset to a tab-delimited CSV string (TSV).
+    """
+    fieldnames = [
+        "Name",
+        "Subtitle",
+        "Year",
+        "About",
+        "Collection R Date",
+        "Collection R Time",
+        "Host",
+        "Levels",
+        "Win Places",
+        "Win Users",
+        "IMG URL",
+    ]
+    buffer = io.StringIO()
+    writer = csv.writer(
+        buffer, delimiter="\t", quotechar='"', quoting=csv.QUOTE_MINIMAL
+    )
+    writer.writerow(fieldnames)
+    for event in queryset:
+        subtitle = event.subtitle or ""
+        year = event.year if event.year is not None else ""
+        about = event.about or ""
+        dt = event.collection_release
+        date_str = dt.strftime("%d/%m/%Y")
+        time_str = dt.strftime("%H:%M:%S")
+        host = str(event.host_id) if event.host_id else ""
+        levels = [str(level.pk) for level in event.levels.order_by("pk")]
+        win_places = [str(winner.place) for winner in event.winners.all()]
+        win_users = [str(winner.user_id) for winner in event.winners.all()]
+        writer.writerow(
+            [
+                event.name,
+                subtitle,
+                year,
+                about,
+                date_str,
+                time_str,
+                host,
+                ",".join(levels),
+                ",".join(win_places),
+                ",".join(win_users),
+                (
+                    urljoin(settings.HOST_SITE, event.cover_image.content.url)
+                    if event.cover_image
+                    else ""
+                ),
+            ]
+        )
+    return buffer.getvalue()

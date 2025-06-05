@@ -5,7 +5,7 @@
 <h1>{% trans "Import Events from CSV" %}</h1>
 <form action="" method="post" enctype="multipart/form-data">
   {% csrf_token %}
-  <input type="file" name="csv_file" accept=".csv, text/csv, text/tab-separated-values" required>
+  <input type="file" name="csv_file" accept=".csv, .tsv, text/csv, text/tab-separated-values" required>
   <button type="submit" class="default">{% trans "Upload" %}</button>
   <a href="{% url 'admin:community_events_event_changelist' %}" class="button">{% trans "Cancel" %}</a>
 </form>
