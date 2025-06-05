@@ -46,10 +46,12 @@ const EventView = ({ event }: EventViewProps) => {
       <h3 className={styles.title}>
         <Link to={`/extras/event/${event.id}`}>
           {EventService.getFullTitle(event)}
+          {event.year && <> ({event.year})</>}
         </Link>
       </h3>
-      {event.year && <div>{event.year}</div>}
-      {event.level_count != null && <div>{event.level_count} levels</div>}
+      {event.level_count != null && (
+        <small>Includes {event.level_count} levels</small>
+      )}
     </Card>
   );
 };
