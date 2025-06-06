@@ -16,5 +16,6 @@
 }
 .rarityBar {
   margin: 0.5rem 0;
-  --award-rarity-bar-height: 1.25rem;
+  --award-rarity-bar-height: 2rem;
+  --award-rarity-bar-font-size: 1rem;
 }

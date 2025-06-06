@@ -2,7 +2,7 @@
   text-align: center;
   width: 100%;
   border-radius: 0.5rem;
-  line-height: var(--award-rarity-bar-height, 1rem);
+  line-height: var(--award-rarity-bar-height, 1.2rem);
   position: relative;
   overflow: hidden;
   background: var(--label-bg-color);
@@ -20,5 +20,5 @@
 .rarityBarLabel {
   position: relative;
   z-index: 2;
-  font-size: calc(var(--award-rarity-bar-height, 1rem) * 0.75);
+  font-size: var(--award-rarity-bar-font-size, 0.85rem);
 }

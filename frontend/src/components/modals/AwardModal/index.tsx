@@ -1,4 +1,5 @@
 import styles from "./index.module.css";
+import AwardRarityBar from "src/components/common/AwardRarityBar";
 import { BaseModal } from "src/components/modals/BaseModal";
 import type { UserAward } from "src/services/UserService";
 import { UserService } from "src/services/UserService";
@@ -27,16 +28,8 @@ const AwardModal = ({ isActive, onIsActiveChange, award }: AwardModalProps) => {
         />
         <h1 className={styles.header}>{UserService.getAwardTitle(award)}</h1>
         <p>{award.description}</p>
-        <dl className={styles.additionalItems}>
-          <dt className={styles.term}>Rarity:</dt>
-          <dd className={styles.definition}>
-            {reprPercentage(award.rarity / 100)}
-          </dd>
-          <dt className={styles.term}>Awarded:</dt>
-          <dd className={styles.definition}>
-            {formatDate(award.last_updated ?? award.created)}
-          </dd>
-        </dl>
+        <p>Awarded on {formatDate(award.last_updated ?? award.created)}.</p>
+        <AwardRarityBar userPercentage={award.user_percentage} />
       </div>
     </BaseModal>
   );
