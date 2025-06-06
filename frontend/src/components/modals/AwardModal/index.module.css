@@ -1,12 +1,15 @@
 .container {
+  width: 400px;
   text-align: center;
+  --award-rarity-bar-height: 1.5rem;
+  --award-rarity-bar-font-size: 0.85rem;
 }
 .image {
   width: 250px;
   height: 250px;
 }
 .header {
-  margin: 0;
+  margin: 0.5rem 0 0 0;
 }
 
 .additionalItems {
