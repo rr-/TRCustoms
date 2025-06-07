@@ -60,3 +60,4 @@ class ConfigSerializer(serializers.Serializer):
     rating_questions = RatingTemplateQuestionSerializer(many=True)
     limits = GlobalLimitsSerializer()
     stats = GlobalStatsSerializer()
+    global_message = serializers.CharField(allow_null=True, required=False)

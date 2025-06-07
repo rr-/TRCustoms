@@ -13,6 +13,7 @@ from trcustoms.genres.models import Genre
 from trcustoms.levels.consts import FeatureType
 from trcustoms.levels.models import Level, LevelDifficulty, LevelDuration
 from trcustoms.levels.serializers import FeaturedLevelsSerializer
+from trcustoms.news.models import GlobalMessage
 from trcustoms.ratings.models import Rating, RatingTemplateQuestion
 from trcustoms.reviews.models import Review
 from trcustoms.tags.models import Tag
@@ -58,6 +59,8 @@ def get_rating_stats() -> list[dict[str, Any]]:
 
 
 def get_config_data():
+    message_obj = GlobalMessage.objects.first()
+    global_message = message_obj.message if message_obj else None
     context = dict(
         countries=Country.objects.order_by("name"),
         tags=Tag.objects.with_counts(),
@@ -95,6 +98,7 @@ def get_config_data():
             walkthroughs=get_walkthrough_stats(),
             ratings=get_rating_stats(),
         ),
+        global_message=global_message,
     )
     return ConfigSerializer(instance=context).data
 

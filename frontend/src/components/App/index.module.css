@@ -10,3 +10,12 @@
   margin-top: 1rem;
   margin-bottom: 1rem;
 }
+
+.globalMessage {
+  background-color: lemonchiffon;
+  color: black;
+  border: 1px solid #ffe58f;
+  padding: 0.5rem;
+  text-align: center;
+  margin-bottom: 1rem;
+}

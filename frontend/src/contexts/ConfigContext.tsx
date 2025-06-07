@@ -43,6 +43,7 @@ const defaultConfig = {
       none: 0,
     },
   },
+  global_message: null,
 };
 
 const ConfigContext = createContext<{
