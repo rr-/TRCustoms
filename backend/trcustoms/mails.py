@@ -27,11 +27,9 @@ def get_level_authors(
     """
     Return distinct users who authored or uploaded the level for notification.
     """
-    q_obj = Q()
+    q_obj = Q(authored_levels=level)
     if include_uploader:
         q_obj |= Q(uploaded_levels=level)
-    if not level.is_pending_approval:
-        q_obj |= Q(authored_levels=level)
 
     # Return distinct User instances for this level
     return User.objects.filter(q_obj).distinct()
