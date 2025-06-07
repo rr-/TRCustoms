@@ -1,5 +1,5 @@
 import styles from "./index.module.css";
-import { useEffect } from "react";
+import { useEffect, useContext } from "react";
 import { Routes } from "react-router-dom";
 import { Route } from "react-router-dom";
 import { EnvironmentWatermark } from "src/components/common/EnvironmentWatermark";
@@ -41,7 +41,10 @@ import { UserListPage } from "src/components/pages/UserListPage";
 import { UserPage } from "src/components/pages/UserPage";
 import { WalkthroughEditPage } from "src/components/pages/WalkthroughEditPage";
 import { WalkthroughPage } from "src/components/pages/WalkthroughPage";
-import { ConfigContextProvider } from "src/contexts/ConfigContext";
+import {
+  ConfigContextProvider,
+  ConfigContext,
+} from "src/contexts/ConfigContext";
 import { useSettings } from "src/contexts/SettingsContext";
 import { UserContextProvider } from "src/contexts/UserContext";
 
@@ -175,6 +178,17 @@ const AppRoutes = () => {
   );
 };
 
+const GlobalMessage = () => {
+  const { config } = useContext(ConfigContext);
+  return (
+    <>
+      {config.global_message && (
+        <div className={styles.globalMessage}>{config.global_message}</div>
+      )}
+    </>
+  );
+};
+
 const App = () => {
   const { theme } = useSettings();
 
@@ -189,6 +203,7 @@ const App = () => {
       <UserContextProvider>
         <EnvironmentWatermark>
           <PageMetadata />
+          <GlobalMessage />
           <NavBar />
           <main className={classNames.join(" ")}>
             <AppRoutes />

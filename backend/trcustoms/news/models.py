@@ -16,3 +16,13 @@ class News(DatesInfo):
 
     def __str__(self) -> str:
         return f"{self.subject} (id={self.pk})"
+
+
+@registry.register_model(name_getter=lambda instance: "Global Message")
+class GlobalMessage(DatesInfo):
+    message = models.TextField(null=True, blank=True)
+
+    class Meta:
+        verbose_name = "Global Message"
+        verbose_name_plural = "Global Messages"
+        default_permissions = []

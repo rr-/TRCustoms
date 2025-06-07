@@ -95,6 +95,7 @@ interface Config {
       none: number;
     };
   };
+  global_message: string | null;
 }
 
 type FeaturedLevels = {
