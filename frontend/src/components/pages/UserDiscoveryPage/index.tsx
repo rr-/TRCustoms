@@ -26,6 +26,7 @@ const LocationUserTable = ({
   searchQuery,
   setSearchQuery,
 }: LocationUserTableProps) => {
+  const [count, setCount] = useState<number>(undefined);
   if (!selectedCountry) {
     return null;
   }
@@ -37,11 +38,13 @@ const LocationUserTable = ({
         {selectedCountry.name === "Unknown"
           ? "unknown country"
           : selectedCountry.name}
+        {count !== undefined ? <> ({count})</> : null}
       </SectionHeader>
 
       <UserFancyList
         searchQuery={searchQuery}
         onSearchQueryChange={setSearchQuery}
+        onResultCountChange={setCount}
       />
     </Section>
   );
