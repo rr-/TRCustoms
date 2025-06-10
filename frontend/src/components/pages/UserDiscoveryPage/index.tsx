@@ -55,7 +55,7 @@ const UserDiscoveryPage = () => {
     () => ({
       ready: true,
       title: "User discovery",
-      description: "Find users and see theri locations around the world.",
+      description: "Find users and see their locations around the world.",
       image: "card-user_discovery.jpg",
     }),
     [],
