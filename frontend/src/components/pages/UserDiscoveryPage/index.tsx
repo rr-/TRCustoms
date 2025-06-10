@@ -74,7 +74,6 @@ const UserDiscoveryPage = () => {
     page: null,
     sort: "-authored_level_count_approved",
     countryCode: undefined,
-    authoredLevelsMin: undefined,
   });
 
   const handleSearchTrigger = useCallback(
@@ -99,14 +98,12 @@ const UserDiscoveryPage = () => {
           page: null,
           sort: "-authored_level_count_approved",
           countryCode: country.iso_3166_1_alpha2,
-          authoredLevelsMin: 1,
         });
       } else {
         setSearchQuery({
           page: null,
           sort: "-authored_level_count_approved",
           countryCode: undefined,
-          authoredLevelsMin: undefined,
         });
       }
     },
