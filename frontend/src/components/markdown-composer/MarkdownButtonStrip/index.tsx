@@ -15,15 +15,18 @@ import { MarkdownColorPickupButton } from "src/components/markdown-composer/Mark
 import { MarkdownColorObjectButton } from "src/components/markdown-composer/MarkdownButtons";
 import { MarkdownColorEnemyButton } from "src/components/markdown-composer/MarkdownButtons";
 import { MarkdownColorTrapButton } from "src/components/markdown-composer/MarkdownButtons";
+import { MarkdownSpoilerButton } from "src/components/markdown-composer/MarkdownButtons";
 import { MarkdownHelpButton } from "src/components/markdown-composer/MarkdownButtons";
 
 interface MarkdownButtonStripProps {
   allowColors?: boolean;
+  allowSpoilers?: boolean;
   textarea: HTMLTextAreaElement | null;
 }
 
 const MarkdownButtonStrip = ({
   allowColors,
+  allowSpoilers,
   textarea,
 }: MarkdownButtonStripProps) => {
   const buttonProps = { textarea };
@@ -60,6 +63,12 @@ const MarkdownButtonStrip = ({
           <MarkdownColorObjectButton {...buttonProps} />
           <MarkdownColorEnemyButton {...buttonProps} />
           <MarkdownColorTrapButton {...buttonProps} />
+        </div>
+      )}
+
+      {allowSpoilers && (
+        <div className={styles.group}>
+          <MarkdownSpoilerButton {...buttonProps} />
         </div>
       )}
 

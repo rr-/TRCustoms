@@ -7,6 +7,7 @@ import { MarkdownButtonStrip } from "src/components/markdown-composer/MarkdownBu
 interface MarkdownComposerProps {
   allowAttachments?: boolean;
   allowColors?: boolean;
+  allowSpoilers?: boolean;
   field: FieldInputProps<string>;
   form: any;
 }
@@ -15,6 +16,7 @@ const MarkdownComposer = ({
   field,
   form,
   allowColors,
+  allowSpoilers,
   allowAttachments,
   ...props
 }: MarkdownComposerProps) => {
@@ -22,7 +24,11 @@ const MarkdownComposer = ({
   const textarea = ref.current;
   return (
     <div className="MarkdownComposer">
-      <MarkdownButtonStrip allowColors={allowColors} textarea={textarea} />
+      <MarkdownButtonStrip
+        allowColors={allowColors}
+        allowSpoilers={allowSpoilers}
+        textarea={textarea}
+      />
       <textarea
         ref={ref}
         className="TextArea--input Input"

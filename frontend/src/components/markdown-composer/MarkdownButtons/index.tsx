@@ -18,6 +18,7 @@ import { IconMarkdownColorPickup } from "src/components/icons";
 import { IconMarkdownColorObject } from "src/components/icons";
 import { IconMarkdownColorEnemy } from "src/components/icons";
 import { IconMarkdownColorTrap } from "src/components/icons";
+import { IconMarkdownSpoiler } from "src/components/icons";
 import { applyStyle } from "src/components/markdown-composer/MarkdownStyle";
 import type { MarkdownInputStyle } from "src/components/markdown-composer/MarkdownStyle";
 
@@ -264,6 +265,20 @@ const MarkdownColorTrapButton = ({ ...props }: MarkdownButtonProps) => {
   );
 };
 
+const MarkdownSpoilerButton = ({ ...props }: MarkdownButtonProps) => {
+  return (
+    <MarkdownBaseButton
+      icon={<IconMarkdownSpoiler />}
+      tooltip="Add a spoiler"
+      style={{
+        prefix: "||",
+        suffix: "||",
+      }}
+      {...props}
+    />
+  );
+};
+
 const MarkdownHelpButton = () => {
   return (
     <Link
@@ -292,5 +307,6 @@ export {
   MarkdownColorObjectButton,
   MarkdownColorEnemyButton,
   MarkdownColorTrapButton,
+  MarkdownSpoilerButton,
   MarkdownHelpButton,
 };

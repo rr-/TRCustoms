@@ -143,7 +143,12 @@ Example text.`,
           <Form>
             <FormGrid>
               <FormGridFieldSet>
-                <TextAreaFormField label="Text" name="text" rich={true} />
+                <TextAreaFormField
+                  label="Text"
+                  name="text"
+                  rich={true}
+                  allowSpoilers={false}
+                />
               </FormGridFieldSet>
 
               <FormGridButtons

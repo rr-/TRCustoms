@@ -53,7 +53,7 @@ const WalkthroughContent: React.FC<WalkthroughContentProps> = ({
     content = (
       <>
         <div className={styles.clamped}>
-          <Markdown>{walkthrough.text}</Markdown>
+          <Markdown allowSpoilers={false}>{walkthrough.text}</Markdown>
         </div>
         <WalkthroughLink
           walkthrough={{
@@ -66,7 +66,7 @@ const WalkthroughContent: React.FC<WalkthroughContentProps> = ({
       </>
     );
   } else {
-    content = <Markdown>{walkthrough.text}</Markdown>;
+    content = <Markdown allowSpoilers={false}>{walkthrough.text}</Markdown>;
   }
 
   return content;

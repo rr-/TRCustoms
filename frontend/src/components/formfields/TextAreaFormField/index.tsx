@@ -14,6 +14,7 @@ import { MarkdownPreviewMode } from "src/contexts/SettingsContext";
 interface TextAreaFormFieldProps extends GenericFormFieldProps {
   rich?: boolean | undefined;
   allowColors?: boolean;
+  allowSpoilers?: boolean;
   allowAttachments?: boolean;
   validate?: (value: string) => string | null;
 }
@@ -22,6 +23,7 @@ const TextAreaFormFieldTabbed = ({
   name,
   readonly,
   allowColors,
+  allowSpoilers,
   allowAttachments,
   validate,
   ...props
@@ -44,6 +46,7 @@ const TextAreaFormFieldTabbed = ({
             validate={validate}
             readOnly={readonly}
             allowColors={allowColors}
+            allowSpoilers={allowSpoilers}
             allowAttachments={allowAttachments}
             component={MarkdownComposer}
           />
@@ -58,7 +61,7 @@ const TextAreaFormFieldTabbed = ({
         <div className={styles.tab}>
           <div className={styles.previewBody}>
             <div className={styles.markdownWrapper}>
-              <Markdown allowColors={allowColors}>
+              <Markdown allowColors={allowColors} allowSpoilers={allowSpoilers}>
                 {(values as any)[name]}
               </Markdown>
             </div>
@@ -85,6 +88,7 @@ const TextAreaFormFieldSide = ({
   name,
   readonly,
   allowColors,
+  allowSpoilers,
   allowAttachments,
   validate,
   ...props
@@ -98,13 +102,14 @@ const TextAreaFormFieldSide = ({
           validate={validate}
           readOnly={readonly}
           allowColors={allowColors}
+          allowSpoilers={allowSpoilers}
           allowAttachments={allowAttachments}
           component={MarkdownComposer}
         />
         <div className={styles.preview}>
           <div className={styles.previewHeader}>Preview</div>
           <div className={styles.previewBody}>
-            <Markdown allowColors={allowColors}>
+            <Markdown allowColors={allowColors} allowSpoilers={allowSpoilers}>
               {(values as any)[name]}
             </Markdown>
           </div>
@@ -118,6 +123,7 @@ const TextAreaFormFieldPlain = ({
   name,
   readonly,
   allowColors,
+  allowSpoilers,
   allowAttachments,
   validate,
   ...props
@@ -140,6 +146,7 @@ const TextAreaFormFieldPlain = ({
 const TextAreaFormField = ({ rich, ...props }: TextAreaFormFieldProps) => {
   props.allowAttachments ??= true;
   props.allowColors ??= true;
+  props.allowSpoilers ??= true;
 
   const { markdownPreviewMode } = useSettings();
   if (!rich) {

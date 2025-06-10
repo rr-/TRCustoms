@@ -1,7 +1,7 @@
 import styles from "./index.module.css";
 import type { Element, Node } from "hast";
 import { findAndReplace } from "mdast-util-find-and-replace";
-import { useMemo } from "react";
+import { useMemo, type MouseEvent } from "react";
 import ReactMarkdown from "react-markdown";
 import remarkBreaks from "remark-breaks";
 import remarkGfm from "remark-gfm";
@@ -182,6 +182,28 @@ const remarkTRCustomColors = () => {
   };
 };
 
+const remarkSpoiler = () => {
+  const spoilerRegex = /\|\|([^|\n]+)\|\|/g;
+  const replaceSpoiler = (_match: string, text: string): any => {
+    return {
+      type: "element",
+      data: {
+        hName: "span",
+        hProperties: {
+          class: styles.spoiler,
+          onClick: (e: MouseEvent<HTMLSpanElement>) => {
+            e.currentTarget.classList.toggle(styles.revealed);
+          },
+        },
+        hChildren: [{ type: "text", value: text }],
+      },
+    };
+  };
+  return (tree: any) => {
+    findAndReplace(tree, [[spoilerRegex, replaceSpoiler]]);
+  };
+};
+
 const transformLink = (link: any): any => {
   const youtubeVideo = parseYoutubeLink(link.href);
   if (youtubeVideo?.videoID || youtubeVideo?.playlistID) {
@@ -192,6 +214,7 @@ const transformLink = (link: any): any => {
 
 interface MarkdownProps {
   allowColors?: boolean;
+  allowSpoilers?: boolean;
   allowEmbeds?: boolean;
   allowLines?: boolean;
   children: string;
@@ -201,11 +224,13 @@ const Markdown = ({
   allowEmbeds,
   allowLines,
   allowColors,
+  allowSpoilers,
   children,
 }: MarkdownProps) => {
   allowEmbeds ??= true;
   allowLines ??= true;
   allowColors ??= true;
+  allowSpoilers ??= true;
 
   const rendered = useMemo(() => {
     const classNames: string[] = [
@@ -222,6 +247,7 @@ const Markdown = ({
       remarkGfm,
       remarkBreaks,
       remarkTransformHeaders,
+      ...(allowSpoilers ? [remarkSpoiler] : []),
       remarkTRCustomColors,
     ];
 

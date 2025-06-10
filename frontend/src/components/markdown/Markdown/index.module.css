@@ -45,3 +45,43 @@
 .center {
   text-align: center;
 }
+
+.spoiler {
+  color: transparent;
+  border-radius: 2px;
+  cursor: pointer;
+  display: inline-block;
+  position: relative;
+  transition: color 0.3s ease;
+  &:after {
+    display: inline-block;
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+    width: 100%;
+    height: 100%;
+    --my-col-1: var(--fg-color);
+    --my-col-2: transparent;
+    background-image: linear-gradient(
+      135deg,
+      var(--my-col-1) 10%,
+      var(--my-col-2) 10%,
+      var(--my-col-2) 50%,
+      var(--my-col-1) 50%,
+      var(--my-col-1) 60%,
+      var(--my-col-2) 60%,
+      var(--my-col-2) 100%
+    );
+    background-size: 7.07px 7.07px;
+    opacity: 1;
+    transition: opacity 0.3s ease;
+  }
+}
+.spoiler.revealed {
+  color: var(--fg-color);
+  &:after {
+    opacity: 0;
+  }
+}
