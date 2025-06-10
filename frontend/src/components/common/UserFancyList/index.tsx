@@ -39,12 +39,14 @@ const UserView = ({ user, showReviews }: UserViewProps) => (
 interface UserFancyListProps extends UserFancyListItemSettings {
   searchQuery: UserSearchQuery;
   onSearchQueryChange?: ((searchQuery: UserSearchQuery) => void) | undefined;
+  onResultCountChange?: ((count: number) => void) | undefined;
 }
 
 const UserFancyList = ({
   searchQuery,
-  onSearchQueryChange,
   showReviews,
+  onSearchQueryChange,
+  onResultCountChange,
 }: UserFancyListProps) => {
   const itemKey = (user: UserListing) => `${user.id}`;
   const itemView = (user: UserListing) => (
@@ -64,6 +66,7 @@ const UserFancyList = ({
       searchQuery={searchQuery}
       searchFunc={UserService.searchUsers}
       onSearchQueryChange={onSearchQueryChange}
+      onResultCountChange={onResultCountChange}
     />
   );
 };
