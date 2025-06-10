@@ -20,5 +20,5 @@
 .rarityBarLabel {
   position: relative;
   z-index: 2;
-  font-size: var(--award-rarity-bar-font-size, 0.85rem);
+  font-size: var(--award-rarity-bar-font-size, 0.8rem);
 }
