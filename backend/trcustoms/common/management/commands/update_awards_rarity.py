@@ -11,7 +11,7 @@ class Command(BaseCommand):
         update_all_awards_stats()
 
         align = 30
-        for spec in sorted(ALL_AWARD_SPECS, key=lambda cls: cls.position):
+        for spec in ALL_AWARD_SPECS:
             rarity = get_award_rarity(spec.code, spec.tier)
             if spec.tier:
                 print(f"{spec.code}({spec.tier}):".ljust(align), rarity)
