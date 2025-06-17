@@ -240,6 +240,9 @@ const searchUsers = async (
     country_code: searchQuery.countryCode,
     authored_levels_min: searchQuery.authoredLevelsMin,
   });
+  if (searchQuery.countryCode === "") {
+    params.country_code = "";
+  }
   const response = (await api.get(`${API_URL}/users/`, {
     params,
   })) as AxiosResponse<UserSearchResult>;
