@@ -35,7 +35,7 @@ const LocationUserTable = ({
     <Section>
       <SectionHeader>
         Users from{" "}
-        {selectedCountry.name === "Unknown"
+        {!selectedCountry.iso_3166_1_alpha2
           ? "unknown country"
           : selectedCountry.name}
         {count !== undefined ? <> ({count})</> : null}
