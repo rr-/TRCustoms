@@ -27,7 +27,7 @@
 }
 
 .artifactLink {
-  cursor: pointer;
+  color: var(--font-color);
   height: 100%;
 }
 

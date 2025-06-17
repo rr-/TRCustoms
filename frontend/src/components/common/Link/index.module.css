@@ -2,6 +2,7 @@
   color: var(--link-color);
   text-decoration: var(--button-text-decoration);
   word-break: break-word;
+  transition: color var(--transition-speed);
 }
 .link:hover {
   color: var(--link-hover-color);
