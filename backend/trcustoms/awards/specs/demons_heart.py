@@ -16,7 +16,7 @@ def demons_heart() -> Iterable[AwardSpec]:
             f"You finished {min_levels} levels with a negative rating."
         ),
         guide_description=(
-            f"Mark {min_levels} negatively reviewed levels "
+            f"Obtained by marking {min_levels} negatively reviewed levels "
             "in your playlist as Finished."
         ),
         requirement=PlayedLevelsWithRatingAwardRequirement(
@@ -33,11 +33,10 @@ def spear_of_destiny() -> Iterable[AwardSpec]:
         code="spear_of_destiny",
         title="Spear of Destiny",
         description=(
-            f"Obtained by marking {min_levels} positively reviewed levels "
-            "in your playlist as Finished."
+            f"You finished {min_levels} levels with a positive rating."
         ),
         guide_description=(
-            f"Obtained by marking {min_levels} negatively reviewed levels "
+            f"Obtained by marking {min_levels} positively reviewed levels "
             "in your playlist as Finished."
         ),
         requirement=PlayedLevelsWithRatingAwardRequirement(
