@@ -1,11 +1,12 @@
 import styles from "./index.module.css";
 import { groupBy } from "lodash";
 import { useState, useEffect, useRef } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import AwardIcon from "src/components/common/AwardIcon";
 import AwardRarityBar from "src/components/common/AwardRarityBar";
 import { Card, CardGrid } from "src/components/common/Card";
 import { ExtrasSidebar } from "src/components/common/ExtrasSidebar";
+import linkStyles from "src/components/common/Link/index.module.css";
 import { Section } from "src/components/common/Section";
 import { SectionHeader } from "src/components/common/Section";
 import { SidebarLayout } from "src/components/layouts/SidebarLayout";
@@ -44,31 +45,14 @@ const ArtifactLink = ({
   tier?: number;
   children: React.ReactNode;
 }) => {
-  const navigate = useNavigate();
-
-  const handleClick = () =>
-    navigate(
-      `/extras/treasure_vault/award_recipients?code=${artifact.code}${
-        tier ? `&tier=${tier}` : ""
-      }`,
-    );
-
-  const handleKeyPress = (e) => {
-    if (e.key === "Enter") {
-      handleClick();
-    }
-  };
+  const to = `/extras/treasure_vault/award_recipients?code=${artifact.code}${
+    tier ? `&tier=${tier}` : ""
+  }`;
 
   return (
-    <div
-      className={styles.artifactLink}
-      role="button"
-      tabIndex={0}
-      onKeyPress={handleKeyPress}
-      onClick={handleClick}
-    >
+    <Link className={styles.artifactLink} to={to}>
       {children}
-    </div>
+    </Link>
   );
 };
 
@@ -116,7 +100,7 @@ const UpgradableArtifactCard = ({
             onMouseLeave={handleMouseLeave}
           >
             <ArtifactLink artifact={artifact} tier={tier.tier}>
-              <strong className={styles.tierName}>
+              <strong className={[styles.tierName, linkStyles.link].join(" ")}>
                 <AwardIcon code={artifact.code} tier={tier.tier} size="small" />
                 <span>{tierNames[tier.tier]} tier</span>
               </strong>
@@ -189,7 +173,11 @@ const TreasureVaultPage = () => {
               <ArtifactLink artifact={artifact}>
                 <div className={styles.standardItem}>
                   <AwardIcon code={artifact.code} size="big" />
-                  <h3 className={styles.artifactName}>{artifact.name}</h3>
+                  <h3
+                    className={[styles.artifactName, linkStyles.link].join(" ")}
+                  >
+                    {artifact.name}
+                  </h3>
                   <AwardRarityBar userPercentage={artifact.userPercentage} />
                 </div>
               </ArtifactLink>
