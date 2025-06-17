@@ -27,8 +27,13 @@
 }
 
 .artifactLink {
-  cursor: pointer;
+  display: block;
+  color: var(--font-color);
   height: 100%;
+  &:hover * {
+    transition: color var(--transition-speed);
+    color: var(--link-hover-color);
+  }
 }
 
 /* Overlapped big icons, default greyscale, opacity and filter transition */
