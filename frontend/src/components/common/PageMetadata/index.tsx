@@ -4,7 +4,7 @@ import { usePageMetadataStore } from "src/contexts/PageMetadataContext";
 
 const BASE_TITLE = "TRCustoms";
 const BASE_DESCRIPTION =
-  "A website dedicated to custom levels for classic Tomb Raider games.";
+  "A website that hosts custom Tomb Raider games created by the Tomb Raider Level Editor (TRLE). Users can upload levels, review them, and more!";
 const BASE_IMAGE = "/logo.png";
 
 const PageMetadata = () => {
