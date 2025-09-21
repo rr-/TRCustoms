@@ -124,6 +124,8 @@ def confirm_user_email(user: User, request: Request | None) -> None:
             request=request,
             change_author=user,
             is_action_required=True,
+            changes=[f"Created ({user.email})"],
+            notify=True,
         )
     else:
         with track_model_update(
