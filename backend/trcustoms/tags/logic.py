@@ -13,6 +13,7 @@ def split_tag(
         obj=source_tag,
         request=request,
         changes=[f"Split to {', '.join(targets)}"],
+        notify=True,
     ):
         existing_tags = Tag.objects.filter(name__in=targets)
         missing_tags = [
@@ -35,6 +36,7 @@ def merge_tags(source: str, target: str, request: Request | None) -> None:
         obj=source_tag,
         request=request,
         changes=[f"Merged to {target_tag.name}"],
+        notify=True,
     ):
         levels = (
             Level.objects.filter(tags=source_tag)

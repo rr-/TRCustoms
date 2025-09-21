@@ -19,6 +19,7 @@ x-backend-environment: &base-backend-environment
   - EMAIL_HOST_PASSWORD
   - EMAIL_USE_TLS
   - EMAIL_USE_SSL
+  - DISCORD_WEBHOOK_URL
 
 x-base-trcustoms: &base-trcustoms
   restart: unless-stopped

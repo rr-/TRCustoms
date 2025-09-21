@@ -72,6 +72,7 @@ class AuditLogModelWatcherCreateMixin:
             serializer.instance,
             request=self.request,
             is_action_required=self.audit_log_review_create,
+            notify=self.audit_log_review_create,
         )
 
 
@@ -84,6 +85,7 @@ class AuditLogModelWatcherUpdateMixin:
             instance,
             request=self.request,
             is_action_required=self.audit_log_review_update,
+            notify=False,
         ):
             super().perform_update(serializer)
 
@@ -91,7 +93,7 @@ class AuditLogModelWatcherUpdateMixin:
 class AuditLogModelWatcherDestroyMixin:
     def perform_destroy(self, instance) -> None:
         clear_audit_log_action_flags(obj=instance)
-        track_model_deletion(instance, request=self.request)
+        track_model_deletion(instance, request=self.request, notify=True)
         super().perform_destroy(instance)
 
 

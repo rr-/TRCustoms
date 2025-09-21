@@ -18,7 +18,9 @@ from trcustoms.tasks import update_awards
 
 
 def approve_level(level: Level, request: Request | None) -> None:
-    with track_model_update(obj=level, request=request, changes=["Approved"]):
+    with track_model_update(
+        obj=level, request=request, changes=["Approved"], notify=True
+    ):
         send_mail = not level.is_approved
         level.is_pending_approval = False
         level.is_approved = True
@@ -38,6 +40,7 @@ def reject_level(level: Level, request: Request | None, reason: str) -> None:
         request=request,
         changes=[f"Rejected (reason: {reason})"],
         is_action_required=True,
+        notify=True,
     ):
         if level.is_approved or reason != level.rejection_reason:
             send_level_rejected_mail(level, reason)
