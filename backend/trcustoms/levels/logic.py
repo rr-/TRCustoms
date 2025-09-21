@@ -1,5 +1,8 @@
+import hashlib
 from collections import defaultdict
 
+from django.conf import settings
+from django.core.cache import cache
 from django.db.models import F, Max, Min, Sum, Value
 from rest_framework.request import Request
 
@@ -7,7 +10,7 @@ from trcustoms.audit_logs.utils import (
     clear_audit_log_action_flags,
     track_model_update,
 )
-from trcustoms.levels.models import Level
+from trcustoms.levels.models import Level, LevelFile
 from trcustoms.mails import send_level_approved_mail, send_level_rejected_mail
 from trcustoms.ratings.consts import RatingType
 from trcustoms.ratings.models import RatingTemplateQuestion
@@ -91,3 +94,24 @@ def get_category_ratings(level: Level) -> None:
     ]
 
     return data
+
+
+def increment_download_counter(file: LevelFile, request: Request) -> None:
+    """Increment download count only once per fingerprint within expiration."""
+    ip: str = request.META.get("REMOTE_ADDR", "")
+    agent: str = request.META.get("HTTP_USER_AGENT", "")
+    level_id: int = file.level_id
+    raw_fp: str = f"{ip}:{agent}:{level_id}"
+    print(raw_fp)
+    fp_key: str = hashlib.sha256(raw_fp.encode("utf-8")).hexdigest()
+    if cache.get(fp_key):
+        return
+
+    file.download_count += 1
+    file.save(update_fields=["download_count"])
+    print("what")
+    cache.set(
+        fp_key,
+        True,
+        timeout=int(settings.DOWNLOAD_FINGERPRINT_EXPIRATION.total_seconds()),
+    )

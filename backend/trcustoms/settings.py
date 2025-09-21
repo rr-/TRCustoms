@@ -258,6 +258,9 @@ MIN_AUTHORS = 1
 MAX_AUTHORS = 25
 MAX_TAG_LENGTH = 20
 
+# Fingerprint expiration for download counter (in timedelta hours)
+DOWNLOAD_FINGERPRINT_EXPIRATION: timedelta = timedelta(hours=2)
+
 EMAIL_HOST = get_setting("EMAIL_HOST")
 EMAIL_PORT = int(get_setting("EMAIL_PORT"))
 EMAIL_HOST_USER = get_setting("EMAIL_HOST_USER")
