@@ -20,6 +20,7 @@ from trcustoms.levels.filters import filter_levels_queryset
 from trcustoms.levels.logic import (
     approve_level,
     get_category_ratings,
+    increment_download_counter,
     reject_level,
 )
 from trcustoms.levels.models import Level, LevelFile
@@ -201,8 +202,7 @@ class LevelFileViewSet(viewsets.GenericViewSet):
             parts.append(f"V{file.version}")
         parts.extend(file.level.authors.values_list("username", flat=True))
 
-        file.download_count += 1
-        file.save()
+        increment_download_counter(file, request)
 
         if not settings.USE_AWS_STORAGE:
             return stream_file_field(
