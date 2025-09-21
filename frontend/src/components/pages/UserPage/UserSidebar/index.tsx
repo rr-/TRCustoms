@@ -20,7 +20,6 @@ interface UserSidebarProps {
 
 const UserSidebar = ({ user }: UserSidebarProps) => {
   const isUserFromTrle = user.trle_reviewer_id || user.trle_author_id;
-  const showJoinDate = !isUserFromTrle || user.last_login;
 
   const header = (
     <VerticalList gap="big">
@@ -49,9 +48,7 @@ const UserSidebar = ({ user }: UserSidebarProps) => {
         </DefinitionItem>
 
         <DefinitionItem term="Joined">
-          {showJoinDate && user.date_joined
-            ? formatDate(user.date_joined)
-            : "Unknown"}
+          {user.date_joined ? formatDate(user.date_joined) : "Unknown"}
         </DefinitionItem>
 
         <DefinitionItem term="Country">

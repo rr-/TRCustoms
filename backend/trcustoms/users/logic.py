@@ -1,3 +1,4 @@
+from django.utils import timezone
 from rest_framework.request import Request
 
 from trcustoms.audit_logs.utils import (
@@ -22,6 +23,8 @@ def activate_user(user: User, request: Request | None) -> None:
         user.is_active = True
         user.is_pending_activation = False
         user.ban_reason = None
+        if user.date_joined is None:
+            user.date_joined = timezone.now()
         user.save()
     clear_audit_log_action_flags(obj=user)
 

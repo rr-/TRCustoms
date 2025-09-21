@@ -1,5 +1,6 @@
 import re
-from datetime import datetime
+from datetime import datetime, timezone
+from unittest.mock import patch
 
 import pytest
 from django.core import mail
@@ -126,6 +127,30 @@ def test_user_activation(staff_api_client: APIClient, fake: Generic) -> None:
     assert user.is_active
     assert AuditLog.objects.count() == 1
     assert not AuditLog.objects.first().is_action_required
+
+
+@pytest.mark.django_db
+def test_date_joined_set_on_activation(
+    staff_api_client: APIClient, fake: Generic
+) -> None:
+    user = UserFactory(
+        email=fake.person.email(),
+        username=fake.person.username(),
+        is_pending_activation=True,
+        is_active=False,
+        is_email_confirmed=True,
+    )
+    assert user.date_joined is None
+    fixed_now = datetime(2021, 1, 1, 0, 0, 0, tzinfo=timezone.utc)
+    with patch("trcustoms.users.logic.timezone.now", return_value=fixed_now):
+        response = staff_api_client.post(
+            f"/api/users/{user.id}/activate/", data={"reason": "activation"}
+        )
+    data = response.json()
+    assert response.status_code == status.HTTP_200_OK, data
+    assert data == {}
+    user.refresh_from_db()
+    assert user.date_joined == fixed_now
 
 
 @pytest.mark.django_db
