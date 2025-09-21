@@ -136,5 +136,7 @@ def fixture_clear_caches() -> None:
 
 @pytest.fixture(name="use_tmp_media_dir", autouse=True, scope="session")
 def fixture_use_tmp_media_dir() -> None:
-    with override_settings(MEDIA_ROOT=tempfile.gettempdir()):
+    with override_settings(
+        MEDIA_ROOT=tempfile.gettempdir(), DISCORD_WEBHOOK_URL=None
+    ):
         yield

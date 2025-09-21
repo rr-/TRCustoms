@@ -25,6 +25,7 @@ def publish_walkthrough(
         request=request,
         changes=["Published"],
         is_action_required=True,
+        notify=True,
     ):
         walkthrough.status = WalkthroughStatus.PENDING_APPROVAL
         walkthrough.rejection_reason = None
@@ -35,7 +36,7 @@ def approve_walkthrough(
     walkthrough: Walkthrough, request: Request | None
 ) -> None:
     with track_model_update(
-        obj=walkthrough, request=request, changes=["Approved"]
+        obj=walkthrough, request=request, changes=["Approved"], notify=True
     ):
         if walkthrough.status != WalkthroughStatus.APPROVED:
             send_walkthrough_submission_mail(walkthrough)
@@ -56,6 +57,7 @@ def reject_walkthrough(
         request=request,
         changes=[f"Rejected (reason: {reason})"],
         is_action_required=True,
+        notify=True,
     ):
         if (
             walkthrough.status != WalkthroughStatus.REJECTED

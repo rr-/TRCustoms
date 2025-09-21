@@ -17,7 +17,9 @@ from trcustoms.users.models import User
 
 
 def activate_user(user: User, request: Request | None) -> None:
-    with track_model_update(obj=user, request=request, changes=["Activated"]):
+    with track_model_update(
+        obj=user, request=request, changes=["Activated"], notify=True
+    ):
         if not user.is_active:
             send_welcome_mail(user)
         user.is_active = True
@@ -54,6 +56,7 @@ def reject_user(user: User, request: Request | None, reason: str) -> None:
         obj=user,
         request=request,
         changes=[f"Rejected (reason: {reason})"],
+        notify=True,
     )
     clear_audit_log_action_flags(obj=user)
     if (
@@ -71,6 +74,7 @@ def deactivate_user(user: User, request: Request | None, reason: str) -> None:
         obj=user,
         request=request,
         changes=[f"Deactivated (reason: {reason})"],
+        notify=True,
     ):
         user.is_active = False
         user.ban_reason = reason
@@ -80,7 +84,9 @@ def deactivate_user(user: User, request: Request | None, reason: str) -> None:
 
 
 def unban_user(user: User, request: Request | None) -> None:
-    with track_model_update(obj=user, request=request, changes=["Unbanned"]):
+    with track_model_update(
+        obj=user, request=request, changes=["Unbanned"], notify=True
+    ):
         if user.is_banned:
             send_unban_mail(user)
         user.is_banned = False
@@ -91,7 +97,10 @@ def unban_user(user: User, request: Request | None) -> None:
 
 def ban_user(user: User, request: Request | None, reason: str) -> None:
     with track_model_update(
-        obj=user, request=request, changes=[f"Banned (reason: {reason})"]
+        obj=user,
+        request=request,
+        changes=[f"Banned (reason: {reason})"],
+        notify=True,
     ):
         if not user.is_banned:
             send_ban_mail(user, reason)
@@ -122,5 +131,6 @@ def confirm_user_email(user: User, request: Request | None) -> None:
             change_author=user,
             is_action_required=False,
             changes=[f"Confirmed email ({user.email})"],
+            notify=True,
         ):
             pass

@@ -9,18 +9,18 @@ class AuditLogAdminMixin:
     def log_addition(self, request, obj, message):
         super().log_addition(request, obj, message)
         obj = self.get_audit_log_obj(obj)
-        track_model_creation(obj, request=request)
+        track_model_creation(obj, request=request, notify=True)
 
     def log_change(self, request, obj, message):
         super().log_change(request, obj, message)
         obj = self.get_audit_log_obj(obj)
         # TODO: figure out a way to track more detailed changes
-        track_model_update(obj, request=request, force=True)
+        track_model_update(obj, request=request, force=True, notify=False)
 
     def log_deletion(self, request, obj, object_repr):
         super().log_deletion(request, obj, object_repr)
         obj = self.get_audit_log_obj(obj)
-        track_model_deletion(obj, request=request)
+        track_model_deletion(obj, request=request, notify=True)
 
     def get_audit_log_obj(self, obj):
         return obj

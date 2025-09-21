@@ -13,5 +13,5 @@ def delete_unreferenced_tags() -> None:
 
         assert not check_model_references(tag)
 
-        track_model_deletion(tag, request=None)
+        track_model_deletion(tag, request=None, notify=False)
         tag.delete()

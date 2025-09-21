@@ -15,5 +15,5 @@ def delete_stalled_drafts() -> None:
         last_updated__lte=timezone.now() - timedelta(days=7),
     ):
         logger.info("deleting old walkthrough draft", walkthrough.level.name)
-        track_model_deletion(walkthrough, request=None)
+        track_model_deletion(walkthrough, request=None, notify=False)
         walkthrough.delete()

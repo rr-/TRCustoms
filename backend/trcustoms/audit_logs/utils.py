@@ -1,6 +1,8 @@
 import contextlib
 from typing import Any
 
+import requests
+from django.conf import settings
 from django.contrib.contenttypes.models import ContentType
 from django.db import models
 from rest_framework.request import Request
@@ -11,6 +13,33 @@ from trcustoms.audit_logs.registry import get_registered_model_info
 from trcustoms.users.models import User
 
 
+def notify_discord(audit_log: AuditLog) -> None:
+    """Send audit log notification to Discord if webhook is configured."""
+    url: str | None = settings.DISCORD_WEBHOOK_URL
+    if not audit_log.is_action_required or not url:
+        return
+
+    model_name = audit_log.object_type.model.title()
+    description = (
+        f"**{audit_log.change_type.title()}** of **{model_name}**"
+        f" #{audit_log.object_id} ({audit_log.object_name})"
+    )
+    if audit_log.change_author:
+        description += f"\n**Author:** {audit_log.change_author.username}"
+    if audit_log.changes:
+        description += f"\n**Changes:** {', '.join(audit_log.changes)}"
+
+    payload = {
+        "username": settings.DISCORD_WEBHOOK_USERNAME,
+        "avatar_url": settings.DISCORD_WEBHOOK_AVATAR,
+        "embeds": [{"description": description}],
+    }
+    try:
+        requests.post(url, json=payload)
+    except requests.RequestException:
+        pass
+
+
 def make_audit_log(
     obj: models.Model,
     request: Request | None,
@@ -18,6 +47,7 @@ def make_audit_log(
     changes: list[str],
     change_author: User | None = None,
     is_action_required: bool = False,
+    notify: bool = False,
     meta: Any = None,
 ) -> None:
     info = get_registered_model_info(obj)
@@ -32,7 +62,7 @@ def make_audit_log(
     if not changes:
         return
 
-    AuditLog.objects.create(
+    log = AuditLog.objects.create(
         object_id=object_id,
         object_name=object_name,
         object_type=object_type,
@@ -49,6 +79,8 @@ def make_audit_log(
         changes=changes,
         meta=meta,
     )
+    if log.is_action_required or notify:
+        notify_discord(log)
 
 
 def track_model_creation(
