@@ -1,11 +1,12 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 
+from trcustoms.audit_logs.mixins import AuditLogAdminMixin
 from trcustoms.users.models import User
 
 
 @admin.register(User)
-class UserAdmin(BaseUserAdmin):
+class UserAdmin(AuditLogAdminMixin, BaseUserAdmin):
     ordering = ["username"]
     search_fields = ["username", "first_name", "last_name", "email"]
     fieldsets = None
