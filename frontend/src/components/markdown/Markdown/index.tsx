@@ -182,12 +182,14 @@ const remarkTRCustomColors = () => {
   };
 };
 
-const transformLink = (link: any): any => {
+const transformLink = (link: any, allowEmbeds: boolean): any => {
   const youtubeVideo = parseYoutubeLink(link.href);
-  if (youtubeVideo?.videoID || youtubeVideo?.playlistID) {
-    return <YoutubeEmbed {...youtubeVideo} />;
+  if (!youtubeVideo?.videoID && !youtubeVideo?.playlistID) {
+    return <a href={link.href}>{link.children}</a>;
+  } else if (!allowEmbeds) {
+    return null;
   }
-  return <a href={link.href}>{link.children}</a>;
+  return <YoutubeEmbed {...youtubeVideo} />;
 };
 
 interface MarkdownProps {
@@ -229,7 +231,7 @@ const Markdown = ({
       <div className={classNames.join(" ")}>
         <ReactMarkdown
           remarkPlugins={plugins}
-          components={{ a: transformLink }}
+          components={{ a: (link) => transformLink(link, allowEmbeds) }}
         >
           {children}
         </ReactMarkdown>
