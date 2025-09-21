@@ -9,6 +9,7 @@ from rest_framework.generics import get_object_or_404
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 
+from trcustoms.audit_logs.utils import track_model_creation
 from trcustoms.common.serializers import EmptySerializer
 from trcustoms.mails import (
     send_email_confirmation_mail,
@@ -143,6 +144,11 @@ class UserViewSet(
         "by_username": UserDetailsSerializer,
         "me": UserDetailsSerializer,
     }
+
+    def log_addition(self, request, obj, message):
+        track_model_creation(
+            obj, request=request, changes=[f"Created ({obj.email})"]
+        )
 
     def get_object(self):
         obj = get_object_or_404(self.get_queryset(), pk=self.kwargs["pk"])

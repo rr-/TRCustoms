@@ -121,6 +121,6 @@ def confirm_user_email(user: User, request: Request | None) -> None:
             request=request,
             change_author=user,
             is_action_required=False,
-            changes=["Confirmed email"],
+            changes=[f"Confirmed email ({user.email})"],
         ):
             pass
