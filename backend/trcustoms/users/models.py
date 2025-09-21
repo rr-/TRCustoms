@@ -91,6 +91,8 @@ class User(AbstractUser):
             ),
         ]
 
+    date_joined = models.DateTimeField(null=True, blank=True)
+
     trle_reviewer_id = models.IntegerField(blank=True, null=True)
     trle_author_id = models.IntegerField(blank=True, null=True)
     website_url = models.URLField(blank=True, null=True, max_length=256)

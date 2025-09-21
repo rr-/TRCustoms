@@ -71,7 +71,7 @@ def test_user_creation_weak_password(
 
 @pytest.mark.django_db
 def test_user_creation(
-    any_integer, any_datetime, api_client: APIClient, fake: Generic
+    any_integer, api_client: APIClient, fake: Generic
 ) -> None:
     """Test that user creation works and is publicly available."""
     payload = {
@@ -96,7 +96,7 @@ def test_user_creation(
         "is_pending_activation": True,
         "is_banned": False,
         "bio": payload["bio"],
-        "date_joined": any_datetime(allow_strings=True),
+        "date_joined": None,
         "last_login": None,
         "played_level_count": 0,
         "authored_level_count_all": 0,
