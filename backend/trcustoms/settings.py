@@ -292,7 +292,12 @@ SPECTACULAR_SETTINGS = {
     "SCHEMA_PATH_PREFIX": r"/api",
 }
 
-DISCORD_WEBHOOK_URL = get_setting("DISCORD_WEBHOOK_URL", allow_null=True)
+DISCORD_WEBHOOK_MOD_URL = get_setting(
+    "DISCORD_WEBHOOK_MOD_URL", allow_null=True
+)
+DISCORD_WEBHOOK_LEVEL_URL = get_setting(
+    "DISCORD_WEBHOOK_LEVEL_URL", allow_null=True
+)
 DISCORD_WEBHOOK_USERNAME = "Winston"
 DISCORD_WEBHOOK_AVATAR = "https://winston.wind.garden/static/avatar.jpg"
 

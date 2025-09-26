@@ -1,7 +1,6 @@
 import contextlib
 from typing import Any
 
-import requests
 from django.conf import settings
 from django.contrib.contenttypes.models import ContentType
 from django.db import models
@@ -10,12 +9,13 @@ from rest_framework.request import Request
 from trcustoms.audit_logs.consts import ChangeType
 from trcustoms.audit_logs.models import AuditLog
 from trcustoms.audit_logs.registry import get_registered_model_info
+from trcustoms.common.utils.discord import send_discord_webhook
 from trcustoms.users.models import User
 
 
 def notify_discord(audit_log: AuditLog) -> None:
     """Send audit log notification to Discord if webhook is configured."""
-    url: str | None = settings.DISCORD_WEBHOOK_URL
+    url: str | None = settings.DISCORD_WEBHOOK_MOD_URL
     if not audit_log.is_action_required or not url:
         return
 
@@ -29,15 +29,12 @@ def notify_discord(audit_log: AuditLog) -> None:
     if audit_log.changes:
         description += f"\n**Changes:** {', '.join(audit_log.changes)}"
 
-    payload = {
-        "username": settings.DISCORD_WEBHOOK_USERNAME,
-        "avatar_url": settings.DISCORD_WEBHOOK_AVATAR,
-        "embeds": [{"description": description}],
-    }
-    try:
-        requests.post(url, json=payload)
-    except requests.RequestException:
-        pass
+    send_discord_webhook(
+        {
+            "embeds": [{"description": description}],
+        },
+        webhook_url=url,
+    )
 
 
 def make_audit_log(

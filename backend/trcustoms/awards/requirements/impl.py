@@ -175,6 +175,7 @@ class JoinDateAwardRequirement(BaseAwardRequirement):
         return (
             user.is_active
             and not user.is_banned
+            and user.date_joined
             and user.date_joined.date() >= self.min_date
             and user.date_joined.date() <= self.max_date
         )
