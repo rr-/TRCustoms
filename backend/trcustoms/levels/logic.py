@@ -1,5 +1,6 @@
 import hashlib
 from collections import defaultdict
+from urllib.parse import urljoin
 
 from django.conf import settings
 from django.core.cache import cache
@@ -10,11 +11,36 @@ from trcustoms.audit_logs.utils import (
     clear_audit_log_action_flags,
     track_model_update,
 )
+from trcustoms.common.utils.discord import send_discord_webhook
 from trcustoms.levels.models import Level, LevelFile
 from trcustoms.mails import send_level_approved_mail, send_level_rejected_mail
 from trcustoms.ratings.consts import RatingType
 from trcustoms.ratings.models import RatingTemplateQuestion
 from trcustoms.tasks import update_awards
+
+
+def send_level_submission_discord_notification(level: Level) -> None:
+    level_url = urljoin(settings.HOST_SITE, f"/levels/{level.id}")
+    description = ""
+    if level.authors.count() > 1:
+        description += "by Multiple authors"
+    if author := level.authors.first():
+        description += f"by {author.username}"
+
+    embed = {
+        "color": 0x2196F3,
+        "url": level_url,
+        "title": level.name,
+        "description": description,
+    }
+    if level.cover:
+        embed["image"] = {
+            "url": urljoin(settings.HOST_SITE, level.cover.content.url)
+        }
+
+    send_discord_webhook(
+        {"embeds": [embed]}, webhook_url=settings.DISCORD_WEBHOOK_LEVEL_URL
+    )
 
 
 def approve_level(level: Level, request: Request | None) -> None:
@@ -26,6 +52,8 @@ def approve_level(level: Level, request: Request | None) -> None:
         level.is_approved = True
         if send_mail:
             send_level_approved_mail(level)
+            send_level_submission_discord_notification(level)
+
         level.rejection_reason = None
         level.save()
         for author in level.authors.iterator():

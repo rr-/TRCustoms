@@ -11,7 +11,7 @@ from trcustoms.users.tests.factories import UserFactory
 
 
 @pytest.mark.django_db
-@override_settings(DISCORD_WEBHOOK_URL=None)
+@override_settings(DISCORD_WEBHOOK_MOD_URL=None)
 def test_no_webhook(settings):
     audit_log = AuditLogFactory(is_action_required=True)
     with patch("requests.post") as mock_post:
@@ -20,7 +20,7 @@ def test_no_webhook(settings):
 
 
 @pytest.mark.django_db
-@override_settings(DISCORD_WEBHOOK_URL="http://example.com")
+@override_settings(DISCORD_WEBHOOK_MOD_URL="http://example.com")
 def test_no_action_required(settings):
     audit_log = AuditLogFactory(is_action_required=False)
     with patch("requests.post") as mock_post:
@@ -30,7 +30,7 @@ def test_no_action_required(settings):
 
 @pytest.mark.django_db
 @override_settings(
-    DISCORD_WEBHOOK_URL="http://example.com",
+    DISCORD_WEBHOOK_MOD_URL="http://example.com",
     DISCORD_WEBHOOK_USERNAME="Bot",
     DISCORD_WEBHOOK_AVATAR="https://example.com/av.jpg",
 )
@@ -62,7 +62,7 @@ def test_posts_notification(settings):
 
 
 @pytest.mark.django_db
-@override_settings(DISCORD_WEBHOOK_URL="http://example.com")
+@override_settings(DISCORD_WEBHOOK_MOD_URL="http://example.com")
 def test_exception_swallowed(settings):
     audit_log = AuditLogFactory(is_action_required=True)
     with patch("requests.post", side_effect=requests.RequestException):
