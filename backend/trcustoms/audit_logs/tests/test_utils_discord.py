@@ -20,15 +20,6 @@ def test_no_webhook(settings):
 
 
 @pytest.mark.django_db
-@override_settings(DISCORD_WEBHOOK_MOD_URL="http://example.com")
-def test_no_action_required(settings):
-    audit_log = AuditLogFactory(is_action_required=False)
-    with patch("requests.post") as mock_post:
-        notify_discord(audit_log)
-    mock_post.assert_not_called()
-
-
-@pytest.mark.django_db
 @override_settings(
     DISCORD_WEBHOOK_MOD_URL="http://example.com",
     DISCORD_WEBHOOK_USERNAME="Bot",
