@@ -16,7 +16,7 @@ from trcustoms.users.models import User
 def notify_discord(audit_log: AuditLog) -> None:
     """Send audit log notification to Discord if webhook is configured."""
     url: str | None = settings.DISCORD_WEBHOOK_MOD_URL
-    if not audit_log.is_action_required or not url:
+    if not url:
         return
 
     model_name = audit_log.object_type.model.title()
