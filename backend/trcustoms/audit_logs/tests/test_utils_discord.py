@@ -47,7 +47,7 @@ def test_posts_notification(settings):
         f"**{str(audit_log.change_type).title()}** of "
         f"**User** #{model.id}"
         f"\n**Author:** {user.username}"
-        f"\n**Changes:** {', '.join(audit_log.changes)}"
+        f"\n**Changes:** {', '.join(audit_log.changes)} 🟡"
     )
     with patch("requests.post") as mock_post:
         notify_discord(audit_log)
@@ -58,7 +58,7 @@ def test_posts_notification(settings):
             "avatar_url": "https://example.com/av.jpg",
             "embeds": [
                 {
-                    "title": model.username,
+                    "title": f"User: {model.username}",
                     "description": expected_desc,
                     "url": f"http://localhost/users/{model.id}",
                 }

@@ -20,15 +20,25 @@ def notify_discord(audit_log: AuditLog) -> None:
         return
 
     model_name = audit_log.object_type.model.title()
-    title = audit_log.object_name
+    title = f"{audit_log.object_type.model.title()}: {audit_log.object_name}"
     description = (
         f"**{audit_log.change_type.title()}** of **{model_name}**"
         f" #{audit_log.object_id}"
     )
     if audit_log.change_author:
         description += f"\n**Author:** {audit_log.change_author.username}"
+
     if audit_log.changes:
-        description += f"\n**Changes:** {', '.join(audit_log.changes)}"
+        changes = ", ".join(audit_log.changes)
+        description += f"\n**Changes:** {changes}"
+    else:
+        changes = ""
+    if "approv" in changes.lower():
+        description += " 🟢"
+    elif "reject" in changes.lower():
+        description += " 🔴"
+    elif audit_log.is_action_required:
+        description += " 🟡"
 
     # Add link to frontend for supported entity types
     link_url: str | None

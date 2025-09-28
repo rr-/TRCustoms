@@ -12,15 +12,14 @@ def send_discord_webhook(payload: dict[str, Any], webhook_url: str) -> None:
     if not webhook_url:
         return
 
+    payload = {
+        "username": settings.DISCORD_WEBHOOK_USERNAME,
+        "avatar_url": settings.DISCORD_WEBHOOK_AVATAR,
+        **payload,
+    }
+
     try:
-        response = requests.post(
-            webhook_url,
-            json={
-                "username": settings.DISCORD_WEBHOOK_USERNAME,
-                "avatar_url": settings.DISCORD_WEBHOOK_AVATAR,
-                **payload,
-            },
-        )
+        response = requests.post(webhook_url, json=payload)
     except requests.RequestException as ex:
         logger.exception("Error while sending payload to Discord: %s", ex)
         return
