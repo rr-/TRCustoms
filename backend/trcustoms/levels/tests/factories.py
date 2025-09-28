@@ -53,6 +53,7 @@ class LevelFileFactory(factory.django.DjangoModelFactory):
 class LevelFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = Level
+        skip_postgeneration_save = True
 
     is_pending_approval = False
     is_approved = True

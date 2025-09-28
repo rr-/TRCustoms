@@ -1,4 +1,4 @@
-from datetime import timedelta
+from datetime import datetime, timedelta, timezone
 
 import pytest
 
@@ -18,7 +18,9 @@ def test_bone_dust_award_spec_success(spec: AwardSpec) -> None:
     user = UserFactory()
     genre = GenreFactory()
     level = LevelFactory(authors=[user], genres=[genre], is_approved=True)
-    level.created = spec.requirement.max_date - timedelta(days=1)
+    level.created = datetime.combine(
+        spec.requirement.max_date, datetime.min.time(), tzinfo=timezone.utc
+    ) - timedelta(days=1)
     level.save()
     assert spec.requirement(user) is True
 
@@ -41,7 +43,9 @@ def test_bone_dust_award_spec_too_recent_levels(spec: AwardSpec) -> None:
 def test_bone_dust_award_spec_missing_genres(spec: AwardSpec) -> None:
     user = UserFactory()
     level = LevelFactory(authors=[user], is_approved=True)
-    level.created = spec.requirement.max_date - timedelta(days=1)
+    level.created = datetime.combine(
+        spec.requirement.max_date, datetime.min.time(), tzinfo=timezone.utc
+    ) - timedelta(days=1)
     level.save()
     assert spec.requirement(user) is False
 
@@ -51,6 +55,8 @@ def test_bone_dust_award_spec_unapproved(spec: AwardSpec) -> None:
     user = UserFactory()
     genre = GenreFactory()
     level = LevelFactory(authors=[user], genres=[genre], is_approved=False)
-    level.created = spec.requirement.max_date - timedelta(days=1)
+    level.created = datetime.combine(
+        spec.requirement.max_date, datetime.min.time(), tzinfo=timezone.utc
+    ) - timedelta(days=1)
     level.save()
     assert spec.requirement(user) is False

@@ -117,6 +117,7 @@ class UserViewSet(
         "complete_password_reset": [AllowAny],
     }
 
+    ordering = ["-pk"]
     ordering_fields = [
         "username",
         "first_name",

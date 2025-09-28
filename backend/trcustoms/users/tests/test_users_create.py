@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timezone
 
 import pytest
 from django.core import mail
@@ -287,7 +287,7 @@ def test_user_creation_acquiring_trle_account(
     account.
     """
     user = UserFactory(source=UserSource.trle, is_active=False)
-    user.date_joined = datetime(1990, 1, 1)
+    user.date_joined = datetime(1990, 1, 1, tzinfo=timezone.utc)
     user.set_unusable_password()
     user.save()
     payload = {
@@ -348,7 +348,7 @@ def test_user_creation_acquiring_trle_account(
     user.refresh_from_db()
     assert user.email == payload["email"]
     assert user.source == UserSource.trle
-    assert user.date_joined != datetime(1990, 1, 1)
+    assert user.date_joined != datetime(1990, 1, 1, tzinfo=timezone.utc)
     assert len(mail.outbox) == 1
     assert mail.outbox[0].subject == "[TRCustoms] Confirm your registration"
 

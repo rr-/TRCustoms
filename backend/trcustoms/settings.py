@@ -219,7 +219,6 @@ SIMPLE_JWT = {
 LANGUAGE_CODE = "en-us"
 TIME_ZONE = "UTC"
 USE_I18N = True
-USE_L10N = True
 USE_TZ = True
 
 USE_X_FORWARDED_HOST = True
@@ -305,7 +304,5 @@ if TESTING:
     del REST_FRAMEWORK["DEFAULT_THROTTLE_CLASSES"]
     del REST_FRAMEWORK["DEFAULT_THROTTLE_RATES"]
     CELERY_TASK_ALWAYS_EAGER = True
-    PASSWORD_HASHERS = (
-        "django.contrib.auth.hashers.UnsaltedMD5PasswordHasher",
-    )
+    PASSWORD_HASHERS = ("django.contrib.auth.hashers.MD5PasswordHasher",)
     os.environ["TESTING"] = "1"  # for xdist, which destroys sys.argv
