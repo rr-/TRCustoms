@@ -14,7 +14,7 @@ const EnvironmentWatermark = ({ children }: EnvironmentWatermarkProps) => {
 
   const size = 150;
   const fontSize = 30;
-  const color = "rgba(96, 96, 96, 0.08)";
+  const color = "rgba(128, 128, 128, 0.15)";
   const text = environment.toUpperCase();
 
   const svg = (
