@@ -20,19 +20,38 @@ def notify_discord(audit_log: AuditLog) -> None:
         return
 
     model_name = audit_log.object_type.model.title()
+    title = audit_log.object_name
     description = (
         f"**{audit_log.change_type.title()}** of **{model_name}**"
-        f" #{audit_log.object_id} ({audit_log.object_name})"
+        f" #{audit_log.object_id}"
     )
     if audit_log.change_author:
         description += f"\n**Author:** {audit_log.change_author.username}"
     if audit_log.changes:
         description += f"\n**Changes:** {', '.join(audit_log.changes)}"
 
+    # Add link to frontend for supported entity types
+    link_url: str | None
+    match audit_log.object_type.model:
+        case "level":
+            link_url = f"{settings.HOST_SITE}/levels/{audit_log.object_id}"
+        case "walkthrough":
+            link_url = (
+                f"{settings.HOST_SITE}/walkthroughs/{audit_log.object_id}"
+            )
+        case "user":
+            link_url = f"{settings.HOST_SITE}/users/{audit_log.object_id}"
+        case "review":
+            link_url = f"{settings.HOST_SITE}/reviews/{audit_log.object_id}"
+        case _:
+            link_url = None
+
+    embed = {"title": title, "description": description}
+    if link_url:
+        embed["url"] = link_url
+
     send_discord_webhook(
-        {
-            "embeds": [{"description": description}],
-        },
+        {"embeds": [embed]},
         webhook_url=url,
     )
 
