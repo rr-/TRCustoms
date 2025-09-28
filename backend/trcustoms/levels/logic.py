@@ -24,7 +24,7 @@ def send_level_submission_discord_notification(level: Level) -> None:
     description = ""
     if level.authors.count() > 1:
         description += "by Multiple authors"
-    if author := level.authors.first():
+    elif author := level.authors.first():
         description += f"by {author.username}"
 
     embed = {
