@@ -1,3 +1,4 @@
+import hashlib
 from datetime import timedelta
 
 from django.core.cache import cache
@@ -20,7 +21,7 @@ class PasswordResetToken(Token):
 
 
 def get_user_from_token(token: Token, mark_used: bool = True) -> User:
-    cache_key = f"token_{token!s}"
+    cache_key = "token_" + hashlib.sha256(str(token).encode()).hexdigest()
     if cache.get(cache_key, None):
         raise ValidationError(
             {"detail": "This token was already used. Please try again."}
