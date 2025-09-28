@@ -218,7 +218,7 @@ def test_important_user_email_late_or_uncached_activation(
         source=UserSource.trle,
         is_active=False,
     )
-    user.date_joined = datetime(1990, 1, 1)
+    user.date_joined = datetime(1990, 1, 1, tzinfo=timezone.utc)
     user.set_unusable_password()
     user.save()
     # Add some asset to this user, ensuring rejection will trigger a wipe

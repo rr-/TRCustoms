@@ -1,5 +1,5 @@
 from collections.abc import Iterable
-from datetime import datetime
+from datetime import datetime, timezone
 
 from trcustoms.awards.requirements.impl import (
     EarlyLevelsEditedAwardRequirement,
@@ -8,7 +8,7 @@ from trcustoms.awards.specs.base import AwardSpec
 
 
 def bone_dust() -> Iterable[AwardSpec]:
-    max_date = datetime(2022, 4, 2)
+    max_date = datetime(2022, 4, 2, tzinfo=timezone.utc)
 
     yield AwardSpec(
         code="bone_dust",

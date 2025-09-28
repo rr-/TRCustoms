@@ -16,6 +16,7 @@ class EventViewSet(
     mixins.RetrieveModelMixin,
     viewsets.GenericViewSet,
 ):
+    ordering = ["-pk"]
     queryset = (
         Event.objects.with_counts()
         .select_related("cover_image", "host__picture")

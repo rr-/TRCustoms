@@ -8,6 +8,10 @@ from trcustoms.users.tests.factories import UserFactory
 
 
 @pytest.mark.django_db
+@patch(
+    "trcustoms.community_events.importer.requests",
+    Mock(**{"get.return_value.content": b"foo"}),
+)
 def test_import_subtitle_and_about_newlines():
     # pylint: disable=C0301
     data = """Name	Subtitle	Year	IMG URL	About	Collection R Date	Collection R Time	Host	Levels	Win Places	Win Users

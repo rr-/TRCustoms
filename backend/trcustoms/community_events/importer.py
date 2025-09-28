@@ -1,7 +1,7 @@
 import csv
 import io
 import time
-from datetime import datetime
+from datetime import datetime, timezone
 from urllib.parse import urljoin
 
 import requests
@@ -88,7 +88,7 @@ def _parse_collection_release(row: dict, request, name: str):
         try:
             return datetime.strptime(
                 f"{date_str} {time_str}", "%d/%m/%Y %H:%M:%S"
-            )
+            ).replace(tzinfo=timezone.utc)
         except ValueError:
             messages.warning(
                 request,

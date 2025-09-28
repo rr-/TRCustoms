@@ -1,11 +1,11 @@
 import csv
 import io
+from datetime import datetime, timezone
 
 import pytest
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.test import Client
 from django.urls import reverse
-from django.utils import timezone
 from rest_framework import status
 
 from trcustoms.community_events.models import Event
@@ -24,7 +24,7 @@ def fixture_client():
 @pytest.mark.django_db
 class TestAdminImportCSV:
     def test_import_creates_and_updates(self, admin_client):
-        initial_dt = timezone.datetime(2001, 1, 1, 12, 0)
+        initial_dt = datetime(2001, 1, 1, 12, 0, tzinfo=timezone.utc)
         existing_event = EventFactory(
             name="test 1",
             subtitle="party",
