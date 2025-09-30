@@ -86,7 +86,7 @@ dump-prod-to-local-file:
 [confirm]
 load-db-from-prod-dump:
     #!/bin/sh
-    docker-compose run -v .:/tmp/ -T --rm trcustoms-db sh -c 'PGPASSWORD="$POSTGRES_PASSWORD" pg_restore -h trcustoms-db -U "$POSTGRES_USER" -d "$POSTGRES_DB" -Fc' < trcustoms-prod.dmp
+    docker-compose run -v .:/tmp/ -T --rm trcustoms-db sh -c 'PGPASSWORD="$POSTGRES_PASSWORD" pg_restore -h trcustoms-db -U "$POSTGRES_USER" -d "$POSTGRES_DB" --clean -Fc' < trcustoms-prod.dmp
 
 [confirm]
 download-files-from-prod:
