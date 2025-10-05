@@ -33,7 +33,7 @@ def notify_discord(audit_log: AuditLog) -> None:
         description += f"\n**Changes:** {changes}"
     else:
         changes = ""
-    if "approv" in changes.lower():
+    if "approv" in changes.lower() or "activated" in changes.lower():
         description += " 🟢"
     elif "reject" in changes.lower():
         description += " 🔴"
