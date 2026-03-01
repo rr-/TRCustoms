@@ -1,6 +1,9 @@
+from datetime import datetime, timezone
+
 import pytest
 from rest_framework import status
 
+from trcustoms.awards.models import UserAward
 from trcustoms.awards.tests.factories import UserAwardFactory
 from trcustoms.users.tests.factories import UserFactory
 
@@ -45,6 +48,8 @@ def test_award_recipient_list_returns_only_for_given_code(
                     "picture": None,
                 },
                 "created": any_datetime(allow_strings=True),
+                "last_updated": any_datetime(allow_strings=True),
+                "awarded_on": any_datetime(allow_strings=True),
             },
             {
                 "user": {
@@ -55,6 +60,8 @@ def test_award_recipient_list_returns_only_for_given_code(
                     "picture": None,
                 },
                 "created": any_datetime(allow_strings=True),
+                "last_updated": any_datetime(allow_strings=True),
+                "awarded_on": any_datetime(allow_strings=True),
             },
         ],
         "disable_paging": False,
@@ -91,6 +98,8 @@ def test_award_recipient_list_filters_by_tier(auth_api_client, any_datetime):
                     "picture": None,
                 },
                 "created": any_datetime(allow_strings=True),
+                "last_updated": any_datetime(allow_strings=True),
+                "awarded_on": any_datetime(allow_strings=True),
             }
         ],
         "disable_paging": False,
@@ -105,3 +114,25 @@ def test_award_recipient_list_invalid_tier_param(auth_api_client):
     )
     assert resp.status_code == status.HTTP_400_BAD_REQUEST, resp.content
     assert resp.json() == {"detail": "Invalid tier parameter"}
+
+
+@pytest.mark.django_db
+def test_award_recipient_list_orders_by_last_updated(auth_api_client):
+    user1 = UserFactory(username="user1")
+    user2 = UserFactory(username="user2")
+    award1 = UserAwardFactory(user=user1, code="r1")
+    award2 = UserAwardFactory(user=user2, code="r1")
+
+    UserAward.objects.filter(pk=award1.pk).update(
+        last_updated=datetime(2026, 1, 2, tzinfo=timezone.utc)
+    )
+    UserAward.objects.filter(pk=award2.pk).update(
+        last_updated=datetime(2026, 1, 1, tzinfo=timezone.utc)
+    )
+
+    resp = auth_api_client.get("/api/award_specs/r1/recipients/")
+    assert resp.status_code == status.HTTP_200_OK, resp.content
+    assert [item["user"]["id"] for item in resp.json()["results"]] == [
+        user1.pk,
+        user2.pk,
+    ]

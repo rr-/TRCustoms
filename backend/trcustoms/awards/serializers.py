@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from rest_framework import serializers
 
 from trcustoms.awards.logic import get_award_rarity, get_award_user_percentage
@@ -27,7 +29,11 @@ class AwardSpecSerializer(serializers.Serializer):
 
 class AwardRecipientSerializer(serializers.ModelSerializer):
     user = UserNestedSerializer(read_only=True)
+    awarded_on = serializers.SerializerMethodField()
+
+    def get_awarded_on(self, obj: UserAward) -> datetime | None:
+        return obj.last_updated or obj.created
 
     class Meta:
         model = UserAward
-        fields = ["user", "created"]
+        fields = ["user", "created", "last_updated", "awarded_on"]

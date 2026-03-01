@@ -35,6 +35,8 @@ const getAwardSpecs = async (): Promise<AwardSpec[]> => {
 export interface AwardRecipient {
   user: UserNested;
   created: string;
+  last_updated: string;
+  awarded_on: string;
 }
 
 /**

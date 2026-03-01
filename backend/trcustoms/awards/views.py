@@ -40,4 +40,4 @@ class AwardRecipientListView(generics.ListAPIView):
                 raise ValidationError(
                     {"detail": "Invalid tier parameter"}
                 ) from ex
-        return qs.order_by("-created")
+        return qs.order_by("-last_updated", "-created")

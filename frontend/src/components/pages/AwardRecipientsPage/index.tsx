@@ -67,10 +67,11 @@ const AwardRecipientsPage = () => {
       itemElement: ({ item }) => <UserPicLink user={item.user} />,
     },
     {
-      name: "created",
+      name: "awarded_on",
       label: "Award date",
-      sortKey: "created",
-      itemElement: ({ item }) => formatDate(item.created),
+      sortKey: "awarded_on",
+      itemElement: ({ item }) =>
+        formatDate(item.awarded_on ?? item.last_updated ?? item.created),
     },
   ];
 
