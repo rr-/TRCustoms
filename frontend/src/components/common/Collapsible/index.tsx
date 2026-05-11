@@ -11,23 +11,33 @@ interface CollapsibleProps {
   children: React.ReactNode;
 }
 
+const getCollapseStatus = (): { [storageKey: string]: boolean } => {
+  try {
+    return JSON.parse(StorageService.getItem("collapse") || "{}");
+  } catch (error) {
+    return {};
+  }
+};
+
 const Collapsible = ({
   title,
   storageKey,
   children,
   ...props
 }: CollapsibleProps) => {
-  const collapseStatus: { [storageKey: string]: boolean } = JSON.parse(
-    StorageService.getItem("collapse") || "{}",
-  );
-  const [isExpanded, setIsExpanded] = useState(
-    collapseStatus[storageKey] !== false,
-  );
+  const [isExpanded, setIsExpanded] = useState(() => {
+    const collapseStatus = getCollapseStatus();
+    return collapseStatus[storageKey] !== false;
+  });
 
   const handleLinkClick = () => {
-    collapseStatus[storageKey] = !isExpanded;
-    setIsExpanded((isExpanded) => !isExpanded);
-    StorageService.setItem("collapse", JSON.stringify(collapseStatus));
+    setIsExpanded((isExpanded) => {
+      const nextIsExpanded = !isExpanded;
+      const collapseStatus = getCollapseStatus();
+      collapseStatus[storageKey] = nextIsExpanded;
+      StorageService.setItem("collapse", JSON.stringify(collapseStatus));
+      return nextIsExpanded;
+    });
   };
 
   return (
