@@ -41,6 +41,18 @@ enum ExternalLinkType {
   Main = "ma",
 }
 
+enum LevelPlaylistFinishedLevelFilter {
+  ShowAll = "show_all",
+  Hide = "hide",
+  Unrated = "unrated",
+  Unreviewed = "unreviewed",
+}
+
+enum LevelPlaylistDroppedLevelFilter {
+  ShowAll = "show_all",
+  Hide = "hide",
+}
+
 interface ExternalLink {
   id?: number | undefined;
   url: string;
@@ -98,6 +110,8 @@ interface LevelSearchQuery extends GenericSearchQuery {
   date?: string;
   videoWalkthroughs?: boolean | null;
   textWalkthroughs?: boolean | null;
+  playlistFinishedLevels?: LevelPlaylistFinishedLevelFilter | null;
+  playlistDroppedLevels?: LevelPlaylistDroppedLevelFilter | null;
 }
 
 interface LevelSearchResult
@@ -122,6 +136,16 @@ const searchLevels = async (
     date: searchQuery.date,
     video_walkthroughs: boolToSearchString(searchQuery.videoWalkthroughs),
     text_walkthroughs: boolToSearchString(searchQuery.textWalkthroughs),
+    finished_levels:
+      searchQuery.playlistFinishedLevels ===
+      LevelPlaylistFinishedLevelFilter.ShowAll
+        ? null
+        : searchQuery.playlistFinishedLevels,
+    dropped_levels:
+      searchQuery.playlistDroppedLevels ===
+      LevelPlaylistDroppedLevelFilter.ShowAll
+        ? null
+        : searchQuery.playlistDroppedLevels,
   });
   const response = (await api.get(`${API_URL}/levels/`, {
     params,
@@ -230,6 +254,8 @@ export type {
 
 export {
   ExternalLinkType,
+  LevelPlaylistDroppedLevelFilter,
+  LevelPlaylistFinishedLevelFilter,
   LevelService,
   formatLinkType,
   getLevelOwningUserIds,

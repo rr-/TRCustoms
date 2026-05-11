@@ -141,7 +141,11 @@ class LevelViewSet(
     def get_queryset(self):
         auth_user = self.request.user
         queryset = super().get_queryset()
-        queryset = filter_levels_queryset(queryset, self.request.query_params)
+        queryset = filter_levels_queryset(
+            queryset,
+            self.request.query_params,
+            auth_user,
+        )
         if not has_permission(auth_user, UserPermission.VIEW_PENDING_LEVELS):
             queryset = queryset.filter(
                 Q(is_approved=True)

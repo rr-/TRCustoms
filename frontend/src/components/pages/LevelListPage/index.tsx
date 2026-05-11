@@ -15,6 +15,8 @@ import { TagsTable } from "src/components/common/TagsTable";
 import { SidebarLayout } from "src/components/layouts/SidebarLayout";
 import { usePageMetadata } from "src/contexts/PageMetadataContext";
 import type { GenreSearchQuery } from "src/services/GenreService";
+import { LevelPlaylistDroppedLevelFilter } from "src/services/LevelService";
+import { LevelPlaylistFinishedLevelFilter } from "src/services/LevelService";
 import type { LevelSearchQuery } from "src/services/LevelService";
 import type { TagSearchQuery } from "src/services/TagService";
 import { filterFalsyObjectValues } from "src/utils/misc";
@@ -27,6 +29,8 @@ const defaultSearchQuery: LevelSearchQuery = {
   sort: "-created",
   search: null,
   isApproved: true,
+  playlistFinishedLevels: LevelPlaylistFinishedLevelFilter.ShowAll,
+  playlistDroppedLevels: LevelPlaylistDroppedLevelFilter.ShowAll,
 };
 
 const defaultGenreSearchQuery: GenreSearchQuery = {
@@ -74,6 +78,12 @@ const deserializeSearchQuery = (qp: {
   isApproved: searchStringToBool(qp.approved),
   videoWalkthroughs: searchStringToBool(qp.video_walkthroughs),
   textWalkthroughs: searchStringToBool(qp.text_walkthroughs),
+  playlistFinishedLevels: qp.finished_levels as
+    | LevelPlaylistFinishedLevelFilter
+    | undefined,
+  playlistDroppedLevels: qp.dropped_levels as
+    | LevelPlaylistDroppedLevelFilter
+    | undefined,
   date: qp.date,
 });
 
@@ -92,6 +102,16 @@ const serializeSearchQuery = (
     date: searchQuery.date,
     video_walkthroughs: boolToSearchString(searchQuery.videoWalkthroughs),
     text_walkthroughs: boolToSearchString(searchQuery.textWalkthroughs),
+    finished_levels:
+      searchQuery.playlistFinishedLevels ===
+      defaultSearchQuery.playlistFinishedLevels
+        ? null
+        : searchQuery.playlistFinishedLevels,
+    dropped_levels:
+      searchQuery.playlistDroppedLevels ===
+      defaultSearchQuery.playlistDroppedLevels
+        ? null
+        : searchQuery.playlistDroppedLevels,
   });
 
 interface LevelListPageProps {

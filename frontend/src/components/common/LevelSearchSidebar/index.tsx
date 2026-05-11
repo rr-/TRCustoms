@@ -1,6 +1,7 @@
 import styles from "./index.module.css";
 import { Formik } from "formik";
 import { Form } from "formik";
+import { useContext } from "react";
 import { useEffect } from "react";
 import { useCallback } from "react";
 import { useState } from "react";
@@ -22,6 +23,9 @@ import { DropDownFormField } from "src/components/formfields/DropDownFormField";
 import { SubmitButton } from "src/components/formfields/SubmitButton";
 import { TextFormField } from "src/components/formfields/TextFormField";
 import { IconSearch } from "src/components/icons";
+import { UserContext } from "src/contexts/UserContext";
+import { LevelPlaylistDroppedLevelFilter } from "src/services/LevelService";
+import { LevelPlaylistFinishedLevelFilter } from "src/services/LevelService";
 import type { LevelSearchQuery } from "src/services/LevelService";
 import { UserPermission } from "src/services/UserService";
 
@@ -35,6 +39,28 @@ const sortOptions = [
   { label: "Biggest size", value: "-size" },
   { label: "Smallest size", value: "size" },
 ];
+
+interface RadioOption<TValue> {
+  id: TValue;
+  name: string;
+}
+
+const playlistFinishedLevelOptions: RadioOption<LevelPlaylistFinishedLevelFilter>[] =
+  [
+    { id: LevelPlaylistFinishedLevelFilter.ShowAll, name: "Show all" },
+    { id: LevelPlaylistFinishedLevelFilter.Hide, name: "Hide" },
+    { id: LevelPlaylistFinishedLevelFilter.Unrated, name: "Unrated only" },
+    {
+      id: LevelPlaylistFinishedLevelFilter.Unreviewed,
+      name: "Unreviewed only",
+    },
+  ];
+
+const playlistDroppedLevelOptions: RadioOption<LevelPlaylistDroppedLevelFilter>[] =
+  [
+    { id: LevelPlaylistDroppedLevelFilter.ShowAll, name: "Show all" },
+    { id: LevelPlaylistDroppedLevelFilter.Hide, name: "Hide" },
+  ];
 
 const convertSearchQueryToFormikValues = (
   searchQuery: LevelSearchQuery,
@@ -66,6 +92,7 @@ const LevelSearchSidebar = ({
   searchQuery,
   onSearchQueryChange,
 }: LevelSearchProps) => {
+  const loggedInUser = useContext(UserContext).user;
   const [formikValues, setFormikValues] = useState<any>(
     convertSearchQueryToFormikValues(searchQuery, defaultSearchQuery),
   );
@@ -169,6 +196,28 @@ const LevelSearchSidebar = ({
         page: null,
         videoWalkthroughs: videoWalkthroughs,
         textWalkthroughs: textWalkthroughs,
+      });
+    },
+    [searchQuery, onSearchQueryChange],
+  );
+
+  const handlePlaylistFinishedLevelsChange = useCallback(
+    (playlistFinishedLevels: LevelPlaylistFinishedLevelFilter) => {
+      onSearchQueryChange({
+        ...searchQuery,
+        page: null,
+        playlistFinishedLevels,
+      });
+    },
+    [searchQuery, onSearchQueryChange],
+  );
+
+  const handlePlaylistDroppedLevelsChange = useCallback(
+    (playlistDroppedLevels: LevelPlaylistDroppedLevelFilter) => {
+      onSearchQueryChange({
+        ...searchQuery,
+        page: null,
+        playlistDroppedLevels,
       });
     },
     [searchQuery, onSearchQueryChange],
@@ -326,6 +375,39 @@ const LevelSearchSidebar = ({
                 />
               </Collapsible>
             </div>
+
+            {loggedInUser && (
+              <div className={styles.section}>
+                <Collapsible
+                  storageKey="levelPlaylistStatus"
+                  title="Playlist status"
+                >
+                  <p>Finished levels:</p>
+                  <Radioboxes
+                    options={playlistFinishedLevelOptions}
+                    value={
+                      searchQuery.playlistFinishedLevels ||
+                      LevelPlaylistFinishedLevelFilter.ShowAll
+                    }
+                    onChange={handlePlaylistFinishedLevelsChange}
+                    getOptionId={(option) => option.id}
+                    getOptionName={(option) => option.name}
+                  />
+
+                  <p>Dropped levels:</p>
+                  <Radioboxes
+                    options={playlistDroppedLevelOptions}
+                    value={
+                      searchQuery.playlistDroppedLevels ||
+                      LevelPlaylistDroppedLevelFilter.ShowAll
+                    }
+                    onChange={handlePlaylistDroppedLevelsChange}
+                    getOptionId={(option) => option.id}
+                    getOptionName={(option) => option.name}
+                  />
+                </Collapsible>
+              </div>
+            )}
           </Form>
         )}
       </Formik>
