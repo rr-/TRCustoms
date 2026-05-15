@@ -43,6 +43,7 @@ def test_level_list_can_show_unrated_finished_playlist_levels(
 ) -> None:
     rated_finished_level = LevelFactory()
     unrated_finished_level = LevelFactory()
+    own_finished_level = LevelFactory(authors=[auth_api_client.user])
     non_playlist_level = LevelFactory()
     PlaylistItemFactory(
         user=auth_api_client.user,
@@ -54,6 +55,11 @@ def test_level_list_can_show_unrated_finished_playlist_levels(
         level=unrated_finished_level,
         status=PlaylistStatus.FINISHED,
     )
+    PlaylistItemFactory(
+        user=auth_api_client.user,
+        level=own_finished_level,
+        status=PlaylistStatus.FINISHED,
+    )
     RatingFactory(author=auth_api_client.user, level=rated_finished_level)
 
     level_ids = get_level_ids(
@@ -63,6 +69,7 @@ def test_level_list_can_show_unrated_finished_playlist_levels(
 
     assert rated_finished_level.pk not in level_ids
     assert unrated_finished_level.pk in level_ids
+    assert own_finished_level.pk not in level_ids
     assert non_playlist_level.pk not in level_ids
 
 
@@ -72,6 +79,7 @@ def test_level_list_can_show_unreviewed_finished_playlist_levels(
 ) -> None:
     reviewed_finished_level = LevelFactory()
     unreviewed_finished_level = LevelFactory()
+    own_finished_level = LevelFactory(authors=[auth_api_client.user])
     non_playlist_level = LevelFactory()
     PlaylistItemFactory(
         user=auth_api_client.user,
@@ -83,6 +91,11 @@ def test_level_list_can_show_unreviewed_finished_playlist_levels(
         level=unreviewed_finished_level,
         status=PlaylistStatus.FINISHED,
     )
+    PlaylistItemFactory(
+        user=auth_api_client.user,
+        level=own_finished_level,
+        status=PlaylistStatus.FINISHED,
+    )
     ReviewFactory(author=auth_api_client.user, level=reviewed_finished_level)
 
     level_ids = get_level_ids(
@@ -91,6 +104,7 @@ def test_level_list_can_show_unreviewed_finished_playlist_levels(
 
     assert reviewed_finished_level.pk not in level_ids
     assert unreviewed_finished_level.pk in level_ids
+    assert own_finished_level.pk not in level_ids
     assert non_playlist_level.pk not in level_ids
 
 

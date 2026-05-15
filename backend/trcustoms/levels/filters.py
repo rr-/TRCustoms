@@ -181,14 +181,20 @@ class PlaylistStatusLevelFilter(LevelFilter):
                 author_id=user_id,
                 level_id=OuterRef("pk"),
             )
-            qs = qs.annotate(
-                finished_playlist_item_exists=Exists(
-                    finished_playlist_item_exists
-                ),
-                user_rating_exists=Exists(user_rating_exists),
-            ).filter(
-                finished_playlist_item_exists=True,
-                user_rating_exists=False,
+            qs = (
+                qs.annotate(
+                    finished_playlist_item_exists=Exists(
+                        finished_playlist_item_exists
+                    ),
+                    user_rating_exists=Exists(user_rating_exists),
+                )
+                .filter(
+                    finished_playlist_item_exists=True,
+                    user_rating_exists=False,
+                )
+                .exclude(
+                    authors__pk=user_id,
+                )
             )
         elif finished_levels == "unreviewed":
             finished_playlist_item_exists = PlaylistItem.objects.filter(
@@ -200,14 +206,20 @@ class PlaylistStatusLevelFilter(LevelFilter):
                 author_id=user_id,
                 level_id=OuterRef("pk"),
             )
-            qs = qs.annotate(
-                finished_playlist_item_exists=Exists(
-                    finished_playlist_item_exists
-                ),
-                user_review_exists=Exists(user_review_exists),
-            ).filter(
-                finished_playlist_item_exists=True,
-                user_review_exists=False,
+            qs = (
+                qs.annotate(
+                    finished_playlist_item_exists=Exists(
+                        finished_playlist_item_exists
+                    ),
+                    user_review_exists=Exists(user_review_exists),
+                )
+                .filter(
+                    finished_playlist_item_exists=True,
+                    user_review_exists=False,
+                )
+                .exclude(
+                    authors__pk=user_id,
+                )
             )
 
         dropped_levels = self.qp.get("dropped_levels")
