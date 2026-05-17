@@ -9,7 +9,7 @@ Kindly review your submission based on the reason provided by the Mod Team:
 
 {{reason}}
 
-View your level page here:
+View your walkthrough page here:
 
 {{link}}
 {% endblock %}
