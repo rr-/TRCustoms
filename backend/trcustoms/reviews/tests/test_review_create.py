@@ -58,6 +58,10 @@ def test_review_creation_success(
             "reviewed_level_count": 1,
         },
         "text": "test",
+        "upvote_count": 0,
+        "downvote_count": 0,
+        "current_user_vote": None,
+        "can_vote": False,
     }
 
     assert review
@@ -158,3 +162,26 @@ def test_review_creation_updates_position(
     assert review1.position == 1
     assert review2.position == 2
     assert review1.last_updated == review1_last_updated
+
+
+@pytest.mark.django_db
+def test_review_creation_removes_users_votes_on_that_level(
+    auth_api_client: APIClient,
+) -> None:
+    level = LevelFactory()
+    other_review = ReviewFactory(level=level)
+    other_review.votes.create(user=auth_api_client.user, vote=1)
+
+    response = auth_api_client.post(
+        "/api/reviews/",
+        format="json",
+        data={
+            "level_id": level.id,
+            "text": "test",
+        },
+    )
+    other_review.refresh_from_db()
+
+    assert response.status_code == status.HTTP_201_CREATED, response.content
+    assert other_review.votes.count() == 0
+    assert other_review.upvote_count == 0

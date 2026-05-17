@@ -1,4 +1,6 @@
+from django.db import transaction
 from rest_framework import mixins, status, viewsets
+from rest_framework.decorators import action
 from rest_framework.generics import get_object_or_404
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
@@ -17,11 +19,18 @@ from trcustoms.permissions import (
     HasPermission,
     IsAccessingOwnResource,
 )
-from trcustoms.reviews.models import Review
+from trcustoms.reviews.logic import (
+    MAX_REVIEW_VOTES_PER_LEVEL,
+    can_user_vote_on_review,
+    get_user_review_vote_count_for_level,
+    update_review_vote_counts,
+)
+from trcustoms.reviews.models import Review, ReviewVote
 from trcustoms.reviews.serializers import (
     ReviewDeletionSerializer,
     ReviewDetailsSerializer,
     ReviewListingSerializer,
+    ReviewVoteSerializer,
 )
 from trcustoms.users.models import UserPermission
 from trcustoms.utils import parse_ints
@@ -66,6 +75,7 @@ class ReviewViewSet(
         "retrieve": [AllowAny],
         "list": [AllowAny],
         "create": [IsAuthenticated],
+        "vote": [IsAuthenticated],
         "destroy": [HasPermission(UserPermission.DELETE_REVIEWS)],
         "update": [
             HasPermission(UserPermission.EDIT_REVIEWS) | IsAccessingOwnResource
@@ -82,6 +92,7 @@ class ReviewViewSet(
         "partial_update": ReviewDetailsSerializer,
         "create": ReviewDetailsSerializer,
         "destroy": ReviewDeletionSerializer,
+        "vote": ReviewVoteSerializer,
     }
 
     def get_object(self):
@@ -101,6 +112,64 @@ class ReviewViewSet(
                 queryset = queryset.filter(level_id=level_id)
 
         return queryset
+
+    @action(detail=True, methods=["post"])
+    def vote(self, request, pk: int) -> Response:
+        review = self.get_object()
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+
+        user = request.user
+        if not can_user_vote_on_review(user, review):
+            return Response(
+                {"detail": "You cannot vote on this review."},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        requested_vote = int(serializer.validated_data["vote"])
+
+        with transaction.atomic():
+            existing_vote = (
+                ReviewVote.objects.select_for_update()
+                .filter(
+                    review=review,
+                    user=user,
+                )
+                .first()
+            )
+            current_vote_count = get_user_review_vote_count_for_level(
+                user,
+                review.level,
+            )
+
+            if existing_vote and existing_vote.vote == requested_vote:
+                existing_vote.delete()
+            else:
+                if (
+                    not existing_vote
+                    and current_vote_count >= MAX_REVIEW_VOTES_PER_LEVEL
+                ):
+                    return Response(
+                        {
+                            "detail": (
+                                "You can only vote on 3 reviews per level."
+                            )
+                        },
+                        status=status.HTTP_400_BAD_REQUEST,
+                    )
+                ReviewVote.objects.update_or_create(
+                    review=review,
+                    user=user,
+                    defaults={"vote": requested_vote},
+                )
+
+        update_review_vote_counts(review)
+        review.refresh_from_db()
+        response_serializer = ReviewListingSerializer(
+            review,
+            context=self.get_serializer_context(),
+        )
+        return Response(response_serializer.data)
 
     def destroy(self, request, *args, **kwargs):
         instance = self.get_object()

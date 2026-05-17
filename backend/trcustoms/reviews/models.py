@@ -8,7 +8,7 @@ from trcustoms.common.models import (
     UserContentDatesInfo,
 )
 from trcustoms.levels.models import Level
-from trcustoms.reviews.consts import ReviewType
+from trcustoms.reviews.consts import ReviewType, ReviewVoteType
 from trcustoms.users.models import User
 
 
@@ -84,6 +84,8 @@ class Review(UserContentDatesInfo, DatesInfo):
     )
 
     text = models.TextField(max_length=5000, null=True, blank=True)
+    upvote_count = models.PositiveIntegerField(default=0)
+    downvote_count = models.PositiveIntegerField(default=0)
 
     def __str__(self):
         return (
@@ -96,6 +98,30 @@ class Review(UserContentDatesInfo, DatesInfo):
         constraints = [
             UniqueConstraint(
                 "level", "author", name="review_level_author_unique"
+            ),
+        ]
+        default_permissions = []
+
+
+class ReviewVote(DatesInfo):
+    review = models.ForeignKey(
+        Review,
+        on_delete=models.CASCADE,
+        related_name="votes",
+    )
+    user = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name="review_votes",
+    )
+    vote = models.IntegerField(choices=ReviewVoteType.choices)
+
+    class Meta:
+        constraints = [
+            UniqueConstraint(
+                "review",
+                "user",
+                name="review_vote_review_user_unique",
             ),
         ]
         default_permissions = []

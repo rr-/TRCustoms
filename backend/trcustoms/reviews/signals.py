@@ -1,7 +1,8 @@
 from django.db.models.signals import post_delete, post_save, pre_save
 from django.dispatch import receiver
 
-from trcustoms.reviews.models import Review
+from trcustoms.reviews.logic import update_review_vote_counts
+from trcustoms.reviews.models import Review, ReviewVote
 from trcustoms.signals import disable_signals
 
 
@@ -38,3 +39,13 @@ def handle_review_deletion(sender, instance, **kwargs):
         if position != review.position:
             # do not trigger modification time changes
             Review.objects.filter(pk=review.pk).update(position=position)
+
+
+@receiver(post_save, sender=ReviewVote)
+def handle_review_vote_save(sender, instance, **kwargs):
+    update_review_vote_counts(instance.review)
+
+
+@receiver(post_delete, sender=ReviewVote)
+def handle_review_vote_delete(sender, instance, **kwargs):
+    update_review_vote_counts(instance.review)

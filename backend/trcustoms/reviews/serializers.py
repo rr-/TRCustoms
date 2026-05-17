@@ -8,7 +8,11 @@ from trcustoms.mails import (
     send_review_submission_mail,
     send_review_update_mail,
 )
-from trcustoms.reviews.models import Review
+from trcustoms.reviews.logic import (
+    can_user_vote_on_review,
+    remove_user_review_votes_for_level,
+)
+from trcustoms.reviews.models import Review, ReviewVote
 from trcustoms.tasks import update_awards
 from trcustoms.users.serializers import UserNestedSerializer
 
@@ -30,6 +34,8 @@ class ReviewListingSerializer(serializers.ModelSerializer):
     )
     level = LevelNestedSerializer(read_only=True)
     last_user_content_updated = serializers.ReadOnlyField()
+    current_user_vote = serializers.SerializerMethodField()
+    can_vote = serializers.SerializerMethodField()
 
     class Meta:
         model = Review
@@ -41,7 +47,33 @@ class ReviewListingSerializer(serializers.ModelSerializer):
             "created",
             "last_updated",
             "last_user_content_updated",
+            "upvote_count",
+            "downvote_count",
+            "current_user_vote",
+            "can_vote",
         ]
+
+    def get_current_user_vote(self, obj: Review) -> int | None:
+        request = self.context.get("request")
+        user = getattr(request, "user", None)
+        if not user or user.is_anonymous:
+            return None
+        vote = (
+            ReviewVote.objects.filter(
+                review=obj,
+                user=user,
+            )
+            .values_list("vote", flat=True)
+            .first()
+        )
+        return vote
+
+    def get_can_vote(self, obj: Review) -> bool:
+        request = self.context.get("request")
+        user = getattr(request, "user", None)
+        if not user or user.is_anonymous:
+            return False
+        return can_user_vote_on_review(user, obj)
 
 
 class ReviewDetailsSerializer(ReviewListingSerializer):
@@ -85,6 +117,7 @@ class ReviewDetailsSerializer(ReviewListingSerializer):
 
     def create(self, validated_data):
         review = super().create(validated_data)
+        remove_user_review_votes_for_level(review.author, review.level)
         review.bump_last_user_content_updated()
         review.save()
         send_review_submission_mail(review)
@@ -92,7 +125,10 @@ class ReviewDetailsSerializer(ReviewListingSerializer):
         return review
 
     def update(self, instance, validated_data):
+        old_level = instance.level
         review = super().update(instance, validated_data)
+        remove_user_review_votes_for_level(review.author, old_level)
+        remove_user_review_votes_for_level(review.author, review.level)
         review.bump_last_user_content_updated()
         review.save()
         send_review_update_mail(review)
@@ -106,3 +142,7 @@ class ReviewDeletionSerializer(serializers.Serializer):
     def notify(self, instance: Review) -> None:
         send_review_removal_mail(instance, self.validated_data["reason"])
         instance.delete()
+
+
+class ReviewVoteSerializer(serializers.Serializer):
+    vote = serializers.ChoiceField(choices=[-1, 1], required=True)

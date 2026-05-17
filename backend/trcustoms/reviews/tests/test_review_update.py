@@ -59,6 +59,10 @@ def test_review_update_success(
             "reviewed_level_count": 1,
         },
         "text": "test",
+        "upvote_count": 0,
+        "downvote_count": 0,
+        "current_user_vote": None,
+        "can_vote": False,
     }
 
     assert review.last_user_content_updated == datetime(
@@ -96,3 +100,33 @@ def test_review_update_updates_level_review_count(
     assert level1.review_count == 0
     assert level2.reviews.count() == 1  # pylint: disable=no-member
     assert level2.review_count == 1
+
+
+@pytest.mark.django_db
+def test_review_update_removes_users_votes_from_old_and_new_levels(
+    auth_api_client: APIClient,
+) -> None:
+    old_level = LevelFactory()
+    new_level = LevelFactory()
+    old_review = ReviewFactory(level=old_level)
+    new_review = ReviewFactory(level=new_level)
+    review = ReviewFactory(level=old_level, author=auth_api_client.user)
+    old_review.votes.create(user=auth_api_client.user, vote=1)
+    new_review.votes.create(user=auth_api_client.user, vote=-1)
+
+    response = auth_api_client.patch(
+        f"/api/reviews/{review.id}/",
+        format="json",
+        data={
+            "level_id": new_level.id,
+            "text": "updated",
+        },
+    )
+    old_review.refresh_from_db()
+    new_review.refresh_from_db()
+
+    assert response.status_code == status.HTTP_200_OK, response.content
+    assert old_review.votes.count() == 0
+    assert new_review.votes.count() == 0
+    assert old_review.upvote_count == 0
+    assert new_review.downvote_count == 0

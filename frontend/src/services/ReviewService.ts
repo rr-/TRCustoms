@@ -22,6 +22,10 @@ interface ReviewListing {
   created: string;
   last_updated: string;
   last_user_content_updated: string;
+  upvote_count: number;
+  downvote_count: number;
+  current_user_vote: number | null;
+  can_vote: boolean;
 }
 
 interface ReviewDetails extends ReviewListing {}
@@ -43,6 +47,10 @@ interface ReviewUpdatePayload extends ReviewBaseChangePayload {}
 interface ReviewCreatePayload extends ReviewBaseChangePayload {}
 interface ReviewDeletePayload {
   reason: string;
+}
+
+interface ReviewVotePayload {
+  vote: -1 | 1;
 }
 
 const searchReviews = async (
@@ -114,6 +122,17 @@ const deleteReview = async (
   await api.delete(`${API_URL}/reviews/${reviewId}/`, { data: payload });
 };
 
+const vote = async (
+  reviewId: number,
+  payload: ReviewVotePayload,
+): Promise<ReviewDetails> => {
+  const response = (await api.post(
+    `${API_URL}/reviews/${reviewId}/vote/`,
+    payload,
+  )) as AxiosResponse<ReviewDetails>;
+  return response.data;
+};
+
 const ReviewService = {
   searchReviews,
   getReviewById,
@@ -121,6 +140,7 @@ const ReviewService = {
   create,
   update,
   delete: deleteReview,
+  vote,
 };
 
 export type {

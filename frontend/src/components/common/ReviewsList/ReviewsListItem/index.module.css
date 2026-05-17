@@ -65,6 +65,14 @@
   flex-grow: 1;
   flex-wrap: wrap;
 }
+
+.postedMeta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
 @media (max-width: 800px) {
   .header .info {
     flex-direction: column;

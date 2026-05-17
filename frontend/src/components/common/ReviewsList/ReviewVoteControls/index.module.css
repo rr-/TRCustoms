@@ -1,0 +1,18 @@
+.wrapper {
+}
+
+.voteButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.25rem 0.5rem;
+
+  &.active {
+    color: var(--link-hover-color);
+  }
+
+  :global(.Icon) {
+    width: 1.2rem;
+    height: 1.2rem;
+  }
+}

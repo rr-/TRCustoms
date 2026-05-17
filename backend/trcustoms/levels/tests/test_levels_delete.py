@@ -79,7 +79,7 @@ def test_level_deletion_updates_reviewed_level_count(
 ) -> None:
     user = UserFactory()
     level = LevelFactory()
-    ReviewFactory(level=level)
+    ReviewFactory(level=level, author=user)
     user.refresh_from_db()
     assert user.reviewed_level_count == 1
     superuser_api_client.delete(f"/api/levels/{level.id}/")

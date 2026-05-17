@@ -5,6 +5,7 @@ from trcustoms.reviews.models import (
     Review,
     ReviewTemplateAnswer,
     ReviewTemplateQuestion,
+    ReviewVote,
 )
 from trcustoms.users.tests.factories import UserFactory
 
@@ -32,5 +33,18 @@ class ReviewFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = Review
 
-    author = factory.SubFactory(UserFactory)
+    author = factory.SubFactory(
+        UserFactory,
+        username=factory.Sequence(lambda n: f"review_author_{n}"),
+        email=factory.Sequence(lambda n: f"review_author_{n}@example.com"),
+    )
     level = factory.SubFactory(LevelFactory)
+
+
+class ReviewVoteFactory(factory.django.DjangoModelFactory):
+    class Meta:
+        model = ReviewVote
+
+    review = factory.SubFactory(ReviewFactory)
+    user = factory.SubFactory(UserFactory)
+    vote = 1

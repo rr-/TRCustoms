@@ -1,16 +1,22 @@
 import styles from "./index.module.css";
+import { useContext } from "react";
+import { useEffect } from "react";
 import { useState } from "react";
 import { ReviewDeleteButton } from "src/components/buttons/ReviewDeleteButton";
 import { ReviewEditButton } from "src/components/buttons/ReviewEditButton";
 import { BurgerMenu } from "src/components/common/BurgerMenu";
 import { Link } from "src/components/common/Link";
 import { PermissionGuard } from "src/components/common/PermissionGuard";
+import { ReviewVoteControls } from "src/components/common/ReviewsList/ReviewVoteControls";
 import { UserPicture } from "src/components/common/UserPicture";
 import { LevelLink } from "src/components/links/LevelLink";
 import { UserLink } from "src/components/links/UserLink";
 import { Markdown } from "src/components/markdown/Markdown";
+import { UserContext } from "src/contexts/UserContext";
 import type { ReviewListing } from "src/services/ReviewService";
+import { ReviewService } from "src/services/ReviewService";
 import { UserPermission } from "src/services/UserService";
+import { extractErrorMessage } from "src/utils/misc";
 import { formatDate } from "src/utils/string";
 
 const REVIEW_EXCERPT_CUTOFF = 1200;
@@ -26,8 +32,25 @@ const ReviewsListItem = ({
   showLevels,
   showExcerpts,
 }: ReviewsListItemProps) => {
+  const { user } = useContext(UserContext);
   const [isExcerptExpanded, setIsExcerptExpanded] = useState(false);
+  const [isVotePending, setIsVotePending] = useState(false);
+  const [voteState, setVoteState] = useState({
+    upvoteCount: review.upvote_count,
+    downvoteCount: review.downvote_count,
+    currentUserVote: review.current_user_vote,
+    canVote: review.can_vote,
+  });
   const classNames = [styles.wrapper];
+
+  useEffect(() => {
+    setVoteState({
+      upvoteCount: review.upvote_count,
+      downvoteCount: review.downvote_count,
+      currentUserVote: review.current_user_vote,
+      canVote: review.can_vote,
+    });
+  }, [review]);
 
   const handleReadMoreClick = () => {
     setIsExcerptExpanded((isExcerptExpanded) => !isExcerptExpanded);
@@ -39,6 +62,52 @@ const ReviewsListItem = ({
       ? fullText.substr(0, fullText.lastIndexOf(" ", REVIEW_EXCERPT_CUTOFF)) +
         "…"
       : fullText;
+
+  const reviewVoteState = {
+    ...review,
+    upvote_count: voteState.upvoteCount,
+    downvote_count: voteState.downvoteCount,
+    current_user_vote: voteState.currentUserVote,
+    can_vote: voteState.canVote,
+  };
+
+  const handleVoteClick = async (vote: -1 | 1) => {
+    if (isVotePending || !user) {
+      return;
+    }
+
+    const previousVote = voteState.currentUserVote;
+    const nextVote = previousVote === vote ? null : vote;
+    const upvoteDelta = (nextVote === 1 ? 1 : 0) - (previousVote === 1 ? 1 : 0);
+    const downvoteDelta =
+      (nextVote === -1 ? 1 : 0) - (previousVote === -1 ? 1 : 0);
+
+    const previousState = voteState;
+    setIsVotePending(true);
+    setVoteState((current) => ({
+      ...current,
+      currentUserVote: nextVote,
+      upvoteCount: current.upvoteCount + upvoteDelta,
+      downvoteCount: current.downvoteCount + downvoteDelta,
+    }));
+
+    try {
+      const updatedReview = await ReviewService.vote(review.id, { vote });
+      setVoteState({
+        upvoteCount: updatedReview.upvote_count,
+        downvoteCount: updatedReview.downvote_count,
+        currentUserVote: updatedReview.current_user_vote,
+        canVote: updatedReview.can_vote,
+      });
+    } catch (error) {
+      setVoteState(previousState);
+      const message = extractErrorMessage(error);
+      if (message) {
+        alert(message);
+      }
+    }
+    setIsVotePending(false);
+  };
 
   const header = (
     <header className={styles.header}>
@@ -65,19 +134,27 @@ const ReviewsListItem = ({
         </small>
       ) : null}
 
-      <small>Posted on: {formatDate(review.created)}</small>
+      <div className={styles.postedMeta}>
+        <small>Posted on: {formatDate(review.created)}</small>
+        {user ? (
+          <ReviewVoteControls
+            review={reviewVoteState}
+            onVote={handleVoteClick}
+          />
+        ) : null}
 
-      <BurgerMenu>
-        <PermissionGuard
-          require={UserPermission.editReviews}
-          owningUsers={[review.author]}
-        >
-          <ReviewEditButton review={review} />
-        </PermissionGuard>
-        <PermissionGuard require={UserPermission.deleteReviews}>
-          <ReviewDeleteButton review={review} />
-        </PermissionGuard>
-      </BurgerMenu>
+        <BurgerMenu>
+          <PermissionGuard
+            require={UserPermission.editReviews}
+            owningUsers={[review.author]}
+          >
+            <ReviewEditButton review={review} />
+          </PermissionGuard>
+          <PermissionGuard require={UserPermission.deleteReviews}>
+            <ReviewDeleteButton review={review} />
+          </PermissionGuard>
+        </BurgerMenu>
+      </div>
     </header>
   );
 
