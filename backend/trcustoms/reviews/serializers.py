@@ -1,8 +1,10 @@
 from rest_framework import serializers
 
+from trcustoms.common.fields import CustomCharField
 from trcustoms.levels.models import Level
 from trcustoms.levels.serializers import LevelNestedSerializer
 from trcustoms.mails import (
+    send_review_removal_mail,
     send_review_submission_mail,
     send_review_update_mail,
 )
@@ -96,3 +98,11 @@ class ReviewDetailsSerializer(ReviewListingSerializer):
         send_review_update_mail(review)
         update_awards.delay(review.author.pk)
         return review
+
+
+class ReviewDeletionSerializer(serializers.Serializer):
+    reason = CustomCharField(collapse_whitespace=False, max_length=500)
+
+    def notify(self, instance: Review) -> None:
+        send_review_removal_mail(instance, self.validated_data["reason"])
+        instance.delete()

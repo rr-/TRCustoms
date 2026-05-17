@@ -1,0 +1,13 @@
+{% extends "email_base.html" %}
+
+{% block content %}
+<p>Hi {{username}},</p>
+
+<p>Your review for the level {{level_name}} has been removed from TRCustoms.org.</p>
+
+<p>Kindly find the reason provided by the Mod Team:</p>
+
+<p>{{reason}}</p>
+
+<p>Regards,<br />TRCustoms.org</p>
+{% endblock %}

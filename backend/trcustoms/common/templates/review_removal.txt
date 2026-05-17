@@ -1,0 +1,14 @@
+{% extends "email_base.txt" %}
+
+{% block content %}
+Hi {{username}},
+
+Your review for the level {{level_name}} has been removed from TRCustoms.org.
+
+Kindly find the reason provided by the Mod Team:
+
+{{reason}}
+
+Regards,
+TRCustoms.org
+{% endblock %}

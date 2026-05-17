@@ -41,6 +41,9 @@ interface ReviewBaseChangePayload {
 
 interface ReviewUpdatePayload extends ReviewBaseChangePayload {}
 interface ReviewCreatePayload extends ReviewBaseChangePayload {}
+interface ReviewDeletePayload {
+  reason: string;
+}
 
 const searchReviews = async (
   searchQuery: ReviewSearchQuery,
@@ -104,8 +107,11 @@ const create = async (payload: ReviewCreatePayload): Promise<ReviewDetails> => {
   return response.data;
 };
 
-const deleteReview = async (reviewId: number): Promise<void> => {
-  await api.delete(`${API_URL}/reviews/${reviewId}/`);
+const deleteReview = async (
+  reviewId: number,
+  payload: ReviewDeletePayload,
+): Promise<void> => {
+  await api.delete(`${API_URL}/reviews/${reviewId}/`, { data: payload });
 };
 
 const ReviewService = {

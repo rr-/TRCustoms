@@ -227,6 +227,21 @@ def send_review_update_mail(review: Review) -> None:
         )
 
 
+def send_review_removal_mail(review: Review, reason: str) -> None:
+    if not review.author.email:
+        return
+    send_mail.delay(
+        template_name="review_removal",
+        subject=f"{PREFIX} Review removed",
+        recipients=[review.author.email],
+        context={
+            "username": review.author.username,
+            "level_name": review.level.name,
+            "reason": reason,
+        },
+    )
+
+
 def send_rating_submission_mail(rating: Rating) -> None:
     link = f"{settings.HOST_SITE}/levels/{rating.level.id}"
     for user in get_level_authors(rating.level, include_uploader=False):

@@ -1,7 +1,12 @@
-from rest_framework import mixins, viewsets
+from rest_framework import mixins, status, viewsets
 from rest_framework.generics import get_object_or_404
 from rest_framework.permissions import AllowAny, IsAuthenticated
+from rest_framework.response import Response
 
+from trcustoms.audit_logs.utils import (
+    clear_audit_log_action_flags,
+    track_model_deletion,
+)
 from trcustoms.mixins import (
     AuditLogModelWatcherMixin,
     MultiSerializerMixin,
@@ -14,6 +19,7 @@ from trcustoms.permissions import (
 )
 from trcustoms.reviews.models import Review
 from trcustoms.reviews.serializers import (
+    ReviewDeletionSerializer,
     ReviewDetailsSerializer,
     ReviewListingSerializer,
 )
@@ -75,6 +81,7 @@ class ReviewViewSet(
         "update": ReviewDetailsSerializer,
         "partial_update": ReviewDetailsSerializer,
         "create": ReviewDetailsSerializer,
+        "destroy": ReviewDeletionSerializer,
     }
 
     def get_object(self):
@@ -94,3 +101,17 @@ class ReviewViewSet(
                 queryset = queryset.filter(level_id=level_id)
 
         return queryset
+
+    def destroy(self, request, *args, **kwargs):
+        instance = self.get_object()
+        review_id = instance.pk
+        audit_log_instance = self.get_queryset().get(pk=review_id)
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.notify(instance)
+        clear_audit_log_action_flags(obj=audit_log_instance)
+        track_model_deletion(
+            audit_log_instance, request=self.request, notify=True
+        )
+        Review.objects.filter(pk=review_id).delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
