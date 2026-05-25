@@ -134,6 +134,7 @@ const StateSearches: StateSearchSection[] = [
     searchList: [
       { title: "Posted", searchState: "created" },
       { title: "Updated", searchState: "updated" },
+      { title: "Hidden", searchState: "hidden" },
       { title: "Deleted", searchState: "deleted" },
     ],
   },

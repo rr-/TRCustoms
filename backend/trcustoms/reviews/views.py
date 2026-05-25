@@ -121,14 +121,15 @@ class ReviewViewSet(
             for level_id in level_ids:
                 queryset = queryset.filter(level_id=level_id)
 
-        queryset = queryset.filter(
-            Q(is_hidden=False)
-            | (
-                Q(author=auth_user)
-                if (auth_user and not auth_user.is_anonymous)
-                else Q()
+        if not has_permission(auth_user, UserPermission.EDIT_REVIEWS):
+            queryset = queryset.filter(
+                Q(is_hidden=False)
+                | (
+                    Q(author=auth_user)
+                    if (auth_user and not auth_user.is_anonymous)
+                    else Q()
+                )
             )
-        )
 
         return queryset
 

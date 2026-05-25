@@ -27,6 +27,7 @@ def filter_queryset_state(qs, states: str | None):
                 | "approved"
                 | "created"
                 | "deleted"
+                | "hidden"
                 | "merged"
                 | "rejected"
                 | "updated"

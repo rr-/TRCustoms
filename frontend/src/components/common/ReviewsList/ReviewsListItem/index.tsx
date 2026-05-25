@@ -165,9 +165,12 @@ const ReviewsListItem = ({
       {header}
 
       <div className={`${styles.content} ChildMarginClear`}>
-        {review.is_hidden && review.author.id === user?.id ? (
+        {review.is_hidden ? (
           <p className={styles.hiddenNotice}>
-            Review visible only to you. Reason: {review.rejection_reason}
+            {review.author.id === user?.id
+              ? "Review visible only to you."
+              : "Review hidden."}{" "}
+            Reason: {review.rejection_reason}
           </p>
         ) : null}
 
