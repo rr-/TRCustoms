@@ -1,5 +1,5 @@
 import { useQueryClient } from "react-query";
-import { PromptButton } from "src/components/buttons/PromptButton";
+import { ConfirmButton } from "src/components/buttons/ConfirmButton";
 import { IconTrash } from "src/components/icons";
 import { ReviewService } from "src/services/ReviewService";
 import type { ReviewListing } from "src/services/ReviewService";
@@ -16,18 +16,22 @@ const ReviewDeleteButton = ({
 }: ReviewDeleteButtonProps) => {
   const queryClient = useQueryClient();
 
-  const handleConfirm = async (reason: string) => {
-    await ReviewService.delete(review.id, { reason });
+  const handleConfirm = async () => {
+    await ReviewService.delete(review.id);
     onComplete?.();
-    resetQueries(queryClient, ["reviews"]);
+    resetQueries(queryClient, ["reviews", "levels", "auditLogs"]);
   };
 
   return (
-    <PromptButton
-      text={<p>Please provide the reason for deleting this review.</p>}
-      promptLabel="Reason"
-      buttonLabel="Delete review"
-      buttonTooltip="Deletes this review and emails the author the reason."
+    <ConfirmButton
+      text={
+        <>
+          Are you sure you want to delete this review?
+          <br /> This action cannot be undone.
+        </>
+      }
+      buttonLabel="Delete"
+      buttonTooltip="Deletes this review forever."
       icon={<IconTrash />}
       big={true}
       onConfirm={handleConfirm}

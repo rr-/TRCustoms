@@ -4,6 +4,7 @@ import { useEffect } from "react";
 import { useState } from "react";
 import { ReviewDeleteButton } from "src/components/buttons/ReviewDeleteButton";
 import { ReviewEditButton } from "src/components/buttons/ReviewEditButton";
+import { ReviewHideButton } from "src/components/buttons/ReviewHideButton";
 import { BurgerMenu } from "src/components/common/BurgerMenu";
 import { Link } from "src/components/common/Link";
 import { PermissionGuard } from "src/components/common/PermissionGuard";
@@ -41,8 +42,6 @@ const ReviewsListItem = ({
     currentUserVote: review.current_user_vote,
     canVote: review.can_vote,
   });
-  const classNames = [styles.wrapper];
-
   useEffect(() => {
     setVoteState({
       upvoteCount: review.upvote_count,
@@ -150,6 +149,9 @@ const ReviewsListItem = ({
           >
             <ReviewEditButton review={review} />
           </PermissionGuard>
+          <PermissionGuard require={UserPermission.editReviews}>
+            <ReviewHideButton review={review} />
+          </PermissionGuard>
           <PermissionGuard require={UserPermission.deleteReviews}>
             <ReviewDeleteButton review={review} />
           </PermissionGuard>
@@ -159,10 +161,16 @@ const ReviewsListItem = ({
   );
 
   return (
-    <div className={classNames.join(" ")}>
+    <div className={styles.wrapper}>
       {header}
 
       <div className={`${styles.content} ChildMarginClear`}>
+        {review.is_hidden && review.author.id === user?.id ? (
+          <p className={styles.hiddenNotice}>
+            Review visible only to you. Reason: {review.rejection_reason}
+          </p>
+        ) : null}
+
         {showLevels ? (
           <p>
             Review on <LevelLink level={review.level} />

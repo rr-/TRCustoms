@@ -1,14 +1,12 @@
 from django.db import transaction
+from django.db.models import Q
+from django.http import Http404
 from rest_framework import mixins, status, viewsets
 from rest_framework.decorators import action
 from rest_framework.generics import get_object_or_404
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 
-from trcustoms.audit_logs.utils import (
-    clear_audit_log_action_flags,
-    track_model_deletion,
-)
 from trcustoms.mixins import (
     AuditLogModelWatcherMixin,
     MultiSerializerMixin,
@@ -18,6 +16,7 @@ from trcustoms.permissions import (
     AllowNone,
     HasPermission,
     IsAccessingOwnResource,
+    has_permission,
 )
 from trcustoms.reviews.logic import (
     MAX_REVIEW_VOTES_PER_LEVEL,
@@ -27,8 +26,8 @@ from trcustoms.reviews.logic import (
 )
 from trcustoms.reviews.models import Review, ReviewVote
 from trcustoms.reviews.serializers import (
-    ReviewDeletionSerializer,
     ReviewDetailsSerializer,
+    ReviewHideSerializer,
     ReviewListingSerializer,
     ReviewVoteSerializer,
 )
@@ -77,6 +76,7 @@ class ReviewViewSet(
         "create": [IsAuthenticated],
         "vote": [IsAuthenticated],
         "destroy": [HasPermission(UserPermission.DELETE_REVIEWS)],
+        "hide": [HasPermission(UserPermission.EDIT_REVIEWS)],
         "update": [
             HasPermission(UserPermission.EDIT_REVIEWS) | IsAccessingOwnResource
         ],
@@ -91,17 +91,27 @@ class ReviewViewSet(
         "update": ReviewDetailsSerializer,
         "partial_update": ReviewDetailsSerializer,
         "create": ReviewDetailsSerializer,
-        "destroy": ReviewDeletionSerializer,
+        "hide": ReviewHideSerializer,
         "vote": ReviewVoteSerializer,
     }
 
     def get_object(self):
-        obj = get_object_or_404(self.get_queryset(), pk=self.kwargs["pk"])
+        auth_user = self.request.user
+        try:
+            obj = get_object_or_404(self.get_queryset(), pk=self.kwargs["pk"])
+        except Http404:
+            if not (
+                has_permission(auth_user, UserPermission.EDIT_REVIEWS)
+                or has_permission(auth_user, UserPermission.DELETE_REVIEWS)
+            ):
+                raise
+            obj = get_object_or_404(self.queryset, pk=self.kwargs["pk"])
         self.check_object_permissions(self.request, obj)
         return obj
 
     def get_queryset(self):
         queryset = super().get_queryset()
+        auth_user = self.request.user
 
         if author_ids := parse_ints(self.request.query_params.get("authors")):
             for author_id in author_ids:
@@ -110,6 +120,15 @@ class ReviewViewSet(
         if level_ids := parse_ints(self.request.query_params.get("levels")):
             for level_id in level_ids:
                 queryset = queryset.filter(level_id=level_id)
+
+        queryset = queryset.filter(
+            Q(is_hidden=False)
+            | (
+                Q(author=auth_user)
+                if (auth_user and not auth_user.is_anonymous)
+                else Q()
+            )
+        )
 
         return queryset
 
@@ -171,16 +190,10 @@ class ReviewViewSet(
         )
         return Response(response_serializer.data)
 
-    def destroy(self, request, *args, **kwargs):
-        instance = self.get_object()
-        review_id = instance.pk
-        audit_log_instance = self.get_queryset().get(pk=review_id)
+    @action(detail=True, methods=["post"])
+    def hide(self, request, pk: int) -> Response:
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        serializer.notify(instance)
-        clear_audit_log_action_flags(obj=audit_log_instance)
-        track_model_deletion(
-            audit_log_instance, request=self.request, notify=True
-        )
-        Review.objects.filter(pk=review_id).delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
+        review = self.get_object()
+        serializer.notify(review)
+        return Response({})

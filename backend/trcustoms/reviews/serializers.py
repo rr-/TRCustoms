@@ -10,7 +10,9 @@ from trcustoms.mails import (
 )
 from trcustoms.reviews.logic import (
     can_user_vote_on_review,
+    hide_review,
     remove_user_review_votes_for_level,
+    unhide_review,
 )
 from trcustoms.reviews.models import Review, ReviewVote
 from trcustoms.tasks import update_awards
@@ -44,6 +46,8 @@ class ReviewListingSerializer(serializers.ModelSerializer):
             "author",
             "level",
             "text",
+            "is_hidden",
+            "rejection_reason",
             "created",
             "last_updated",
             "last_user_content_updated",
@@ -125,8 +129,11 @@ class ReviewDetailsSerializer(ReviewListingSerializer):
         return review
 
     def update(self, instance, validated_data):
+        was_hidden = instance.is_hidden
         old_level = instance.level
         review = super().update(instance, validated_data)
+        if was_hidden:
+            unhide_review(review)
         remove_user_review_votes_for_level(review.author, old_level)
         remove_user_review_votes_for_level(review.author, review.level)
         review.bump_last_user_content_updated()
@@ -136,12 +143,16 @@ class ReviewDetailsSerializer(ReviewListingSerializer):
         return review
 
 
-class ReviewDeletionSerializer(serializers.Serializer):
+class ReviewHideSerializer(serializers.Serializer):
     reason = CustomCharField(collapse_whitespace=False, max_length=500)
 
     def notify(self, instance: Review) -> None:
         send_review_removal_mail(instance, self.validated_data["reason"])
-        instance.delete()
+        hide_review(
+            instance,
+            self.context.get("request"),
+            self.validated_data["reason"],
+        )
 
 
 class ReviewVoteSerializer(serializers.Serializer):

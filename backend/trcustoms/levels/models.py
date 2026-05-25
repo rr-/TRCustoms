@@ -163,7 +163,7 @@ class Level(UserContentDatesInfo, DatesInfo):
                 self.save(update_fields=["rating_count"])
 
     def update_review_count(self, save: bool = True) -> None:
-        review_count = self.reviews.count()
+        review_count = self.reviews.filter(is_hidden=False).count()
         if review_count != self.review_count:
             self.review_count = review_count
             if save:

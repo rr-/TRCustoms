@@ -9,6 +9,10 @@ Kindly find the reason provided by the Mod Team:
 
 {{reason}}
 
+If you fix the issues with your review and update it, it will be reinstated.
+
+Please note that repeated offenses may result in a ban.
+
 Regards,
 TRCustoms.org
 {% endblock %}

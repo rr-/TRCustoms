@@ -1,3 +1,9 @@
+from rest_framework.request import Request
+
+from trcustoms.audit_logs.utils import (
+    clear_audit_log_action_flags,
+    track_model_update,
+)
 from trcustoms.levels.models import Level
 from trcustoms.reviews.consts import ReviewVoteType
 from trcustoms.reviews.models import Review, ReviewVote
@@ -37,3 +43,26 @@ def update_review_vote_counts(review: Review) -> None:
         upvote_count=upvote_count,
         downvote_count=downvote_count,
     )
+
+
+def hide_review(review: Review, request: Request | None, reason: str) -> None:
+    clear_audit_log_action_flags(obj=review)
+    with track_model_update(
+        obj=review,
+        request=request,
+        changes=[f"Hidden (reason: {reason})"],
+        is_action_required=True,
+        notify=True,
+    ):
+        review.is_hidden = True
+        review.rejection_reason = reason
+        review.save(update_fields=["is_hidden", "rejection_reason"])
+
+
+def unhide_review(review: Review) -> None:
+    if not review.is_hidden and not review.rejection_reason:
+        return
+    review.is_hidden = False
+    review.rejection_reason = None
+    review.save(update_fields=["is_hidden", "rejection_reason"])
+    clear_audit_log_action_flags(obj=review)

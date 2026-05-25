@@ -59,6 +59,8 @@ def test_review_update_success(
             "reviewed_level_count": 1,
         },
         "text": "test",
+        "is_hidden": False,
+        "rejection_reason": None,
         "upvote_count": 0,
         "downvote_count": 0,
         "current_user_vote": None,

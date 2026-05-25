@@ -5,18 +5,13 @@
   grid-template-rows: auto auto auto;
   background: var(--box-content-bg-color);
 }
-.wrapper.positive .badge {
-  color: var(--success-fg-color);
-}
-.wrapper.neutral .badge {
-  color: var(--warning-fg-color);
-}
-.wrapper.negative .badge {
-  color: var(--failure-fg-color);
-}
 
 .content {
   padding: 1rem;
+}
+
+.hiddenNotice {
+  color: var(--failure-fg-color);
 }
 
 .header {

@@ -55,6 +55,8 @@ class ReviewTemplateAnswer(DatesInfo):
 )
 class Review(UserContentDatesInfo, DatesInfo):
     position = models.IntegerField(default=0)
+    is_hidden = models.BooleanField(default=False)
+    rejection_reason = models.CharField(max_length=500, null=True, blank=True)
 
     level = models.ForeignKey(
         Level, on_delete=models.CASCADE, related_name="reviews"

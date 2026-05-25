@@ -18,6 +18,8 @@ interface ReviewListing {
   id: number;
   author: ReviewAuthor;
   text: string | null;
+  is_hidden: boolean;
+  rejection_reason: string | null;
   rating_class: RatingClass | null;
   created: string;
   last_updated: string;
@@ -45,7 +47,7 @@ interface ReviewBaseChangePayload {
 
 interface ReviewUpdatePayload extends ReviewBaseChangePayload {}
 interface ReviewCreatePayload extends ReviewBaseChangePayload {}
-interface ReviewDeletePayload {
+interface ReviewHidePayload {
   reason: string;
 }
 
@@ -115,11 +117,15 @@ const create = async (payload: ReviewCreatePayload): Promise<ReviewDetails> => {
   return response.data;
 };
 
-const deleteReview = async (
+const deleteReview = async (reviewId: number): Promise<void> => {
+  await api.delete(`${API_URL}/reviews/${reviewId}/`);
+};
+
+const hide = async (
   reviewId: number,
-  payload: ReviewDeletePayload,
+  payload: ReviewHidePayload,
 ): Promise<void> => {
-  await api.delete(`${API_URL}/reviews/${reviewId}/`, { data: payload });
+  await api.post(`${API_URL}/reviews/${reviewId}/hide/`, payload);
 };
 
 const vote = async (
@@ -140,6 +146,7 @@ const ReviewService = {
   create,
   update,
   delete: deleteReview,
+  hide,
   vote,
 };
 

@@ -137,7 +137,8 @@ class User(AbstractUser):
 
     def update_reviewed_level_count(self, save: bool = True) -> None:
         self.reviewed_level_count = self.reviewed_levels.filter(
-            level__is_approved=True
+            level__is_approved=True,
+            is_hidden=False,
         ).count()
         if save:
             self.save(update_fields=["reviewed_level_count"])
