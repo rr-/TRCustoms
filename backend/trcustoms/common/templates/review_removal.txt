@@ -9,7 +9,9 @@ Kindly find the reason provided by the Mod Team:
 
 {{reason}}
 
-If you fix the issues with your review and update it, it will be reinstated.
+To reinstate the review, please update it on the level page here:
+{{link}}
+and abide by the rules.
 
 Please note that repeated offenses may result in a ban.
 {% endblock %}
