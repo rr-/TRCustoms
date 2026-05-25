@@ -134,29 +134,29 @@ const ReviewsListItem = ({
       ) : null}
 
       <div className={styles.postedMeta}>
-        <small>Posted on: {formatDate(review.created)}</small>
         {user ? (
           <ReviewVoteControls
             review={reviewVoteState}
             onVote={handleVoteClick}
           />
         ) : null}
-
-        <BurgerMenu>
-          <PermissionGuard
-            require={UserPermission.editReviews}
-            owningUsers={[review.author]}
-          >
-            <ReviewEditButton review={review} />
-          </PermissionGuard>
-          <PermissionGuard require={UserPermission.editReviews}>
-            <ReviewHideButton review={review} />
-          </PermissionGuard>
-          <PermissionGuard require={UserPermission.deleteReviews}>
-            <ReviewDeleteButton review={review} />
-          </PermissionGuard>
-        </BurgerMenu>
+        <small>Posted on: {formatDate(review.created)}</small>
       </div>
+
+      <BurgerMenu>
+        <PermissionGuard
+          require={UserPermission.editReviews}
+          owningUsers={[review.author]}
+        >
+          <ReviewEditButton review={review} />
+        </PermissionGuard>
+        <PermissionGuard require={UserPermission.editReviews}>
+          <ReviewHideButton review={review} />
+        </PermissionGuard>
+        <PermissionGuard require={UserPermission.deleteReviews}>
+          <ReviewDeleteButton review={review} />
+        </PermissionGuard>
+      </BurgerMenu>
     </header>
   );
 
