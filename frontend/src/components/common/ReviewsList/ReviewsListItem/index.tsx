@@ -127,12 +127,6 @@ const ReviewsListItem = ({
         </div>
       </div>
 
-      {review.last_user_content_updated ? (
-        <small>
-          Updated on: {formatDate(review.last_user_content_updated)}
-        </small>
-      ) : null}
-
       <div className={styles.postedMeta}>
         {user ? (
           <ReviewVoteControls
@@ -140,7 +134,15 @@ const ReviewsListItem = ({
             onVote={handleVoteClick}
           />
         ) : null}
-        <small>Posted on: {formatDate(review.created)}</small>
+        <div className={styles.dates}>
+          {review.last_user_content_updated ? (
+            <small>
+              Updated on: {formatDate(review.last_user_content_updated)}
+            </small>
+          ) : null}
+
+          <small>Posted on: {formatDate(review.created)}</small>
+        </div>
       </div>
 
       <BurgerMenu>
