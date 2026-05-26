@@ -4,7 +4,7 @@ from rest_framework.test import APIClient
 
 from trcustoms.levels.tests.factories import LevelFactory
 from trcustoms.reviews.models import ReviewVote
-from trcustoms.reviews.tests.factories import ReviewFactory
+from trcustoms.reviews.tests.factories import ReviewFactory, ReviewVoteFactory
 from trcustoms.users.tests.factories import UserFactory
 
 
@@ -144,3 +144,30 @@ def test_review_retrieve_includes_current_vote_and_can_vote(
     assert response.json()["can_vote"] is True
     assert response.json()["upvote_count"] == 1
     assert response.json()["downvote_count"] == 0
+
+
+@pytest.mark.django_db
+def test_review_list_can_be_sorted_by_score_descending(
+    api_client: APIClient,
+) -> None:
+    level = LevelFactory()
+    low_score_review = ReviewFactory(level=level, author=UserFactory())
+    high_score_review = ReviewFactory(level=level, author=UserFactory())
+
+    ReviewVoteFactory(review=low_score_review, vote=1)
+    low_score_review.refresh_from_db()
+
+    ReviewVoteFactory(review=high_score_review, vote=1)
+    ReviewVoteFactory(review=high_score_review, vote=1)
+    high_score_review.refresh_from_db()
+
+    response = api_client.get(
+        "/api/reviews/",
+        data={"levels": str(level.id), "sort": "-score,-created"},
+    )
+
+    assert response.status_code == status.HTTP_200_OK, response.content
+    assert [item["id"] for item in response.json()["results"]] == [
+        high_score_review.id,
+        low_score_review.id,
+    ]

@@ -1,5 +1,5 @@
 from django.db import transaction
-from django.db.models import Q
+from django.db.models import ExpressionWrapper, F, IntegerField, Q
 from django.http import Http404
 from rest_framework import mixins, status, viewsets
 from rest_framework.decorators import action
@@ -46,7 +46,12 @@ class ReviewViewSet(
     mixins.DestroyModelMixin,
     viewsets.GenericViewSet,
 ):
-    queryset = Review.objects.all().prefetch_related(
+    queryset = Review.objects.annotate(
+        score=ExpressionWrapper(
+            F("upvote_count") - F("downvote_count"),
+            output_field=IntegerField(),
+        )
+    ).prefetch_related(
         "author",
         "author__picture",
         "level",
@@ -67,6 +72,7 @@ class ReviewViewSet(
         "last_user_content_updated",
         "level__name",
         "level_id",
+        "score",
     ]
 
     permission_classes = [AllowNone]
