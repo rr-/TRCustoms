@@ -151,14 +151,28 @@ def test_review_list_can_be_sorted_by_score_descending(
     api_client: APIClient,
 ) -> None:
     level = LevelFactory()
-    low_score_review = ReviewFactory(level=level, author=UserFactory())
-    high_score_review = ReviewFactory(level=level, author=UserFactory())
+    low_score_review = ReviewFactory(
+        level=level,
+        author=UserFactory(username="score_author_1"),
+    )
+    high_score_review = ReviewFactory(
+        level=level,
+        author=UserFactory(username="score_author_2"),
+    )
 
     ReviewVoteFactory(review=low_score_review, vote=1)
     low_score_review.refresh_from_db()
 
-    ReviewVoteFactory(review=high_score_review, vote=1)
-    ReviewVoteFactory(review=high_score_review, vote=1)
+    ReviewVoteFactory(
+        review=high_score_review,
+        user=UserFactory(username="score_voter_1"),
+        vote=1,
+    )
+    ReviewVoteFactory(
+        review=high_score_review,
+        user=UserFactory(username="score_voter_2"),
+        vote=1,
+    )
     high_score_review.refresh_from_db()
 
     response = api_client.get(
