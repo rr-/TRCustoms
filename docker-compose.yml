@@ -107,6 +107,7 @@ services:
     environment: *base-backend-environment
     volumes:
       - ./services/nginx/nginx_dev.conf.template:/etc/nginx/nginx.conf.template:ro
+      - ./services/nginx/nginx_social_preview_map.conf:/etc/nginx/nginx_social_preview_map.conf:ro
       - ./backend/volumes/uploads/:/app/uploads/
       - ./backend/volumes/django_static/:/app/django_static/
     networks:

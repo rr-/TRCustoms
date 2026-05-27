@@ -25,6 +25,7 @@ RUN npm run build
 FROM nginx:stable-alpine
 ARG ADMIN_DIR
 COPY services/nginx/nginx_prod.conf.template /etc/nginx/nginx.conf.template
+COPY services/nginx/nginx_social_preview_map.conf /etc/nginx/nginx_social_preview_map.conf
 RUN envsubst '${ADMIN_DIR}' < /etc/nginx/nginx.conf.template > /etc/nginx/nginx.conf
 COPY --from=build /app/frontend/dist /usr/share/nginx/html
 CMD ["nginx", "-g", "daemon off;"]

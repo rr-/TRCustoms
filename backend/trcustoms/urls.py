@@ -1,7 +1,7 @@
 from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
-from django.urls import include, path
+from django.urls import include, path, re_path
 from drf_spectacular.views import (
     SpectacularAPIView,
     SpectacularRedocView,
@@ -37,6 +37,7 @@ from trcustoms.tags.views import (
 )
 from trcustoms.uploads.views import UploadViewSet
 from trcustoms.users.views import UserViewSet
+from trcustoms.utils.social_preview import build_social_preview_response
 from trcustoms.utils.views import as_detail_view, as_list_view, as_view
 from trcustoms.walkthroughs.views import WalkthroughViewSet
 
@@ -93,6 +94,9 @@ urlpatterns = [
     path("api/schema/", SpectacularAPIView.as_view(), name="schema"),
     path("api/swagger/", SpectacularSwaggerView.as_view(url_name="schema")),
     path("api/redoc/", SpectacularRedocView.as_view(url_name="schema")),
+    re_path(
+        r"^(?!api/|uploads/|django_static/).*$", build_social_preview_response
+    ),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -5,6 +5,7 @@ events { }
 
 http {
   keepalive_timeout     65;
+  include /etc/nginx/nginx_social_preview_map.conf;
 
   client_body_temp_path /tmp/client_temp;
   proxy_temp_path       /tmp/proxy_temp_path;
@@ -32,7 +33,17 @@ http {
     proxy_set_header Connection "upgrade";
 
     location / {
+      error_page 418 = @social_preview;
+      if ($social_preview_ua = 1) {
+        return 418;
+      }
+
       proxy_pass http://trcustoms-frontend:3000;
+    }
+
+    location @social_preview {
+      proxy_set_header X-Social-Preview 1;
+      proxy_pass http://trcustoms:8000;
     }
 
     location ~ ^/(${ADMIN_DIR}|api|uploads|django_static)(/.*)?$ {
