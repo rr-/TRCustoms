@@ -1,5 +1,20 @@
-const isStorageAvailable = (type: any): boolean => {
-  let storage: any;
+interface StorageLike {
+  setItem: (key: string, value: any) => void;
+  removeItem: (key: string) => void;
+  getItem: (key: string) => any;
+  readonly isAvailable: boolean;
+}
+
+const STORAGE_PREFIX = "trcustoms.";
+
+const getPrefixedKey = (key: string): string => {
+  return `${STORAGE_PREFIX}${key}`;
+};
+
+const isStorageAvailable = (
+  type: "localStorage" | "sessionStorage",
+): boolean => {
+  let storage: Storage;
   try {
     storage = window[type];
     const x = "__storage_test__";
@@ -12,7 +27,7 @@ const isStorageAvailable = (type: any): boolean => {
   }
 };
 
-class MyStorage {
+class MyStorage implements StorageLike {
   data: { [key: string]: any };
 
   constructor() {
@@ -36,7 +51,7 @@ class MyStorage {
   }
 }
 
-class LocalStorage {
+class LocalStorage implements StorageLike {
   setItem(key: string, value: any): void {
     localStorage.setItem(key, value);
   }
@@ -54,7 +69,7 @@ class LocalStorage {
   }
 }
 
-class SessionStorage {
+class SessionStorage implements StorageLike {
   setItem(key: string, value: any): void {
     sessionStorage.setItem(key, value);
   }
@@ -72,11 +87,20 @@ class SessionStorage {
   }
 }
 
-const storages = [new LocalStorage(), new SessionStorage(), new MyStorage()];
+const storages: StorageLike[] = [
+  new LocalStorage(),
+  new SessionStorage(),
+  new MyStorage(),
+];
 
 const getItem = (key: string): any | null => {
+  const prefixedKey = getPrefixedKey(key);
   for (let storage of storages) {
     if (storage.isAvailable) {
+      const prefixedValue = storage.getItem(prefixedKey);
+      if (prefixedValue !== null) {
+        return prefixedValue;
+      }
       return storage.getItem(key);
     }
   }
@@ -84,17 +108,19 @@ const getItem = (key: string): any | null => {
 };
 
 const setItem = (key: string, value: any): void => {
+  const prefixedKey = getPrefixedKey(key);
   for (let storage of storages) {
     if (storage.isAvailable) {
-      storage.setItem(key, value);
+      storage.setItem(prefixedKey, value);
     }
   }
 };
 
 const removeItem = (key: string): void => {
+  const prefixedKey = getPrefixedKey(key);
   for (let storage of storages) {
     if (storage.isAvailable) {
-      storage.removeItem(key);
+      storage.removeItem(prefixedKey);
     }
   }
 };
@@ -105,4 +131,4 @@ const StorageService = {
   removeItem,
 };
 
-export { StorageService };
+export { STORAGE_PREFIX, StorageService, getPrefixedKey };

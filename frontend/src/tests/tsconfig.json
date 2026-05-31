@@ -1,0 +1,15 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "baseUrl": "../..",
+    "module": "commonjs",
+    "outDir": "../../.test-dist",
+    "rootDir": "../..",
+    "noEmit": false
+  },
+  "include": [
+    "../../src/tests/**/*.ts",
+    "../../src/services/**/*.ts",
+    "../../src/contexts/themeStorage.ts"
+  ]
+}

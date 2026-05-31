@@ -33,6 +33,9 @@ lint-frontend *args:
     docker-compose run --rm trcustoms-frontend lint
     docker-compose run --rm trcustoms-frontend tsc
 
+test-frontend *args:
+    docker-compose run --rm trcustoms-frontend test {{args}}
+
 test *args:
     docker-compose run --rm trcustoms test -n auto {{args}}
 qtest *args:

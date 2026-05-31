@@ -28,6 +28,7 @@
   "scripts": {
     "start": "vite serve --host 0.0.0.0 --port 3000",
     "build": "vite build",
+    "test": "rm -rf .test-dist && tsc -p src/tests/tsconfig.json && node --test .test-dist/src/tests/*.test.js",
     "tsc": "tsc --strict",
     "lint": "eslint ."
   },

@@ -10,6 +10,7 @@ Commands
 dev         : Run a development server
 shell       : Start a bash shell
 build       : Build the frontend
+test        : Run frontend tests
 tsc         : Run TypeScript compiler
 lint        : Run linters
 help        : Show this message
@@ -25,6 +26,9 @@ case "$1" in
     ;;
     build)
         npm run build
+    ;;
+    test)
+        npm run test
     ;;
     tsc)
         npm run tsc
