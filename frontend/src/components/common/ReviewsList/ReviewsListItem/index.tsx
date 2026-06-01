@@ -128,12 +128,11 @@ const ReviewsListItem = ({
       </div>
 
       <div className={styles.postedMeta}>
-        {user ? (
-          <ReviewVoteControls
-            review={reviewVoteState}
-            onVote={handleVoteClick}
-          />
-        ) : null}
+        <ReviewVoteControls
+          review={reviewVoteState}
+          isInteractive={!!user}
+          onVote={handleVoteClick}
+        />
         <div className={styles.dates}>
           {review.last_user_content_updated ? (
             <small>

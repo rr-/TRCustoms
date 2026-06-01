@@ -5,21 +5,25 @@ import type { ReviewListing } from "src/services/ReviewService";
 
 interface ReviewVoteControlsProps {
   review: ReviewListing;
+  isInteractive?: boolean | undefined;
   onVote: (vote: -1 | 1) => void;
 }
 
-const ReviewVoteControls = ({ review, onVote }: ReviewVoteControlsProps) => {
-  if (!review.can_vote) {
-    return null;
-  }
+const ReviewVoteControls = ({
+  review,
+  isInteractive = true,
+  onVote,
+}: ReviewVoteControlsProps) => {
+  const isVotingEnabled = isInteractive && review.can_vote;
 
   return (
     <div className={styles.wrapper}>
       <Link
         className={`${styles.voteButton} ${
-          review.current_user_vote === 1 ? styles.active : ""
-        }`}
-        onClick={() => onVote(1)}
+          !isVotingEnabled ? styles.disabled : ""
+        } ${review.current_user_vote === 1 ? styles.active : ""}`}
+        aria-disabled={!isVotingEnabled}
+        onClick={isVotingEnabled ? () => onVote(1) : undefined}
       >
         <IconThumbUp />
         <span>{review.upvote_count}</span>
@@ -27,9 +31,10 @@ const ReviewVoteControls = ({ review, onVote }: ReviewVoteControlsProps) => {
 
       <Link
         className={`${styles.voteButton} ${
-          review.current_user_vote === -1 ? styles.active : ""
-        }`}
-        onClick={() => onVote(-1)}
+          !isVotingEnabled ? styles.disabled : ""
+        } ${review.current_user_vote === -1 ? styles.active : ""}`}
+        aria-disabled={!isVotingEnabled}
+        onClick={isVotingEnabled ? () => onVote(-1) : undefined}
       >
         <IconThumbDown />
         <span>{review.downvote_count}</span>
