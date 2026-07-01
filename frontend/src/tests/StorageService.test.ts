@@ -8,6 +8,9 @@ interface MockWindow extends Window {
   sessionStorage: Storage;
 }
 
+const IMPORTED_ACCESS_TOKEN = "test-access.header.payload-signature";
+const IMPORTED_REFRESH_TOKEN = "test-refresh.header.payload-signature";
+
 const createStorage = (
   initialData: Record<string, string>,
   options?: { failOnSet?: boolean },
@@ -116,6 +119,36 @@ test("StorageService writes only the namespaced key", () => {
   assert.equal(localStorageMock.getItem("theme"), null);
   assert.equal(sessionStorageMock.getItem(getPrefixedKey("theme")), "robotic");
   assert.equal(sessionStorageMock.getItem("theme"), null);
+});
+
+test("StorageService reads and removes legacy auth tokens from imported local storage", () => {
+  const localStorageMock = createStorage({
+    accessToken: IMPORTED_ACCESS_TOKEN,
+    refreshToken: IMPORTED_REFRESH_TOKEN,
+    theme: "Sepia flashback",
+  });
+
+  setupDom({
+    localStorage: localStorageMock,
+    sessionStorage: createStorage({}),
+    location: { pathname: "/login" } as Location,
+  } as MockWindow);
+
+  assert.equal(
+    StorageService.getItem("accessToken"),
+    localStorageMock.getItem("accessToken"),
+  );
+  assert.equal(
+    StorageService.getItem("refreshToken"),
+    localStorageMock.getItem("refreshToken"),
+  );
+
+  StorageService.removeItem("accessToken");
+  StorageService.removeItem("refreshToken");
+
+  assert.equal(localStorageMock.getItem("accessToken"), null);
+  assert.equal(localStorageMock.getItem("refreshToken"), null);
+  assert.equal(localStorageMock.getItem("theme"), "Sepia flashback");
 });
 
 test("theme resolution accepts legacy names and defaults only for unknown values", () => {

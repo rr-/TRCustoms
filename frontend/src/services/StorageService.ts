@@ -121,6 +121,7 @@ const removeItem = (key: string): void => {
   for (let storage of storages) {
     if (storage.isAvailable) {
       storage.removeItem(prefixedKey);
+      storage.removeItem(key);
     }
   }
 };
