@@ -62,6 +62,13 @@ interface Config {
   difficulties: DifficultyListing[];
   rating_questions: RatingTemplateQuestion[];
   limits: {
+    markdown_fields: {
+      review_text: number | null;
+      level_description: number | null;
+      user_bio: number | null;
+      news_text: number | null;
+      walkthrough_text: number | null;
+    };
     min_tags: number;
     max_tags: number;
     min_genres: number;

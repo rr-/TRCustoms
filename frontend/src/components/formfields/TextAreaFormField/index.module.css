@@ -2,18 +2,40 @@
   --textarea-height: 32rem;
 }
 
+.composeColumn {
+  display: flex;
+  flex: 1 1 50%;
+  flex-direction: column;
+  min-width: 0;
+}
+
 .wrapper :global .MarkdownComposer {
   flex: 1;
 }
 
 .preview {
-  flex-grow: 1;
+  flex: 1 1 50%;
+  min-width: 0;
 }
 
 .previewHeader {
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
   padding: 0.5rem;
   background: var(--label-bg-color);
   border-bottom: 2px solid var(--input-border-color);
+}
+
+.counter {
+  color: var(--text-color);
+  font-size: 0.85rem;
+  white-space: nowrap;
+}
+
+.counterOverLimit {
+  color: var(--error-color);
+  font-weight: 700;
 }
 
 .previewBody {

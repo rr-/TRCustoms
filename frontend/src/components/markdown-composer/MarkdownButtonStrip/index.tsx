@@ -16,14 +16,17 @@ import { MarkdownColorObjectButton } from "src/components/markdown-composer/Mark
 import { MarkdownColorEnemyButton } from "src/components/markdown-composer/MarkdownButtons";
 import { MarkdownColorTrapButton } from "src/components/markdown-composer/MarkdownButtons";
 import { MarkdownHelpButton } from "src/components/markdown-composer/MarkdownButtons";
+import type { MarkdownLimitState } from "src/services/MarkdownLimitService";
 
 interface MarkdownButtonStripProps {
   allowColors?: boolean;
+  markdownLimitState?: MarkdownLimitState | null;
   textarea: HTMLTextAreaElement | null;
 }
 
 const MarkdownButtonStrip = ({
   allowColors,
+  markdownLimitState,
   textarea,
 }: MarkdownButtonStripProps) => {
   const buttonProps = { textarea };
@@ -63,8 +66,19 @@ const MarkdownButtonStrip = ({
         </div>
       )}
 
-      <div className={styles.group}>
-        <MarkdownHelpButton />
+      <div className={styles.trailingGroup}>
+        {markdownLimitState?.shouldDisplay && (
+          <div
+            className={`${styles.counter} ${
+              markdownLimitState.isOverLimit ? styles.counterOverLimit : ""
+            }`}
+          >
+            {markdownLimitState.currentLength}/{markdownLimitState.limit}
+          </div>
+        )}
+        <div className={styles.group}>
+          <MarkdownHelpButton />
+        </div>
       </div>
     </div>
   );

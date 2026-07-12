@@ -99,7 +99,6 @@ class LevelNestedSerializer(serializers.ModelSerializer):
 
 class LevelListingSerializer(serializers.ModelSerializer):
     name = CustomCharField(validators=[MaxLengthValidator(100)])
-    description = serializers.CharField(validators=[MaxLengthValidator(5000)])
     rejection_reason = CustomCharField(
         validators=[MaxLengthValidator(500)], required=False, allow_blank=True
     )
@@ -209,6 +208,13 @@ class LevelListingSerializer(serializers.ModelSerializer):
             "rejection_reason",
             "rating_class",
         ]
+        extra_kwargs = {
+            "description": {
+                "required": True,
+                "allow_blank": False,
+                "allow_null": False,
+            }
+        }
 
 
 class LevelDetailsSerializer(LevelListingSerializer):

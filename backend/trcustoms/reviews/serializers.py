@@ -84,13 +84,19 @@ class ReviewDetailsSerializer(ReviewListingSerializer):
     level_id = serializers.PrimaryKeyRelatedField(
         write_only=True, source="level", queryset=Level.objects.all()
     )
-    text = serializers.CharField(required=True)
 
     class Meta:
         model = Review
         fields = ReviewListingSerializer.Meta.fields + [
             "level_id",
         ]
+        extra_kwargs = {
+            "text": {
+                "required": True,
+                "allow_blank": False,
+                "allow_null": False,
+            }
+        }
 
     def validate(self, data):
         validated_data = super().validate(data)

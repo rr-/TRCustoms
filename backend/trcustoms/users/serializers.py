@@ -119,9 +119,6 @@ class UserListingSerializer(serializers.ModelSerializer):
     last_name = CustomCharField(
         required=False, validators=[MaxLengthValidator(150)], allow_blank=True
     )
-    bio = serializers.CharField(
-        required=False, validators=[MaxLengthValidator(5000)], allow_blank=True
-    )
 
     def get_permissions(self, instance: User) -> list[str]:
         return sorted(perm.value for perm in get_permissions(instance))

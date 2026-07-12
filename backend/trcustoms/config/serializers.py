@@ -26,6 +26,9 @@ class GlobalLimitsSerializer(serializers.Serializer):
     min_authors = serializers.IntegerField()
     max_authors = serializers.IntegerField()
     max_tag_length = serializers.IntegerField()
+    markdown_fields = serializers.DictField(
+        child=serializers.IntegerField(allow_null=True)
+    )
 
 
 class RatingStatSerializer(serializers.Serializer):

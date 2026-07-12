@@ -3,14 +3,36 @@
   border-bottom: 2px solid var(--input-border-color);
   padding: 0.5rem;
   display: flex;
-  gap: 2rem;
+  align-items: center;
+  column-gap: 1.25rem;
+  flex-wrap: wrap;
+  row-gap: 0.5rem;
 }
 
 .group {
   display: flex;
   gap: 0.75rem;
+  flex-wrap: wrap;
 }
 
-.group:last-of-type {
+.trailingGroup {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  justify-content: flex-end;
   margin-left: auto;
+  min-width: max-content;
+}
+
+.counter {
+  color: var(--text-color);
+  font-size: 0.85rem;
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+
+.counterOverLimit {
+  color: var(--error-color);
+  font-weight: 700;
 }

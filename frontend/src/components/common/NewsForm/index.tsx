@@ -139,6 +139,7 @@ const NewsForm = ({ news, onGoBack, onSubmit }: NewsFormProps) => {
                   rich={true}
                   required={true}
                   label="News text"
+                  markdownLimitKey="news_text"
                   name="text"
                 />
               </FormGridFieldSet>

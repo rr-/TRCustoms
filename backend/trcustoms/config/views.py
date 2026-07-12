@@ -13,13 +13,28 @@ from trcustoms.genres.models import Genre
 from trcustoms.levels.consts import FeatureType
 from trcustoms.levels.models import Level, LevelDifficulty, LevelDuration
 from trcustoms.levels.serializers import FeaturedLevelsSerializer
-from trcustoms.news.models import GlobalMessage
+from trcustoms.news.models import GlobalMessage, News
 from trcustoms.ratings.models import Rating, RatingTemplateQuestion
 from trcustoms.reviews.models import Review
 from trcustoms.tags.models import Tag
 from trcustoms.tasks.update_featured_levels import get_featured_level
+from trcustoms.users.models import User
 from trcustoms.walkthroughs.consts import WalkthroughStatus
 from trcustoms.walkthroughs.models import Walkthrough
+
+
+def get_model_field_limit(model: type, field_name: str) -> int | None:
+    return model._meta.get_field(field_name).max_length
+
+
+def get_markdown_field_limits() -> dict[str, int | None]:
+    return {
+        "review_text": get_model_field_limit(Review, "text"),
+        "level_description": get_model_field_limit(Level, "description"),
+        "user_bio": get_model_field_limit(User, "bio"),
+        "news_text": get_model_field_limit(News, "text"),
+        "walkthrough_text": get_model_field_limit(Walkthrough, "text"),
+    }
 
 
 def get_walkthrough_stats() -> dict[str, int]:
@@ -70,6 +85,7 @@ def get_config_data():
         durations=LevelDuration.objects.order_by("position"),
         rating_questions=RatingTemplateQuestion.objects.all(),
         limits=dict(
+            markdown_fields=get_markdown_field_limits(),
             min_genres=settings.MIN_GENRES,
             max_genres=settings.MAX_GENRES,
             min_tags=settings.MIN_TAGS,

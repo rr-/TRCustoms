@@ -155,6 +155,7 @@ const ReviewForm = ({ level, review, onGoBack, onSubmit }: ReviewFormProps) => {
                   required={true}
                   allowColors={false}
                   label="Review text"
+                  markdownLimitKey="review_text"
                   name="text"
                 />
               </FormGridFieldSet>

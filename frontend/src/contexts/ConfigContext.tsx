@@ -17,6 +17,13 @@ const defaultConfig = {
   difficulties: [],
   rating_questions: [],
   limits: {
+    markdown_fields: {
+      review_text: null,
+      level_description: null,
+      user_bio: null,
+      news_text: null,
+      walkthrough_text: null,
+    },
     min_tags: 0,
     max_tags: 0,
     min_genres: 0,

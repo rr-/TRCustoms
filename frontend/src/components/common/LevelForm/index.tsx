@@ -386,6 +386,7 @@ const LevelForm = ({ level, onGoBack, onSubmit }: LevelFormProps) => {
                   required={true}
                   allowColors={false}
                   label="Description"
+                  markdownLimitKey="level_description"
                   name="description"
                 />
               </FormGridFieldSet>
