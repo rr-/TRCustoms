@@ -174,6 +174,7 @@ class LevelViewSet(
         reject_level(level, request, reason)
         return Response({})
 
+    @extend_schema(responses=LevelRatingStatsSerializer)
     @action(detail=True, methods=["get"])
     def rating_stats(self, request, pk: int) -> Response:
         level = self.get_object()
