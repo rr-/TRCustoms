@@ -1,6 +1,7 @@
 from django.db import transaction
 from django.db.models import ExpressionWrapper, F, IntegerField, Q
 from django.http import Http404
+from drf_spectacular.utils import extend_schema
 from rest_framework import mixins, status, viewsets
 from rest_framework.decorators import action
 from rest_framework.generics import get_object_or_404
@@ -139,6 +140,7 @@ class ReviewViewSet(
 
         return queryset
 
+    @extend_schema(responses=ReviewListingSerializer)
     @action(detail=True, methods=["post"])
     def vote(self, request, pk: int) -> Response:
         review = self.get_object()

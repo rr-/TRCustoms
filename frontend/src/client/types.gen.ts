@@ -2547,7 +2547,7 @@ export type ReviewsVoteCreateData = {
 };
 
 export type ReviewsVoteCreateResponses = {
-    200: ReviewVote;
+    200: ReviewListing;
 };
 
 export type ReviewsVoteCreateResponse = ReviewsVoteCreateResponses[keyof ReviewsVoteCreateResponses];
@@ -3118,7 +3118,7 @@ export type WalkthroughsUpdateResponses = {
 export type WalkthroughsUpdateResponse = WalkthroughsUpdateResponses[keyof WalkthroughsUpdateResponses];
 
 export type WalkthroughsApproveCreateData = {
-    body: WalkthroughListingWritable;
+    body?: never;
     path: {
         /**
          * A unique integer value identifying this walkthrough.
@@ -3136,7 +3136,7 @@ export type WalkthroughsApproveCreateResponses = {
 export type WalkthroughsApproveCreateResponse = WalkthroughsApproveCreateResponses[keyof WalkthroughsApproveCreateResponses];
 
 export type WalkthroughsPublishCreateData = {
-    body: WalkthroughListingWritable;
+    body?: never;
     path: {
         /**
          * A unique integer value identifying this walkthrough.

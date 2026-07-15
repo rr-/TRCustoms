@@ -1,13 +1,16 @@
-import { AxiosResponse } from "axios";
-import { api } from "src/api";
-import { API_URL } from "src/constants";
-import type { LevelNested } from "src/services/LevelService";
-import type { UserNested } from "src/services/UserService";
-import type { GenericSearchQuery } from "src/types";
-import { GenericSearchResult } from "src/types";
-import { filterFalsyObjectValues } from "src/utils/misc";
+import {
+  walkthroughsApproveCreate,
+  walkthroughsCreate,
+  walkthroughsDestroy,
+  walkthroughsList,
+  walkthroughsPartialUpdate,
+  walkthroughsPublishCreate,
+  walkthroughsRejectCreate,
+  walkthroughsRetrieve,
+} from "src/client";
+import type { WalkthroughDetails, WalkthroughListing } from "src/client";
+import type { GenericSearchQuery, GenericSearchResult } from "src/types";
 import { getGenericSearchQuery } from "src/utils/misc";
-import { boolToSearchString } from "src/utils/misc";
 
 enum WalkthroughType {
   Link = "l",
@@ -20,24 +23,6 @@ enum WalkthroughStatus {
   Approved = "app",
   Rejected = "rej",
 }
-
-interface WalkthroughAuthor extends UserNested {}
-
-interface WalkthroughListing {
-  level: LevelNested;
-  id: number;
-  author: WalkthroughAuthor | null;
-  legacy_author_name: string | null;
-  text: string;
-  walkthrough_type: WalkthroughType;
-  created: string;
-  last_updated: string;
-  last_user_content_updated: string;
-  status: WalkthroughStatus;
-  rejection_reason: string | null;
-}
-
-interface WalkthroughDetails extends WalkthroughListing {}
 
 interface WalkthroughCreatePayload {
   levelId: number;
@@ -62,31 +47,34 @@ interface WalkthroughSearchResult
 const searchWalkthroughs = async (
   searchQuery: WalkthroughSearchQuery,
 ): Promise<WalkthroughSearchResult> => {
-  const params = filterFalsyObjectValues({
+  const query: { [key: string]: any } = {
     ...getGenericSearchQuery(searchQuery),
-    walkthrough_type: searchQuery.walkthroughType || null,
-    levels: searchQuery.levels?.join(",") || null,
-    authors: searchQuery.authors?.join(",") || null,
-    is_approved: boolToSearchString(searchQuery.isApproved),
-  });
-  const response = (await api.get(`${API_URL}/walkthroughs/`, {
-    params,
-  })) as AxiosResponse<WalkthroughSearchResult>;
-  if (searchQuery.sort === "random") {
-    response.data.results = response.data.results.sort(
-      () => Math.random() - 0.5,
-    );
-  }
-  return { ...response.data, searchQuery };
+    walkthrough_type: searchQuery.walkthroughType || undefined,
+    levels: searchQuery.levels?.join(",") || undefined,
+    authors: searchQuery.authors?.join(",") || undefined,
+    is_approved:
+      searchQuery.isApproved == null
+        ? undefined
+        : searchQuery.isApproved
+          ? "1"
+          : "0",
+  };
+  const { data } = await walkthroughsList({ query, throwOnError: true });
+  const results =
+    searchQuery.sort === "random"
+      ? [...data.results].sort(() => Math.random() - 0.5)
+      : data.results;
+  return { ...data, results, searchQuery };
 };
 
 const getWalkthroughById = async (
   walkthroughId: number,
 ): Promise<WalkthroughDetails> => {
-  const response = (await api.get(
-    `${API_URL}/walkthroughs/${walkthroughId}/`,
-  )) as AxiosResponse<WalkthroughDetails>;
-  return response.data;
+  const { data } = await walkthroughsRetrieve({
+    path: { id: walkthroughId },
+    throwOnError: true,
+  });
+  return data;
 };
 
 const create = async ({
@@ -94,45 +82,56 @@ const create = async ({
   walkthroughType,
   text,
 }: WalkthroughCreatePayload): Promise<WalkthroughListing> => {
-  const data: { [key: string]: any } = {
-    level_id: levelId,
-    walkthrough_type: walkthroughType,
-    text,
-  };
-  const response = (await api.post(
-    `${API_URL}/walkthroughs/`,
-    data,
-  )) as AxiosResponse<WalkthroughListing>;
-  return response.data;
+  const { data } = await walkthroughsCreate({
+    body: {
+      level_id: levelId,
+      walkthrough_type: walkthroughType,
+      text,
+    } as any,
+    throwOnError: true,
+  });
+  return data;
 };
 
 const update = async (
   walkthroughId: number,
   { text }: WalkthroughUpdatePayload,
 ): Promise<WalkthroughListing> => {
-  const data = { text };
-  const response = (await api.patch(
-    `${API_URL}/walkthroughs/${walkthroughId}/`,
-    data,
-  )) as AxiosResponse<WalkthroughListing>;
-  return response.data;
+  const { data } = await walkthroughsPartialUpdate({
+    path: { id: walkthroughId },
+    body: { text } as any,
+    throwOnError: true,
+  });
+  return data;
 };
 
 const approve = async (walkthroughId: number): Promise<void> => {
-  await api.post(`${API_URL}/walkthroughs/${walkthroughId}/approve/`);
+  await walkthroughsApproveCreate({
+    path: { id: walkthroughId },
+    throwOnError: true,
+  });
 };
 
 const reject = async (walkthroughId: number, reason: string): Promise<void> => {
-  const data = { reason };
-  await api.post(`${API_URL}/walkthroughs/${walkthroughId}/reject/`, data);
+  await walkthroughsRejectCreate({
+    path: { id: walkthroughId },
+    body: { reason } as any,
+    throwOnError: true,
+  });
 };
 
 const deleteWalkthrough = async (walkthroughId: number): Promise<void> => {
-  await api.delete(`${API_URL}/walkthroughs/${walkthroughId}/`);
+  await walkthroughsDestroy({
+    path: { id: walkthroughId },
+    throwOnError: true,
+  });
 };
 
 const publish = async (walkthroughId: number): Promise<void> => {
-  await api.post(`${API_URL}/walkthroughs/${walkthroughId}/publish/`);
+  await walkthroughsPublishCreate({
+    path: { id: walkthroughId },
+    throwOnError: true,
+  });
 };
 
 const WalkthroughService = {

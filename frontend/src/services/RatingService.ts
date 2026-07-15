@@ -1,49 +1,22 @@
-import { AxiosResponse } from "axios";
-import { api } from "src/api";
-import { API_URL } from "src/constants";
-import type { LevelNested } from "src/services/LevelService";
-import type { UserNested } from "src/services/UserService";
-import type { GenericSearchQuery } from "src/types";
-import { GenericSearchResult } from "src/types";
-import type { RatingClass } from "src/types";
-import { filterFalsyObjectValues } from "src/utils/misc";
+import {
+  levelsRatingStatsRetrieve,
+  ratingsCreate,
+  ratingsDestroy,
+  ratingsList,
+  ratingsPartialUpdate,
+  ratingsRetrieve,
+} from "src/client";
+import type {
+  LevelRatingStats as RatingStats,
+  RatingDetails,
+  RatingListing,
+} from "src/client";
+import type { GenericSearchQuery, GenericSearchResult } from "src/types";
 import { getGenericSearchQuery } from "src/utils/misc";
-
-interface RatingAuthor extends UserNested {
-  rated_level_count: number;
-}
-
-interface CategoryRatingStats {
-  category: string;
-  total_points: number;
-  min_points: number;
-  max_points: number;
-}
-
-interface RatingStats {
-  trc_rating_count: number;
-  trle_rating_count: number;
-  categories: CategoryRatingStats[];
-}
 
 enum RatingType {
   TRLE = "le",
   TRC = "mo",
-}
-
-interface RatingListing {
-  level: LevelNested;
-  id: number;
-  author: RatingAuthor;
-  rating_class: RatingClass | null;
-  created: string;
-  rating_type: RatingType;
-  last_updated: string;
-  last_user_content_updated: string;
-}
-
-interface RatingDetails extends RatingListing {
-  answers: number[];
 }
 
 interface RatingSearchQuery extends GenericSearchQuery {
@@ -65,22 +38,21 @@ interface RatingCreatePayload extends RatingBaseChangePayload {}
 const searchRatings = async (
   searchQuery: RatingSearchQuery,
 ): Promise<RatingSearchResult> => {
-  const params = filterFalsyObjectValues({
+  const query: { [key: string]: any } = {
     ...getGenericSearchQuery(searchQuery),
-    levels: searchQuery.levels?.join(",") || null,
-    authors: searchQuery.authors?.join(",") || null,
-  });
-  const response = (await api.get(`${API_URL}/ratings/`, {
-    params,
-  })) as AxiosResponse<RatingSearchResult>;
-  return { ...response.data, searchQuery };
+    levels: searchQuery.levels?.join(",") || undefined,
+    authors: searchQuery.authors?.join(",") || undefined,
+  };
+  const { data } = await ratingsList({ query, throwOnError: true });
+  return { ...data, searchQuery };
 };
 
 const getRatingById = async (ratingId: number): Promise<RatingDetails> => {
-  const response = (await api.get(
-    `${API_URL}/ratings/${ratingId}/`,
-  )) as AxiosResponse<RatingDetails>;
-  return response.data;
+  const { data } = await ratingsRetrieve({
+    path: { id: ratingId },
+    throwOnError: true,
+  });
+  return data;
 };
 
 const getRatingByAuthorAndLevelIds = async (
@@ -101,40 +73,34 @@ const update = async (
   ratingId: number,
   payload: RatingUpdatePayload,
 ): Promise<RatingDetails> => {
-  const data = {
-    level_id: payload.levelId,
-    answer_ids: payload.answerIds,
-  };
-  const response = (await api.patch(
-    `${API_URL}/ratings/${ratingId}/`,
-    data,
-  )) as AxiosResponse<RatingDetails>;
-  return response.data;
+  const { data } = await ratingsPartialUpdate({
+    path: { id: ratingId },
+    body: { level_id: payload.levelId, answer_ids: payload.answerIds } as any,
+    throwOnError: true,
+  });
+  return data;
 };
 
 const create = async (payload: RatingCreatePayload): Promise<RatingDetails> => {
-  const data = {
-    level_id: payload.levelId,
-    answer_ids: payload.answerIds,
-  };
-  const response = (await api.post(
-    `${API_URL}/ratings/`,
-    data,
-  )) as AxiosResponse<RatingDetails>;
-  return response.data;
+  const { data } = await ratingsCreate({
+    body: { level_id: payload.levelId, answer_ids: payload.answerIds } as any,
+    throwOnError: true,
+  });
+  return data;
 };
 
 const deleteRating = async (ratingId: number): Promise<void> => {
-  await api.delete(`${API_URL}/ratings/${ratingId}/`);
+  await ratingsDestroy({ path: { id: ratingId }, throwOnError: true });
 };
 
 const getRatingStatsByLevelId = async (
   levelId: number,
 ): Promise<RatingStats> => {
-  const response = (await api.get(
-    `${API_URL}/levels/${levelId}/rating_stats/`,
-  )) as AxiosResponse<RatingStats>;
-  return response.data;
+  const { data } = await levelsRatingStatsRetrieve({
+    path: { id: levelId },
+    throwOnError: true,
+  });
+  return data;
 };
 
 const RatingService = {

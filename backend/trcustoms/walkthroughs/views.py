@@ -1,4 +1,5 @@
 from django.db.models import Q
+from drf_spectacular.utils import extend_schema
 from rest_framework import mixins, status, viewsets
 from rest_framework.decorators import action
 from rest_framework.exceptions import PermissionDenied
@@ -6,6 +7,7 @@ from rest_framework.generics import get_object_or_404
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 
+from trcustoms.common.serializers import EmptySerializer
 from trcustoms.mixins import (
     AuditLogModelWatcherMixin,
     MultiSerializerMixin,
@@ -153,12 +155,14 @@ class WalkthroughViewSet(
 
         return obj
 
+    @extend_schema(request=EmptySerializer)
     @action(detail=True, methods=["post"])
     def publish(self, request, pk: int) -> Response:
         walkthrough = self.get_object()
         publish_walkthrough(walkthrough, request)
         return Response({})
 
+    @extend_schema(request=EmptySerializer)
     @action(detail=True, methods=["post"])
     def approve(self, request, pk: int) -> Response:
         walkthrough = self.get_object()

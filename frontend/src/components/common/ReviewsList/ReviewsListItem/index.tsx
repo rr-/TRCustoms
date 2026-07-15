@@ -37,15 +37,15 @@ const ReviewsListItem = ({
   const [isExcerptExpanded, setIsExcerptExpanded] = useState(false);
   const [isVotePending, setIsVotePending] = useState(false);
   const [voteState, setVoteState] = useState({
-    upvoteCount: review.upvote_count,
-    downvoteCount: review.downvote_count,
+    upvoteCount: review.upvote_count ?? 0,
+    downvoteCount: review.downvote_count ?? 0,
     currentUserVote: review.current_user_vote,
     canVote: review.can_vote,
   });
   useEffect(() => {
     setVoteState({
-      upvoteCount: review.upvote_count,
-      downvoteCount: review.downvote_count,
+      upvoteCount: review.upvote_count ?? 0,
+      downvoteCount: review.downvote_count ?? 0,
       currentUserVote: review.current_user_vote,
       canVote: review.can_vote,
     });
@@ -93,8 +93,8 @@ const ReviewsListItem = ({
     try {
       const updatedReview = await ReviewService.vote(review.id, { vote });
       setVoteState({
-        upvoteCount: updatedReview.upvote_count,
-        downvoteCount: updatedReview.downvote_count,
+        upvoteCount: updatedReview.upvote_count ?? 0,
+        downvoteCount: updatedReview.downvote_count ?? 0,
         currentUserVote: updatedReview.current_user_vote,
         canVote: updatedReview.can_vote,
       });

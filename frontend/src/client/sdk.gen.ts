@@ -464,23 +464,9 @@ export const walkthroughsUpdate = <ThrowOnError extends boolean = false>(options
     }
 });
 
-export const walkthroughsApproveCreate = <ThrowOnError extends boolean = false>(options: Options<WalkthroughsApproveCreateData, ThrowOnError>): RequestResult<WalkthroughsApproveCreateResponses, unknown, ThrowOnError> => (options.client ?? client).post<WalkthroughsApproveCreateResponses, unknown, ThrowOnError>({
-    url: '/api/walkthroughs/{id}/approve/',
-    ...options,
-    headers: {
-        'Content-Type': 'application/json',
-        ...options.headers
-    }
-});
+export const walkthroughsApproveCreate = <ThrowOnError extends boolean = false>(options: Options<WalkthroughsApproveCreateData, ThrowOnError>): RequestResult<WalkthroughsApproveCreateResponses, unknown, ThrowOnError> => (options.client ?? client).post<WalkthroughsApproveCreateResponses, unknown, ThrowOnError>({ url: '/api/walkthroughs/{id}/approve/', ...options });
 
-export const walkthroughsPublishCreate = <ThrowOnError extends boolean = false>(options: Options<WalkthroughsPublishCreateData, ThrowOnError>): RequestResult<WalkthroughsPublishCreateResponses, unknown, ThrowOnError> => (options.client ?? client).post<WalkthroughsPublishCreateResponses, unknown, ThrowOnError>({
-    url: '/api/walkthroughs/{id}/publish/',
-    ...options,
-    headers: {
-        'Content-Type': 'application/json',
-        ...options.headers
-    }
-});
+export const walkthroughsPublishCreate = <ThrowOnError extends boolean = false>(options: Options<WalkthroughsPublishCreateData, ThrowOnError>): RequestResult<WalkthroughsPublishCreateResponses, unknown, ThrowOnError> => (options.client ?? client).post<WalkthroughsPublishCreateResponses, unknown, ThrowOnError>({ url: '/api/walkthroughs/{id}/publish/', ...options });
 
 export const walkthroughsRejectCreate = <ThrowOnError extends boolean = false>(options: Options<WalkthroughsRejectCreateData, ThrowOnError>): RequestResult<WalkthroughsRejectCreateResponses, unknown, ThrowOnError> => (options.client ?? client).post<WalkthroughsRejectCreateResponses, unknown, ThrowOnError>({
     url: '/api/walkthroughs/{id}/reject/',
