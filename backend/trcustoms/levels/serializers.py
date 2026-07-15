@@ -208,13 +208,6 @@ class LevelListingSerializer(serializers.ModelSerializer):
             "rejection_reason",
             "rating_class",
         ]
-        extra_kwargs = {
-            "description": {
-                "required": True,
-                "allow_blank": False,
-                "allow_null": False,
-            }
-        }
 
 
 class LevelDetailsSerializer(LevelListingSerializer):
@@ -411,6 +404,13 @@ class LevelDetailsSerializer(LevelListingSerializer):
             "file_id",
             "trle_id",
         ]
+        extra_kwargs = {
+            "description": {
+                "required": True,
+                "allow_blank": False,
+                "allow_null": False,
+            }
+        }
 
 
 class LevelRejectionSerializer(serializers.Serializer):
