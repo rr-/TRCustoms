@@ -1,47 +1,16 @@
-import { AxiosResponse } from "axios";
-import { api } from "src/api";
-import { API_URL } from "src/constants";
-import type { UserNested } from "src/services/UserService";
+import { awardSpecsList, awardSpecsRecipientsList } from "src/client";
+import type { AwardRecipient, AwardSpec } from "src/client";
 import type { GenericSearchQuery, GenericSearchResult } from "src/types";
-import { getGenericSearchQuery, filterFalsyObjectValues } from "src/utils/misc";
-
-/**
- * Represents a specification for an award available to users.
- */
-export interface AwardSpec {
-  code: string;
-  title: string;
-  description: string;
-  guide_description: string;
-  tier: number;
-  can_be_removed: boolean;
-  rarity: number;
-  user_percentage: number;
-}
+import { getGenericSearchQuery } from "src/utils/misc";
 
 /**
  * Fetches all award specifications from the backend.
  */
 const getAwardSpecs = async (): Promise<AwardSpec[]> => {
-  const response = (await api.get(`${API_URL}/award_specs/`)) as AxiosResponse<
-    AwardSpec[]
-  >;
-  return response.data;
+  const { data } = await awardSpecsList({ throwOnError: true });
+  return data;
 };
 
-/**
- * Represents a single award recipient entry.
- */
-export interface AwardRecipient {
-  user: UserNested;
-  created: string;
-  last_updated: string;
-  awarded_on: string;
-}
-
-/**
- * Search for award recipients with pagination (supported by backend CustomPagination).
- */
 export interface AwardRecipientsSearchQuery extends GenericSearchQuery {
   code: string;
   tier?: number;
@@ -54,15 +23,16 @@ const searchAwardRecipients = async (
   searchQuery: AwardRecipientsSearchQuery,
 ): Promise<AwardRecipientsSearchResult> => {
   const { code, tier, ...genericQuery } = searchQuery;
-  const params = filterFalsyObjectValues({
+  const query: { [key: string]: any } = {
     ...getGenericSearchQuery(genericQuery),
-    tier: tier != null ? `${tier}` : null,
+    tier: tier ?? undefined,
+  };
+  const { data } = await awardSpecsRecipientsList({
+    path: { code },
+    query,
+    throwOnError: true,
   });
-  const response = (await api.get(
-    `${API_URL}/award_specs/${code}/recipients/`,
-    { params },
-  )) as AxiosResponse<AwardRecipientsSearchResult>;
-  return { ...response.data, searchQuery };
+  return { ...data, searchQuery };
 };
 
 /**
@@ -93,4 +63,5 @@ const AwardService = {
   getTierNames,
 };
 
+export type { AwardSpec, AwardRecipient };
 export { AwardService };

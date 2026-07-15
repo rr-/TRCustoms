@@ -1,20 +1,7 @@
-import { AxiosResponse } from "axios";
-import { api } from "src/api";
-import { API_URL } from "src/constants";
-import type { LevelListing } from "src/services/LevelService";
-import type { UserNested } from "src/services/UserService";
-import type { GenericSearchQuery } from "src/types";
-import type { GenericSearchResult } from "src/types";
-import { filterFalsyObjectValues, getGenericSearchQuery } from "src/utils/misc";
-
-interface EventListing {
-  id: number;
-  name: string;
-  subtitle: string | null;
-  cover_image: { url: string } | null;
-  year: number | null;
-  level_count: number;
-}
+import { eventsList, eventsRetrieve } from "src/client";
+import type { EventDetails, EventListing } from "src/client";
+import type { GenericSearchQuery, GenericSearchResult } from "src/types";
+import { getGenericSearchQuery } from "src/utils/misc";
 
 interface EventSearchQuery extends GenericSearchQuery {
   year?: number | null | undefined;
@@ -23,30 +10,24 @@ interface EventSearchQuery extends GenericSearchQuery {
 interface EventSearchResult
   extends GenericSearchResult<EventSearchQuery, EventListing> {}
 
-interface EventDetails extends EventListing {
-  about: string | null;
-  host: UserNested | null;
-  winners: { place: number; user: UserNested }[];
-  levels: LevelListing[];
-}
-
 const searchEvents = async (
   searchQuery: EventSearchQuery,
 ): Promise<EventSearchResult> => {
-  const params = filterFalsyObjectValues({
+  const query: { [key: string]: any } = {
     ...getGenericSearchQuery(searchQuery),
-    year: searchQuery.year != null ? `${searchQuery.year}` : null,
+    year: searchQuery.year ?? undefined,
     page_size: 15,
-  });
-  const response = (await api.get(`${API_URL}/events/`, {
-    params,
-  })) as AxiosResponse<EventSearchResult>;
-  return { ...response.data, searchQuery };
+  };
+  const { data } = await eventsList({ query, throwOnError: true });
+  return { ...data, searchQuery };
 };
 
 const getEventById = async (eventId: number): Promise<EventDetails> => {
-  const response = await api.get<EventDetails>(`${API_URL}/events/${eventId}/`);
-  return response.data;
+  const { data } = await eventsRetrieve({
+    path: { id: eventId },
+    throwOnError: true,
+  });
+  return data;
 };
 
 const getFullTitle = (event: EventListing): string => {

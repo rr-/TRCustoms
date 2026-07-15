@@ -1,11 +1,10 @@
-import { AxiosResponse } from "axios";
 import { api } from "src/api";
+import { auditlogsList } from "src/client";
 import { API_URL } from "src/constants";
 import type { UserNested } from "src/services/UserService";
 import type { PagedResponse } from "src/types";
 import type { GenericSearchQuery } from "src/types";
 import { GenericSearchResult } from "src/types";
-import { filterFalsyObjectValues } from "src/utils/misc";
 import { getGenericSearchQuery } from "src/utils/misc";
 import { boolToSearchString } from "src/utils/misc";
 
@@ -58,19 +57,20 @@ interface AuditLogSearchResult
 const searchAuditLogs = async (
   searchQuery: AuditLogSearchQuery,
 ): Promise<AuditLogSearchResult> => {
-  const params = filterFalsyObjectValues({
+  const query: { [key: string]: any } = {
     ...getGenericSearchQuery(searchQuery),
-    level: searchQuery.level || null,
-    user_search: searchQuery.userSearch || null,
-    object_search: searchQuery.objectSearch || null,
+    level: searchQuery.level || undefined,
+    user_search: searchQuery.userSearch || undefined,
+    object_search: searchQuery.objectSearch || undefined,
     is_action_required: boolToSearchString(searchQuery.isActionRequired),
-  });
-  const response = (await api.get(`${API_URL}/auditlogs/`, {
-    params,
-  })) as AxiosResponse<AuditLogSearchResult>;
-  return { ...response.data, searchQuery };
+  };
+  const { data } = await auditlogsList({ query, throwOnError: true });
+  // The audit log's change list and meta are loosely typed in the schema.
+  return { ...data, searchQuery } as unknown as AuditLogSearchResult;
 };
 
+// The audit log approve action is not part of the generated schema, so it
+// stays on axios for now.
 const approve = async (auditLogId: number): Promise<void> => {
   await api.post(`${API_URL}/auditlogs/${auditLogId}/approve/`);
 };

@@ -1,13 +1,14 @@
-import { AxiosResponse } from "axios";
-import { api } from "src/api";
-import { API_URL } from "src/constants";
-import type { UploadedFile } from "src/services/FileService";
-import type { LevelNested } from "src/services/LevelService";
-import type { UserNested } from "src/services/UserService";
+import {
+  usersPlaylistByLevelIdRetrieve,
+  usersPlaylistCreate,
+  usersPlaylistDestroy,
+  usersPlaylistImportCreate,
+  usersPlaylistList,
+  usersPlaylistPartialUpdate,
+} from "src/client";
+import type { PlaylistImportResult, PlaylistItem } from "src/client";
 import { getPlaylistSearchQuery } from "src/services/playlistSearchQuery";
-import type { GenericSearchQuery } from "src/types";
-import { GenericSearchResult } from "src/types";
-import { filterFalsyObjectValues } from "src/utils/misc";
+import type { GenericSearchQuery, GenericSearchResult } from "src/types";
 import { getGenericSearchQuery } from "src/utils/misc";
 
 enum PlaylistItemStatus {
@@ -18,20 +19,8 @@ enum PlaylistItemStatus {
   OnHold = "on_hold",
 }
 
-interface PlaylistItemPlayer extends UserNested {
-  reviewed_level_count: number;
-}
-
-interface PlaylistItemListing {
-  id: number;
-  level: LevelNested;
-  user: PlaylistItemPlayer;
-  status: PlaylistItemStatus;
-  created: string;
-  last_updated: string;
-}
-
-interface PlaylistItemDetails extends PlaylistItemListing {}
+type PlaylistItemListing = PlaylistItem;
+type PlaylistItemDetails = PlaylistItem;
 
 interface PlaylistItemCreatePayload {
   levelId: number;
@@ -49,46 +38,39 @@ interface PlaylistSearchQuery extends GenericSearchQuery {
 interface PlaylistSearchResult
   extends GenericSearchResult<PlaylistSearchQuery, PlaylistItemListing> {}
 
-interface PlaylistImportResult {
-  updated_items: number;
-}
-
 const search = async (
   userId: number,
   searchQuery: PlaylistSearchQuery,
 ): Promise<PlaylistSearchResult> => {
-  const params = filterFalsyObjectValues({
-    ...getGenericSearchQuery(searchQuery),
+  const { data } = await usersPlaylistList({
+    path: { user_id: userId },
+    query: getGenericSearchQuery(searchQuery),
+    throwOnError: true,
   });
-  const response = (await api.get(`${API_URL}/users/${userId}/playlist/`, {
-    params,
-  })) as AxiosResponse<PlaylistSearchResult>;
-  return { ...response.data, searchQuery };
+  return { ...data, searchQuery };
 };
 
 const get = async (
   userId: number,
   levelId: number,
 ): Promise<PlaylistItemDetails> => {
-  const response = (await api.get(
-    `${API_URL}/users/${userId}/playlist/by_level_id/${levelId}/`,
-  )) as AxiosResponse<PlaylistItemDetails>;
-  return { ...response.data };
+  const { data } = await usersPlaylistByLevelIdRetrieve({
+    path: { user_id: userId, level_id: levelId },
+    throwOnError: true,
+  });
+  return data;
 };
 
 const create = async (
   userId: number,
   { levelId, status }: PlaylistItemCreatePayload,
 ): Promise<PlaylistItemListing> => {
-  const data: { [key: string]: any } = {
-    level_id: levelId,
-    status,
-  };
-  const response = (await api.post(
-    `${API_URL}/users/${userId}/playlist/`,
-    data,
-  )) as AxiosResponse<PlaylistItemListing>;
-  return response.data;
+  const { data } = await usersPlaylistCreate({
+    path: { user_id: userId },
+    body: { level_id: levelId, status } as any,
+    throwOnError: true,
+  });
+  return data;
 };
 
 const update = async (
@@ -96,26 +78,30 @@ const update = async (
   playlistItemId: number,
   { status }: PlaylistItemUpdatePayload,
 ): Promise<PlaylistItemListing> => {
-  const data = { status };
-  const response = (await api.patch(
-    `${API_URL}/users/${userId}/playlist/${playlistItemId}/`,
-    data,
-  )) as AxiosResponse<PlaylistItemListing>;
-  return response.data;
+  const { data } = await usersPlaylistPartialUpdate({
+    path: { user_id: userId, id: playlistItemId },
+    body: { status } as any,
+    throwOnError: true,
+  });
+  return data;
 };
 
 const import_ = async (userId: number): Promise<PlaylistImportResult> => {
-  const response = (await api.post(
-    `${API_URL}/users/${userId}/playlist/import/`,
-  )) as AxiosResponse<PlaylistImportResult>;
-  return response.data;
+  const { data } = await usersPlaylistImportCreate({
+    path: { user_id: userId },
+    throwOnError: true,
+  });
+  return data;
 };
 
 const delete_ = async (
   userId: number,
   playlistItemId: number,
 ): Promise<void> => {
-  await api.delete(`${API_URL}/users/${userId}/playlist/${playlistItemId}/`);
+  await usersPlaylistDestroy({
+    path: { user_id: userId, id: playlistItemId },
+    throwOnError: true,
+  });
 };
 
 const PlaylistService = {

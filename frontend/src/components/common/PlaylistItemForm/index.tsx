@@ -46,7 +46,7 @@ const PlaylistItemFormView = ({
   const navigate = useNavigate();
   const initialValues: PlaylistItemFormValues = {
     levelName: level.name,
-    status: playlistItem?.status,
+    status: playlistItem?.status as PlaylistItemStatus | undefined,
   };
 
   const handleSubmitError = useCallback(
