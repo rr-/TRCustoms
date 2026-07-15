@@ -46,7 +46,7 @@ class LevelDifficultyNestedSerializer(serializers.ModelSerializer):
 class LevelDifficultyListingSerializer(serializers.ModelSerializer):
     class Meta:
         model = LevelDifficulty
-        fields = ["id", "name", "created", "last_updated"]
+        fields = ["id", "name", "position", "created", "last_updated"]
 
 
 class LevelDurationNestedSerializer(serializers.ModelSerializer):
@@ -58,7 +58,7 @@ class LevelDurationNestedSerializer(serializers.ModelSerializer):
 class LevelDurationListingSerializer(serializers.ModelSerializer):
     class Meta:
         model = LevelDuration
-        fields = ["id", "name", "created", "last_updated"]
+        fields = ["id", "name", "position", "created", "last_updated"]
 
 
 class LevelScreenshotSerializer(serializers.ModelSerializer):

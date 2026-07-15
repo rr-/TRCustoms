@@ -13,7 +13,7 @@ const RatingStats = () => {
     ...config.stats.ratings.map((item) => item.level_count),
   );
   const maxRatingClassPosition = Math.max(
-    ...config.stats.ratings.map((item) => item.rating_class.position),
+    ...config.stats.ratings.map((item) => item.rating_class.position ?? 0),
   );
 
   const handleMouseEnter = (item: (typeof config.stats.ratings)[0]) => {
@@ -53,14 +53,15 @@ const RatingStats = () => {
               >
                 <div
                   className={`${styles.indicatorFill} ${
-                    item.rating_class.position > 0
+                    (item.rating_class.position ?? 0) > 0
                       ? styles.positive
                       : styles.negative
                   }`}
                   style={{
                     opacity: `${
                       Math.abs(
-                        item.rating_class.position / maxRatingClassPosition,
+                        (item.rating_class.position ?? 0) /
+                          maxRatingClassPosition,
                       ) * 100
                     }%`,
                   }}

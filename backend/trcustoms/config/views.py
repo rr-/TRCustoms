@@ -2,6 +2,7 @@ from typing import Any
 
 from django.conf import settings
 from django.db.models import Count, Sum
+from drf_spectacular.utils import extend_schema
 from rest_framework import generics, status, viewsets
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
@@ -123,6 +124,7 @@ class ConfigViewSet(viewsets.ViewSet):
     permission_classes = [AllowAny]
     serializer_class = ConfigSerializer
 
+    @extend_schema(responses=ConfigSerializer)
     def list(self, request) -> Response:
         return Response(
             get_config_data(),

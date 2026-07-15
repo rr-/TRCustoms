@@ -1,17 +1,14 @@
-import { AxiosResponse } from "axios";
-import { api } from "src/api";
-import { EngineListing } from "src/client";
-import { API_URL } from "src/constants";
-import { GenreNested } from "src/services/GenreService";
-import { GenreListing } from "src/services/GenreService";
-import { LevelListing } from "src/services/LevelService";
-import { TagListing } from "src/services/TagService";
-
-interface CountryListing {
-  iso_3166_1_alpha2: string;
-  iso_3166_1_numeric: string;
-  name: string;
-}
+import { configFeaturedLevelsRetrieve, configList } from "src/client";
+import type {
+  Config,
+  CountryListing,
+  FeaturedLevelListing as FeaturedLevel,
+  FeaturedLevels,
+  LevelDifficultyListing as DifficultyListing,
+  LevelDurationListing as DurationListing,
+  RatingTemplateAnswer,
+  RatingTemplateQuestion,
+} from "src/client";
 
 enum FeatureType {
   NewRelease = "new_release",
@@ -20,107 +17,15 @@ enum FeatureType {
   BestInGenre = "best_in_genre",
 }
 
-interface FeaturedLevel {
-  created: string;
-  feature_type: FeatureType;
-  level: LevelListing | null;
-  chosen_genre: GenreNested | null;
-}
-
-interface DurationListing {
-  id: number;
-  name: string;
-  position: number;
-}
-
-interface DifficultyListing {
-  id: number;
-  name: string;
-  position: number;
-}
-
-interface RatingTemplateAnswer {
-  position: number;
-  id: number;
-  answer_text: string;
-}
-
-interface RatingTemplateQuestion {
-  position: number;
-  id: number;
-  question_text: string;
-  category: string;
-  answers: RatingTemplateAnswer[];
-}
-
-interface Config {
-  countries: CountryListing[];
-  tags: TagListing[];
-  genres: GenreListing[];
-  engines: EngineListing[];
-  durations: DurationListing[];
-  difficulties: DifficultyListing[];
-  rating_questions: RatingTemplateQuestion[];
-  limits: {
-    markdown_fields: {
-      review_text: number | null;
-      level_description: number | null;
-      user_bio: number | null;
-      news_text: number | null;
-      walkthrough_text: number | null;
-    };
-    min_tags: number;
-    max_tags: number;
-    min_genres: number;
-    max_genres: number;
-    min_screenshots: number;
-    max_screenshots: number;
-    min_showcase_links: number;
-    max_showcase_links: number;
-    min_authors: number;
-    max_authors: number;
-    max_tag_length: number;
-  };
-  stats: {
-    total_levels: number;
-    total_ratings: number;
-    total_reviews: number;
-    total_downloads: number;
-    total_walkthroughs: number;
-    ratings: {
-      rating_class: {
-        id: number;
-        position: number;
-        name: string;
-      };
-      level_count: number;
-    }[];
-    walkthroughs: {
-      video_and_text: number;
-      video: number;
-      text: number;
-      none: number;
-    };
-  };
-  global_message: string | null;
-}
-
-type FeaturedLevels = {
-  [K in FeatureType]: FeaturedLevel | null;
-};
-
 const getConfig = async (): Promise<Config> => {
-  const response = (await api.get(
-    `${API_URL}/config/`,
-  )) as AxiosResponse<Config>;
-  return response.data;
+  const response = await configList({ throwOnError: true });
+  // The config list action returns a single object, not an array.
+  return response.data as unknown as Config;
 };
 
 const getFeaturedLevels = async (): Promise<FeaturedLevels> => {
-  const response = (await api.get(
-    `${API_URL}/config/featured_levels`,
-  )) as AxiosResponse<FeaturedLevels>;
-  return response.data;
+  const { data } = await configFeaturedLevelsRetrieve({ throwOnError: true });
+  return data;
 };
 
 const ConfigService = {

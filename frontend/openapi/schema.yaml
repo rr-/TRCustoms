@@ -3073,6 +3073,10 @@ components:
         name:
           type: string
           maxLength: 100
+        position:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
         created:
           type: string
           format: date-time
@@ -3088,6 +3092,7 @@ components:
       - id
       - last_updated
       - name
+      - position
     LevelDifficultyNested:
       type: object
       properties:
@@ -3109,6 +3114,10 @@ components:
         name:
           type: string
           maxLength: 100
+        position:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
         created:
           type: string
           format: date-time
@@ -3124,6 +3133,7 @@ components:
       - id
       - last_updated
       - name
+      - position
     LevelDurationNested:
       type: object
       properties:

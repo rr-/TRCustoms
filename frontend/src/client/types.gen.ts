@@ -209,6 +209,7 @@ export type LevelDetails = {
 export type LevelDifficultyListing = {
     readonly id: number;
     name: string;
+    position: number;
     readonly created: string | null;
     readonly last_updated: string | null;
 };
@@ -221,6 +222,7 @@ export type LevelDifficultyNested = {
 export type LevelDurationListing = {
     readonly id: number;
     name: string;
+    position: number;
     readonly created: string | null;
     readonly last_updated: string | null;
 };
@@ -1109,6 +1111,7 @@ export type LevelDetailsWritable = {
 
 export type LevelDifficultyListingWritable = {
     name: string;
+    position: number;
 };
 
 export type LevelDifficultyNestedWritable = {
@@ -1117,6 +1120,7 @@ export type LevelDifficultyNestedWritable = {
 
 export type LevelDurationListingWritable = {
     name: string;
+    position: number;
 };
 
 export type LevelDurationNestedWritable = {
