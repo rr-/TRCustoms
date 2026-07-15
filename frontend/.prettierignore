@@ -1,0 +1,3 @@
+# Generated API client and OpenAPI schema
+src/client/
+openapi/

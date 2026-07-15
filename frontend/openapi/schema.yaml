@@ -1,0 +1,5539 @@
+openapi: 3.0.3
+info:
+  title: TRCustoms
+  version: 0.0.0
+  description: An API for TRCustoms.org
+paths:
+  /api/auditlogs/:
+    get:
+      operationId: auditlogs_list
+      parameters:
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: page_size
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      - name: sort
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      tags:
+      - auditlogs
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedAuditLogListingList'
+          description: ''
+  /api/auth/token/:
+    post:
+      operationId: auth_token_create
+      description: |-
+        Takes a set of user credentials and returns an access and refresh JSON web
+        token pair to prove the authentication of those credentials.
+      tags:
+      - auth
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TokenObtainPair'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/TokenObtainPair'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/TokenObtainPair'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TokenObtainPair'
+          description: ''
+  /api/auth/token/refresh/:
+    post:
+      operationId: auth_token_refresh_create
+      description: |-
+        Takes a refresh type JSON web token and returns an access type JSON web
+        token if the refresh token is valid.
+      tags:
+      - auth
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TokenRefresh'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/TokenRefresh'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/TokenRefresh'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TokenRefresh'
+          description: ''
+  /api/award_specs/:
+    get:
+      operationId: award_specs_list
+      tags:
+      - award_specs
+      security:
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/AwardSpec'
+          description: ''
+  /api/award_specs/{code}/recipients/:
+    get:
+      operationId: award_specs_recipients_list
+      description: |-
+        API view to list users who received a given award (by code and optional
+        tier), with pagination.
+      parameters:
+      - in: path
+        name: code
+        schema:
+          type: string
+        required: true
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: page_size
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      - name: sort
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      tags:
+      - award_specs
+      security:
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedAwardRecipientList'
+          description: ''
+  /api/config/:
+    get:
+      operationId: config_list
+      tags:
+      - config
+      security:
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Config'
+          description: ''
+  /api/config/featured_levels/:
+    get:
+      operationId: config_featured_levels_retrieve
+      tags:
+      - config
+      security:
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FeaturedLevels'
+          description: ''
+  /api/events/:
+    get:
+      operationId: events_list
+      parameters:
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: page_size
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      - name: sort
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      tags:
+      - events
+      security:
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedEventListingList'
+          description: ''
+  /api/events/{id}/:
+    get:
+      operationId: events_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this event.
+        required: true
+      tags:
+      - events
+      security:
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EventDetails'
+          description: ''
+  /api/level_engines/:
+    get:
+      operationId: level_engines_list
+      parameters:
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: page_size
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      - name: sort
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      tags:
+      - level_engines
+      security:
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedEngineListingList'
+          description: ''
+  /api/level_files/{id}/download/:
+    get:
+      operationId: level_files_download_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this level file.
+        required: true
+      tags:
+      - level_files
+      security:
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: string
+                format: binary
+          description: ''
+  /api/level_genres/:
+    get:
+      operationId: level_genres_list
+      parameters:
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: page_size
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      - name: sort
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      tags:
+      - level_genres
+      security:
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedGenreListingList'
+          description: ''
+  /api/level_genres/{id}/:
+    get:
+      operationId: level_genres_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - level_genres
+      security:
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GenreListing'
+          description: ''
+  /api/level_genres/{id}/stats/:
+    get:
+      operationId: level_genres_stats_list
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      - name: sort
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      tags:
+      - level_genres
+      security:
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/GenreListing'
+          description: ''
+  /api/level_tags/:
+    get:
+      operationId: level_tags_list
+      parameters:
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: page_size
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      - name: sort
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      tags:
+      - level_tags
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedTagListingList'
+          description: ''
+    post:
+      operationId: level_tags_create
+      tags:
+      - level_tags
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TagDetails'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/TagDetails'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/TagDetails'
+        required: true
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TagDetails'
+          description: ''
+  /api/level_tags/{id}/:
+    get:
+      operationId: level_tags_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - level_tags
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TagListing'
+          description: ''
+    put:
+      operationId: level_tags_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - level_tags
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TagDetails'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/TagDetails'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/TagDetails'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TagDetails'
+          description: ''
+    patch:
+      operationId: level_tags_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - level_tags
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedTagDetails'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedTagDetails'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedTagDetails'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TagDetails'
+          description: ''
+    delete:
+      operationId: level_tags_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - level_tags
+      responses:
+        '204':
+          description: No response body
+  /api/level_tags/{id}/merge/:
+    post:
+      operationId: level_tags_merge_create
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - level_tags
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TagMerge'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/TagMerge'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/TagMerge'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TagDetails'
+          description: ''
+  /api/level_tags/{id}/stats/:
+    get:
+      operationId: level_tags_stats_list
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      - name: sort
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      tags:
+      - level_tags
+      security:
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TagListing'
+          description: ''
+  /api/level_tags/by_name/{name}/:
+    get:
+      operationId: level_tags_by_name_retrieve
+      parameters:
+      - in: path
+        name: name
+        schema:
+          type: string
+        required: true
+      tags:
+      - level_tags
+      security:
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TagDetails'
+          description: ''
+  /api/levels/:
+    get:
+      operationId: levels_list
+      parameters:
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: page_size
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      - name: sort
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      tags:
+      - levels
+      security:
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedLevelListingList'
+          description: ''
+    post:
+      operationId: levels_create
+      tags:
+      - levels
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LevelDetails'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/LevelDetails'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/LevelDetails'
+        required: true
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LevelDetails'
+          description: ''
+  /api/levels/{id}/:
+    get:
+      operationId: levels_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this level.
+        required: true
+      tags:
+      - levels
+      security:
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LevelDetails'
+          description: ''
+    put:
+      operationId: levels_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this level.
+        required: true
+      tags:
+      - levels
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LevelDetails'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/LevelDetails'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/LevelDetails'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LevelDetails'
+          description: ''
+    patch:
+      operationId: levels_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this level.
+        required: true
+      tags:
+      - levels
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedLevelDetails'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedLevelDetails'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedLevelDetails'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LevelDetails'
+          description: ''
+    delete:
+      operationId: levels_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this level.
+        required: true
+      tags:
+      - levels
+      responses:
+        '204':
+          description: No response body
+  /api/levels/{id}/approve/:
+    post:
+      operationId: levels_approve_create
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this level.
+        required: true
+      tags:
+      - levels
+      responses:
+        '200':
+          description: No response body
+  /api/levels/{id}/rating_stats/:
+    get:
+      operationId: levels_rating_stats_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this level.
+        required: true
+      tags:
+      - levels
+      security:
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LevelListing'
+          description: ''
+  /api/levels/{id}/reject/:
+    post:
+      operationId: levels_reject_create
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this level.
+        required: true
+      tags:
+      - levels
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LevelRejection'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/LevelRejection'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/LevelRejection'
+        required: true
+      responses:
+        '200':
+          description: No response body
+  /api/news/:
+    get:
+      operationId: news_list
+      parameters:
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: page_size
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      - name: sort
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      tags:
+      - news
+      security:
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedNewsListingList'
+          description: ''
+    post:
+      operationId: news_create
+      tags:
+      - news
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewsDetails'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/NewsDetails'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/NewsDetails'
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NewsDetails'
+          description: ''
+  /api/news/{id}/:
+    get:
+      operationId: news_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this news.
+        required: true
+      tags:
+      - news
+      security:
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NewsListing'
+          description: ''
+    put:
+      operationId: news_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this news.
+        required: true
+      tags:
+      - news
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewsDetails'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/NewsDetails'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/NewsDetails'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NewsDetails'
+          description: ''
+    patch:
+      operationId: news_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this news.
+        required: true
+      tags:
+      - news
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedNewsDetails'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedNewsDetails'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedNewsDetails'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NewsDetails'
+          description: ''
+    delete:
+      operationId: news_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this news.
+        required: true
+      tags:
+      - news
+      responses:
+        '204':
+          description: No response body
+  /api/ratings/:
+    get:
+      operationId: ratings_list
+      parameters:
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: page_size
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      - name: sort
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      tags:
+      - ratings
+      security:
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedRatingListingList'
+          description: ''
+    post:
+      operationId: ratings_create
+      tags:
+      - ratings
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RatingDetails'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/RatingDetails'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/RatingDetails'
+        required: true
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RatingDetails'
+          description: ''
+  /api/ratings/{id}/:
+    get:
+      operationId: ratings_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this rating.
+        required: true
+      tags:
+      - ratings
+      security:
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RatingDetails'
+          description: ''
+    put:
+      operationId: ratings_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this rating.
+        required: true
+      tags:
+      - ratings
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RatingDetails'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/RatingDetails'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/RatingDetails'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RatingDetails'
+          description: ''
+    patch:
+      operationId: ratings_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this rating.
+        required: true
+      tags:
+      - ratings
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedRatingDetails'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedRatingDetails'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedRatingDetails'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RatingDetails'
+          description: ''
+    delete:
+      operationId: ratings_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this rating.
+        required: true
+      tags:
+      - ratings
+      responses:
+        '204':
+          description: No response body
+  /api/reviews/:
+    get:
+      operationId: reviews_list
+      parameters:
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: page_size
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      - name: sort
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      tags:
+      - reviews
+      security:
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedReviewListingList'
+          description: ''
+    post:
+      operationId: reviews_create
+      tags:
+      - reviews
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReviewDetails'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ReviewDetails'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ReviewDetails'
+        required: true
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReviewDetails'
+          description: ''
+  /api/reviews/{id}/:
+    get:
+      operationId: reviews_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this review.
+        required: true
+      tags:
+      - reviews
+      security:
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReviewDetails'
+          description: ''
+    put:
+      operationId: reviews_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this review.
+        required: true
+      tags:
+      - reviews
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReviewDetails'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ReviewDetails'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ReviewDetails'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReviewDetails'
+          description: ''
+    patch:
+      operationId: reviews_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this review.
+        required: true
+      tags:
+      - reviews
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedReviewDetails'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedReviewDetails'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedReviewDetails'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReviewDetails'
+          description: ''
+    delete:
+      operationId: reviews_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this review.
+        required: true
+      tags:
+      - reviews
+      responses:
+        '204':
+          description: No response body
+  /api/reviews/{id}/hide/:
+    post:
+      operationId: reviews_hide_create
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this review.
+        required: true
+      tags:
+      - reviews
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReviewHide'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ReviewHide'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ReviewHide'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReviewHide'
+          description: ''
+  /api/reviews/{id}/vote/:
+    post:
+      operationId: reviews_vote_create
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this review.
+        required: true
+      tags:
+      - reviews
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReviewVote'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ReviewVote'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ReviewVote'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReviewVote'
+          description: ''
+  /api/schema/:
+    get:
+      operationId: schema_retrieve
+      description: |-
+        OpenApi3 schema for this API. Format can be selected via content negotiation.
+
+        - YAML: application/vnd.oai.openapi
+        - JSON: application/vnd.oai.openapi+json
+      parameters:
+      - in: query
+        name: format
+        schema:
+          type: string
+          enum:
+          - json
+          - yaml
+      - in: query
+        name: lang
+        schema:
+          type: string
+          enum:
+          - af
+          - ar
+          - ar-dz
+          - ast
+          - az
+          - be
+          - bg
+          - bn
+          - br
+          - bs
+          - ca
+          - ckb
+          - cs
+          - cy
+          - da
+          - de
+          - dsb
+          - el
+          - en
+          - en-au
+          - en-gb
+          - eo
+          - es
+          - es-ar
+          - es-co
+          - es-mx
+          - es-ni
+          - es-ve
+          - et
+          - eu
+          - fa
+          - fi
+          - fr
+          - fy
+          - ga
+          - gd
+          - gl
+          - he
+          - hi
+          - hr
+          - hsb
+          - hu
+          - hy
+          - ia
+          - id
+          - ig
+          - io
+          - is
+          - it
+          - ja
+          - ka
+          - kab
+          - kk
+          - km
+          - kn
+          - ko
+          - ky
+          - lb
+          - lt
+          - lv
+          - mk
+          - ml
+          - mn
+          - mr
+          - ms
+          - my
+          - nb
+          - ne
+          - nl
+          - nn
+          - os
+          - pa
+          - pl
+          - pt
+          - pt-br
+          - ro
+          - ru
+          - sk
+          - sl
+          - sq
+          - sr
+          - sr-latn
+          - sv
+          - sw
+          - ta
+          - te
+          - tg
+          - th
+          - tk
+          - tr
+          - tt
+          - udm
+          - ug
+          - uk
+          - ur
+          - uz
+          - vi
+          - zh-hans
+          - zh-hant
+      tags:
+      - schema
+      security:
+      - {}
+      responses:
+        '200':
+          content:
+            application/vnd.oai.openapi:
+              schema:
+                type: object
+                additionalProperties: {}
+            application/yaml:
+              schema:
+                type: object
+                additionalProperties: {}
+            application/vnd.oai.openapi+json:
+              schema:
+                type: object
+                additionalProperties: {}
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+          description: ''
+  /api/uploads/:
+    post:
+      operationId: uploads_create
+      tags:
+      - uploads
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/UploadedFileDetails'
+        required: true
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UploadedFileDetails'
+          description: ''
+  /api/uploads/{id}/:
+    get:
+      operationId: uploads_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - uploads
+      security:
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UploadedFileDetails'
+          description: ''
+  /api/uploads/{id}/file/:
+    get:
+      operationId: uploads_file_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - uploads
+      security:
+      - {}
+      responses:
+        '200':
+          description: No response body
+  /api/users/:
+    get:
+      operationId: users_list
+      parameters:
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: page_size
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      - name: sort
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      tags:
+      - users
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedUserListingList'
+          description: ''
+    post:
+      operationId: users_create
+      tags:
+      - users
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserDetails'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/UserDetails'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/UserDetails'
+        required: true
+      security:
+      - {}
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserDetails'
+          description: ''
+  /api/users/{id}/:
+    get:
+      operationId: users_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this user.
+        required: true
+      tags:
+      - users
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserDetails'
+          description: ''
+    put:
+      operationId: users_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this user.
+        required: true
+      tags:
+      - users
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserDetails'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/UserDetails'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/UserDetails'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserDetails'
+          description: ''
+    patch:
+      operationId: users_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this user.
+        required: true
+      tags:
+      - users
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedUserDetails'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedUserDetails'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedUserDetails'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserDetails'
+          description: ''
+  /api/users/{id}/activate/:
+    post:
+      operationId: users_activate_create
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this user.
+        required: true
+      tags:
+      - users
+      responses:
+        '200':
+          description: No response body
+  /api/users/{id}/ban/:
+    post:
+      operationId: users_ban_create
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this user.
+        required: true
+      tags:
+      - users
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserBan'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/UserBan'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/UserBan'
+        required: true
+      responses:
+        '200':
+          description: No response body
+  /api/users/{id}/deactivate/:
+    post:
+      operationId: users_deactivate_create
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this user.
+        required: true
+      tags:
+      - users
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserBan'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/UserBan'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/UserBan'
+        required: true
+      responses:
+        '200':
+          description: No response body
+  /api/users/{id}/unban/:
+    post:
+      operationId: users_unban_create
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this user.
+        required: true
+      tags:
+      - users
+      responses:
+        '200':
+          description: No response body
+  /api/users/{user_id}/playlist/:
+    get:
+      operationId: users_playlist_list
+      parameters:
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: page_size
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      - name: sort
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      - in: path
+        name: user_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - users
+      security:
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedPlaylistItemList'
+          description: ''
+    post:
+      operationId: users_playlist_create
+      parameters:
+      - in: path
+        name: user_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - users
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PlaylistItem'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PlaylistItem'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PlaylistItem'
+        required: true
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PlaylistItem'
+          description: ''
+  /api/users/{user_id}/playlist/{id}/:
+    put:
+      operationId: users_playlist_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      - in: path
+        name: user_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - users
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PlaylistItem'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PlaylistItem'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PlaylistItem'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PlaylistItem'
+          description: ''
+    patch:
+      operationId: users_playlist_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      - in: path
+        name: user_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - users
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedPlaylistItem'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedPlaylistItem'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedPlaylistItem'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PlaylistItem'
+          description: ''
+    delete:
+      operationId: users_playlist_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      - in: path
+        name: user_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - users
+      responses:
+        '204':
+          description: No response body
+  /api/users/{user_id}/playlist/by_level_id/{level_id}/:
+    get:
+      operationId: users_playlist_by_level_id_retrieve
+      parameters:
+      - in: path
+        name: level_id
+        schema:
+          type: integer
+        required: true
+      - in: path
+        name: user_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - users
+      security:
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PlaylistItem'
+          description: ''
+  /api/users/{user_id}/playlist/import/:
+    post:
+      operationId: users_playlist_import_create
+      parameters:
+      - in: path
+        name: user_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - users
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PlaylistImportResult'
+          description: ''
+  /api/users/by_username/{username}/:
+    get:
+      operationId: users_by_username_retrieve
+      parameters:
+      - in: path
+        name: username
+        schema:
+          type: string
+          pattern: ^\w+$
+        required: true
+      tags:
+      - users
+      security:
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserDetails'
+          description: ''
+  /api/users/complete_password_reset/:
+    post:
+      operationId: users_complete_password_reset_create
+      tags:
+      - users
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserCompletePasswordReset'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/UserCompletePasswordReset'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/UserCompletePasswordReset'
+        required: true
+      security:
+      - {}
+      responses:
+        '200':
+          description: No response body
+  /api/users/confirm_email/:
+    post:
+      operationId: users_confirm_email_create
+      tags:
+      - users
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserConfirmEmail'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/UserConfirmEmail'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/UserConfirmEmail'
+        required: true
+      security:
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserDetails'
+          description: ''
+  /api/users/me/:
+    get:
+      operationId: users_me_retrieve
+      tags:
+      - users
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserDetails'
+          description: ''
+  /api/users/request_password_reset/:
+    post:
+      operationId: users_request_password_reset_create
+      tags:
+      - users
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserRequestPasswordReset'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/UserRequestPasswordReset'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/UserRequestPasswordReset'
+        required: true
+      security:
+      - {}
+      responses:
+        '200':
+          description: No response body
+  /api/users/resend_activation_email/:
+    post:
+      operationId: users_resend_activation_email_create
+      tags:
+      - users
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Username'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Username'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Username'
+        required: true
+      security:
+      - {}
+      responses:
+        '200':
+          description: No response body
+  /api/walkthroughs/:
+    get:
+      operationId: walkthroughs_list
+      parameters:
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: page_size
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      - name: sort
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      tags:
+      - walkthroughs
+      security:
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedWalkthroughListingList'
+          description: ''
+    post:
+      operationId: walkthroughs_create
+      tags:
+      - walkthroughs
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WalkthroughDetails'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/WalkthroughDetails'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/WalkthroughDetails'
+        required: true
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WalkthroughDetails'
+          description: ''
+  /api/walkthroughs/{id}/:
+    get:
+      operationId: walkthroughs_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this walkthrough.
+        required: true
+      tags:
+      - walkthroughs
+      security:
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WalkthroughListing'
+          description: ''
+    put:
+      operationId: walkthroughs_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this walkthrough.
+        required: true
+      tags:
+      - walkthroughs
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WalkthroughDetails'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/WalkthroughDetails'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/WalkthroughDetails'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WalkthroughDetails'
+          description: ''
+    patch:
+      operationId: walkthroughs_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this walkthrough.
+        required: true
+      tags:
+      - walkthroughs
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedWalkthroughDetails'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedWalkthroughDetails'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedWalkthroughDetails'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WalkthroughDetails'
+          description: ''
+    delete:
+      operationId: walkthroughs_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this walkthrough.
+        required: true
+      tags:
+      - walkthroughs
+      responses:
+        '204':
+          description: No response body
+  /api/walkthroughs/{id}/approve/:
+    post:
+      operationId: walkthroughs_approve_create
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this walkthrough.
+        required: true
+      tags:
+      - walkthroughs
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WalkthroughListing'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/WalkthroughListing'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/WalkthroughListing'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WalkthroughListing'
+          description: ''
+  /api/walkthroughs/{id}/publish/:
+    post:
+      operationId: walkthroughs_publish_create
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this walkthrough.
+        required: true
+      tags:
+      - walkthroughs
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WalkthroughListing'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/WalkthroughListing'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/WalkthroughListing'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WalkthroughListing'
+          description: ''
+  /api/walkthroughs/{id}/reject/:
+    post:
+      operationId: walkthroughs_reject_create
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this walkthrough.
+        required: true
+      tags:
+      - walkthroughs
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WalkthroughListing'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/WalkthroughListing'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/WalkthroughListing'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WalkthroughListing'
+          description: ''
+components:
+  schemas:
+    AuditLogListing:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        created:
+          type: string
+          format: date-time
+          readOnly: true
+          nullable: true
+        object_id:
+          type: string
+          maxLength: 64
+        object_name:
+          type: string
+          maxLength: 256
+        object_type:
+          type: string
+          readOnly: true
+        change_type:
+          $ref: '#/components/schemas/ChangeTypeEnum'
+        change_author:
+          allOf:
+          - $ref: '#/components/schemas/UserNested'
+          readOnly: true
+        changes: {}
+        meta: {}
+        is_action_required:
+          type: boolean
+      required:
+      - change_author
+      - change_type
+      - changes
+      - created
+      - id
+      - meta
+      - object_id
+      - object_name
+      - object_type
+    AwardRecipient:
+      type: object
+      properties:
+        user:
+          allOf:
+          - $ref: '#/components/schemas/UserNested'
+          readOnly: true
+        created:
+          type: string
+          format: date-time
+          readOnly: true
+          nullable: true
+        last_updated:
+          type: string
+          format: date-time
+          readOnly: true
+          nullable: true
+        awarded_on:
+          type: string
+          format: date-time
+          nullable: true
+          readOnly: true
+      required:
+      - awarded_on
+      - created
+      - last_updated
+      - user
+    AwardSpec:
+      type: object
+      properties:
+        code:
+          type: string
+        title:
+          type: string
+        description:
+          type: string
+        guide_description:
+          type: string
+          readOnly: true
+        tier:
+          type: integer
+        can_be_removed:
+          type: boolean
+        rarity:
+          type: integer
+          readOnly: true
+        user_percentage:
+          type: integer
+          readOnly: true
+      required:
+      - can_be_removed
+      - code
+      - description
+      - guide_description
+      - rarity
+      - tier
+      - title
+      - user_percentage
+    ChangeTypeEnum:
+      enum:
+      - CREATE
+      - UPDATE
+      - DELETE
+      type: string
+      description: |-
+        * `CREATE` - Create
+        * `UPDATE` - Update
+        * `DELETE` - Delete
+    Config:
+      type: object
+      properties:
+        countries:
+          type: array
+          items:
+            $ref: '#/components/schemas/CountryListing'
+        tags:
+          type: array
+          items:
+            $ref: '#/components/schemas/TagListing'
+        genres:
+          type: array
+          items:
+            $ref: '#/components/schemas/GenreListing'
+        engines:
+          type: array
+          items:
+            $ref: '#/components/schemas/EngineListing'
+        difficulties:
+          type: array
+          items:
+            $ref: '#/components/schemas/LevelDifficultyListing'
+        durations:
+          type: array
+          items:
+            $ref: '#/components/schemas/LevelDurationListing'
+        rating_questions:
+          type: array
+          items:
+            $ref: '#/components/schemas/RatingTemplateQuestion'
+        limits:
+          $ref: '#/components/schemas/GlobalLimits'
+        stats:
+          $ref: '#/components/schemas/GlobalStats'
+        global_message:
+          type: string
+          nullable: true
+      required:
+      - countries
+      - difficulties
+      - durations
+      - engines
+      - genres
+      - limits
+      - rating_questions
+      - stats
+      - tags
+    CountryListing:
+      type: object
+      properties:
+        iso_3166_1_alpha2:
+          type: string
+          maxLength: 2
+        name:
+          type: string
+          maxLength: 64
+        iso_3166_1_numeric:
+          type: string
+          nullable: true
+          maxLength: 3
+      required:
+      - iso_3166_1_alpha2
+      - name
+    CountryNested:
+      type: object
+      properties:
+        iso_3166_1_alpha2:
+          type: string
+          maxLength: 2
+        name:
+          type: string
+          maxLength: 64
+        iso_3166_1_numeric:
+          type: string
+          nullable: true
+          maxLength: 3
+      required:
+      - iso_3166_1_alpha2
+      - name
+    EngineListing:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          maxLength: 100
+        position:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+        level_count:
+          type: integer
+          readOnly: true
+        created:
+          type: string
+          format: date-time
+          readOnly: true
+          nullable: true
+        last_updated:
+          type: string
+          format: date-time
+          readOnly: true
+          nullable: true
+      required:
+      - created
+      - id
+      - last_updated
+      - level_count
+      - name
+    EngineNested:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          maxLength: 100
+      required:
+      - id
+      - name
+    EventDetails:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          maxLength: 200
+        subtitle:
+          type: string
+          nullable: true
+          maxLength: 200
+        cover_image:
+          allOf:
+          - $ref: '#/components/schemas/UploadedFileNested'
+          readOnly: true
+        year:
+          type: integer
+          maximum: 2147483647
+          minimum: 0
+          nullable: true
+        level_count:
+          type: integer
+          readOnly: true
+        created:
+          type: string
+          format: date-time
+          readOnly: true
+          nullable: true
+        last_updated:
+          type: string
+          format: date-time
+          readOnly: true
+          nullable: true
+        about:
+          type: string
+          readOnly: true
+        host:
+          allOf:
+          - $ref: '#/components/schemas/UserNested'
+          readOnly: true
+        winners:
+          type: array
+          items:
+            $ref: '#/components/schemas/Winner'
+          readOnly: true
+        levels:
+          type: array
+          items:
+            type: object
+            additionalProperties: {}
+          description: Only include levels that have been approved (exclude pending).
+          readOnly: true
+      required:
+      - about
+      - cover_image
+      - created
+      - host
+      - id
+      - last_updated
+      - level_count
+      - levels
+      - name
+      - winners
+    EventListing:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          maxLength: 200
+        subtitle:
+          type: string
+          nullable: true
+          maxLength: 200
+        cover_image:
+          allOf:
+          - $ref: '#/components/schemas/UploadedFileNested'
+          readOnly: true
+        year:
+          type: integer
+          maximum: 2147483647
+          minimum: 0
+          nullable: true
+        level_count:
+          type: integer
+          readOnly: true
+        created:
+          type: string
+          format: date-time
+          readOnly: true
+          nullable: true
+        last_updated:
+          type: string
+          format: date-time
+          readOnly: true
+          nullable: true
+      required:
+      - cover_image
+      - created
+      - id
+      - last_updated
+      - level_count
+      - name
+    FeatureTypeEnum:
+      enum:
+      - new_release
+      - monthly_hidden_gem
+      - level_of_the_day
+      - best_in_genre
+      type: string
+      description: |-
+        * `new_release` - New release
+        * `monthly_hidden_gem` - Monthly hidden gem
+        * `level_of_the_day` - Level of the day
+        * `best_in_genre` - Best in genre
+    FeaturedLevelListing:
+      type: object
+      properties:
+        created:
+          type: string
+          format: date-time
+          readOnly: true
+          nullable: true
+        feature_type:
+          $ref: '#/components/schemas/FeatureTypeEnum'
+        level:
+          allOf:
+          - $ref: '#/components/schemas/LevelListing'
+          readOnly: true
+        chosen_genre:
+          allOf:
+          - $ref: '#/components/schemas/GenreNested'
+          readOnly: true
+      required:
+      - chosen_genre
+      - created
+      - feature_type
+      - level
+    FeaturedLevels:
+      type: object
+      properties:
+        new_release:
+          $ref: '#/components/schemas/FeaturedLevelListing'
+        monthly_hidden_gem:
+          $ref: '#/components/schemas/FeaturedLevelListing'
+        level_of_the_day:
+          $ref: '#/components/schemas/FeaturedLevelListing'
+        best_in_genre:
+          $ref: '#/components/schemas/FeaturedLevelListing'
+      required:
+      - best_in_genre
+      - level_of_the_day
+      - monthly_hidden_gem
+      - new_release
+    GenreListing:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          maxLength: 100
+        description:
+          type: string
+          maxLength: 500
+        level_count:
+          type: integer
+          readOnly: true
+        created:
+          type: string
+          format: date-time
+          readOnly: true
+          nullable: true
+        last_updated:
+          type: string
+          format: date-time
+          readOnly: true
+          nullable: true
+      required:
+      - created
+      - description
+      - id
+      - last_updated
+      - level_count
+      - name
+    GenreNested:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          maxLength: 100
+      required:
+      - id
+      - name
+    GlobalLimits:
+      type: object
+      properties:
+        min_genres:
+          type: integer
+        max_genres:
+          type: integer
+        min_tags:
+          type: integer
+        max_tags:
+          type: integer
+        min_screenshots:
+          type: integer
+        max_screenshots:
+          type: integer
+        min_showcase_links:
+          type: integer
+        max_showcase_links:
+          type: integer
+        min_authors:
+          type: integer
+        max_authors:
+          type: integer
+        max_tag_length:
+          type: integer
+        markdown_fields:
+          type: object
+          additionalProperties:
+            type: integer
+            nullable: true
+      required:
+      - markdown_fields
+      - max_authors
+      - max_genres
+      - max_screenshots
+      - max_showcase_links
+      - max_tag_length
+      - max_tags
+      - min_authors
+      - min_genres
+      - min_screenshots
+      - min_showcase_links
+      - min_tags
+    GlobalStats:
+      type: object
+      properties:
+        total_levels:
+          type: integer
+        total_ratings:
+          type: integer
+        total_reviews:
+          type: integer
+        total_walkthroughs:
+          type: integer
+        total_downloads:
+          type: integer
+        ratings:
+          type: array
+          items:
+            $ref: '#/components/schemas/RatingStat'
+        walkthroughs:
+          $ref: '#/components/schemas/WalkthroughStat'
+      required:
+      - ratings
+      - total_downloads
+      - total_levels
+      - total_ratings
+      - total_reviews
+      - total_walkthroughs
+      - walkthroughs
+    LevelDetails:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          maxLength: 100
+        description:
+          type: string
+          maxLength: 5000
+        engine:
+          allOf:
+          - $ref: '#/components/schemas/EngineNested'
+          readOnly: true
+        engine_id:
+          type: integer
+          writeOnly: true
+        duration:
+          allOf:
+          - $ref: '#/components/schemas/LevelDurationNested'
+          readOnly: true
+        duration_id:
+          type: integer
+          writeOnly: true
+        difficulty:
+          allOf:
+          - $ref: '#/components/schemas/LevelDifficultyNested'
+          readOnly: true
+        difficulty_id:
+          type: integer
+          writeOnly: true
+        genres:
+          type: array
+          items:
+            $ref: '#/components/schemas/GenreNested'
+          readOnly: true
+        genre_ids:
+          type: array
+          items:
+            type: integer
+            writeOnly: true
+          writeOnly: true
+        tags:
+          type: array
+          items:
+            $ref: '#/components/schemas/TagNested'
+          readOnly: true
+        tag_ids:
+          type: array
+          items:
+            type: integer
+            writeOnly: true
+          writeOnly: true
+        authors:
+          type: array
+          items:
+            $ref: '#/components/schemas/UserNested'
+          readOnly: true
+        author_ids:
+          type: array
+          items:
+            type: integer
+            writeOnly: true
+          writeOnly: true
+        uploader:
+          allOf:
+          - $ref: '#/components/schemas/UserNested'
+          readOnly: true
+        created:
+          type: string
+          format: date-time
+          readOnly: true
+          nullable: true
+        cover:
+          allOf:
+          - $ref: '#/components/schemas/UploadedFileNested'
+          readOnly: true
+        screenshots:
+          type: array
+          items:
+            $ref: '#/components/schemas/LevelScreenshot'
+          readOnly: true
+        external_links:
+          type: array
+          items:
+            $ref: '#/components/schemas/LevelExternalLink'
+        last_updated:
+          type: string
+          format: date-time
+          readOnly: true
+          nullable: true
+        last_user_content_updated:
+          type: string
+          format: date-time
+          nullable: true
+          readOnly: true
+        last_file:
+          type: object
+          additionalProperties: {}
+          nullable: true
+          description: Get last file ID from the LevelViewSet's annotated queryset.
+          readOnly: true
+        download_count:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+          readOnly: true
+        rating_count:
+          type: integer
+          maximum: 2147483647
+          minimum: 0
+          readOnly: true
+        review_count:
+          type: integer
+          maximum: 2147483647
+          minimum: 0
+          readOnly: true
+        walkthrough_count:
+          type: integer
+          maximum: 2147483647
+          minimum: 0
+          readOnly: true
+        is_approved:
+          type: boolean
+          readOnly: true
+        rejection_reason:
+          type: string
+          nullable: true
+          readOnly: true
+        rating_class:
+          allOf:
+          - $ref: '#/components/schemas/RatingClassNested'
+          readOnly: true
+        cover_id:
+          type: integer
+          writeOnly: true
+        screenshot_ids:
+          type: array
+          items:
+            type: integer
+            writeOnly: true
+          writeOnly: true
+        files:
+          type: object
+          additionalProperties: {}
+          nullable: true
+          readOnly: true
+        file_id:
+          type: integer
+          writeOnly: true
+        trle_id:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+          nullable: true
+      required:
+      - author_ids
+      - authors
+      - cover
+      - cover_id
+      - created
+      - description
+      - difficulty
+      - difficulty_id
+      - download_count
+      - duration
+      - duration_id
+      - engine
+      - engine_id
+      - file_id
+      - files
+      - genre_ids
+      - genres
+      - id
+      - is_approved
+      - last_file
+      - last_updated
+      - last_user_content_updated
+      - name
+      - rating_class
+      - rating_count
+      - rejection_reason
+      - review_count
+      - screenshot_ids
+      - screenshots
+      - tag_ids
+      - tags
+      - uploader
+      - walkthrough_count
+    LevelDifficultyListing:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          maxLength: 100
+        created:
+          type: string
+          format: date-time
+          readOnly: true
+          nullable: true
+        last_updated:
+          type: string
+          format: date-time
+          readOnly: true
+          nullable: true
+      required:
+      - created
+      - id
+      - last_updated
+      - name
+    LevelDifficultyNested:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          maxLength: 100
+      required:
+      - id
+      - name
+    LevelDurationListing:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          maxLength: 100
+        created:
+          type: string
+          format: date-time
+          readOnly: true
+          nullable: true
+        last_updated:
+          type: string
+          format: date-time
+          readOnly: true
+          nullable: true
+      required:
+      - created
+      - id
+      - last_updated
+      - name
+    LevelDurationNested:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          maxLength: 100
+      required:
+      - id
+      - name
+    LevelExternalLink:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        position:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+        url:
+          type: string
+          format: uri
+          maxLength: 256
+        link_type:
+          $ref: '#/components/schemas/LinkTypeEnum'
+      required:
+      - id
+      - link_type
+      - position
+      - url
+    LevelListing:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          maxLength: 100
+        description:
+          type: string
+          nullable: true
+          maxLength: 5000
+        engine:
+          allOf:
+          - $ref: '#/components/schemas/EngineNested'
+          readOnly: true
+        engine_id:
+          type: integer
+          writeOnly: true
+        duration:
+          allOf:
+          - $ref: '#/components/schemas/LevelDurationNested'
+          readOnly: true
+        duration_id:
+          type: integer
+          writeOnly: true
+        difficulty:
+          allOf:
+          - $ref: '#/components/schemas/LevelDifficultyNested'
+          readOnly: true
+        difficulty_id:
+          type: integer
+          writeOnly: true
+        genres:
+          type: array
+          items:
+            $ref: '#/components/schemas/GenreNested'
+          readOnly: true
+        genre_ids:
+          type: array
+          items:
+            type: integer
+            writeOnly: true
+          writeOnly: true
+        tags:
+          type: array
+          items:
+            $ref: '#/components/schemas/TagNested'
+          readOnly: true
+        tag_ids:
+          type: array
+          items:
+            type: integer
+            writeOnly: true
+          writeOnly: true
+        authors:
+          type: array
+          items:
+            $ref: '#/components/schemas/UserNested'
+          readOnly: true
+        author_ids:
+          type: array
+          items:
+            type: integer
+            writeOnly: true
+          writeOnly: true
+        uploader:
+          allOf:
+          - $ref: '#/components/schemas/UserNested'
+          readOnly: true
+        created:
+          type: string
+          format: date-time
+          readOnly: true
+          nullable: true
+        cover:
+          allOf:
+          - $ref: '#/components/schemas/UploadedFileNested'
+          readOnly: true
+        screenshots:
+          type: array
+          items:
+            $ref: '#/components/schemas/LevelScreenshot'
+          readOnly: true
+        external_links:
+          type: array
+          items:
+            $ref: '#/components/schemas/LevelExternalLink'
+        last_updated:
+          type: string
+          format: date-time
+          readOnly: true
+          nullable: true
+        last_user_content_updated:
+          type: string
+          format: date-time
+          nullable: true
+          readOnly: true
+        last_file:
+          type: object
+          additionalProperties: {}
+          nullable: true
+          description: Get last file ID from the LevelViewSet's annotated queryset.
+          readOnly: true
+        download_count:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+          readOnly: true
+        rating_count:
+          type: integer
+          maximum: 2147483647
+          minimum: 0
+          readOnly: true
+        review_count:
+          type: integer
+          maximum: 2147483647
+          minimum: 0
+          readOnly: true
+        walkthrough_count:
+          type: integer
+          maximum: 2147483647
+          minimum: 0
+          readOnly: true
+        is_approved:
+          type: boolean
+          readOnly: true
+        rejection_reason:
+          type: string
+          nullable: true
+          readOnly: true
+        rating_class:
+          allOf:
+          - $ref: '#/components/schemas/RatingClassNested'
+          readOnly: true
+      required:
+      - author_ids
+      - authors
+      - cover
+      - created
+      - difficulty
+      - difficulty_id
+      - download_count
+      - duration
+      - duration_id
+      - engine
+      - engine_id
+      - genre_ids
+      - genres
+      - id
+      - is_approved
+      - last_file
+      - last_updated
+      - last_user_content_updated
+      - name
+      - rating_class
+      - rating_count
+      - rejection_reason
+      - review_count
+      - screenshots
+      - tag_ids
+      - tags
+      - uploader
+      - walkthrough_count
+    LevelNested:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          maxLength: 100
+        cover:
+          allOf:
+          - $ref: '#/components/schemas/UploadedFileNested'
+          readOnly: true
+      required:
+      - cover
+      - id
+      - name
+    LevelRejection:
+      type: object
+      properties:
+        reason:
+          type: string
+          maxLength: 500
+      required:
+      - reason
+    LevelScreenshot:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        position:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+        file:
+          allOf:
+          - $ref: '#/components/schemas/UploadedFileNested'
+          readOnly: true
+      required:
+      - file
+      - id
+    LinkTypeEnum:
+      enum:
+      - sh
+      - ma
+      type: string
+      description: |-
+        * `sh` - Showcase
+        * `ma` - Main
+    NewsDetails:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        subject:
+          type: string
+          nullable: true
+          maxLength: 200
+        text:
+          type: string
+          nullable: true
+        created:
+          type: string
+          format: date-time
+          readOnly: true
+          nullable: true
+        last_updated:
+          type: string
+          format: date-time
+          readOnly: true
+          nullable: true
+      required:
+      - created
+      - id
+      - last_updated
+    NewsListing:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        subject:
+          type: string
+          nullable: true
+          maxLength: 200
+        text:
+          type: string
+          nullable: true
+        created:
+          type: string
+          format: date-time
+          readOnly: true
+          nullable: true
+        last_updated:
+          type: string
+          format: date-time
+          readOnly: true
+          nullable: true
+      required:
+      - created
+      - id
+      - last_updated
+    PaginatedAuditLogListingList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/AuditLogListing'
+    PaginatedAwardRecipientList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/AwardRecipient'
+    PaginatedEngineListingList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/EngineListing'
+    PaginatedEventListingList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/EventListing'
+    PaginatedGenreListingList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/GenreListing'
+    PaginatedLevelListingList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/LevelListing'
+    PaginatedNewsListingList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/NewsListing'
+    PaginatedPlaylistItemList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/PlaylistItem'
+    PaginatedRatingListingList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/RatingListing'
+    PaginatedReviewListingList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/ReviewListing'
+    PaginatedTagListingList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/TagListing'
+    PaginatedUserListingList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/UserListing'
+    PaginatedWalkthroughListingList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/WalkthroughListing'
+    PatchedLevelDetails:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          maxLength: 100
+        description:
+          type: string
+          maxLength: 5000
+        engine:
+          allOf:
+          - $ref: '#/components/schemas/EngineNested'
+          readOnly: true
+        engine_id:
+          type: integer
+          writeOnly: true
+        duration:
+          allOf:
+          - $ref: '#/components/schemas/LevelDurationNested'
+          readOnly: true
+        duration_id:
+          type: integer
+          writeOnly: true
+        difficulty:
+          allOf:
+          - $ref: '#/components/schemas/LevelDifficultyNested'
+          readOnly: true
+        difficulty_id:
+          type: integer
+          writeOnly: true
+        genres:
+          type: array
+          items:
+            $ref: '#/components/schemas/GenreNested'
+          readOnly: true
+        genre_ids:
+          type: array
+          items:
+            type: integer
+            writeOnly: true
+          writeOnly: true
+        tags:
+          type: array
+          items:
+            $ref: '#/components/schemas/TagNested'
+          readOnly: true
+        tag_ids:
+          type: array
+          items:
+            type: integer
+            writeOnly: true
+          writeOnly: true
+        authors:
+          type: array
+          items:
+            $ref: '#/components/schemas/UserNested'
+          readOnly: true
+        author_ids:
+          type: array
+          items:
+            type: integer
+            writeOnly: true
+          writeOnly: true
+        uploader:
+          allOf:
+          - $ref: '#/components/schemas/UserNested'
+          readOnly: true
+        created:
+          type: string
+          format: date-time
+          readOnly: true
+          nullable: true
+        cover:
+          allOf:
+          - $ref: '#/components/schemas/UploadedFileNested'
+          readOnly: true
+        screenshots:
+          type: array
+          items:
+            $ref: '#/components/schemas/LevelScreenshot'
+          readOnly: true
+        external_links:
+          type: array
+          items:
+            $ref: '#/components/schemas/LevelExternalLink'
+        last_updated:
+          type: string
+          format: date-time
+          readOnly: true
+          nullable: true
+        last_user_content_updated:
+          type: string
+          format: date-time
+          nullable: true
+          readOnly: true
+        last_file:
+          type: object
+          additionalProperties: {}
+          nullable: true
+          description: Get last file ID from the LevelViewSet's annotated queryset.
+          readOnly: true
+        download_count:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+          readOnly: true
+        rating_count:
+          type: integer
+          maximum: 2147483647
+          minimum: 0
+          readOnly: true
+        review_count:
+          type: integer
+          maximum: 2147483647
+          minimum: 0
+          readOnly: true
+        walkthrough_count:
+          type: integer
+          maximum: 2147483647
+          minimum: 0
+          readOnly: true
+        is_approved:
+          type: boolean
+          readOnly: true
+        rejection_reason:
+          type: string
+          nullable: true
+          readOnly: true
+        rating_class:
+          allOf:
+          - $ref: '#/components/schemas/RatingClassNested'
+          readOnly: true
+        cover_id:
+          type: integer
+          writeOnly: true
+        screenshot_ids:
+          type: array
+          items:
+            type: integer
+            writeOnly: true
+          writeOnly: true
+        files:
+          type: object
+          additionalProperties: {}
+          nullable: true
+          readOnly: true
+        file_id:
+          type: integer
+          writeOnly: true
+        trle_id:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+          nullable: true
+    PatchedNewsDetails:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        subject:
+          type: string
+          nullable: true
+          maxLength: 200
+        text:
+          type: string
+          nullable: true
+        created:
+          type: string
+          format: date-time
+          readOnly: true
+          nullable: true
+        last_updated:
+          type: string
+          format: date-time
+          readOnly: true
+          nullable: true
+    PatchedPlaylistItem:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        level:
+          allOf:
+          - $ref: '#/components/schemas/LevelNested'
+          readOnly: true
+        level_id:
+          type: integer
+          writeOnly: true
+        user:
+          allOf:
+          - $ref: '#/components/schemas/UserNested'
+          readOnly: true
+        status:
+          $ref: '#/components/schemas/PlaylistItemStatusEnum'
+        created:
+          type: string
+          format: date-time
+          readOnly: true
+          nullable: true
+        last_updated:
+          type: string
+          format: date-time
+          readOnly: true
+          nullable: true
+    PatchedRatingDetails:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        author:
+          allOf:
+          - $ref: '#/components/schemas/RatingAuthor'
+          readOnly: true
+        level:
+          allOf:
+          - $ref: '#/components/schemas/LevelNested'
+          readOnly: true
+        created:
+          type: string
+          format: date-time
+          readOnly: true
+          nullable: true
+        rating_type:
+          allOf:
+          - $ref: '#/components/schemas/RatingTypeEnum'
+          readOnly: true
+        last_updated:
+          type: string
+          format: date-time
+          readOnly: true
+          nullable: true
+        rating_class:
+          allOf:
+          - $ref: '#/components/schemas/RatingClassNested'
+          readOnly: true
+        last_user_content_updated:
+          type: string
+          format: date-time
+          nullable: true
+          readOnly: true
+        answers:
+          type: array
+          items:
+            type: integer
+          readOnly: true
+        answer_ids:
+          type: array
+          items:
+            type: integer
+            writeOnly: true
+          writeOnly: true
+        level_id:
+          type: integer
+          writeOnly: true
+    PatchedReviewDetails:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        author:
+          allOf:
+          - $ref: '#/components/schemas/ReviewAuthor'
+          readOnly: true
+        level:
+          allOf:
+          - $ref: '#/components/schemas/LevelNested'
+          readOnly: true
+        text:
+          type: string
+          maxLength: 5000
+        is_hidden:
+          type: boolean
+        rejection_reason:
+          type: string
+          nullable: true
+          maxLength: 500
+        created:
+          type: string
+          format: date-time
+          readOnly: true
+          nullable: true
+        last_updated:
+          type: string
+          format: date-time
+          readOnly: true
+          nullable: true
+        last_user_content_updated:
+          type: string
+          format: date-time
+          nullable: true
+          readOnly: true
+        upvote_count:
+          type: integer
+          maximum: 2147483647
+          minimum: 0
+        downvote_count:
+          type: integer
+          maximum: 2147483647
+          minimum: 0
+        current_user_vote:
+          type: integer
+          nullable: true
+          readOnly: true
+        can_vote:
+          type: boolean
+          readOnly: true
+        level_id:
+          type: integer
+          writeOnly: true
+    PatchedTagDetails:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          maxLength: 100
+        level_count:
+          type: integer
+          readOnly: true
+        created:
+          type: string
+          format: date-time
+          readOnly: true
+          nullable: true
+        last_updated:
+          type: string
+          format: date-time
+          readOnly: true
+          nullable: true
+    PatchedUserDetails:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        username:
+          type: string
+          minLength: 2
+          maxLength: 26
+        first_name:
+          type: string
+          maxLength: 30
+        last_name:
+          type: string
+          maxLength: 150
+        bio:
+          type: string
+          maxLength: 5000
+        date_joined:
+          type: string
+          format: date-time
+          nullable: true
+          readOnly: true
+        last_login:
+          type: string
+          format: date-time
+          nullable: true
+          readOnly: true
+        is_active:
+          type: boolean
+          title: Active
+          description: Designates whether this user should be treated as active. Unselect
+            this instead of deleting accounts.
+          readOnly: true
+        is_banned:
+          type: boolean
+        is_pending_activation:
+          type: boolean
+          readOnly: true
+        played_level_count:
+          type: integer
+          maximum: 2147483647
+          minimum: 0
+          readOnly: true
+        authored_level_count_all:
+          type: integer
+          maximum: 2147483647
+          minimum: 0
+          readOnly: true
+        authored_level_count_approved:
+          type: integer
+          maximum: 2147483647
+          minimum: 0
+          readOnly: true
+        authored_walkthrough_count_all:
+          type: integer
+          maximum: 2147483647
+          minimum: 0
+          readOnly: true
+        authored_walkthrough_count_approved:
+          type: integer
+          maximum: 2147483647
+          minimum: 0
+          readOnly: true
+        rated_level_count:
+          type: integer
+          maximum: 2147483647
+          minimum: 0
+          readOnly: true
+        reviewed_level_count:
+          type: integer
+          maximum: 2147483647
+          minimum: 0
+          readOnly: true
+        picture:
+          allOf:
+          - $ref: '#/components/schemas/UploadedFileNested'
+          readOnly: true
+        permissions:
+          type: array
+          items:
+            type: string
+          readOnly: true
+        trle_reviewer_id:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+          nullable: true
+          readOnly: true
+        trle_author_id:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+          nullable: true
+          readOnly: true
+        email:
+          type: string
+          format: email
+          minLength: 3
+          maxLength: 64
+        country:
+          allOf:
+          - $ref: '#/components/schemas/CountryNested'
+          readOnly: true
+        country_code:
+          type: string
+          writeOnly: true
+          nullable: true
+        website_url:
+          nullable: true
+          oneOf:
+          - type: string
+            format: uri
+            maxLength: 256
+          - type: string
+            maxLength: 0
+        donation_url:
+          nullable: true
+          oneOf:
+          - type: string
+            format: uri
+            maxLength: 256
+          - type: string
+            maxLength: 0
+        old_password:
+          type: string
+          writeOnly: true
+        password:
+          type: string
+          writeOnly: true
+        picture_id:
+          type: integer
+          writeOnly: true
+          nullable: true
+        is_staff:
+          type: boolean
+          title: Staff status
+          description: Designates whether the user can log into this admin site.
+          readOnly: true
+        is_superuser:
+          type: boolean
+          title: Superuser status
+          description: Designates that this user has all permissions without explicitly
+            assigning them.
+          readOnly: true
+        settings:
+          $ref: '#/components/schemas/UserSettings'
+        awards:
+          type: array
+          items:
+            $ref: '#/components/schemas/UserAward'
+          readOnly: true
+    PatchedWalkthroughDetails:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        level:
+          allOf:
+          - $ref: '#/components/schemas/LevelNested'
+          readOnly: true
+        author:
+          allOf:
+          - $ref: '#/components/schemas/WalkthroughAuthor'
+          readOnly: true
+        legacy_author_name:
+          type: string
+          nullable: true
+          readOnly: true
+        status:
+          allOf:
+          - $ref: '#/components/schemas/StatusAa3Enum'
+          readOnly: true
+        rejection_reason:
+          type: string
+          nullable: true
+          readOnly: true
+        walkthrough_type:
+          $ref: '#/components/schemas/WalkthroughTypeEnum'
+        text:
+          type: string
+          minLength: 0
+        created:
+          type: string
+          format: date-time
+          readOnly: true
+          nullable: true
+        last_updated:
+          type: string
+          format: date-time
+          readOnly: true
+          nullable: true
+        last_user_content_updated:
+          type: string
+          format: date-time
+          nullable: true
+          readOnly: true
+        level_id:
+          type: integer
+          writeOnly: true
+    PlaylistImportResult:
+      type: object
+      properties:
+        updated_items:
+          type: integer
+      required:
+      - updated_items
+    PlaylistItem:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        level:
+          allOf:
+          - $ref: '#/components/schemas/LevelNested'
+          readOnly: true
+        level_id:
+          type: integer
+          writeOnly: true
+        user:
+          allOf:
+          - $ref: '#/components/schemas/UserNested'
+          readOnly: true
+        status:
+          $ref: '#/components/schemas/PlaylistItemStatusEnum'
+        created:
+          type: string
+          format: date-time
+          readOnly: true
+          nullable: true
+        last_updated:
+          type: string
+          format: date-time
+          readOnly: true
+          nullable: true
+      required:
+      - created
+      - id
+      - last_updated
+      - level
+      - level_id
+      - status
+      - user
+    PlaylistItemStatusEnum:
+      enum:
+      - not_yet_played
+      - playing
+      - finished
+      - dropped
+      - on_hold
+      type: string
+      description: |-
+        * `not_yet_played` - Not yet played
+        * `playing` - Playing
+        * `finished` - Finished
+        * `dropped` - Dropped
+        * `on_hold` - On hold
+    RatingAuthor:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        username:
+          type: string
+          description: Required. 150 characters or fewer. Letters, digits and @/./+/-/_
+            only.
+          pattern: ^[\w.@+-]+$
+          maxLength: 150
+        first_name:
+          type: string
+          maxLength: 150
+        last_name:
+          type: string
+          maxLength: 150
+        picture:
+          allOf:
+          - $ref: '#/components/schemas/UploadedFileNested'
+          readOnly: true
+        rated_level_count:
+          type: integer
+          maximum: 2147483647
+          minimum: 0
+      required:
+      - id
+      - picture
+      - username
+    RatingClassNested:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          maxLength: 30
+        position:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+          nullable: true
+      required:
+      - id
+      - name
+    RatingDetails:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        author:
+          allOf:
+          - $ref: '#/components/schemas/RatingAuthor'
+          readOnly: true
+        level:
+          allOf:
+          - $ref: '#/components/schemas/LevelNested'
+          readOnly: true
+        created:
+          type: string
+          format: date-time
+          readOnly: true
+          nullable: true
+        rating_type:
+          allOf:
+          - $ref: '#/components/schemas/RatingTypeEnum'
+          readOnly: true
+        last_updated:
+          type: string
+          format: date-time
+          readOnly: true
+          nullable: true
+        rating_class:
+          allOf:
+          - $ref: '#/components/schemas/RatingClassNested'
+          readOnly: true
+        last_user_content_updated:
+          type: string
+          format: date-time
+          nullable: true
+          readOnly: true
+        answers:
+          type: array
+          items:
+            type: integer
+          readOnly: true
+        answer_ids:
+          type: array
+          items:
+            type: integer
+            writeOnly: true
+          writeOnly: true
+        level_id:
+          type: integer
+          writeOnly: true
+      required:
+      - answer_ids
+      - answers
+      - author
+      - created
+      - id
+      - last_updated
+      - last_user_content_updated
+      - level
+      - level_id
+      - rating_class
+      - rating_type
+    RatingListing:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        author:
+          allOf:
+          - $ref: '#/components/schemas/RatingAuthor'
+          readOnly: true
+        level:
+          allOf:
+          - $ref: '#/components/schemas/LevelNested'
+          readOnly: true
+        created:
+          type: string
+          format: date-time
+          readOnly: true
+          nullable: true
+        rating_type:
+          allOf:
+          - $ref: '#/components/schemas/RatingTypeEnum'
+          readOnly: true
+        last_updated:
+          type: string
+          format: date-time
+          readOnly: true
+          nullable: true
+        rating_class:
+          allOf:
+          - $ref: '#/components/schemas/RatingClassNested'
+          readOnly: true
+        last_user_content_updated:
+          type: string
+          format: date-time
+          nullable: true
+          readOnly: true
+      required:
+      - author
+      - created
+      - id
+      - last_updated
+      - last_user_content_updated
+      - level
+      - rating_class
+      - rating_type
+    RatingStat:
+      type: object
+      properties:
+        rating_class:
+          $ref: '#/components/schemas/RatingClassNested'
+        level_count:
+          type: integer
+      required:
+      - level_count
+      - rating_class
+    RatingTemplateAnswer:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        position:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+        answer_text:
+          type: string
+          maxLength: 100
+      required:
+      - answer_text
+      - id
+      - position
+    RatingTemplateQuestion:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        position:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+        question_text:
+          type: string
+          maxLength: 100
+        answers:
+          type: array
+          items:
+            $ref: '#/components/schemas/RatingTemplateAnswer'
+          readOnly: true
+        category:
+          type: string
+          nullable: true
+          maxLength: 30
+      required:
+      - answers
+      - id
+      - position
+      - question_text
+    RatingTypeEnum:
+      enum:
+      - le
+      - mo
+      type: string
+      description: |-
+        * `le` - Legacy (TRLE.net)
+        * `mo` - Modern (TRCustoms)
+    ReviewAuthor:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        username:
+          type: string
+          description: Required. 150 characters or fewer. Letters, digits and @/./+/-/_
+            only.
+          pattern: ^[\w.@+-]+$
+          maxLength: 150
+        first_name:
+          type: string
+          maxLength: 150
+        last_name:
+          type: string
+          maxLength: 150
+        picture:
+          allOf:
+          - $ref: '#/components/schemas/UploadedFileNested'
+          readOnly: true
+        reviewed_level_count:
+          type: integer
+          maximum: 2147483647
+          minimum: 0
+      required:
+      - id
+      - picture
+      - username
+    ReviewDetails:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        author:
+          allOf:
+          - $ref: '#/components/schemas/ReviewAuthor'
+          readOnly: true
+        level:
+          allOf:
+          - $ref: '#/components/schemas/LevelNested'
+          readOnly: true
+        text:
+          type: string
+          maxLength: 5000
+        is_hidden:
+          type: boolean
+        rejection_reason:
+          type: string
+          nullable: true
+          maxLength: 500
+        created:
+          type: string
+          format: date-time
+          readOnly: true
+          nullable: true
+        last_updated:
+          type: string
+          format: date-time
+          readOnly: true
+          nullable: true
+        last_user_content_updated:
+          type: string
+          format: date-time
+          nullable: true
+          readOnly: true
+        upvote_count:
+          type: integer
+          maximum: 2147483647
+          minimum: 0
+        downvote_count:
+          type: integer
+          maximum: 2147483647
+          minimum: 0
+        current_user_vote:
+          type: integer
+          nullable: true
+          readOnly: true
+        can_vote:
+          type: boolean
+          readOnly: true
+        level_id:
+          type: integer
+          writeOnly: true
+      required:
+      - author
+      - can_vote
+      - created
+      - current_user_vote
+      - id
+      - last_updated
+      - last_user_content_updated
+      - level
+      - level_id
+      - text
+    ReviewHide:
+      type: object
+      properties:
+        reason:
+          type: string
+          maxLength: 500
+      required:
+      - reason
+    ReviewListing:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        author:
+          allOf:
+          - $ref: '#/components/schemas/ReviewAuthor'
+          readOnly: true
+        level:
+          allOf:
+          - $ref: '#/components/schemas/LevelNested'
+          readOnly: true
+        text:
+          type: string
+          nullable: true
+          maxLength: 5000
+        is_hidden:
+          type: boolean
+        rejection_reason:
+          type: string
+          nullable: true
+          maxLength: 500
+        created:
+          type: string
+          format: date-time
+          readOnly: true
+          nullable: true
+        last_updated:
+          type: string
+          format: date-time
+          readOnly: true
+          nullable: true
+        last_user_content_updated:
+          type: string
+          format: date-time
+          nullable: true
+          readOnly: true
+        upvote_count:
+          type: integer
+          maximum: 2147483647
+          minimum: 0
+        downvote_count:
+          type: integer
+          maximum: 2147483647
+          minimum: 0
+        current_user_vote:
+          type: integer
+          nullable: true
+          readOnly: true
+        can_vote:
+          type: boolean
+          readOnly: true
+      required:
+      - author
+      - can_vote
+      - created
+      - current_user_vote
+      - id
+      - last_updated
+      - last_user_content_updated
+      - level
+    ReviewVote:
+      type: object
+      properties:
+        vote:
+          $ref: '#/components/schemas/VoteEnum'
+      required:
+      - vote
+    StatusAa3Enum:
+      enum:
+      - dra
+      - pen
+      - app
+      - rej
+      type: string
+      description: |-
+        * `dra` - Draft
+        * `pen` - Pending approval
+        * `app` - Approved
+        * `rej` - Rejected
+    TagDetails:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          maxLength: 100
+        level_count:
+          type: integer
+          readOnly: true
+        created:
+          type: string
+          format: date-time
+          readOnly: true
+          nullable: true
+        last_updated:
+          type: string
+          format: date-time
+          readOnly: true
+          nullable: true
+      required:
+      - created
+      - id
+      - last_updated
+      - level_count
+      - name
+    TagListing:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          maxLength: 100
+        level_count:
+          type: integer
+          readOnly: true
+        created:
+          type: string
+          format: date-time
+          readOnly: true
+          nullable: true
+        last_updated:
+          type: string
+          format: date-time
+          readOnly: true
+          nullable: true
+      required:
+      - created
+      - id
+      - last_updated
+      - level_count
+      - name
+    TagMerge:
+      type: object
+      properties:
+        target_tag_id:
+          type: integer
+      required:
+      - target_tag_id
+    TagNested:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          maxLength: 100
+      required:
+      - id
+      - name
+    TokenObtainPair:
+      type: object
+      properties:
+        username:
+          type: string
+          writeOnly: true
+        password:
+          type: string
+          writeOnly: true
+        access:
+          type: string
+          readOnly: true
+        refresh:
+          type: string
+          readOnly: true
+      required:
+      - access
+      - password
+      - refresh
+      - username
+    TokenRefresh:
+      type: object
+      properties:
+        access:
+          type: string
+          readOnly: true
+        refresh:
+          type: string
+          writeOnly: true
+      required:
+      - access
+      - refresh
+    UploadTypeEnum:
+      enum:
+      - up
+      - lb
+      - ls
+      - lf
+      - at
+      - ec
+      type: string
+      description: |-
+        * `up` - User picture
+        * `lb` - Level cover image
+        * `ls` - Level screenshot
+        * `lf` - Level file
+        * `at` - Post attachment
+        * `ec` - Event cover image
+    UploadedFileDetails:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        content:
+          type: string
+          format: uri
+          nullable: true
+        upload_type:
+          $ref: '#/components/schemas/UploadTypeEnum'
+        url:
+          type: string
+          nullable: true
+          readOnly: true
+        size:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+          readOnly: true
+        md5sum:
+          type: string
+          nullable: true
+          readOnly: true
+      required:
+      - id
+      - md5sum
+      - size
+      - upload_type
+      - url
+    UploadedFileNested:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        content:
+          type: string
+          format: uri
+          nullable: true
+        upload_type:
+          $ref: '#/components/schemas/UploadTypeEnum'
+        url:
+          type: string
+          nullable: true
+          readOnly: true
+        size:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+          readOnly: true
+        md5sum:
+          type: string
+          nullable: true
+          readOnly: true
+      required:
+      - id
+      - md5sum
+      - size
+      - upload_type
+      - url
+    UserAward:
+      type: object
+      properties:
+        created:
+          type: string
+          format: date-time
+          readOnly: true
+          nullable: true
+        last_updated:
+          type: string
+          format: date-time
+          readOnly: true
+          nullable: true
+        position:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+        code:
+          type: string
+          maxLength: 50
+        title:
+          type: string
+          maxLength: 50
+        description:
+          type: string
+          maxLength: 100
+        tier:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+          nullable: true
+        rarity:
+          type: integer
+          readOnly: true
+        user_percentage:
+          type: integer
+          readOnly: true
+      required:
+      - code
+      - created
+      - description
+      - last_updated
+      - rarity
+      - title
+      - user_percentage
+    UserBan:
+      type: object
+      properties:
+        reason:
+          type: string
+          maxLength: 500
+      required:
+      - reason
+    UserCompletePasswordReset:
+      type: object
+      properties:
+        password:
+          type: string
+          writeOnly: true
+        token:
+          type: string
+      required:
+      - password
+      - token
+    UserConfirmEmail:
+      type: object
+      properties:
+        token:
+          type: string
+      required:
+      - token
+    UserDetails:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        username:
+          type: string
+          minLength: 2
+          maxLength: 26
+        first_name:
+          type: string
+          maxLength: 30
+        last_name:
+          type: string
+          maxLength: 150
+        bio:
+          type: string
+          maxLength: 5000
+        date_joined:
+          type: string
+          format: date-time
+          nullable: true
+          readOnly: true
+        last_login:
+          type: string
+          format: date-time
+          nullable: true
+          readOnly: true
+        is_active:
+          type: boolean
+          title: Active
+          description: Designates whether this user should be treated as active. Unselect
+            this instead of deleting accounts.
+          readOnly: true
+        is_banned:
+          type: boolean
+        is_pending_activation:
+          type: boolean
+          readOnly: true
+        played_level_count:
+          type: integer
+          maximum: 2147483647
+          minimum: 0
+          readOnly: true
+        authored_level_count_all:
+          type: integer
+          maximum: 2147483647
+          minimum: 0
+          readOnly: true
+        authored_level_count_approved:
+          type: integer
+          maximum: 2147483647
+          minimum: 0
+          readOnly: true
+        authored_walkthrough_count_all:
+          type: integer
+          maximum: 2147483647
+          minimum: 0
+          readOnly: true
+        authored_walkthrough_count_approved:
+          type: integer
+          maximum: 2147483647
+          minimum: 0
+          readOnly: true
+        rated_level_count:
+          type: integer
+          maximum: 2147483647
+          minimum: 0
+          readOnly: true
+        reviewed_level_count:
+          type: integer
+          maximum: 2147483647
+          minimum: 0
+          readOnly: true
+        picture:
+          allOf:
+          - $ref: '#/components/schemas/UploadedFileNested'
+          readOnly: true
+        permissions:
+          type: array
+          items:
+            type: string
+          readOnly: true
+        trle_reviewer_id:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+          nullable: true
+          readOnly: true
+        trle_author_id:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+          nullable: true
+          readOnly: true
+        email:
+          type: string
+          format: email
+          minLength: 3
+          maxLength: 64
+        country:
+          allOf:
+          - $ref: '#/components/schemas/CountryNested'
+          readOnly: true
+        country_code:
+          type: string
+          writeOnly: true
+          nullable: true
+        website_url:
+          nullable: true
+          oneOf:
+          - type: string
+            format: uri
+            maxLength: 256
+          - type: string
+            maxLength: 0
+        donation_url:
+          nullable: true
+          oneOf:
+          - type: string
+            format: uri
+            maxLength: 256
+          - type: string
+            maxLength: 0
+        old_password:
+          type: string
+          writeOnly: true
+        password:
+          type: string
+          writeOnly: true
+        picture_id:
+          type: integer
+          writeOnly: true
+          nullable: true
+        is_staff:
+          type: boolean
+          title: Staff status
+          description: Designates whether the user can log into this admin site.
+          readOnly: true
+        is_superuser:
+          type: boolean
+          title: Superuser status
+          description: Designates that this user has all permissions without explicitly
+            assigning them.
+          readOnly: true
+        settings:
+          $ref: '#/components/schemas/UserSettings'
+        awards:
+          type: array
+          items:
+            $ref: '#/components/schemas/UserAward'
+          readOnly: true
+      required:
+      - authored_level_count_all
+      - authored_level_count_approved
+      - authored_walkthrough_count_all
+      - authored_walkthrough_count_approved
+      - awards
+      - country
+      - date_joined
+      - email
+      - id
+      - is_active
+      - is_pending_activation
+      - is_staff
+      - is_superuser
+      - last_login
+      - password
+      - permissions
+      - picture
+      - played_level_count
+      - rated_level_count
+      - reviewed_level_count
+      - trle_author_id
+      - trle_reviewer_id
+      - username
+    UserListing:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        username:
+          type: string
+          minLength: 2
+          maxLength: 26
+        first_name:
+          type: string
+          maxLength: 30
+        last_name:
+          type: string
+          maxLength: 150
+        bio:
+          type: string
+          maxLength: 5000
+        date_joined:
+          type: string
+          format: date-time
+          nullable: true
+          readOnly: true
+        last_login:
+          type: string
+          format: date-time
+          nullable: true
+          readOnly: true
+        is_active:
+          type: boolean
+          title: Active
+          description: Designates whether this user should be treated as active. Unselect
+            this instead of deleting accounts.
+          readOnly: true
+        is_banned:
+          type: boolean
+        is_pending_activation:
+          type: boolean
+          readOnly: true
+        played_level_count:
+          type: integer
+          maximum: 2147483647
+          minimum: 0
+          readOnly: true
+        authored_level_count_all:
+          type: integer
+          maximum: 2147483647
+          minimum: 0
+          readOnly: true
+        authored_level_count_approved:
+          type: integer
+          maximum: 2147483647
+          minimum: 0
+          readOnly: true
+        authored_walkthrough_count_all:
+          type: integer
+          maximum: 2147483647
+          minimum: 0
+          readOnly: true
+        authored_walkthrough_count_approved:
+          type: integer
+          maximum: 2147483647
+          minimum: 0
+          readOnly: true
+        rated_level_count:
+          type: integer
+          maximum: 2147483647
+          minimum: 0
+          readOnly: true
+        reviewed_level_count:
+          type: integer
+          maximum: 2147483647
+          minimum: 0
+          readOnly: true
+        picture:
+          allOf:
+          - $ref: '#/components/schemas/UploadedFileNested'
+          readOnly: true
+        permissions:
+          type: array
+          items:
+            type: string
+          readOnly: true
+        trle_reviewer_id:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+          nullable: true
+          readOnly: true
+        trle_author_id:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+          nullable: true
+          readOnly: true
+      required:
+      - authored_level_count_all
+      - authored_level_count_approved
+      - authored_walkthrough_count_all
+      - authored_walkthrough_count_approved
+      - date_joined
+      - id
+      - is_active
+      - is_pending_activation
+      - last_login
+      - permissions
+      - picture
+      - played_level_count
+      - rated_level_count
+      - reviewed_level_count
+      - trle_author_id
+      - trle_reviewer_id
+      - username
+    UserNested:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        username:
+          type: string
+          description: Required. 150 characters or fewer. Letters, digits and @/./+/-/_
+            only.
+          pattern: ^[\w.@+-]+$
+          maxLength: 150
+        first_name:
+          type: string
+          maxLength: 150
+        last_name:
+          type: string
+          maxLength: 150
+        picture:
+          allOf:
+          - $ref: '#/components/schemas/UploadedFileNested'
+          readOnly: true
+      required:
+      - id
+      - picture
+      - username
+    UserRequestPasswordReset:
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+          minLength: 3
+          maxLength: 64
+      required:
+      - email
+    UserSettings:
+      type: object
+      properties:
+        email_review_posted:
+          type: boolean
+        email_rating_posted:
+          type: boolean
+        email_walkthrough_posted:
+          type: boolean
+        email_review_updated:
+          type: boolean
+        email_rating_updated:
+          type: boolean
+        email_walkthrough_updated:
+          type: boolean
+    Username:
+      type: object
+      properties:
+        username:
+          type: string
+          maxLength: 200
+      required:
+      - username
+    VoteEnum:
+      enum:
+      - -1
+      - 1
+      type: integer
+      description: |-
+        * `-1` - -1
+        * `1` - 1
+    WalkthroughAuthor:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        username:
+          type: string
+          description: Required. 150 characters or fewer. Letters, digits and @/./+/-/_
+            only.
+          pattern: ^[\w.@+-]+$
+          maxLength: 150
+        first_name:
+          type: string
+          maxLength: 150
+        last_name:
+          type: string
+          maxLength: 150
+        picture:
+          allOf:
+          - $ref: '#/components/schemas/UploadedFileNested'
+          readOnly: true
+      required:
+      - id
+      - picture
+      - username
+    WalkthroughDetails:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        level:
+          allOf:
+          - $ref: '#/components/schemas/LevelNested'
+          readOnly: true
+        author:
+          allOf:
+          - $ref: '#/components/schemas/WalkthroughAuthor'
+          readOnly: true
+        legacy_author_name:
+          type: string
+          nullable: true
+          readOnly: true
+        status:
+          allOf:
+          - $ref: '#/components/schemas/StatusAa3Enum'
+          readOnly: true
+        rejection_reason:
+          type: string
+          nullable: true
+          readOnly: true
+        walkthrough_type:
+          $ref: '#/components/schemas/WalkthroughTypeEnum'
+        text:
+          type: string
+          minLength: 0
+        created:
+          type: string
+          format: date-time
+          readOnly: true
+          nullable: true
+        last_updated:
+          type: string
+          format: date-time
+          readOnly: true
+          nullable: true
+        last_user_content_updated:
+          type: string
+          format: date-time
+          nullable: true
+          readOnly: true
+        level_id:
+          type: integer
+          writeOnly: true
+      required:
+      - author
+      - created
+      - id
+      - last_updated
+      - last_user_content_updated
+      - legacy_author_name
+      - level
+      - level_id
+      - rejection_reason
+      - status
+      - text
+      - walkthrough_type
+    WalkthroughListing:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        level:
+          allOf:
+          - $ref: '#/components/schemas/LevelNested'
+          readOnly: true
+        author:
+          allOf:
+          - $ref: '#/components/schemas/WalkthroughAuthor'
+          readOnly: true
+        legacy_author_name:
+          type: string
+          nullable: true
+          readOnly: true
+        status:
+          allOf:
+          - $ref: '#/components/schemas/StatusAa3Enum'
+          readOnly: true
+        rejection_reason:
+          type: string
+          nullable: true
+          readOnly: true
+        walkthrough_type:
+          $ref: '#/components/schemas/WalkthroughTypeEnum'
+        text:
+          type: string
+        created:
+          type: string
+          format: date-time
+          readOnly: true
+          nullable: true
+        last_updated:
+          type: string
+          format: date-time
+          readOnly: true
+          nullable: true
+        last_user_content_updated:
+          type: string
+          format: date-time
+          nullable: true
+          readOnly: true
+      required:
+      - author
+      - created
+      - id
+      - last_updated
+      - last_user_content_updated
+      - legacy_author_name
+      - level
+      - rejection_reason
+      - status
+      - text
+      - walkthrough_type
+    WalkthroughStat:
+      type: object
+      properties:
+        video_and_text:
+          type: integer
+        video:
+          type: integer
+        text:
+          type: integer
+        none:
+          type: integer
+      required:
+      - none
+      - text
+      - video
+      - video_and_text
+    WalkthroughTypeEnum:
+      enum:
+      - l
+      - t
+      type: string
+      description: |-
+        * `l` - Link
+        * `t` - Text
+    Winner:
+      type: object
+      properties:
+        place:
+          type: integer
+          maximum: 2147483647
+          minimum: 0
+        user:
+          allOf:
+          - $ref: '#/components/schemas/UserNested'
+          readOnly: true
+      required:
+      - place
+      - user

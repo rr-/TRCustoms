@@ -36,6 +36,12 @@ lint-frontend *args:
 test-frontend *args:
     docker-compose run --rm trcustoms-frontend test {{args}}
 
+generate-api:
+    #!/bin/sh
+    set -xeuo pipefail
+    docker-compose run --rm -T -v ./frontend/openapi:/out trcustoms manage spectacular --file /out/schema.yaml
+    cd frontend && npm run generate-client
+
 test *args:
     docker-compose run --rm trcustoms test -n auto {{args}}
 qtest *args:

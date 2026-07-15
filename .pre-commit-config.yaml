@@ -25,4 +25,4 @@ repos:
         additional_dependencies:
           - prettier@3.5.3
           - "@trivago/prettier-plugin-sort-imports@5.2.2"
-        exclude: "backend/.*/templates/"
+        exclude: "backend/.*/templates/|frontend/src/client/|frontend/openapi/"
