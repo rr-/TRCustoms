@@ -1,5 +1,4 @@
 import styles from "./index.module.css";
-import type { Element, Node } from "hast";
 import { findAndReplace } from "mdast-util-find-and-replace";
 import { useMemo } from "react";
 import ReactMarkdown from "react-markdown";
@@ -8,7 +7,13 @@ import remarkGfm from "remark-gfm";
 import { YoutubeEmbed } from "src/components/common/YoutubeEmbed";
 import { remarkTransformHeaders } from "src/components/markdown/MarkdownTOC";
 import { parseYoutubeLink } from "src/utils/misc";
-import { visit } from "unist-util-visit";
+import { visit as _visit } from "unist-util-visit";
+
+// unist-util-visit's overloaded generic signature makes tsc type-check of the
+// two-argument visit(tree, visitor) form pathologically slow (minutes). This
+// module operates on loosely-typed (any) trees, so narrow it to a plain
+// signature to keep type-checking fast.
+const visit = _visit as (tree: any, visitor: any) => void;
 
 const remarkAlignment = () => {
   const filterEmpty = (root: any) => {
@@ -51,7 +56,7 @@ const remarkAlignment = () => {
     return true;
   };
 
-  const transformBlock = (root: any, index) => {
+  const transformBlock = (root: any) => {
     const startRegex = /^(?<prefix>.*?)\[center\](?<suffix>.*)$/i;
     const endRegex = /^(?<prefix>.*?)\[\/center\](?<suffix>.*)$/i;
     let startMatch = null;
@@ -115,7 +120,7 @@ const remarkAlignment = () => {
   };
 
   return (tree: any) => {
-    visit(tree, (node: Element, index: number | undefined, parent: Node) => {
+    visit(tree, (node: any, index: any, parent: any) => {
       transformInline(node);
       transformBlock(node);
     });
@@ -124,12 +129,12 @@ const remarkAlignment = () => {
 
 const remarkSqueezeParagraphs = () => {
   return (tree: any) => {
-    visit(tree, (node: Element, index: number | undefined, parent: Node) => {
+    visit(tree, (node: any, index: any, parent: any) => {
       if (
         index !== undefined &&
         parent &&
         (node.type === "paragraph" || node.type === "alignment") &&
-        node.children.every(function (child) {
+        node.children.every(function (child: any) {
           return child.type === "text" && /^\s*$/.test(child.value);
         })
       ) {
@@ -143,7 +148,7 @@ const remarkSqueezeParagraphs = () => {
 const remarkRemoveElements = (allowedTags: string[]) => {
   return () => {
     return (tree: any) => {
-      visit(tree, (node: Element, index: number | undefined, parent: Node) => {
+      visit(tree, (node: any, index: any, parent: any) => {
         if (
           index !== undefined &&
           parent &&
@@ -182,7 +187,7 @@ const remarkTRCustomColors = () => {
   };
 };
 
-const transformLink = (link: any, allowEmbeds: boolean): any => {
+const transformLink = (link: any, allowEmbeds: boolean | undefined): any => {
   const youtubeVideo = parseYoutubeLink(link.href);
   if (!youtubeVideo?.videoID && !youtubeVideo?.playlistID) {
     return <a href={link.href}>{link.children}</a>;
