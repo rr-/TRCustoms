@@ -90,6 +90,7 @@ interface LevelListing {
   rating_class: RatingClass | null;
   rating_count: number;
   review_count: number;
+  walkthrough_count: number;
 }
 
 interface LevelDetails extends LevelListing {

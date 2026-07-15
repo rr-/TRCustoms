@@ -26,13 +26,12 @@ const tierNames: { [tier: number]: string } = {
 interface UpgradableArtifact {
   code: string;
   name: string;
-  tiers: { tier: number; description: string; userPercentage: number }[];
+  tiers: { tier: number; userPercentage: number }[];
 }
 
 interface StandardArtifact {
   code: string;
   name: string;
-  description: string;
   userPercentage: number;
 }
 

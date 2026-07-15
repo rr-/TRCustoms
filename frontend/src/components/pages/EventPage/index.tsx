@@ -20,7 +20,7 @@ interface EventPageParams {
 }
 
 const EventPage = () => {
-  const { eventId } = useParams() as EventPageParams;
+  const { eventId } = useParams() as unknown as EventPageParams;
   const result = useQuery<EventDetails, Error>(
     ["event", EventService.getEventById, eventId],
     async () => EventService.getEventById(Number(eventId)),
@@ -40,13 +40,13 @@ const EventPage = () => {
   if (result.error) {
     return <p>{result.error.message}</p>;
   }
-  if (result.isLoading || !result.data) {
+  if (result.isLoading || !event) {
     return <Loader />;
   }
 
   return (
     <SidebarLayout
-      variant={SidebarLayoutVariant.Normal}
+      variant={SidebarLayoutVariant.Regular}
       sidebar={<EventSidebar event={event} />}
       header={
         <PageHeader

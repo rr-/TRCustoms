@@ -1,7 +1,7 @@
 import { AxiosResponse } from "axios";
 import { api } from "src/api";
 import { API_URL } from "src/constants";
-import type { LevelNested } from "src/services/LevelService";
+import type { LevelListing } from "src/services/LevelService";
 import type { UserNested } from "src/services/UserService";
 import type { GenericSearchQuery } from "src/types";
 import type { GenericSearchResult } from "src/types";
@@ -27,7 +27,7 @@ interface EventDetails extends EventListing {
   about: string | null;
   host: UserNested | null;
   winners: { place: number; user: UserNested }[];
-  levels: LevelNested[];
+  levels: LevelListing[];
 }
 
 const searchEvents = async (

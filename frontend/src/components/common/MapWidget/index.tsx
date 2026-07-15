@@ -47,8 +47,8 @@ export const MapWidget = ({ country, onChange }: MapWidgetProps) => {
       }}
     >
       <Geographies geography={geoFeatures}>
-        {({ geographies }) =>
-          geographies.map((geo) => {
+        {({ geographies }: any) =>
+          geographies.map((geo: any) => {
             const geoCountry = config.countries.filter(
               (geoCountry) => geoCountry.iso_3166_1_numeric === geo.id,
             )[0];
@@ -70,8 +70,8 @@ export const MapWidget = ({ country, onChange }: MapWidgetProps) => {
       </Geographies>
 
       <Geographies geography={geoFeatures}>
-        {({ geographies }) =>
-          geographies.map((geo) => {
+        {({ geographies }: any) =>
+          geographies.map((geo: any) => {
             return (
               <Geography
                 key={geo.rsmKey}

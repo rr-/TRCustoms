@@ -33,7 +33,6 @@ const ReviewDeleteButton = ({
       buttonLabel="Delete"
       buttonTooltip="Deletes this review forever."
       icon={<IconTrash />}
-      big={true}
       onConfirm={handleConfirm}
     />
   );

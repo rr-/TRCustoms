@@ -26,7 +26,7 @@ const LocationUserTable = ({
   searchQuery,
   setSearchQuery,
 }: LocationUserTableProps) => {
-  const [count, setCount] = useState<number>(undefined);
+  const [count, setCount] = useState<number | undefined>(undefined);
   if (!selectedCountry) {
     return null;
   }

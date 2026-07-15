@@ -95,6 +95,7 @@ interface UserAward {
   position: number;
   tier: number;
   rarity: number;
+  user_percentage: number;
 }
 
 interface UserSearchQuery extends GenericSearchQuery {
@@ -168,7 +169,7 @@ const update = async (
     websiteUrl,
     donationUrl,
     settings,
-  }: UserUpdatePayload,
+  }: Partial<UserUpdatePayload>,
 ): Promise<UserDetails> => {
   const data: { [key: string]: any } = {
     username: username,

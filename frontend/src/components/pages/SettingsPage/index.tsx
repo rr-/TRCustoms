@@ -53,12 +53,11 @@ const EmailCheckbox = ({
   <Checkbox
     label={label}
     checked={userSettings[settingKey]}
-    onChange={async (e) => {
+    onChange={(e) => {
       const updated = { ...userSettings, [settingKey]: e.target.checked };
       setUserSettings(updated);
       if (user) {
-        const u = await UserService.update(user.id, { settings: updated });
-        setUser(u);
+        UserService.update(user.id, { settings: updated }).then(setUser);
       }
     }}
   />
