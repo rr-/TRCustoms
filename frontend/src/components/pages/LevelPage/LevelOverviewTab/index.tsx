@@ -11,7 +11,7 @@ interface LevelOverviewTabProps {
 }
 
 const LevelOverviewTab = ({ level }: LevelOverviewTabProps) => {
-  const showcaseLinks = level.external_links
+  const showcaseLinks = (level.external_links ?? [])
     .filter((link) => link.link_type === ExternalLinkType.Showcase)
     .map((link) => link.url);
 

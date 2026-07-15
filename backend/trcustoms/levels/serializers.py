@@ -2,6 +2,7 @@ from typing import Any
 
 from django.conf import settings
 from django.core.validators import MaxLengthValidator
+from drf_spectacular.utils import extend_schema_field
 from rest_framework import serializers
 
 from trcustoms.common.fields import CustomCharField
@@ -168,6 +169,7 @@ class LevelListingSerializer(serializers.ModelSerializer):
     external_links = LevelExternalLinkSerializer(required=False, many=True)
     last_user_content_updated = serializers.ReadOnlyField()
 
+    @extend_schema_field(LevelFileSerializer)
     def get_last_file(self, instance: Level) -> dict[str, Any] | None:
         """Get last file ID from the LevelViewSet's annotated queryset."""
         if instance.last_file:
@@ -245,6 +247,7 @@ class LevelDetailsSerializer(LevelListingSerializer):
         ),
     )
 
+    @extend_schema_field(LevelFileSerializer(many=True))
     def get_files(self, instance) -> dict | None:
         files = instance.files.active()
         serializer = LevelFileSerializer(

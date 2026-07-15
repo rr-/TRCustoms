@@ -1,3 +1,4 @@
+from drf_spectacular.utils import extend_schema_field
 from rest_framework import serializers
 
 from trcustoms.community_events.models import Event, Winner
@@ -55,6 +56,7 @@ class EventDetailsSerializer(EventListingSerializer):
             "levels",
         ]
 
+    @extend_schema_field(LevelListingSerializer(many=True))
     def get_levels(self, instance: Event) -> list[dict]:
         """Only include levels that have been approved (exclude pending)."""
         qs = instance.levels.filter(is_approved=True)

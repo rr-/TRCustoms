@@ -93,12 +93,7 @@ export type EventDetails = {
     readonly about: string;
     host: UserNested;
     readonly winners: Array<Winner>;
-    /**
-     * Only include levels that have been approved (exclude pending).
-     */
-    readonly levels: Array<{
-        [key: string]: unknown;
-    }>;
+    readonly levels: Array<LevelListing>;
 };
 
 export type EventListing = {
@@ -199,12 +194,7 @@ export type LevelDetails = {
     external_links?: Array<LevelExternalLink>;
     readonly last_updated: string | null;
     readonly last_user_content_updated: string | null;
-    /**
-     * Get last file ID from the LevelViewSet's annotated queryset.
-     */
-    readonly last_file: {
-        [key: string]: unknown;
-    } | null;
+    last_file: LevelFile;
     readonly download_count: number;
     readonly rating_count: number;
     readonly review_count: number;
@@ -212,9 +202,7 @@ export type LevelDetails = {
     readonly is_approved: boolean;
     readonly rejection_reason: string | null;
     rating_class: RatingClassNested;
-    readonly files: {
-        [key: string]: unknown;
-    } | null;
+    readonly files: Array<LevelFile>;
     trle_id?: number | null;
 };
 
@@ -249,6 +237,14 @@ export type LevelExternalLink = {
     link_type: LinkTypeEnum;
 };
 
+export type LevelFile = {
+    readonly id: number;
+    version: number;
+    readonly size: number | null;
+    readonly created: string | null;
+    readonly url: string | null;
+};
+
 export type LevelListing = {
     readonly id: number;
     name: string;
@@ -266,12 +262,7 @@ export type LevelListing = {
     external_links?: Array<LevelExternalLink>;
     readonly last_updated: string | null;
     readonly last_user_content_updated: string | null;
-    /**
-     * Get last file ID from the LevelViewSet's annotated queryset.
-     */
-    readonly last_file: {
-        [key: string]: unknown;
-    } | null;
+    last_file: LevelFile;
     readonly download_count: number;
     readonly rating_count: number;
     readonly review_count: number;
@@ -485,12 +476,7 @@ export type PatchedLevelDetails = {
     external_links?: Array<LevelExternalLink>;
     readonly last_updated?: string | null;
     readonly last_user_content_updated?: string | null;
-    /**
-     * Get last file ID from the LevelViewSet's annotated queryset.
-     */
-    readonly last_file?: {
-        [key: string]: unknown;
-    } | null;
+    last_file?: LevelFile;
     readonly download_count?: number;
     readonly rating_count?: number;
     readonly review_count?: number;
@@ -498,9 +484,7 @@ export type PatchedLevelDetails = {
     readonly is_approved?: boolean;
     readonly rejection_reason?: string | null;
     rating_class?: RatingClassNested;
-    readonly files?: {
-        [key: string]: unknown;
-    } | null;
+    readonly files?: Array<LevelFile>;
     trle_id?: number | null;
 };
 
@@ -1143,6 +1127,10 @@ export type LevelExternalLinkWritable = {
     position: number;
     url: string;
     link_type: LinkTypeEnum;
+};
+
+export type LevelFileWritable = {
+    version: number;
 };
 
 export type LevelListingWritable = {

@@ -79,7 +79,7 @@ const FeaturedLevelView = ({
                   allowLines={false}
                   allowColors={false}
                 >
-                  {level.description}
+                  {level.description ?? ""}
                 </Markdown>
               </div>
             )}

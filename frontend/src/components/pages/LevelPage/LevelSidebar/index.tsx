@@ -37,7 +37,7 @@ const LevelSidebar = ({ level }: LevelSidebarProps) => {
     alert("This file is no longer available on our website.");
 
   const mainLink =
-    level.external_links.filter(
+    (level.external_links ?? []).filter(
       (link) => link.link_type === ExternalLinkType.Main,
     )[0]?.url || null;
 

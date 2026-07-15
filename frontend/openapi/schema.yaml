@@ -2663,9 +2663,7 @@ components:
         levels:
           type: array
           items:
-            type: object
-            additionalProperties: {}
-          description: Only include levels that have been approved (exclude pending).
+            $ref: '#/components/schemas/LevelListing'
           readOnly: true
       required:
       - about
@@ -3000,10 +2998,8 @@ components:
           nullable: true
           readOnly: true
         last_file:
-          type: object
-          additionalProperties: {}
-          nullable: true
-          description: Get last file ID from the LevelViewSet's annotated queryset.
+          allOf:
+          - $ref: '#/components/schemas/LevelFile'
           readOnly: true
         download_count:
           type: integer
@@ -3046,9 +3042,9 @@ components:
             writeOnly: true
           writeOnly: true
         files:
-          type: object
-          additionalProperties: {}
-          nullable: true
+          type: array
+          items:
+            $ref: '#/components/schemas/LevelFile'
           readOnly: true
         file_id:
           type: integer
@@ -3185,6 +3181,35 @@ components:
       - link_type
       - position
       - url
+    LevelFile:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        version:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+        size:
+          type: integer
+          nullable: true
+          readOnly: true
+        created:
+          type: string
+          format: date-time
+          readOnly: true
+          nullable: true
+        url:
+          type: string
+          nullable: true
+          readOnly: true
+      required:
+      - created
+      - id
+      - size
+      - url
+      - version
     LevelListing:
       type: object
       properties:
@@ -3285,10 +3310,8 @@ components:
           nullable: true
           readOnly: true
         last_file:
-          type: object
-          additionalProperties: {}
-          nullable: true
-          description: Get last file ID from the LevelViewSet's annotated queryset.
+          allOf:
+          - $ref: '#/components/schemas/LevelFile'
           readOnly: true
         download_count:
           type: integer
@@ -4010,10 +4033,8 @@ components:
           nullable: true
           readOnly: true
         last_file:
-          type: object
-          additionalProperties: {}
-          nullable: true
-          description: Get last file ID from the LevelViewSet's annotated queryset.
+          allOf:
+          - $ref: '#/components/schemas/LevelFile'
           readOnly: true
         download_count:
           type: integer
@@ -4056,9 +4077,9 @@ components:
             writeOnly: true
           writeOnly: true
         files:
-          type: object
-          additionalProperties: {}
-          nullable: true
+          type: array
+          items:
+            $ref: '#/components/schemas/LevelFile'
           readOnly: true
         file_id:
           type: integer

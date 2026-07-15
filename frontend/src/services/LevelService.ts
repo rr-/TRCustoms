@@ -1,40 +1,29 @@
-import { AxiosResponse } from "axios";
-import { api } from "src/api";
-import type { EngineNested } from "src/client";
-import { API_URL } from "src/constants";
-import type { UploadedFile } from "src/services/FileService";
-import type { GenreNested } from "src/services/GenreService";
-import type { TagNested } from "src/services/TagService";
-import type { UserNested } from "src/services/UserService";
-import type { GenericSearchQuery } from "src/types";
-import { GenericSearchResult } from "src/types";
-import type { RatingClass } from "src/types";
-import { filterFalsyObjectValues } from "src/utils/misc";
-import { getGenericSearchQuery } from "src/utils/misc";
-import { boolToSearchString } from "src/utils/misc";
-
-interface Screenshot {
-  id: number;
-  file: UploadedFile | null;
-}
-
-interface LevelFile {
-  id: number;
-  version: number;
-  size: number;
-  created: string;
-  url: string | null;
-}
-
-interface LevelDifficulty {
-  id: number;
-  name: string;
-}
-
-interface LevelDuration {
-  id: number;
-  name: string;
-}
+import {
+  levelsApproveCreate,
+  levelsCreate,
+  levelsDestroy,
+  levelsList,
+  levelsPartialUpdate,
+  levelsRejectCreate,
+  levelsRetrieve,
+} from "src/client";
+import type {
+  LevelDetails,
+  LevelDifficultyNested as LevelDifficulty,
+  LevelDurationNested as LevelDuration,
+  LevelExternalLink as ExternalLink,
+  LevelFile,
+  LevelListing,
+  LevelNested,
+  LevelScreenshot as Screenshot,
+  LinkTypeEnum,
+} from "src/client";
+import type { GenericSearchQuery, GenericSearchResult } from "src/types";
+import {
+  boolToSearchString,
+  filterFalsyObjectValues,
+  getGenericSearchQuery,
+} from "src/utils/misc";
 
 enum ExternalLinkType {
   Showcase = "sh",
@@ -53,50 +42,7 @@ enum LevelPlaylistDroppedLevelFilter {
   Hide = "hide",
 }
 
-interface ExternalLink {
-  id?: number | undefined;
-  url: string;
-  position: number;
-  link_type: ExternalLinkType;
-}
-
-interface LevelNested {
-  id: number;
-  name: string;
-  cover: UploadedFile | null;
-}
-
-interface LevelListing {
-  id: number;
-  name: string;
-  description: string;
-  genres: GenreNested[];
-  tags: TagNested[];
-  engine: EngineNested;
-  authors: UserNested[];
-  uploader: UserNested | null;
-  created: string;
-  last_updated: string;
-  last_user_content_updated: string;
-  last_file: LevelFile | null;
-  difficulty: LevelDifficulty;
-  duration: LevelDuration;
-  download_count: number;
-  cover: UploadedFile | null;
-  screenshots: Screenshot[];
-  external_links: ExternalLink[];
-  is_approved: boolean | null;
-  rejection_reason: string | null;
-  rating_class: RatingClass | null;
-  rating_count: number;
-  review_count: number;
-  walkthrough_count: number;
-}
-
-interface LevelDetails extends LevelListing {
-  trle_id: number | null;
-  files: LevelFile[];
-}
+interface ScreenshotList extends Array<Screenshot> {}
 
 interface LevelSearchQuery extends GenericSearchQuery {
   tags?: number[];
@@ -118,12 +64,10 @@ interface LevelSearchQuery extends GenericSearchQuery {
 interface LevelSearchResult
   extends GenericSearchResult<LevelSearchQuery, LevelListing> {}
 
-interface ScreenshotList extends Array<Screenshot> {}
-
 const searchLevels = async (
   searchQuery: LevelSearchQuery,
 ): Promise<LevelSearchResult> => {
-  const params = filterFalsyObjectValues({
+  const query: { [key: string]: any } = filterFalsyObjectValues({
     ...getGenericSearchQuery(searchQuery),
     tags: searchQuery.tags?.join(","),
     genres: searchQuery.genres?.join(","),
@@ -148,17 +92,16 @@ const searchLevels = async (
         ? null
         : searchQuery.playlistDroppedLevels,
   });
-  const response = (await api.get(`${API_URL}/levels/`, {
-    params,
-  })) as AxiosResponse<LevelSearchResult>;
-  return { ...response.data, searchQuery };
+  const { data } = await levelsList({ query, throwOnError: true });
+  return { ...data, searchQuery };
 };
 
 const getLevelById = async (levelId: number): Promise<LevelDetails> => {
-  const response = (await api.get(
-    `${API_URL}/levels/${levelId}/`,
-  )) as AxiosResponse<LevelDetails>;
-  return response.data;
+  const { data } = await levelsRetrieve({
+    path: { id: levelId },
+    throwOnError: true,
+  });
+  return data;
 };
 
 interface LevelBaseChangePayload {
@@ -182,34 +125,36 @@ const update = async (
   levelId: number,
   payload: LevelUpdatePayload,
 ): Promise<LevelDetails> => {
-  const data: { [key: string]: any } = filterFalsyObjectValues(payload);
-  const response = (await api.patch(
-    `${API_URL}/levels/${levelId}/`,
-    data,
-  )) as AxiosResponse<LevelDetails>;
-  return response.data;
+  const { data } = await levelsPartialUpdate({
+    path: { id: levelId },
+    body: filterFalsyObjectValues({ ...payload }) as any,
+    throwOnError: true,
+  });
+  return data;
 };
 
 const create = async (payload: LevelCreatePayload): Promise<LevelDetails> => {
-  const data: { [key: string]: any } = filterFalsyObjectValues(payload);
-  const response = (await api.post(
-    `${API_URL}/levels/`,
-    data,
-  )) as AxiosResponse<LevelDetails>;
-  return response.data;
+  const { data } = await levelsCreate({
+    body: filterFalsyObjectValues({ ...payload }) as any,
+    throwOnError: true,
+  });
+  return data;
 };
 
 const approve = async (levelId: number): Promise<void> => {
-  await api.post(`${API_URL}/levels/${levelId}/approve/`);
+  await levelsApproveCreate({ path: { id: levelId }, throwOnError: true });
 };
 
 const reject = async (levelId: number, reason: string): Promise<void> => {
-  const data = { reason };
-  await api.post(`${API_URL}/levels/${levelId}/reject/`, data);
+  await levelsRejectCreate({
+    path: { id: levelId },
+    body: { reason },
+    throwOnError: true,
+  });
 };
 
 const deleteLevel = async (levelId: number): Promise<void> => {
-  await api.delete(`${API_URL}/levels/${levelId}/`);
+  await levelsDestroy({ path: { id: levelId }, throwOnError: true });
 };
 
 const LevelService = {
@@ -222,11 +167,11 @@ const LevelService = {
   delete: deleteLevel,
 };
 
-const formatLinkType = (linkType: ExternalLinkType): string => {
+const formatLinkType = (linkType: LinkTypeEnum): string => {
   switch (linkType) {
-    case ExternalLinkType.Showcase:
+    case "sh":
       return "YouTube";
-    case ExternalLinkType.Main:
+    case "ma":
       return "Website";
   }
 };

@@ -101,7 +101,7 @@ const LevelForm = ({ level, onGoBack, onSubmit }: LevelFormProps) => {
     name: level?.name || "",
     description: level?.description || "",
     genres: level ? [...level.genres] : [],
-    external_links: level ? [...level.external_links] : [],
+    external_links: level ? [...(level.external_links ?? [])] : [],
     authors: level ? [...level.authors] : user ? [user] : [],
     tags: level ? [...level.tags] : [],
     engine_id: level?.engine?.id,

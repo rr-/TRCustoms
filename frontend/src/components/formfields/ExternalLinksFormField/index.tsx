@@ -1,6 +1,7 @@
 import styles from "./index.module.css";
 import { useFormikContext } from "formik";
 import { useState } from "react";
+import type { LinkTypeEnum } from "src/client";
 import { Button } from "src/components/common/Button";
 import { Link } from "src/components/common/Link";
 import type { GenericFormFieldProps } from "src/components/formfields/BaseFormField";
@@ -10,13 +11,20 @@ import { IconChevronDown } from "src/components/icons";
 import { IconChevronUp } from "src/components/icons";
 import { KEY_RETURN } from "src/constants";
 import { formatLinkType } from "src/services/LevelService";
-import type { ExternalLink } from "src/services/LevelService";
-import { ExternalLinkType } from "src/services/LevelService";
 import { validateURL } from "src/utils/validation";
 
+interface EditableExternalLink {
+  id?: number;
+  url: string;
+  position: number;
+  link_type: LinkTypeEnum;
+}
+
+const LINK_TYPES: LinkTypeEnum[] = ["sh", "ma"];
+
 interface ExternalLinksFormFieldProps extends GenericFormFieldProps {
-  value: ExternalLink[];
-  setValue: (value: ExternalLink[]) => void;
+  value: EditableExternalLink[];
+  setValue: (value: EditableExternalLink[]) => void;
 }
 
 const ExternalLinksFormField = ({
@@ -27,7 +35,7 @@ const ExternalLinksFormField = ({
   ...props
 }: ExternalLinksFormFieldProps) => {
   const { setFieldTouched } = useFormikContext();
-  const [linkType, setLinkType] = useState(ExternalLinkType.Showcase);
+  const [linkType, setLinkType] = useState<LinkTypeEnum>("sh");
   const [textInput, setTextInput] = useState("");
   const [textInputIsValid, setTextInputIsValid] = useState(false);
 
@@ -48,12 +56,12 @@ const ExternalLinksFormField = ({
     }
   };
 
-  const removeLink = (link: ExternalLink) => {
+  const removeLink = (link: EditableExternalLink) => {
     setFieldTouched(name);
     setValue(value.filter((l) => l.url !== link.url));
   };
 
-  const moveLinkUp = (link: ExternalLink) => {
+  const moveLinkUp = (link: EditableExternalLink) => {
     const newValue = [...value];
     const idx = value.findIndex((v) => v.url === link.url);
     newValue.splice(idx, 1);
@@ -62,7 +70,7 @@ const ExternalLinksFormField = ({
     setValue(newValue);
   };
 
-  const moveLinkDown = (link: ExternalLink) => {
+  const moveLinkDown = (link: EditableExternalLink) => {
     const newValue = [...value];
     const idx = value.findIndex((v) => v.url === link.url);
     newValue.splice(idx, 1);
@@ -89,18 +97,18 @@ const ExternalLinksFormField = ({
 
   const handleSelectChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const chosen: string = event.target.selectedOptions?.[0].value;
-    setLinkType(chosen as ExternalLinkType);
+    setLinkType(chosen as LinkTypeEnum);
   };
 
-  const handleRemoveButtonClick = (link: ExternalLink) => {
+  const handleRemoveButtonClick = (link: EditableExternalLink) => {
     removeLink(link);
   };
 
-  const handleMoveUpButtonClick = (link: ExternalLink) => {
+  const handleMoveUpButtonClick = (link: EditableExternalLink) => {
     moveLinkUp(link);
   };
 
-  const handleMoveDownButtonClick = (link: ExternalLink) => {
+  const handleMoveDownButtonClick = (link: EditableExternalLink) => {
     moveLinkDown(link);
   };
 
@@ -120,7 +128,7 @@ const ExternalLinksFormField = ({
           value={linkType}
           onChange={handleSelectChange}
         >
-          {Object.values(ExternalLinkType).map((linkType) => (
+          {LINK_TYPES.map((linkType) => (
             <option key={linkType} value={linkType}>
               {formatLinkType(linkType)}
             </option>

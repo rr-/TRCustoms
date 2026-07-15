@@ -1,3 +1,4 @@
+import type { RatingClassNested } from "src/client";
 import { DISABLE_PAGING } from "src/constants";
 
 interface PagedResponse<TItem> {
@@ -23,11 +24,7 @@ interface GenericSearchResult<TSearchQuery, TItem>
   searchQuery: TSearchQuery;
 }
 
-interface RatingClass {
-  id: number;
-  name: string;
-  position: number;
-}
+type RatingClass = RatingClassNested;
 
 enum DisplayMode {
   Cover = "cover",

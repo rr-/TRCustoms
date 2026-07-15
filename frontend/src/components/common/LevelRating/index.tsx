@@ -10,9 +10,9 @@ const LevelRating = ({ ratingClass }: LevelRatingProps) => {
     return <>Not enough ratings</>;
   }
   let style = styles.neutral;
-  if (ratingClass.position > 0) {
+  if ((ratingClass.position ?? 0) > 0) {
     style = styles.positive;
-  } else if (ratingClass.position < 0) {
+  } else if ((ratingClass.position ?? 0) < 0) {
     style = styles.negative;
   }
   return <span className={style}>{ratingClass.name}</span>;
