@@ -101,7 +101,9 @@ def forward_func(apps, schema_editor):
     print("Mapping answers")
     through_model = Rating.answers.through
     m2m_relations = []
-    for review in Review.objects.prefetch_related("answers").iterator():
+    for review in Review.objects.prefetch_related("answers").iterator(
+        chunk_size=2000
+    ):
         new_rating_id = review.id
         for answer in review.answers.iterator():
             m2m_relations.append(
