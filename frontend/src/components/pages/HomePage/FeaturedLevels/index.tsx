@@ -55,7 +55,7 @@ const FeaturedLevelView = ({
             <LevelLink level={level} className={styles.coverLink}>
               <img
                 className={styles.coverImage}
-                src={level.cover.url}
+                src={level.cover.url ?? undefined}
                 alt={level.name}
               />
             </LevelLink>

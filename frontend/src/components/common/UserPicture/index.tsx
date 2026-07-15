@@ -19,7 +19,7 @@ const UserPicture = ({ user, mode }: UserPictureProps) => {
     <img
       className={`${styles.picture} ${styles[mode]}`}
       alt={`Avatar for ${user.username}`}
-      src={user.picture ? user.picture.url : "/anonymous.svg"}
+      src={user.picture?.url ?? "/anonymous.svg"}
     />
   );
 };

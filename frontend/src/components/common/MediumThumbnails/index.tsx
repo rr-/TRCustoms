@@ -97,7 +97,7 @@ const MediumThumbnailModal = ({
           <img
             onMouseDown={handleImageMouseDown}
             alt="Full resolution"
-            src={file.url}
+            src={file.url ?? undefined}
           />
 
           <Link
@@ -148,7 +148,7 @@ const MediumThumbnail = ({
           <img
             alt="Background"
             className={styles.backgroundBlur}
-            src={file.url}
+            src={file.url ?? undefined}
           />
         )}
         <img
@@ -156,7 +156,7 @@ const MediumThumbnail = ({
           className={styles.mediumThumbnailThumb}
           role="link"
           tabIndex={1}
-          src={file.url}
+          src={file.url ?? undefined}
           onClick={() => onActivate(file)}
         />
       </div>

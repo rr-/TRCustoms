@@ -19,7 +19,7 @@ const MarkdownAttachmentStrip = ({
     if (!textarea) {
       return;
     }
-    const isImage = uploadedFiles[0].url.match(/\.(jpg|png|gif)$/i);
+    const isImage = uploadedFiles[0].url?.match(/\.(jpg|png|gif)$/i);
     applyStyle(
       textarea,
       isImage

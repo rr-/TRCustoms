@@ -102,7 +102,7 @@ const LevelView = ({ level }: LevelViewProps) => {
           {level.cover ? (
             <img
               className={styles.coverImage}
-              src={level.cover.url}
+              src={level.cover.url ?? undefined}
               alt={level.name}
             />
           ) : null}

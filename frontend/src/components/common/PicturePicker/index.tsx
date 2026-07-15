@@ -35,7 +35,7 @@ const PicturePickerPreview = ({
   return (
     <img
       className={classNames.join(" ")}
-      src={uploadedFile.url}
+      src={uploadedFile.url ?? undefined}
       alt="Upload preview"
     />
   );
