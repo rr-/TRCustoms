@@ -256,4 +256,4 @@ def test_important_user_email_late_or_uncached_activation(
     )
     assert AuditLog.objects.filter(is_action_required=True).count() == 0
     assert response.status_code == status.HTTP_404_NOT_FOUND, response.content
-    assert response.json() == {"detail": "Not found."}
+    assert response.json() == {"detail": "No User matches the given query."}

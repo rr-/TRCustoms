@@ -37,7 +37,7 @@ x-base-trcustoms-backend: &base-trcustoms-backend
     - ./backend/volumes/uploads/:/app/uploads/
     - ./backend/volumes/django_static/:/app/django_static/
     - ./services/backend/entrypoint.sh:/usr/local/bin/entrypoint.sh
-    - ./pyproject.toml:/pyproject.toml
+    - ./pyproject.toml:/app/pyproject.toml
   networks:
     - trcustoms
   depends_on:

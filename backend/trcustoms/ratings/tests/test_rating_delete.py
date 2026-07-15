@@ -1,4 +1,5 @@
 import pytest
+from pytest_lazy_fixtures import lf
 from rest_framework import status
 from rest_framework.test import APIClient
 
@@ -12,12 +13,12 @@ from trcustoms.users.tests.factories import UserFactory
 @pytest.mark.parametrize(
     "my_api_client,test_own,expected",
     [
-        (pytest.lazy_fixture("auth_api_client"), False, False),
-        (pytest.lazy_fixture("auth_api_client"), True, True),
-        (pytest.lazy_fixture("staff_api_client"), False, False),
-        (pytest.lazy_fixture("staff_api_client"), True, True),
-        (pytest.lazy_fixture("superuser_api_client"), False, True),
-        (pytest.lazy_fixture("superuser_api_client"), True, True),
+        (lf("auth_api_client"), False, False),
+        (lf("auth_api_client"), True, True),
+        (lf("staff_api_client"), False, False),
+        (lf("staff_api_client"), True, True),
+        (lf("superuser_api_client"), False, True),
+        (lf("superuser_api_client"), True, True),
     ],
 )
 def test_rating_deletion_permissions(
