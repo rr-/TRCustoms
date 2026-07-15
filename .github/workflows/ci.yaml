@@ -45,11 +45,7 @@ jobs:
           cache-dependency-path: frontend/package-lock.json
       - name: Install dependencies
         run: npm ci
-      # tsc has pre-existing type errors that predate CI (they were masked by a
-      # type-checking performance bug that made tsc hang, now fixed). Run it for
-      # visibility but don't block CI until those errors are cleaned up.
       - name: Type-check
-        continue-on-error: true
         run: npm run tsc
       - name: Run tests
         run: npm test
