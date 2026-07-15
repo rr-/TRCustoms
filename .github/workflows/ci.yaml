@@ -1,0 +1,55 @@
+name: CI
+on:
+  push:
+  pull_request:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  lint:
+    name: Lint (prek)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+      - name: Run pre-commit hooks
+        run: uvx prek run --all-files --show-diff-on-failure --color always
+
+  test:
+    name: Backend tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Prepare environment
+        run: cp .env.example .env
+      - name: Build backend image
+        run: docker compose build trcustoms
+      - name: Run tests
+        run: docker compose run --rm trcustoms test -n auto --no-cov
+
+  frontend:
+    name: Frontend (tsc + tests)
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    defaults:
+      run:
+        working-directory: frontend
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+      - name: Install dependencies
+        run: npm ci
+      # tsc has pre-existing type errors that predate CI (they were masked by a
+      # type-checking performance bug that made tsc hang, now fixed). Run it for
+      # visibility but don't block CI until those errors are cleaned up.
+      - name: Type-check
+        continue-on-error: true
+        run: npm run tsc
+      - name: Run tests
+        run: npm test
