@@ -175,6 +175,13 @@ export type GlobalStats = {
     walkthroughs: WalkthroughStat;
 };
 
+export type LevelCategoryRatings = {
+    category: string;
+    total_points: number;
+    min_points: number;
+    max_points: number;
+};
+
 export type LevelDetails = {
     readonly id: number;
     name: string;
@@ -278,6 +285,12 @@ export type LevelNested = {
     readonly id: number;
     name: string;
     cover: UploadedFileNested;
+};
+
+export type LevelRatingStats = {
+    trc_rating_count: number;
+    trle_rating_count: number;
+    categories: Array<LevelCategoryRatings>;
 };
 
 export type LevelRejection = {
@@ -2033,7 +2046,7 @@ export type LevelsRatingStatsRetrieveData = {
 };
 
 export type LevelsRatingStatsRetrieveResponses = {
-    200: LevelListing;
+    200: LevelRatingStats;
 };
 
 export type LevelsRatingStatsRetrieveResponse = LevelsRatingStatsRetrieveResponses[keyof LevelsRatingStatsRetrieveResponses];

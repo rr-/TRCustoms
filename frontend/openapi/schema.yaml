@@ -824,7 +824,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/LevelListing'
+                $ref: '#/components/schemas/LevelRatingStats'
           description: ''
   /api/levels/{id}/reject/:
     post:
@@ -2885,6 +2885,22 @@ components:
       - total_reviews
       - total_walkthroughs
       - walkthroughs
+    LevelCategoryRatings:
+      type: object
+      properties:
+        category:
+          type: string
+        total_points:
+          type: integer
+        min_points:
+          type: integer
+        max_points:
+          type: integer
+      required:
+      - category
+      - max_points
+      - min_points
+      - total_points
     LevelDetails:
       type: object
       properties:
@@ -3351,6 +3367,21 @@ components:
       - cover
       - id
       - name
+    LevelRatingStats:
+      type: object
+      properties:
+        trc_rating_count:
+          type: integer
+        trle_rating_count:
+          type: integer
+        categories:
+          type: array
+          items:
+            $ref: '#/components/schemas/LevelCategoryRatings'
+      required:
+      - categories
+      - trc_rating_count
+      - trle_rating_count
     LevelRejection:
       type: object
       properties:
