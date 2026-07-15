@@ -1,9 +1,9 @@
 import styles from "./index.module.css";
+import { useInfiniteQuery } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { useRef } from "react";
 import { Fragment } from "react";
 import { useState } from "react";
-import { useQuery } from "react-query";
-import { useInfiniteQuery } from "react-query";
 import { Box } from "src/components/common/Box";
 import { Loader } from "src/components/common/Loader";
 import { Pager } from "src/components/common/Pager";
@@ -190,10 +190,10 @@ const PagedDataTable = <TItem extends {}, TQuery extends GenericSearchQuery>(
     noItemsElement,
   } = props;
 
-  const result = useQuery<GenericSearchResult<TQuery, TItem> | null, Error>(
-    [queryName, searchFunc, searchQuery],
-    async () => searchFunc(searchQuery),
-  );
+  const result = useQuery<GenericSearchResult<TQuery, TItem> | null, Error>({
+    queryKey: [queryName, searchFunc, searchQuery],
+    queryFn: async () => searchFunc(searchQuery),
+  });
 
   if (!result?.data?.results?.length) {
     return <>{noItemsElement || DefaultNoItemsElement}</>;
@@ -226,37 +226,28 @@ const InfiniteDataTable = <TItem extends {}, TQuery extends GenericSearchQuery>(
 ) => {
   const { className, queryName, searchQuery, searchFunc } = props;
 
-  const result = useInfiniteQuery<
-    GenericSearchResult<TQuery, TItem> | null,
-    Error
-  >(
-    [queryName, searchQuery],
-    async ({ pageParam }) => {
+  const result = useInfiniteQuery({
+    queryKey: [queryName, searchQuery],
+    queryFn: async ({ pageParam }: { pageParam: number }) => {
       return searchFunc({
         ...searchQuery,
-        page:
-          searchQuery.page === DISABLE_PAGING
-            ? DISABLE_PAGING
-            : pageParam === undefined
-              ? 1
-              : pageParam,
+        page: searchQuery.page === DISABLE_PAGING ? DISABLE_PAGING : pageParam,
       });
     },
-    {
-      getNextPageParam: (lastPage, pages) => {
-        if (!lastPage) {
-          return undefined;
-        }
-        if (lastPage.disable_paging) {
-          return undefined;
-        }
-        return lastPage.current_page < lastPage.last_page
-          ? lastPage.current_page + 1
-          : undefined;
-      },
-      refetchOnWindowFocus: false,
+    initialPageParam: 1,
+    getNextPageParam: (lastPage: GenericSearchResult<TQuery, TItem> | null) => {
+      if (!lastPage) {
+        return undefined;
+      }
+      if (lastPage.disable_paging) {
+        return undefined;
+      }
+      return lastPage.current_page < lastPage.last_page
+        ? lastPage.current_page + 1
+        : undefined;
     },
-  );
+    refetchOnWindowFocus: false,
+  });
 
   const infiniteScrollRef = useRef(null);
   useInfiniteScroll(
