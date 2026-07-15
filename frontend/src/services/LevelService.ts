@@ -1,7 +1,7 @@
 import { AxiosResponse } from "axios";
 import { api } from "src/api";
+import type { EngineNested } from "src/client";
 import { API_URL } from "src/constants";
-import type { EngineNested } from "src/services/EngineService";
 import type { UploadedFile } from "src/services/FileService";
 import type { GenreNested } from "src/services/GenreService";
 import type { TagNested } from "src/services/TagService";

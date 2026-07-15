@@ -1,7 +1,7 @@
 import { useContext } from "react";
+import type { EngineListing } from "src/client";
 import { EntitiesCheckboxes } from "src/components/common/EntitiesCheckboxes";
 import { ConfigContext } from "src/contexts/ConfigContext";
-import type { EngineListing } from "src/services/EngineService";
 
 interface EnginesCheckboxesProps {
   value: number[];

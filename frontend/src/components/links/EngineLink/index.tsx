@@ -1,5 +1,5 @@
+import type { EngineNested } from "src/client";
 import { Link } from "src/components/common/Link";
-import type { EngineNested } from "src/services/EngineService";
 
 interface EngineLinkProps {
   engine: EngineNested;
