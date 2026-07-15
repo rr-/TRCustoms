@@ -4,6 +4,7 @@ import { API_URL } from "src/constants";
 import type { UploadedFile } from "src/services/FileService";
 import type { LevelNested } from "src/services/LevelService";
 import type { UserNested } from "src/services/UserService";
+import { getPlaylistSearchQuery } from "src/services/playlistSearchQuery";
 import type { GenericSearchQuery } from "src/types";
 import { GenericSearchResult } from "src/types";
 import { filterFalsyObjectValues } from "src/utils/misc";
@@ -42,7 +43,9 @@ interface PlaylistItemUpdatePayload {
   status: PlaylistItemStatus;
 }
 
-interface PlaylistSearchQuery extends GenericSearchQuery {}
+interface PlaylistSearchQuery extends GenericSearchQuery {
+  userId: number;
+}
 
 interface PlaylistSearchResult
   extends GenericSearchResult<PlaylistSearchQuery, PlaylistItemListing> {}
@@ -117,6 +120,7 @@ const delete_ = async (
 };
 
 const PlaylistService = {
+  getSearchQuery: getPlaylistSearchQuery,
   search,
   get,
   create,
@@ -133,4 +137,4 @@ export type {
   PlaylistImportResult,
 };
 
-export { PlaylistItemStatus, PlaylistService };
+export { PlaylistItemStatus, PlaylistService, getPlaylistSearchQuery };
