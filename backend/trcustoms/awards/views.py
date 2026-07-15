@@ -1,3 +1,4 @@
+from drf_spectacular.utils import extend_schema
 from rest_framework import generics
 from rest_framework.exceptions import ValidationError
 from rest_framework.permissions import AllowAny
@@ -15,6 +16,7 @@ from trcustoms.awards.specs import ALL_AWARD_SPECS
 class AwardSpecListView(APIView):
     permission_classes = [AllowAny]
 
+    @extend_schema(responses=AwardSpecSerializer(many=True))
     def get(self, request):
         serializer = AwardSpecSerializer(ALL_AWARD_SPECS, many=True)
         return Response(serializer.data)

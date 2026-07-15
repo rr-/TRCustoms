@@ -6,6 +6,7 @@ from django.conf import settings
 from django.db import models
 from django.db.models import Q
 from django.http import HttpResponseRedirect
+from drf_spectacular.types import OpenApiTypes
 from drf_spectacular.utils import extend_schema, extend_schema_view
 from rest_framework import mixins, status, viewsets
 from rest_framework.decorators import action
@@ -195,9 +196,11 @@ class LevelViewSet(
 class LevelFileViewSet(viewsets.GenericViewSet):
     permission_classes = [AllowAny]
     queryset = LevelFile.objects.all()
+    serializer_class = EmptySerializer
     pagination_class = None
     download_count = models.IntegerField(default=0)
 
+    @extend_schema(responses={200: OpenApiTypes.BINARY})
     @action(detail=True)
     def download(self, request, pk: int) -> Response:
         file = get_object_or_404(LevelFile, pk=pk)
