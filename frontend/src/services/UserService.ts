@@ -1,16 +1,28 @@
-import { AxiosResponse } from "axios";
-import { api } from "src/api";
-import { API_URL } from "src/constants";
+import {
+  usersActivateCreate,
+  usersBanCreate,
+  usersByUsernameRetrieve,
+  usersCompletePasswordResetCreate,
+  usersConfirmEmailCreate,
+  usersCreate,
+  usersDeactivateCreate,
+  usersList,
+  usersMeRetrieve,
+  usersPartialUpdate,
+  usersRequestPasswordResetCreate,
+  usersResendActivationEmailCreate,
+  usersRetrieve,
+  usersUnbanCreate,
+} from "src/client";
+import type {
+  UserAward,
+  UserDetails,
+  UserListing,
+  UserNested,
+} from "src/client";
 import { AuthService } from "src/services/AuthService";
-import type { CountryListing } from "src/services/ConfigService";
-import type { UploadedFile } from "src/services/FileService";
-import type { GenericSearchQuery } from "src/types";
-import { GenericSearchResult } from "src/types";
-import { filterFalsyObjectValues } from "src/utils/misc";
-import { getGenericSearchQuery } from "src/utils/misc";
-import { boolToSearchString } from "src/utils/misc";
-
-interface CountryNested extends CountryListing {}
+import type { GenericSearchQuery, GenericSearchResult } from "src/types";
+import { boolToSearchString, getGenericSearchQuery } from "src/utils/misc";
 
 enum UserPermission {
   editUsers = "edit_users",
@@ -43,61 +55,6 @@ interface UserBasic {
   last_name?: string | undefined;
 }
 
-interface UserNested extends UserBasic {
-  first_name: string;
-  last_name: string;
-  picture: UploadedFile | null;
-}
-
-interface UserListing extends UserNested {
-  email: string;
-  bio: string;
-  date_joined: string;
-  last_login: string;
-  is_active: boolean;
-  is_banned: boolean;
-  is_pending_activation: boolean;
-  played_level_count: number;
-  authored_level_count_all: number;
-  authored_level_count_approved: number;
-  rated_level_count: number;
-  reviewed_level_count: number;
-  authored_walkthrough_count_all: number;
-  authored_walkthrough_count_approved: number;
-  permissions: UserPermission[];
-  trle_author_id: number | null;
-  trle_reviewer_id: number | null;
-}
-
-interface UserDetails extends UserListing {
-  website_url: string;
-  donation_url: string;
-  country?: CountryNested;
-  is_staff: boolean;
-  is_superuser: boolean;
-  awards: UserAward[];
-  settings: {
-    email_review_posted: boolean;
-    email_rating_posted: boolean;
-    email_walkthrough_posted: boolean;
-    email_review_updated: boolean;
-    email_rating_updated: boolean;
-    email_walkthrough_updated: boolean;
-  };
-}
-
-interface UserAward {
-  created: string;
-  last_updated: string;
-  code: string;
-  title: string;
-  description: string;
-  position: number;
-  tier: number;
-  rarity: number;
-  user_percentage: number;
-}
-
 interface UserSearchQuery extends GenericSearchQuery {
   reviewsMin?: number;
   hideInactiveReviewers?: boolean;
@@ -107,34 +64,6 @@ interface UserSearchQuery extends GenericSearchQuery {
 
 interface UserSearchResult
   extends GenericSearchResult<UserSearchQuery, UserListing> {}
-
-const getCurrentUser = async (): Promise<UserDetails | null> => {
-  if (!AuthService.getAccessToken()) {
-    return null;
-  }
-  try {
-    const response = (await api.get(
-      `${API_URL}/users/me/`,
-    )) as AxiosResponse<UserDetails>;
-    return response.data;
-  } catch (error) {
-    return null;
-  }
-};
-
-const getUserById = async (userId: number): Promise<UserDetails> => {
-  const response = (await api.get(
-    `${API_URL}/users/${userId}/`,
-  )) as AxiosResponse<UserDetails>;
-  return response.data;
-};
-
-const getUserByUsername = async (username: string): Promise<UserDetails> => {
-  const response = (await api.get(
-    `${API_URL}/users/by_username/${username}/`,
-  )) as AxiosResponse<UserDetails>;
-  return response.data;
-};
 
 interface UserCreatePayload {
   username: string;
@@ -154,6 +83,34 @@ interface UserUpdatePayload extends UserCreatePayload {
   settings?: UserDetails["settings"];
 }
 
+const getCurrentUser = async (): Promise<UserDetails | null> => {
+  if (!AuthService.getAccessToken()) {
+    return null;
+  }
+  try {
+    const { data } = await usersMeRetrieve({ throwOnError: true });
+    return data;
+  } catch (error) {
+    return null;
+  }
+};
+
+const getUserById = async (userId: number): Promise<UserDetails> => {
+  const { data } = await usersRetrieve({
+    path: { id: userId },
+    throwOnError: true,
+  });
+  return data;
+};
+
+const getUserByUsername = async (username: string): Promise<UserDetails> => {
+  const { data } = await usersByUsernameRetrieve({
+    path: { username },
+    throwOnError: true,
+  });
+  return data;
+};
+
 const update = async (
   userId: number,
   {
@@ -171,7 +128,7 @@ const update = async (
     settings,
   }: Partial<UserUpdatePayload>,
 ): Promise<UserDetails> => {
-  const data: { [key: string]: any } = {
+  const body: { [key: string]: any } = {
     username: username,
     first_name: firstName,
     last_name: lastName,
@@ -183,19 +140,20 @@ const update = async (
     donation_url: donationUrl,
   };
   if (oldPassword) {
-    data.old_password = oldPassword;
+    body.old_password = oldPassword;
   }
   if (password) {
-    data.password = password;
+    body.password = password;
   }
   if (settings) {
-    data.settings = settings;
+    body.settings = settings;
   }
-  const response = (await api.patch(
-    `${API_URL}/users/${userId}/`,
-    data,
-  )) as AxiosResponse<UserDetails>;
-  return response.data;
+  const { data } = await usersPartialUpdate({
+    path: { id: userId },
+    body,
+    throwOnError: true,
+  });
+  return data;
 };
 
 const register = async ({
@@ -210,29 +168,28 @@ const register = async ({
   websiteUrl,
   donationUrl,
 }: UserCreatePayload): Promise<UserDetails> => {
-  const data: { [key: string]: any } = {
-    username: username,
-    first_name: firstName,
-    last_name: lastName,
-    email: email,
-    password: password,
-    bio: bio,
-    picture_id: pictureId,
-    country_code: countryCode,
-    website_url: websiteUrl,
-    donation_url: donationUrl,
-  };
-  const response = (await api.post(
-    `${API_URL}/users/`,
-    data,
-  )) as AxiosResponse<UserDetails>;
-  return response.data;
+  const { data } = await usersCreate({
+    body: {
+      username: username,
+      first_name: firstName,
+      last_name: lastName,
+      email: email,
+      password: password,
+      bio: bio,
+      picture_id: pictureId,
+      country_code: countryCode,
+      website_url: websiteUrl,
+      donation_url: donationUrl,
+    },
+    throwOnError: true,
+  });
+  return data;
 };
 
 const searchUsers = async (
   searchQuery: UserSearchQuery,
 ): Promise<UserSearchResult> => {
-  const params = filterFalsyObjectValues({
+  const query: { [key: string]: any } = {
     ...getGenericSearchQuery(searchQuery),
     reviews_min: searchQuery.reviewsMin,
     hide_inactive_reviewers: boolToSearchString(
@@ -240,60 +197,67 @@ const searchUsers = async (
     ),
     country_code: searchQuery.countryCode,
     authored_levels_min: searchQuery.authoredLevelsMin,
-  });
-  if (searchQuery.countryCode === "") {
-    params.country_code = "";
-  }
-  const response = (await api.get(`${API_URL}/users/`, {
-    params,
-  })) as AxiosResponse<UserSearchResult>;
-  return { ...response.data, searchQuery };
+  };
+  const { data } = await usersList({ query, throwOnError: true });
+  return { ...data, searchQuery };
 };
 
 const activate = async (userId: number): Promise<void> => {
-  await api.post(`${API_URL}/users/${userId}/activate/`);
+  await usersActivateCreate({ path: { id: userId }, throwOnError: true });
 };
 
 const deactivate = async (userId: number, reason: string): Promise<void> => {
-  const data = { reason };
-  await api.post(`${API_URL}/users/${userId}/deactivate/`, data);
+  await usersDeactivateCreate({
+    path: { id: userId },
+    body: { reason },
+    throwOnError: true,
+  });
 };
 
 const ban = async (userId: number, reason: string): Promise<void> => {
-  const data = { reason };
-  await api.post(`${API_URL}/users/${userId}/ban/`, data);
+  await usersBanCreate({
+    path: { id: userId },
+    body: { reason },
+    throwOnError: true,
+  });
 };
 
 const unban = async (userId: number): Promise<void> => {
-  await api.post(`${API_URL}/users/${userId}/unban/`);
+  await usersUnbanCreate({ path: { id: userId }, throwOnError: true });
 };
 
 const resendActivationLink = async (username: string): Promise<void> => {
-  const data = { username };
-  await api.post(`${API_URL}/users/resend_activation_email/`, data);
+  await usersResendActivationEmailCreate({
+    body: { username },
+    throwOnError: true,
+  });
 };
 
 const confirmEmail = async (token: string): Promise<UserDetails> => {
-  const data = { token };
-  const response = (await api.post(
-    `${API_URL}/users/confirm_email/`,
-    data,
-  )) as AxiosResponse<UserDetails>;
-  return response.data;
+  const { data } = await usersConfirmEmailCreate({
+    body: { token },
+    throwOnError: true,
+  });
+  return data;
 };
 
 const requestPasswordReset = async (email: string): Promise<void> => {
-  const data = { email };
-  await api.post(`${API_URL}/users/request_password_reset/`, data);
+  await usersRequestPasswordResetCreate({
+    body: { email },
+    throwOnError: true,
+  });
 };
 
 const completePasswordReset = async (
   password: string,
   token: string,
 ): Promise<void> => {
-  const data = { password, token };
-  await api.post(`${API_URL}/users/complete_password_reset/`, data);
+  await usersCompletePasswordResetCreate({
+    body: { password, token },
+    throwOnError: true,
+  });
 };
+
 const getAwardImageUrl = (award: UserAward) => {
   const stem = award.tier ? `${award.code}_${award.tier}` : award.code;
   return `/awards/${stem}.svg`;
@@ -346,4 +310,5 @@ export type {
   UserSearchResult,
   UserAward,
 };
+
 export { UserPermission, UserService };

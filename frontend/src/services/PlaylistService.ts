@@ -19,7 +19,6 @@ enum PlaylistItemStatus {
 }
 
 interface PlaylistItemPlayer extends UserNested {
-  picture: UploadedFile | null;
   reviewed_level_count: number;
 }
 
