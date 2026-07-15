@@ -48,7 +48,7 @@ const NewsListPage = () => {
   const resultsByYear = sortBy(
     Object.entries(
       groupBy(result.data.results, (news) =>
-        new Date(news.created).getFullYear(),
+        new Date(news.created ?? 0).getFullYear(),
       ),
     ),
     ([year, items]) => -year,
