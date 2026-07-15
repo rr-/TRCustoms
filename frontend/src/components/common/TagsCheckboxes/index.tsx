@@ -26,7 +26,9 @@ const TagsCheckboxes = ({ value, onChange }: TagsCheckboxesProps) => {
       onChange={onChange}
       getEntityId={(entity: TagListing) => entity.id}
       getEntityName={(entity: TagListing) => entity.name}
-      getEntitySortPosition={(entity: TagListing) => -new Date(entity.created)}
+      getEntitySortPosition={(entity: TagListing) =>
+        -new Date(entity.created ?? 0)
+      }
     />
   );
 };

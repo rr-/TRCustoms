@@ -37,6 +37,8 @@ class CustomPagination(pagination.PageNumberPagination):
                 "last_page",
                 "total_count",
                 "items_on_page",
+                "next",
+                "previous",
                 "results",
                 "disable_paging",
             ],
