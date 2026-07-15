@@ -326,94 +326,146 @@ export type NewsListing = {
 };
 
 export type PaginatedAuditLogListingList = {
-    count: number;
+    current_page: number;
+    last_page: number;
+    total_count: number;
+    items_on_page: number;
     next?: string | null;
     previous?: string | null;
     results: Array<AuditLogListing>;
+    disable_paging: boolean;
 };
 
 export type PaginatedAwardRecipientList = {
-    count: number;
+    current_page: number;
+    last_page: number;
+    total_count: number;
+    items_on_page: number;
     next?: string | null;
     previous?: string | null;
     results: Array<AwardRecipient>;
+    disable_paging: boolean;
 };
 
 export type PaginatedEngineListingList = {
-    count: number;
+    current_page: number;
+    last_page: number;
+    total_count: number;
+    items_on_page: number;
     next?: string | null;
     previous?: string | null;
     results: Array<EngineListing>;
+    disable_paging: boolean;
 };
 
 export type PaginatedEventListingList = {
-    count: number;
+    current_page: number;
+    last_page: number;
+    total_count: number;
+    items_on_page: number;
     next?: string | null;
     previous?: string | null;
     results: Array<EventListing>;
+    disable_paging: boolean;
 };
 
 export type PaginatedGenreListingList = {
-    count: number;
+    current_page: number;
+    last_page: number;
+    total_count: number;
+    items_on_page: number;
     next?: string | null;
     previous?: string | null;
     results: Array<GenreListing>;
+    disable_paging: boolean;
 };
 
 export type PaginatedLevelListingList = {
-    count: number;
+    current_page: number;
+    last_page: number;
+    total_count: number;
+    items_on_page: number;
     next?: string | null;
     previous?: string | null;
     results: Array<LevelListing>;
+    disable_paging: boolean;
 };
 
 export type PaginatedNewsListingList = {
-    count: number;
+    current_page: number;
+    last_page: number;
+    total_count: number;
+    items_on_page: number;
     next?: string | null;
     previous?: string | null;
     results: Array<NewsListing>;
+    disable_paging: boolean;
 };
 
 export type PaginatedPlaylistItemList = {
-    count: number;
+    current_page: number;
+    last_page: number;
+    total_count: number;
+    items_on_page: number;
     next?: string | null;
     previous?: string | null;
     results: Array<PlaylistItem>;
+    disable_paging: boolean;
 };
 
 export type PaginatedRatingListingList = {
-    count: number;
+    current_page: number;
+    last_page: number;
+    total_count: number;
+    items_on_page: number;
     next?: string | null;
     previous?: string | null;
     results: Array<RatingListing>;
+    disable_paging: boolean;
 };
 
 export type PaginatedReviewListingList = {
-    count: number;
+    current_page: number;
+    last_page: number;
+    total_count: number;
+    items_on_page: number;
     next?: string | null;
     previous?: string | null;
     results: Array<ReviewListing>;
+    disable_paging: boolean;
 };
 
 export type PaginatedTagListingList = {
-    count: number;
+    current_page: number;
+    last_page: number;
+    total_count: number;
+    items_on_page: number;
     next?: string | null;
     previous?: string | null;
     results: Array<TagListing>;
+    disable_paging: boolean;
 };
 
 export type PaginatedUserListingList = {
-    count: number;
+    current_page: number;
+    last_page: number;
+    total_count: number;
+    items_on_page: number;
     next?: string | null;
     previous?: string | null;
     results: Array<UserListing>;
+    disable_paging: boolean;
 };
 
 export type PaginatedWalkthroughListingList = {
-    count: number;
+    current_page: number;
+    last_page: number;
+    total_count: number;
+    items_on_page: number;
     next?: string | null;
     previous?: string | null;
     results: Array<WalkthroughListing>;
+    disable_paging: boolean;
 };
 
 export type PatchedLevelDetails = {
@@ -1124,94 +1176,146 @@ export type NewsListingWritable = {
 };
 
 export type PaginatedAuditLogListingListWritable = {
-    count: number;
+    current_page: number;
+    last_page: number;
+    total_count: number;
+    items_on_page: number;
     next?: string | null;
     previous?: string | null;
     results: Array<AuditLogListingWritable>;
+    disable_paging: boolean;
 };
 
 export type PaginatedAwardRecipientListWritable = {
-    count: number;
+    current_page: number;
+    last_page: number;
+    total_count: number;
+    items_on_page: number;
     next?: string | null;
     previous?: string | null;
     results: Array<AwardRecipientWritable>;
+    disable_paging: boolean;
 };
 
 export type PaginatedEngineListingListWritable = {
-    count: number;
+    current_page: number;
+    last_page: number;
+    total_count: number;
+    items_on_page: number;
     next?: string | null;
     previous?: string | null;
     results: Array<EngineListingWritable>;
+    disable_paging: boolean;
 };
 
 export type PaginatedEventListingListWritable = {
-    count: number;
+    current_page: number;
+    last_page: number;
+    total_count: number;
+    items_on_page: number;
     next?: string | null;
     previous?: string | null;
     results: Array<EventListingWritable>;
+    disable_paging: boolean;
 };
 
 export type PaginatedGenreListingListWritable = {
-    count: number;
+    current_page: number;
+    last_page: number;
+    total_count: number;
+    items_on_page: number;
     next?: string | null;
     previous?: string | null;
     results: Array<GenreListingWritable>;
+    disable_paging: boolean;
 };
 
 export type PaginatedLevelListingListWritable = {
-    count: number;
+    current_page: number;
+    last_page: number;
+    total_count: number;
+    items_on_page: number;
     next?: string | null;
     previous?: string | null;
     results: Array<LevelListingWritable>;
+    disable_paging: boolean;
 };
 
 export type PaginatedNewsListingListWritable = {
-    count: number;
+    current_page: number;
+    last_page: number;
+    total_count: number;
+    items_on_page: number;
     next?: string | null;
     previous?: string | null;
     results: Array<NewsListingWritable>;
+    disable_paging: boolean;
 };
 
 export type PaginatedPlaylistItemListWritable = {
-    count: number;
+    current_page: number;
+    last_page: number;
+    total_count: number;
+    items_on_page: number;
     next?: string | null;
     previous?: string | null;
     results: Array<PlaylistItemWritable>;
+    disable_paging: boolean;
 };
 
 export type PaginatedRatingListingListWritable = {
-    count: number;
+    current_page: number;
+    last_page: number;
+    total_count: number;
+    items_on_page: number;
     next?: string | null;
     previous?: string | null;
     results: Array<RatingListingWritable>;
+    disable_paging: boolean;
 };
 
 export type PaginatedReviewListingListWritable = {
-    count: number;
+    current_page: number;
+    last_page: number;
+    total_count: number;
+    items_on_page: number;
     next?: string | null;
     previous?: string | null;
     results: Array<ReviewListingWritable>;
+    disable_paging: boolean;
 };
 
 export type PaginatedTagListingListWritable = {
-    count: number;
+    current_page: number;
+    last_page: number;
+    total_count: number;
+    items_on_page: number;
     next?: string | null;
     previous?: string | null;
     results: Array<TagListingWritable>;
+    disable_paging: boolean;
 };
 
 export type PaginatedUserListingListWritable = {
-    count: number;
+    current_page: number;
+    last_page: number;
+    total_count: number;
+    items_on_page: number;
     next?: string | null;
     previous?: string | null;
     results: Array<UserListingWritable>;
+    disable_paging: boolean;
 };
 
 export type PaginatedWalkthroughListingListWritable = {
-    count: number;
+    current_page: number;
+    last_page: number;
+    total_count: number;
+    items_on_page: number;
     next?: string | null;
     previous?: string | null;
     results: Array<WalkthroughListingWritable>;
+    disable_paging: boolean;
 };
 
 export type PatchedLevelDetailsWritable = {

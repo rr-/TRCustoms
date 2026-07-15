@@ -27,6 +27,35 @@ class CustomPagination(pagination.PageNumberPagination):
             }
         )
 
+    def get_paginated_response_schema(self, schema):
+        # Describe the shape returned by get_paginated_response above so the
+        # generated OpenAPI client types match the real response.
+        return {
+            "type": "object",
+            "required": [
+                "current_page",
+                "last_page",
+                "total_count",
+                "items_on_page",
+                "results",
+                "disable_paging",
+            ],
+            "properties": {
+                "current_page": {"type": "integer"},
+                "last_page": {"type": "integer"},
+                "total_count": {"type": "integer"},
+                "items_on_page": {"type": "integer"},
+                "next": {"type": "string", "format": "uri", "nullable": True},
+                "previous": {
+                    "type": "string",
+                    "format": "uri",
+                    "nullable": True,
+                },
+                "results": schema,
+                "disable_paging": {"type": "boolean"},
+            },
+        }
+
     def get_page_size(self, request):
         if request.query_params.get("disable_paging"):
             self.disable_paging = True

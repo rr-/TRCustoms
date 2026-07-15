@@ -3472,302 +3472,419 @@ components:
     PaginatedAuditLogListingList:
       type: object
       required:
-      - count
+      - current_page
+      - last_page
+      - total_count
+      - items_on_page
       - results
+      - disable_paging
       properties:
-        count:
+        current_page:
           type: integer
-          example: 123
+        last_page:
+          type: integer
+        total_count:
+          type: integer
+        items_on_page:
+          type: integer
         next:
           type: string
-          nullable: true
           format: uri
-          example: http://api.example.org/accounts/?page=4
+          nullable: true
         previous:
           type: string
-          nullable: true
           format: uri
-          example: http://api.example.org/accounts/?page=2
+          nullable: true
         results:
           type: array
           items:
             $ref: '#/components/schemas/AuditLogListing'
+        disable_paging:
+          type: boolean
     PaginatedAwardRecipientList:
       type: object
       required:
-      - count
+      - current_page
+      - last_page
+      - total_count
+      - items_on_page
       - results
+      - disable_paging
       properties:
-        count:
+        current_page:
           type: integer
-          example: 123
+        last_page:
+          type: integer
+        total_count:
+          type: integer
+        items_on_page:
+          type: integer
         next:
           type: string
-          nullable: true
           format: uri
-          example: http://api.example.org/accounts/?page=4
+          nullable: true
         previous:
           type: string
-          nullable: true
           format: uri
-          example: http://api.example.org/accounts/?page=2
+          nullable: true
         results:
           type: array
           items:
             $ref: '#/components/schemas/AwardRecipient'
+        disable_paging:
+          type: boolean
     PaginatedEngineListingList:
       type: object
       required:
-      - count
+      - current_page
+      - last_page
+      - total_count
+      - items_on_page
       - results
+      - disable_paging
       properties:
-        count:
+        current_page:
           type: integer
-          example: 123
+        last_page:
+          type: integer
+        total_count:
+          type: integer
+        items_on_page:
+          type: integer
         next:
           type: string
-          nullable: true
           format: uri
-          example: http://api.example.org/accounts/?page=4
+          nullable: true
         previous:
           type: string
-          nullable: true
           format: uri
-          example: http://api.example.org/accounts/?page=2
+          nullable: true
         results:
           type: array
           items:
             $ref: '#/components/schemas/EngineListing'
+        disable_paging:
+          type: boolean
     PaginatedEventListingList:
       type: object
       required:
-      - count
+      - current_page
+      - last_page
+      - total_count
+      - items_on_page
       - results
+      - disable_paging
       properties:
-        count:
+        current_page:
           type: integer
-          example: 123
+        last_page:
+          type: integer
+        total_count:
+          type: integer
+        items_on_page:
+          type: integer
         next:
           type: string
-          nullable: true
           format: uri
-          example: http://api.example.org/accounts/?page=4
+          nullable: true
         previous:
           type: string
-          nullable: true
           format: uri
-          example: http://api.example.org/accounts/?page=2
+          nullable: true
         results:
           type: array
           items:
             $ref: '#/components/schemas/EventListing'
+        disable_paging:
+          type: boolean
     PaginatedGenreListingList:
       type: object
       required:
-      - count
+      - current_page
+      - last_page
+      - total_count
+      - items_on_page
       - results
+      - disable_paging
       properties:
-        count:
+        current_page:
           type: integer
-          example: 123
+        last_page:
+          type: integer
+        total_count:
+          type: integer
+        items_on_page:
+          type: integer
         next:
           type: string
-          nullable: true
           format: uri
-          example: http://api.example.org/accounts/?page=4
+          nullable: true
         previous:
           type: string
-          nullable: true
           format: uri
-          example: http://api.example.org/accounts/?page=2
+          nullable: true
         results:
           type: array
           items:
             $ref: '#/components/schemas/GenreListing'
+        disable_paging:
+          type: boolean
     PaginatedLevelListingList:
       type: object
       required:
-      - count
+      - current_page
+      - last_page
+      - total_count
+      - items_on_page
       - results
+      - disable_paging
       properties:
-        count:
+        current_page:
           type: integer
-          example: 123
+        last_page:
+          type: integer
+        total_count:
+          type: integer
+        items_on_page:
+          type: integer
         next:
           type: string
-          nullable: true
           format: uri
-          example: http://api.example.org/accounts/?page=4
+          nullable: true
         previous:
           type: string
-          nullable: true
           format: uri
-          example: http://api.example.org/accounts/?page=2
+          nullable: true
         results:
           type: array
           items:
             $ref: '#/components/schemas/LevelListing'
+        disable_paging:
+          type: boolean
     PaginatedNewsListingList:
       type: object
       required:
-      - count
+      - current_page
+      - last_page
+      - total_count
+      - items_on_page
       - results
+      - disable_paging
       properties:
-        count:
+        current_page:
           type: integer
-          example: 123
+        last_page:
+          type: integer
+        total_count:
+          type: integer
+        items_on_page:
+          type: integer
         next:
           type: string
-          nullable: true
           format: uri
-          example: http://api.example.org/accounts/?page=4
+          nullable: true
         previous:
           type: string
-          nullable: true
           format: uri
-          example: http://api.example.org/accounts/?page=2
+          nullable: true
         results:
           type: array
           items:
             $ref: '#/components/schemas/NewsListing'
+        disable_paging:
+          type: boolean
     PaginatedPlaylistItemList:
       type: object
       required:
-      - count
+      - current_page
+      - last_page
+      - total_count
+      - items_on_page
       - results
+      - disable_paging
       properties:
-        count:
+        current_page:
           type: integer
-          example: 123
+        last_page:
+          type: integer
+        total_count:
+          type: integer
+        items_on_page:
+          type: integer
         next:
           type: string
-          nullable: true
           format: uri
-          example: http://api.example.org/accounts/?page=4
+          nullable: true
         previous:
           type: string
-          nullable: true
           format: uri
-          example: http://api.example.org/accounts/?page=2
+          nullable: true
         results:
           type: array
           items:
             $ref: '#/components/schemas/PlaylistItem'
+        disable_paging:
+          type: boolean
     PaginatedRatingListingList:
       type: object
       required:
-      - count
+      - current_page
+      - last_page
+      - total_count
+      - items_on_page
       - results
+      - disable_paging
       properties:
-        count:
+        current_page:
           type: integer
-          example: 123
+        last_page:
+          type: integer
+        total_count:
+          type: integer
+        items_on_page:
+          type: integer
         next:
           type: string
-          nullable: true
           format: uri
-          example: http://api.example.org/accounts/?page=4
+          nullable: true
         previous:
           type: string
-          nullable: true
           format: uri
-          example: http://api.example.org/accounts/?page=2
+          nullable: true
         results:
           type: array
           items:
             $ref: '#/components/schemas/RatingListing'
+        disable_paging:
+          type: boolean
     PaginatedReviewListingList:
       type: object
       required:
-      - count
+      - current_page
+      - last_page
+      - total_count
+      - items_on_page
       - results
+      - disable_paging
       properties:
-        count:
+        current_page:
           type: integer
-          example: 123
+        last_page:
+          type: integer
+        total_count:
+          type: integer
+        items_on_page:
+          type: integer
         next:
           type: string
-          nullable: true
           format: uri
-          example: http://api.example.org/accounts/?page=4
+          nullable: true
         previous:
           type: string
-          nullable: true
           format: uri
-          example: http://api.example.org/accounts/?page=2
+          nullable: true
         results:
           type: array
           items:
             $ref: '#/components/schemas/ReviewListing'
+        disable_paging:
+          type: boolean
     PaginatedTagListingList:
       type: object
       required:
-      - count
+      - current_page
+      - last_page
+      - total_count
+      - items_on_page
       - results
+      - disable_paging
       properties:
-        count:
+        current_page:
           type: integer
-          example: 123
+        last_page:
+          type: integer
+        total_count:
+          type: integer
+        items_on_page:
+          type: integer
         next:
           type: string
-          nullable: true
           format: uri
-          example: http://api.example.org/accounts/?page=4
+          nullable: true
         previous:
           type: string
-          nullable: true
           format: uri
-          example: http://api.example.org/accounts/?page=2
+          nullable: true
         results:
           type: array
           items:
             $ref: '#/components/schemas/TagListing'
+        disable_paging:
+          type: boolean
     PaginatedUserListingList:
       type: object
       required:
-      - count
+      - current_page
+      - last_page
+      - total_count
+      - items_on_page
       - results
+      - disable_paging
       properties:
-        count:
+        current_page:
           type: integer
-          example: 123
+        last_page:
+          type: integer
+        total_count:
+          type: integer
+        items_on_page:
+          type: integer
         next:
           type: string
-          nullable: true
           format: uri
-          example: http://api.example.org/accounts/?page=4
+          nullable: true
         previous:
           type: string
-          nullable: true
           format: uri
-          example: http://api.example.org/accounts/?page=2
+          nullable: true
         results:
           type: array
           items:
             $ref: '#/components/schemas/UserListing'
+        disable_paging:
+          type: boolean
     PaginatedWalkthroughListingList:
       type: object
       required:
-      - count
+      - current_page
+      - last_page
+      - total_count
+      - items_on_page
       - results
+      - disable_paging
       properties:
-        count:
+        current_page:
           type: integer
-          example: 123
+        last_page:
+          type: integer
+        total_count:
+          type: integer
+        items_on_page:
+          type: integer
         next:
           type: string
-          nullable: true
           format: uri
-          example: http://api.example.org/accounts/?page=4
+          nullable: true
         previous:
           type: string
-          nullable: true
           format: uri
-          example: http://api.example.org/accounts/?page=2
+          nullable: true
         results:
           type: array
           items:
             $ref: '#/components/schemas/WalkthroughListing'
+        disable_paging:
+          type: boolean
     PatchedLevelDetails:
       type: object
       properties:
