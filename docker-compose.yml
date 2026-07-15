@@ -119,6 +119,7 @@ services:
         target: 8000
     depends_on:
       - trcustoms
+      - trcustoms-frontend
     command: /bin/bash -c 'envsubst "\$${ADMIN_DIR}" < /etc/nginx/nginx.conf.template > /etc/nginx/nginx.conf && nginx -g "daemon off;"'
 
   trcustoms-mailhog:

@@ -38,7 +38,12 @@ http {
         return 418;
       }
 
-      proxy_pass http://trcustoms-frontend:3000;
+      # Resolve the frontend dev server at request time via Docker's embedded
+      # DNS instead of at startup, so nginx does not abort when the frontend
+      # container is not yet registered.
+      resolver 127.0.0.11 valid=10s ipv6=off;
+      set $frontend_upstream trcustoms-frontend:3000;
+      proxy_pass http://$frontend_upstream;
     }
 
     location @social_preview {
