@@ -118,6 +118,49 @@ def test_level_creation_success(auth_api_client: APIClient) -> None:
 
 
 @pytest.mark.django_db
+def test_level_creation_reports_limit_error_on_api_field(
+    auth_api_client: APIClient,
+) -> None:
+    engine = EngineFactory()
+    duration = DurationFactory()
+    difficulty = DifficultyFactory()
+    genres = [GenreFactory() for _ in range(6)]  # MAX_GENRES is 5
+    tag = TagFactory()
+    user = UserFactory()
+    cover = UploadedFileFactory(upload_type=UploadType.LEVEL_COVER)
+    screenshots = [
+        UploadedFileFactory(upload_type=UploadType.LEVEL_SCREENSHOT)
+        for _ in range(3)
+    ]
+    file = UploadedFileFactory(upload_type=UploadType.LEVEL_FILE)
+
+    response = auth_api_client.post(
+        "/api/levels/",
+        format="json",
+        data={
+            "name": "Test level",
+            "description": "Test description",
+            "engine_id": engine.id,
+            "duration_id": duration.id,
+            "difficulty_id": difficulty.id,
+            "genre_ids": [genre.id for genre in genres],
+            "tag_ids": [tag.id],
+            "author_ids": [user.id],
+            "cover_id": cover.id,
+            "screenshot_ids": [screenshot.id for screenshot in screenshots],
+            "file_id": file.id,
+        },
+    )
+
+    data = response.json()
+    assert response.status_code == status.HTTP_400_BAD_REQUEST, data
+    # The limit error is keyed by the writable API field, not the model
+    # source "genres".
+    assert "genres" not in data
+    assert data["genre_ids"] == ["At most 5 genres can be added"]
+
+
+@pytest.mark.django_db
 def test_unapproved_level_creation_updates_authored_level_count() -> None:
     user = UserFactory()
     LevelFactory(authors=[user], is_approved=False)

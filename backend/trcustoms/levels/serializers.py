@@ -259,16 +259,23 @@ class LevelDetailsSerializer(LevelListingSerializer):
         validated_data = super().validate(data)
 
         def validate_limits(
-            queryset, field: str, min_count: int, max_count: int
+            queryset,
+            error_field: str,
+            noun: str,
+            min_count: int,
+            max_count: int,
         ) -> None:
+            # Report against the writable API field (e.g. screenshot_ids), not
+            # the model source (screenshots), so clients and the generated
+            # schema see a single, consistent key per field.
             count = len(set(queryset))
             if count < min_count:
                 raise serializers.ValidationError(
-                    {field: f"At least {min_count} {field} must be added"}
+                    {error_field: f"At least {min_count} {noun} must be added"}
                 )
             if count > max_count:
                 raise serializers.ValidationError(
-                    {field: f"At most {max_count} {field} can be added"}
+                    {error_field: f"At most {max_count} {noun} can be added"}
                 )
 
         validate_limits(
@@ -276,6 +283,7 @@ class LevelDetailsSerializer(LevelListingSerializer):
                 "screenshots",
                 self.instance.screenshots.all() if self.instance else [],
             ),
+            "screenshot_ids",
             "screenshots",
             settings.MIN_SCREENSHOTS,
             settings.MAX_SCREENSHOTS,
@@ -284,6 +292,7 @@ class LevelDetailsSerializer(LevelListingSerializer):
             validated_data.get(
                 "genres", self.instance.genres.all() if self.instance else []
             ),
+            "genre_ids",
             "genres",
             settings.MIN_GENRES,
             settings.MAX_GENRES,
@@ -292,6 +301,7 @@ class LevelDetailsSerializer(LevelListingSerializer):
             validated_data.get(
                 "tags", self.instance.tags.all() if self.instance else []
             ),
+            "tag_ids",
             "tags",
             settings.MIN_TAGS,
             settings.MAX_TAGS,
@@ -300,6 +310,7 @@ class LevelDetailsSerializer(LevelListingSerializer):
             validated_data.get(
                 "authors", self.instance.authors.all() if self.instance else []
             ),
+            "author_ids",
             "authors",
             settings.MIN_AUTHORS,
             settings.MAX_AUTHORS,
