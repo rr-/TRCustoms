@@ -23,6 +23,10 @@ MAX_SIZE_MAP = {
     UploadType.ATTACHMENT: [
         (".*", 0.5 * MEGABYTE),
     ],
+    UploadType.EVENT_COVER: [
+        ("image/png", 10 * MEGABYTE),
+        (".*", MEGABYTE),
+    ],
 }
 
 CONTENT_TYPE_MAP = {
@@ -41,6 +45,7 @@ CONTENT_TYPE_MAP = {
         "application/zip-compressed",
         "application/x-zip-compressed",
     ],
+    UploadType.EVENT_COVER: ["image/jpeg", "image/png"],
 }
 
 
@@ -96,7 +101,7 @@ class UploadedFileDetailsSerializer(serializers.ModelSerializer):
                 {
                     "upload_type": (
                         "Invalid upload type. Valid values include: "
-                        + ",".join(map(repr(MAX_SIZE_MAP.keys())))
+                        + ", ".join(map(repr, MAX_SIZE_MAP.keys()))
                     )
                 }
             ) from None
