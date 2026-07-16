@@ -1,0 +1,83 @@
+import { render } from "@testing-library/react";
+import { screen } from "@testing-library/react";
+import { waitFor } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
+import type { ReactNode } from "react";
+import { MemoryRouter } from "react-router-dom";
+import { LoginPage } from "src/components/pages/LoginPage";
+import { UserContext } from "src/contexts/UserContext";
+import { AuthService } from "src/services/AuthService";
+import { UserService } from "src/services/UserService";
+import { beforeEach } from "vitest";
+import { describe } from "vitest";
+import { expect } from "vitest";
+import { test } from "vitest";
+import { vi } from "vitest";
+
+const setUser = vi.fn();
+
+const wrapper = ({ children }: { children: ReactNode }) => (
+  <UserContext.Provider value={{ user: null, setUser }}>
+    <MemoryRouter>{children}</MemoryRouter>
+  </UserContext.Provider>
+);
+
+const submitLogin = async () => {
+  await userEvent.type(screen.getByLabelText(/Username/), "tester");
+  await userEvent.type(screen.getByLabelText(/Password/), "hunter2000");
+  await userEvent.click(screen.getByRole("button", { name: "Log in" }));
+};
+
+describe("LoginPage", () => {
+  beforeEach(() => {
+    vi.restoreAllMocks();
+    setUser.mockClear();
+  });
+
+  test("renders a Log in button", () => {
+    render(<LoginPage />, { wrapper });
+    expect(screen.getByRole("button", { name: "Log in" })).toBeInTheDocument();
+  });
+
+  test("logs in and stores the user", async () => {
+    const login = vi
+      .spyOn(AuthService, "login")
+      .mockResolvedValue(undefined as any);
+    vi.spyOn(UserService, "getCurrentUser").mockResolvedValue({
+      id: 1,
+    } as any);
+    render(<LoginPage />, { wrapper });
+
+    await submitLogin();
+
+    await waitFor(() =>
+      expect(login).toHaveBeenCalledWith("tester", "hunter2000"),
+    );
+    expect(setUser).toHaveBeenCalledWith({ id: 1 });
+  });
+
+  test("shows the error detail on failed login", async () => {
+    vi.spyOn(AuthService, "login").mockRejectedValue({
+      detail: "invalid credentials",
+    });
+    render(<LoginPage />, { wrapper });
+
+    await submitLogin();
+
+    expect(await screen.findByText(/invalid credentials/i)).toBeInTheDocument();
+  });
+
+  test("offers to resend activation when the email is unconfirmed", async () => {
+    vi.spyOn(AuthService, "login").mockRejectedValue({
+      code: "email_not_confirmed",
+      detail: "your email is not confirmed",
+    });
+    render(<LoginPage />, { wrapper });
+
+    await submitLogin();
+
+    expect(
+      await screen.findByText(/Resend activation email/i),
+    ).toBeInTheDocument();
+  });
+});

@@ -1,22 +1,23 @@
-import type { FormikHelpers } from "formik";
-import { Formik } from "formik";
-import { Form } from "formik";
 import { useCallback } from "react";
 import { useContext } from "react";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { UserResendActivationEmailButton } from "src/components/buttons/UserResendActivationEmailButton";
 import { FormGrid } from "src/components/common/FormGrid";
-import { FormGridButtons } from "src/components/common/FormGrid";
 import { FormGridFieldSet } from "src/components/common/FormGrid";
-import { PasswordFormField } from "src/components/formfields/PasswordFormField";
-import { TextFormField } from "src/components/formfields/TextFormField";
+import { Form } from "src/components/forms/Form";
+import { FormButtons } from "src/components/forms/FormButtons";
+import { PasswordField } from "src/components/forms/PasswordField";
+import { TextField } from "src/components/forms/TextField";
+import { applyServerErrors } from "src/components/forms/serverErrors";
+import type { FormResult } from "src/components/forms/useFormSubmit";
 import { PlainLayout } from "src/components/layouts/PlainLayout";
 import { usePageMetadata } from "src/contexts/PageMetadataContext";
 import { UserContext } from "src/contexts/UserContext";
 import { AuthService } from "src/services/AuthService";
 import { UserService } from "src/services/UserService";
-import { filterFalsyObjectValues } from "src/utils/misc";
 import { getResponseError } from "src/utils/misc";
 import { makeSentence } from "src/utils/string";
 
@@ -28,75 +29,66 @@ interface LoginFormValues {
 const LoginPage = () => {
   const navigate = useNavigate();
   const { setUser } = useContext(UserContext);
-  const initialValues: LoginFormValues = { username: "", password: "" };
+  const [result, setResult] = useState<FormResult | null>(null);
+  const form = useForm<LoginFormValues>({
+    defaultValues: { username: "", password: "" },
+  });
 
-  const handleSubmit = useCallback(
-    async (
-      values: LoginFormValues,
-      { setSubmitting, setStatus, setErrors }: FormikHelpers<LoginFormValues>,
-    ) => {
-      setStatus({});
-      try {
-        await AuthService.login(values.username, values.password);
-        const user = await UserService.getCurrentUser();
-        setUser(user);
-        navigate("/");
-      } catch (error) {
-        setSubmitting(false);
-        const data = getResponseError(error);
-        if (!data) {
-          setStatus({ error: <>Unknown error.</> });
-        } else if (data.code === "email_not_confirmed") {
-          setStatus({
-            error: (
-              <>
-                {makeSentence(data.detail)}
-                <br />
-                <UserResendActivationEmailButton username={values.username} />
-              </>
-            ),
-          });
-        } else if (data.detail) {
-          setStatus({ error: <>{makeSentence(data.detail)}</> });
-        } else {
-          const errors = {
-            username: data?.username,
-            password: data?.password,
-          };
-          if (Object.keys(filterFalsyObjectValues(errors)).length) {
-            setErrors(errors);
-          } else {
+  // Login carries custom error handling (the resend-activation prompt), so it
+  // manages its own submit rather than using useFormSubmit.
+  const submit = form.handleSubmit(
+    useCallback(
+      async (values: LoginFormValues) => {
+        setResult(null);
+        try {
+          await AuthService.login(values.username, values.password);
+          const user = await UserService.getCurrentUser();
+          setUser(user);
+          navigate("/");
+        } catch (error) {
+          const data = getResponseError(error);
+          if (!data) {
+            setResult({ error: <>Unknown error.</> });
+          } else if (data.code === "email_not_confirmed") {
+            setResult({
+              error: (
+                <>
+                  {makeSentence(data.detail)}
+                  <br />
+                  <UserResendActivationEmailButton username={values.username} />
+                </>
+              ),
+            });
+          } else if (data.detail) {
+            setResult({ error: <>{makeSentence(data.detail)}</> });
+          } else if (!applyServerErrors(form, data)) {
             console.error(error);
-            setStatus({ error: <>Unknown error.</> });
+            setResult({ error: <>Unknown error.</> });
           }
         }
-      }
-    },
-    [navigate, setUser],
+      },
+      [navigate, setUser, form],
+    ),
   );
 
   usePageMetadata(() => ({ ready: true, title: "Login" }), []);
 
   return (
     <PlainLayout header="Login">
-      <Formik initialValues={initialValues} onSubmit={handleSubmit}>
-        {({ isSubmitting, status }) => (
-          <Form>
-            <FormGrid>
-              <FormGridFieldSet>
-                <TextFormField label="Username" name="username" />
-                <PasswordFormField label="Password" name="password" />
-              </FormGridFieldSet>
-              <FormGridButtons status={status}>
-                <button type="submit" disabled={isSubmitting}>
-                  Log in
-                </button>
-                <Link to="/password-reset">Forgot password?</Link>
-              </FormGridButtons>
-            </FormGrid>
-          </Form>
-        )}
-      </Formik>
+      <Form form={form} onSubmit={submit}>
+        <FormGrid>
+          <FormGridFieldSet>
+            <TextField label="Username" name="username" />
+            <PasswordField label="Password" name="password" />
+          </FormGridFieldSet>
+          <FormButtons result={result}>
+            <button type="submit" disabled={form.formState.isSubmitting}>
+              Log in
+            </button>
+            <Link to="/password-reset">Forgot password?</Link>
+          </FormButtons>
+        </FormGrid>
+      </Form>
     </PlainLayout>
   );
 };
