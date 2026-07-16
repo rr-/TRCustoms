@@ -79,11 +79,16 @@ const Button = ({
     </>
   );
 
+  // Icon-only buttons have no visible text to name them; fall back to the
+  // tooltip so screen readers announce something.
+  const ariaLabel = !children ? tooltip : undefined;
+
   if (to?.includes("://")) {
     // handle external links
     return (
       <a
         title={tooltip}
+        aria-label={ariaLabel}
         rel="noopener noreferrer"
         target="_blank"
         className={classNames.join(" ")}
@@ -99,6 +104,7 @@ const Button = ({
   return (
     <Link
       title={tooltip}
+      aria-label={ariaLabel}
       className={classNames.join(" ")}
       onClick={handleLinkClick}
       onAuxClick={handleLinkClick}

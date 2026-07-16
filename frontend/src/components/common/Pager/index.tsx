@@ -47,27 +47,36 @@ const addEllipsisMarkers = (pages: number[]): (number | null)[] => {
 const PagerActiveLink = ({
   onPageChange,
   page,
+  ariaLabel,
+  isCurrent,
   children,
 }: {
   onPageChange: (page: number) => void;
   page: number;
+  ariaLabel?: string | undefined;
+  isCurrent?: boolean | undefined;
   children: React.ReactNode;
 }) => {
   return (
-    <Link className={styles.button} onClick={() => onPageChange(page)}>
+    <Link
+      className={styles.button}
+      onClick={() => onPageChange(page)}
+      ariaLabel={ariaLabel}
+      ariaCurrent={isCurrent ? "page" : undefined}
+    >
       {children}
     </Link>
   );
 };
 
 const PagerInactiveLink = ({
-  page,
+  ariaLabel,
   children,
 }: {
-  page: number;
+  ariaLabel?: string | undefined;
   children: React.ReactNode;
 }) => {
-  return <span>{children}</span>;
+  return <span aria-label={ariaLabel}>{children}</span>;
 };
 
 const PagerLink = ({
@@ -75,22 +84,33 @@ const PagerLink = ({
   firstPage,
   lastPage,
   page,
+  ariaLabel,
+  isCurrent,
   children,
 }: {
   onPageChange: (page: number) => void;
   firstPage: number;
   lastPage: number;
   page: number;
+  ariaLabel?: string | undefined;
+  isCurrent?: boolean | undefined;
   children: React.ReactNode;
 }) => {
   if (page >= firstPage && page <= lastPage) {
     return (
-      <PagerActiveLink onPageChange={onPageChange} page={page}>
+      <PagerActiveLink
+        onPageChange={onPageChange}
+        page={page}
+        ariaLabel={ariaLabel}
+        isCurrent={isCurrent}
+      >
         {children}
       </PagerActiveLink>
     );
   }
-  return <PagerInactiveLink page={page}>{children}</PagerInactiveLink>;
+  return (
+    <PagerInactiveLink ariaLabel={ariaLabel}>{children}</PagerInactiveLink>
+  );
 };
 
 const Pager = <TCollection extends {}>({
@@ -112,12 +132,20 @@ const Pager = <TCollection extends {}>({
     <div className={styles.wrapper}>
       <ul className={styles.list}>
         <li className={styles.listItem}>
-          <PagerLink {...pagerLinkProps} page={firstPage}>
+          <PagerLink
+            {...pagerLinkProps}
+            page={firstPage}
+            ariaLabel="First page"
+          >
             &laquo;
           </PagerLink>
         </li>
         <li className={styles.listItem}>
-          <PagerLink {...pagerLinkProps} page={prevPage}>
+          <PagerLink
+            {...pagerLinkProps}
+            page={prevPage}
+            ariaLabel="Previous page"
+          >
             &lsaquo;
           </PagerLink>
         </li>
@@ -134,7 +162,12 @@ const Pager = <TCollection extends {}>({
                 page === currentPage ? styles.active : ""
               }`}
             >
-              <PagerLink {...pagerLinkProps} page={page}>
+              <PagerLink
+                {...pagerLinkProps}
+                page={page}
+                ariaLabel={`Page ${page}`}
+                isCurrent={page === currentPage}
+              >
                 {page}
               </PagerLink>
             </li>
@@ -142,12 +175,12 @@ const Pager = <TCollection extends {}>({
         )}
 
         <li className={styles.listItem}>
-          <PagerLink {...pagerLinkProps} page={nextPage}>
+          <PagerLink {...pagerLinkProps} page={nextPage} ariaLabel="Next page">
             &rsaquo;
           </PagerLink>
         </li>
         <li className={styles.listItem}>
-          <PagerLink {...pagerLinkProps} page={lastPage}>
+          <PagerLink {...pagerLinkProps} page={lastPage} ariaLabel="Last page">
             &raquo;
           </PagerLink>
         </li>

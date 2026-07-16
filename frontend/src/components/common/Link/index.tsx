@@ -13,6 +13,8 @@ interface MyLinkProps {
   children?: React.ReactNode | string | undefined;
   tooltip?: string | undefined;
   forceNewWindow?: boolean | undefined;
+  ariaLabel?: string | undefined;
+  ariaCurrent?: React.AriaAttributes["aria-current"];
 }
 
 const MyLink = ({
@@ -25,6 +27,8 @@ const MyLink = ({
   disabled,
   tooltip,
   forceNewWindow,
+  ariaLabel,
+  ariaCurrent,
 }: MyLinkProps) => {
   const [timer, setTimer] = useState<number | null>(null);
   const [isTimeoutActive, setIsTimeoutActive] = useState(false);
@@ -77,6 +81,8 @@ const MyLink = ({
     return (
       <a
         title={tooltip}
+        aria-label={ariaLabel}
+        aria-current={ariaCurrent}
         rel="noopener noreferrer"
         target="_blank"
         className={classNames.join(" ")}
@@ -92,6 +98,8 @@ const MyLink = ({
   return (
     <Link
       title={tooltip}
+      aria-label={ariaLabel}
+      aria-current={ariaCurrent}
       className={classNames.join(" ")}
       onClick={handleLinkClick}
       onAuxClick={handleLinkClick}
