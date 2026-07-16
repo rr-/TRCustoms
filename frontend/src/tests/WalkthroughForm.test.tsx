@@ -79,6 +79,7 @@ describe("WalkthroughForm", () => {
     vi.spyOn(WalkthroughService, "create").mockRejectedValue({
       text: ["Server rejected this text"],
     });
+    vi.spyOn(console, "error").mockImplementation(() => {});
     renderForm();
 
     await userEvent.click(screen.getByRole("button", { name: "Save draft" }));

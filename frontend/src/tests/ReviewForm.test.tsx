@@ -80,6 +80,7 @@ describe("ReviewForm", () => {
     vi.spyOn(ReviewService, "create").mockRejectedValue({
       text: ["No profanity please"],
     });
+    vi.spyOn(console, "error").mockImplementation(() => {});
     renderForm();
 
     await userEvent.type(screen.getByLabelText(/Review text/), "bad words");

@@ -49,6 +49,7 @@ describe("PlaylistLevelSearch", () => {
       code: "duplicate_level",
     });
     const alertSpy = vi.spyOn(window, "alert").mockImplementation(() => {});
+    vi.spyOn(console, "error").mockImplementation(() => {});
     render(<PlaylistLevelSearch userId={7} />);
 
     await applyFirstSuggestion();
@@ -63,6 +64,7 @@ describe("PlaylistLevelSearch", () => {
   test("shows a generic error on other failures", async () => {
     vi.spyOn(PlaylistService, "create").mockRejectedValue({ detail: "nope" });
     const alertSpy = vi.spyOn(window, "alert").mockImplementation(() => {});
+    vi.spyOn(console, "error").mockImplementation(() => {});
     render(<PlaylistLevelSearch userId={7} />);
 
     await applyFirstSuggestion();

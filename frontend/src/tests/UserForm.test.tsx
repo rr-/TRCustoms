@@ -93,6 +93,7 @@ describe("UserForm (registration)", () => {
     vi.spyOn(UserService, "register").mockRejectedValue({
       username: ["Username already taken"],
     });
+    vi.spyOn(console, "error").mockImplementation(() => {});
     renderForm();
 
     await fillValid();

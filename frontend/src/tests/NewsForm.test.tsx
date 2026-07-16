@@ -75,6 +75,7 @@ describe("NewsForm", () => {
     vi.spyOn(NewsService, "create").mockRejectedValue({
       subject: ["Subject already used"],
     });
+    vi.spyOn(console, "error").mockImplementation(() => {});
     renderForm();
 
     await userEvent.type(screen.getByLabelText(/Subject/), "Dupe");
