@@ -13,7 +13,7 @@ ENV UV_PROJECT_ENVIRONMENT=/usr/local \
     UV_LINK_MODE=copy
 
 RUN apt-get update \
-    && apt-get install -y --no-install-recommends libpq-dev \
+    && apt-get install -y --no-install-recommends libpq-dev libmagic1 \
     && rm -rf /var/lib/apt/lists/*
 
 COPY pyproject.toml uv.lock /app/

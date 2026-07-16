@@ -1,9 +1,33 @@
 import re
 
+import magic
 from rest_framework import serializers
 
 from trcustoms.uploads.consts import GIGABYTE, KILOBYTE, MEGABYTE, UploadType
 from trcustoms.uploads.models import UploadedFile
+
+# Canonical extension per sniffed MIME type. Used to normalize the stored
+# file name so its extension always matches the real content, regardless of
+# what the client named the upload.
+EXTENSION_MAP = {
+    "image/jpeg": ".jpg",
+    "image/png": ".png",
+    "application/zip": ".zip",
+}
+
+
+def detect_content_type(file) -> str:
+    """Sniff the real MIME type from the file's magic bytes.
+
+    The client-supplied Content-Type header is not trusted: a client can
+    declare an allowed type while sending arbitrary bytes (e.g. HTML or
+    SVG), which would otherwise be stored and served with an executable
+    extension on our own origin.
+    """
+    head = file.read(2048)
+    file.seek(0)
+    return magic.from_buffer(head, mime=True)
+
 
 MAX_SIZE_MAP = {
     UploadType.USER_PICTURE: [
@@ -106,27 +130,30 @@ class UploadedFileDetailsSerializer(serializers.ModelSerializer):
                 }
             ) from None
 
-        for content_type, max_file_size in max_size_map:
-            if re.match(content_type, data["content"].content_type.lower()):
+        content = data.get("content")
+        if not content:
+            raise serializers.ValidationError({"content": "Missing file."})
+
+        content_type = detect_content_type(content)
+
+        for pattern, max_file_size in max_size_map:
+            if re.match(pattern, content_type):
                 break
         else:
             max_file_size = 0
 
-        if not data.get("content"):
-            raise serializers.ValidationError({"content": "Missing file."})
-
-        if data["content"].content_type.lower() not in allowed_content_types:
+        if content_type not in allowed_content_types:
             raise serializers.ValidationError(
                 {
                     "content": (
-                        f"Invalid file type ({data['content'].content_type}). "
+                        f"Invalid file type ({content_type}). "
                         "Allowed types: "
                         f"{', '.join(allowed_content_types)}"
                     )
                 }
             )
 
-        if data["content"].size > max_file_size:
+        if content.size > max_file_size:
             raise serializers.ValidationError(
                 {
                     "content": (
@@ -135,6 +162,9 @@ class UploadedFileDetailsSerializer(serializers.ModelSerializer):
                     )
                 }
             )
+
+        if extension := EXTENSION_MAP.get(content_type):
+            content.name = f"upload{extension}"
 
         return data
 
