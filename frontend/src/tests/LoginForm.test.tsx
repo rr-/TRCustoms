@@ -4,7 +4,7 @@ import { waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import type { ReactNode } from "react";
 import { MemoryRouter } from "react-router-dom";
-import { LoginPage } from "src/components/pages/LoginPage";
+import { LoginForm } from "src/components/common/LoginForm";
 import { UserContext } from "src/contexts/UserContext";
 import { AuthService } from "src/services/AuthService";
 import { UserService } from "src/services/UserService";
@@ -28,25 +28,26 @@ const submitLogin = async () => {
   await userEvent.click(screen.getByRole("button", { name: "Log in" }));
 };
 
-describe("LoginPage", () => {
+describe("LoginForm", () => {
   beforeEach(() => {
     vi.restoreAllMocks();
     setUser.mockClear();
   });
 
   test("renders a Log in button", () => {
-    render(<LoginPage />, { wrapper });
+    render(<LoginForm />, { wrapper });
     expect(screen.getByRole("button", { name: "Log in" })).toBeInTheDocument();
   });
 
-  test("logs in and stores the user", async () => {
+  test("logs in, stores the user, and calls onLogin", async () => {
     const login = vi
       .spyOn(AuthService, "login")
       .mockResolvedValue(undefined as any);
     vi.spyOn(UserService, "getCurrentUser").mockResolvedValue({
       id: 1,
     } as any);
-    render(<LoginPage />, { wrapper });
+    const onLogin = vi.fn();
+    render(<LoginForm onLogin={onLogin} />, { wrapper });
 
     await submitLogin();
 
@@ -54,13 +55,14 @@ describe("LoginPage", () => {
       expect(login).toHaveBeenCalledWith("tester", "hunter2000"),
     );
     expect(setUser).toHaveBeenCalledWith({ id: 1 });
+    expect(onLogin).toHaveBeenCalled();
   });
 
   test("shows the error detail on failed login", async () => {
     vi.spyOn(AuthService, "login").mockRejectedValue({
       detail: "invalid credentials",
     });
-    render(<LoginPage />, { wrapper });
+    render(<LoginForm />, { wrapper });
 
     await submitLogin();
 
@@ -72,7 +74,7 @@ describe("LoginPage", () => {
       code: "email_not_confirmed",
       detail: "your email is not confirmed",
     });
-    render(<LoginPage />, { wrapper });
+    render(<LoginForm />, { wrapper });
 
     await submitLogin();
 
