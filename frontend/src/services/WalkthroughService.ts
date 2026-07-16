@@ -61,10 +61,20 @@ const searchWalkthroughs = async (
   };
   const { data } = await walkthroughsList({ query, throwOnError: true });
   const results =
-    searchQuery.sort === "random"
-      ? [...data.results].sort(() => Math.random() - 0.5)
-      : data.results;
+    searchQuery.sort === "random" ? shuffle(data.results) : data.results;
   return { ...data, results, searchQuery };
+};
+
+// Fisher-Yates: an unbiased shuffle (sort(() => Math.random() - 0.5) is not).
+// Note this only randomises the current page; true cross-page randomness would
+// have to come from the backend.
+const shuffle = <T>(items: readonly T[]): T[] => {
+  const result = [...items];
+  for (let i = result.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [result[i], result[j]] = [result[j], result[i]];
+  }
+  return result;
 };
 
 const getWalkthroughById = async (
@@ -81,7 +91,7 @@ const create = async ({
   levelId,
   walkthroughType,
   text,
-}: WalkthroughCreatePayload): Promise<WalkthroughListing> => {
+}: WalkthroughCreatePayload): Promise<WalkthroughDetails> => {
   const { data } = await walkthroughsCreate({
     body: {
       level_id: levelId,
@@ -96,7 +106,7 @@ const create = async ({
 const update = async (
   walkthroughId: number,
   { text }: WalkthroughUpdatePayload,
-): Promise<WalkthroughListing> => {
+): Promise<WalkthroughDetails> => {
   const { data } = await walkthroughsPartialUpdate({
     path: { id: walkthroughId },
     body: { text },
