@@ -1,25 +1,21 @@
-import { Formik } from "formik";
-import { Form } from "formik";
 import { useEffect } from "react";
-import { useCallback } from "react";
-import { useState } from "react";
+import { useForm } from "react-hook-form";
 import { Button } from "src/components/common/Button";
 import { FormGrid } from "src/components/common/FormGrid";
-import { FormGridButtons } from "src/components/common/FormGrid";
 import { FormGridFieldSet } from "src/components/common/FormGrid";
 import { FormGridType } from "src/components/common/FormGrid";
-import { CheckboxFormField } from "src/components/formfields/CheckboxFormField";
 import { SubmitButton } from "src/components/formfields/SubmitButton";
-import { TextFormField } from "src/components/formfields/TextFormField";
+import { CheckboxField } from "src/components/forms/CheckboxField";
+import { Form } from "src/components/forms/Form";
+import { FormButtons } from "src/components/forms/FormButtons";
+import { TextField } from "src/components/forms/TextField";
 import { IconSearch } from "src/components/icons";
 import type { UserSearchQuery } from "src/services/UserService";
 
-const convertSearchQueryToFormikValues = (searchQuery: UserSearchQuery) => {
-  return {
-    search: searchQuery.search || "",
-    hideInactiveReviewers: searchQuery.hideInactiveReviewers,
-  };
-};
+const toFormValues = (searchQuery: UserSearchQuery) => ({
+  search: searchQuery.search || "",
+  hideInactiveReviewers: searchQuery.hideInactiveReviewers,
+});
 
 interface UserSearchProps {
   defaultSearchQuery: UserSearchQuery;
@@ -34,68 +30,48 @@ const UserSearch = ({
   onSearchQueryChange,
   showInactiveReviewersCheckbox,
 }: UserSearchProps) => {
-  const [formikValues, setFormikValues] = useState<any>(
-    convertSearchQueryToFormikValues(searchQuery),
-  );
+  const form = useForm({ defaultValues: toFormValues(searchQuery) });
 
-  useEffect(
-    () => setFormikValues(convertSearchQueryToFormikValues(searchQuery)),
-    [searchQuery],
-  );
+  // Keep the form in sync when the query changes externally (URL, reset).
+  const { reset } = form;
+  useEffect(() => reset(toFormValues(searchQuery)), [searchQuery, reset]);
 
-  const handleSubmit = useCallback(
-    async (values: any) => {
-      onSearchQueryChange({
-        ...searchQuery,
-        page: null,
-        search: values.search || null,
-        hideInactiveReviewers: values.hideInactiveReviewers,
-      });
-    },
-    [searchQuery, onSearchQueryChange],
-  );
-
-  const handleClear = useCallback(
-    () => onSearchQueryChange(defaultSearchQuery),
-    [onSearchQueryChange, defaultSearchQuery],
-  );
+  const submit = form.handleSubmit((values) => {
+    onSearchQueryChange({
+      ...searchQuery,
+      page: null,
+      search: values.search || null,
+      hideInactiveReviewers: values.hideInactiveReviewers,
+    });
+  });
 
   return (
-    <Formik
-      enableReinitialize={true}
-      initialValues={formikValues}
-      onSubmit={handleSubmit}
-    >
-      {({ submitForm, resetForm }) => (
-        <Form>
-          <FormGrid gridType={FormGridType.Row}>
-            <FormGridFieldSet>
-              <TextFormField label="Search" name="search" />
+    <Form form={form} onSubmit={submit}>
+      <FormGrid gridType={FormGridType.Row}>
+        <FormGridFieldSet>
+          <TextField label="Search" name="search" />
 
-              {showInactiveReviewersCheckbox && (
-                <CheckboxFormField
-                  onChange={() => {
-                    submitForm();
-                  }}
-                  label="Hide inactive"
-                  name="hideInactiveReviewers"
-                />
-              )}
-            </FormGridFieldSet>
+          {showInactiveReviewersCheckbox && (
+            <CheckboxField
+              onChange={() => submit()}
+              label="Hide inactive"
+              name="hideInactiveReviewers"
+            />
+          )}
+        </FormGridFieldSet>
 
-            <FormGridButtons>
-              <SubmitButton onClick={() => submitForm()} icon={<IconSearch />}>
-                Search
-              </SubmitButton>
+        <FormButtons>
+          <SubmitButton icon={<IconSearch />}>Search</SubmitButton>
 
-              <Button disableTimeout={true} onClick={handleClear}>
-                Reset
-              </Button>
-            </FormGridButtons>
-          </FormGrid>
-        </Form>
-      )}
-    </Formik>
+          <Button
+            disableTimeout={true}
+            onClick={() => onSearchQueryChange(defaultSearchQuery)}
+          >
+            Reset
+          </Button>
+        </FormButtons>
+      </FormGrid>
+    </Form>
   );
 };
 
