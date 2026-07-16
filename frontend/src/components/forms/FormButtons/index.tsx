@@ -8,9 +8,8 @@ interface FormButtonsProps {
   children: React.ReactNode;
 }
 
-// The button row plus the submit-status area. Reuses FormGrid's styles so it
-// matches the legacy FormGridButtons, but derives its error state from
-// react-hook-form instead of Formik.
+// The button row plus the submit-status area. Reuses FormGrid's styles and
+// derives its error state from react-hook-form.
 const FormButtons = ({ result, extra, children }: FormButtonsProps) => {
   const { errors } = useFormState();
   const hasFieldErrors = Object.keys(errors).length > 0;

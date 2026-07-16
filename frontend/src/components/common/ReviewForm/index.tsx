@@ -37,7 +37,7 @@ const ReviewForm = ({ level, review, onGoBack, onSubmit }: ReviewFormProps) => {
     defaultValues: { text: review?.text || "" },
   });
 
-  // Mirror Formik's enableReinitialize: refill when a different review loads.
+  // Refill the form when a different review loads.
   const { reset } = form;
   useEffect(() => {
     reset({ text: review?.text || "" });

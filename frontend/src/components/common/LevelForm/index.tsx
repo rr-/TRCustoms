@@ -214,7 +214,7 @@ const LevelForm = ({ level, onGoBack, onSubmit }: LevelFormProps) => {
     defaultValues: initialValues,
   });
 
-  // Mirror Formik's enableReinitialize when a level loads.
+  // Refill the form when a level loads.
   const { reset } = form;
   useEffect(() => {
     reset(initialValues);

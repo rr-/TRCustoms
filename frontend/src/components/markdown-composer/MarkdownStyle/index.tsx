@@ -81,7 +81,7 @@ const insertText = (
   const after = textarea.value.slice(textarea.selectionEnd);
 
   // fancy way of doing `textarea.value = before + text + after`
-  // that triggers the change event listeners, so that Formik can keep up
+  // that triggers the change event listeners, so the bound field keeps up
   const setValue = Object.getOwnPropertyDescriptor(
     HTMLTextAreaElement.prototype,
     "value",

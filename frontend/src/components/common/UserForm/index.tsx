@@ -71,7 +71,7 @@ type UserFormValues = z.infer<typeof baseSchema>;
 
 // Reuse the existing field validators inside the schema so the rules stay in
 // one place. Each field runs its validators in order and reports the first
-// error against that field, exactly like the old Formik validate().
+// error against that field.
 const makeSchema = (isNew: boolean) =>
   baseSchema.superRefine((values, ctx) => {
     const rules: { [field: string]: Array<(value: any) => string | null> } = {

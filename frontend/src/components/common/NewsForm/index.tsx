@@ -35,8 +35,8 @@ const NewsForm = ({ news, onGoBack, onSubmit }: NewsFormProps) => {
     defaultValues: { subject: news?.subject || "", text: news?.text || "" },
   });
 
-  // Mirror Formik's enableReinitialize: when a different news item loads,
-  // refill the form. Keyed on the id so it does not clobber the user's edits.
+  // Refill the form when a different news item loads. Keyed on the id so it
+  // does not clobber the user's edits.
   const { reset } = form;
   useEffect(() => {
     reset({ subject: news?.subject || "", text: news?.text || "" });
