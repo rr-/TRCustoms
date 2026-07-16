@@ -176,10 +176,13 @@ const buildSchema = (limits: Config["limits"], isEdit: boolean) =>
           limits.max_authors,
         ),
       );
+      const descriptionLimit = limits.markdown_fields.level_description ?? null;
       fail(
         "description",
         validateRequired(values.description) ||
-          validateMaxLength(5000)(values.description),
+          (descriptionLimit !== null
+            ? validateMaxLength(descriptionLimit)(values.description)
+            : null),
       );
       fail("engine_id", validateRequired(values.engine_id));
       fail("duration_id", validateRequired(values.duration_id));
