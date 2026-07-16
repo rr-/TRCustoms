@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import { useMemo } from "react";
 import { createContext } from "react";
 import { useState } from "react";
 import type { UserDetails } from "src/services/UserService";
@@ -36,11 +37,9 @@ const UserContextProvider = ({ children }: UserContextProviderProps) => {
     fetchUser();
   }, [setUser]);
 
-  return (
-    <UserContext.Provider value={{ user, setUser }}>
-      {children}
-    </UserContext.Provider>
-  );
+  const value = useMemo(() => ({ user, setUser }), [user]);
+
+  return <UserContext.Provider value={value}>{children}</UserContext.Provider>;
 };
 
 export { UserContextProvider, UserContext };
