@@ -1,5 +1,6 @@
 import { API_URL } from "src/constants";
 import { StorageService } from "src/services/StorageService";
+import { useUser } from "src/stores/user";
 
 interface AccessTokenResponse {
   access: string;
@@ -75,6 +76,10 @@ const logout = () => {
   const refreshToken = getRefreshToken();
   StorageService.removeItem("accessToken");
   StorageService.removeItem("refreshToken");
+  // Clear the user store here so every logout path — including the forced one
+  // authFetch triggers when the server rejects a banned/deleted account —
+  // drops the signed-in UI instead of waiting for a manual reload.
+  useUser.getState().setUser(null);
   if (refreshToken) {
     // Best-effort server-side revocation so the long-lived refresh token
     // can't be reused after logout. Fire and forget: local state is already
