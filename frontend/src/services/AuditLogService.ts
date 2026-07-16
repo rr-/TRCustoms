@@ -1,4 +1,5 @@
 import { auditlogsList } from "src/client";
+import type { AuditLogListing as ApiAuditLogListing } from "src/client";
 import type { UserNested } from "src/services/UserService";
 import type { PagedResponse } from "src/types";
 import type { GenericSearchQuery } from "src/types";
@@ -27,17 +28,26 @@ enum AuditLogObjectType {
   Walkthrough = "walkthrough",
 }
 
-interface AuditLogListing {
-  id: number;
+// Anchored to the generated listing so the shared fields (id, object_id,
+// object_name, ...) can't drift; only the fields the schema types loosely
+// (object_type as a bare string, changes/meta as unknown) or nullably are
+// refined here.
+interface AuditLogListing
+  extends Omit<
+    ApiAuditLogListing,
+    | "created"
+    | "object_type"
+    | "change_author"
+    | "change_type"
+    | "changes"
+    | "meta"
+  > {
   created: string;
-  object_id: string;
-  object_name: string;
   object_type: AuditLogObjectType;
   change_author: UserNested | null;
   change_type: AuditLogChangeType;
-  meta: Record<string, string>;
   changes: string[];
-  is_action_required: boolean;
+  meta: Record<string, string>;
 }
 
 interface AuditLogList extends PagedResponse<AuditLogListing> {}
@@ -63,13 +73,20 @@ const searchAuditLogs = async (
     is_action_required: boolToSearchString(searchQuery.isActionRequired),
   };
   const { data } = await auditlogsList({ query, throwOnError: true });
-  // Only the listing item type diverges from the generated one: the schema
-  // types changes/meta as unknown and object_type as a bare string, while our
-  // AuditLogListing refines them. Confine the cast to results; the pagination
-  // fields type-check on their own.
   return {
     ...data,
-    results: data.results as unknown as AuditLogListing[],
+    // Refine the loosely-typed fields per row rather than casting the whole
+    // array through unknown.
+    results: data.results.map(
+      (row): AuditLogListing => ({
+        ...row,
+        created: row.created ?? "",
+        object_type: row.object_type as AuditLogObjectType,
+        change_type: row.change_type as AuditLogChangeType,
+        changes: row.changes as string[],
+        meta: row.meta as Record<string, string>,
+      }),
+    ),
     searchQuery,
   };
 };
