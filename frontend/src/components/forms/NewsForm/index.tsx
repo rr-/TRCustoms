@@ -46,7 +46,7 @@ const NewsForm = ({ news, onGoBack, onSubmit }: NewsFormProps) => {
     const outNews = news?.id
       ? await NewsService.update(news.id, values)
       : await NewsService.create(values);
-    resetQueries(queryClient, ["newsList"]);
+    resetQueries(queryClient, ["news"]);
     onSubmit?.(outNews);
     return {
       final: true,
