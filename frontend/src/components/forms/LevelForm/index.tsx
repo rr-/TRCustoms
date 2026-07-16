@@ -284,6 +284,16 @@ const LevelForm = ({ level, onGoBack, onSubmit }: LevelFormProps) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [level?.id]);
 
+  // On the create form the current user is the default author, but the user
+  // context may resolve after mount — fill it in when it arrives, without
+  // clobbering an author the uploader has already picked.
+  const { setValue, getValues } = form;
+  useEffect(() => {
+    if (!level && user && getValues("authors").length === 0) {
+      setValue("authors", [user]);
+    }
+  }, [level, user, setValue, getValues]);
+
   const { submit, result } = useFormSubmit(
     form,
     async (values) => {
