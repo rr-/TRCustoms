@@ -9,87 +9,113 @@ import { remarkTransformHeaders } from "src/components/markdown/MarkdownTOC";
 import { parseYoutubeLink } from "src/utils/misc";
 import { visit as _visit } from "unist-util-visit";
 
+// A loosely-structured mdast/unist node. This module both reads standard
+// nodes (text, paragraph) and synthesizes custom ones (e.g. "alignment"),
+// so the shape is intentionally open rather than tied to @types/mdast.
+interface MdNode {
+  type: string;
+  value?: string;
+  children?: MdNode[];
+  data?: Record<string, unknown>;
+}
+
+type Visitor = (
+  node: MdNode,
+  index: number | undefined,
+  parent: MdNode | undefined,
+) => number | void;
+
 // unist-util-visit's overloaded generic signature makes tsc type-check of the
-// two-argument visit(tree, visitor) form pathologically slow (minutes). This
-// module operates on loosely-typed (any) trees, so narrow it to a plain
-// signature to keep type-checking fast.
-const visit = _visit as (tree: any, visitor: any) => void;
+// two-argument visit(tree, visitor) form pathologically slow (minutes), so
+// narrow it to a plain, non-generic signature to keep type-checking fast.
+const visit = _visit as (tree: MdNode, visitor: Visitor) => void;
+
+const textNode = (value: string): MdNode => ({ type: "text", value });
 
 const remarkAlignment = () => {
-  const filterEmpty = (root: any) => {
-    return root.filter((item: any) => !(item.type === "text" && !item.value));
+  const filterEmpty = (root: MdNode[]): MdNode[] => {
+    return root.filter((item) => !(item.type === "text" && !item.value));
   };
 
-  const transformInline = (root: any) => {
+  const transformInline = (root: MdNode): boolean => {
     const regex =
       /^(?<prefix>.*?)\[center\](?<content>.*?)\[\/center\](?<suffix>.*)$/i;
 
-    let middle = null;
-    let match = null;
+    let middle: MdNode | null = null;
+    let match: RegExpMatchArray | null = null;
     for (const node of root.children || []) {
       if (node.type !== "text") {
         continue;
       }
-      if (!middle && (match = node.value.match(regex))) {
+      if (!middle && (match = node.value?.match(regex) ?? null)) {
         middle = node;
         break;
       }
     }
 
-    if (!middle) {
+    if (!middle || !match?.groups || !root.children) {
       return false;
     }
+    const groups = match.groups;
 
     const newContent = filterEmpty([
-      { type: "text", value: match.groups.prefix },
+      textNode(groups.prefix),
       {
         type: "alignment",
-        children: [{ type: "text", value: match.groups.content }],
+        children: [textNode(groups.content)],
         data: {
           hName: "div",
           hProperties: { class: styles.center },
         },
       },
-      { type: "text", value: match.groups.suffix },
+      textNode(groups.suffix),
     ]);
     root.children.splice(root.children.indexOf(middle), 1, ...newContent);
     return true;
   };
 
-  const transformBlock = (root: any) => {
+  const transformBlock = (root: MdNode): boolean => {
     const startRegex = /^(?<prefix>.*?)\[center\](?<suffix>.*)$/i;
     const endRegex = /^(?<prefix>.*?)\[\/center\](?<suffix>.*)$/i;
-    let startMatch = null;
-    let endMatch = null;
+    let startMatch: RegExpMatchArray | null = null;
+    let endMatch: RegExpMatchArray | null = null;
 
-    let startNode = null;
-    let endNode = null;
+    let startNode: MdNode | null = null;
+    let endNode: MdNode | null = null;
     for (const node of root.children || []) {
       if (node.type !== "text") {
         continue;
       }
-      if (!startNode && (startMatch = node.value.match(startRegex))) {
+      if (!startNode && (startMatch = node.value?.match(startRegex) ?? null)) {
         startNode = node;
       }
-      if (!endNode && (endMatch = node.value.match(endRegex))) {
+      if (!endNode && (endMatch = node.value?.match(endRegex) ?? null)) {
         endNode = node;
       }
     }
 
-    if (!startNode || !endNode || !startMatch || !endMatch) {
+    if (
+      !startNode ||
+      !endNode ||
+      !startMatch?.groups ||
+      !endMatch?.groups ||
+      !root.children
+    ) {
       return false;
     }
+    const startGroups = startMatch.groups;
+    const endGroups = endMatch.groups;
 
     const startIdx = root.children.indexOf(startNode);
     const endIdx = root.children.indexOf(endNode);
-    const contentNodes: any = filterEmpty([
-      { type: "text", value: startMatch.groups.suffix },
+    const contentNodes = filterEmpty([
+      textNode(startGroups.suffix),
       ...root.children.slice(startIdx + 1, endIdx),
-      { type: "text", value: endMatch.groups.prefix },
+      textNode(endGroups.prefix),
     ]);
 
-    const newContent: any = filterEmpty([
-      { type: "text", value: startMatch.groups.prefix },
+    const newContent = filterEmpty([
+      textNode(startGroups.prefix),
       contentNodes.length
         ? {
             type: "alignment",
@@ -99,8 +125,8 @@ const remarkAlignment = () => {
               hProperties: { class: styles.center },
             },
           }
-        : { type: "text", value: "" },
-      { type: "text", value: endMatch.groups.suffix },
+        : textNode(""),
+      textNode(endGroups.suffix),
     ]);
 
     if (startIdx === 0 && endIdx === root.children.length - 1) {
@@ -119,8 +145,8 @@ const remarkAlignment = () => {
     return true;
   };
 
-  return (tree: any) => {
-    visit(tree, (node: any, index: any, parent: any) => {
+  return (tree: MdNode) => {
+    visit(tree, (node) => {
       transformInline(node);
       transformBlock(node);
     });
@@ -128,15 +154,15 @@ const remarkAlignment = () => {
 };
 
 const remarkSqueezeParagraphs = () => {
-  return (tree: any) => {
-    visit(tree, (node: any, index: any, parent: any) => {
+  return (tree: MdNode) => {
+    visit(tree, (node, index, parent) => {
       if (
         index !== undefined &&
-        parent &&
+        parent?.children &&
         (node.type === "paragraph" || node.type === "alignment") &&
-        node.children.every(function (child: any) {
-          return child.type === "text" && /^\s*$/.test(child.value);
-        })
+        (node.children ?? []).every(
+          (child) => child.type === "text" && /^\s*$/.test(child.value ?? ""),
+        )
       ) {
         parent.children.splice(index, 1);
         return index;
@@ -147,11 +173,11 @@ const remarkSqueezeParagraphs = () => {
 
 const remarkRemoveElements = (allowedTags: string[]) => {
   return () => {
-    return (tree: any) => {
-      visit(tree, (node: any, index: any, parent: any) => {
+    return (tree: MdNode) => {
+      visit(tree, (node, index, parent) => {
         if (
           index !== undefined &&
-          parent &&
+          parent?.children &&
           allowedTags.some((tag) => node.type === tag)
         ) {
           parent.children.splice(index, 1);
@@ -164,7 +190,11 @@ const remarkRemoveElements = (allowedTags: string[]) => {
 
 const remarkTRCustomColors = () => {
   const coloredTextRegex = /\[([pesto])\]([^\n[\]]*)\[\/\1\]/gi;
-  const replaceColoredText = ($0: string, char: string, text: string): any => {
+  const replaceColoredText = (
+    $0: string,
+    char: string,
+    text: string,
+  ): MdNode => {
     const className = {
       p: styles.pickup,
       e: styles.enemy,
@@ -177,18 +207,28 @@ const remarkTRCustomColors = () => {
       data: {
         hName: "span",
         hProperties: { class: `${styles.color} ${className}` },
-        hChildren: [{ type: "text", value: text }],
+        hChildren: [textNode(text)],
       },
     };
   };
 
-  return (tree: any) => {
-    findAndReplace(tree, [[coloredTextRegex, replaceColoredText]]);
+  return (tree: MdNode) => {
+    // mdast-util-find-and-replace is typed against @types/mdast's concrete
+    // node unions; our open MdNode/replacement don't line up with them, so
+    // cross the boundary with a cast rather than pulling in those types.
+    findAndReplace(tree as Parameters<typeof findAndReplace>[0], [
+      [coloredTextRegex, replaceColoredText as never],
+    ]);
   };
 };
 
-const transformLink = (link: any, allowEmbeds: boolean | undefined): any => {
-  const youtubeVideo = parseYoutubeLink(link.href);
+type AnchorProps = React.ComponentPropsWithoutRef<"a">;
+
+const transformLink = (
+  link: AnchorProps,
+  allowEmbeds: boolean | undefined,
+): React.ReactElement | null => {
+  const youtubeVideo = parseYoutubeLink(link.href ?? "");
   if (!youtubeVideo?.videoID && !youtubeVideo?.playlistID) {
     return <a href={link.href}>{link.children}</a>;
   } else if (!allowEmbeds) {
