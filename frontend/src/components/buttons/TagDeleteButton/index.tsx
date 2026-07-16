@@ -1,20 +1,17 @@
-import { useQueryClient } from "@tanstack/react-query";
 import { ConfirmButton } from "src/components/buttons/ConfirmButton";
+import { useEntityAction } from "src/components/buttons/useEntityAction";
 import type { TagListing } from "src/services/TagService";
 import { TagService } from "src/services/TagService";
-import { resetQueries } from "src/utils/misc";
 
 interface TagDeleteButtonProps {
   tag: TagListing;
 }
 
 const TagDeleteButton = ({ tag }: TagDeleteButtonProps) => {
-  const queryClient = useQueryClient();
-
-  const handleConfirm = async () => {
-    await TagService.delete(tag.id);
-    resetQueries(queryClient, ["tags", "auditLogs"]);
-  };
+  const handleConfirm = useEntityAction(
+    () => TagService.delete(tag.id),
+    ["tags", "auditLogs"],
+  );
 
   return (
     <ConfirmButton

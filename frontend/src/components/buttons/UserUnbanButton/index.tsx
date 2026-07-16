@@ -1,21 +1,18 @@
-import { useQueryClient } from "@tanstack/react-query";
 import { ConfirmButton } from "src/components/buttons/ConfirmButton";
+import { useEntityAction } from "src/components/buttons/useEntityAction";
 import { IconCheck } from "src/components/icons";
 import { UserService } from "src/services/UserService";
 import type { UserBasic } from "src/services/UserService";
-import { resetQueries } from "src/utils/misc";
 
 interface UserUnbanButtonProps {
   user: UserBasic;
 }
 
 const UserUnbanButton = ({ user }: UserUnbanButtonProps) => {
-  const queryClient = useQueryClient();
-
-  const handleConfirm = async () => {
-    await UserService.unban(user.id);
-    resetQueries(queryClient, ["user", "users", "auditLogs"]);
-  };
+  const handleConfirm = useEntityAction(
+    () => UserService.unban(user.id),
+    ["user", "users", "auditLogs"],
+  );
 
   return (
     <ConfirmButton

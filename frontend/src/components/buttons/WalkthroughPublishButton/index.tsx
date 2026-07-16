@@ -1,12 +1,11 @@
-import { useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { ConfirmButton } from "src/components/buttons/ConfirmButton";
+import { useEntityAction } from "src/components/buttons/useEntityAction";
 import { IconSubmit } from "src/components/icons";
 import { WalkthroughLink } from "src/components/links/WalkthroughLink";
 import { BaseModal } from "src/components/modals/BaseModal";
 import type { WalkthroughDetails } from "src/services/WalkthroughService";
 import { WalkthroughService } from "src/services/WalkthroughService";
-import { resetQueries } from "src/utils/misc";
 
 interface WalkthroughPublishButtonProps {
   walkthrough: WalkthroughDetails;
@@ -17,14 +16,12 @@ const WalkthroughPublishButton = ({
   walkthrough,
   onComplete,
 }: WalkthroughPublishButtonProps) => {
-  const queryClient = useQueryClient();
   const [isModalActive, setIsModalActive] = useState(false);
 
-  const handleConfirm = async () => {
+  const handleConfirm = useEntityAction(async () => {
     await WalkthroughService.publish(walkthrough.id);
     onComplete?.();
-    resetQueries(queryClient, ["walkthrough", "walkthroughs", "auditLogs"]);
-  };
+  }, ["walkthrough", "walkthroughs", "auditLogs"]);
 
   return (
     <>

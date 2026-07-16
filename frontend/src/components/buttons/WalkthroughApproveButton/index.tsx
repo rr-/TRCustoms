@@ -1,21 +1,20 @@
-import { useQueryClient } from "@tanstack/react-query";
 import { ConfirmButton } from "src/components/buttons/ConfirmButton";
+import { useEntityAction } from "src/components/buttons/useEntityAction";
 import { IconBadgeCheck } from "src/components/icons";
 import type { WalkthroughDetails } from "src/services/WalkthroughService";
 import { WalkthroughService } from "src/services/WalkthroughService";
-import { resetQueries } from "src/utils/misc";
 
-interface LevelApproveButtonProps {
+interface WalkthroughApproveButtonProps {
   walkthrough: WalkthroughDetails;
 }
 
-const WalkthroughApproveButton = ({ walkthrough }: LevelApproveButtonProps) => {
-  const queryClient = useQueryClient();
-
-  const handleConfirm = async () => {
-    await WalkthroughService.approve(walkthrough.id);
-    resetQueries(queryClient, ["walkthrough", "walkthroughs", "auditLogs"]);
-  };
+const WalkthroughApproveButton = ({
+  walkthrough,
+}: WalkthroughApproveButtonProps) => {
+  const handleConfirm = useEntityAction(
+    () => WalkthroughService.approve(walkthrough.id),
+    ["walkthrough", "walkthroughs", "auditLogs"],
+  );
 
   return (
     <ConfirmButton

@@ -1,9 +1,8 @@
-import { useQueryClient } from "@tanstack/react-query";
 import { PromptButton } from "src/components/buttons/PromptButton";
+import { useEntityAction } from "src/components/buttons/useEntityAction";
 import { IconXCircle } from "src/components/icons";
 import { ReviewService } from "src/services/ReviewService";
 import type { ReviewListing } from "src/services/ReviewService";
-import { resetQueries } from "src/utils/misc";
 
 interface ReviewHideButtonProps {
   review: ReviewListing;
@@ -11,13 +10,13 @@ interface ReviewHideButtonProps {
 }
 
 const ReviewHideButton = ({ review, onComplete }: ReviewHideButtonProps) => {
-  const queryClient = useQueryClient();
-
-  const handleConfirm = async (reason: string) => {
-    await ReviewService.hide(review.id, { reason });
-    onComplete?.();
-    resetQueries(queryClient, ["reviews", "levels", "auditLogs"]);
-  };
+  const handleConfirm = useEntityAction(
+    async (reason: string) => {
+      await ReviewService.hide(review.id, { reason });
+      onComplete?.();
+    },
+    ["reviews", "levels", "auditLogs"],
+  );
 
   return (
     <PromptButton

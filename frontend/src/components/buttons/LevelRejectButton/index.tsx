@@ -1,10 +1,9 @@
-import { useQueryClient } from "@tanstack/react-query";
 import { PromptButton } from "src/components/buttons/PromptButton";
+import { useEntityAction } from "src/components/buttons/useEntityAction";
 import { ButtonVariant } from "src/components/common/Button";
 import { IconXCircle } from "src/components/icons";
 import type { LevelNested } from "src/services/LevelService";
 import { LevelService } from "src/services/LevelService";
-import { resetQueries } from "src/utils/misc";
 
 interface LevelRejectButtonProps {
   level: LevelNested;
@@ -12,12 +11,12 @@ interface LevelRejectButtonProps {
 }
 
 const LevelRejectButton = ({ level, variant }: LevelRejectButtonProps) => {
-  const queryClient = useQueryClient();
-
-  const handleConfirm = async (result: string) => {
-    await LevelService.reject(level.id, result);
-    resetQueries(queryClient, ["level", "levels", "auditLogs"]);
-  };
+  const handleConfirm = useEntityAction(
+    async (result: string) => {
+      await LevelService.reject(level.id, result);
+    },
+    ["level", "levels", "auditLogs"],
+  );
 
   return (
     <PromptButton

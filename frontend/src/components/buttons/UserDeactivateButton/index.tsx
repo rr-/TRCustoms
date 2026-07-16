@@ -1,9 +1,8 @@
-import { useQueryClient } from "@tanstack/react-query";
 import { PromptButton } from "src/components/buttons/PromptButton";
+import { useEntityAction } from "src/components/buttons/useEntityAction";
 import { IconBan } from "src/components/icons";
 import { UserService } from "src/services/UserService";
 import type { UserBasic } from "src/services/UserService";
-import { resetQueries } from "src/utils/misc";
 
 interface UserDeactivateButtonProps {
   user: UserBasic;
@@ -16,13 +15,13 @@ const UserDeactivateButton = ({
   onComplete,
   children,
 }: UserDeactivateButtonProps) => {
-  const queryClient = useQueryClient();
-
-  const handleConfirm = async (reason: string) => {
-    await UserService.deactivate(user.id, reason);
-    onComplete?.();
-    resetQueries(queryClient, ["user", "users", "auditLogs"]);
-  };
+  const handleConfirm = useEntityAction(
+    async (reason: string) => {
+      await UserService.deactivate(user.id, reason);
+      onComplete?.();
+    },
+    ["user", "users", "auditLogs"],
+  );
 
   return (
     <PromptButton

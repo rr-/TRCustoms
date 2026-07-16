@@ -1,9 +1,8 @@
-import { useQueryClient } from "@tanstack/react-query";
 import { ConfirmButton } from "src/components/buttons/ConfirmButton";
+import { useEntityAction } from "src/components/buttons/useEntityAction";
 import { IconTrash } from "src/components/icons";
 import { RatingService } from "src/services/RatingService";
 import type { RatingListing } from "src/services/RatingService";
-import { resetQueries } from "src/utils/misc";
 
 interface RatingDeleteButtonProps {
   rating: RatingListing;
@@ -14,13 +13,10 @@ const RatingDeleteButton = ({
   rating,
   onComplete,
 }: RatingDeleteButtonProps) => {
-  const queryClient = useQueryClient();
-
-  const handleConfirm = async () => {
+  const handleConfirm = useEntityAction(async () => {
     await RatingService.delete(rating.id);
     onComplete?.();
-    resetQueries(queryClient, ["ratings"]);
-  };
+  }, ["ratings"]);
 
   return (
     <ConfirmButton

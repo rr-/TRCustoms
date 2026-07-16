@@ -1,9 +1,8 @@
-import { useQueryClient } from "@tanstack/react-query";
 import { ConfirmButton } from "src/components/buttons/ConfirmButton";
+import { useEntityAction } from "src/components/buttons/useEntityAction";
 import { IconTrash } from "src/components/icons";
 import type { WalkthroughDetails } from "src/services/WalkthroughService";
 import { WalkthroughService } from "src/services/WalkthroughService";
-import { resetQueries } from "src/utils/misc";
 
 interface WalkthroughDeleteButtonProps {
   walkthrough: WalkthroughDetails;
@@ -14,13 +13,10 @@ const WalkthroughDeleteButton = ({
   walkthrough,
   onComplete,
 }: WalkthroughDeleteButtonProps) => {
-  const queryClient = useQueryClient();
-
-  const handleConfirm = async () => {
+  const handleConfirm = useEntityAction(async () => {
     await WalkthroughService.delete(walkthrough.id);
     onComplete?.();
-    resetQueries(queryClient, ["walkthrough", "walkthroughs", "auditLogs"]);
-  };
+  }, ["walkthrough", "walkthroughs", "auditLogs"]);
 
   return (
     <ConfirmButton

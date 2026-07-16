@@ -1,20 +1,19 @@
-import { useQueryClient } from "@tanstack/react-query";
 import { PromptButton } from "src/components/buttons/PromptButton";
+import { useEntityAction } from "src/components/buttons/useEntityAction";
 import type { TagListing } from "src/services/TagService";
 import { TagService } from "src/services/TagService";
-import { resetQueries } from "src/utils/misc";
 
 interface TagRenameButtonProps {
   tag: TagListing;
 }
 
 const TagRenameButton = ({ tag }: TagRenameButtonProps) => {
-  const queryClient = useQueryClient();
-
-  const handleConfirm = async (newTagName: string) => {
-    await TagService.update(tag.id, { name: newTagName });
-    resetQueries(queryClient, ["tags", "auditLogs"]);
-  };
+  const handleConfirm = useEntityAction(
+    async (newTagName: string) => {
+      await TagService.update(tag.id, { name: newTagName });
+    },
+    ["tags", "auditLogs"],
+  );
 
   return (
     <PromptButton

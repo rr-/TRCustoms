@@ -1,21 +1,18 @@
-import { useQueryClient } from "@tanstack/react-query";
 import { ConfirmButton } from "src/components/buttons/ConfirmButton";
+import { useEntityAction } from "src/components/buttons/useEntityAction";
 import { IconBadgeCheck } from "src/components/icons";
 import type { LevelNested } from "src/services/LevelService";
 import { LevelService } from "src/services/LevelService";
-import { resetQueries } from "src/utils/misc";
 
 interface LevelApproveButtonProps {
   level: LevelNested;
 }
 
 const LevelApproveButton = ({ level }: LevelApproveButtonProps) => {
-  const queryClient = useQueryClient();
-
-  const handleConfirm = async () => {
-    await LevelService.approve(level.id);
-    resetQueries(queryClient, ["level", "levels", "auditLogs"]);
-  };
+  const handleConfirm = useEntityAction(
+    () => LevelService.approve(level.id),
+    ["level", "levels", "auditLogs"],
+  );
 
   return (
     <ConfirmButton

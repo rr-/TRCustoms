@@ -1,10 +1,9 @@
-import { useQueryClient } from "@tanstack/react-query";
 import { ConfirmButton } from "src/components/buttons/ConfirmButton";
+import { useEntityAction } from "src/components/buttons/useEntityAction";
 import { ButtonVariant } from "src/components/common/Button";
 import { IconTrash } from "src/components/icons";
 import type { LevelNested } from "src/services/LevelService";
 import { LevelService } from "src/services/LevelService";
-import { resetQueries } from "src/utils/misc";
 
 interface LevelDeleteButtonProps {
   level: LevelNested;
@@ -17,13 +16,10 @@ const LevelDeleteButton = ({
   variant,
   onComplete,
 }: LevelDeleteButtonProps) => {
-  const queryClient = useQueryClient();
-
-  const handleConfirm = async () => {
+  const handleConfirm = useEntityAction(async () => {
     await LevelService.delete(level.id);
     onComplete?.();
-    resetQueries(queryClient, ["level", "levels", "auditLogs"]);
-  };
+  }, ["level", "levels", "auditLogs"]);
 
   return (
     <ConfirmButton
