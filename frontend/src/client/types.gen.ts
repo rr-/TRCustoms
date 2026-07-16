@@ -557,7 +557,7 @@ export type PatchedUserDetails = {
      * Designates whether this user should be treated as active. Unselect this instead of deleting accounts.
      */
     readonly is_active?: boolean;
-    is_banned?: boolean;
+    readonly is_banned?: boolean;
     readonly is_pending_activation?: boolean;
     readonly played_level_count?: number;
     readonly authored_level_count_all?: number;
@@ -777,6 +777,10 @@ export type TagNested = {
     name: string;
 };
 
+export type TokenBlacklist = {
+    refresh: string;
+};
+
 export type TokenObtainPair = {
     username: string;
     password: string;
@@ -855,7 +859,7 @@ export type UserDetails = {
      * Designates whether this user should be treated as active. Unselect this instead of deleting accounts.
      */
     readonly is_active: boolean;
-    is_banned?: boolean;
+    readonly is_banned: boolean;
     readonly is_pending_activation: boolean;
     readonly played_level_count: number;
     readonly authored_level_count_all: number;
@@ -902,7 +906,7 @@ export type UserListing = {
      * Designates whether this user should be treated as active. Unselect this instead of deleting accounts.
      */
     readonly is_active: boolean;
-    is_banned?: boolean;
+    readonly is_banned: boolean;
     readonly is_pending_activation: boolean;
     readonly played_level_count: number;
     readonly authored_level_count_all: number;
@@ -1363,7 +1367,6 @@ export type PatchedUserDetailsWritable = {
     first_name?: string;
     last_name?: string;
     bio?: string;
-    is_banned?: boolean;
     email?: string;
     country_code?: string | null;
     website_url?: string | string | null;
@@ -1492,7 +1495,6 @@ export type UserDetailsWritable = {
     first_name?: string;
     last_name?: string;
     bio?: string;
-    is_banned?: boolean;
     email: string;
     country_code?: string | null;
     website_url?: string | string | null;
@@ -1508,7 +1510,6 @@ export type UserListingWritable = {
     first_name?: string;
     last_name?: string;
     bio?: string;
-    is_banned?: boolean;
 };
 
 export type UserNestedWritable = {
@@ -1586,6 +1587,19 @@ export type AuthTokenCreateResponses = {
 };
 
 export type AuthTokenCreateResponse = AuthTokenCreateResponses[keyof AuthTokenCreateResponses];
+
+export type AuthTokenLogoutCreateData = {
+    body: TokenBlacklist;
+    path?: never;
+    query?: never;
+    url: '/api/auth/token/logout/';
+};
+
+export type AuthTokenLogoutCreateResponses = {
+    200: TokenBlacklist;
+};
+
+export type AuthTokenLogoutCreateResponse = AuthTokenLogoutCreateResponses[keyof AuthTokenLogoutCreateResponses];
 
 export type AuthTokenRefreshCreateData = {
     body: TokenRefresh;

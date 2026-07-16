@@ -68,6 +68,33 @@ paths:
               schema:
                 $ref: '#/components/schemas/TokenObtainPair'
           description: ''
+  /api/auth/token/logout/:
+    post:
+      operationId: auth_token_logout_create
+      description: |-
+        Takes a token and blacklists it. Must be used with the
+        `rest_framework_simplejwt.token_blacklist` app installed.
+      tags:
+      - auth
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TokenBlacklist'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/TokenBlacklist'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/TokenBlacklist'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TokenBlacklist'
+          description: ''
   /api/auth/token/refresh/:
     post:
       operationId: auth_token_refresh_create
@@ -4293,6 +4320,7 @@ components:
           readOnly: true
         is_banned:
           type: boolean
+          readOnly: true
         is_pending_activation:
           type: boolean
           readOnly: true
@@ -4996,6 +5024,14 @@ components:
       required:
       - id
       - name
+    TokenBlacklist:
+      type: object
+      properties:
+        refresh:
+          type: string
+          writeOnly: true
+      required:
+      - refresh
     TokenObtainPair:
       type: object
       properties:
@@ -5214,6 +5250,7 @@ components:
           readOnly: true
         is_banned:
           type: boolean
+          readOnly: true
         is_pending_activation:
           type: boolean
           readOnly: true
@@ -5341,6 +5378,7 @@ components:
       - email
       - id
       - is_active
+      - is_banned
       - is_pending_activation
       - is_staff
       - is_superuser
@@ -5391,6 +5429,7 @@ components:
           readOnly: true
         is_banned:
           type: boolean
+          readOnly: true
         is_pending_activation:
           type: boolean
           readOnly: true
@@ -5458,6 +5497,7 @@ components:
       - date_joined
       - id
       - is_active
+      - is_banned
       - is_pending_activation
       - last_login
       - permissions
