@@ -990,6 +990,10 @@ export type WalkthroughListing = {
     readonly last_user_content_updated: string | null;
 };
 
+export type WalkthroughRejection = {
+    reason: string;
+};
+
 export type WalkthroughStat = {
     video_and_text: number;
     video: number;
@@ -3158,7 +3162,7 @@ export type WalkthroughsPublishCreateResponses = {
 export type WalkthroughsPublishCreateResponse = WalkthroughsPublishCreateResponses[keyof WalkthroughsPublishCreateResponses];
 
 export type WalkthroughsRejectCreateData = {
-    body: WalkthroughListingWritable;
+    body: WalkthroughRejection;
     path: {
         /**
          * A unique integer value identifying this walkthrough.

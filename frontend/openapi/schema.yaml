@@ -2340,13 +2340,13 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/WalkthroughListing'
+              $ref: '#/components/schemas/WalkthroughRejection'
           application/x-www-form-urlencoded:
             schema:
-              $ref: '#/components/schemas/WalkthroughListing'
+              $ref: '#/components/schemas/WalkthroughRejection'
           multipart/form-data:
             schema:
-              $ref: '#/components/schemas/WalkthroughListing'
+              $ref: '#/components/schemas/WalkthroughRejection'
         required: true
       responses:
         '200':
@@ -5680,6 +5680,14 @@ components:
       - status
       - text
       - walkthrough_type
+    WalkthroughRejection:
+      type: object
+      properties:
+        reason:
+          type: string
+          maxLength: 500
+      required:
+      - reason
     WalkthroughStat:
       type: object
       properties:

@@ -169,6 +169,7 @@ class WalkthroughViewSet(
         approve_walkthrough(walkthrough, request)
         return Response({})
 
+    @extend_schema(request=WalkthroughRejectionSerializer)
     @action(detail=True, methods=["post"])
     def reject(self, request, pk: int) -> Response:
         serializer = WalkthroughRejectionSerializer(data=request.data)
