@@ -59,18 +59,26 @@ export const createAuthFetch = (
       return response;
     }
 
-    const code = await readErrorCode(response);
-    if (code && LOGOUT_CODES.includes(code)) {
-      auth.logout();
-      return response;
-    }
+    let code = await readErrorCode(response);
     if (code === "token_not_valid") {
       try {
         const token = await auth.getNewAccessToken();
         response = await attempt(token);
       } catch {
         auth.logout();
+        return response;
       }
+      // Re-evaluate the retried response: a refreshed token can still be
+      // rejected (e.g. the account was banned or deleted in the meantime),
+      // and that must force a logout rather than leave a dead session.
+      if (response.status !== 401 && response.status !== 403) {
+        return response;
+      }
+      code = await readErrorCode(response);
+    }
+
+    if (code && LOGOUT_CODES.includes(code)) {
+      auth.logout();
     }
     return response;
   };

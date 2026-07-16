@@ -88,6 +88,26 @@ test("logs out and returns the original response when refresh fails", async () =
   assert.equal(response.status, 401);
 });
 
+test("logs out when the retried request still rejects the session", async () => {
+  let loggedOut = false;
+  let calls = 0;
+  const fetchMock = (async () => {
+    calls += 1;
+    return calls === 1
+      ? jsonResponse(401, { code: "token_not_valid" })
+      : jsonResponse(403, { code: "user_banned" });
+  }) as unknown as typeof fetch;
+
+  const response = await createAuthFetch(
+    handlers({ logout: () => (loggedOut = true) }),
+    fetchMock,
+  )("http://x/api/thing");
+
+  assert.equal(calls, 2);
+  assert.equal(loggedOut, true);
+  assert.equal(response.status, 403);
+});
+
 test("re-sends the request body on the retried request", async () => {
   const bodies: (string | null)[] = [];
   let calls = 0;
