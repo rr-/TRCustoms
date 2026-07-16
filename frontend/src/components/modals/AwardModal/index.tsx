@@ -3,7 +3,6 @@ import AwardRarityBar from "src/components/common/AwardRarityBar";
 import { BaseModal } from "src/components/modals/BaseModal";
 import type { UserAward } from "src/services/UserService";
 import { UserService } from "src/services/UserService";
-import { reprPercentage } from "src/utils/string";
 import { formatDate } from "src/utils/string";
 
 interface AwardModalProps {

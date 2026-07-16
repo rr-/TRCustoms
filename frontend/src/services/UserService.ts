@@ -22,6 +22,7 @@ import type {
   UserNested,
 } from "src/client";
 import { AuthService } from "src/services/AuthService";
+import { AwardService } from "src/services/AwardService";
 import type { GenericSearchQuery, GenericSearchResult } from "src/types";
 import { boolToSearchString, getGenericSearchQuery } from "src/utils/misc";
 
@@ -266,25 +267,14 @@ const completePasswordReset = async (
   });
 };
 
-const getAwardImageUrl = (award: UserAward) => {
-  const stem = award.tier ? `${award.code}_${award.tier}` : award.code;
-  return `/awards/${stem}.svg`;
-};
-
-const getAwardTierName = (tier: number) => {
-  return {
-    0: "",
-    1: "Bronze",
-    2: "Silver",
-    3: "Gold",
-    4: "Jade",
-    5: "Meteorite",
-  }[tier];
-};
+// Award image and tier names live in AwardService; these wrap them for the
+// UserAward shape so there's a single source of truth.
+const getAwardImageUrl = (award: UserAward) =>
+  AwardService.getArtifactImageSrc(award.code, award.tier ?? undefined);
 
 const getAwardTitle = (award: UserAward) => {
   if (award.tier) {
-    return `${award.title} (${getAwardTierName(award.tier)} Tier)`;
+    return `${award.title} (${AwardService.getTierNames()[award.tier]} Tier)`;
   }
   return award.title;
 };
@@ -305,7 +295,6 @@ const UserService = {
   resendActivationLink,
   searchUsers,
   getAwardImageUrl,
-  getAwardTierName,
   getAwardTitle,
 };
 

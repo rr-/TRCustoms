@@ -19,8 +19,6 @@ interface UserSidebarProps {
 }
 
 const UserSidebar = ({ user }: UserSidebarProps) => {
-  const isUserFromTrle = user.trle_reviewer_id || user.trle_author_id;
-
   const header = (
     <VerticalList gap="big">
       <VerticalList>

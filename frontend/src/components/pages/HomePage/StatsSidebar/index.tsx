@@ -8,7 +8,6 @@ import { WalkthroughStats } from "src/components/common/WalkthroughStats";
 import { IconDiscord } from "src/components/icons";
 import { IconGitHub } from "src/components/icons";
 import { IconKofi } from "src/components/icons";
-import { IconTwitter } from "src/components/icons";
 import { IconReddit } from "src/components/icons";
 import { IconSocials } from "src/components/icons";
 import { LevelStats } from "src/components/pages/HomePage/LevelStats";

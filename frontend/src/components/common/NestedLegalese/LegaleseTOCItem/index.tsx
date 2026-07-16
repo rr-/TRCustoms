@@ -1,4 +1,4 @@
-import type { LegaleseItemProps } from "../LegaleseItem";
+import type { LegaleseItemProps } from "src/components/common/NestedLegalese/LegaleseItem";
 
 const LegaleseTOCItem = ({
   prefix,

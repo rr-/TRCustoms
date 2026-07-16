@@ -1,7 +1,6 @@
 import styles from "./index.module.css";
 import { useQuery } from "@tanstack/react-query";
 import { useParams } from "react-router-dom";
-import { DefaultNoItemsElement } from "src/components/common/DataList";
 import { EventSidebar } from "src/components/common/EventSidebar";
 import { LevelView } from "src/components/common/LevelList";
 import { Loader } from "src/components/common/Loader";

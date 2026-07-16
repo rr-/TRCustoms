@@ -12,7 +12,6 @@ import { SectionHeader } from "src/components/common/Section";
 import { SidebarLayout } from "src/components/layouts/SidebarLayout";
 import { usePageMetadata } from "src/contexts/PageMetadataContext";
 import { AwardService, AwardSpec } from "src/services/AwardService";
-import { reprPercentage } from "src/utils/string";
 
 // Mapping of tier numbers to human-readable names
 const tierNames: { [tier: number]: string } = {

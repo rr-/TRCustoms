@@ -1,5 +1,4 @@
 import styles from "./index.module.css";
-import { SectionHeader } from "src/components/common/Section";
 
 interface SidebarBoxProps {
   header?: React.ReactNode | undefined;
