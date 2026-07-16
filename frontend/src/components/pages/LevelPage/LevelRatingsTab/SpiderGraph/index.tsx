@@ -1,8 +1,9 @@
 import styles from "./index.module.css";
 import { useQuery } from "@tanstack/react-query";
-import { levelsRatingStatsRetrieveOptions } from "src/client/@tanstack/react-query.gen";
 import { Loader } from "src/components/common/Loader";
 import { SpiderGraph } from "src/components/common/SpiderGraph";
+import { LevelService } from "src/services/LevelService";
+import { queryKeys } from "src/services/queryKeys";
 import { titleCase } from "src/utils/string";
 
 const MIN_RATING_COUNT = 3;
@@ -12,9 +13,10 @@ interface SpiderGraphProps {
 }
 
 const SpiderGraphWrapper = ({ levelId }: SpiderGraphProps) => {
-  const result = useQuery(
-    levelsRatingStatsRetrieveOptions({ path: { id: levelId } }),
-  );
+  const result = useQuery({
+    queryKey: queryKeys.levels.ratingStats(levelId),
+    queryFn: () => LevelService.getRatingStats(levelId),
+  });
 
   if (result.isLoading || !result.data) {
     return <Loader />;

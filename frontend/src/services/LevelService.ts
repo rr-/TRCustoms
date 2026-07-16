@@ -4,12 +4,14 @@ import {
   levelsDestroy,
   levelsList,
   levelsPartialUpdate,
+  levelsRatingStatsRetrieve,
   levelsRejectCreate,
   levelsRetrieve,
 } from "src/client";
 import type {
   LevelDetails,
   LevelDetailsWritable,
+  LevelRatingStats,
   LevelDifficultyNested as LevelDifficulty,
   LevelDurationNested as LevelDuration,
   LevelExternalLink as ExternalLink,
@@ -106,6 +108,14 @@ const getLevelById = async (levelId: number): Promise<LevelDetails> => {
   return data;
 };
 
+const getRatingStats = async (levelId: number): Promise<LevelRatingStats> => {
+  const { data } = await levelsRatingStatsRetrieve({
+    path: { id: levelId },
+    throwOnError: true,
+  });
+  return data;
+};
+
 interface LevelBaseChangePayload {
   name?: string;
   description?: string;
@@ -166,6 +176,7 @@ const deleteLevel = async (levelId: number): Promise<void> => {
 const LevelService = {
   searchLevels,
   getLevelById,
+  getRatingStats,
   update,
   create,
   approve,
