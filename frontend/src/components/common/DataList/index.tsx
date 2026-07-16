@@ -53,16 +53,22 @@ const PagedDataList = <TItem extends {}, TQuery extends GenericSearchQuery>({
     queryFn: async () => searchFunc(searchQuery),
   });
 
+  // Report the count from an effect, not the render body: onResultCountChange
+  // is typically a parent's state setter, and calling it during render updates
+  // another component mid-render.
+  const totalCount = result.data?.total_count;
+  useEffect(() => {
+    if (totalCount !== undefined) {
+      onResultCountChange?.(totalCount);
+    }
+  }, [onResultCountChange, totalCount]);
+
   if (result.error) {
     return <p>{result.error.message}</p>;
   }
 
   if (result.isLoading || !result.data) {
     return <Loader />;
-  }
-
-  if (result.data.total_count !== undefined) {
-    onResultCountChange?.(result.data.total_count);
   }
 
   return (
