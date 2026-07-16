@@ -6,9 +6,25 @@ from django.db.models.signals import (
 )
 from django.dispatch import receiver
 
-from trcustoms.ratings.models import Rating
+from trcustoms.ratings.logic import get_max_rating_score
+from trcustoms.ratings.models import (
+    Rating,
+    RatingTemplateAnswer,
+    RatingTemplateQuestion,
+)
 from trcustoms.scoring import get_object_rating_class
 from trcustoms.signals import disable_signals
+
+
+@receiver(post_save, sender=RatingTemplateQuestion)
+@receiver(post_delete, sender=RatingTemplateQuestion)
+@receiver(post_save, sender=RatingTemplateAnswer)
+@receiver(post_delete, sender=RatingTemplateAnswer)
+def clear_max_rating_score_cache(sender, **kwargs) -> None:
+    # The rating template (question weights and answer points) is editable
+    # config; drop the memoized max score so edits take effect without a
+    # worker restart, mirroring scoring.clear_rating_classes_cache.
+    get_max_rating_score.cache_clear()
 
 
 @receiver(pre_save, sender=Rating)
