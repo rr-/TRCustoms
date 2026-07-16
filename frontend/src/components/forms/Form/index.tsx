@@ -4,6 +4,7 @@ import type { FieldValues, UseFormReturn } from "react-hook-form";
 interface FormProps<T extends FieldValues> {
   form: UseFormReturn<T>;
   onSubmit: React.FormEventHandler<HTMLFormElement>;
+  className?: string | undefined;
   children: React.ReactNode;
 }
 
@@ -13,10 +14,11 @@ interface FormProps<T extends FieldValues> {
 const Form = <T extends FieldValues>({
   form,
   onSubmit,
+  className,
   children,
 }: FormProps<T>) => (
   <FormProvider {...form}>
-    <form onSubmit={onSubmit} noValidate>
+    <form onSubmit={onSubmit} noValidate className={className}>
       {children}
     </form>
   </FormProvider>

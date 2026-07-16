@@ -1,11 +1,11 @@
 import styles from "./index.module.css";
-import { Formik } from "formik";
-import { Form } from "formik";
-import { useRef } from "react";
 import { useEffect } from "react";
+import { useRef } from "react";
+import { useForm } from "react-hook-form";
 import { SubmitButton } from "src/components/formfields/SubmitButton";
-import { TextAreaFormField } from "src/components/formfields/TextAreaFormField";
-import { TextFormField } from "src/components/formfields/TextFormField";
+import { Form } from "src/components/forms/Form";
+import { TextAreaField } from "src/components/forms/TextAreaField";
+import { TextField } from "src/components/forms/TextField";
 import { BaseModal } from "src/components/modals/BaseModal";
 
 interface PromptModalProps {
@@ -17,6 +17,10 @@ interface PromptModalProps {
   big?: boolean | undefined;
 }
 
+interface PromptModalValues {
+  text: string;
+}
+
 const PromptModal = ({
   isActive,
   onIsActiveChange,
@@ -26,14 +30,6 @@ const PromptModal = ({
   big,
 }: PromptModalProps) => {
   const modalRef = useRef<HTMLDivElement>(null);
-  const initialValues = { text: "" };
-
-  const handleSubmit = (values: any) => {
-    if (values.text) {
-      onIsActiveChange?.(false);
-      onConfirm?.(values.text);
-    }
-  };
 
   // focus the input when opening the modal.
   useEffect(() => {
@@ -46,20 +42,28 @@ const PromptModal = ({
   }, [isActive]);
 
   const PromptModalBody = () => {
-    return (
-      <Formik initialValues={initialValues} onSubmit={handleSubmit}>
-        {({ submitForm }) => (
-          <Form className={big ? styles.formBig : styles.formSmall}>
-            {big ? (
-              <TextAreaFormField label={label} name="text" rich={false} />
-            ) : (
-              <TextFormField label={label} name="text" />
-            )}
+    const form = useForm<PromptModalValues>({ defaultValues: { text: "" } });
+    const submit = form.handleSubmit((values) => {
+      if (values.text) {
+        onIsActiveChange?.(false);
+        onConfirm?.(values.text);
+      }
+    });
 
-            <SubmitButton onClick={() => submitForm()}>Confirm</SubmitButton>
-          </Form>
+    return (
+      <Form
+        form={form}
+        onSubmit={submit}
+        className={big ? styles.formBig : styles.formSmall}
+      >
+        {big ? (
+          <TextAreaField label={label} name="text" rich={false} />
+        ) : (
+          <TextField label={label} name="text" />
         )}
-      </Formik>
+
+        <SubmitButton>Confirm</SubmitButton>
+      </Form>
     );
   };
 
