@@ -1,0 +1,4 @@
+# Generated API client and OpenAPI schema — hidden from search tools
+# (ripgrep, fd, ag, fzf). Pass --no-ignore to include them.
+src/client/
+openapi/

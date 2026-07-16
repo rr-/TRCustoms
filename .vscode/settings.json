@@ -1,0 +1,9 @@
+{
+  "search.exclude": {
+    "frontend/src/client/**": true,
+    "frontend/openapi/**": true
+  },
+  "files.watcherExclude": {
+    "**/frontend/src/client/**": true
+  }
+}
