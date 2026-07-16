@@ -155,9 +155,15 @@ const MediumThumbnail = ({
           alt="Thumbnail"
           className={styles.mediumThumbnailThumb}
           role="link"
-          tabIndex={1}
+          tabIndex={0}
           src={file.url ?? undefined}
           onClick={() => onActivate(file)}
+          onKeyDown={(event) => {
+            if (event.key === "Enter" || event.key === " ") {
+              event.preventDefault();
+              onActivate(file);
+            }
+          }}
         />
       </div>
     );
