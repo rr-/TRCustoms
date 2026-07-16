@@ -42,7 +42,7 @@ const AutoComplete = <TItem extends object>({
       if (activeResultIdx < 0) {
         setActiveResultIdx(0);
       }
-      if (activeResultIdx > suggestions.length) {
+      if (activeResultIdx >= suggestions.length) {
         setActiveResultIdx(suggestions.length - 1);
       }
     }
@@ -87,11 +87,11 @@ const AutoComplete = <TItem extends object>({
       applyResult();
     } else if (suggestions.length) {
       if (event.keyCode === KEY_UP) {
-        if (activeResultIdx - 1 > 0) {
+        if (activeResultIdx > 0) {
           setActiveResultIdx(activeResultIdx - 1);
         }
       } else if (event.keyCode === KEY_DOWN) {
-        if (activeResultIdx - 1 < suggestions.length) {
+        if (activeResultIdx < suggestions.length - 1) {
           setActiveResultIdx(activeResultIdx + 1);
         }
       }
