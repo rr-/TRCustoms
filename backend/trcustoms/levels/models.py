@@ -98,7 +98,10 @@ class LevelQuerySet(models.QuerySet):
         return self.exclude(walkthroughs__status=WalkthroughStatus.APPROVED)
 
 
-@registry.register_model(name_getter=lambda instance: instance.name)
+@registry.register_model(
+    name_getter=lambda instance: instance.name,
+    url_getter=lambda object_id: f"/levels/{object_id}",
+)
 class Level(UserContentDatesInfo, DatesInfo):
     objects = LevelQuerySet.as_manager()
     name = models.CharField(max_length=100)

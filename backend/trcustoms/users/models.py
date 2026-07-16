@@ -52,7 +52,10 @@ class UserManager(BaseUserManager):
         return self.get(**{case_insensitive_username_field: username})
 
 
-@registry.register_model(name_getter=lambda instance: instance.username)
+@registry.register_model(
+    name_getter=lambda instance: instance.username,
+    url_getter=lambda object_id: f"/users/{object_id}",
+)
 class User(AbstractUser):
     objects = UserManager()
 

@@ -8,7 +8,10 @@ from rest_framework.request import Request
 
 from trcustoms.audit_logs.consts import ChangeType
 from trcustoms.audit_logs.models import AuditLog
-from trcustoms.audit_logs.registry import get_registered_model_info
+from trcustoms.audit_logs.registry import (
+    get_registered_model_info,
+    get_registered_model_info_for_class,
+)
 from trcustoms.common.utils.discord import send_discord_webhook
 from trcustoms.users.models import User
 
@@ -40,21 +43,15 @@ def notify_discord(audit_log: AuditLog) -> None:
     elif audit_log.is_action_required:
         description += " 🟡"
 
-    # Add link to frontend for supported entity types
-    link_url: str | None
-    match audit_log.object_type.model:
-        case "level":
-            link_url = f"{settings.HOST_SITE}/levels/{audit_log.object_id}"
-        case "walkthrough":
-            link_url = (
-                f"{settings.HOST_SITE}/walkthroughs/{audit_log.object_id}"
-            )
-        case "user":
-            link_url = f"{settings.HOST_SITE}/users/{audit_log.object_id}"
-        case "review":
-            link_url = f"{settings.HOST_SITE}/reviews/{audit_log.object_id}"
-        case _:
-            link_url = None
+    # Add link to frontend for models that declare a url_getter.
+    link_url: str | None = None
+    info = get_registered_model_info_for_class(
+        audit_log.object_type.model_class()
+    )
+    if info and info.url_getter:
+        link_url = (
+            f"{settings.HOST_SITE}{info.url_getter(audit_log.object_id)}"
+        )
 
     embed = {"title": title, "description": description}
     if link_url:

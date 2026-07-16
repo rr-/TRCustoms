@@ -52,6 +52,7 @@ class ReviewTemplateAnswer(DatesInfo):
         "level_id": instance.level.id,
         "level_name": instance.level.name,
     },
+    url_getter=lambda object_id: f"/reviews/{object_id}",
 )
 class Review(UserContentDatesInfo, DatesInfo):
     position = models.IntegerField(default=0)

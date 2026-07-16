@@ -13,6 +13,7 @@ from trcustoms.walkthroughs.consts import WalkthroughStatus, WalkthroughType
         "level_id": instance.level.id,
         "level_name": instance.level.name,
     },
+    url_getter=lambda object_id: f"/walkthroughs/{object_id}",
 )
 class Walkthrough(UserContentDatesInfo, DatesInfo):
     level = models.ForeignKey(

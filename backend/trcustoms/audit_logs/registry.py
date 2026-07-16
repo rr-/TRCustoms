@@ -14,6 +14,9 @@ class AuditLogModelInfo:
     meta_factory: Callable[[models.Model], Any] = field(
         default_factory=lambda: lambda entity: {}
     )
+    # Frontend path for this object (e.g. "/levels/5"), given its id. None
+    # for models with no public page.
+    url_getter: Callable[[Any], str] | None = None
 
 
 registry = []
@@ -41,3 +44,14 @@ def get_registered_model_info(obj: models.Model) -> AuditLogModelInfo:
         if isinstance(obj, info.model_cls):
             return info
     raise ValueError(f"Cannot make audit log of {obj}")
+
+
+def get_registered_model_info_for_class(
+    model_cls: type[models.Model] | None,
+) -> AuditLogModelInfo | None:
+    if model_cls is None:
+        return None
+    for info in registry:
+        if issubclass(model_cls, info.model_cls):
+            return info
+    return None
