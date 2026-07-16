@@ -15,12 +15,8 @@ import { usePageMetadata } from "src/contexts/PageMetadataContext";
 import type { EventDetails } from "src/services/EventService";
 import { EventService } from "src/services/EventService";
 
-interface EventPageParams {
-  eventId: string;
-}
-
 const EventPage = () => {
-  const { eventId } = useParams() as unknown as EventPageParams;
+  const { eventId = "" } = useParams();
   const result = useQuery<EventDetails, Error>({
     queryKey: ["event", EventService.getEventById, eventId],
     queryFn: async () => EventService.getEventById(Number(eventId)),

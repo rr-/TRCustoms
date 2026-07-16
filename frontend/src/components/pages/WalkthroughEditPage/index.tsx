@@ -14,14 +14,8 @@ import { UserPermission } from "src/services/UserService";
 import type { WalkthroughDetails } from "src/services/WalkthroughService";
 import { WalkthroughService } from "src/services/WalkthroughService";
 
-interface WalkthroughEditPageParams {
-  levelId: string;
-  walkthroughId: string;
-}
-
 const WalkthroughEditPage = () => {
-  const { levelId, walkthroughId } =
-    useParams() as unknown as WalkthroughEditPageParams;
+  const { levelId = "", walkthroughId = "" } = useParams();
 
   // React Query v5 forbids a query function from resolving to undefined, so
   // these return null when the id is absent (creating a walkthrough has no

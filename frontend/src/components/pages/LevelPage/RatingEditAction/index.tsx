@@ -15,16 +15,12 @@ import type { RatingDetails } from "src/services/RatingService";
 import { RatingService } from "src/services/RatingService";
 import { UserPermission } from "src/services/UserService";
 
-interface LevelRatingEditPageParams {
-  ratingId: string;
-}
-
 interface RatingEditActionProps {
   level: LevelNested;
 }
 
 const RatingEditAction = ({ level }: RatingEditActionProps) => {
-  const { ratingId } = useParams() as unknown as LevelRatingEditPageParams;
+  const { ratingId = "" } = useParams();
   const { config } = useContext(ConfigContext);
   const navigate = useNavigate();
   const playlistModalRef = useRef<PlaylistAddModalHandle>(null);

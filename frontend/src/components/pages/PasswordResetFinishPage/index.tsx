@@ -3,12 +3,8 @@ import { PasswordResetFinishForm } from "src/components/forms/PasswordResetFinis
 import { PlainLayout } from "src/components/layouts/PlainLayout";
 import { usePageMetadata } from "src/contexts/PageMetadataContext";
 
-interface PasswordResetFinishPageParams {
-  token: string;
-}
-
 const PasswordResetFinishPage = () => {
-  const { token } = useParams() as unknown as PasswordResetFinishPageParams;
+  const { token = "" } = useParams();
   usePageMetadata(() => ({ ready: true, title: "Password Reset" }), []);
   return (
     <PlainLayout header="Password Reset Finish">

@@ -13,12 +13,8 @@ import { LevelService } from "src/services/LevelService";
 import { getLevelOwningUserIds } from "src/services/LevelService";
 import { UserPermission } from "src/services/UserService";
 
-interface LevelEditPageParams {
-  levelId: string;
-}
-
 const LevelEditPage = () => {
-  const { levelId } = useParams() as unknown as LevelEditPageParams;
+  const { levelId = "" } = useParams();
   const navigate = useNavigate();
 
   const result = useQuery<LevelDetails, Error>({

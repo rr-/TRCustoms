@@ -23,17 +23,13 @@ import type { UserDetails } from "src/services/UserService";
 import { UserPermission } from "src/services/UserService";
 import { UserService } from "src/services/UserService";
 
-interface UserPageParams {
-  userId: string;
-}
-
 interface UserPageProps {
   tabName?: string;
 }
 
 const UserPage = ({ tabName }: UserPageProps) => {
   const navigate = useNavigate();
-  const { userId } = useParams() as unknown as UserPageParams;
+  const { userId = "" } = useParams();
   const loggedInUser = useContext(UserContext).user;
   const isLoggedIn = +userId === loggedInUser?.id;
   const { setShouldScroll } = useScrollStore((state) => state);

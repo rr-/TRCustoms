@@ -12,10 +12,6 @@ import type { NewsDetails } from "src/services/NewsService";
 import { NewsService } from "src/services/NewsService";
 import { UserPermission } from "src/services/UserService";
 
-interface NewsEditPageParams {
-  newsId: string;
-}
-
 interface NewsEditPageViewProps {
   newsId: string;
 }
@@ -55,7 +51,7 @@ const NewsEditPageView = ({ newsId }: NewsEditPageViewProps) => {
 };
 
 const NewsEditPage = () => {
-  const { newsId } = useParams() as unknown as NewsEditPageParams;
+  const { newsId = "" } = useParams();
   return (
     <PageGuard require={UserPermission.editNews}>
       <NewsEditPageView newsId={newsId} />

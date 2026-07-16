@@ -23,10 +23,6 @@ import { useScrollStore } from "src/contexts/ScrollContext";
 import { LevelService } from "src/services/LevelService";
 import type { LevelDetails } from "src/services/LevelService";
 
-interface LevelPageParams {
-  levelId: string;
-}
-
 interface LevelPageProps {
   action?: string;
   tabName?: string;
@@ -34,7 +30,7 @@ interface LevelPageProps {
 
 const LevelPage = ({ tabName, action }: LevelPageProps) => {
   const navigate = useNavigate();
-  const { levelId } = useParams() as unknown as LevelPageParams;
+  const { levelId = "" } = useParams();
   const { setShouldScroll } = useScrollStore((state) => state);
 
   const result = useQuery<LevelDetails, Error>({

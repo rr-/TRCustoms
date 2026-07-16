@@ -16,12 +16,8 @@ import { NewsService } from "src/services/NewsService";
 import { UserPermission } from "src/services/UserService";
 import { formatDate } from "src/utils/string";
 
-interface NewsPageParams {
-  newsId: string;
-}
-
 const NewsPage = () => {
-  const { newsId } = useParams() as unknown as NewsPageParams;
+  const { newsId = "" } = useParams();
 
   const newsResult = useQuery<NewsDetails, Error>({
     queryKey: ["news", NewsService.getNewsById, newsId],

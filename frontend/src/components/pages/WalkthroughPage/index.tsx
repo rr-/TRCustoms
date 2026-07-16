@@ -14,12 +14,8 @@ import { WalkthroughType } from "src/services/WalkthroughService";
 import type { WalkthroughDetails } from "src/services/WalkthroughService";
 import { WalkthroughService } from "src/services/WalkthroughService";
 
-interface WalkthroughPageParams {
-  walkthroughId: string;
-}
-
 const WalkthroughPage = () => {
-  const { walkthroughId } = useParams() as unknown as WalkthroughPageParams;
+  const { walkthroughId = "" } = useParams();
 
   const result = useQuery<WalkthroughDetails | null, Error>({
     queryKey: [

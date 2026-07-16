@@ -14,10 +14,6 @@ import { UserService } from "src/services/UserService";
 import type { UserDetails } from "src/services/UserService";
 import { UserPermission } from "src/services/UserService";
 
-interface UserEditPageParams {
-  userId: string;
-}
-
 interface UserEditViewProps {
   userId: string;
 }
@@ -66,7 +62,7 @@ const UserEditPageView = ({ userId }: UserEditViewProps) => {
 };
 
 const UserEditPage = () => {
-  const { userId } = useParams() as unknown as UserEditPageParams;
+  const { userId = "" } = useParams();
 
   return (
     <PageGuard require={UserPermission.editUsers} owningUserIds={[+userId]}>

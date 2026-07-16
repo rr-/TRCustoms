@@ -10,14 +10,10 @@ import { UserService } from "src/services/UserService";
 import { UserDetails } from "src/services/UserService";
 import { extractErrorMessage } from "src/utils/misc";
 
-interface UserPageParams {
-  token: string;
-}
-
 const EmailConfirmationPage = () => {
   const [user, setUser] = useState<UserDetails | undefined>();
   const [error, setError] = useState<string | undefined>();
-  const { token } = useParams() as unknown as UserPageParams;
+  const { token = "" } = useParams();
 
   useEffect(() => {
     const run = async () => {

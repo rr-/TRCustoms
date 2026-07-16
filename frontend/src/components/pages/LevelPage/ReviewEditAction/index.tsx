@@ -17,13 +17,9 @@ interface ReviewEditActionProps {
   level: LevelNested;
 }
 
-interface ReviewEditActionParams {
-  reviewId: string;
-}
-
 const ReviewEditAction = ({ level }: ReviewEditActionProps) => {
   const navigate = useNavigate();
-  const { reviewId } = useParams() as unknown as ReviewEditActionParams;
+  const { reviewId = "" } = useParams();
   const playlistModalRef = useRef<PlaylistAddModalHandle>(null);
 
   const reviewResult = useQuery<ReviewDetails, Error>({
