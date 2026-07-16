@@ -39,12 +39,12 @@ const ExternalLinksField = ({
   const value: EditableExternalLink[] = field.value || [];
   const [linkType, setLinkType] = useState<LinkTypeEnum>("sh");
   const [textInput, setTextInput] = useState("");
-  const [textInputIsValid, setTextInputIsValid] = useState(false);
+  const urlError = validateURL(textInput);
 
   const addCurrentLink = () => {
     if (
-      textInputIsValid &&
       textInput &&
+      !urlError &&
       !value
         .map((link) => link.url.toLowerCase())
         .includes(textInput.toLowerCase())
@@ -81,7 +81,6 @@ const ExternalLinksField = ({
     event: React.ChangeEvent<HTMLInputElement>,
   ) => {
     setTextInput(event.target.value);
-    setTextInputIsValid(event.target.checkValidity());
   };
 
   const handleTextInputKeyDown = (
@@ -128,7 +127,7 @@ const ExternalLinksField = ({
         </Button>
       </div>
 
-      <div className="FormFieldError">{validateURL(textInput)}</div>
+      <div className="FormFieldError">{urlError}</div>
 
       <table>
         <tbody>
