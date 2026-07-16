@@ -1,3 +1,8 @@
+# File hooks run at the pre-commit stage; the message hook below opts into
+# commit-msg explicitly, so installing the commit-msg stage doesn't drag the
+# file hooks (e.g. prettier) onto COMMIT_EDITMSG.
+default_stages: [pre-commit]
+
 repos:
   - repo: https://github.com/astral-sh/ruff-pre-commit
     rev: v0.11.11
@@ -26,3 +31,10 @@ repos:
           - prettier@3.5.3
           - "@trivago/prettier-plugin-sort-imports@5.2.2"
         exclude: "backend/.*/templates/|frontend/src/client/|frontend/openapi/"
+  - repo: local
+    hooks:
+      - id: commit-msg-50-72
+        name: commit message 50/72 rule
+        entry: python3 scripts/check_commit_msg.py
+        language: system
+        stages: [commit-msg]
