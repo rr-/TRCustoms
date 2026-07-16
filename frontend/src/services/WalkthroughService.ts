@@ -47,7 +47,7 @@ interface WalkthroughSearchResult
 const searchWalkthroughs = async (
   searchQuery: WalkthroughSearchQuery,
 ): Promise<WalkthroughSearchResult> => {
-  const query: { [key: string]: any } = {
+  const query: Record<string, string | number | null | undefined> = {
     ...getGenericSearchQuery(searchQuery),
     walkthrough_type: searchQuery.walkthroughType || undefined,
     levels: searchQuery.levels?.join(",") || undefined,

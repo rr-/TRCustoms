@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { PageGuard } from "src/components/common/PermissionGuard";
 import { QueryPersister } from "src/components/common/QueryPersister";
+import type { SerializedQuery } from "src/components/common/QueryPersister";
 import { deserializeGenericSearchQuery } from "src/components/common/QueryPersister";
 import { serializeGenericSearchQuery } from "src/components/common/QueryPersister";
 import { UserList } from "src/components/common/UserList";
@@ -21,9 +22,7 @@ const deserializeSearchQuery = (qp: {
   [key: string]: string;
 }): UserSearchQuery => deserializeGenericSearchQuery(qp, defaultSearchQuery);
 
-const serializeSearchQuery = (
-  searchQuery: UserSearchQuery,
-): { [key: string]: any } =>
+const serializeSearchQuery = (searchQuery: UserSearchQuery): SerializedQuery =>
   serializeGenericSearchQuery(searchQuery, defaultSearchQuery);
 
 const UserListPageView = () => {

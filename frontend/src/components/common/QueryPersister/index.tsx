@@ -6,6 +6,10 @@ import type { GenericSearchQuery } from "src/types";
 import { filterFalsyObjectValues } from "src/utils/misc";
 import { getCurrentSearchParams } from "src/utils/misc";
 
+// A search query flattened for the URL. Values are stringified before being
+// handed to URLSearchParams; numbers are allowed here for convenience.
+type SerializedQuery = { [key: string]: string | number | undefined };
+
 const deserializeGenericSearchQuery = (
   qp: { [key: string]: string },
   defaults?: GenericSearchQuery | undefined,
@@ -21,9 +25,15 @@ const deserializeGenericSearchQuery = (
 const serializeGenericSearchQuery = (
   searchQuery: GenericSearchQuery,
   defaults?: GenericSearchQuery,
-): { [key: string]: any } => {
+): SerializedQuery => {
   return filterFalsyObjectValues({
-    page: searchQuery.page === defaults?.page ? undefined : searchQuery.page,
+    // DISABLE_PAGING is a symbol sentinel that never round-trips through the
+    // URL (URLSearchParams would reject it), so drop it here.
+    page:
+      typeof searchQuery.page === "symbol" ||
+      searchQuery.page === defaults?.page
+        ? undefined
+        : searchQuery.page,
     pageSize:
       searchQuery.pageSize === defaults?.pageSize
         ? undefined
@@ -35,7 +45,7 @@ const serializeGenericSearchQuery = (
 };
 
 interface QueryPersisterProps<TQuery> {
-  serializeSearchQuery: (query: TQuery) => { [key: string]: any };
+  serializeSearchQuery: (query: TQuery) => SerializedQuery;
   deserializeSearchQuery: (qp: { [key: string]: string }) => TQuery;
   searchQuery: TQuery;
   setSearchQuery: (query: TQuery) => void;
@@ -72,8 +82,10 @@ const QueryPersister = <TQuery extends GenericSearchQuery>({
     if (
       !isEqual(deserializeSearchQuery(getCurrentSearchParams()), searchQuery)
     ) {
-      const newLocation =
-        "?" + new URLSearchParams(serializeSearchQuery(searchQuery)).toString();
+      const params = Object.entries(serializeSearchQuery(searchQuery)).flatMap(
+        ([key, value]) => (value === undefined ? [] : [[key, String(value)]]),
+      );
+      const newLocation = "?" + new URLSearchParams(params).toString();
       navigate(newLocation);
     }
   }, [searchQuery, navigate, serializeSearchQuery, deserializeSearchQuery]);
@@ -91,6 +103,7 @@ const QueryPersister = <TQuery extends GenericSearchQuery>({
   return null;
 };
 
+export type { SerializedQuery };
 export {
   QueryPersister,
   deserializeGenericSearchQuery,

@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { QueryPersister } from "src/components/common/QueryPersister";
+import type { SerializedQuery } from "src/components/common/QueryPersister";
 import { deserializeGenericSearchQuery } from "src/components/common/QueryPersister";
 import { serializeGenericSearchQuery } from "src/components/common/QueryPersister";
 import { ReviewSearchSidebar } from "src/components/common/ReviewSearchSidebar";
@@ -30,9 +31,7 @@ const deserializeSearchQuery = (qp: {
   hideInactiveReviewers: qp.hide_inactive === "1",
 });
 
-const serializeSearchQuery = (
-  searchQuery: UserSearchQuery,
-): { [key: string]: any } =>
+const serializeSearchQuery = (searchQuery: UserSearchQuery): SerializedQuery =>
   filterFalsyObjectValues({
     ...serializeGenericSearchQuery(searchQuery, defaultSearchQuery),
     hide_inactive: searchQuery.hideInactiveReviewers === true ? "1" : null,

@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { QueryPersister } from "src/components/common/QueryPersister";
+import type { SerializedQuery } from "src/components/common/QueryPersister";
 import { deserializeGenericSearchQuery } from "src/components/common/QueryPersister";
 import { serializeGenericSearchQuery } from "src/components/common/QueryPersister";
 import { ReviewSearchSidebar } from "src/components/common/ReviewSearchSidebar";
@@ -26,7 +27,7 @@ const deserializeSearchQuery = (qp: {
 
 const serializeSearchQuery = (
   searchQuery: ReviewSearchQuery,
-): { [key: string]: any } =>
+): SerializedQuery =>
   serializeGenericSearchQuery(searchQuery, defaultSearchQuery);
 
 const ReviewListPage = () => {

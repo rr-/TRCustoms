@@ -37,7 +37,7 @@ interface ReviewVotePayload {
 const searchReviews = async (
   searchQuery: ReviewSearchQuery,
 ): Promise<ReviewSearchResult> => {
-  const query: { [key: string]: any } = {
+  const query: Record<string, string | number | null | undefined> = {
     ...getGenericSearchQuery(searchQuery),
     levels: searchQuery.levels?.join(",") || undefined,
     authors: searchQuery.authors?.join(",") || undefined,

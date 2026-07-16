@@ -23,7 +23,7 @@ const searchAwardRecipients = async (
   searchQuery: AwardRecipientsSearchQuery,
 ): Promise<AwardRecipientsSearchResult> => {
   const { code, tier, ...genericQuery } = searchQuery;
-  const query: { [key: string]: any } = {
+  const query: Record<string, string | number | null | undefined> = {
     ...getGenericSearchQuery(genericQuery),
     tier: tier ?? undefined,
   };

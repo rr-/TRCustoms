@@ -13,7 +13,7 @@ interface EventSearchResult
 const searchEvents = async (
   searchQuery: EventSearchQuery,
 ): Promise<EventSearchResult> => {
-  const query: { [key: string]: any } = {
+  const query: Record<string, string | number | null | undefined> = {
     ...getGenericSearchQuery(searchQuery),
     year: searchQuery.year ?? undefined,
     page_size: 15,

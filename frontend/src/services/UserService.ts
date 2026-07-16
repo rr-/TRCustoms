@@ -15,6 +15,7 @@ import {
   usersUnbanCreate,
 } from "src/client";
 import type {
+  PatchedUserDetailsWritable,
   UserAward,
   UserDetails,
   UserListing,
@@ -135,7 +136,7 @@ const update = async (
     settings,
   }: Partial<UserUpdatePayload>,
 ): Promise<UserDetails> => {
-  const body: { [key: string]: any } = {
+  const body: PatchedUserDetailsWritable = {
     username: username,
     first_name: firstName,
     last_name: lastName,
@@ -196,7 +197,7 @@ const register = async ({
 const searchUsers = async (
   searchQuery: UserSearchQuery,
 ): Promise<UserSearchResult> => {
-  const query: { [key: string]: any } = {
+  const query: Record<string, string | number | null | undefined> = {
     ...getGenericSearchQuery(searchQuery),
     reviews_min: searchQuery.reviewsMin,
     hide_inactive_reviewers: boolToSearchString(

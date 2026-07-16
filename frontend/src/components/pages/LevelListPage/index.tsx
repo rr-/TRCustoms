@@ -6,6 +6,7 @@ import { GenresTable } from "src/components/common/GenresTable";
 import { LevelList } from "src/components/common/LevelList";
 import { LevelSearchSidebar } from "src/components/common/LevelSearchSidebar";
 import { QueryPersister } from "src/components/common/QueryPersister";
+import type { SerializedQuery } from "src/components/common/QueryPersister";
 import { deserializeGenericSearchQuery } from "src/components/common/QueryPersister";
 import { serializeGenericSearchQuery } from "src/components/common/QueryPersister";
 import { LightTabSwitch } from "src/components/common/TabSwitch";
@@ -46,7 +47,7 @@ const deserializeGenreSearchQuery = (qp: {
 
 const serializeGenreSearchQuery = (
   searchQuery: GenreSearchQuery,
-): { [key: string]: any } =>
+): SerializedQuery =>
   serializeGenericSearchQuery(searchQuery, defaultGenreSearchQuery);
 
 const defaultTagSearchQuery: TagSearchQuery = {
@@ -61,7 +62,7 @@ const deserializeTagSearchQuery = (qp: {
 
 const serializeTagSearchQuery = (
   searchQuery: TagSearchQuery,
-): { [key: string]: any } =>
+): SerializedQuery =>
   serializeGenericSearchQuery(searchQuery, defaultTagSearchQuery);
 
 const deserializeSearchQuery = (qp: {
@@ -87,9 +88,7 @@ const deserializeSearchQuery = (qp: {
   date: qp.date,
 });
 
-const serializeSearchQuery = (
-  searchQuery: LevelSearchQuery,
-): { [key: string]: any } =>
+const serializeSearchQuery = (searchQuery: LevelSearchQuery): SerializedQuery =>
   filterFalsyObjectValues({
     ...serializeGenericSearchQuery(searchQuery, defaultSearchQuery),
     tags: searchQuery.tags?.join(","),

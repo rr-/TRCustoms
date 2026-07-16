@@ -3,6 +3,7 @@ import { InfoMessage } from "src/components/common/InfoMessage";
 import { InfoMessageType } from "src/components/common/InfoMessage";
 import { LevelList } from "src/components/common/LevelList";
 import { QueryPersister } from "src/components/common/QueryPersister";
+import type { SerializedQuery } from "src/components/common/QueryPersister";
 import { deserializeGenericSearchQuery } from "src/components/common/QueryPersister";
 import { serializeGenericSearchQuery } from "src/components/common/QueryPersister";
 import { ReviewSearchSidebar } from "src/components/common/ReviewSearchSidebar";
@@ -27,9 +28,7 @@ const deserializeSearchQuery = (qp: {
   ...deserializeGenericSearchQuery(qp, defaultSearchQuery),
 });
 
-const serializeSearchQuery = (
-  searchQuery: LevelSearchQuery,
-): { [key: string]: any } =>
+const serializeSearchQuery = (searchQuery: LevelSearchQuery): SerializedQuery =>
   serializeGenericSearchQuery(searchQuery, defaultSearchQuery);
 
 const ReviewLevelSuggestionsPage = () => {

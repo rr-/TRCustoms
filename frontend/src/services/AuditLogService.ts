@@ -55,7 +55,7 @@ interface AuditLogSearchResult
 const searchAuditLogs = async (
   searchQuery: AuditLogSearchQuery,
 ): Promise<AuditLogSearchResult> => {
-  const query: { [key: string]: any } = {
+  const query: Record<string, string | number | null | undefined> = {
     ...getGenericSearchQuery(searchQuery),
     level: searchQuery.level || undefined,
     user_search: searchQuery.userSearch || undefined,

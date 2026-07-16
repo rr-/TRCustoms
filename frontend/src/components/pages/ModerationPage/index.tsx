@@ -6,6 +6,7 @@ import { InfoMessage } from "src/components/common/InfoMessage";
 import { InfoMessageType } from "src/components/common/InfoMessage";
 import { PageGuard } from "src/components/common/PermissionGuard";
 import { QueryPersister } from "src/components/common/QueryPersister";
+import type { SerializedQuery } from "src/components/common/QueryPersister";
 import { deserializeGenericSearchQuery } from "src/components/common/QueryPersister";
 import { serializeGenericSearchQuery } from "src/components/common/QueryPersister";
 import { SectionHeader } from "src/components/common/Section";
@@ -35,7 +36,7 @@ const deserializeSearchQuery = (qp: {
 
 const serializeSearchQuery = (
   searchQuery: AuditLogSearchQuery,
-): { [key: string]: any } =>
+): SerializedQuery =>
   filterFalsyObjectValues({
     ...serializeGenericSearchQuery(searchQuery, defaultSearchQuery),
     user: searchQuery.userSearch,

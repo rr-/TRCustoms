@@ -68,31 +68,32 @@ interface LevelSearchResult
 const searchLevels = async (
   searchQuery: LevelSearchQuery,
 ): Promise<LevelSearchResult> => {
-  const query: { [key: string]: any } = filterFalsyObjectValues({
-    ...getGenericSearchQuery(searchQuery),
-    tags: searchQuery.tags?.join(","),
-    genres: searchQuery.genres?.join(","),
-    engines: searchQuery.engines?.join(","),
-    authors: searchQuery.authors?.join(","),
-    difficulties: searchQuery.difficulties?.join(","),
-    durations: searchQuery.durations?.join(","),
-    ratings: searchQuery.ratings?.join(","),
-    is_approved: boolToSearchString(searchQuery.isApproved),
-    reviews_max: searchQuery.reviewsMax,
-    date: searchQuery.date,
-    video_walkthroughs: boolToSearchString(searchQuery.videoWalkthroughs),
-    text_walkthroughs: boolToSearchString(searchQuery.textWalkthroughs),
-    finished_levels:
-      searchQuery.playlistFinishedLevels ===
-      LevelPlaylistFinishedLevelFilter.ShowAll
-        ? null
-        : searchQuery.playlistFinishedLevels,
-    dropped_levels:
-      searchQuery.playlistDroppedLevels ===
-      LevelPlaylistDroppedLevelFilter.ShowAll
-        ? null
-        : searchQuery.playlistDroppedLevels,
-  });
+  const query: Record<string, string | number | null | undefined> =
+    filterFalsyObjectValues({
+      ...getGenericSearchQuery(searchQuery),
+      tags: searchQuery.tags?.join(","),
+      genres: searchQuery.genres?.join(","),
+      engines: searchQuery.engines?.join(","),
+      authors: searchQuery.authors?.join(","),
+      difficulties: searchQuery.difficulties?.join(","),
+      durations: searchQuery.durations?.join(","),
+      ratings: searchQuery.ratings?.join(","),
+      is_approved: boolToSearchString(searchQuery.isApproved),
+      reviews_max: searchQuery.reviewsMax,
+      date: searchQuery.date,
+      video_walkthroughs: boolToSearchString(searchQuery.videoWalkthroughs),
+      text_walkthroughs: boolToSearchString(searchQuery.textWalkthroughs),
+      finished_levels:
+        searchQuery.playlistFinishedLevels ===
+        LevelPlaylistFinishedLevelFilter.ShowAll
+          ? null
+          : searchQuery.playlistFinishedLevels,
+      dropped_levels:
+        searchQuery.playlistDroppedLevels ===
+        LevelPlaylistDroppedLevelFilter.ShowAll
+          ? null
+          : searchQuery.playlistDroppedLevels,
+    });
   const { data } = await levelsList({ query, throwOnError: true });
   return { ...data, searchQuery };
 };

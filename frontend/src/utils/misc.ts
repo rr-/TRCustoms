@@ -5,7 +5,7 @@ import type { GenericSearchQuery } from "src/types";
 
 const getGenericSearchQuery = (
   searchQuery: GenericSearchQuery,
-): { [key: string]: any } => {
+): Record<string, string | number | null | undefined> => {
   return filterFalsyObjectValues({
     page:
       searchQuery.page && searchQuery.page !== DISABLE_PAGING
