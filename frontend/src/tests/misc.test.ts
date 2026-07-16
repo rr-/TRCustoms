@@ -70,6 +70,10 @@ describe("parseYoutubeLink", () => {
     expect(parseYoutubeLink("https://youtu.be/xyz")?.videoID).toBe("xyz");
   });
 
+  test("takes only the first youtu.be path segment as the video id", () => {
+    expect(parseYoutubeLink("https://youtu.be/xyz/extra")?.videoID).toBe("xyz");
+  });
+
   test("extracts the video id from an embed URL", () => {
     expect(parseYoutubeLink("https://youtube.com/embed/emb123")?.videoID).toBe(
       "emb123",

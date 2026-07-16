@@ -93,7 +93,7 @@ const parseYoutubeLink = (urlStr: string): YoutubeLink | null => {
   }
   if (!videoID) {
     if (["youtu.be", "www.youtu.be"].includes(url.hostname)) {
-      videoID = url.pathname.replace("/", "");
+      videoID = url.pathname.split("/").filter(Boolean)[0] ?? null;
     }
   }
   return { fullUrl: urlStr, videoID, playlistID };
