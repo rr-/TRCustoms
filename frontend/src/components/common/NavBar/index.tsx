@@ -1,5 +1,5 @@
 import styles from "./index.module.css";
-import type { LinkProps } from "react-router-dom";
+import type { LinkProps, NavLinkProps } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { NavLink } from "react-router-dom";
 import { useLocation } from "react-router-dom";
@@ -11,7 +11,7 @@ import { UserPicture } from "src/components/common/UserPicture";
 import { UserPermission } from "src/services/UserService";
 import { useUser } from "src/stores/user";
 
-const MyNavLink = ({ children, ...args }: any) => {
+const MyNavLink = ({ children, ...args }: Omit<NavLinkProps, "className">) => {
   return (
     <NavLink
       {...args}

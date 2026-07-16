@@ -5,18 +5,22 @@ interface DropdownOption {
   label: string;
 }
 
-interface DropdownProps {
+type DropdownValue<Multiple extends boolean> = Multiple extends true
+  ? string[]
+  : string;
+
+interface DropdownProps<Multiple extends boolean = false> {
   className?: string;
   nullLabel?: string;
   value: string | number;
-  onChange: (value: any) => any;
+  onChange: (value: DropdownValue<Multiple>) => void;
   options: DropdownOption[];
   allowNull?: boolean | undefined;
-  multiple?: boolean | undefined;
+  multiple?: Multiple | undefined;
   readonly?: boolean | undefined;
 }
 
-const Dropdown = ({
+const Dropdown = <Multiple extends boolean = false>({
   className,
   nullLabel,
   options,
@@ -25,16 +29,12 @@ const Dropdown = ({
   multiple,
   allowNull,
   readonly,
-  ...props
-}: DropdownProps) => {
+}: DropdownProps<Multiple>) => {
   const handleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    onChange(
-      multiple
-        ? [].slice
-            .call(event.target.selectedOptions)
-            .map((option: HTMLOptionElement) => option.value)
-        : event.target.selectedOptions?.[0].value,
-    );
+    const selected = multiple
+      ? Array.from(event.target.selectedOptions).map((option) => option.value)
+      : (event.target.selectedOptions?.[0].value ?? "");
+    onChange(selected as DropdownValue<Multiple>);
   };
 
   if (allowNull === undefined) {
