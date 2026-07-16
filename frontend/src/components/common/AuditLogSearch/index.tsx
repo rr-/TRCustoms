@@ -1,16 +1,14 @@
 import styles from "./index.module.css";
-import { Formik } from "formik";
-import { Form } from "formik";
-import { useState } from "react";
-import { useCallback } from "react";
 import { useEffect } from "react";
+import { useForm } from "react-hook-form";
 import { Checkbox } from "src/components/common/Checkbox";
 import { Collapsible } from "src/components/common/Collapsible";
 import { Link } from "src/components/common/Link";
 import { SectionHeader } from "src/components/common/Section";
-import { CheckboxFormField } from "src/components/formfields/CheckboxFormField";
 import { SubmitButton } from "src/components/formfields/SubmitButton";
-import { TextFormField } from "src/components/formfields/TextFormField";
+import { CheckboxField } from "src/components/forms/CheckboxField";
+import { Form } from "src/components/forms/Form";
+import { TextField } from "src/components/forms/TextField";
 import { IconSearch } from "src/components/icons";
 import type { AuditLogSearchQuery } from "src/services/AuditLogService";
 
@@ -163,13 +161,11 @@ const StateSearches: StateSearchSection[] = [
   },
 ];
 
-const convertSearchQueryToFormikValues = (searchQuery: AuditLogSearchQuery) => {
-  return {
-    userSearch: searchQuery.userSearch || "",
-    objectSearch: searchQuery.objectSearch || "",
-    isActionRequired: searchQuery.isActionRequired,
-  };
-};
+const toFormValues = (searchQuery: AuditLogSearchQuery) => ({
+  userSearch: searchQuery.userSearch || "",
+  objectSearch: searchQuery.objectSearch || "",
+  isActionRequired: searchQuery.isActionRequired,
+});
 
 interface AuditLogSearchProps {
   defaultSearchQuery: AuditLogSearchQuery;
@@ -182,37 +178,24 @@ const AuditLogSearch = ({
   searchQuery,
   onSearchQueryChange,
 }: AuditLogSearchProps) => {
-  const [formikValues, setFormikValues] = useState<any>(
-    convertSearchQueryToFormikValues(searchQuery),
-  );
+  const form = useForm({ defaultValues: toFormValues(searchQuery) });
 
-  useEffect(
-    () => setFormikValues(convertSearchQueryToFormikValues(searchQuery)),
-    [searchQuery],
-  );
+  // Keep the form in sync when the query changes externally (URL, reset).
+  const { reset } = form;
+  useEffect(() => reset(toFormValues(searchQuery)), [searchQuery, reset]);
 
-  const handleSubmit = useCallback(
-    // push changes to query on Formik submit
-    async (values: any) => {
-      onSearchQueryChange({
-        ...searchQuery,
-        page: null,
-        userSearch: values.userSearch || null,
-        objectSearch: values.objectSearch || null,
-        isActionRequired: values.isActionRequired,
-      });
-    },
-    [searchQuery, onSearchQueryChange],
-  );
+  const submit = form.handleSubmit((values) => {
+    onSearchQueryChange({
+      ...searchQuery,
+      page: null,
+      userSearch: values.userSearch || undefined,
+      objectSearch: values.objectSearch || undefined,
+      isActionRequired: values.isActionRequired,
+    });
+  });
 
-  const handleClear = useCallback(
-    async (resetForm: () => void) => {
-      onSearchQueryChange(defaultSearchQuery);
-      resetForm();
-    },
-    [onSearchQueryChange, defaultSearchQuery],
-  );
-
+  // The state-search checkboxes are not form fields; they edit the query's
+  // free-text search string directly.
   const handleStateSearchCheckboxChange = (
     event: React.ChangeEvent<HTMLInputElement>,
     section: StateSearchSection,
@@ -244,70 +227,54 @@ const AuditLogSearch = ({
   };
 
   return (
-    <Formik
-      enableReinitialize={true}
-      initialValues={formikValues}
-      onSubmit={handleSubmit}
-    >
-      {({ submitForm, resetForm }) => (
-        <Form className="ChildMarginClear">
-          <SectionHeader>
-            <span className={styles.header}>
-              Search filter
-              <Link
-                className={styles.resetButton}
-                onClick={() => handleClear(resetForm)}
-              >
-                (reset)
-              </Link>
-            </span>
-          </SectionHeader>
+    <Form form={form} onSubmit={submit} className="ChildMarginClear">
+      <SectionHeader>
+        <span className={styles.header}>
+          Search filter
+          <Link
+            className={styles.resetButton}
+            onClick={() => onSearchQueryChange(defaultSearchQuery)}
+          >
+            (reset)
+          </Link>
+        </span>
+      </SectionHeader>
 
-          <div className={styles.form}>
-            <CheckboxFormField
-              onChange={() => {
-                submitForm();
-              }}
-              label="Action required"
-              name="isActionRequired"
-            />
+      <div className={styles.form}>
+        <CheckboxField
+          onChange={() => submit()}
+          label="Action required"
+          name="isActionRequired"
+        />
 
-            <TextFormField label="Search user" name="userSearch" />
-            <TextFormField label="Search object" name="objectSearch" />
-            <div className={styles.submitStrip}>
-              <SubmitButton onClick={submitForm} icon={<IconSearch />}>
-                Search
-              </SubmitButton>
-            </div>
-          </div>
+        <TextField label="Search user" name="userSearch" />
+        <TextField label="Search object" name="objectSearch" />
+        <div className={styles.submitStrip}>
+          <SubmitButton icon={<IconSearch />}>Search</SubmitButton>
+        </div>
+      </div>
 
-          {StateSearches.map((section, sectionNum) => (
-            <div className={styles.section} key={sectionNum}>
-              <Collapsible
-                key={section.storageKey}
-                storageKey={section.storageKey}
-                title={section.title}
-              >
-                {section.searchList.map((sectionItem, searchNum) => (
-                  <Checkbox
-                    key={searchNum}
-                    label={sectionItem.title}
-                    onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
-                      handleStateSearchCheckboxChange(
-                        event,
-                        section,
-                        sectionItem,
-                      )
-                    }
-                    checked={isStateSearchCheckboxChecked(section, sectionItem)}
-                  />
-                ))}
-              </Collapsible>
-            </div>
-          ))}
-        </Form>
-      )}
-    </Formik>
+      {StateSearches.map((section, sectionNum) => (
+        <div className={styles.section} key={sectionNum}>
+          <Collapsible
+            key={section.storageKey}
+            storageKey={section.storageKey}
+            title={section.title}
+          >
+            {section.searchList.map((sectionItem, searchNum) => (
+              <Checkbox
+                key={searchNum}
+                label={sectionItem.title}
+                onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
+                  handleStateSearchCheckboxChange(event, section, sectionItem)
+                }
+                checked={isStateSearchCheckboxChecked(section, sectionItem)}
+              />
+            ))}
+          </Collapsible>
+        </div>
+      ))}
+    </Form>
   );
 };
 
