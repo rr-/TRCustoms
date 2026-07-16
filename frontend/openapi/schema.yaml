@@ -187,7 +187,7 @@ paths:
           description: ''
   /api/config/:
     get:
-      operationId: config_list
+      operationId: config_retrieve
       tags:
       - config
       security:
@@ -197,9 +197,7 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Config'
+                $ref: '#/components/schemas/Config'
           description: ''
   /api/config/featured_levels/:
     get:

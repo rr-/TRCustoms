@@ -17,7 +17,7 @@ from rest_framework_simplejwt.views import (
 from trcustoms.audit_logs.views import AuditLogViewSet
 from trcustoms.awards.views import AwardRecipientListView, AwardSpecListView
 from trcustoms.community_events.views import EventViewSet
-from trcustoms.config.views import ConfigViewSet, FeaturedLevelsView
+from trcustoms.config.views import ConfigView, FeaturedLevelsView
 from trcustoms.engines.views import EngineViewSet
 from trcustoms.genres.views import (
     GenreDetailView,
@@ -43,7 +43,6 @@ from trcustoms.utils.views import as_detail_view, as_list_view, as_view
 from trcustoms.walkthroughs.views import WalkthroughViewSet
 
 router = DefaultRouter()
-router.register(r"config", ConfigViewSet, basename="config")
 router.register(r"users", UserViewSet)
 router.register(r"news", NewsViewSet)
 router.register(r"uploads", UploadViewSet, basename="uploads")
@@ -72,6 +71,7 @@ urlpatterns = [
     ),
     path("api/level_tags/<int:pk>/merge/", TagMergeView.as_view()),
     path("api/level_tags/<int:pk>/stats/", TagStatsView.as_view()),
+    path("api/config/", ConfigView.as_view()),
     path("api/config/featured_levels/", FeaturedLevelsView.as_view()),
     path(
         "api/users/<int:user_id>/playlist/", as_list_view(PlaylistItemViewSet)

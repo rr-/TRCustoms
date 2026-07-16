@@ -1,4 +1,4 @@
-import { configFeaturedLevelsRetrieve, configList } from "src/client";
+import { configFeaturedLevelsRetrieve, configRetrieve } from "src/client";
 import type {
   Config,
   CountryListing,
@@ -18,9 +18,8 @@ enum FeatureType {
 }
 
 const getConfig = async (): Promise<Config> => {
-  const response = await configList({ throwOnError: true });
-  // The config list action returns a single object, not an array.
-  return response.data as unknown as Config;
+  const { data } = await configRetrieve({ throwOnError: true });
+  return data;
 };
 
 const getFeaturedLevels = async (): Promise<FeaturedLevels> => {

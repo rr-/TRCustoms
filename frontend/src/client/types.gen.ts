@@ -1659,18 +1659,18 @@ export type AwardSpecsRecipientsListResponses = {
 
 export type AwardSpecsRecipientsListResponse = AwardSpecsRecipientsListResponses[keyof AwardSpecsRecipientsListResponses];
 
-export type ConfigListData = {
+export type ConfigRetrieveData = {
     body?: never;
     path?: never;
     query?: never;
     url: '/api/config/';
 };
 
-export type ConfigListResponses = {
-    200: Array<Config>;
+export type ConfigRetrieveResponses = {
+    200: Config;
 };
 
-export type ConfigListResponse = ConfigListResponses[keyof ConfigListResponses];
+export type ConfigRetrieveResponse = ConfigRetrieveResponses[keyof ConfigRetrieveResponses];
 
 export type ConfigFeaturedLevelsRetrieveData = {
     body?: never;

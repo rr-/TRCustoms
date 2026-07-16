@@ -3,9 +3,10 @@ from typing import Any
 from django.conf import settings
 from django.db.models import Count, Sum
 from drf_spectacular.utils import extend_schema
-from rest_framework import generics, status, viewsets
+from rest_framework import generics, status
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
+from rest_framework.views import APIView
 
 from trcustoms.common.models import Country
 from trcustoms.config.serializers import ConfigSerializer
@@ -120,12 +121,13 @@ def get_config_data():
     return ConfigSerializer(instance=context).data
 
 
-class ConfigViewSet(viewsets.ViewSet):
+class ConfigView(APIView):
+    # A plain APIView (not a ViewSet list action) so the schema describes a
+    # single Config object rather than a list of them.
     permission_classes = [AllowAny]
-    serializer_class = ConfigSerializer
 
     @extend_schema(responses=ConfigSerializer)
-    def list(self, request) -> Response:
+    def get(self, request) -> Response:
         return Response(
             get_config_data(),
             status.HTTP_200_OK,
