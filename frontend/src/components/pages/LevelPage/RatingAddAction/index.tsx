@@ -1,6 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
 import { useCallback } from "react";
-import { useContext } from "react";
 import { useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { Loader } from "src/components/common/Loader";
@@ -8,11 +7,11 @@ import { PageGuard } from "src/components/common/PermissionGuard";
 import { RatingForm } from "src/components/forms/RatingForm";
 import type { PlaylistAddModalHandle } from "src/components/modals/PlaylistAddModal";
 import { PlaylistAddModal } from "src/components/modals/PlaylistAddModal";
-import { ConfigContext } from "src/contexts/ConfigContext";
 import type { LevelNested } from "src/services/LevelService";
 import type { RatingDetails } from "src/services/RatingService";
 import { RatingService } from "src/services/RatingService";
 import { UserPermission } from "src/services/UserService";
+import { useConfig } from "src/stores/config";
 import { useUser } from "src/stores/user";
 
 interface RatingAddActionProps {
@@ -21,7 +20,7 @@ interface RatingAddActionProps {
 
 const RatingAddAction = ({ level }: RatingAddActionProps) => {
   const { user } = useUser();
-  const { config } = useContext(ConfigContext);
+  const { config } = useConfig();
   const navigate = useNavigate();
   const playlistModalRef = useRef<PlaylistAddModalHandle>(null);
 

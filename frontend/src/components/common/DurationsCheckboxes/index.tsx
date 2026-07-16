@@ -1,7 +1,6 @@
-import { useContext } from "react";
 import { EntitiesCheckboxes } from "src/components/common/EntitiesCheckboxes";
-import { ConfigContext } from "src/contexts/ConfigContext";
 import type { DurationListing } from "src/services/ConfigService";
+import { useConfig } from "src/stores/config";
 
 interface DurationsCheckboxesProps {
   value: number[];
@@ -9,7 +8,7 @@ interface DurationsCheckboxesProps {
 }
 
 const DurationsCheckboxes = ({ value, onChange }: DurationsCheckboxesProps) => {
-  const { config } = useContext(ConfigContext);
+  const { config } = useConfig();
 
   return (
     <EntitiesCheckboxes

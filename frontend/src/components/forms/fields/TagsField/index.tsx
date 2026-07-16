@@ -1,16 +1,15 @@
 import { sortBy } from "lodash";
 import { useState } from "react";
 import { useCallback } from "react";
-import { useContext } from "react";
 import { useController } from "react-hook-form";
 import { useFormContext } from "react-hook-form";
 import { AutoComplete } from "src/components/common/AutoComplete";
 import { Pills } from "src/components/common/Pills";
 import { BaseField } from "src/components/forms/fields/BaseField";
 import type { BaseFieldProps } from "src/components/forms/fields/BaseField";
-import { ConfigContext } from "src/contexts/ConfigContext";
 import { TagNested } from "src/services/TagService";
 import { TagService } from "src/services/TagService";
+import { useConfig } from "src/stores/config";
 
 interface TagsFieldProps extends Omit<BaseFieldProps, "children"> {
   readonly?: boolean | undefined;
@@ -19,7 +18,7 @@ interface TagsFieldProps extends Omit<BaseFieldProps, "children"> {
 // react-hook-form port of TagsFormField: an autocomplete over the configured
 // tags (with on-the-fly creation) plus removable pills.
 const TagsField = ({ name, readonly, ...baseProps }: TagsFieldProps) => {
-  const { config, refetchConfig } = useContext(ConfigContext);
+  const { config, refetchConfig } = useConfig();
   const { control } = useFormContext();
   const { field } = useController({ name, control });
   const value: TagNested[] = field.value || [];

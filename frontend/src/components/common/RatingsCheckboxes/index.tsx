@@ -1,6 +1,5 @@
-import { useContext } from "react";
 import { EntitiesCheckboxes } from "src/components/common/EntitiesCheckboxes";
-import { ConfigContext } from "src/contexts/ConfigContext";
+import { useConfig } from "src/stores/config";
 import type { RatingClass } from "src/types";
 
 interface RatingsCheckboxesProps {
@@ -9,7 +8,7 @@ interface RatingsCheckboxesProps {
 }
 
 const RatingsCheckboxes = ({ value, onChange }: RatingsCheckboxesProps) => {
-  const { config } = useContext(ConfigContext);
+  const { config } = useConfig();
 
   return (
     <EntitiesCheckboxes

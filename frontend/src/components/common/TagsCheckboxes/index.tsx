@@ -1,8 +1,7 @@
-import { useContext } from "react";
 import { EntitiesCheckboxes } from "src/components/common/EntitiesCheckboxes";
 import { Link } from "src/components/common/Link";
-import { ConfigContext } from "src/contexts/ConfigContext";
 import type { TagListing } from "src/services/TagService";
+import { useConfig } from "src/stores/config";
 
 interface TagsCheckboxesProps {
   value: number[];
@@ -10,7 +9,7 @@ interface TagsCheckboxesProps {
 }
 
 const TagsCheckboxes = ({ value, onChange }: TagsCheckboxesProps) => {
-  const { config } = useContext(ConfigContext);
+  const { config } = useConfig();
 
   return (
     <EntitiesCheckboxes

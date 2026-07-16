@@ -1,5 +1,6 @@
 import "@testing-library/jest-dom/vitest";
 import { cleanup } from "@testing-library/react";
+import { useConfig } from "src/stores/config";
 import { usePageMetadataStore } from "src/stores/pageMetadata";
 import { useScrollStore } from "src/stores/scroll";
 import { useSettings } from "src/stores/settings";
@@ -10,7 +11,13 @@ import { afterEach, vi } from "vitest";
 // With per-file isolation off (see vite.config.js), any state a test writes
 // would otherwise persist into the next file sharing the worker. Snapshot the
 // initial state of each store now and restore it after every test.
-const STORES = [useSettings, useScrollStore, usePageMetadataStore, useUser];
+const STORES = [
+  useSettings,
+  useScrollStore,
+  usePageMetadataStore,
+  useUser,
+  useConfig,
+];
 const INITIAL_STATE = STORES.map((store) => ({ ...store.getState() }));
 
 // happy-dom ships no window.alert (jsdom stubs one); provide a noop so code

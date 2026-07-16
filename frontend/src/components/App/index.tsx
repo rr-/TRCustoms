@@ -1,15 +1,12 @@
 import styles from "./index.module.css";
-import { lazy, Suspense, useEffect, useContext } from "react";
+import { lazy, Suspense, useEffect } from "react";
 import { Routes } from "react-router-dom";
 import { Route } from "react-router-dom";
 import { EnvironmentWatermark } from "src/components/common/EnvironmentWatermark";
 import { Loader } from "src/components/common/Loader";
 import { NavBar } from "src/components/common/NavBar";
 import { PageMetadata } from "src/components/common/PageMetadata";
-import {
-  ConfigContextProvider,
-  ConfigContext,
-} from "src/contexts/ConfigContext";
+import { useConfig } from "src/stores/config";
 import { useSettings } from "src/stores/settings";
 import { useUser } from "src/stores/user";
 
@@ -302,7 +299,7 @@ const AppRoutes = () => {
 };
 
 const GlobalMessage = () => {
-  const { config } = useContext(ConfigContext);
+  const { config } = useConfig();
   return (
     <>
       {config.global_message && (
@@ -320,23 +317,23 @@ const App = () => {
   }, [theme]);
 
   useEffect(() => {
-    // Try to restore the session when the application starts.
+    // Load global state once when the application starts: restore the session
+    // and fetch the site config.
     useUser.getState().fetchUser();
+    useConfig.getState().refetchConfig();
   }, []);
 
   const classNames = [styles.content, styles.mainContainer];
 
   return (
-    <ConfigContextProvider>
-      <EnvironmentWatermark>
-        <PageMetadata />
-        <GlobalMessage />
-        <NavBar />
-        <main className={classNames.join(" ")}>
-          <AppRoutes />
-        </main>
-      </EnvironmentWatermark>
-    </ConfigContextProvider>
+    <EnvironmentWatermark>
+      <PageMetadata />
+      <GlobalMessage />
+      <NavBar />
+      <main className={classNames.join(" ")}>
+        <AppRoutes />
+      </main>
+    </EnvironmentWatermark>
   );
 };
 

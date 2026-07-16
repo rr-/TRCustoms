@@ -1,6 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useQueryClient } from "@tanstack/react-query";
-import { useContext } from "react";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import type { UseFormReturn } from "react-hook-form";
@@ -24,7 +23,6 @@ import { TextField } from "src/components/forms/fields/TextField";
 import { UsersField } from "src/components/forms/fields/UsersField";
 import { useFormSubmit } from "src/components/forms/useFormSubmit";
 import { LevelLink } from "src/components/links/LevelLink";
-import { ConfigContext } from "src/contexts/ConfigContext";
 import type { Config } from "src/services/ConfigService";
 import type { UploadedFile } from "src/services/FileService";
 import { UploadType } from "src/services/FileService";
@@ -35,6 +33,7 @@ import type { LevelDetails } from "src/services/LevelService";
 import { LevelService } from "src/services/LevelService";
 import { TagNested } from "src/services/TagService";
 import type { UserNested } from "src/services/UserService";
+import { useConfig } from "src/stores/config";
 import { useUser } from "src/stores/user";
 import { DisplayMode } from "src/types";
 import { extractNestedErrorText } from "src/utils/misc";
@@ -251,7 +250,7 @@ const applyLevelServerErrors = (
 const LevelForm = ({ level, onGoBack, onSubmit }: LevelFormProps) => {
   const { user } = useUser();
   const queryClient = useQueryClient();
-  const { config } = useContext(ConfigContext);
+  const { config } = useConfig();
 
   const initialValues: LevelFormValues = {
     name: level?.name || "",

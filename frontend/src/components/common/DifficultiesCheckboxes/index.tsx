@@ -1,7 +1,6 @@
-import { useContext } from "react";
 import { EntitiesCheckboxes } from "src/components/common/EntitiesCheckboxes";
-import { ConfigContext } from "src/contexts/ConfigContext";
 import type { DifficultyListing } from "src/services/ConfigService";
+import { useConfig } from "src/stores/config";
 
 interface DifficultiesCheckboxesProps {
   value: number[];
@@ -12,7 +11,7 @@ const DifficultiesCheckboxes = ({
   value,
   onChange,
 }: DifficultiesCheckboxesProps) => {
-  const { config } = useContext(ConfigContext);
+  const { config } = useConfig();
 
   return (
     <EntitiesCheckboxes

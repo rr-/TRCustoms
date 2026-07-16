@@ -1,5 +1,4 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useContext } from "react";
 import { useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
 import { FormGrid } from "src/components/common/FormGrid";
@@ -17,11 +16,11 @@ import { TextAreaField } from "src/components/forms/fields/TextAreaField";
 import { TextField } from "src/components/forms/fields/TextField";
 import { useFormSubmit } from "src/components/forms/useFormSubmit";
 import { UserLink } from "src/components/links/UserLink";
-import { ConfigContext } from "src/contexts/ConfigContext";
 import { AuthService } from "src/services/AuthService";
 import { UploadType } from "src/services/FileService";
 import type { UserDetails } from "src/services/UserService";
 import { UserService } from "src/services/UserService";
+import { useConfig } from "src/stores/config";
 import { useUser } from "src/stores/user";
 import { DisplayMode } from "src/types";
 import { makeSentence } from "src/utils/string";
@@ -105,7 +104,7 @@ const makeSchema = (isNew: boolean) =>
   });
 
 const UserForm = ({ user, onGoBack, onSubmit }: UserFormProps) => {
-  const { config } = useContext(ConfigContext);
+  const { config } = useConfig();
   const { setUser } = useUser();
 
   const form = useForm<UserFormValues>({

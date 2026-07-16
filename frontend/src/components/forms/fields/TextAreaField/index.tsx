@@ -1,5 +1,4 @@
 import styles from "./index.module.css";
-import { useContext } from "react";
 import { useState } from "react";
 import { useController } from "react-hook-form";
 import { useFormContext } from "react-hook-form";
@@ -9,11 +8,11 @@ import { BaseField } from "src/components/forms/fields/BaseField";
 import type { BaseFieldProps } from "src/components/forms/fields/BaseField";
 import { MarkdownComposer } from "src/components/markdown-composer/MarkdownComposer";
 import { Markdown } from "src/components/markdown/Markdown";
-import { ConfigContext } from "src/contexts/ConfigContext";
 import type { MarkdownLimitKey } from "src/services/MarkdownLimitService";
 import { getMarkdownLimit } from "src/services/MarkdownLimitService";
 import { getMarkdownLimitState } from "src/services/MarkdownLimitService";
 import type { MarkdownLimitState } from "src/services/MarkdownLimitService";
+import { useConfig } from "src/stores/config";
 import { useSettings } from "src/stores/settings";
 import { MarkdownPreviewMode } from "src/stores/settings";
 
@@ -61,7 +60,7 @@ const RichTextAreaField = ({
   const { ref: _ref, ...fieldProps } = field;
   const value = typeof field.value === "string" ? field.value : "";
 
-  const { config } = useContext(ConfigContext);
+  const { config } = useConfig();
   const { markdownPreviewMode } = useSettings();
   const [tabName, setTabName] = useState("compose");
 

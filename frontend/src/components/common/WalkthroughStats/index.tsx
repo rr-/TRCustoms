@@ -1,12 +1,11 @@
 import styles from "./index.module.css";
 import { useState } from "react";
-import { useContext } from "react";
-import { ConfigContext } from "src/contexts/ConfigContext";
+import { useConfig } from "src/stores/config";
 import { reprBigNumber } from "src/utils/string";
 import { reprPercentage } from "src/utils/string";
 
 const WalkthroughStats = () => {
-  const { config } = useContext(ConfigContext);
+  const { config } = useConfig();
   const [tooltip, setTooltip] = useState<string | undefined>();
 
   const stats = [

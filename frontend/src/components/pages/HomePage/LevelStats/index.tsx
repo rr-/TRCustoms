@@ -1,14 +1,13 @@
-import { useContext } from "react";
 import { Link } from "react-router-dom";
 import { DefinitionItem } from "src/components/common/DefinitionList";
 import { DefinitionList } from "src/components/common/DefinitionList";
 import { GFXCard } from "src/components/common/GFXCard";
 import { EngineLink } from "src/components/links/EngineLink";
-import { ConfigContext } from "src/contexts/ConfigContext";
+import { useConfig } from "src/stores/config";
 import { reprBigNumber } from "src/utils/string";
 
 const LevelStats = () => {
-  const { config } = useContext(ConfigContext);
+  const { config } = useConfig();
 
   return (
     <>

@@ -1,7 +1,6 @@
-import { useContext } from "react";
 import { EntitiesCheckboxes } from "src/components/common/EntitiesCheckboxes";
-import { ConfigContext } from "src/contexts/ConfigContext";
 import type { GenreListing } from "src/services/GenreService";
+import { useConfig } from "src/stores/config";
 
 interface GenresCheckboxesProps {
   value: number[];
@@ -9,7 +8,7 @@ interface GenresCheckboxesProps {
 }
 
 const GenresCheckboxes = ({ value, onChange }: GenresCheckboxesProps) => {
-  const { config } = useContext(ConfigContext);
+  const { config } = useConfig();
 
   return (
     <EntitiesCheckboxes

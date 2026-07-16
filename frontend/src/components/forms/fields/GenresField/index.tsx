@@ -1,14 +1,13 @@
 import styles from "./index.module.css";
-import { useContext } from "react";
 import { useController } from "react-hook-form";
 import { useFormContext } from "react-hook-form";
 import { Checkbox } from "src/components/common/Checkbox";
 import { BaseField } from "src/components/forms/fields/BaseField";
 import type { BaseFieldProps } from "src/components/forms/fields/BaseField";
 import { IconInformationCircle } from "src/components/icons";
-import { ConfigContext } from "src/contexts/ConfigContext";
 import { GenreListing } from "src/services/GenreService";
 import { GenreNested } from "src/services/GenreService";
+import { useConfig } from "src/stores/config";
 
 interface GenresFieldProps extends Omit<BaseFieldProps, "children"> {
   readonly?: boolean | undefined;
@@ -17,7 +16,7 @@ interface GenresFieldProps extends Omit<BaseFieldProps, "children"> {
 // react-hook-form port of GenresFormField: a checkbox grid of the configured
 // genres, bound to an array of the selected genres.
 const GenresField = ({ name, readonly, ...baseProps }: GenresFieldProps) => {
-  const { config } = useContext(ConfigContext);
+  const { config } = useConfig();
   const { control } = useFormContext();
   const { field } = useController({ name, control });
   const value: GenreNested[] = field.value || [];

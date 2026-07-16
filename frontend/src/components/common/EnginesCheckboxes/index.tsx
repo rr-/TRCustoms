@@ -1,7 +1,6 @@
-import { useContext } from "react";
 import type { EngineListing } from "src/client";
 import { EntitiesCheckboxes } from "src/components/common/EntitiesCheckboxes";
-import { ConfigContext } from "src/contexts/ConfigContext";
+import { useConfig } from "src/stores/config";
 
 interface EnginesCheckboxesProps {
   value: number[];
@@ -9,7 +8,7 @@ interface EnginesCheckboxesProps {
 }
 
 const EnginesCheckboxes = ({ value, onChange }: EnginesCheckboxesProps) => {
-  const { config } = useContext(ConfigContext);
+  const { config } = useConfig();
 
   return (
     <EntitiesCheckboxes

@@ -1,16 +1,8 @@
-import { useCallback } from "react";
-import { useEffect } from "react";
-import { useMemo } from "react";
-import { createContext } from "react";
-import { useState } from "react";
 import type { Config } from "src/services/ConfigService";
 import { ConfigService } from "src/services/ConfigService";
+import { create } from "zustand";
 
-interface ConfigContextProviderProps {
-  children: React.ReactNode;
-}
-
-const defaultConfig = {
+const defaultConfig: Config = {
   countries: [],
   tags: [],
   genres: [],
@@ -55,36 +47,24 @@ const defaultConfig = {
   global_message: null,
 };
 
-const ConfigContext = createContext<{
+interface ConfigState {
   config: Config;
   refetchConfig: () => Promise<void>;
-}>({ config: defaultConfig, refetchConfig: async () => {} });
+}
 
-const ConfigContextProvider = ({ children }: ConfigContextProviderProps) => {
-  const [config, setConfig] = useState<Config>(defaultConfig);
+const useConfig = create<ConfigState>((set) => ({
+  config: defaultConfig,
 
-  const refetchConfig = useCallback(async () => {
+  refetchConfig: async (): Promise<void> => {
     try {
-      setConfig(await ConfigService.getConfig());
+      set({ config: await ConfigService.getConfig() });
     } catch (error) {
       // Keep the last-known (or default) config rather than letting an
       // unhandled rejection escape; the app degrades to empty tags/genres.
       console.error("Failed to load site config", error);
     }
-  }, []);
+  },
+}));
 
-  useEffect(() => {
-    refetchConfig();
-  }, [refetchConfig]);
-
-  const value = useMemo(
-    () => ({ config, refetchConfig }),
-    [config, refetchConfig],
-  );
-
-  return (
-    <ConfigContext.Provider value={value}>{children}</ConfigContext.Provider>
-  );
-};
-
-export { ConfigContextProvider, ConfigContext };
+export type { ConfigState };
+export { useConfig, defaultConfig };

@@ -1,9 +1,9 @@
 import styles from "./index.module.css";
 import { geoCylindricalStereographic } from "d3-geo-projection";
-import { useContext, useMemo } from "react";
+import { useMemo } from "react";
 import { ComposableMap, Geographies, Geography } from "react-simple-maps";
-import { ConfigContext } from "src/contexts/ConfigContext";
 import type { CountryListing } from "src/services/ConfigService";
+import { useConfig } from "src/stores/config";
 import { feature } from "topojson-client";
 import worldData from "world-atlas/countries-110m.json";
 
@@ -13,7 +13,7 @@ interface MapWidgetProps {
 }
 
 export const MapWidget = ({ country, onChange }: MapWidgetProps) => {
-  const { config } = useContext(ConfigContext);
+  const { config } = useConfig();
   const geoFeatures = useMemo(
     () =>
       feature(worldData as any, (worldData as any).objects.countries).features,

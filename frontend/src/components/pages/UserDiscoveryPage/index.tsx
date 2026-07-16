@@ -1,4 +1,4 @@
-import { useContext, useState, useCallback } from "react";
+import { useState, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { AutoComplete } from "src/components/common/AutoComplete";
 import { ExtrasSidebar } from "src/components/common/ExtrasSidebar";
@@ -9,10 +9,10 @@ import { MapWidget } from "src/components/common/MapWidget";
 import { Section, SectionHeader } from "src/components/common/Section";
 import { UserFancyList } from "src/components/common/UserFancyList";
 import { SidebarLayout } from "src/components/layouts/SidebarLayout";
-import { ConfigContext } from "src/contexts/ConfigContext";
 import type { CountryListing } from "src/services/ConfigService";
 import type { UserListing, UserSearchQuery } from "src/services/UserService";
 import { UserService } from "src/services/UserService";
+import { useConfig } from "src/stores/config";
 import { usePageMetadata } from "src/stores/pageMetadata";
 
 interface LocationUserTableProps {
@@ -61,7 +61,7 @@ const UserDiscoveryPage = () => {
     [],
   );
 
-  const { config } = useContext(ConfigContext);
+  const { config } = useConfig();
   const [selectedCountry, setSelectedCountry] = useState<CountryListing | null>(
     null,
   );
