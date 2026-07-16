@@ -32,6 +32,12 @@ const DropDownField = ({
   ...baseProps
 }: DropDownFieldProps) => {
   const { control } = useFormContext();
+  // A <select> always yields string values from the DOM, so map each selection
+  // back to its declared option value to preserve numeric ids (schemas expect
+  // z.number() for engine/difficulty/duration). Unmatched values — e.g. the
+  // empty "null" option — pass through unchanged.
+  const toOptionValue = (raw: string): string | number =>
+    options.find((option) => String(option.value) === raw)?.value ?? raw;
   return (
     <BaseField name={name} {...baseProps}>
       <Controller
@@ -50,11 +56,10 @@ const DropDownField = ({
             onChange={(event) => {
               field.onChange(
                 multiple
-                  ? Array.from(
-                      event.target.selectedOptions,
-                      (option) => option.value,
+                  ? Array.from(event.target.selectedOptions, (option) =>
+                      toOptionValue(option.value),
                     )
-                  : event.target.value,
+                  : toOptionValue(event.target.value),
               );
               onChange?.();
             }}
