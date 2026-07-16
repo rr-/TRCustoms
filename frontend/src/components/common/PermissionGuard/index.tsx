@@ -1,6 +1,4 @@
-import { useEffect } from "react";
 import { useContext } from "react";
-import { useState } from "react";
 import { Error403Page } from "src/components/pages/ErrorPage";
 import { UserContext } from "src/contexts/UserContext";
 import type { UserDetails } from "src/services/UserService";
@@ -63,39 +61,25 @@ const PermissionGuard = ({
   ...props
 }: PermissionGuardProps) => {
   const { user } = useContext(UserContext);
-  const [isShown, setIsShown] = useState<boolean>(false);
-
-  useEffect(() => {
-    setIsShown(
-      hasPermission(
-        user,
-        require,
-        owningUsers?.map((u) => u.id),
-      ),
-    );
-  }, [user, owningUsers, require]);
+  const isShown = hasPermission(
+    user,
+    require,
+    owningUsers?.map((u) => u.id),
+  );
 
   return <GenericGuard {...props} isShown={isShown} />;
 };
 
 const LoggedInUserGuard = ({ user, ...props }: UserGuardProps) => {
   const userContext = useContext(UserContext);
-  const [isShown, setIsShown] = useState<boolean>(false);
-
-  useEffect(() => {
-    setIsShown(user?.id === userContext.user?.id);
-  }, [user, userContext]);
+  const isShown = user?.id === userContext.user?.id;
 
   return <GenericGuard {...props} isShown={isShown} />;
 };
 
 const PageGuard = ({ require, owningUserIds, children }: PageGuardProps) => {
   const { user } = useContext(UserContext);
-  const [isShown, setIsShown] = useState<boolean>(false);
-
-  useEffect(() => {
-    setIsShown(hasPermission(user, require, owningUserIds));
-  }, [user, owningUserIds, require]);
+  const isShown = hasPermission(user, require, owningUserIds);
 
   return (
     <GenericGuard alternative={<Error403Page />} isShown={isShown}>
