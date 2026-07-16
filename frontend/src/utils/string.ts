@@ -19,7 +19,9 @@ const reprPercentage = (num: number, decimalPlaces = 1): string => {
 const titleCase = (input: string): string => {
   const sentences = input.split(/\. /);
   return sentences
-    .map((sentence) => sentence[0].toUpperCase() + sentence.substr(1))
+    .map((sentence) =>
+      sentence ? sentence[0].toUpperCase() + sentence.slice(1) : sentence,
+    )
     .join(". ");
 };
 

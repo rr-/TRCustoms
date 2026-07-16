@@ -36,6 +36,12 @@ describe("titleCase / makeSentence", () => {
     expect(makeSentence("hello world")).toBe("Hello world.");
     expect(makeSentence("hello world.")).toBe("Hello world.");
   });
+
+  test("survives empty and empty-segment input without throwing", () => {
+    expect(titleCase("")).toBe("");
+    expect(titleCase(". x")).toBe(". X");
+    expect(makeSentence("")).toBe(".");
+  });
 });
 
 describe("formatFileSize", () => {
