@@ -1,7 +1,7 @@
 import { resolveStoredTheme } from "../contexts/themeStorage";
 import { getPrefixedKey, StorageService } from "../services/StorageService";
 import assert from "node:assert/strict";
-import test from "node:test";
+import { test } from "vitest";
 
 interface MockWindow extends Window {
   localStorage: Storage;

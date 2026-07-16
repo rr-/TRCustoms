@@ -1,7 +1,7 @@
 import { getPlaylistSearchQuery } from "../services/playlistSearchQuery";
 import { hashKey } from "@tanstack/react-query";
 import assert from "node:assert/strict";
-import test from "node:test";
+import { test } from "vitest";
 
 // The playlist table is rendered by DataTable, which registers its React Query
 // entry under the key [queryName, searchFunc, searchQuery] (see

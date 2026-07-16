@@ -1,6 +1,6 @@
 import { type AuthHandlers, createAuthFetch } from "../services/authFetch";
 import assert from "node:assert";
-import { test } from "node:test";
+import { test } from "vitest";
 
 const jsonResponse = (status: number, body: unknown): Response =>
   new Response(JSON.stringify(body), {
