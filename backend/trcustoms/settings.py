@@ -284,6 +284,18 @@ CSRF_TRUSTED_ORIGINS = [
     "https://staging.trcustoms.org",
 ]
 
+# Don't let browsers MIME-sniff Django responses into a different type.
+SECURE_CONTENT_TYPE_NOSNIFF = True
+
+# In production the site is served over HTTPS at the edge, so scope the
+# session/CSRF cookies to HTTPS. Left off in development (DEBUG), which runs
+# over plain HTTP. SSL redirect / HSTS are intentionally not enabled here:
+# this nginx terminates plain HTTP and rewrites X-Forwarded-Proto, so Django
+# can't reliably tell HTTPS apart and would risk a redirect loop.
+if not DEBUG:
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
+
 SPECTACULAR_SETTINGS = {
     "TITLE": "TRCustoms",
     "DESCRIPTION": "An API for TRCustoms.org",

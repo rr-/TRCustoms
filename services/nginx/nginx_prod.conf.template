@@ -54,12 +54,12 @@ http {
     }
 
     location /uploads/ {
-      autoindex on;
+      add_header X-Content-Type-Options "nosniff" always;
       alias /app/backend/django_uploads/;
     }
 
     location /django_static/ {
-      autoindex on;
+      add_header X-Content-Type-Options "nosniff" always;
       alias /app/backend/django_static/;
     }
   }
