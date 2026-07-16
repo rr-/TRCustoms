@@ -5,8 +5,8 @@ x-backend-environment: &base-backend-environment
   - HOST_SITE=${HOST_SITE}
   - ADMIN_DIR=${ADMIN_DIR}
   - POSTGRES_DB=trcustoms
-  - POSTGRES_USER=root
-  - POSTGRES_PASSWORD=root
+  - POSTGRES_USER=${POSTGRES_USER:-root}
+  - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-root}
   - AWS_ACCESS_KEY_ID
   - AWS_SECRET_ACCESS_KEY
   - AWS_STORAGE_BUCKET_NAME
