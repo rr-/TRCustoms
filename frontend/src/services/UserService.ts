@@ -87,12 +87,19 @@ const getCurrentUser = async (): Promise<UserDetails | null> => {
   if (!AuthService.getAccessToken()) {
     return null;
   }
-  try {
-    const { data } = await usersMeRetrieve({ throwOnError: true });
-    return data;
-  } catch (error) {
+  // Inspect the status rather than throwOnError: only genuine auth failures
+  // mean "logged out". A transient 500 or network error must propagate so the
+  // caller can keep the existing session instead of silently signing out.
+  const { data, response } = await usersMeRetrieve();
+  if (response && (response.status === 401 || response.status === 403)) {
     return null;
   }
+  if (!response?.ok || !data) {
+    throw new Error(
+      `Failed to fetch the current user (${response?.status ?? "no response"})`,
+    );
+  }
+  return data;
 };
 
 const getUserById = async (userId: number): Promise<UserDetails> => {

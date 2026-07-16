@@ -24,8 +24,13 @@ const UserContextProvider = ({ children }: UserContextProviderProps) => {
   useEffect(() => {
     // try to log in when the application starts.
     const fetchUser = async () => {
-      const user = await UserService.getCurrentUser();
-      setUser(user);
+      try {
+        const user = await UserService.getCurrentUser();
+        setUser(user);
+      } catch {
+        // A transient failure isn't a logout: leave the current user as-is
+        // rather than forcing a signed-out state.
+      }
     };
 
     fetchUser();
