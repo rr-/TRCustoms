@@ -1,21 +1,21 @@
-import type { FormikHelpers } from "formik";
-import { Formik } from "formik";
-import { Form } from "formik";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { useContext } from "react";
-import { useCallback } from "react";
+import { useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
 import { FormGrid } from "src/components/common/FormGrid";
-import { FormGridButtons } from "src/components/common/FormGrid";
 import { FormGridFieldSet } from "src/components/common/FormGrid";
 import { InfoMessage } from "src/components/common/InfoMessage";
 import { InfoMessageType } from "src/components/common/InfoMessage";
 import { PicturePicker } from "src/components/common/PicturePicker";
-import { BaseFormField } from "src/components/formfields/BaseFormField";
-import { DropDownFormField } from "src/components/formfields/DropDownFormField";
-import { EmailFormField } from "src/components/formfields/EmailFormField";
-import { PasswordFormField } from "src/components/formfields/PasswordFormField";
-import { TextAreaFormField } from "src/components/formfields/TextAreaFormField";
-import { TextFormField } from "src/components/formfields/TextFormField";
+import { BaseField } from "src/components/forms/BaseField";
+import { DropDownField } from "src/components/forms/DropDownField";
+import { EmailField } from "src/components/forms/EmailField";
+import { Form } from "src/components/forms/Form";
+import { FormButtons } from "src/components/forms/FormButtons";
+import { PasswordField } from "src/components/forms/PasswordField";
+import { TextAreaField } from "src/components/forms/TextAreaField";
+import { TextField } from "src/components/forms/TextField";
+import { useFormSubmit } from "src/components/forms/useFormSubmit";
 import { UserLink } from "src/components/links/UserLink";
 import { ConfigContext } from "src/contexts/ConfigContext";
 import { UserContext } from "src/contexts/UserContext";
@@ -24,15 +24,14 @@ import { UploadType } from "src/services/FileService";
 import type { UserDetails } from "src/services/UserService";
 import { UserService } from "src/services/UserService";
 import { DisplayMode } from "src/types";
-import { filterFalsyObjectValues } from "src/utils/misc";
-import { getResponseError } from "src/utils/misc";
 import { makeSentence } from "src/utils/string";
-import { validateUserName } from "src/utils/validation";
-import { validateRequired } from "src/utils/validation";
+import { validateEmail } from "src/utils/validation";
 import { validatePassword } from "src/utils/validation";
 import { validatePassword2 } from "src/utils/validation";
+import { validateRequired } from "src/utils/validation";
 import { validateURL } from "src/utils/validation";
-import { validateEmail } from "src/utils/validation";
+import { validateUserName } from "src/utils/validation";
+import { z } from "zod";
 
 const RegistrationDisclaimer = () => {
   return (
@@ -54,172 +53,122 @@ interface UserFormProps {
   onSubmit?: ((user: UserDetails, password: string | null) => void) | undefined;
 }
 
-interface UserFormValues {
-  username: string;
-  firstName: string;
-  lastName: string;
-  email: string;
-  oldPassword: string;
-  password: string;
-  password2: string;
-  bio: string;
-  pictureId: number | undefined;
-  countryCode: string;
-  websiteUrl: string;
-  donationUrl: string;
-}
+const baseSchema = z.object({
+  username: z.string(),
+  firstName: z.string(),
+  lastName: z.string(),
+  email: z.string(),
+  oldPassword: z.string(),
+  password: z.string(),
+  password2: z.string(),
+  bio: z.string(),
+  pictureId: z.number().nullish(),
+  countryCode: z.string(),
+  websiteUrl: z.string(),
+  donationUrl: z.string(),
+});
+type UserFormValues = z.infer<typeof baseSchema>;
+
+// Reuse the existing field validators inside the schema so the rules stay in
+// one place. Each field runs its validators in order and reports the first
+// error against that field, exactly like the old Formik validate().
+const makeSchema = (isNew: boolean) =>
+  baseSchema.superRefine((values, ctx) => {
+    const rules: { [field: string]: Array<(value: any) => string | null> } = {
+      username: [validateRequired, validateUserName],
+      email: [validateRequired, validateEmail],
+      websiteUrl: [validateURL],
+      donationUrl: [validateURL],
+      password: [validatePassword],
+      password2: [
+        (v) => validatePassword2(v, values.password),
+        validatePassword,
+      ],
+    };
+    if (isNew) {
+      rules.password.unshift(validateRequired);
+      rules.password2.unshift(validateRequired);
+    }
+    for (const [field, validators] of Object.entries(rules)) {
+      for (const validator of validators) {
+        const error = validator((values as Record<string, any>)[field]);
+        if (error) {
+          ctx.addIssue({
+            code: "custom",
+            path: [field],
+            message: makeSentence(error),
+          });
+          break;
+        }
+      }
+    }
+  });
 
 const UserForm = ({ user, onGoBack, onSubmit }: UserFormProps) => {
   const { config } = useContext(ConfigContext);
   const { setUser } = useContext(UserContext);
 
-  const initialValues: UserFormValues = {
-    username: user?.username || "",
-    firstName: user?.first_name || "",
-    lastName: user?.last_name || "",
-    email: user?.email || "",
-    oldPassword: "",
-    password: "",
-    password2: "",
-    bio: user?.bio || "",
-    pictureId: user?.picture?.id || undefined,
-    countryCode: user?.country?.iso_3166_1_alpha2 || "",
-    websiteUrl: user?.website_url || "",
-    donationUrl: user?.donation_url || "",
-  };
-
-  const handleSubmitError = useCallback(
-    (
-      error: unknown,
-      { setSubmitting, setStatus, setErrors }: FormikHelpers<UserFormValues>,
-    ) => {
-      setSubmitting(false);
-      const data = getResponseError(error);
-      if (data) {
-        if (data.detail) {
-          setStatus({ error: <>{makeSentence(data.detail)}</> });
-        }
-        const errors = {
-          username: data?.username,
-          firstName: data?.first_name,
-          lastName: data?.last_name,
-          email: data?.email,
-          oldPassword: data?.old_password,
-          password: data?.password,
-          bio: data?.bio,
-          pictureId: data?.picture,
-          countryCode: data?.country_code,
-          websiteUrl: data?.website_url,
-          donationUrl: data?.donation_url,
-        };
-        if (Object.keys(filterFalsyObjectValues(errors)).length) {
-          setErrors(errors);
-        } else {
-          console.error(error);
-          setStatus({ error: <>Unknown error.</> });
-        }
-      } else {
-        console.error(error);
-        setStatus({ error: <>Unknown error.</> });
-      }
+  const form = useForm<UserFormValues>({
+    resolver: zodResolver(makeSchema(!user)),
+    defaultValues: {
+      username: user?.username || "",
+      firstName: user?.first_name || "",
+      lastName: user?.last_name || "",
+      email: user?.email || "",
+      oldPassword: "",
+      password: "",
+      password2: "",
+      bio: user?.bio || "",
+      pictureId: user?.picture?.id || undefined,
+      countryCode: user?.country?.iso_3166_1_alpha2 || "",
+      websiteUrl: user?.website_url || "",
+      donationUrl: user?.donation_url || "",
     },
-    [],
-  );
+  });
 
-  const handleSubmit = useCallback(
-    async (values: UserFormValues, helpers: FormikHelpers<UserFormValues>) => {
-      const { setStatus } = helpers;
-      setStatus({});
-      try {
-        const payload = {
-          username: values.username,
-          firstName: values.firstName,
-          lastName: values.lastName,
-          email: values.email,
-          oldPassword: values.oldPassword || values.password,
-          password: values.password,
-          bio: values.bio,
-          pictureId: values.pictureId,
-          countryCode: values.countryCode,
-          websiteUrl: values.websiteUrl,
-          donationUrl: values.donationUrl,
-        };
-
-        if (user?.id) {
-          let outUser = await UserService.update(user.id, payload);
-
-          onSubmit?.(outUser, values.password);
-
-          if (user.email !== values.email) {
-            setUser(null);
-            AuthService.logout();
-            setStatus({
-              success: (
-                <>
-                  Profile information updated. You were logged out. Please check
-                  your mailbox and confirm your new e-mail address.
-                </>
-              ),
-            });
-          } else {
-            setStatus({
-              success: (
-                <>
-                  Profile information updated.{" "}
-                  <UserLink user={outUser}>Click here</UserLink> to see the
-                  changes.
-                </>
-              ),
-            });
-          }
-        } else {
-          let outUser = await UserService.register(payload);
-          onSubmit?.(outUser, values.password);
-        }
-      } catch (error) {
-        handleSubmitError(error, helpers);
-      }
-    },
-    [user, setUser, onSubmit, handleSubmitError],
-  );
-
-  const validate = (values: { [key: string]: any }) => {
-    const errors: {
-      [key: string]: string | null;
-    } = {};
-
-    const validatorMap: {
-      [field: string]: Array<(value: any) => string | null>;
-    } = {
-      username: [validateRequired, validateUserName],
-      email: [validateRequired, validateEmail],
-      oldPassword: [],
-      websiteUrl: [validateURL],
-      donationUrl: [validateURL],
-      password: [validatePassword],
-      password2: [
-        (source) => validatePassword2(source, values.password),
-        validatePassword,
-      ],
+  const { submit, result } = useFormSubmit(form, async (values) => {
+    const payload = {
+      username: values.username,
+      firstName: values.firstName,
+      lastName: values.lastName,
+      email: values.email,
+      oldPassword: values.oldPassword || values.password,
+      password: values.password,
+      bio: values.bio,
+      pictureId: values.pictureId as number | undefined,
+      countryCode: values.countryCode,
+      websiteUrl: values.websiteUrl,
+      donationUrl: values.donationUrl,
     };
 
-    if (!user) {
-      validatorMap.password.splice(0, 0, validateRequired);
-      validatorMap.password2.splice(0, 0, validateRequired);
-    }
-
-    for (const [field, validators] of Object.entries(validatorMap)) {
-      for (let validator of validators) {
-        const error = validator(values[field]);
-        if (error) {
-          errors[field] = makeSentence(error);
-          break;
-        }
+    if (user?.id) {
+      const outUser = await UserService.update(user.id, payload);
+      onSubmit?.(outUser, values.password);
+      if (user.email !== values.email) {
+        setUser(null);
+        AuthService.logout();
+        return {
+          success: (
+            <>
+              Profile information updated. You were logged out. Please check
+              your mailbox and confirm your new e-mail address.
+            </>
+          ),
+        };
       }
+      return {
+        success: (
+          <>
+            Profile information updated.{" "}
+            <UserLink user={outUser}>Click here</UserLink> to see the changes.
+          </>
+        ),
+      };
     }
 
-    return errors;
-  };
+    const outUser = await UserService.register(payload);
+    onSubmit?.(outUser, values.password);
+  });
 
   const countryOptions = config.countries.map((country) => ({
     label: country.name,
@@ -227,106 +176,86 @@ const UserForm = ({ user, onGoBack, onSubmit }: UserFormProps) => {
   }));
 
   return (
-    <Formik
-      initialValues={initialValues}
-      validate={validate}
-      onSubmit={handleSubmit}
-    >
-      {({ isSubmitting, setFieldValue, status }) =>
-        !user && status?.success ? (
-          <div className="FormFieldSuccess">{status.success}</div>
-        ) : (
-          <Form>
-            <FormGrid>
-              <FormGridFieldSet title="Basic information">
-                <TextFormField
-                  required={true}
-                  label="Username"
-                  name="username"
-                />
-                <EmailFormField
-                  required={true}
-                  label="E-mail"
-                  name="email"
-                  extraInformation="Changing the e-mail will require confirmation and cause you to log out."
-                />
-                {user && (
-                  <PasswordFormField
-                    label="Old password"
-                    extraInformation="Fill only if you want to change the password."
-                    name="oldPassword"
-                  />
-                )}
-                <PasswordFormField
-                  required={!user}
-                  label="Password"
-                  extraInformation={
-                    user ? "Leave empty to keep the current password." : ""
-                  }
-                  name="password"
-                />
-                <PasswordFormField
-                  required={!user}
-                  label="Password (repeat)"
-                  name="password2"
-                />
-              </FormGridFieldSet>
+    <Form form={form} onSubmit={submit}>
+      <FormGrid>
+        <FormGridFieldSet title="Basic information">
+          <TextField required={true} label="Username" name="username" />
+          <EmailField
+            required={true}
+            label="E-mail"
+            name="email"
+            extraInformation="Changing the e-mail will require confirmation and cause you to log out."
+          />
+          {user && (
+            <PasswordField
+              label="Old password"
+              extraInformation="Fill only if you want to change the password."
+              name="oldPassword"
+            />
+          )}
+          <PasswordField
+            required={!user}
+            label="Password"
+            extraInformation={
+              user ? "Leave empty to keep the current password." : ""
+            }
+            name="password"
+          />
+          <PasswordField
+            required={!user}
+            label="Password (repeat)"
+            name="password2"
+          />
+        </FormGridFieldSet>
 
-              <FormGridFieldSet title="Extra information">
-                <TextFormField label="First name" name="firstName" />
-                <TextFormField label="Last name" name="lastName" />
-                <TextFormField label="Website link" name="websiteUrl" />
-                <TextFormField label="Donation link" name="donationUrl" />
-                <TextAreaFormField
-                  label="Bio"
-                  name="bio"
-                  rich={true}
-                  markdownLimitKey="user_bio"
-                />
-                <DropDownFormField
-                  label="Country"
-                  name="countryCode"
-                  allowNull={true}
-                  options={countryOptions}
-                />
-                {user && (
-                  <BaseFormField
-                    required={false}
-                    label="Picture"
-                    name="pictureId"
-                  >
-                    <PicturePicker
-                      displayMode={DisplayMode.Contain}
-                      allowMultiple={false}
-                      allowClear={true}
-                      uploadType={UploadType.UserPicture}
-                      fileIds={user?.picture ? [user?.picture.id] : []}
-                      onChange={([fileId]) =>
-                        setFieldValue("pictureId", fileId || null)
-                      }
-                    />
-                  </BaseFormField>
-                )}
-              </FormGridFieldSet>
+        <FormGridFieldSet title="Extra information">
+          <TextField label="First name" name="firstName" />
+          <TextField label="Last name" name="lastName" />
+          <TextField label="Website link" name="websiteUrl" />
+          <TextField label="Donation link" name="donationUrl" />
+          <TextAreaField
+            label="Bio"
+            name="bio"
+            rich={true}
+            markdownLimitKey="user_bio"
+          />
+          <DropDownField
+            label="Country"
+            name="countryCode"
+            allowNull={true}
+            options={countryOptions}
+          />
+          {user && (
+            <BaseField required={false} label="Picture" name="pictureId">
+              <PicturePicker
+                displayMode={DisplayMode.Contain}
+                allowMultiple={false}
+                allowClear={true}
+                uploadType={UploadType.UserPicture}
+                fileIds={user?.picture ? [user?.picture.id] : []}
+                onChange={([fileId]) =>
+                  form.setValue("pictureId", fileId || null)
+                }
+              />
+            </BaseField>
+          )}
+        </FormGridFieldSet>
 
-              <FormGridButtons
-                status={status}
-                extra={!user?.id ? <RegistrationDisclaimer /> : undefined}
-              >
-                <button type="submit" disabled={isSubmitting}>
-                  {user ? "Update profile" : "Register"}
-                </button>
-                {onGoBack && (
-                  <button type="button" onClick={onGoBack}>
-                    Go back
-                  </button>
-                )}
-              </FormGridButtons>
-            </FormGrid>
-          </Form>
-        )
-      }
-    </Formik>
+        <FormButtons
+          result={result}
+          extra={!user?.id ? <RegistrationDisclaimer /> : undefined}
+        >
+          <button type="submit" disabled={form.formState.isSubmitting}>
+            {user ? "Update profile" : "Register"}
+          </button>
+          {onGoBack && (
+            <button type="button" onClick={onGoBack}>
+              Go back
+            </button>
+          )}
+        </FormButtons>
+      </FormGrid>
+    </Form>
   );
 };
 
