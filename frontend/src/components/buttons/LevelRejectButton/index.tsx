@@ -1,4 +1,4 @@
-import { useQueryClient } from "react-query";
+import { useQueryClient } from "@tanstack/react-query";
 import { PromptButton } from "src/components/buttons/PromptButton";
 import { ButtonVariant } from "src/components/common/Button";
 import { IconXCircle } from "src/components/icons";

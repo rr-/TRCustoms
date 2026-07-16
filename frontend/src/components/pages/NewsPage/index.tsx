@@ -1,5 +1,5 @@
 import styles from "./index.module.css";
-import { useQuery } from "react-query";
+import { useQuery } from "@tanstack/react-query";
 import { useParams } from "react-router-dom";
 import { Box } from "src/components/common/Box";
 import { Button } from "src/components/common/Button";
@@ -23,10 +23,10 @@ interface NewsPageParams {
 const NewsPage = () => {
   const { newsId } = useParams() as unknown as NewsPageParams;
 
-  const newsResult = useQuery<NewsDetails, Error>(
-    ["news", NewsService.getNewsById, newsId],
-    async () => NewsService.getNewsById(+newsId),
-  );
+  const newsResult = useQuery<NewsDetails, Error>({
+    queryKey: ["news", NewsService.getNewsById, newsId],
+    queryFn: async () => NewsService.getNewsById(+newsId),
+  });
 
   usePageMetadata(
     () => ({

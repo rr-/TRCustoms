@@ -1,5 +1,5 @@
+import { useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
-import { useQueryClient } from "react-query";
 import { ConfirmButton } from "src/components/buttons/ConfirmButton";
 import { IconSubmit } from "src/components/icons";
 import { WalkthroughLink } from "src/components/links/WalkthroughLink";

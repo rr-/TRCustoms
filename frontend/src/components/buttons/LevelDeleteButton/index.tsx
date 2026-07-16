@@ -1,4 +1,4 @@
-import { useQueryClient } from "react-query";
+import { useQueryClient } from "@tanstack/react-query";
 import { ConfirmButton } from "src/components/buttons/ConfirmButton";
 import { ButtonVariant } from "src/components/common/Button";
 import { IconTrash } from "src/components/icons";

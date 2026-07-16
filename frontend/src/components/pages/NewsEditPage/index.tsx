@@ -1,5 +1,5 @@
+import { useQuery } from "@tanstack/react-query";
 import { useCallback } from "react";
-import { useQuery } from "react-query";
 import { useNavigate } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import { Loader } from "src/components/common/Loader";
@@ -23,10 +23,10 @@ interface NewsEditPageViewProps {
 const NewsEditPageView = ({ newsId }: NewsEditPageViewProps) => {
   const navigate = useNavigate();
 
-  const result = useQuery<NewsDetails, Error>(
-    ["news", NewsService.getNewsById, newsId],
-    async () => NewsService.getNewsById(+newsId),
-  );
+  const result = useQuery<NewsDetails, Error>({
+    queryKey: ["news", NewsService.getNewsById, newsId],
+    queryFn: async () => NewsService.getNewsById(+newsId),
+  });
 
   const handleGoBack = useCallback(
     () => navigate(result?.data?.id ? `/news/${result?.data?.id}` : "/"),

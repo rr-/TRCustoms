@@ -1,5 +1,5 @@
 import styles from "./index.module.css";
-import { useQuery } from "react-query";
+import { useQuery } from "@tanstack/react-query";
 import { Box } from "src/components/common/Box";
 import { Loader } from "src/components/common/Loader";
 import { SectionHeader } from "src/components/common/Section";
@@ -91,10 +91,10 @@ const FeaturedLevelView = ({
 };
 
 const FeaturedLevelsView = () => {
-  const result = useQuery<FeaturedLevels, Error>(
-    ["featuredLevels", ConfigService.getFeaturedLevels],
-    async () => ConfigService.getFeaturedLevels(),
-  );
+  const result = useQuery<FeaturedLevels, Error>({
+    queryKey: ["featuredLevels", ConfigService.getFeaturedLevels],
+    queryFn: async () => ConfigService.getFeaturedLevels(),
+  });
 
   if (result.error) {
     return <p>{result.error.message}</p>;

@@ -1,5 +1,5 @@
+import { useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
-import { useQueryClient } from "react-query";
 import { Button } from "src/components/common/Button";
 import { PromptModal } from "src/components/modals/PromptModal";
 import type { TagListing } from "src/services/TagService";

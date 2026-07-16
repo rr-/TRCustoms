@@ -1,4 +1,4 @@
-import { useQuery } from "react-query";
+import { useQuery } from "@tanstack/react-query";
 import { useParams } from "react-router-dom";
 import { Loader } from "src/components/common/Loader";
 import { SidebarBox } from "src/components/common/SidebarBox";
@@ -21,10 +21,14 @@ interface WalkthroughPageParams {
 const WalkthroughPage = () => {
   const { walkthroughId } = useParams() as unknown as WalkthroughPageParams;
 
-  const result = useQuery<WalkthroughDetails | null, Error>(
-    ["walkthrough", WalkthroughService.getWalkthroughById, walkthroughId],
-    async () => WalkthroughService.getWalkthroughById(+walkthroughId),
-  );
+  const result = useQuery<WalkthroughDetails | null, Error>({
+    queryKey: [
+      "walkthrough",
+      WalkthroughService.getWalkthroughById,
+      walkthroughId,
+    ],
+    queryFn: async () => WalkthroughService.getWalkthroughById(+walkthroughId),
+  });
 
   usePageMetadata(
     () => ({

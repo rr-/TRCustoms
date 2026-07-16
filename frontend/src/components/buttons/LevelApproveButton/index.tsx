@@ -1,4 +1,4 @@
-import { useQueryClient } from "react-query";
+import { useQueryClient } from "@tanstack/react-query";
 import { ConfirmButton } from "src/components/buttons/ConfirmButton";
 import { IconBadgeCheck } from "src/components/icons";
 import type { LevelNested } from "src/services/LevelService";

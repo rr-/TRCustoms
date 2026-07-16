@@ -1,5 +1,5 @@
 import styles from "./index.module.css";
-import { useQuery } from "react-query";
+import { useQuery } from "@tanstack/react-query";
 import type { DataTableColumn } from "src/components/common/DataTable";
 import { DataTable } from "src/components/common/DataTable";
 import { Loader } from "src/components/common/Loader";
@@ -167,10 +167,10 @@ const AuditLogTable = ({
   searchQuery,
   onSearchQueryChange,
 }: AuditLogTableProps) => {
-  const result = useQuery<AuditLogSearchResult, Error>(
-    ["auditLogs", AuditLogService.searchAuditLogs, searchQuery],
-    async () => AuditLogService.searchAuditLogs(searchQuery),
-  );
+  const result = useQuery<AuditLogSearchResult, Error>({
+    queryKey: ["auditLogs", AuditLogService.searchAuditLogs, searchQuery],
+    queryFn: async () => AuditLogService.searchAuditLogs(searchQuery),
+  });
 
   if (result.error) {
     return <p>{result.error.message}</p>;

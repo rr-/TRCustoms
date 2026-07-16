@@ -1,7 +1,7 @@
+import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { forwardRef } from "react";
 import { useImperativeHandle } from "react";
-import { useQuery } from "react-query";
 import { Checkbox } from "src/components/common/Checkbox";
 import { ConfirmModal } from "src/components/modals/ConfirmModal";
 import { AutoPlaylistChoice } from "src/contexts/SettingsContext";
@@ -29,10 +29,10 @@ const PlaylistAddModal = forwardRef<
   const { userId, levelId } = props;
   const { autoPlaylistChoice, setAutoPlaylistChoice } = useSettings();
 
-  const playlistItemResult = useQuery<PlaylistItemDetails, Error>(
-    ["playlists", PlaylistService.get, userId, levelId],
-    async () => PlaylistService.get(userId, levelId),
-  );
+  const playlistItemResult = useQuery<PlaylistItemDetails, Error>({
+    queryKey: ["playlists", PlaylistService.get, userId, levelId],
+    queryFn: async () => PlaylistService.get(userId, levelId),
+  });
 
   useImperativeHandle(ref, () => ({
     trigger() {

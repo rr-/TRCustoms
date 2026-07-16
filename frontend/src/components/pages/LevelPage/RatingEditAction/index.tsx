@@ -1,7 +1,7 @@
+import { useQuery } from "@tanstack/react-query";
 import { useCallback } from "react";
 import { useRef } from "react";
 import { useContext } from "react";
-import { useQuery } from "react-query";
 import { useNavigate } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import { Loader } from "src/components/common/Loader";
@@ -29,10 +29,10 @@ const RatingEditAction = ({ level }: RatingEditActionProps) => {
   const navigate = useNavigate();
   const playlistModalRef = useRef<PlaylistAddModalHandle>(null);
 
-  const ratingResult = useQuery<RatingDetails, Error>(
-    ["rating", RatingService.getRatingById, ratingId],
-    async () => RatingService.getRatingById(+ratingId),
-  );
+  const ratingResult = useQuery<RatingDetails, Error>({
+    queryKey: ["rating", RatingService.getRatingById, ratingId],
+    queryFn: async () => RatingService.getRatingById(+ratingId),
+  });
 
   const handleGoBack = useCallback(() => {
     navigate(`/levels/${level.id}/ratings`);

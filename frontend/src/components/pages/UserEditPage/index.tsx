@@ -1,6 +1,6 @@
+import { useQuery } from "@tanstack/react-query";
 import { useCallback } from "react";
 import { useContext } from "react";
-import { useQuery } from "react-query";
 import { useNavigate } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import { Loader } from "src/components/common/Loader";
@@ -26,10 +26,10 @@ const UserEditPageView = ({ userId }: UserEditViewProps) => {
   const userContext = useContext(UserContext);
   const navigate = useNavigate();
 
-  const result = useQuery<UserDetails, Error>(
-    ["user", UserService.getUserById, userId],
-    async () => await UserService.getUserById(+userId),
-  );
+  const result = useQuery<UserDetails, Error>({
+    queryKey: ["user", UserService.getUserById, userId],
+    queryFn: async () => await UserService.getUserById(+userId),
+  });
 
   const handleSubmit = useCallback(
     (outUser: UserDetails, password: string | null) => {

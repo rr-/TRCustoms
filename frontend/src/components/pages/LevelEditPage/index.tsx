@@ -1,5 +1,5 @@
+import { useQuery } from "@tanstack/react-query";
 import { useCallback } from "react";
-import { useQuery } from "react-query";
 import { useNavigate } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import { LevelForm } from "src/components/common/LevelForm";
@@ -21,10 +21,10 @@ const LevelEditPage = () => {
   const { levelId } = useParams() as unknown as LevelEditPageParams;
   const navigate = useNavigate();
 
-  const result = useQuery<LevelDetails, Error>(
-    ["level", LevelService.getLevelById, levelId],
-    async () => LevelService.getLevelById(+levelId),
-  );
+  const result = useQuery<LevelDetails, Error>({
+    queryKey: ["level", LevelService.getLevelById, levelId],
+    queryFn: async () => LevelService.getLevelById(+levelId),
+  });
 
   const handleGoBack = useCallback(() => {
     navigate(`/levels/${levelId}`);

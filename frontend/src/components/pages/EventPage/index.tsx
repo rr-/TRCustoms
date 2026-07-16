@@ -1,5 +1,5 @@
 import styles from "./index.module.css";
-import { useQuery } from "react-query";
+import { useQuery } from "@tanstack/react-query";
 import { useParams } from "react-router-dom";
 import { DefaultNoItemsElement } from "src/components/common/DataList";
 import { EventSidebar } from "src/components/common/EventSidebar";
@@ -21,10 +21,10 @@ interface EventPageParams {
 
 const EventPage = () => {
   const { eventId } = useParams() as unknown as EventPageParams;
-  const result = useQuery<EventDetails, Error>(
-    ["event", EventService.getEventById, eventId],
-    async () => EventService.getEventById(Number(eventId)),
-  );
+  const result = useQuery<EventDetails, Error>({
+    queryKey: ["event", EventService.getEventById, eventId],
+    queryFn: async () => EventService.getEventById(Number(eventId)),
+  });
 
   const event = result.data;
   usePageMetadata(

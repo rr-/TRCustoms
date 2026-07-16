@@ -1,6 +1,6 @@
 import styles from "./index.module.css";
+import { useQuery } from "@tanstack/react-query";
 import { useContext } from "react";
-import { useQuery } from "react-query";
 import { useNavigate } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import { Loader } from "src/components/common/Loader";
@@ -38,10 +38,10 @@ const UserPage = ({ tabName }: UserPageProps) => {
   const isLoggedIn = +userId === loggedInUser?.id;
   const { setShouldScroll } = useScrollStore((state) => state);
 
-  const userResult = useQuery<UserDetails, Error>(
-    ["user", UserService.getUserById, userId],
-    async () => UserService.getUserById(+userId),
-  );
+  const userResult = useQuery<UserDetails, Error>({
+    queryKey: ["user", UserService.getUserById, userId],
+    queryFn: async () => UserService.getUserById(+userId),
+  });
 
   usePageMetadata(
     () => ({

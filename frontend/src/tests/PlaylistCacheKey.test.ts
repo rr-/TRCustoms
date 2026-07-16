@@ -1,7 +1,7 @@
 import { getPlaylistSearchQuery } from "../services/playlistSearchQuery";
+import { hashKey } from "@tanstack/react-query";
 import assert from "node:assert/strict";
 import test from "node:test";
-import { hashQueryKey } from "react-query";
 
 // The playlist table is rendered by DataTable, which registers its React Query
 // entry under the key [queryName, searchFunc, searchQuery] (see
@@ -15,11 +15,7 @@ import { hashQueryKey } from "react-query";
 // This reproduces the exact key DataTable builds and asserts it is per-user.
 const buildPlaylistCacheKey = (userId: number): string => {
   const searchFunc = (query: unknown) => query; // stand-in for the real closure
-  return hashQueryKey([
-    "playlists",
-    searchFunc,
-    getPlaylistSearchQuery(userId),
-  ]);
+  return hashKey(["playlists", searchFunc, getPlaylistSearchQuery(userId)]);
 };
 
 test("playlist cache key is distinct per user", () => {

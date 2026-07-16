@@ -1,5 +1,5 @@
+import { useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
-import { useQueryClient } from "react-query";
 import { Link } from "src/components/common/Link";
 import { PlaylistItemModal } from "src/components/modals/PlaylistItemModal";
 import type { LevelNested } from "src/services/LevelService";

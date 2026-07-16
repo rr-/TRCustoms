@@ -1,5 +1,5 @@
 import styles from "./index.module.css";
-import { useQuery } from "react-query";
+import { useQuery } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import { InfoMessage } from "src/components/common/InfoMessage";
@@ -37,10 +37,10 @@ const LevelPage = ({ tabName, action }: LevelPageProps) => {
   const { levelId } = useParams() as unknown as LevelPageParams;
   const { setShouldScroll } = useScrollStore((state) => state);
 
-  const result = useQuery<LevelDetails, Error>(
-    ["level", LevelService.getLevelById, levelId],
-    async () => LevelService.getLevelById(+levelId),
-  );
+  const result = useQuery<LevelDetails, Error>({
+    queryKey: ["level", LevelService.getLevelById, levelId],
+    queryFn: async () => LevelService.getLevelById(+levelId),
+  });
 
   const handleTabChange = (tab: TabPage) => {
     setShouldScroll(false);

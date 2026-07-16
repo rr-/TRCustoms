@@ -1,5 +1,5 @@
+import { useQuery } from "@tanstack/react-query";
 import { useContext } from "react";
-import { useQuery } from "react-query";
 import { Button } from "src/components/common/Button";
 import { PermissionGuard } from "src/components/common/PermissionGuard";
 import { IconThumbUp } from "src/components/icons";
@@ -16,10 +16,16 @@ interface AddOrEditRatingButtonProps {
 const AddOrEditRatingButton = ({ level }: AddOrEditRatingButtonProps) => {
   const { user } = useContext(UserContext);
 
-  const ratingResult = useQuery<RatingDetails | null, Error>(
-    ["rating", RatingService.getRatingByAuthorAndLevelIds, level.id, user?.id],
-    async () => RatingService.getRatingByAuthorAndLevelIds(level.id, user?.id),
-  );
+  const ratingResult = useQuery<RatingDetails | null, Error>({
+    queryKey: [
+      "rating",
+      RatingService.getRatingByAuthorAndLevelIds,
+      level.id,
+      user?.id,
+    ],
+    queryFn: async () =>
+      RatingService.getRatingByAuthorAndLevelIds(level.id, user?.id),
+  });
 
   if (level.authors.some((author) => author.id === user?.id)) {
     return null;

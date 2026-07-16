@@ -155,13 +155,20 @@ const resetQueries = (
   soft?: boolean | undefined,
 ) => {
   for (let queryFilter of queryFilters) {
+    // React Query v5 takes a filters object rather than a bare key; the callers
+    // pass a string prefix, which maps to a partial queryKey match.
+    const filters = Array.isArray(queryFilter)
+      ? { queryKey: queryFilter }
+      : typeof queryFilter === "string"
+        ? { queryKey: [queryFilter] }
+        : queryFilter;
     if (!soft) {
       queryClient
         .getQueryCache()
-        .findAll(queryFilter)
+        .findAll(filters)
         .forEach((query: any) => query.setData(undefined));
     }
-    queryClient.invalidateQueries(queryFilter);
+    queryClient.invalidateQueries(filters);
   }
 };
 

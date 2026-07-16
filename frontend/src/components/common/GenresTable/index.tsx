@@ -1,5 +1,5 @@
 import styles from "./index.module.css";
-import { useQuery } from "react-query";
+import { useQuery } from "@tanstack/react-query";
 import type { DataTableColumn } from "src/components/common/DataTable";
 import { DataTable } from "src/components/common/DataTable";
 import { Link } from "src/components/common/Link";
@@ -20,10 +20,10 @@ interface GenresTableDetailsProps {
 }
 
 const GenresTableDetails = ({ genre }: GenresTableDetailsProps) => {
-  const result = useQuery<GenreListing[], Error>(
-    ["genre", GenreService.getStats, genre.id],
-    async () => GenreService.getStats(+genre.id),
-  );
+  const result = useQuery<GenreListing[], Error>({
+    queryKey: ["genre", GenreService.getStats, genre.id],
+    queryFn: async () => GenreService.getStats(+genre.id),
+  });
 
   if (result.isLoading || !result.data) {
     return <Loader />;

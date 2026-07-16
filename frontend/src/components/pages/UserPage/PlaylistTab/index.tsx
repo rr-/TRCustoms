@@ -1,7 +1,7 @@
 import styles from "./index.module.css";
+import { useQueryClient } from "@tanstack/react-query";
 import { useEffect } from "react";
 import { useState } from "react";
-import { useQueryClient } from "react-query";
 import { PlaylistImportButton } from "src/components/buttons/PlaylistImportButton";
 import { PermissionGuard } from "src/components/common/PermissionGuard";
 import { PlaylistAddForm } from "src/components/common/PlaylistAddForm";

@@ -1,6 +1,6 @@
+import { useQuery } from "@tanstack/react-query";
 import { useCallback } from "react";
 import { useRef } from "react";
-import { useQuery } from "react-query";
 import { useNavigate } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import { Loader } from "src/components/common/Loader";
@@ -26,10 +26,10 @@ const ReviewEditAction = ({ level }: ReviewEditActionProps) => {
   const { reviewId } = useParams() as unknown as ReviewEditActionParams;
   const playlistModalRef = useRef<PlaylistAddModalHandle>(null);
 
-  const reviewResult = useQuery<ReviewDetails, Error>(
-    ["review", ReviewService.getReviewById, reviewId],
-    async () => ReviewService.getReviewById(+reviewId),
-  );
+  const reviewResult = useQuery<ReviewDetails, Error>({
+    queryKey: ["review", ReviewService.getReviewById, reviewId],
+    queryFn: async () => ReviewService.getReviewById(+reviewId),
+  });
 
   const handleGoBack = useCallback(() => {
     navigate(`/levels/${level.id}/reviews`);

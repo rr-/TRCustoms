@@ -1,5 +1,5 @@
+import { useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
-import { useQueryClient } from "react-query";
 import { Button } from "src/components/common/Button";
 import { ButtonVariant } from "src/components/common/Button";
 import { IconBookmark } from "src/components/icons";

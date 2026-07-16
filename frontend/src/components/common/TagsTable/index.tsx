@@ -1,5 +1,5 @@
 import styles from "./index.module.css";
-import { useQuery } from "react-query";
+import { useQuery } from "@tanstack/react-query";
 import { TagDeleteButton } from "src/components/buttons/TagDeleteButton";
 import { TagMergeButton } from "src/components/buttons/TagMergeButton";
 import { TagRenameButton } from "src/components/buttons/TagRenameButton";
@@ -25,10 +25,10 @@ interface TagsTableDetailsProps {
 }
 
 const TagsTableDetails = ({ tag }: TagsTableDetailsProps) => {
-  const result = useQuery<TagListing[], Error>(
-    ["tag", TagService.getStats, tag.id],
-    async () => TagService.getStats(+tag.id),
-  );
+  const result = useQuery<TagListing[], Error>({
+    queryKey: ["tag", TagService.getStats, tag.id],
+    queryFn: async () => TagService.getStats(+tag.id),
+  });
 
   if (result.isLoading || !result.data) {
     return <Loader />;

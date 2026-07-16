@@ -1,7 +1,7 @@
 import styles from "./index.module.css";
+import { useQuery } from "@tanstack/react-query";
 import { useContext } from "react";
 import { useState } from "react";
-import { useQuery } from "react-query";
 import { useNavigate } from "react-router-dom";
 import { Button } from "src/components/common/Button";
 import { PermissionGuard } from "src/components/common/PermissionGuard";
@@ -24,9 +24,14 @@ const WalkthroughsBar = ({ level }: WalkthroughsBarProps) => {
   const [textInput, setTextInput] = useState("");
 
   const { user } = useContext(UserContext);
-  const ownWalkthroughResult = useQuery<WalkthroughDetails | null, Error>(
-    ["walkthrough", WalkthroughService.getWalkthroughById, level.id, user?.id],
-    async () => {
+  const ownWalkthroughResult = useQuery<WalkthroughDetails | null, Error>({
+    queryKey: [
+      "walkthrough",
+      WalkthroughService.getWalkthroughById,
+      level.id,
+      user?.id,
+    ],
+    queryFn: async () => {
       const walkthroughs = await WalkthroughService.searchWalkthroughs({
         authors: [user?.id],
         levels: [level.id],
@@ -39,7 +44,7 @@ const WalkthroughsBar = ({ level }: WalkthroughsBarProps) => {
       }
       return null;
     },
-  );
+  });
 
   const handleVideoButtonClick = () => {
     showAlertOnError(async () => {

@@ -1,5 +1,5 @@
+import { useQuery } from "@tanstack/react-query";
 import { useContext } from "react";
-import { useQuery } from "react-query";
 import { Button } from "src/components/common/Button";
 import { PermissionGuard } from "src/components/common/PermissionGuard";
 import { IconAnnotation } from "src/components/icons";
@@ -16,10 +16,16 @@ interface AddOrEditReviewButtonProps {
 const AddOrEditReviewButton = ({ level }: AddOrEditReviewButtonProps) => {
   const { user } = useContext(UserContext);
 
-  const reviewResult = useQuery<ReviewDetails | null, Error>(
-    ["review", ReviewService.getReviewByAuthorAndLevelIds, level.id, user?.id],
-    async () => ReviewService.getReviewByAuthorAndLevelIds(level.id, user?.id),
-  );
+  const reviewResult = useQuery<ReviewDetails | null, Error>({
+    queryKey: [
+      "review",
+      ReviewService.getReviewByAuthorAndLevelIds,
+      level.id,
+      user?.id,
+    ],
+    queryFn: async () =>
+      ReviewService.getReviewByAuthorAndLevelIds(level.id, user?.id),
+  });
 
   if (level.authors.some((author) => author.id === user?.id)) {
     return null;

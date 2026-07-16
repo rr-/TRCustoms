@@ -1,5 +1,5 @@
 import styles from "./index.module.css";
-import { useQuery } from "react-query";
+import { useQuery } from "@tanstack/react-query";
 import { Button } from "src/components/common/Button";
 import { GFXCard } from "src/components/common/GFXCard";
 import { Link } from "src/components/common/Link";
@@ -18,10 +18,10 @@ const NewsSidebar = () => {
   const searchQuery = {
     pageSize: 10,
   };
-  const result = useQuery<NewsSearchResult, Error>(
-    ["news", searchQuery],
-    async () => NewsService.searchNews(searchQuery),
-  );
+  const result = useQuery<NewsSearchResult, Error>({
+    queryKey: ["news", searchQuery],
+    queryFn: async () => NewsService.searchNews(searchQuery),
+  });
 
   if (result.error) {
     return <p>{result.error.message}</p>;

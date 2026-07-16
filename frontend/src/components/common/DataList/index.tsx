@@ -1,9 +1,9 @@
 import styles from "./index.module.css";
+import { useInfiniteQuery } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { useRef } from "react";
 import { Fragment } from "react";
 import { useEffect } from "react";
-import { useInfiniteQuery } from "react-query";
-import { useQuery } from "react-query";
 import { Loader } from "src/components/common/Loader";
 import { Pager } from "src/components/common/Pager";
 import { DISABLE_PAGING } from "src/constants";
@@ -48,10 +48,10 @@ const PagedDataList = <TItem extends {}, TQuery extends GenericSearchQuery>({
   queryName,
   noItemsElement,
 }: ConcreteDataListProps<TItem, TQuery>) => {
-  const result = useQuery<GenericSearchResult<TQuery, TItem>, Error>(
-    [queryName, searchFunc, searchQuery],
-    async () => searchFunc(searchQuery),
-  );
+  const result = useQuery<GenericSearchResult<TQuery, TItem>, Error>({
+    queryKey: [queryName, searchFunc, searchQuery],
+    queryFn: async () => searchFunc(searchQuery),
+  });
 
   if (result.error) {
     return <p>{result.error.message}</p>;
@@ -100,9 +100,9 @@ const InfiniteDataList = <TItem extends {}, TQuery extends GenericSearchQuery>({
   queryName,
   noItemsElement,
 }: ConcreteDataListProps<TItem, TQuery>) => {
-  const result = useInfiniteQuery<GenericSearchResult<TQuery, TItem>, Error>(
-    [queryName, searchQuery],
-    async ({ pageParam }) => {
+  const result = useInfiniteQuery<GenericSearchResult<TQuery, TItem>, Error>({
+    queryKey: [queryName, searchQuery],
+    queryFn: async ({ pageParam }) => {
       return searchFunc({
         ...searchQuery,
         page:
@@ -110,24 +110,23 @@ const InfiniteDataList = <TItem extends {}, TQuery extends GenericSearchQuery>({
             ? DISABLE_PAGING
             : pageParam === undefined
               ? 1
-              : pageParam,
+              : (pageParam as number),
       });
     },
-    {
-      getNextPageParam: (lastPage, pages) => {
-        if (!lastPage) {
-          return undefined;
-        }
-        if (lastPage.disable_paging) {
-          return undefined;
-        }
-        return lastPage.current_page < lastPage.last_page
-          ? lastPage.current_page + 1
-          : undefined;
-      },
-      refetchOnWindowFocus: false,
+    initialPageParam: 1,
+    getNextPageParam: (lastPage) => {
+      if (!lastPage) {
+        return undefined;
+      }
+      if (lastPage.disable_paging) {
+        return undefined;
+      }
+      return lastPage.current_page < lastPage.last_page
+        ? lastPage.current_page + 1
+        : undefined;
     },
-  );
+    refetchOnWindowFocus: false,
+  });
 
   const infiniteScrollRef = useRef(null);
   useInfiniteScroll(

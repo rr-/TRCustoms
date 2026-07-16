@@ -1,7 +1,7 @@
 import styles from "./index.module.css";
+import { useQuery } from "@tanstack/react-query";
 import { sortBy } from "lodash";
 import { groupBy } from "lodash";
-import { useQuery } from "react-query";
 import { Box } from "src/components/common/Box";
 import { Loader } from "src/components/common/Loader";
 import { NewsSidebar } from "src/components/common/NewsSidebar";
@@ -23,10 +23,10 @@ const NewsListPage = () => {
     search: null,
   };
 
-  const result = useQuery<NewsSearchResult, Error>(
-    ["news", NewsService.searchNews, newsSearchQuery],
-    async () => NewsService.searchNews(newsSearchQuery),
-  );
+  const result = useQuery<NewsSearchResult, Error>({
+    queryKey: ["news", NewsService.searchNews, newsSearchQuery],
+    queryFn: async () => NewsService.searchNews(newsSearchQuery),
+  });
 
   usePageMetadata(
     () => ({

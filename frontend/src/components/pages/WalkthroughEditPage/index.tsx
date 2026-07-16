@@ -1,5 +1,5 @@
 import styles from "./index.module.css";
-import { useQuery } from "react-query";
+import { useQuery } from "@tanstack/react-query";
 import { useParams } from "react-router-dom";
 import { Loader } from "src/components/common/Loader";
 import { PageGuard } from "src/components/common/PermissionGuard";
@@ -23,18 +23,23 @@ const WalkthroughEditPage = () => {
   const { levelId, walkthroughId } =
     useParams() as unknown as WalkthroughEditPageParams;
 
-  const levelResult = useQuery<LevelDetails | undefined, Error>(
-    ["level", LevelService.getLevelById, levelId],
-    async () => (levelId ? LevelService.getLevelById(+levelId) : undefined),
-  );
+  const levelResult = useQuery<LevelDetails | undefined, Error>({
+    queryKey: ["level", LevelService.getLevelById, levelId],
+    queryFn: async () =>
+      levelId ? LevelService.getLevelById(+levelId) : undefined,
+  });
 
-  const walkthroughResult = useQuery<WalkthroughDetails | undefined, Error>(
-    ["walkthrough", WalkthroughService.getWalkthroughById, walkthroughId],
-    async () =>
+  const walkthroughResult = useQuery<WalkthroughDetails | undefined, Error>({
+    queryKey: [
+      "walkthrough",
+      WalkthroughService.getWalkthroughById,
+      walkthroughId,
+    ],
+    queryFn: async () =>
       walkthroughId
         ? WalkthroughService.getWalkthroughById(+walkthroughId)
         : undefined,
-  );
+  });
 
   usePageMetadata(
     () => ({

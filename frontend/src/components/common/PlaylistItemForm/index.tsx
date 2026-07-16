@@ -1,8 +1,8 @@
+import { useQuery } from "@tanstack/react-query";
 import type { FormikHelpers } from "formik";
 import { Formik } from "formik";
 import { Form } from "formik";
 import { useCallback } from "react";
-import { useQuery } from "react-query";
 import { useNavigate } from "react-router-dom";
 import { FormGrid } from "src/components/common/FormGrid";
 import { FormGridButtons } from "src/components/common/FormGrid";
@@ -212,10 +212,10 @@ const PlaylistItemForm = ({
   onSubmit,
   onNavigateToMyPlaylist,
 }: PlaylistItemFormProps) => {
-  const playlistItemResult = useQuery<PlaylistItemDetails, Error>(
-    ["playlists", PlaylistService.get, userId, level.id],
-    async () => PlaylistService.get(userId, level.id),
-  );
+  const playlistItemResult = useQuery<PlaylistItemDetails, Error>({
+    queryKey: ["playlists", PlaylistService.get, userId, level.id],
+    queryFn: async () => PlaylistService.get(userId, level.id),
+  });
 
   if (playlistItemResult.isLoading) {
     return <></>;

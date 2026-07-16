@@ -1,7 +1,7 @@
+import { useQuery } from "@tanstack/react-query";
 import { useCallback } from "react";
 import { useContext } from "react";
 import { useRef } from "react";
-import { useQuery } from "react-query";
 import { useNavigate } from "react-router-dom";
 import { Loader } from "src/components/common/Loader";
 import { PageGuard } from "src/components/common/PermissionGuard";
@@ -25,10 +25,16 @@ const RatingAddAction = ({ level }: RatingAddActionProps) => {
   const navigate = useNavigate();
   const playlistModalRef = useRef<PlaylistAddModalHandle>(null);
 
-  const ratingResult = useQuery<RatingDetails | null, Error>(
-    ["rating", RatingService.getRatingByAuthorAndLevelIds, level.id, user?.id],
-    async () => RatingService.getRatingByAuthorAndLevelIds(level.id, user?.id),
-  );
+  const ratingResult = useQuery<RatingDetails | null, Error>({
+    queryKey: [
+      "rating",
+      RatingService.getRatingByAuthorAndLevelIds,
+      level.id,
+      user?.id,
+    ],
+    queryFn: async () =>
+      RatingService.getRatingByAuthorAndLevelIds(level.id, user?.id),
+  });
 
   const handleGoBack = useCallback(() => {
     navigate(`/levels/${level.id}/ratings`);

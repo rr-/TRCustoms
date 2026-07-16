@@ -1,8 +1,8 @@
 import styles from "./index.module.css";
+import { useQueryClient } from "@tanstack/react-query";
 import { groupBy } from "lodash";
 import { last } from "lodash";
 import { useState } from "react";
-import { useQueryClient } from "react-query";
 import { InfoMessage } from "src/components/common/InfoMessage";
 import { InfoMessageType } from "src/components/common/InfoMessage";
 import { RatingFormValues } from "src/components/common/RatingForm/RatingFormPage";

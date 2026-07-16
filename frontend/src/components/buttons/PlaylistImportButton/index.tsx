@@ -1,5 +1,5 @@
+import { useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
-import { useQueryClient } from "react-query";
 import { Button } from "src/components/common/Button";
 import { ConfirmModal } from "src/components/modals/ConfirmModal";
 import { PlaylistService } from "src/services/PlaylistService";
