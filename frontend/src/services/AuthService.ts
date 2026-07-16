@@ -44,16 +44,31 @@ const getRefreshToken = (): string | null => {
   return StorageService.getItem("refreshToken");
 };
 
+// Single-flight the refresh: concurrent 401s would otherwise each POST to
+// /auth/token/refresh/, and if the backend rotates refresh tokens all but the
+// first would fail and log the user out. Callers share one in-flight refresh.
+let refreshPromise: Promise<string> | null = null;
+
 const getNewAccessToken = async (): Promise<string> => {
-  const refreshToken = getRefreshToken();
-  if (!refreshToken) {
-    throw new AuthError("refresh token not available");
+  if (refreshPromise) {
+    return refreshPromise;
   }
-  const data: RefreshTokenResponse = await postJson("/auth/token/refresh/", {
-    refresh: refreshToken,
-  });
-  StorageService.setItem("accessToken", data.access);
-  return data.access;
+  refreshPromise = (async (): Promise<string> => {
+    const refreshToken = getRefreshToken();
+    if (!refreshToken) {
+      throw new AuthError("refresh token not available");
+    }
+    const data: RefreshTokenResponse = await postJson("/auth/token/refresh/", {
+      refresh: refreshToken,
+    });
+    StorageService.setItem("accessToken", data.access);
+    return data.access;
+  })();
+  try {
+    return await refreshPromise;
+  } finally {
+    refreshPromise = null;
+  }
 };
 
 const logout = () => {
