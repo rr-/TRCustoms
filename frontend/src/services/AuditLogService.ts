@@ -35,7 +35,7 @@ interface AuditLogListing {
   object_type: AuditLogObjectType;
   change_author: UserNested | null;
   change_type: AuditLogChangeType;
-  meta: any;
+  meta: Record<string, string>;
   changes: string[];
   is_action_required: boolean;
 }
@@ -63,8 +63,15 @@ const searchAuditLogs = async (
     is_action_required: boolToSearchString(searchQuery.isActionRequired),
   };
   const { data } = await auditlogsList({ query, throwOnError: true });
-  // The audit log's change list and meta are loosely typed in the schema.
-  return { ...data, searchQuery } as unknown as AuditLogSearchResult;
+  // Only the listing item type diverges from the generated one: the schema
+  // types changes/meta as unknown and object_type as a bare string, while our
+  // AuditLogListing refines them. Confine the cast to results; the pagination
+  // fields type-check on their own.
+  return {
+    ...data,
+    results: data.results as unknown as AuditLogListing[],
+    searchQuery,
+  };
 };
 
 const AuditLogService = {
