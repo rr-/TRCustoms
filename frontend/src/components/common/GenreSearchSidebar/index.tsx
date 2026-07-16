@@ -1,20 +1,18 @@
-import { Formik } from "formik";
-import { Form } from "formik";
 import { useEffect } from "react";
-import { useCallback } from "react";
-import { useState } from "react";
+import { useForm } from "react-hook-form";
 import styles from "src/components/common/LevelSearchSidebar/index.module.css";
 import { Link } from "src/components/common/Link";
 import { SidebarBoxHeader } from "src/components/common/SidebarBox";
 import { SidebarBox } from "src/components/common/SidebarBox";
 import { SubmitButton } from "src/components/formfields/SubmitButton";
-import { TextFormField } from "src/components/formfields/TextFormField";
+import { Form } from "src/components/forms/Form";
+import { TextField } from "src/components/forms/TextField";
 import { IconSearch } from "src/components/icons";
 import type { GenreSearchQuery } from "src/services/GenreService";
 
-const convertSearchQueryToFormikValues = (searchQuery: GenreSearchQuery) => {
-  return { search: searchQuery.search || "" };
-};
+const toFormValues = (searchQuery: GenreSearchQuery) => ({
+  search: searchQuery.search || "",
+});
 
 interface GenreSearchProps {
   defaultSearchQuery: GenreSearchQuery;
@@ -27,61 +25,46 @@ const GenreSearchSidebar = ({
   searchQuery,
   onSearchQueryChange,
 }: GenreSearchProps) => {
-  const [formikValues, setFormikValues] = useState<any>(
-    convertSearchQueryToFormikValues(searchQuery),
-  );
+  const form = useForm({ defaultValues: toFormValues(searchQuery) });
 
-  const handleSubmit = useCallback(
-    async (values: any) => {
-      onSearchQueryChange({
-        ...searchQuery,
-        page: null,
-        search: values.search || null,
-      });
-    },
-    [searchQuery, onSearchQueryChange],
-  );
+  // Keep the form in sync when the query changes externally (URL, reset).
+  const { reset } = form;
+  useEffect(() => reset(toFormValues(searchQuery)), [searchQuery, reset]);
 
-  const handleClear = useCallback(
-    () => onSearchQueryChange(defaultSearchQuery),
-    [onSearchQueryChange, defaultSearchQuery],
-  );
-
-  useEffect(
-    () => setFormikValues(convertSearchQueryToFormikValues(searchQuery)),
-    [searchQuery],
-  );
+  const submit = form.handleSubmit((values) => {
+    onSearchQueryChange({
+      ...searchQuery,
+      page: null,
+      search: values.search || null,
+    });
+  });
 
   return (
     <SidebarBox>
-      <Formik
-        enableReinitialize={true}
-        initialValues={formikValues}
-        onSubmit={handleSubmit}
+      <Form
+        form={form}
+        onSubmit={submit}
+        className={`${styles.wrapper} ChildMarginClear`}
       >
-        {({ submitForm, resetForm }) => (
-          <Form className={`${styles.wrapper} ChildMarginClear`}>
-            <SidebarBoxHeader alignToTabSwitch={true}>
-              <span className={styles.header}>
-                Search filter
-                <Link className={styles.resetButton} onClick={handleClear}>
-                  (reset)
-                </Link>
-              </span>
-            </SidebarBoxHeader>
+        <SidebarBoxHeader alignToTabSwitch={true}>
+          <span className={styles.header}>
+            Search filter
+            <Link
+              className={styles.resetButton}
+              onClick={() => onSearchQueryChange(defaultSearchQuery)}
+            >
+              (reset)
+            </Link>
+          </span>
+        </SidebarBoxHeader>
 
-            <div className={`${styles.section} ${styles.searchBar}`}>
-              <TextFormField label="Genre name" name="search" />
-              <div className="FormField">
-                <SubmitButton
-                  onClick={() => submitForm()}
-                  icon={<IconSearch />}
-                />
-              </div>
-            </div>
-          </Form>
-        )}
-      </Formik>
+        <div className={`${styles.section} ${styles.searchBar}`}>
+          <TextField label="Genre name" name="search" />
+          <div className="FormField">
+            <SubmitButton icon={<IconSearch />} />
+          </div>
+        </div>
+      </Form>
     </SidebarBox>
   );
 };
