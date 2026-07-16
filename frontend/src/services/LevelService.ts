@@ -116,26 +116,16 @@ const getRatingStats = async (levelId: number): Promise<LevelRatingStats> => {
   return data;
 };
 
-interface LevelBaseChangePayload {
-  name?: string;
-  description?: string;
-  engine_id?: number;
-  duration_id?: number;
-  difficulty_id?: number;
-  genre_ids?: number[];
-  tag_ids?: number[];
-  author_ids?: number[];
-  cover_id?: number;
-  screenshot_ids?: number[];
-  file_id?: number;
-}
-
-interface LevelUpdatePayload extends LevelBaseChangePayload {}
-interface LevelCreatePayload extends LevelBaseChangePayload {}
+// Derived from the generated writable type so a new writable field can't be
+// silently dropped: the old hand-written list omitted external_links and
+// trle_id. Optional throughout — update sends a subset, and create asserts the
+// full writable shape because the form's zod schema guarantees the required
+// fields are present at runtime.
+type LevelChangePayload = Partial<LevelDetailsWritable>;
 
 const update = async (
   levelId: number,
-  payload: LevelUpdatePayload,
+  payload: LevelChangePayload,
 ): Promise<LevelDetails> => {
   const { data } = await levelsPartialUpdate({
     path: { id: levelId },
@@ -145,7 +135,7 @@ const update = async (
   return data;
 };
 
-const create = async (payload: LevelCreatePayload): Promise<LevelDetails> => {
+const create = async (payload: LevelChangePayload): Promise<LevelDetails> => {
   const { data } = await levelsCreate({
     // The payload type keeps every field optional (it is shared with the PATCH
     // path), but the form's zod schema guarantees the required ones are present
