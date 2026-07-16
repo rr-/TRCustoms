@@ -11,3 +11,4 @@ yarn-debug.log*
 yarn-error.log*
 docker-compose.override.yml
 .test-dist
+*.dmp
