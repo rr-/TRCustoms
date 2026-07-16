@@ -133,14 +133,12 @@ def increment_download_counter(file: LevelFile, request: Request) -> None:
     agent: str = request.META.get("HTTP_USER_AGENT", "")
     level_id: int = file.level_id
     raw_fp: str = f"{ip}:{agent}:{level_id}"
-    print(raw_fp)
     fp_key: str = hashlib.sha256(raw_fp.encode("utf-8")).hexdigest()
     if cache.get(fp_key):
         return
 
-    file.download_count += 1
+    file.download_count = F("download_count") + 1
     file.save(update_fields=["download_count"])
-    print("what")
     cache.set(
         fp_key,
         True,
