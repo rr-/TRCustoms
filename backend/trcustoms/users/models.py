@@ -194,15 +194,3 @@ class UserSettings(models.Model):
     email_review_updated = models.BooleanField(default=False)
     email_rating_updated = models.BooleanField(default=False)
     email_walkthrough_updated = models.BooleanField(default=False)
-
-
-# Auto-create UserSettings on access if it doesn't exist
-def _get_user_settings(self):
-    if getattr(self, "__settings", None) is not None:
-        return self.__settings
-    settings, _created = UserSettings.objects.get_or_create(user=self)
-    self.__settings = settings
-    return settings
-
-
-User.settings = property(_get_user_settings)

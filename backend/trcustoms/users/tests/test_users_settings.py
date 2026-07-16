@@ -5,10 +5,9 @@ from trcustoms.users.tests.factories import UserFactory
 
 
 @pytest.mark.django_db
-def test_user_settings_auto_created_on_access():
+def test_user_settings_created_with_user():
+    """Every user gets a settings row (with defaults) on creation."""
     user = UserFactory()
-    UserSettings.objects.filter(user=user).delete()
-    assert not UserSettings.objects.filter(user=user).exists()
 
     settings = user.settings
     assert isinstance(settings, UserSettings)
@@ -23,17 +22,9 @@ def test_user_settings_auto_created_on_access():
 
 
 @pytest.mark.django_db
-def test_user_settings_returns_existing_instance():
+def test_user_settings_persisted_values_are_read_back():
     user = UserFactory()
-    UserSettings.objects.filter(user=user).delete()
+    user.settings.email_review_posted = False
+    user.settings.save()
 
-    existing = UserSettings.objects.create(
-        user=user, email_review_posted=False
-    )
-    settings = user.settings
-    assert settings.pk == existing.pk
-    assert settings.email_review_posted is False
-    assert UserSettings.objects.filter(user=user).count() == 1
-
-    settings2 = user.settings
-    assert settings2.pk == existing.pk
+    assert UserSettings.objects.get(user=user).email_review_posted is False
