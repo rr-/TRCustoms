@@ -15,6 +15,7 @@ from trcustoms.levels.tests.factories import LevelFactory
 from trcustoms.users.consts import UserSource
 from trcustoms.users.models import User
 from trcustoms.users.tests.factories import UserFactory
+from trcustoms.users.tokens import ConfirmEmailToken
 
 VALID_PASSWORD = "Test123!"
 
@@ -257,3 +258,17 @@ def test_important_user_email_late_or_uncached_activation(
     assert AuditLog.objects.filter(is_action_required=True).count() == 0
     assert response.status_code == status.HTTP_404_NOT_FOUND, response.content
     assert response.json() == {"detail": "No User matches the given query."}
+
+
+@pytest.mark.django_db
+def test_confirm_email_token_rejected_as_access_token(
+    api_client: APIClient,
+) -> None:
+    """An email-confirmation token must not authenticate API requests."""
+    user = UserFactory()
+    token = str(ConfirmEmailToken.for_user(user))
+
+    api_client.credentials(HTTP_X_ACCESS_TOKEN=f"Bearer {token}")
+    response = api_client.get("/api/users/")
+
+    assert response.status_code == status.HTTP_401_UNAUTHORIZED

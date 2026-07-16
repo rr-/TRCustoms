@@ -11,7 +11,7 @@ from trcustoms.users.models import User
 
 
 class ConfirmEmailToken(Token):
-    token_type = "access"
+    token_type = "email_confirmation"
     lifetime = timedelta(hours=6)
 
 
