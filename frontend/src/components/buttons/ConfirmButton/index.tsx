@@ -10,6 +10,7 @@ interface ConfirmButtonProps {
   buttonLabel: string;
   buttonTooltip?: string | undefined;
   buttonVariant?: ButtonVariant;
+  disableTimeout?: boolean | undefined;
   onConfirm: () => Promise<void>;
 }
 
@@ -19,6 +20,7 @@ const ConfirmButton = ({
   buttonLabel,
   buttonTooltip,
   buttonVariant,
+  disableTimeout,
   onConfirm,
 }: ConfirmButtonProps) => {
   const [isModalActive, setIsModalActive] = useState(false);
@@ -46,6 +48,7 @@ const ConfirmButton = ({
         onClick={handleButtonClick}
         tooltip={buttonTooltip}
         variant={buttonVariant}
+        disableTimeout={disableTimeout}
       >
         {buttonLabel}
       </Button>

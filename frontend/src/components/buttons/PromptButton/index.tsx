@@ -5,11 +5,11 @@ import { PromptModal } from "src/components/modals/PromptModal";
 import { showAlertOnError } from "src/utils/misc";
 
 interface PromptButtonProps {
-  icon: React.ReactElement;
+  icon?: React.ReactElement | undefined;
   text: React.ReactElement | string;
   promptLabel: string;
-  buttonLabel: string;
-  buttonTooltip: string;
+  buttonLabel: React.ReactNode;
+  buttonTooltip?: string | undefined;
   onConfirm: (result: string) => Promise<void>;
   buttonVariant?: ButtonVariant;
   big?: boolean | undefined;

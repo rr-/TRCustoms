@@ -1,10 +1,7 @@
 import { useQueryClient } from "@tanstack/react-query";
-import { useState } from "react";
-import { Button } from "src/components/common/Button";
-import { PromptModal } from "src/components/modals/PromptModal";
+import { PromptButton } from "src/components/buttons/PromptButton";
 import type { TagListing } from "src/services/TagService";
 import { TagService } from "src/services/TagService";
-import { showAlertOnError } from "src/utils/misc";
 import { resetQueries } from "src/utils/misc";
 
 interface TagMergeButtonProps {
@@ -12,36 +9,21 @@ interface TagMergeButtonProps {
 }
 
 const TagMergeButton = ({ tag }: TagMergeButtonProps) => {
-  const [isModalActive, setIsModalActive] = useState(false);
   const queryClient = useQueryClient();
 
-  const handleButtonClick = () => {
-    setIsModalActive(true);
-  };
-
-  const handleModalConfirm = (newTagName: string) => {
-    showAlertOnError(async () => {
-      const targetTag = await TagService.getByName(newTagName);
-      await TagService.merge(tag.id, targetTag.id);
-      resetQueries(queryClient, ["tags", "auditLogs"]);
-    });
+  const handleConfirm = async (newTagName: string) => {
+    const targetTag = await TagService.getByName(newTagName);
+    await TagService.merge(tag.id, targetTag.id);
+    resetQueries(queryClient, ["tags", "auditLogs"]);
   };
 
   return (
-    <>
-      <PromptModal
-        isActive={isModalActive}
-        onIsActiveChange={setIsModalActive}
-        onConfirm={handleModalConfirm}
-        label="Tag name"
-      >
-        Enter name of the tag to merge {tag.name} with.
-      </PromptModal>
-
-      <Button disableTimeout={true} onClick={handleButtonClick}>
-        Merge
-      </Button>
-    </>
+    <PromptButton
+      text={`Enter name of the tag to merge ${tag.name} with.`}
+      promptLabel="Tag name"
+      buttonLabel="Merge"
+      onConfirm={handleConfirm}
+    />
   );
 };
 

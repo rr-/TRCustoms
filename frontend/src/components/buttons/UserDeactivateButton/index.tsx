@@ -1,11 +1,8 @@
 import { useQueryClient } from "@tanstack/react-query";
-import { useState } from "react";
-import { Button } from "src/components/common/Button";
+import { PromptButton } from "src/components/buttons/PromptButton";
 import { IconBan } from "src/components/icons";
-import { PromptModal } from "src/components/modals/PromptModal";
 import { UserService } from "src/services/UserService";
 import type { UserBasic } from "src/services/UserService";
-import { showAlertOnError } from "src/utils/misc";
 import { resetQueries } from "src/utils/misc";
 
 interface UserDeactivateButtonProps {
@@ -19,36 +16,22 @@ const UserDeactivateButton = ({
   onComplete,
   children,
 }: UserDeactivateButtonProps) => {
-  const [isModalActive, setIsModalActive] = useState(false);
   const queryClient = useQueryClient();
 
-  const handleButtonClick = () => {
-    setIsModalActive(true);
-  };
-
-  const handleModalConfirm = (reason: string) => {
-    showAlertOnError(async () => {
-      await UserService.deactivate(user.id, reason);
-      onComplete?.();
-      resetQueries(queryClient, ["user", "users", "auditLogs"]);
-    });
+  const handleConfirm = async (reason: string) => {
+    await UserService.deactivate(user.id, reason);
+    onComplete?.();
+    resetQueries(queryClient, ["user", "users", "auditLogs"]);
   };
 
   return (
-    <>
-      <PromptModal
-        isActive={isModalActive}
-        onIsActiveChange={setIsModalActive}
-        onConfirm={handleModalConfirm}
-        label="Reason"
-      >
-        Please provide the reason for rejecting this user.
-      </PromptModal>
-
-      <Button icon={<IconBan />} onClick={handleButtonClick}>
-        {children || "Reject activation"}
-      </Button>
-    </>
+    <PromptButton
+      icon={<IconBan />}
+      text="Please provide the reason for rejecting this user."
+      promptLabel="Reason"
+      buttonLabel={children || "Reject activation"}
+      onConfirm={handleConfirm}
+    />
   );
 };
 

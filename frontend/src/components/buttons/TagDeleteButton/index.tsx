@@ -1,10 +1,7 @@
 import { useQueryClient } from "@tanstack/react-query";
-import { useState } from "react";
-import { Button } from "src/components/common/Button";
-import { ConfirmModal } from "src/components/modals/ConfirmModal";
+import { ConfirmButton } from "src/components/buttons/ConfirmButton";
 import type { TagListing } from "src/services/TagService";
 import { TagService } from "src/services/TagService";
-import { showAlertOnError } from "src/utils/misc";
 import { resetQueries } from "src/utils/misc";
 
 interface TagDeleteButtonProps {
@@ -12,34 +9,20 @@ interface TagDeleteButtonProps {
 }
 
 const TagDeleteButton = ({ tag }: TagDeleteButtonProps) => {
-  const [isModalActive, setIsModalActive] = useState(false);
   const queryClient = useQueryClient();
 
-  const handleButtonClick = () => {
-    setIsModalActive(true);
-  };
-
-  const handleModalConfirm = () => {
-    showAlertOnError(async () => {
-      await TagService.delete(tag.id);
-      resetQueries(queryClient, ["tags", "auditLogs"]);
-    });
+  const handleConfirm = async () => {
+    await TagService.delete(tag.id);
+    resetQueries(queryClient, ["tags", "auditLogs"]);
   };
 
   return (
-    <>
-      <ConfirmModal
-        isActive={isModalActive}
-        onIsActiveChange={setIsModalActive}
-        onConfirm={handleModalConfirm}
-      >
-        Are you sure you want to delete tag {tag.name}?
-      </ConfirmModal>
-
-      <Button disableTimeout={true} onClick={handleButtonClick}>
-        Delete
-      </Button>
-    </>
+    <ConfirmButton
+      text={`Are you sure you want to delete tag ${tag.name}?`}
+      buttonLabel="Delete"
+      disableTimeout={true}
+      onConfirm={handleConfirm}
+    />
   );
 };
 
