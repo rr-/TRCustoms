@@ -272,3 +272,32 @@ def test_confirm_email_token_rejected_as_access_token(
     response = api_client.get("/api/users/")
 
     assert response.status_code == status.HTTP_401_UNAUTHORIZED
+
+
+@pytest.mark.django_db
+def test_resend_activation_email_unknown_user_is_silent(
+    api_client: APIClient,
+) -> None:
+    """Unknown accounts get a 200 with no email (no enumeration oracle)."""
+    response = api_client.post(
+        "/api/users/resend_activation_email/",
+        data={"username": "does-not-exist"},
+    )
+
+    assert response.status_code == status.HTTP_200_OK
+    assert len(mail.outbox) == 0
+
+
+@pytest.mark.django_db
+def test_resend_activation_email_existing_user_sends_mail(
+    api_client: APIClient,
+) -> None:
+    user = UserFactory(email="someone@example.com", is_email_confirmed=False)
+
+    response = api_client.post(
+        "/api/users/resend_activation_email/",
+        data={"username": user.username},
+    )
+
+    assert response.status_code == status.HTTP_200_OK
+    assert len(mail.outbox) == 1

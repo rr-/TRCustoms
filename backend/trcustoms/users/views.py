@@ -239,7 +239,10 @@ class UserViewSet(
             Q(username=serializer.data["username"])
             | Q(email__iexact=serializer.data["username"])
         ).first()
-        send_email_confirmation_mail(user)
+        # Respond identically whether or not the account exists so the
+        # endpoint can't be used to enumerate usernames/emails.
+        if user:
+            send_email_confirmation_mail(user)
         return Response({}, status.HTTP_200_OK)
 
     @action(detail=False, methods=["post"])
