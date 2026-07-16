@@ -46,7 +46,6 @@ def _has_name(row: dict) -> bool:
 
 
 def _process_row(row: dict, request) -> bool:
-    print(row)
     name = (row.get("Name") or "").strip()
     subtitle_raw = row.get("Subtitle") or ""
     subtitle = subtitle_raw.strip() or None

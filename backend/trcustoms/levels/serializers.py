@@ -100,9 +100,6 @@ class LevelNestedSerializer(serializers.ModelSerializer):
 
 class LevelListingSerializer(serializers.ModelSerializer):
     name = CustomCharField(validators=[MaxLengthValidator(100)])
-    rejection_reason = CustomCharField(
-        validators=[MaxLengthValidator(500)], required=False, allow_blank=True
-    )
 
     download_count = serializers.ReadOnlyField()
     rating_count = serializers.ReadOnlyField()

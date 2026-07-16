@@ -169,7 +169,7 @@ class LevelViewSet(
         if not serializer.is_valid():
             return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
         level = self.get_object()
-        reason = serializer.data["reason"]
+        reason = serializer.validated_data["reason"]
         reject_level(level, request, reason)
         return Response({})
 
