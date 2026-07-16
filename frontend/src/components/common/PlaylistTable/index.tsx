@@ -1,17 +1,16 @@
 import { EditPlaylistItemButton } from "./EditButton";
 import { RemovePlaylistItemButton } from "./RemoveButton";
 import styles from "./index.module.css";
-import { useContext } from "react";
 import type { DataTableColumn } from "src/components/common/DataTable";
 import { DataTable } from "src/components/common/DataTable";
 import { hasPermission } from "src/components/common/PermissionGuard";
 import { LevelLink } from "src/components/links/LevelLink";
-import { UserContext } from "src/contexts/UserContext";
 import type { PlaylistItemListing } from "src/services/PlaylistService";
 import type { PlaylistSearchQuery } from "src/services/PlaylistService";
 import { PlaylistItemStatus } from "src/services/PlaylistService";
 import { PlaylistService } from "src/services/PlaylistService";
 import { UserPermission } from "src/services/UserService";
+import { useUser } from "src/stores/user";
 import { formatDate } from "src/utils/string";
 
 interface PlaylistTableProps {
@@ -27,7 +26,7 @@ const PlaylistTable = ({
   searchQuery,
   onSearchQueryChange,
 }: PlaylistTableProps) => {
-  const loggedInUser = useContext(UserContext).user;
+  const loggedInUser = useUser().user;
 
   const columns: DataTableColumn<PlaylistItemListing>[] = [
     {

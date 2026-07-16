@@ -18,11 +18,11 @@ import { TextField } from "src/components/forms/fields/TextField";
 import { useFormSubmit } from "src/components/forms/useFormSubmit";
 import { UserLink } from "src/components/links/UserLink";
 import { ConfigContext } from "src/contexts/ConfigContext";
-import { UserContext } from "src/contexts/UserContext";
 import { AuthService } from "src/services/AuthService";
 import { UploadType } from "src/services/FileService";
 import type { UserDetails } from "src/services/UserService";
 import { UserService } from "src/services/UserService";
+import { useUser } from "src/stores/user";
 import { DisplayMode } from "src/types";
 import { makeSentence } from "src/utils/string";
 import { firstError } from "src/utils/validation";
@@ -106,7 +106,7 @@ const makeSchema = (isNew: boolean) =>
 
 const UserForm = ({ user, onGoBack, onSubmit }: UserFormProps) => {
   const { config } = useContext(ConfigContext);
-  const { setUser } = useContext(UserContext);
+  const { setUser } = useUser();
 
   const form = useForm<UserFormValues>({
     resolver: zodResolver(makeSchema(!user)),

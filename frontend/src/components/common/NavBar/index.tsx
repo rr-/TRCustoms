@@ -1,5 +1,4 @@
 import styles from "./index.module.css";
-import { useContext } from "react";
 import type { LinkProps } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { NavLink } from "react-router-dom";
@@ -9,8 +8,8 @@ import appStyles from "src/components/App/index.module.css";
 import { Logo } from "src/components/common/Logo";
 import { PermissionGuard } from "src/components/common/PermissionGuard";
 import { UserPicture } from "src/components/common/UserPicture";
-import { UserContext } from "src/contexts/UserContext";
 import { UserPermission } from "src/services/UserService";
+import { useUser } from "src/stores/user";
 
 const MyNavLink = ({ children, ...args }: any) => {
   return (
@@ -51,7 +50,7 @@ const LevelsNavLink = ({ children, to, ...rest }: LinkProps) => {
 };
 
 const NavBar = () => {
-  const { user } = useContext(UserContext);
+  const { user } = useUser();
 
   return (
     <div className={appStyles.mainContainer}>

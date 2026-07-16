@@ -5,21 +5,17 @@ import userEvent from "@testing-library/user-event";
 import type { ReactNode } from "react";
 import { MemoryRouter } from "react-router-dom";
 import { LoginForm } from "src/components/forms/LoginForm";
-import { UserContext } from "src/contexts/UserContext";
 import { AuthService } from "src/services/AuthService";
 import { UserService } from "src/services/UserService";
+import { useUser } from "src/stores/user";
 import { beforeEach } from "vitest";
 import { describe } from "vitest";
 import { expect } from "vitest";
 import { test } from "vitest";
 import { vi } from "vitest";
 
-const setUser = vi.fn();
-
 const wrapper = ({ children }: { children: ReactNode }) => (
-  <UserContext.Provider value={{ user: null, setUser }}>
-    <MemoryRouter>{children}</MemoryRouter>
-  </UserContext.Provider>
+  <MemoryRouter>{children}</MemoryRouter>
 );
 
 const submitLogin = async () => {
@@ -31,7 +27,6 @@ const submitLogin = async () => {
 describe("LoginForm", () => {
   beforeEach(() => {
     vi.restoreAllMocks();
-    setUser.mockClear();
   });
 
   test("renders a Log in button", () => {
@@ -54,7 +49,7 @@ describe("LoginForm", () => {
     await waitFor(() =>
       expect(login).toHaveBeenCalledWith("tester", "hunter2000"),
     );
-    expect(setUser).toHaveBeenCalledWith({ id: 1 });
+    await waitFor(() => expect(useUser.getState().user).toEqual({ id: 1 }));
     expect(onLogin).toHaveBeenCalled();
   });
 

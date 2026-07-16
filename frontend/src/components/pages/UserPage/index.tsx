@@ -1,6 +1,5 @@
 import styles from "./index.module.css";
 import { useQuery } from "@tanstack/react-query";
-import { useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import { Loader } from "src/components/common/Loader";
@@ -16,12 +15,12 @@ import { ReviewsTab } from "src/components/pages/UserPage/ReviewsTab";
 import { UserHeader } from "src/components/pages/UserPage/UserHeader";
 import { UserSidebar } from "src/components/pages/UserPage/UserSidebar";
 import { WalkthroughsTab } from "src/components/pages/UserPage/WalkthroughsTab";
-import { UserContext } from "src/contexts/UserContext";
 import type { UserDetails } from "src/services/UserService";
 import { UserPermission } from "src/services/UserService";
 import { UserService } from "src/services/UserService";
 import { usePageMetadata } from "src/stores/pageMetadata";
 import { useScrollStore } from "src/stores/scroll";
+import { useUser } from "src/stores/user";
 
 interface UserPageProps {
   tabName?: string;
@@ -30,7 +29,7 @@ interface UserPageProps {
 const UserPage = ({ tabName }: UserPageProps) => {
   const navigate = useNavigate();
   const { userId = "" } = useParams();
-  const loggedInUser = useContext(UserContext).user;
+  const loggedInUser = useUser().user;
   const isLoggedIn = +userId === loggedInUser?.id;
   const { setShouldScroll } = useScrollStore((state) => state);
 

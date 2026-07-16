@@ -1,4 +1,3 @@
-import { useContext } from "react";
 import { useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
 import { UserResendActivationEmailButton } from "src/components/buttons/UserResendActivationEmailButton";
@@ -9,9 +8,9 @@ import { FormButtons } from "src/components/forms/FormButtons";
 import { PasswordField } from "src/components/forms/fields/PasswordField";
 import { TextField } from "src/components/forms/fields/TextField";
 import { useFormSubmit } from "src/components/forms/useFormSubmit";
-import { UserContext } from "src/contexts/UserContext";
 import { AuthService } from "src/services/AuthService";
 import { UserService } from "src/services/UserService";
+import { useUser } from "src/stores/user";
 import { getResponseError } from "src/utils/misc";
 import { makeSentence } from "src/utils/string";
 
@@ -25,7 +24,7 @@ interface LoginFormValues {
 }
 
 const LoginForm = ({ onLogin }: LoginFormProps) => {
-  const { setUser } = useContext(UserContext);
+  const { setUser } = useUser();
   const form = useForm<LoginFormValues>({
     defaultValues: { username: "", password: "" },
   });

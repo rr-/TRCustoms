@@ -1,20 +1,19 @@
 import { useState } from "react";
 import { useCallback } from "react";
-import { useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { InfoMessageType } from "src/components/common/InfoMessage";
 import { InfoMessage } from "src/components/common/InfoMessage";
 import { UserForm } from "src/components/forms/UserForm";
 import { PlainLayout } from "src/components/layouts/PlainLayout";
-import { UserContext } from "src/contexts/UserContext";
 import { AuthService } from "src/services/AuthService";
 import type { UserDetails } from "src/services/UserService";
 import { UserService } from "src/services/UserService";
 import { usePageMetadata } from "src/stores/pageMetadata";
+import { useUser } from "src/stores/user";
 
 const RegisterPage = () => {
   const navigate = useNavigate();
-  const { setUser } = useContext(UserContext);
+  const { setUser } = useUser();
   const [isComplete, setIsComplete] = useState(false);
 
   const handleSubmit = useCallback(

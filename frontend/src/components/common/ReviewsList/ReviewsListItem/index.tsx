@@ -1,5 +1,4 @@
 import styles from "./index.module.css";
-import { useContext } from "react";
 import { useEffect } from "react";
 import { useState } from "react";
 import { ReviewDeleteButton } from "src/components/buttons/ReviewDeleteButton";
@@ -13,10 +12,10 @@ import { UserPicture } from "src/components/common/UserPicture";
 import { LevelLink } from "src/components/links/LevelLink";
 import { UserLink } from "src/components/links/UserLink";
 import { Markdown } from "src/components/markdown/Markdown";
-import { UserContext } from "src/contexts/UserContext";
 import type { ReviewListing } from "src/services/ReviewService";
 import { ReviewService } from "src/services/ReviewService";
 import { UserPermission } from "src/services/UserService";
+import { useUser } from "src/stores/user";
 import { extractErrorMessage } from "src/utils/misc";
 import { formatDate } from "src/utils/string";
 
@@ -33,7 +32,7 @@ const ReviewsListItem = ({
   showLevels,
   showExcerpts,
 }: ReviewsListItemProps) => {
-  const { user } = useContext(UserContext);
+  const { user } = useUser();
   const [isExcerptExpanded, setIsExcerptExpanded] = useState(false);
   const [isVotePending, setIsVotePending] = useState(false);
   const [voteState, setVoteState] = useState({

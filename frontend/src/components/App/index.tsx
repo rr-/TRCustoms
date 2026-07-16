@@ -10,8 +10,8 @@ import {
   ConfigContextProvider,
   ConfigContext,
 } from "src/contexts/ConfigContext";
-import { UserContextProvider } from "src/contexts/UserContext";
 import { useSettings } from "src/stores/settings";
+import { useUser } from "src/stores/user";
 
 // Each page is code-split into its own chunk so the initial bundle no longer
 // ships every route. The pages use named exports, so unwrap the chosen name
@@ -319,20 +319,23 @@ const App = () => {
     document.documentElement.dataset.theme = theme.stub;
   }, [theme]);
 
+  useEffect(() => {
+    // Try to restore the session when the application starts.
+    useUser.getState().fetchUser();
+  }, []);
+
   const classNames = [styles.content, styles.mainContainer];
 
   return (
     <ConfigContextProvider>
-      <UserContextProvider>
-        <EnvironmentWatermark>
-          <PageMetadata />
-          <GlobalMessage />
-          <NavBar />
-          <main className={classNames.join(" ")}>
-            <AppRoutes />
-          </main>
-        </EnvironmentWatermark>
-      </UserContextProvider>
+      <EnvironmentWatermark>
+        <PageMetadata />
+        <GlobalMessage />
+        <NavBar />
+        <main className={classNames.join(" ")}>
+          <AppRoutes />
+        </main>
+      </EnvironmentWatermark>
     </ConfigContextProvider>
   );
 };

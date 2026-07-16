@@ -1,18 +1,17 @@
 import { useQuery } from "@tanstack/react-query";
 import { useCallback } from "react";
 import { useRef } from "react";
-import { useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { Loader } from "src/components/common/Loader";
 import { PageGuard } from "src/components/common/PermissionGuard";
 import { ReviewForm } from "src/components/forms/ReviewForm";
 import type { PlaylistAddModalHandle } from "src/components/modals/PlaylistAddModal";
 import { PlaylistAddModal } from "src/components/modals/PlaylistAddModal";
-import { UserContext } from "src/contexts/UserContext";
 import type { LevelNested } from "src/services/LevelService";
 import type { ReviewDetails } from "src/services/ReviewService";
 import { ReviewService } from "src/services/ReviewService";
 import { UserPermission } from "src/services/UserService";
+import { useUser } from "src/stores/user";
 
 interface ReviewAddActionProps {
   level: LevelNested;
@@ -20,7 +19,7 @@ interface ReviewAddActionProps {
 
 const ReviewAddAction = ({ level }: ReviewAddActionProps) => {
   const navigate = useNavigate();
-  const { user } = useContext(UserContext);
+  const { user } = useUser();
   const playlistModalRef = useRef<PlaylistAddModalHandle>(null);
 
   const reviewResult = useQuery<ReviewDetails | null, Error>({

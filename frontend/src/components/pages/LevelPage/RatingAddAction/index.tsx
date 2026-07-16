@@ -9,18 +9,18 @@ import { RatingForm } from "src/components/forms/RatingForm";
 import type { PlaylistAddModalHandle } from "src/components/modals/PlaylistAddModal";
 import { PlaylistAddModal } from "src/components/modals/PlaylistAddModal";
 import { ConfigContext } from "src/contexts/ConfigContext";
-import { UserContext } from "src/contexts/UserContext";
 import type { LevelNested } from "src/services/LevelService";
 import type { RatingDetails } from "src/services/RatingService";
 import { RatingService } from "src/services/RatingService";
 import { UserPermission } from "src/services/UserService";
+import { useUser } from "src/stores/user";
 
 interface RatingAddActionProps {
   level: LevelNested;
 }
 
 const RatingAddAction = ({ level }: RatingAddActionProps) => {
-  const { user } = useContext(UserContext);
+  const { user } = useUser();
   const { config } = useContext(ConfigContext);
   const navigate = useNavigate();
   const playlistModalRef = useRef<PlaylistAddModalHandle>(null);

@@ -1,14 +1,14 @@
-import { useContext, useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { Checkbox } from "src/components/common/Checkbox";
 import { Radioboxes } from "src/components/common/Radioboxes";
 import { ThemeSwitcher } from "src/components/common/ThemeSwitcher";
 import { PlainLayout } from "src/components/layouts/PlainLayout";
-import { UserContext } from "src/contexts/UserContext";
 import type { UserDetails } from "src/services/UserService";
 import { UserService } from "src/services/UserService";
 import { usePageMetadata } from "src/stores/pageMetadata";
 import { useSettings } from "src/stores/settings";
 import { AutoPlaylistChoice, MarkdownPreviewMode } from "src/stores/settings";
+import { useUser } from "src/stores/user";
 
 // Email notification settings configuration
 const emailSettingsConfig = [
@@ -57,7 +57,7 @@ const EmailCheckbox = ({
     React.SetStateAction<Record<EmailSettingKey, boolean>>
   >;
   user: UserDetails | null;
-  setUser: React.Dispatch<React.SetStateAction<UserDetails | null>>;
+  setUser: (user: UserDetails | null) => void;
 }) => (
   <Checkbox
     label={label}
@@ -80,7 +80,7 @@ const ThemeSettings = () => (
 );
 
 const EmailSettings = () => {
-  const { user, setUser } = useContext(UserContext);
+  const { user, setUser } = useUser();
   const [userSettings, setUserSettings] = useState<
     Record<EmailSettingKey, boolean>
   >(resolveEmailSettings(user?.settings));

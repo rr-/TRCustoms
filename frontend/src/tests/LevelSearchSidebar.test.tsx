@@ -5,7 +5,6 @@ import userEvent from "@testing-library/user-event";
 import type { ReactNode } from "react";
 import { MemoryRouter } from "react-router-dom";
 import { LevelSearchSidebar } from "src/components/common/LevelSearchSidebar";
-import { UserContext } from "src/contexts/UserContext";
 import { beforeEach } from "vitest";
 import { describe } from "vitest";
 import { expect } from "vitest";
@@ -19,9 +18,7 @@ const defaultSearchQuery = {
 } as any;
 
 const wrapper = ({ children }: { children: ReactNode }) => (
-  <UserContext.Provider value={{ user: null, setUser: vi.fn() }}>
-    <MemoryRouter>{children}</MemoryRouter>
-  </UserContext.Provider>
+  <MemoryRouter>{children}</MemoryRouter>
 );
 
 describe("LevelSearchSidebar", () => {

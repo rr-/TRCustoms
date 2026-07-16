@@ -6,7 +6,6 @@ import userEvent from "@testing-library/user-event";
 import type { ReactNode } from "react";
 import { MemoryRouter } from "react-router-dom";
 import { LevelForm } from "src/components/forms/LevelForm";
-import { UserContext } from "src/contexts/UserContext";
 import { LevelService } from "src/services/LevelService";
 import { beforeEach } from "vitest";
 import { describe } from "vitest";
@@ -20,9 +19,7 @@ const wrapper = ({ children }: { children: ReactNode }) => {
   });
   return (
     <QueryClientProvider client={queryClient}>
-      <UserContext.Provider value={{ user: null, setUser: vi.fn() }}>
-        <MemoryRouter>{children}</MemoryRouter>
-      </UserContext.Provider>
+      <MemoryRouter>{children}</MemoryRouter>
     </QueryClientProvider>
   );
 };

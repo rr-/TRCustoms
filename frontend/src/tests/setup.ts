@@ -3,13 +3,14 @@ import { cleanup } from "@testing-library/react";
 import { usePageMetadataStore } from "src/stores/pageMetadata";
 import { useScrollStore } from "src/stores/scroll";
 import { useSettings } from "src/stores/settings";
+import { useUser } from "src/stores/user";
 import { afterEach, vi } from "vitest";
 
 // The zustand stores are module-level singletons created once per worker.
 // With per-file isolation off (see vite.config.js), any state a test writes
 // would otherwise persist into the next file sharing the worker. Snapshot the
 // initial state of each store now and restore it after every test.
-const STORES = [useSettings, useScrollStore, usePageMetadataStore];
+const STORES = [useSettings, useScrollStore, usePageMetadataStore, useUser];
 const INITIAL_STATE = STORES.map((store) => ({ ...store.getState() }));
 
 // happy-dom ships no window.alert (jsdom stubs one); provide a noop so code

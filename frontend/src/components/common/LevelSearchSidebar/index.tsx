@@ -1,5 +1,4 @@
 import styles from "./index.module.css";
-import { useContext } from "react";
 import { useEffect } from "react";
 import { useCallback } from "react";
 import { useForm } from "react-hook-form";
@@ -22,11 +21,11 @@ import { SubmitButton } from "src/components/forms/SubmitButton";
 import { DropDownField } from "src/components/forms/fields/DropDownField";
 import { TextField } from "src/components/forms/fields/TextField";
 import { IconSearch } from "src/components/icons";
-import { UserContext } from "src/contexts/UserContext";
 import { LevelPlaylistDroppedLevelFilter } from "src/services/LevelService";
 import { LevelPlaylistFinishedLevelFilter } from "src/services/LevelService";
 import type { LevelSearchQuery } from "src/services/LevelService";
 import { UserPermission } from "src/services/UserService";
+import { useUser } from "src/stores/user";
 
 const sortOptions = [
   { label: "Most recent", value: "-created" },
@@ -80,7 +79,7 @@ const LevelSearchSidebar = ({
   searchQuery,
   onSearchQueryChange,
 }: LevelSearchProps) => {
-  const loggedInUser = useContext(UserContext).user;
+  const loggedInUser = useUser().user;
   const form = useForm({
     defaultValues: toFormValues(searchQuery, defaultSearchQuery),
   });

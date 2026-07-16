@@ -1,6 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
 import { useCallback } from "react";
-import { useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import { Loader } from "src/components/common/Loader";
@@ -8,18 +7,18 @@ import { PageGuard } from "src/components/common/PermissionGuard";
 import { SmartWrap } from "src/components/common/SmartWrap";
 import { UserForm } from "src/components/forms/UserForm";
 import { PlainLayout } from "src/components/layouts/PlainLayout";
-import { UserContext } from "src/contexts/UserContext";
 import { UserService } from "src/services/UserService";
 import type { UserDetails } from "src/services/UserService";
 import { UserPermission } from "src/services/UserService";
 import { usePageMetadata } from "src/stores/pageMetadata";
+import { useUser } from "src/stores/user";
 
 interface UserEditViewProps {
   userId: string;
 }
 
 const UserEditPageView = ({ userId }: UserEditViewProps) => {
-  const userContext = useContext(UserContext);
+  const userContext = useUser();
   const navigate = useNavigate();
 
   const result = useQuery<UserDetails, Error>({

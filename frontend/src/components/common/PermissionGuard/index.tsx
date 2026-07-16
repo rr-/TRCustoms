@@ -1,9 +1,8 @@
-import { useContext } from "react";
 import { Error403Page } from "src/components/pages/ErrorPage";
-import { UserContext } from "src/contexts/UserContext";
 import type { UserDetails } from "src/services/UserService";
 import type { UserNested } from "src/services/UserService";
 import { UserPermission } from "src/services/UserService";
+import { useUser } from "src/stores/user";
 
 interface CommonGuardProps {
   alternative?: React.ReactNode | undefined;
@@ -60,7 +59,7 @@ const PermissionGuard = ({
   owningUsers,
   ...props
 }: PermissionGuardProps) => {
-  const { user } = useContext(UserContext);
+  const { user } = useUser();
   const isShown = hasPermission(
     user,
     require,
@@ -71,14 +70,14 @@ const PermissionGuard = ({
 };
 
 const LoggedInUserGuard = ({ user, ...props }: UserGuardProps) => {
-  const userContext = useContext(UserContext);
+  const userContext = useUser();
   const isShown = user?.id === userContext.user?.id;
 
   return <GenericGuard {...props} isShown={isShown} />;
 };
 
 const PageGuard = ({ require, owningUserIds, children }: PageGuardProps) => {
-  const { user } = useContext(UserContext);
+  const { user } = useUser();
   const isShown = hasPermission(user, require, owningUserIds);
 
   return (

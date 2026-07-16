@@ -5,7 +5,6 @@ import userEvent from "@testing-library/user-event";
 import type { ReactNode } from "react";
 import { MemoryRouter } from "react-router-dom";
 import { UserForm } from "src/components/forms/UserForm";
-import { UserContext } from "src/contexts/UserContext";
 import { UserService } from "src/services/UserService";
 import { beforeEach } from "vitest";
 import { describe } from "vitest";
@@ -14,9 +13,7 @@ import { test } from "vitest";
 import { vi } from "vitest";
 
 const wrapper = ({ children }: { children: ReactNode }) => (
-  <UserContext.Provider value={{ user: null, setUser: vi.fn() }}>
-    <MemoryRouter>{children}</MemoryRouter>
-  </UserContext.Provider>
+  <MemoryRouter>{children}</MemoryRouter>
 );
 
 const renderForm = (onSubmit = vi.fn()) =>

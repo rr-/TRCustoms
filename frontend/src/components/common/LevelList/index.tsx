@@ -1,5 +1,4 @@
 import styles from "./index.module.css";
-import { useContext } from "react";
 import { DataList } from "src/components/common/DataList";
 import { LevelRating } from "src/components/common/LevelRating";
 import { Link } from "src/components/common/Link";
@@ -9,10 +8,10 @@ import { IconXCircle } from "src/components/icons";
 import { IconDownload } from "src/components/icons";
 import { LevelAuthorsLink } from "src/components/links/LevelAuthorsLink";
 import { LevelLink } from "src/components/links/LevelLink";
-import { UserContext } from "src/contexts/UserContext";
 import type { LevelListing } from "src/services/LevelService";
 import type { LevelSearchQuery } from "src/services/LevelService";
 import { LevelService } from "src/services/LevelService";
+import { useUser } from "src/stores/user";
 import { formatDate } from "src/utils/string";
 import { formatFileSize } from "src/utils/string";
 import { EMPTY_INPUT_PLACEHOLDER } from "src/utils/string";
@@ -23,7 +22,7 @@ interface LevelViewProps {
 }
 
 const LevelView = ({ level }: LevelViewProps) => {
-  const loggedInUser = useContext(UserContext).user;
+  const loggedInUser = useUser().user;
 
   const author = (
     <span>

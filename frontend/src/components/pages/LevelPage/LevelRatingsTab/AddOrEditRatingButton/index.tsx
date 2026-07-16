@@ -1,20 +1,19 @@
 import { useQuery } from "@tanstack/react-query";
-import { useContext } from "react";
 import { Button } from "src/components/common/Button";
 import { PermissionGuard } from "src/components/common/PermissionGuard";
 import { IconThumbUp } from "src/components/icons";
-import { UserContext } from "src/contexts/UserContext";
 import type { LevelDetails } from "src/services/LevelService";
 import type { RatingDetails } from "src/services/RatingService";
 import { RatingService } from "src/services/RatingService";
 import { UserPermission } from "src/services/UserService";
+import { useUser } from "src/stores/user";
 
 interface AddOrEditRatingButtonProps {
   level: LevelDetails;
 }
 
 const AddOrEditRatingButton = ({ level }: AddOrEditRatingButtonProps) => {
-  const { user } = useContext(UserContext);
+  const { user } = useUser();
 
   const ratingResult = useQuery<RatingDetails | null, Error>({
     queryKey: [

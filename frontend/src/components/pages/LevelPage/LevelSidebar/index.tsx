@@ -1,5 +1,4 @@
 import styles from "./index.module.css";
-import { useContext } from "react";
 import { PlaylistAddButton } from "src/components/buttons/PlaylistAddButton";
 import { Button } from "src/components/common/Button";
 import { ButtonVariant } from "src/components/common/Button";
@@ -18,9 +17,9 @@ import { EngineLink } from "src/components/links/EngineLink";
 import { GenreLink } from "src/components/links/GenreLink";
 import { TagLink } from "src/components/links/TagLink";
 import { UserLink } from "src/components/links/UserLink";
-import { UserContext } from "src/contexts/UserContext";
 import { ExternalLinkType } from "src/services/LevelService";
 import type { LevelDetails } from "src/services/LevelService";
+import { useUser } from "src/stores/user";
 import { DisplayMode } from "src/types";
 import { formatFileSize } from "src/utils/string";
 import { formatDate } from "src/utils/string";
@@ -31,7 +30,7 @@ interface LevelSidebarProps {
 }
 
 const LevelSidebar = ({ level }: LevelSidebarProps) => {
-  const { user } = useContext(UserContext);
+  const { user } = useUser();
 
   const showFileGoneAlert = () =>
     alert("This file is no longer available on our website.");

@@ -25,7 +25,6 @@ import { UsersField } from "src/components/forms/fields/UsersField";
 import { useFormSubmit } from "src/components/forms/useFormSubmit";
 import { LevelLink } from "src/components/links/LevelLink";
 import { ConfigContext } from "src/contexts/ConfigContext";
-import { UserContext } from "src/contexts/UserContext";
 import type { Config } from "src/services/ConfigService";
 import type { UploadedFile } from "src/services/FileService";
 import { UploadType } from "src/services/FileService";
@@ -36,6 +35,7 @@ import type { LevelDetails } from "src/services/LevelService";
 import { LevelService } from "src/services/LevelService";
 import { TagNested } from "src/services/TagService";
 import type { UserNested } from "src/services/UserService";
+import { useUser } from "src/stores/user";
 import { DisplayMode } from "src/types";
 import { extractNestedErrorText } from "src/utils/misc";
 import { resetQueries } from "src/utils/misc";
@@ -249,7 +249,7 @@ const applyLevelServerErrors = (
 };
 
 const LevelForm = ({ level, onGoBack, onSubmit }: LevelFormProps) => {
-  const { user } = useContext(UserContext);
+  const { user } = useUser();
   const queryClient = useQueryClient();
   const { config } = useContext(ConfigContext);
 

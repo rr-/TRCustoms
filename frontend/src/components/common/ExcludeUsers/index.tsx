@@ -1,8 +1,7 @@
 import { useEffect } from "react";
-import { useContext } from "react";
 import { useState } from "react";
-import { UserContext } from "src/contexts/UserContext";
 import type { UserNested } from "src/services/UserService";
+import { useUser } from "src/stores/user";
 
 interface ExcludeUsersProps {
   users: UserNested[];
@@ -11,7 +10,7 @@ interface ExcludeUsersProps {
 }
 
 const ExcludeUsers = ({ users, alternative, children }: ExcludeUsersProps) => {
-  const { user } = useContext(UserContext);
+  const { user } = useUser();
   const [isShown, setIsShown] = useState<boolean>(false);
 
   useEffect(() => {
