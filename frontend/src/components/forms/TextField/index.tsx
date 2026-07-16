@@ -5,11 +5,18 @@ import type { BaseFieldProps } from "src/components/forms/BaseField";
 interface TextFieldProps extends Omit<BaseFieldProps, "children"> {
   readonly?: boolean | undefined;
   type?: string | undefined;
+  placeholder?: string | undefined;
 }
 
 // react-hook-form port of TextFormField: a single-line text input bound to the
 // form by register(). Reuses the existing global input styles.
-const TextField = ({ name, readonly, type, ...baseProps }: TextFieldProps) => {
+const TextField = ({
+  name,
+  readonly,
+  type,
+  placeholder,
+  ...baseProps
+}: TextFieldProps) => {
   const { register } = useFormContext();
   return (
     <BaseField name={name} {...baseProps}>
@@ -17,6 +24,7 @@ const TextField = ({ name, readonly, type, ...baseProps }: TextFieldProps) => {
         id={name}
         {...register(name)}
         disabled={readonly}
+        placeholder={placeholder}
         className="TextFormField--input Input"
         type={type || "text"}
       />

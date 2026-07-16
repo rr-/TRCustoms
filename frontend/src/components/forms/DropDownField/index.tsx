@@ -13,6 +13,7 @@ interface DropDownFieldProps extends Omit<BaseFieldProps, "children"> {
   options: DropDownOption[];
   readonly?: boolean | undefined;
   allowNull?: boolean | undefined;
+  nullLabel?: string | undefined;
   multiple?: boolean | undefined;
   onChange?: (() => void) | undefined;
 }
@@ -25,6 +26,7 @@ const DropDownField = ({
   options,
   readonly,
   allowNull = false,
+  nullLabel = "Select an option…",
   multiple,
   onChange,
   ...baseProps
@@ -59,7 +61,7 @@ const DropDownField = ({
           >
             {!multiple && (
               <option disabled={!allowNull} value="">
-                Select an option…
+                {nullLabel}
               </option>
             )}
             {options.map(({ value, label }) => (

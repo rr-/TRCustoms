@@ -1,11 +1,11 @@
 import styles from "./index.module.css";
 import { range } from "lodash";
-import { useState, useCallback } from "react";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
 import { useSearchParams } from "react-router-dom";
 import { ButtonVariant } from "src/components/common/Button";
 import { Card, CardList } from "src/components/common/Card";
 import { DataList } from "src/components/common/DataList";
-import { Dropdown, type DropdownOption } from "src/components/common/Dropdown";
 import { ExtrasSidebar } from "src/components/common/ExtrasSidebar";
 import {
   FormGrid,
@@ -15,8 +15,10 @@ import {
 import { Link } from "src/components/common/Link";
 import { Section } from "src/components/common/Section";
 import { SectionHeader } from "src/components/common/Section";
-import { TextInput } from "src/components/common/TextInput";
 import { SubmitButton } from "src/components/formfields/SubmitButton";
+import { DropDownField } from "src/components/forms/DropDownField";
+import { Form } from "src/components/forms/Form";
+import { TextField } from "src/components/forms/TextField";
 import { SidebarLayout } from "src/components/layouts/SidebarLayout";
 import { usePageMetadata } from "src/contexts/PageMetadataContext";
 import {
@@ -68,7 +70,7 @@ const EventCataloguePage = () => {
   );
 
   const currentYear = new Date().getFullYear();
-  const yearOptions: DropdownOption[] = range(1999, currentYear + 1)
+  const yearOptions = range(1999, currentYear + 1)
     .map((year) => ({ value: year, label: `${year}` }))
     .reverse();
 
@@ -78,10 +80,12 @@ const EventCataloguePage = () => {
     ? Number(searchParams.get("year"))
     : undefined;
 
-  const [formSearch, setFormSearch] = useState<string>(initialSearchParam);
-  const [formYear, setFormYear] = useState<number | undefined>(
-    initialYearParam,
-  );
+  const form = useForm({
+    defaultValues: {
+      search: initialSearchParam,
+      year: initialYearParam != null ? String(initialYearParam) : "",
+    },
+  });
 
   const [searchQuery, setSearchQuery] = useState<EventSearchQuery>({
     page: null,
@@ -90,17 +94,9 @@ const EventCataloguePage = () => {
     year: initialYearParam,
   });
 
-  const handleFormSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormSearch(e.target.value);
-  };
-
-  const handleFormYearChange = (value: unknown) => {
-    setFormYear(value === "" ? undefined : Number(value));
-  };
-
-  const applySearch = useCallback(() => {
-    const newSearch = formSearch.trim() || null;
-    const newYear = formYear;
+  const submit = form.handleSubmit((values) => {
+    const newSearch = values.search.trim() || null;
+    const newYear = values.year ? Number(values.year) : undefined;
     const params: Record<string, string> = {};
     if (newSearch) {
       params.search = newSearch;
@@ -115,35 +111,30 @@ const EventCataloguePage = () => {
       year: newYear,
       page: null,
     }));
-  }, [formSearch, formYear, setSearchParams]);
+  });
 
   return (
     <SidebarLayout sidebar={<ExtrasSidebar />}>
       <Section>
         <SectionHeader>Event catalogue</SectionHeader>
 
-        <form
-          onSubmit={(e) => {
-            e.preventDefault();
-            applySearch();
-          }}
-        >
+        <Form form={form} onSubmit={submit}>
           <FormGrid gridType={FormGridType.Row}>
             <FormGridFieldSet>
-              <TextInput
+              <TextField
+                name="search"
                 placeholder="Search events..."
-                value={formSearch}
-                onChange={handleFormSearchChange}
+                hideErrors={true}
               />
             </FormGridFieldSet>
 
             <FormGridFieldSet>
-              <Dropdown
-                allowNull
+              <DropDownField
+                name="year"
+                allowNull={true}
                 nullLabel="Any year"
                 options={yearOptions}
-                value={formYear ?? ""}
-                onChange={handleFormYearChange}
+                hideErrors={true}
               />
             </FormGridFieldSet>
 
@@ -153,7 +144,7 @@ const EventCataloguePage = () => {
               </SubmitButton>
             </FormGridFieldSet>
           </FormGrid>
-        </form>
+        </Form>
       </Section>
 
       <Section>
