@@ -1,19 +1,15 @@
 import styles from "./index.module.css";
-import { useInfiniteQuery } from "@tanstack/react-query";
-import { useQuery } from "@tanstack/react-query";
-import { useRef } from "react";
 import { Fragment } from "react";
 import { useState } from "react";
 import { Box } from "src/components/common/Box";
 import { Loader } from "src/components/common/Loader";
 import { Pager } from "src/components/common/Pager";
 import { SortLink } from "src/components/common/SortLink";
-import { DISABLE_PAGING } from "src/constants";
 import type { Key } from "src/services/queryKeys";
 import { useSettings } from "src/stores/settings";
 import type { GenericSearchResult } from "src/types";
 import type { GenericSearchQuery } from "src/types";
-import { useInfiniteScroll } from "src/utils/useInfiniteScroll";
+import { useInfiniteSearch, usePagedSearch } from "src/utils/useSearchQuery";
 
 const DefaultNoItemsElement = (
   <p className={styles.noResults}>There are no results to show.</p>
@@ -191,10 +187,11 @@ const PagedDataTable = <TItem extends {}, TQuery extends GenericSearchQuery>(
     noItemsElement,
   } = props;
 
-  const result = useQuery<GenericSearchResult<TQuery, TItem> | null, Error>({
-    queryKey: [...queryKey, searchQuery],
-    queryFn: async () => searchFunc(searchQuery),
-  });
+  const result = usePagedSearch<TItem, TQuery>(
+    queryKey,
+    searchQuery,
+    searchFunc,
+  );
 
   if (!result?.data?.results?.length) {
     return <>{noItemsElement || DefaultNoItemsElement}</>;
@@ -227,33 +224,10 @@ const InfiniteDataTable = <TItem extends {}, TQuery extends GenericSearchQuery>(
 ) => {
   const { className, queryKey, searchQuery, searchFunc } = props;
 
-  const result = useInfiniteQuery({
-    queryKey: [...queryKey, searchQuery],
-    queryFn: async ({ pageParam }: { pageParam: number }) => {
-      return searchFunc({
-        ...searchQuery,
-        page: searchQuery.page === DISABLE_PAGING ? DISABLE_PAGING : pageParam,
-      });
-    },
-    initialPageParam: 1,
-    getNextPageParam: (lastPage: GenericSearchResult<TQuery, TItem> | null) => {
-      if (!lastPage) {
-        return undefined;
-      }
-      if (lastPage.disable_paging) {
-        return undefined;
-      }
-      return lastPage.current_page < lastPage.last_page
-        ? lastPage.current_page + 1
-        : undefined;
-    },
-    refetchOnWindowFocus: false,
-  });
-
-  const infiniteScrollRef = useRef(null);
-  useInfiniteScroll(
-    { element: infiniteScrollRef, fetch: () => result.fetchNextPage() },
-    [result],
+  const { result, scrollRef } = useInfiniteSearch<TItem, TQuery>(
+    queryKey,
+    searchQuery,
+    searchFunc,
   );
 
   return (
@@ -272,7 +246,7 @@ const InfiniteDataTable = <TItem extends {}, TQuery extends GenericSearchQuery>(
       <tfoot>
         <tr>
           <td colSpan={100}>
-            <span ref={infiniteScrollRef} />
+            <span ref={scrollRef} />
 
             <div>
               <span

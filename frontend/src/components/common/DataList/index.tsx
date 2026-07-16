@@ -1,17 +1,12 @@
 import styles from "./index.module.css";
-import { useInfiniteQuery } from "@tanstack/react-query";
-import { useQuery } from "@tanstack/react-query";
-import { useRef } from "react";
 import { Fragment } from "react";
-import { useEffect } from "react";
 import { Loader } from "src/components/common/Loader";
 import { Pager } from "src/components/common/Pager";
-import { DISABLE_PAGING } from "src/constants";
 import type { Key } from "src/services/queryKeys";
 import { useSettings } from "src/stores/settings";
 import type { GenericSearchResult } from "src/types";
 import type { GenericSearchQuery } from "src/types";
-import { useInfiniteScroll } from "src/utils/useInfiniteScroll";
+import { useInfiniteSearch, usePagedSearch } from "src/utils/useSearchQuery";
 
 const DefaultNoItemsElement = <p>There are no results to show.</p>;
 
@@ -49,20 +44,12 @@ const PagedDataList = <TItem extends {}, TQuery extends GenericSearchQuery>({
   queryKey,
   noItemsElement,
 }: ConcreteDataListProps<TItem, TQuery>) => {
-  const result = useQuery<GenericSearchResult<TQuery, TItem>, Error>({
-    queryKey: [...queryKey, searchQuery],
-    queryFn: async () => searchFunc(searchQuery),
-  });
-
-  // Report the count from an effect, not the render body: onResultCountChange
-  // is typically a parent's state setter, and calling it during render updates
-  // another component mid-render.
-  const totalCount = result.data?.total_count;
-  useEffect(() => {
-    if (totalCount !== undefined) {
-      onResultCountChange?.(totalCount);
-    }
-  }, [onResultCountChange, totalCount]);
+  const result = usePagedSearch(
+    queryKey,
+    searchQuery,
+    searchFunc,
+    onResultCountChange,
+  );
 
   if (result.error) {
     return <p>{result.error.message}</p>;
@@ -107,47 +94,12 @@ const InfiniteDataList = <TItem extends {}, TQuery extends GenericSearchQuery>({
   queryKey,
   noItemsElement,
 }: ConcreteDataListProps<TItem, TQuery>) => {
-  const result = useInfiniteQuery<GenericSearchResult<TQuery, TItem>, Error>({
-    queryKey: [...queryKey, searchQuery],
-    queryFn: async ({ pageParam }) => {
-      return searchFunc({
-        ...searchQuery,
-        page:
-          searchQuery.page === DISABLE_PAGING
-            ? DISABLE_PAGING
-            : pageParam === undefined
-              ? 1
-              : (pageParam as number),
-      });
-    },
-    initialPageParam: 1,
-    getNextPageParam: (lastPage) => {
-      if (!lastPage) {
-        return undefined;
-      }
-      if (lastPage.disable_paging) {
-        return undefined;
-      }
-      return lastPage.current_page < lastPage.last_page
-        ? lastPage.current_page + 1
-        : undefined;
-    },
-    refetchOnWindowFocus: false,
-  });
-
-  const infiniteScrollRef = useRef<HTMLSpanElement>(null);
-  // Re-observe when pagination state changes (new page loaded / exhausted),
-  // not on every render — result is a fresh object each render.
-  useInfiniteScroll(
-    { element: infiniteScrollRef, fetch: () => result.fetchNextPage() },
-    [result.hasNextPage, result.data?.pages?.length],
+  const { result, scrollRef } = useInfiniteSearch(
+    queryKey,
+    searchQuery,
+    searchFunc,
+    onResultCountChange,
   );
-
-  useEffect(() => {
-    if (result.data?.pages?.[0]?.total_count !== undefined) {
-      onResultCountChange?.(result.data?.pages?.[0].total_count);
-    }
-  }, [onResultCountChange, result]);
 
   return (
     <div className={`ChildMarginClear ${className}`}>
@@ -164,7 +116,7 @@ const InfiniteDataList = <TItem extends {}, TQuery extends GenericSearchQuery>({
         )),
       )}
 
-      <span ref={infiniteScrollRef} />
+      <span ref={scrollRef} />
 
       {(result.isFetching || result.isFetchingNextPage) && <Loader />}
     </div>
