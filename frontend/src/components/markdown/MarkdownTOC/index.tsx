@@ -39,7 +39,7 @@ const remarkTOC = () => {
       children: [],
     };
 
-    for (let node of tree.children) {
+    for (const node of tree.children) {
       if (node.type === "heading" && node.depth > prefs.fromHeading - 1) {
         tocMarkdownAST.children.push(node);
       }

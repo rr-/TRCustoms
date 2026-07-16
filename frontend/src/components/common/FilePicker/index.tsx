@@ -56,7 +56,7 @@ const FilePicker = ({
       return;
     }
     const newFileIds = [...currentFileIds];
-    var fileId = newFileIds[oldIndex];
+    const fileId = newFileIds[oldIndex];
     newFileIds.splice(oldIndex, 1);
     newFileIds.splice(newIndex, 0, fileId);
     setCurrentFileIds(newFileIds);

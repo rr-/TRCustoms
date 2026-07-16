@@ -10,7 +10,7 @@ interface PillsProps<TItem> {
   onRemove: (item: TItem) => void;
 }
 
-const Pills = <TItem extends Object>({
+const Pills = <TItem extends object>({
   source,
   getKey,
   getText,

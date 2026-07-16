@@ -26,7 +26,7 @@ const remarkAlignment = () => {
 
     let middle = null;
     let match = null;
-    for (let node of root.children || []) {
+    for (const node of root.children || []) {
       if (node.type !== "text") {
         continue;
       }
@@ -64,7 +64,7 @@ const remarkAlignment = () => {
 
     let startNode = null;
     let endNode = null;
-    for (let node of root.children || []) {
+    for (const node of root.children || []) {
       if (node.type !== "text") {
         continue;
       }
@@ -165,7 +165,7 @@ const remarkRemoveElements = (allowedTags: string[]) => {
 const remarkTRCustomColors = () => {
   const coloredTextRegex = /\[([pesto])\]([^\n[\]]*)\[\/\1\]/gi;
   const replaceColoredText = ($0: string, char: string, text: string): any => {
-    let className = {
+    const className = {
       p: styles.pickup,
       e: styles.enemy,
       s: styles.secret,

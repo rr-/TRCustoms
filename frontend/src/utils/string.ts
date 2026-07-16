@@ -17,7 +17,7 @@ const reprPercentage = (num: number, decimalPlaces = 1): string => {
 };
 
 const titleCase = (input: string): string => {
-  let sentences = input.split(/\. /);
+  const sentences = input.split(/\. /);
   return sentences
     .map((sentence) => sentence[0].toUpperCase() + sentence.substr(1))
     .join(". ");
@@ -62,7 +62,7 @@ const formatFileSize = (input: number | null): string => {
   const suffixes = ["B", "KB", "MB", "GB"];
   let suffix = suffixes.shift();
   let value = input;
-  let base = 1024.0;
+  const base = 1024.0;
   while (value >= base && suffixes.length) {
     value /= base;
     suffix = suffixes.shift();

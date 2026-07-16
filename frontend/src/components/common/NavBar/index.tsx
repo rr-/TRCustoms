@@ -28,20 +28,20 @@ const MyNavLink = ({ children, ...args }: any) => {
 };
 
 const LevelsNavLink = ({ children, to, ...rest }: LinkProps) => {
-  let location = useLocation();
-  let path = useResolvedPath(to);
+  const location = useLocation();
+  const path = useResolvedPath(to);
 
   let locationPathname = location.pathname;
   let toPathname = path.pathname;
   locationPathname = locationPathname.toLowerCase();
   toPathname = toPathname.toLowerCase();
 
-  let isActive =
+  const isActive =
     locationPathname === toPathname ||
     locationPathname.match(/^\/?(genres|tags|levels(\/(?!upload)|$))/);
 
-  let ariaCurrent: "page" | undefined = isActive ? "page" : undefined;
-  let className = [isActive ? styles.active : null].filter(Boolean).join(" ");
+  const ariaCurrent: "page" | undefined = isActive ? "page" : undefined;
+  const className = [isActive ? styles.active : null].filter(Boolean).join(" ");
 
   return (
     <Link to={to} aria-current={ariaCurrent} className={className} {...rest}>

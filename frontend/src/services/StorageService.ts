@@ -95,7 +95,7 @@ const storages: StorageLike[] = [
 
 const getItem = (key: string): any | null => {
   const prefixedKey = getPrefixedKey(key);
-  for (let storage of storages) {
+  for (const storage of storages) {
     if (storage.isAvailable) {
       const prefixedValue = storage.getItem(prefixedKey);
       if (prefixedValue !== null) {
@@ -109,7 +109,7 @@ const getItem = (key: string): any | null => {
 
 const setItem = (key: string, value: any): void => {
   const prefixedKey = getPrefixedKey(key);
-  for (let storage of storages) {
+  for (const storage of storages) {
     if (storage.isAvailable) {
       storage.setItem(prefixedKey, value);
     }
@@ -118,7 +118,7 @@ const setItem = (key: string, value: any): void => {
 
 const removeItem = (key: string): void => {
   const prefixedKey = getPrefixedKey(key);
-  for (let storage of storages) {
+  for (const storage of storages) {
     if (storage.isAvailable) {
       storage.removeItem(prefixedKey);
       storage.removeItem(key);

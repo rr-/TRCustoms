@@ -51,7 +51,7 @@ interface LevelFormProps {
   onSubmit?: ((level: LevelDetails) => void) | undefined;
 }
 
-const validateRange = <T extends Object>(
+const validateRange = <T,>(
   value: T[],
   noun: string,
   minCount: number | null,

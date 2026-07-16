@@ -34,7 +34,7 @@ const DatePicker = ({ value, onChange }: DatePickerProps) => {
     new Date().getFullYear() + 1,
   ).map((year) => ({ label: `${year}`, value: `${year}` }));
 
-  let [selectedYear, selectedMonth]: string[] = (value || "").split(/-/);
+  const [selectedYear, selectedMonth]: string[] = (value || "").split(/-/);
   const submitChange = (year: string, month: string) => {
     onChange(`${year || ""}-${month || ""}`.replace(/-$/, ""));
   };

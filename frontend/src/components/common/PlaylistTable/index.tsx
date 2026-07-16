@@ -29,7 +29,7 @@ const PlaylistTable = ({
 }: PlaylistTableProps) => {
   const loggedInUser = useContext(UserContext).user;
 
-  let columns: DataTableColumn<PlaylistItemListing>[] = [
+  const columns: DataTableColumn<PlaylistItemListing>[] = [
     {
       name: "status",
       sortKey: "status,-last_updated",

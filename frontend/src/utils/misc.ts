@@ -22,7 +22,7 @@ const getCurrentSearchParams = (): { [key: string]: string } => {
   return Object.fromEntries(new URL(window.location.href).searchParams);
 };
 
-const filterFalsyObjectValues = <T extends any>(source: {
+const filterFalsyObjectValues = <T>(source: {
   [key: string]: T | null;
 }): { [key: string]: T } => {
   return Object.fromEntries(
@@ -154,7 +154,7 @@ const resetQueries = (
   queryFilters: any,
   soft?: boolean | undefined,
 ) => {
-  for (let queryFilter of queryFilters) {
+  for (const queryFilter of queryFilters) {
     // React Query v5 takes a filters object rather than a bare key; the callers
     // pass a string prefix, which maps to a partial queryKey match.
     const filters = Array.isArray(queryFilter)

@@ -15,7 +15,7 @@ const getPagesShown = (
   currentPage: number,
   lastPage: number,
 ): number[] => {
-  let pages: Set<number> = new Set();
+  const pages: Set<number> = new Set();
   for (let i = -PAGES_AROUND; i <= PAGES_AROUND; i++) {
     pages.add(firstPage + i);
     pages.add(currentPage + i);

@@ -47,7 +47,7 @@ const FileUploader = ({
         try {
           const uploadedFiles = [];
 
-          for (let file of files) {
+          for (const file of files) {
             const handleUploadProgress = (progressEvent: ProgressEvent) => {
               const fileSize = file.size || 0;
               const fraction = fileSize ? progressEvent.loaded / fileSize : 0;

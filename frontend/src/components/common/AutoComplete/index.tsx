@@ -20,7 +20,7 @@ interface AutoCompleteProps<TItem> {
   placeholder?: string;
 }
 
-const AutoComplete = <TItem extends Object>({
+const AutoComplete = <TItem extends object>({
   maxLength,
   placeholder,
   suggestions,
@@ -127,7 +127,7 @@ const AutoComplete = <TItem extends Object>({
         {suggestions.length ? (
           <ul className={styles.list}>
             {suggestions.map((result, index) => {
-              let classNames = [styles.listItem];
+              const classNames = [styles.listItem];
               if (index === activeResultIdx) {
                 classNames.push(styles.active);
               }

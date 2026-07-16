@@ -36,7 +36,7 @@ const addSearchTerm = (
   const terms = splitTerms(searchQuery);
   const newTerms = [];
   let found = false;
-  for (let term of terms) {
+  for (const term of terms) {
     const [otherModel, changesStr] = term.split(/:/);
     const otherChanges = changesStr.split(/,/).filter((c) => c);
     if (model === otherModel) {
@@ -60,7 +60,7 @@ const deleteSearchTerm = (
 ) => {
   const terms = splitTerms(searchQuery);
   const newTerms = [];
-  for (let term of terms) {
+  for (const term of terms) {
     const [otherModel, changesStr] = term.split(/:/);
     let otherChanges = changesStr.split(/,/).filter((c) => c);
     if (model === otherModel) {
