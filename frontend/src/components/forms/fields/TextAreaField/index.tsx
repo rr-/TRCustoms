@@ -72,8 +72,7 @@ const RichTextAreaField = ({
 
   const composer = (showLimitInToolbar: boolean) => (
     <MarkdownComposer
-      field={{ ...fieldProps, id: name, readOnly: readonly } as any}
-      form={undefined as any}
+      field={{ ...fieldProps, id: name, readOnly: readonly }}
       allowColors={allowColors}
       allowAttachments={allowAttachments}
       markdownLimitState={markdownLimitState}

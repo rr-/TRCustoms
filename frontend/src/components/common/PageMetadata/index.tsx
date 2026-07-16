@@ -13,7 +13,7 @@ const PageMetadata = () => {
   );
 
   useEffect(() => {
-    (window as any).prerenderReady = ready;
+    window.prerenderReady = ready;
   }, [ready]);
 
   const baseUrl = import.meta.env.VITE_HOST_SITE;

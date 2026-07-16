@@ -31,7 +31,7 @@ const serializeGenericSearchQuery = (
     sort: searchQuery.sort === defaults?.sort ? undefined : searchQuery.sort,
     search:
       searchQuery.search === defaults?.search ? undefined : searchQuery.search,
-  }) as any;
+  });
 };
 
 interface QueryPersisterProps<TQuery> {

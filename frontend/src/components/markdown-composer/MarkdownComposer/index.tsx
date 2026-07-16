@@ -4,27 +4,28 @@ import { MarkdownAttachmentStrip } from "src/components/markdown-composer/Markdo
 import { MarkdownButtonStrip } from "src/components/markdown-composer/MarkdownButtonStrip";
 import type { MarkdownLimitState } from "src/services/MarkdownLimitService";
 
-// The bound input props the composer spreads onto its textarea (name, value,
-// onChange, onBlur). Supplied by react-hook-form's useController.
+// The bound input props the composer spreads onto its textarea. The core four
+// come from react-hook-form's useController; id/readOnly are supplied by the
+// field wrapper.
 interface FieldInputProps {
   name: string;
   value: string;
   onChange: (event: React.ChangeEvent<HTMLTextAreaElement>) => void;
   onBlur: (event: React.FocusEvent<HTMLTextAreaElement>) => void;
+  id?: string;
+  readOnly?: boolean;
 }
 
 interface MarkdownComposerProps {
   allowAttachments?: boolean;
   allowColors?: boolean;
   field: FieldInputProps;
-  form: any;
   markdownLimitState?: MarkdownLimitState | null;
   showLimitInToolbar?: boolean;
 }
 
 const MarkdownComposer = ({
   field,
-  form,
   allowColors,
   allowAttachments,
   markdownLimitState,
