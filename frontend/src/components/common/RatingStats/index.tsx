@@ -27,7 +27,11 @@ const RatingStats = () => {
   const defaultTooltip = (
     <>
       Ratings: {reprBigNumber(config.stats.total_ratings)} (
-      {reprBigNumber(config.stats.total_ratings / config.stats.total_levels)}{" "}
+      {reprBigNumber(
+        config.stats.total_levels
+          ? config.stats.total_ratings / config.stats.total_levels
+          : 0,
+      )}{" "}
       per level)
     </>
   );

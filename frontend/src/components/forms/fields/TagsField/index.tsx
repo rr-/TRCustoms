@@ -51,6 +51,9 @@ const TagsField = ({ name, readonly, ...baseProps }: TagsFieldProps) => {
   const handleNewResultApply = useCallback(
     async (text: string) => {
       text = text.trim();
+      if (!text) {
+        return;
+      }
       text = text[0].toUpperCase() + text.substr(1);
       if (value.map((t) => t.name.toLowerCase()).includes(text.toLowerCase())) {
         return;
