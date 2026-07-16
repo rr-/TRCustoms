@@ -13,6 +13,12 @@ import { useUser } from "src/stores/user";
 // Each page is code-split into its own chunk so the initial bundle no longer
 // ships every route. The pages use named exports, so unwrap the chosen name
 // into the default export React.lazy expects.
+//
+// The registry is heterogeneous — each page has its own props — so the value
+// type is ComponentType<any>. ComponentType<unknown> can't stand in here:
+// a page with required props (e.g. LevelPage's tabName) is not assignable to
+// it. The precise per-page prop types are still enforced at the JSX call
+// sites below.
 const lazyPage = (
   factory: () => Promise<Record<string, React.ComponentType<any>>>,
   name: string,
