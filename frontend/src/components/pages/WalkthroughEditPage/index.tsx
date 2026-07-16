@@ -23,13 +23,15 @@ const WalkthroughEditPage = () => {
   const { levelId, walkthroughId } =
     useParams() as unknown as WalkthroughEditPageParams;
 
-  const levelResult = useQuery<LevelDetails | undefined, Error>({
+  // React Query v5 forbids a query function from resolving to undefined, so
+  // these return null when the id is absent (creating a walkthrough has no
+  // walkthroughId; editing via the /walkthroughs route has no levelId).
+  const levelResult = useQuery<LevelDetails | null, Error>({
     queryKey: ["level", LevelService.getLevelById, levelId],
-    queryFn: async () =>
-      levelId ? LevelService.getLevelById(+levelId) : undefined,
+    queryFn: async () => (levelId ? LevelService.getLevelById(+levelId) : null),
   });
 
-  const walkthroughResult = useQuery<WalkthroughDetails | undefined, Error>({
+  const walkthroughResult = useQuery<WalkthroughDetails | null, Error>({
     queryKey: [
       "walkthrough",
       WalkthroughService.getWalkthroughById,
@@ -38,7 +40,7 @@ const WalkthroughEditPage = () => {
     queryFn: async () =>
       walkthroughId
         ? WalkthroughService.getWalkthroughById(+walkthroughId)
-        : undefined,
+        : null,
   });
 
   usePageMetadata(
