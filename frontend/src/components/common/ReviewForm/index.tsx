@@ -1,27 +1,22 @@
+import { zodResolver } from "@hookform/resolvers/zod";
 import { useQueryClient } from "@tanstack/react-query";
-import type { FormikHelpers } from "formik";
-import { Formik } from "formik";
-import { Form } from "formik";
-import { useContext } from "react";
-import { useCallback } from "react";
+import { useEffect } from "react";
+import { useForm } from "react-hook-form";
 import { FormGrid } from "src/components/common/FormGrid";
 import { FormGridType } from "src/components/common/FormGrid";
-import { FormGridButtons } from "src/components/common/FormGrid";
 import { FormGridFieldSet } from "src/components/common/FormGrid";
 import { InfoMessage } from "src/components/common/InfoMessage";
 import { InfoMessageType } from "src/components/common/InfoMessage";
-import { Loader } from "src/components/common/Loader";
-import { TextAreaFormField } from "src/components/formfields/TextAreaFormField";
+import { Form } from "src/components/forms/Form";
+import { FormButtons } from "src/components/forms/FormButtons";
+import { TextAreaField } from "src/components/forms/TextAreaField";
+import { useFormSubmit } from "src/components/forms/useFormSubmit";
 import { LevelLink } from "src/components/links/LevelLink";
-import { ConfigContext } from "src/contexts/ConfigContext";
 import type { LevelNested } from "src/services/LevelService";
 import type { ReviewDetails } from "src/services/ReviewService";
 import { ReviewService } from "src/services/ReviewService";
-import { filterFalsyObjectValues } from "src/utils/misc";
 import { resetQueries } from "src/utils/misc";
-import { getResponseError } from "src/utils/misc";
-import { makeSentence } from "src/utils/string";
-import { validateRequired } from "src/utils/validation";
+import { z } from "zod";
 
 interface ReviewFormProps {
   level: LevelNested;
@@ -30,149 +25,98 @@ interface ReviewFormProps {
   onSubmit?: ((review: ReviewDetails) => void) | undefined;
 }
 
-interface ReviewFormValues {
-  text: string;
-}
+const schema = z.object({
+  text: z.string().min(1, "Review text is required"),
+});
+type ReviewFormValues = z.infer<typeof schema>;
 
 const ReviewForm = ({ level, review, onGoBack, onSubmit }: ReviewFormProps) => {
   const queryClient = useQueryClient();
-  const { config } = useContext(ConfigContext);
-  const initialValues: ReviewFormValues = {
-    text: review?.text || "",
-  };
+  const form = useForm<ReviewFormValues>({
+    resolver: zodResolver(schema),
+    defaultValues: { text: review?.text || "" },
+  });
 
-  const handleSubmitError = useCallback(
-    (
-      error: unknown,
-      { setSubmitting, setStatus, setErrors }: FormikHelpers<ReviewFormValues>,
-    ) => {
-      setSubmitting(false);
-      const data = getResponseError(error);
-      if (data) {
-        if (data.detail) {
-          setStatus({ error: <>{makeSentence(data.detail)}</> });
-        }
-        const errors = {
-          text: data?.text,
-        };
-        if (Object.keys(filterFalsyObjectValues(errors)).length) {
-          setErrors(errors as any);
-        } else {
-          console.error(error);
-          setStatus({ error: <>Unknown error.</> });
-        }
-      } else {
-        console.error(error);
-        setStatus({ error: <>Unknown error.</> });
-      }
-    },
-    [],
-  );
+  // Mirror Formik's enableReinitialize: refill when a different review loads.
+  const { reset } = form;
+  useEffect(() => {
+    reset({ text: review?.text || "" });
+  }, [review?.id, review?.text, reset]);
 
-  const handleSubmit = useCallback(
-    async (
-      values: ReviewFormValues,
-      helpers: FormikHelpers<ReviewFormValues>,
-    ) => {
-      const { setStatus } = helpers;
-      setStatus({});
-      try {
-        const payload = {
-          levelId: level.id,
-          text: values.text,
-        };
+  const { submit, result } = useFormSubmit(form, async (values) => {
+    const payload = { levelId: level.id, text: values.text };
+    if (review?.id) {
+      const outReview = await ReviewService.update(review.id, payload);
+      resetQueries(queryClient, ["levels", "reviews"], true);
+      resetQueries(queryClient, ["auditLogs"]);
+      onSubmit?.(outReview);
+      return {
+        final: true,
+        success: (
+          <>
+            Review updated.{" "}
+            <LevelLink subPage="reviews" level={level}>
+              Click here
+            </LevelLink>{" "}
+            to see the changes.
+          </>
+        ),
+      };
+    }
+    const outReview = await ReviewService.create(payload);
+    resetQueries(queryClient, ["levels", "reviews", "auditLogs"]);
+    onSubmit?.(outReview);
+    return {
+      final: true,
+      success: (
+        <>
+          Review posted.{" "}
+          <LevelLink subPage="reviews" level={level}>
+            Click here
+          </LevelLink>{" "}
+          to go back to the level page.
+        </>
+      ),
+    };
+  });
 
-        if (review?.id) {
-          let outReview = await ReviewService.update(review.id, payload);
-          resetQueries(queryClient, ["levels", "reviews"], true);
-          resetQueries(queryClient, ["auditLogs"]);
-          onSubmit?.(outReview);
-
-          setStatus({
-            success: (
-              <>
-                Review updated.{" "}
-                <LevelLink subPage="reviews" level={level}>
-                  Click here
-                </LevelLink>{" "}
-                to see the changes.
-              </>
-            ),
-          });
-        } else {
-          let outReview = await ReviewService.create(payload);
-          resetQueries(queryClient, ["levels", "reviews", "auditLogs"]);
-          onSubmit?.(outReview);
-
-          setStatus({
-            success: (
-              <>
-                Review posted.{" "}
-                <LevelLink subPage="reviews" level={level}>
-                  Click here
-                </LevelLink>{" "}
-                to go back to the level page.
-              </>
-            ),
-          });
-        }
-      } catch (error) {
-        handleSubmitError(error, helpers);
-      }
-    },
-    [level, review, onSubmit, handleSubmitError, queryClient],
-  );
-
-  if (!config) {
-    return <Loader />;
+  if (result?.final && result.success) {
+    return <div className="FormFieldSuccess">{result.success}</div>;
   }
 
   return (
-    <Formik
-      initialValues={initialValues}
-      enableReinitialize={true}
-      onSubmit={handleSubmit}
-    >
-      {({ isSubmitting, values, setFieldValue, status }) =>
-        status?.success ? (
-          <div className="FormFieldSuccess">{status.success}</div>
-        ) : (
-          <Form>
-            <FormGrid gridType={FormGridType.Column}>
-              <FormGridFieldSet>
-                <InfoMessage type={InfoMessageType.Info}>
-                  Remember to stay respectful and constructive, and avoid
-                  excessive profanity.
-                  <br />
-                  The review needs to be written in English.
-                </InfoMessage>
+    <Form form={form} onSubmit={submit}>
+      <FormGrid gridType={FormGridType.Column}>
+        <FormGridFieldSet>
+          <InfoMessage type={InfoMessageType.Info}>
+            Remember to stay respectful and constructive, and avoid excessive
+            profanity.
+            <br />
+            The review needs to be written in English.
+          </InfoMessage>
 
-                <TextAreaFormField
-                  validate={validateRequired}
-                  rich={true}
-                  required={true}
-                  allowColors={false}
-                  label="Review text"
-                  markdownLimitKey="review_text"
-                  name="text"
-                />
-              </FormGridFieldSet>
+          <TextAreaField
+            rich={true}
+            required={true}
+            allowColors={false}
+            label="Review text"
+            markdownLimitKey="review_text"
+            name="text"
+          />
+        </FormGridFieldSet>
 
-              <FormGridButtons status={status}>
-                <button type="submit" disabled={isSubmitting}>
-                  {review ? "Update review" : "Submit review"}
-                </button>
-                {onGoBack && (
-                  <button type="button" onClick={onGoBack}>
-                    Go back
-                  </button>
-                )}
-              </FormGridButtons>
-            </FormGrid>
-          </Form>
-        )
-      }
-    </Formik>
+        <FormButtons result={result}>
+          <button type="submit" disabled={form.formState.isSubmitting}>
+            {review ? "Update review" : "Submit review"}
+          </button>
+          {onGoBack && (
+            <button type="button" onClick={onGoBack}>
+              Go back
+            </button>
+          )}
+        </FormButtons>
+      </FormGrid>
+    </Form>
   );
 };
 
