@@ -1,10 +1,10 @@
+import styles from "./index.module.css";
 import { useState } from "react";
 import { useController } from "react-hook-form";
 import { useFormContext } from "react-hook-form";
 import type { LinkTypeEnum } from "src/client";
 import { Button } from "src/components/common/Button";
 import { Link } from "src/components/common/Link";
-import styles from "src/components/formfields/ExternalLinksFormField/index.module.css";
 import { BaseField } from "src/components/forms/BaseField";
 import type { BaseFieldProps } from "src/components/forms/BaseField";
 import { IconChevronDown } from "src/components/icons";

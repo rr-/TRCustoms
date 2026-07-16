@@ -1,14 +1,22 @@
 import "./index.css";
-import type { FieldInputProps } from "formik";
 import { useRef } from "react";
 import { MarkdownAttachmentStrip } from "src/components/markdown-composer/MarkdownAttachmentStrip";
 import { MarkdownButtonStrip } from "src/components/markdown-composer/MarkdownButtonStrip";
 import type { MarkdownLimitState } from "src/services/MarkdownLimitService";
 
+// The bound input props the composer spreads onto its textarea (name, value,
+// onChange, onBlur). Supplied by react-hook-form's useController.
+interface FieldInputProps {
+  name: string;
+  value: string;
+  onChange: (event: React.ChangeEvent<HTMLTextAreaElement>) => void;
+  onBlur: (event: React.FocusEvent<HTMLTextAreaElement>) => void;
+}
+
 interface MarkdownComposerProps {
   allowAttachments?: boolean;
   allowColors?: boolean;
-  field: FieldInputProps<string>;
+  field: FieldInputProps;
   form: any;
   markdownLimitState?: MarkdownLimitState | null;
   showLimitInToolbar?: boolean;

@@ -1,6 +1,6 @@
+import "./index.css";
 import { Controller } from "react-hook-form";
 import { useFormContext } from "react-hook-form";
-import "src/components/formfields/DropDownFormField/index.css";
 import { BaseField } from "src/components/forms/BaseField";
 import type { BaseFieldProps } from "src/components/forms/BaseField";
 

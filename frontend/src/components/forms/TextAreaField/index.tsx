@@ -1,10 +1,10 @@
+import styles from "./index.module.css";
 import { useContext } from "react";
 import { useState } from "react";
 import { useController } from "react-hook-form";
 import { useFormContext } from "react-hook-form";
 import type { TabPage } from "src/components/common/TabSwitch";
 import { BoxedTabSwitch } from "src/components/common/TabSwitch";
-import styles from "src/components/formfields/TextAreaFormField/index.module.css";
 import { BaseField } from "src/components/forms/BaseField";
 import type { BaseFieldProps } from "src/components/forms/BaseField";
 import { MarkdownComposer } from "src/components/markdown-composer/MarkdownComposer";

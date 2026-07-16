@@ -1,8 +1,8 @@
+import styles from "./index.module.css";
 import { useContext } from "react";
 import { useController } from "react-hook-form";
 import { useFormContext } from "react-hook-form";
 import { Checkbox } from "src/components/common/Checkbox";
-import styles from "src/components/formfields/GenresFormField/index.module.css";
 import { BaseField } from "src/components/forms/BaseField";
 import type { BaseFieldProps } from "src/components/forms/BaseField";
 import { IconInformationCircle } from "src/components/icons";

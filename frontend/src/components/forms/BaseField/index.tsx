@@ -1,4 +1,4 @@
-import "src/components/formfields/BaseFormField/index.css";
+import "./index.css";
 import { FieldError } from "src/components/forms/FieldError";
 
 interface BaseFieldProps {
