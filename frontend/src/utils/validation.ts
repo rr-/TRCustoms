@@ -113,6 +113,27 @@ const validateUserName = (username: string): string | null => {
   return null;
 };
 
+// A field validator returns an error message, or null when the value is
+// acceptable. Validators accept `unknown` too (e.g. validateRequired), which
+// satisfies this narrower string signature.
+type FieldValidator = (value: string) => string | null;
+
+// Run validators in order and return the first error, so a field reports one
+// message at a time (e.g. "required" before "too short").
+const firstError = (
+  value: string,
+  validators: FieldValidator[],
+): string | null => {
+  for (const validator of validators) {
+    const error = validator(value);
+    if (error) {
+      return error;
+    }
+  }
+  return null;
+};
+
+export type { FieldValidator };
 export {
   validateRequired,
   validateMaxLength,
@@ -121,4 +142,5 @@ export {
   validatePassword2,
   validateUserName,
   validateURL,
+  firstError,
 };

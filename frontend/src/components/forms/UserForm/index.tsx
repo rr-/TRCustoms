@@ -25,6 +25,7 @@ import type { UserDetails } from "src/services/UserService";
 import { UserService } from "src/services/UserService";
 import { DisplayMode } from "src/types";
 import { makeSentence } from "src/utils/string";
+import { firstError } from "src/utils/validation";
 import { validateEmail } from "src/utils/validation";
 import { validatePassword } from "src/utils/validation";
 import { validatePassword2 } from "src/utils/validation";
@@ -74,32 +75,31 @@ type UserFormValues = z.infer<typeof baseSchema>;
 // error against that field.
 const makeSchema = (isNew: boolean) =>
   baseSchema.superRefine((values, ctx) => {
-    const rules: { [field: string]: Array<(value: any) => string | null> } = {
-      username: [validateRequired, validateUserName],
-      email: [validateRequired, validateEmail],
-      websiteUrl: [validateURL],
-      donationUrl: [validateURL],
-      password: [validatePassword],
-      password2: [
+    // Required always runs first so an empty field reports "required" rather
+    // than a format error.
+    const required = isNew ? [validateRequired] : [];
+    const errors = {
+      username: firstError(values.username, [
+        validateRequired,
+        validateUserName,
+      ]),
+      email: firstError(values.email, [validateRequired, validateEmail]),
+      websiteUrl: firstError(values.websiteUrl, [validateURL]),
+      donationUrl: firstError(values.donationUrl, [validateURL]),
+      password: firstError(values.password, [...required, validatePassword]),
+      password2: firstError(values.password2, [
+        ...required,
         (v) => validatePassword2(v, values.password),
         validatePassword,
-      ],
+      ]),
     };
-    if (isNew) {
-      rules.password.unshift(validateRequired);
-      rules.password2.unshift(validateRequired);
-    }
-    for (const [field, validators] of Object.entries(rules)) {
-      for (const validator of validators) {
-        const error = validator((values as Record<string, any>)[field]);
-        if (error) {
-          ctx.addIssue({
-            code: "custom",
-            path: [field],
-            message: makeSentence(error),
-          });
-          break;
-        }
+    for (const [field, error] of Object.entries(errors)) {
+      if (error) {
+        ctx.addIssue({
+          code: "custom",
+          path: [field],
+          message: makeSentence(error),
+        });
       }
     }
   });

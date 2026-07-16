@@ -8,21 +8,19 @@ import { EmailField } from "src/components/forms/fields/EmailField";
 import { useFormSubmit } from "src/components/forms/useFormSubmit";
 import { UserService } from "src/services/UserService";
 import { makeSentence } from "src/utils/string";
+import { firstError } from "src/utils/validation";
 import { validateEmail } from "src/utils/validation";
 import { validateRequired } from "src/utils/validation";
 import { z } from "zod";
 
 const schema = z.object({ email: z.string() }).superRefine((values, ctx) => {
-  for (const validator of [validateRequired, validateEmail]) {
-    const error = validator(values.email);
-    if (error) {
-      ctx.addIssue({
-        code: "custom",
-        path: ["email"],
-        message: makeSentence(error),
-      });
-      break;
-    }
+  const error = firstError(values.email, [validateRequired, validateEmail]);
+  if (error) {
+    ctx.addIssue({
+      code: "custom",
+      path: ["email"],
+      message: makeSentence(error),
+    });
   }
 });
 type PasswordResetFormValues = z.infer<typeof schema>;

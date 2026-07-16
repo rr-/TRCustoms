@@ -9,6 +9,7 @@ import { PasswordField } from "src/components/forms/fields/PasswordField";
 import { useFormSubmit } from "src/components/forms/useFormSubmit";
 import { UserService } from "src/services/UserService";
 import { makeSentence } from "src/utils/string";
+import { firstError } from "src/utils/validation";
 import { validatePassword } from "src/utils/validation";
 import { validatePassword2 } from "src/utils/validation";
 import { validateRequired } from "src/utils/validation";
@@ -21,25 +22,24 @@ interface PasswordResetFinishFormProps {
 const schema = z
   .object({ password: z.string(), password2: z.string() })
   .superRefine((values, ctx) => {
-    const rules: { [field: string]: Array<(value: any) => string | null> } = {
-      password: [validatePassword, validateRequired],
-      password2: [
+    const errors = {
+      password: firstError(values.password, [
+        validateRequired,
+        validatePassword,
+      ]),
+      password2: firstError(values.password2, [
+        validateRequired,
         (v) => validatePassword2(v, values.password),
         validatePassword,
-        validateRequired,
-      ],
+      ]),
     };
-    for (const [field, validators] of Object.entries(rules)) {
-      for (const validator of validators) {
-        const error = validator((values as Record<string, any>)[field]);
-        if (error) {
-          ctx.addIssue({
-            code: "custom",
-            path: [field],
-            message: makeSentence(error),
-          });
-          break;
-        }
+    for (const [field, error] of Object.entries(errors)) {
+      if (error) {
+        ctx.addIssue({
+          code: "custom",
+          path: [field],
+          message: makeSentence(error),
+        });
       }
     }
   });
