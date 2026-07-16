@@ -73,7 +73,7 @@ const TagsField = ({ name, readonly, ...baseProps }: TagsFieldProps) => {
   );
 
   return (
-    <BaseField name={name} {...baseProps}>
+    <BaseField name={name} asGroup {...baseProps}>
       <AutoComplete
         maxLength={config.limits.max_tag_length}
         suggestions={suggestions}

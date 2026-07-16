@@ -7,6 +7,11 @@ interface BaseFieldProps {
   extraInformation?: React.ReactNode | undefined;
   required?: boolean | undefined;
   hideErrors?: boolean | undefined;
+  // Set for fields that render several controls (radios, tag/genre pickers)
+  // rather than one input with id={name}: the label becomes a group caption
+  // (role="group" + aria-labelledby) instead of a <label htmlFor> that would
+  // point at a non-existent control.
+  asGroup?: boolean | undefined;
   children: React.ReactNode;
 }
 
@@ -19,23 +24,42 @@ const BaseField = ({
   required,
   extraInformation,
   hideErrors,
+  asGroup,
   children,
-}: BaseFieldProps) => (
-  <div className="FormField">
-    {label ? (
-      <label className="FormField--label" htmlFor={name}>
-        {label}
-        {required && <>*</>}
-        {!label.match(/[.?!:]$/) && <>:</>}
-      </label>
-    ) : null}
-    <div className="FormField--field">
-      {children}
-      {extraInformation ? <div>{extraInformation}</div> : null}
-      {!hideErrors && <FieldError name={name} />}
+}: BaseFieldProps) => {
+  const labelId = `${name}-label`;
+  const labelText = label ? (
+    <>
+      {label}
+      {required && <>*</>}
+      {!label.match(/[.?!:]$/) && <>:</>}
+    </>
+  ) : null;
+
+  return (
+    <div
+      className="FormField"
+      role={asGroup ? "group" : undefined}
+      aria-labelledby={asGroup && label ? labelId : undefined}
+    >
+      {labelText &&
+        (asGroup ? (
+          <span className="FormField--label" id={labelId}>
+            {labelText}
+          </span>
+        ) : (
+          <label className="FormField--label" htmlFor={name}>
+            {labelText}
+          </label>
+        ))}
+      <div className="FormField--field">
+        {children}
+        {extraInformation ? <div>{extraInformation}</div> : null}
+        {!hideErrors && <FieldError name={name} />}
+      </div>
     </div>
-  </div>
-);
+  );
+};
 
 export type { BaseFieldProps };
 export { BaseField };

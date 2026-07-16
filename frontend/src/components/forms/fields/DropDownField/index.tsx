@@ -1,5 +1,5 @@
 import "./index.css";
-import { Controller } from "react-hook-form";
+import { useController } from "react-hook-form";
 import { useFormContext } from "react-hook-form";
 import { BaseField } from "src/components/forms/fields/BaseField";
 import type { BaseFieldProps } from "src/components/forms/fields/BaseField";
@@ -32,6 +32,7 @@ const DropDownField = ({
   ...baseProps
 }: DropDownFieldProps) => {
   const { control } = useFormContext();
+  const { field } = useController({ name, control });
   // A <select> always yields string values from the DOM, so map each selection
   // back to its declared option value to preserve numeric ids (schemas expect
   // z.number() for engine/difficulty/duration). Unmatched values — e.g. the
@@ -40,43 +41,37 @@ const DropDownField = ({
     options.find((option) => String(option.value) === raw)?.value ?? raw;
   return (
     <BaseField name={name} {...baseProps}>
-      <Controller
-        control={control}
-        name={name}
-        render={({ field }) => (
-          <select
-            id={name}
-            ref={field.ref}
-            name={field.name}
-            disabled={readonly}
-            multiple={multiple}
-            className="DropDownFormField--select Input"
-            value={multiple ? (field.value ?? []) : (field.value ?? "")}
-            onBlur={field.onBlur}
-            onChange={(event) => {
-              field.onChange(
-                multiple
-                  ? Array.from(event.target.selectedOptions, (option) =>
-                      toOptionValue(option.value),
-                    )
-                  : toOptionValue(event.target.value),
-              );
-              onChange?.();
-            }}
-          >
-            {!multiple && (
-              <option disabled={!allowNull} value="">
-                {nullLabel}
-              </option>
-            )}
-            {options.map(({ value, label }) => (
-              <option key={value} value={value}>
-                {label}
-              </option>
-            ))}
-          </select>
+      <select
+        id={name}
+        ref={field.ref}
+        name={field.name}
+        disabled={readonly}
+        multiple={multiple}
+        className="DropDownFormField--select Input"
+        value={multiple ? (field.value ?? []) : (field.value ?? "")}
+        onBlur={field.onBlur}
+        onChange={(event) => {
+          field.onChange(
+            multiple
+              ? Array.from(event.target.selectedOptions, (option) =>
+                  toOptionValue(option.value),
+                )
+              : toOptionValue(event.target.value),
+          );
+          onChange?.();
+        }}
+      >
+        {!multiple && (
+          <option disabled={!allowNull} value="">
+            {nullLabel}
+          </option>
         )}
-      />
+        {options.map(({ value, label }) => (
+          <option key={value} value={value}>
+            {label}
+          </option>
+        ))}
+      </select>
     </BaseField>
   );
 };

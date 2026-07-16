@@ -99,7 +99,7 @@ const ExternalLinksField = ({
   };
 
   return (
-    <BaseField name={name} {...baseProps}>
+    <BaseField name={name} asGroup {...baseProps}>
       <div className={styles.entry}>
         <input
           className="Input"

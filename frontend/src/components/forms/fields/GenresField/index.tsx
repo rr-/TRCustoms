@@ -38,7 +38,7 @@ const GenresField = ({ name, readonly, ...baseProps }: GenresFieldProps) => {
   };
 
   return (
-    <BaseField name={name} {...baseProps}>
+    <BaseField name={name} asGroup {...baseProps}>
       <div className={styles.wrapper}>
         {Object.values(genreMap).map((genre) => (
           <div key={genre.id}>

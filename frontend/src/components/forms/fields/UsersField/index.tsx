@@ -57,7 +57,7 @@ const UsersField = ({ name, readonly, ...baseProps }: UsersFieldProps) => {
   );
 
   return (
-    <BaseField name={name} {...baseProps}>
+    <BaseField name={name} asGroup {...baseProps}>
       <AutoComplete
         suggestions={suggestions}
         getResultText={(user) => user.username}

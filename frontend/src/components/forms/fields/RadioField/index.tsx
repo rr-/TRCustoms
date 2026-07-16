@@ -19,7 +19,7 @@ const RadioField = ({ name, options, ...baseProps }: RadioFieldProps) => {
   const { control } = useFormContext();
   const { field } = useController({ name, control });
   return (
-    <BaseField name={name} {...baseProps}>
+    <BaseField name={name} asGroup {...baseProps}>
       {options.map((option) => (
         <div key={option.value}>
           <Radiobox
