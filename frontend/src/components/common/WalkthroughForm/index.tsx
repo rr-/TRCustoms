@@ -1,20 +1,49 @@
-import { Formik } from "formik";
-import type { FormikHelpers } from "formik";
-import { Form } from "formik";
-import { useCallback } from "react";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
 import { FormGrid } from "src/components/common/FormGrid";
-import { FormGridButtons } from "src/components/common/FormGrid";
 import { FormGridFieldSet } from "src/components/common/FormGrid";
 import { InfoMessage } from "src/components/common/InfoMessage";
 import { InfoMessageType } from "src/components/common/InfoMessage";
-import { TextAreaFormField } from "src/components/formfields/TextAreaFormField";
+import { Form } from "src/components/forms/Form";
+import { FormButtons } from "src/components/forms/FormButtons";
+import { TextAreaField } from "src/components/forms/TextAreaField";
+import { useFormSubmit } from "src/components/forms/useFormSubmit";
 import { WalkthroughLink } from "src/components/links/WalkthroughLink";
 import type { LevelNested } from "src/services/LevelService";
-import { WalkthroughType } from "src/services/WalkthroughService";
-import type { WalkthroughDetails } from "src/services/WalkthroughService";
 import { WalkthroughService } from "src/services/WalkthroughService";
 import { WalkthroughStatus } from "src/services/WalkthroughService";
-import { extractErrorMessage } from "src/utils/misc";
+import { WalkthroughType } from "src/services/WalkthroughService";
+import type { WalkthroughDetails } from "src/services/WalkthroughService";
+import type { WalkthroughListing } from "src/services/WalkthroughService";
+import { z } from "zod";
+
+const DEFAULT_TEXT = `# Level Walkthrough
+## Level 1
+Example text.
+
+## Level 2
+Example text.`;
+
+const schema = z.object({
+  text: z.string().min(1, "Walkthrough text is required"),
+});
+type WalkthroughFormValues = z.infer<typeof schema>;
+
+const successMessage = (
+  walkthrough: WalkthroughListing,
+  action: string,
+  suffix: string,
+) => (
+  <>
+    Walkthrough {action}.{" "}
+    <WalkthroughLink
+      walkthrough={{ id: walkthrough.id, levelName: walkthrough.level.name }}
+    >
+      Click here
+    </WalkthroughLink>{" "}
+    {suffix}.
+  </>
+);
 
 interface WalkthroughDraftDisclaimerProps {
   walkthrough?: WalkthroughDetails | undefined;
@@ -39,135 +68,68 @@ const WalkthroughDraftDisclaimer = ({
   );
 };
 
-interface WalkthroughFormValues {
-  text: string;
-}
-
 interface WalkthroughFormProps {
   level?: LevelNested | undefined;
   walkthrough?: WalkthroughDetails | undefined;
 }
 
 const WalkthroughForm = ({ level, walkthrough }: WalkthroughFormProps) => {
-  const initialValues = {
-    text:
-      walkthrough?.text ||
-      `# Level Walkthrough
-## Level 1
-Example text.
+  const form = useForm<WalkthroughFormValues>({
+    resolver: zodResolver(schema),
+    defaultValues: { text: walkthrough?.text || DEFAULT_TEXT },
+  });
 
-## Level 2
-Example text.`,
-  };
+  const { submit, result } = useFormSubmit(form, async ({ text }) => {
+    if (walkthrough?.id) {
+      const updated = await WalkthroughService.update(walkthrough.id, { text });
+      return {
+        final: false,
+        success: successMessage(updated, "updated", "to see the changes"),
+      };
+    }
+    if (level) {
+      const created = await WalkthroughService.create({
+        levelId: level.id,
+        walkthroughType: WalkthroughType.Text,
+        text,
+      });
+      return {
+        final: true,
+        success: successMessage(created, "draft saved", "to see it"),
+      };
+    }
+  });
 
-  const handleSubmitError = useCallback(
-    (
-      error: unknown,
-      { setSubmitting, setStatus }: FormikHelpers<WalkthroughFormValues>,
-    ) => {
-      console.error(error);
-      const message = extractErrorMessage(error);
-      setSubmitting(false);
-      setStatus({ error: message });
-    },
-    [],
-  );
-
-  const handleSubmit = useCallback(
-    async (
-      values: WalkthroughFormValues,
-      helpers: FormikHelpers<WalkthroughFormValues>,
-    ) => {
-      const { setStatus } = helpers;
-      setStatus({});
-      try {
-        if (walkthrough?.id) {
-          const outWalkthrough = await WalkthroughService.update(
-            walkthrough.id,
-            { text: values.text },
-          );
-          setStatus({
-            final: false,
-            success: (
-              <>
-                Walkthrough updated.{" "}
-                <WalkthroughLink
-                  walkthrough={{
-                    id: outWalkthrough.id,
-                    levelName: outWalkthrough.level.name,
-                  }}
-                >
-                  Click here
-                </WalkthroughLink>{" "}
-                to see the changes.
-              </>
-            ),
-          });
-        } else if (level) {
-          const outWalkthrough = await WalkthroughService.create({
-            levelId: level?.id,
-            walkthroughType: WalkthroughType.Text,
-            text: values.text,
-          });
-          setStatus({
-            final: true,
-            success: (
-              <>
-                Walkthrough draft saved.{" "}
-                <WalkthroughLink
-                  walkthrough={{
-                    id: outWalkthrough.id,
-                    levelName: outWalkthrough.level.name,
-                  }}
-                >
-                  Click here
-                </WalkthroughLink>{" "}
-                to see it.
-              </>
-            ),
-          });
-        }
-      } catch (error) {
-        handleSubmitError(error, helpers);
-      }
-    },
-    [level, walkthrough, handleSubmitError],
-  );
+  if (result?.final && result.success) {
+    return <div className="FormFieldSuccess">{result.success}</div>;
+  }
 
   return (
-    <Formik initialValues={initialValues} onSubmit={handleSubmit}>
-      {({ isSubmitting, status, ...context }) =>
-        status?.final && status?.success ? (
-          <div className="FormFieldSuccess">{status.success}</div>
-        ) : (
-          <Form>
-            <FormGrid>
-              <FormGridFieldSet>
-                <TextAreaFormField
-                  label="Text"
-                  name="text"
-                  rich={true}
-                  markdownLimitKey="walkthrough_text"
-                />
-              </FormGridFieldSet>
+    <Form form={form} onSubmit={submit}>
+      <FormGrid>
+        <FormGridFieldSet>
+          <TextAreaField
+            label="Text"
+            name="text"
+            rich={true}
+            markdownLimitKey="walkthrough_text"
+          />
+        </FormGridFieldSet>
 
-              <FormGridButtons
-                status={status}
-                extra={<WalkthroughDraftDisclaimer walkthrough={walkthrough} />}
-              >
-                <button type="submit" disabled={isSubmitting}>
-                  {walkthrough?.status === WalkthroughStatus.Draft
-                    ? "Update draft"
-                    : walkthrough
-                      ? "Update walkthrough"
-                      : "Save draft"}
-                </button>
-              </FormGridButtons>
-            </FormGrid>
-          </Form>
-        )
-      }
-    </Formik>
+        <FormButtons
+          result={result}
+          extra={<WalkthroughDraftDisclaimer walkthrough={walkthrough} />}
+        >
+          <button type="submit" disabled={form.formState.isSubmitting}>
+            {walkthrough?.status === WalkthroughStatus.Draft
+              ? "Update draft"
+              : walkthrough
+                ? "Update walkthrough"
+                : "Save draft"}
+          </button>
+        </FormButtons>
+      </FormGrid>
+    </Form>
   );
 };
 
