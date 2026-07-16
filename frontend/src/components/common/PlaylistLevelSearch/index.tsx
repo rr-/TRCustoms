@@ -5,13 +5,14 @@ import type { LevelNested } from "src/services/LevelService";
 import { LevelService } from "src/services/LevelService";
 import { PlaylistItemStatus } from "src/services/PlaylistService";
 import { PlaylistService } from "src/services/PlaylistService";
+import { getResponseError } from "src/utils/misc";
 
-interface PlaylistAddFormProps {
+interface PlaylistLevelSearchProps {
   userId: number;
   onAdd?: () => void;
 }
 
-const PlaylistAddForm = ({ userId, onAdd }: PlaylistAddFormProps) => {
+const PlaylistLevelSearch = ({ userId, onAdd }: PlaylistLevelSearchProps) => {
   const [suggestions, setSuggestions] = useState<LevelNested[]>([]);
 
   const handleSearchTrigger = useCallback(async (userInput: string) => {
@@ -42,7 +43,9 @@ const PlaylistAddForm = ({ userId, onAdd }: PlaylistAddFormProps) => {
         onAdd?.();
       } catch (error) {
         console.error(error);
-        if ((error as any).response?.data.code === "duplicate_level") {
+        // The generated client rejects with the parsed response body, so the
+        // duplicate marker lives at the top level rather than error.response.
+        if (getResponseError(error)?.code === "duplicate_level") {
           alert("This level was already added to the playlist.");
         } else {
           alert("Failed to add the level to the playlist.");
@@ -64,4 +67,4 @@ const PlaylistAddForm = ({ userId, onAdd }: PlaylistAddFormProps) => {
   );
 };
 
-export { PlaylistAddForm };
+export { PlaylistLevelSearch };

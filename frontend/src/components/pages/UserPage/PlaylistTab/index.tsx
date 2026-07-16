@@ -4,7 +4,7 @@ import { useEffect } from "react";
 import { useState } from "react";
 import { PlaylistImportButton } from "src/components/buttons/PlaylistImportButton";
 import { PermissionGuard } from "src/components/common/PermissionGuard";
-import { PlaylistAddForm } from "src/components/common/PlaylistAddForm";
+import { PlaylistLevelSearch } from "src/components/common/PlaylistLevelSearch";
 import { PlaylistTable } from "src/components/common/PlaylistTable";
 import type { PlaylistSearchQuery } from "src/services/PlaylistService";
 import { getPlaylistSearchQuery } from "src/services/PlaylistService";
@@ -36,7 +36,7 @@ const PlaylistTab = ({ user }: PlaylistTabProps) => {
         owningUsers={[user]}
       >
         <div className={styles.toolbar}>
-          <PlaylistAddForm userId={user.id} onAdd={handleAdd} />
+          <PlaylistLevelSearch userId={user.id} onAdd={handleAdd} />
           <PlaylistImportButton userId={user.id} />
         </div>
       </PermissionGuard>
