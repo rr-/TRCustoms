@@ -6,9 +6,15 @@ import { defineConfig } from "vitest/config";
 export default defineConfig({
   plugins: [react()],
   test: {
-    environment: "jsdom",
+    environment: "happy-dom",
     setupFiles: ["./src/tests/setup.ts"],
     include: ["src/tests/**/*.test.{ts,tsx}"],
+    // happy-dom stands up ~3x faster than jsdom; threads start cheaper than
+    // forks; and skipping per-file isolation reuses one environment per worker.
+    // Our tests are leak-safe (per-test query clients + afterEach cleanup), so
+    // together these cut the suite roughly in half.
+    pool: "threads",
+    isolate: false,
   },
   build: {
     rollupOptions: {
