@@ -50,7 +50,7 @@ const RatingAddAction = ({ level }: RatingAddActionProps) => {
     return <p>{ratingResult.error.message}</p>;
   }
 
-  if (ratingResult.isLoading || !config) {
+  if (ratingResult.isLoading || !config || !user) {
     return <Loader />;
   }
 

@@ -33,6 +33,17 @@ const defaultEmailSettings: Record<EmailSettingKey, boolean> = {
   email_walkthrough_updated: false,
 };
 
+// The server settings mark each flag optional; fall back to the defaults so
+// every key is a concrete boolean for the checkbox state.
+const resolveEmailSettings = (
+  settings: Partial<Record<EmailSettingKey, boolean>> | null | undefined,
+): Record<EmailSettingKey, boolean> => {
+  const keys = Object.keys(defaultEmailSettings) as EmailSettingKey[];
+  return Object.fromEntries(
+    keys.map((key) => [key, settings?.[key] ?? defaultEmailSettings[key]]),
+  ) as Record<EmailSettingKey, boolean>;
+};
+
 const EmailCheckbox = ({
   label,
   settingKey,
@@ -74,10 +85,10 @@ const EmailSettings = () => {
   const { user, setUser } = useContext(UserContext);
   const [userSettings, setUserSettings] = useState<
     Record<EmailSettingKey, boolean>
-  >(user?.settings ?? defaultEmailSettings);
+  >(resolveEmailSettings(user?.settings));
   useEffect(() => {
     if (user?.settings) {
-      setUserSettings(user.settings);
+      setUserSettings(resolveEmailSettings(user.settings));
     }
   }, [user]);
 

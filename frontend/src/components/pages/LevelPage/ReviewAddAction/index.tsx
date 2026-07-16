@@ -48,7 +48,7 @@ const ReviewAddAction = ({ level }: ReviewAddActionProps) => {
     return <p>{reviewResult.error.message}</p>;
   }
 
-  if (reviewResult.isLoading) {
+  if (reviewResult.isLoading || !user) {
     return <Loader />;
   }
 

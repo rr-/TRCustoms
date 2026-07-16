@@ -8,7 +8,15 @@ interface UserContextProviderProps {
   children: React.ReactNode;
 }
 
-const UserContext = createContext<any>(null);
+interface UserContextType {
+  user: UserDetails | null;
+  setUser: React.Dispatch<React.SetStateAction<UserDetails | null>>;
+}
+
+const UserContext = createContext<UserContextType>({
+  user: null,
+  setUser: () => {},
+});
 
 const UserContextProvider = ({ children }: UserContextProviderProps) => {
   const [user, setUser] = useState<UserDetails | null>(null);

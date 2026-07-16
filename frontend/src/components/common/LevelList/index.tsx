@@ -113,7 +113,8 @@ const LevelView = ({ level }: LevelViewProps) => {
         <header className={styles.header}>
           {author}
           {!level.is_approved ||
-          level.authors.map((author) => author.id).includes(loggedInUser?.id)
+          (loggedInUser != null &&
+            level.authors.some((author) => author.id === loggedInUser.id))
             ? status
             : null}
         </header>

@@ -6,13 +6,15 @@ import { MemoryRouter } from "react-router-dom";
 import { Route } from "react-router-dom";
 import { Routes } from "react-router-dom";
 import { UserContext } from "src/contexts/UserContext";
+import type { UserDetails } from "src/services/UserService";
 
 interface RenderRouteOptions {
   // The route pattern (e.g. "/levels/:levelId/walkthrough") and the concrete
   // entry to visit, so useParams resolves exactly as it does in the app.
   path: string;
   entry: string;
-  user?: unknown;
+  // Tests supply only the fields the component reads.
+  user?: Partial<UserDetails> | null;
 }
 
 // Render a page component inside the providers it expects: a retry-free query
@@ -25,7 +27,9 @@ const renderRoute = (ui: ReactElement, options: RenderRouteOptions) => {
   });
   return render(
     <QueryClientProvider client={queryClient}>
-      <UserContext.Provider value={{ user, setUser: () => {} }}>
+      <UserContext.Provider
+        value={{ user: user as UserDetails | null, setUser: () => {} }}
+      >
         <MemoryRouter initialEntries={[entry]}>
           <Routes>
             <Route path={path} element={ui} />

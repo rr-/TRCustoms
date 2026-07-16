@@ -32,8 +32,11 @@ const WalkthroughsBar = ({ level }: WalkthroughsBarProps) => {
       user?.id,
     ],
     queryFn: async () => {
+      if (!user) {
+        return null;
+      }
       const walkthroughs = await WalkthroughService.searchWalkthroughs({
-        authors: [user?.id],
+        authors: [user.id],
         levels: [level.id],
         walkthroughType: WalkthroughType.Text,
       });

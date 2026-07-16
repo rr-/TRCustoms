@@ -56,8 +56,11 @@ const getReviewById = async (reviewId: number): Promise<ReviewDetails> => {
 
 const getReviewByAuthorAndLevelIds = async (
   levelId: number,
-  authorId: number,
+  authorId: number | undefined,
 ): Promise<ReviewDetails | null> => {
+  if (authorId === undefined) {
+    return null;
+  }
   const reviews = await searchReviews({
     authors: [authorId],
     levels: [levelId],

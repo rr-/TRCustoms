@@ -42,7 +42,7 @@ const GenericGuard = ({
 };
 
 const hasPermission = (
-  loggedInUser: UserDetails,
+  loggedInUser: UserDetails | null,
   require: UserPermission | string,
   owningUserIds?: number[],
 ): boolean => {
