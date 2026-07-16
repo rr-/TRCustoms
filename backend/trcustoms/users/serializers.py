@@ -75,6 +75,7 @@ class UserListingSerializer(serializers.ModelSerializer):
     rated_level_count = serializers.ReadOnlyField()
     reviewed_level_count = serializers.ReadOnlyField()
     is_active = serializers.ReadOnlyField()
+    is_banned = serializers.ReadOnlyField()
     is_pending_activation = serializers.ReadOnlyField()
     picture = UploadedFileNestedSerializer(read_only=True)
 

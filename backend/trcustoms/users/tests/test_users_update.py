@@ -103,6 +103,7 @@ def test_user_update_spoofing_privileges(auth_api_client: APIClient) -> None:
     payload = {
         "is_active": False,
         "is_staff": True,
+        "is_banned": True,
         "is_pending_activation": True,
     }
     user = auth_api_client.user
@@ -114,4 +115,5 @@ def test_user_update_spoofing_privileges(auth_api_client: APIClient) -> None:
     user.refresh_from_db()
     assert user.is_active
     assert not user.is_staff
+    assert not user.is_banned
     assert not user.is_pending_activation
