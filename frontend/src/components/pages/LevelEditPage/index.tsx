@@ -11,6 +11,7 @@ import type { LevelDetails } from "src/services/LevelService";
 import { LevelService } from "src/services/LevelService";
 import { getLevelOwningUserIds } from "src/services/LevelService";
 import { UserPermission } from "src/services/UserService";
+import { queryKeys } from "src/services/queryKeys";
 import { usePageMetadata } from "src/stores/pageMetadata";
 
 const LevelEditPage = () => {
@@ -18,7 +19,7 @@ const LevelEditPage = () => {
   const navigate = useNavigate();
 
   const result = useQuery<LevelDetails, Error>({
-    queryKey: ["level", LevelService.getLevelById, levelId],
+    queryKey: queryKeys.levels.detail(levelId),
     queryFn: async () => LevelService.getLevelById(+levelId),
   });
 

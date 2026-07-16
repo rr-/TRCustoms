@@ -20,6 +20,7 @@ import { ReviewAddAction } from "src/components/pages/LevelPage/ReviewAddAction"
 import { ReviewEditAction } from "src/components/pages/LevelPage/ReviewEditAction";
 import { LevelService } from "src/services/LevelService";
 import type { LevelDetails } from "src/services/LevelService";
+import { queryKeys } from "src/services/queryKeys";
 import { usePageMetadata } from "src/stores/pageMetadata";
 import { useScrollStore } from "src/stores/scroll";
 
@@ -34,7 +35,7 @@ const LevelPage = ({ tabName, action }: LevelPageProps) => {
   const { setShouldScroll } = useScrollStore((state) => state);
 
   const result = useQuery<LevelDetails, Error>({
-    queryKey: ["level", LevelService.getLevelById, levelId],
+    queryKey: queryKeys.levels.detail(levelId),
     queryFn: async () => LevelService.getLevelById(+levelId),
   });
 

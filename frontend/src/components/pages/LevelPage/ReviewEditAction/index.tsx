@@ -12,6 +12,7 @@ import type { LevelNested } from "src/services/LevelService";
 import type { ReviewDetails } from "src/services/ReviewService";
 import { ReviewService } from "src/services/ReviewService";
 import { UserPermission } from "src/services/UserService";
+import { queryKeys } from "src/services/queryKeys";
 
 interface ReviewEditActionProps {
   level: LevelNested;
@@ -23,7 +24,7 @@ const ReviewEditAction = ({ level }: ReviewEditActionProps) => {
   const playlistModalRef = useRef<PlaylistAddModalHandle>(null);
 
   const reviewResult = useQuery<ReviewDetails, Error>({
-    queryKey: ["review", ReviewService.getReviewById, reviewId],
+    queryKey: queryKeys.reviews.detail(reviewId),
     queryFn: async () => ReviewService.getReviewById(+reviewId),
   });
 

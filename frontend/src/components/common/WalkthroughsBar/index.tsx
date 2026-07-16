@@ -11,6 +11,7 @@ import { UserPermission } from "src/services/UserService";
 import { WalkthroughType } from "src/services/WalkthroughService";
 import type { WalkthroughDetails } from "src/services/WalkthroughService";
 import { WalkthroughService } from "src/services/WalkthroughService";
+import { queryKeys } from "src/services/queryKeys";
 import { useUser } from "src/stores/user";
 import { showAlertOnError } from "src/utils/misc";
 
@@ -24,12 +25,7 @@ const WalkthroughsBar = ({ level }: WalkthroughsBarProps) => {
 
   const { user } = useUser();
   const ownWalkthroughResult = useQuery<WalkthroughDetails | null, Error>({
-    queryKey: [
-      "walkthrough",
-      WalkthroughService.getWalkthroughById,
-      level.id,
-      user?.id,
-    ],
+    queryKey: queryKeys.walkthroughs.byLevelAndUser(level.id, user?.id),
     queryFn: async () => {
       if (!user) {
         return null;

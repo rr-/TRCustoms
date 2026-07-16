@@ -12,12 +12,13 @@ import { SidebarLayoutVariant } from "src/components/layouts/SidebarLayout";
 import { Markdown } from "src/components/markdown/Markdown";
 import type { EventDetails } from "src/services/EventService";
 import { EventService } from "src/services/EventService";
+import { queryKeys } from "src/services/queryKeys";
 import { usePageMetadata } from "src/stores/pageMetadata";
 
 const EventPage = () => {
   const { eventId = "" } = useParams();
   const result = useQuery<EventDetails, Error>({
-    queryKey: ["event", EventService.getEventById, eventId],
+    queryKey: queryKeys.events.detail(eventId),
     queryFn: async () => EventService.getEventById(Number(eventId)),
   });
 

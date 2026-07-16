@@ -169,7 +169,7 @@ const AuditLogTable = ({
   onSearchQueryChange,
 }: AuditLogTableProps) => {
   const result = useQuery<AuditLogSearchResult, Error>({
-    queryKey: ["auditLogs", AuditLogService.searchAuditLogs, searchQuery],
+    queryKey: queryKeys.auditLogs.list(searchQuery),
     queryFn: async () => AuditLogService.searchAuditLogs(searchQuery),
   });
 

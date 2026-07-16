@@ -12,6 +12,7 @@ import { LevelService } from "src/services/LevelService";
 import { UserPermission } from "src/services/UserService";
 import type { WalkthroughDetails } from "src/services/WalkthroughService";
 import { WalkthroughService } from "src/services/WalkthroughService";
+import { queryKeys } from "src/services/queryKeys";
 import { usePageMetadata } from "src/stores/pageMetadata";
 
 const WalkthroughEditPage = () => {
@@ -21,16 +22,12 @@ const WalkthroughEditPage = () => {
   // these return null when the id is absent (creating a walkthrough has no
   // walkthroughId; editing via the /walkthroughs route has no levelId).
   const levelResult = useQuery<LevelDetails | null, Error>({
-    queryKey: ["level", LevelService.getLevelById, levelId],
+    queryKey: queryKeys.levels.detail(levelId),
     queryFn: async () => (levelId ? LevelService.getLevelById(+levelId) : null),
   });
 
   const walkthroughResult = useQuery<WalkthroughDetails | null, Error>({
-    queryKey: [
-      "walkthrough",
-      WalkthroughService.getWalkthroughById,
-      walkthroughId,
-    ],
+    queryKey: queryKeys.walkthroughs.detail(walkthroughId),
     queryFn: async () =>
       walkthroughId
         ? WalkthroughService.getWalkthroughById(+walkthroughId)

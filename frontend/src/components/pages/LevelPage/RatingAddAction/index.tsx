@@ -11,6 +11,7 @@ import type { LevelNested } from "src/services/LevelService";
 import type { RatingDetails } from "src/services/RatingService";
 import { RatingService } from "src/services/RatingService";
 import { UserPermission } from "src/services/UserService";
+import { queryKeys } from "src/services/queryKeys";
 import { useConfig } from "src/stores/config";
 import { useUser } from "src/stores/user";
 
@@ -25,12 +26,7 @@ const RatingAddAction = ({ level }: RatingAddActionProps) => {
   const playlistModalRef = useRef<PlaylistAddModalHandle>(null);
 
   const ratingResult = useQuery<RatingDetails | null, Error>({
-    queryKey: [
-      "rating",
-      RatingService.getRatingByAuthorAndLevelIds,
-      level.id,
-      user?.id,
-    ],
+    queryKey: queryKeys.ratings.byAuthorAndLevel(level.id, user?.id),
     queryFn: async () =>
       RatingService.getRatingByAuthorAndLevelIds(level.id, user?.id),
   });

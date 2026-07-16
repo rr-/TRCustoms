@@ -10,6 +10,7 @@ import { PlainLayout } from "src/components/layouts/PlainLayout";
 import type { NewsDetails } from "src/services/NewsService";
 import { NewsService } from "src/services/NewsService";
 import { UserPermission } from "src/services/UserService";
+import { queryKeys } from "src/services/queryKeys";
 import { usePageMetadata } from "src/stores/pageMetadata";
 
 interface NewsEditPageViewProps {
@@ -20,7 +21,7 @@ const NewsEditPageView = ({ newsId }: NewsEditPageViewProps) => {
   const navigate = useNavigate();
 
   const result = useQuery<NewsDetails, Error>({
-    queryKey: ["news", NewsService.getNewsById, newsId],
+    queryKey: queryKeys.news.detail(newsId),
     queryFn: async () => NewsService.getNewsById(+newsId),
   });
 

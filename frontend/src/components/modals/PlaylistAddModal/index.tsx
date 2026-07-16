@@ -7,6 +7,7 @@ import { ConfirmModal } from "src/components/modals/ConfirmModal";
 import { PlaylistItemStatus } from "src/services/PlaylistService";
 import { PlaylistService } from "src/services/PlaylistService";
 import type { PlaylistItemDetails } from "src/services/PlaylistService";
+import { queryKeys } from "src/services/queryKeys";
 import { AutoPlaylistChoice } from "src/stores/settings";
 import { useSettings } from "src/stores/settings";
 import { showAlertOnError } from "src/utils/misc";
@@ -30,7 +31,7 @@ const PlaylistAddModal = forwardRef<
   const { autoPlaylistChoice, setAutoPlaylistChoice } = useSettings();
 
   const playlistItemResult = useQuery<PlaylistItemDetails, Error>({
-    queryKey: ["playlists", PlaylistService.get, userId, levelId],
+    queryKey: queryKeys.playlists.byLevel(userId, levelId),
     queryFn: async () => PlaylistService.get(userId, levelId),
   });
 

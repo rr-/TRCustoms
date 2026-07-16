@@ -11,6 +11,7 @@ import type { LevelNested } from "src/services/LevelService";
 import type { ReviewDetails } from "src/services/ReviewService";
 import { ReviewService } from "src/services/ReviewService";
 import { UserPermission } from "src/services/UserService";
+import { queryKeys } from "src/services/queryKeys";
 import { useUser } from "src/stores/user";
 
 interface ReviewAddActionProps {
@@ -23,12 +24,7 @@ const ReviewAddAction = ({ level }: ReviewAddActionProps) => {
   const playlistModalRef = useRef<PlaylistAddModalHandle>(null);
 
   const reviewResult = useQuery<ReviewDetails | null, Error>({
-    queryKey: [
-      "review",
-      ReviewService.getReviewByAuthorAndLevelIds,
-      level.id,
-      user?.id,
-    ],
+    queryKey: queryKeys.reviews.byAuthorAndLevel(level.id, user?.id),
     queryFn: async () =>
       ReviewService.getReviewByAuthorAndLevelIds(level.id, user?.id),
   });

@@ -18,6 +18,7 @@ import { WalkthroughsTab } from "src/components/pages/UserPage/WalkthroughsTab";
 import type { UserDetails } from "src/services/UserService";
 import { UserPermission } from "src/services/UserService";
 import { UserService } from "src/services/UserService";
+import { queryKeys } from "src/services/queryKeys";
 import { usePageMetadata } from "src/stores/pageMetadata";
 import { useScrollStore } from "src/stores/scroll";
 import { useUser } from "src/stores/user";
@@ -34,7 +35,7 @@ const UserPage = ({ tabName }: UserPageProps) => {
   const { setShouldScroll } = useScrollStore((state) => state);
 
   const userResult = useQuery<UserDetails, Error>({
-    queryKey: ["user", UserService.getUserById, userId],
+    queryKey: queryKeys.users.detail(userId),
     queryFn: async () => UserService.getUserById(+userId),
   });
 

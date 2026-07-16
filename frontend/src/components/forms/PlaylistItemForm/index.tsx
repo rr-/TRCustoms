@@ -15,6 +15,7 @@ import type { LevelNested } from "src/services/LevelService";
 import type { PlaylistItemDetails } from "src/services/PlaylistService";
 import { PlaylistService } from "src/services/PlaylistService";
 import { PlaylistItemStatus } from "src/services/PlaylistService";
+import { queryKeys } from "src/services/queryKeys";
 import { z } from "zod";
 
 interface PlaylistItemFormProps {
@@ -125,7 +126,7 @@ const PlaylistItemForm = ({
   onNavigateToMyPlaylist,
 }: PlaylistItemFormProps) => {
   const playlistItemResult = useQuery<PlaylistItemDetails, Error>({
-    queryKey: ["playlists", PlaylistService.get, userId, level.id],
+    queryKey: queryKeys.playlists.byLevel(userId, level.id),
     queryFn: async () => PlaylistService.get(userId, level.id),
   });
 

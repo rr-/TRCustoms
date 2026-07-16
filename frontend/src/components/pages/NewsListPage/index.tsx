@@ -13,6 +13,7 @@ import { DISABLE_PAGING } from "src/constants";
 import type { NewsSearchQuery } from "src/services/NewsService";
 import type { NewsSearchResult } from "src/services/NewsService";
 import { NewsService } from "src/services/NewsService";
+import { queryKeys } from "src/services/queryKeys";
 import { usePageMetadata } from "src/stores/pageMetadata";
 import { formatDate } from "src/utils/string";
 
@@ -24,7 +25,7 @@ const NewsListPage = () => {
   };
 
   const result = useQuery<NewsSearchResult, Error>({
-    queryKey: ["news", NewsService.searchNews, newsSearchQuery],
+    queryKey: queryKeys.news.list(newsSearchQuery),
     queryFn: async () => NewsService.searchNews(newsSearchQuery),
   });
 

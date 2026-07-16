@@ -13,6 +13,7 @@ import { Markdown } from "src/components/markdown/Markdown";
 import type { NewsDetails } from "src/services/NewsService";
 import { NewsService } from "src/services/NewsService";
 import { UserPermission } from "src/services/UserService";
+import { queryKeys } from "src/services/queryKeys";
 import { usePageMetadata } from "src/stores/pageMetadata";
 import { formatDate } from "src/utils/string";
 
@@ -20,7 +21,7 @@ const NewsPage = () => {
   const { newsId = "" } = useParams();
 
   const newsResult = useQuery<NewsDetails, Error>({
-    queryKey: ["news", NewsService.getNewsById, newsId],
+    queryKey: queryKeys.news.detail(newsId),
     queryFn: async () => NewsService.getNewsById(+newsId),
   });
 

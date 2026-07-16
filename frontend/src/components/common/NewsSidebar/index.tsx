@@ -12,6 +12,7 @@ import type { NewsListing } from "src/services/NewsService";
 import { NewsSearchResult } from "src/services/NewsService";
 import { NewsService } from "src/services/NewsService";
 import { UserPermission } from "src/services/UserService";
+import { queryKeys } from "src/services/queryKeys";
 import { formatDate } from "src/utils/string";
 
 const NewsSidebar = () => {
@@ -19,7 +20,7 @@ const NewsSidebar = () => {
     pageSize: 10,
   };
   const result = useQuery<NewsSearchResult, Error>({
-    queryKey: ["news", searchQuery],
+    queryKey: queryKeys.news.list(searchQuery),
     queryFn: async () => NewsService.searchNews(searchQuery),
   });
 

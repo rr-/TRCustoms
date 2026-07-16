@@ -10,6 +10,7 @@ import type { FeaturedLevels } from "src/services/ConfigService";
 import type { FeaturedLevel } from "src/services/ConfigService";
 import { FeatureType } from "src/services/ConfigService";
 import { ConfigService } from "src/services/ConfigService";
+import { queryKeys } from "src/services/queryKeys";
 
 interface FeaturedLevelViewProps {
   featuredLevel: FeaturedLevel | null;
@@ -92,7 +93,7 @@ const FeaturedLevelView = ({
 
 const FeaturedLevelsView = () => {
   const result = useQuery<FeaturedLevels, Error>({
-    queryKey: ["featuredLevels", ConfigService.getFeaturedLevels],
+    queryKey: queryKeys.levels.featured(),
     queryFn: async () => ConfigService.getFeaturedLevels(),
   });
 

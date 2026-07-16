@@ -12,6 +12,7 @@ import type { LevelNested } from "src/services/LevelService";
 import type { RatingDetails } from "src/services/RatingService";
 import { RatingService } from "src/services/RatingService";
 import { UserPermission } from "src/services/UserService";
+import { queryKeys } from "src/services/queryKeys";
 import { useConfig } from "src/stores/config";
 
 interface RatingEditActionProps {
@@ -25,7 +26,7 @@ const RatingEditAction = ({ level }: RatingEditActionProps) => {
   const playlistModalRef = useRef<PlaylistAddModalHandle>(null);
 
   const ratingResult = useQuery<RatingDetails, Error>({
-    queryKey: ["rating", RatingService.getRatingById, ratingId],
+    queryKey: queryKeys.ratings.detail(ratingId),
     queryFn: async () => RatingService.getRatingById(+ratingId),
   });
 

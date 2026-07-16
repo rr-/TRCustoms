@@ -22,7 +22,7 @@ interface GenresTableDetailsProps {
 
 const GenresTableDetails = ({ genre }: GenresTableDetailsProps) => {
   const result = useQuery<GenreListing[], Error>({
-    queryKey: ["genre", GenreService.getStats, genre.id],
+    queryKey: queryKeys.genres.stats(genre.id),
     queryFn: async () => GenreService.getStats(+genre.id),
   });
 

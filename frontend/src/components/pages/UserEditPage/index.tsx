@@ -10,6 +10,7 @@ import { PlainLayout } from "src/components/layouts/PlainLayout";
 import { UserService } from "src/services/UserService";
 import type { UserDetails } from "src/services/UserService";
 import { UserPermission } from "src/services/UserService";
+import { queryKeys } from "src/services/queryKeys";
 import { usePageMetadata } from "src/stores/pageMetadata";
 import { useUser } from "src/stores/user";
 
@@ -22,7 +23,7 @@ const UserEditPageView = ({ userId }: UserEditViewProps) => {
   const navigate = useNavigate();
 
   const result = useQuery<UserDetails, Error>({
-    queryKey: ["user", UserService.getUserById, userId],
+    queryKey: queryKeys.users.detail(userId),
     queryFn: async () => await UserService.getUserById(+userId),
   });
 

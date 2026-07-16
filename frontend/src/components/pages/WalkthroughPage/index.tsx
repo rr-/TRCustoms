@@ -12,17 +12,14 @@ import { WalkthroughHeader } from "src/components/pages/WalkthroughPage/Walkthro
 import { WalkthroughType } from "src/services/WalkthroughService";
 import type { WalkthroughDetails } from "src/services/WalkthroughService";
 import { WalkthroughService } from "src/services/WalkthroughService";
+import { queryKeys } from "src/services/queryKeys";
 import { usePageMetadata } from "src/stores/pageMetadata";
 
 const WalkthroughPage = () => {
   const { walkthroughId = "" } = useParams();
 
   const result = useQuery<WalkthroughDetails | null, Error>({
-    queryKey: [
-      "walkthrough",
-      WalkthroughService.getWalkthroughById,
-      walkthroughId,
-    ],
+    queryKey: queryKeys.walkthroughs.detail(walkthroughId),
     queryFn: async () => WalkthroughService.getWalkthroughById(+walkthroughId),
   });
 
