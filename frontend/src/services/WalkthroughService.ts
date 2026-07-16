@@ -87,7 +87,7 @@ const create = async ({
       level_id: levelId,
       walkthrough_type: walkthroughType,
       text,
-    } as any,
+    },
     throwOnError: true,
   });
   return data;
@@ -99,7 +99,7 @@ const update = async (
 ): Promise<WalkthroughListing> => {
   const { data } = await walkthroughsPartialUpdate({
     path: { id: walkthroughId },
-    body: { text } as any,
+    body: { text },
     throwOnError: true,
   });
   return data;
@@ -115,7 +115,7 @@ const approve = async (walkthroughId: number): Promise<void> => {
 const reject = async (walkthroughId: number, reason: string): Promise<void> => {
   await walkthroughsRejectCreate({
     path: { id: walkthroughId },
-    body: { reason } as any,
+    body: { reason },
     throwOnError: true,
   });
 };

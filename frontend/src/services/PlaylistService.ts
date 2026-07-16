@@ -67,7 +67,7 @@ const create = async (
 ): Promise<PlaylistItemListing> => {
   const { data } = await usersPlaylistCreate({
     path: { user_id: userId },
-    body: { level_id: levelId, status } as any,
+    body: { level_id: levelId, status },
     throwOnError: true,
   });
   return data;
@@ -80,7 +80,7 @@ const update = async (
 ): Promise<PlaylistItemListing> => {
   const { data } = await usersPlaylistPartialUpdate({
     path: { user_id: userId, id: playlistItemId },
-    body: { status } as any,
+    body: { status },
     throwOnError: true,
   });
   return data;

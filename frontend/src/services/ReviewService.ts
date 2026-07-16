@@ -77,7 +77,7 @@ const update = async (
 ): Promise<ReviewDetails> => {
   const { data } = await reviewsPartialUpdate({
     path: { id: reviewId },
-    body: { level_id: payload.levelId, text: payload.text } as any,
+    body: { level_id: payload.levelId, text: payload.text },
     throwOnError: true,
   });
   return data;
@@ -85,7 +85,7 @@ const update = async (
 
 const create = async (payload: ReviewCreatePayload): Promise<ReviewDetails> => {
   const { data } = await reviewsCreate({
-    body: { level_id: payload.levelId, text: payload.text } as any,
+    body: { level_id: payload.levelId, text: payload.text },
     throwOnError: true,
   });
   return data;
@@ -101,7 +101,7 @@ const hide = async (
 ): Promise<void> => {
   await reviewsHideCreate({
     path: { id: reviewId },
-    body: payload as any,
+    body: payload,
     throwOnError: true,
   });
 };
@@ -112,7 +112,7 @@ const vote = async (
 ): Promise<ReviewListing> => {
   const { data } = await reviewsVoteCreate({
     path: { id: reviewId },
-    body: payload as any,
+    body: payload,
     throwOnError: true,
   });
   return data;

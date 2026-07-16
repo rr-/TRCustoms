@@ -9,6 +9,7 @@ import {
 } from "src/client";
 import type {
   LevelDetails,
+  LevelDetailsWritable,
   LevelDifficultyNested as LevelDifficulty,
   LevelDurationNested as LevelDuration,
   LevelExternalLink as ExternalLink,
@@ -127,7 +128,7 @@ const update = async (
 ): Promise<LevelDetails> => {
   const { data } = await levelsPartialUpdate({
     path: { id: levelId },
-    body: filterFalsyObjectValues({ ...payload }) as any,
+    body: filterFalsyObjectValues({ ...payload }),
     throwOnError: true,
   });
   return data;
@@ -135,7 +136,11 @@ const update = async (
 
 const create = async (payload: LevelCreatePayload): Promise<LevelDetails> => {
   const { data } = await levelsCreate({
-    body: filterFalsyObjectValues({ ...payload }) as any,
+    // The payload type keeps every field optional (it is shared with the PATCH
+    // path), but the form's zod schema guarantees the required ones are present
+    // for a create, so assert the writable shape rather than widening to any.
+    // Undefined optionals drop out during JSON serialization.
+    body: { ...payload } as LevelDetailsWritable,
     throwOnError: true,
   });
   return data;

@@ -78,7 +78,7 @@ const update = async (
 ): Promise<RatingDetails> => {
   const { data } = await ratingsPartialUpdate({
     path: { id: ratingId },
-    body: { level_id: payload.levelId, answer_ids: payload.answerIds } as any,
+    body: { level_id: payload.levelId, answer_ids: payload.answerIds },
     throwOnError: true,
   });
   return data;
@@ -86,7 +86,7 @@ const update = async (
 
 const create = async (payload: RatingCreatePayload): Promise<RatingDetails> => {
   const { data } = await ratingsCreate({
-    body: { level_id: payload.levelId, answer_ids: payload.answerIds } as any,
+    body: { level_id: payload.levelId, answer_ids: payload.answerIds },
     throwOnError: true,
   });
   return data;
