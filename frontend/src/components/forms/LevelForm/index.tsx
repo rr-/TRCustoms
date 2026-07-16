@@ -91,18 +91,23 @@ interface LevelFormValues {
   file_id?: number;
 }
 
-// The field shapes carry the domain objects untouched; every real rule lives in
-// the superRefine below, which reuses the shared validators. The limits come
-// from the backend config and file is only required when creating a level.
+// These arrays hold domain objects produced by the form's own picker
+// components, so we only guard the basic shape (a non-null object) — z.object
+// would strip fields the payload needs. Every real rule lives in the
+// superRefine below, which reuses the shared validators.
+const isObject = (value: unknown): boolean =>
+  typeof value === "object" && value !== null;
+
+// The limits come from the backend config; file is only required on create.
 const buildSchema = (limits: Config["limits"], isEdit: boolean) =>
   z
     .object({
       name: z.string(),
       description: z.string(),
-      genres: z.array(z.custom<GenreNested>()),
-      external_links: z.array(z.custom<ExternalLink>()),
-      authors: z.array(z.custom<UserNested>()),
-      tags: z.array(z.custom<TagNested>()),
+      genres: z.array(z.custom<GenreNested>(isObject)),
+      external_links: z.array(z.custom<ExternalLink>(isObject)),
+      authors: z.array(z.custom<UserNested>(isObject)),
+      tags: z.array(z.custom<TagNested>(isObject)),
       engine_id: z.number().optional(),
       difficulty_id: z.number().optional(),
       duration_id: z.number().optional(),

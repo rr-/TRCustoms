@@ -31,7 +31,7 @@ type ServerErrorMapper<T extends FieldValues> = (
 // try-catch that used to be copy-pasted into each form.
 const useFormSubmit = <T extends FieldValues>(
   form: UseFormReturn<T>,
-  handler: (values: T) => Promise<FormSuccess | void>,
+  handler: (values: T) => Promise<FormResult | void>,
   applyErrors: ServerErrorMapper<T> = applyServerErrors,
 ) => {
   const [result, setResult] = useState<FormResult | null>(null);
