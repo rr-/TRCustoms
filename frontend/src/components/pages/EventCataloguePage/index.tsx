@@ -25,6 +25,7 @@ import {
   type EventSearchQuery,
   type EventListing,
 } from "src/services/EventService";
+import { queryKeys } from "src/services/queryKeys";
 import { usePageMetadata } from "src/stores/pageMetadata";
 
 interface EventViewProps {
@@ -149,7 +150,7 @@ const EventCataloguePage = () => {
 
       <Section>
         <DataList
-          queryName="events"
+          queryKey={queryKeys.events.lists}
           itemKey={(event: EventListing) => `${event.id}`}
           itemView={(event: EventListing) => (
             <EventView key={event.id} event={event} />

@@ -7,6 +7,7 @@ import type { WalkthroughSearchQuery } from "src/services/WalkthroughService";
 import { WalkthroughType } from "src/services/WalkthroughService";
 import { WalkthroughStatus } from "src/services/WalkthroughService";
 import { WalkthroughService } from "src/services/WalkthroughService";
+import { queryKeys } from "src/services/queryKeys";
 import { formatDate } from "src/utils/string";
 
 interface WalkthroughsTableProps {
@@ -112,7 +113,7 @@ const WalkthroughsTable = ({
 
   return (
     <DataTable
-      queryName="walkthroughs"
+      queryKey={queryKeys.walkthroughs.lists}
       columns={columns}
       itemKey={itemKey}
       searchQuery={searchQuery}

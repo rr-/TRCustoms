@@ -11,6 +11,7 @@ import { LevelLink } from "src/components/links/LevelLink";
 import type { LevelListing } from "src/services/LevelService";
 import type { LevelSearchQuery } from "src/services/LevelService";
 import { LevelService } from "src/services/LevelService";
+import { queryKeys } from "src/services/queryKeys";
 import { useUser } from "src/stores/user";
 import { formatDate } from "src/utils/string";
 import { formatFileSize } from "src/utils/string";
@@ -137,7 +138,7 @@ const LevelList = ({ searchQuery, onSearchQueryChange }: LevelListProps) => {
 
   return (
     <DataList
-      queryName="levels"
+      queryKey={queryKeys.levels.lists}
       itemKey={itemKey}
       itemView={itemView}
       searchQuery={searchQuery}

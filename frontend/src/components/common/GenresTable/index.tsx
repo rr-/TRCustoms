@@ -8,6 +8,7 @@ import { GenreLink } from "src/components/links/GenreLink";
 import type { GenreListing } from "src/services/GenreService";
 import type { GenreSearchQuery } from "src/services/GenreService";
 import { GenreService } from "src/services/GenreService";
+import { queryKeys } from "src/services/queryKeys";
 import { formatDate } from "src/utils/string";
 
 interface GenresTableProps {
@@ -95,7 +96,7 @@ const GenresTable = ({
   return (
     <DataTable
       className={styles.table}
-      queryName="genres"
+      queryKey={queryKeys.genres.lists}
       columns={columns}
       itemKey={itemKey}
       detailsElement={(item) => <GenresTableDetails genre={item} />}

@@ -3,6 +3,7 @@ import { DataList } from "src/components/common/DataList";
 import type { ReviewListing } from "src/services/ReviewService";
 import { ReviewService } from "src/services/ReviewService";
 import type { ReviewSearchQuery } from "src/services/ReviewService";
+import { queryKeys } from "src/services/queryKeys";
 
 interface ReviewsListProps {
   showLevels: boolean;
@@ -25,7 +26,7 @@ const ReviewsList = ({
     <DataList
       searchQuery={searchQuery}
       onResultCountChange={onResultCountChange}
-      queryName="reviews"
+      queryKey={queryKeys.reviews.lists}
       onSearchQueryChange={onSearchQueryChange}
       searchFunc={ReviewService.searchReviews}
       itemKey={(review: ReviewListing) => review.id.toString()}

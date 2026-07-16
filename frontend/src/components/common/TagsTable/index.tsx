@@ -13,6 +13,7 @@ import type { TagListing } from "src/services/TagService";
 import type { TagSearchQuery } from "src/services/TagService";
 import { TagService } from "src/services/TagService";
 import { UserPermission } from "src/services/UserService";
+import { queryKeys } from "src/services/queryKeys";
 import { formatDate } from "src/utils/string";
 
 interface TagsTableProps {
@@ -103,7 +104,7 @@ const TagsTable = ({ searchQuery, onSearchQueryChange }: TagsTableProps) => {
   return (
     <DataTable
       className={styles.table}
-      queryName="tags"
+      queryKey={queryKeys.tags.lists}
       columns={columns}
       itemKey={itemKey}
       detailsElement={(item) => <TagsTableDetails tag={item} />}

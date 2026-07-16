@@ -15,6 +15,7 @@ import type {
   AwardSpec,
 } from "src/services/AwardService";
 import { AwardService } from "src/services/AwardService";
+import { queryKeys } from "src/services/queryKeys";
 import { usePageMetadata } from "src/stores/pageMetadata";
 import { makeSentence } from "src/utils/string";
 import { formatDate } from "src/utils/string";
@@ -103,7 +104,7 @@ const AwardRecipientsPage = () => {
 
         <DataTable
           className={styles.table}
-          queryName={`awardRecipients-${code}-${tier ?? ""}`}
+          queryKey={queryKeys.awardRecipients.lists(code, tier)}
           columns={columns}
           itemKey={(item) => `${item.user.id}`}
           searchQuery={searchQuery}

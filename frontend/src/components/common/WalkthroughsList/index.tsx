@@ -3,6 +3,7 @@ import { DataList } from "src/components/common/DataList";
 import type { WalkthroughListing } from "src/services/WalkthroughService";
 import { WalkthroughService } from "src/services/WalkthroughService";
 import type { WalkthroughSearchQuery } from "src/services/WalkthroughService";
+import { queryKeys } from "src/services/queryKeys";
 
 interface WalkthroughsListProps {
   showLevels: boolean;
@@ -22,7 +23,7 @@ const WalkthroughsList = ({
   return (
     <DataList
       searchQuery={searchQuery}
-      queryName="walkthroughs"
+      queryKey={queryKeys.walkthroughs.lists}
       onResultCountChange={onResultCountChange}
       onSearchQueryChange={onSearchQueryChange}
       searchFunc={WalkthroughService.searchWalkthroughs}

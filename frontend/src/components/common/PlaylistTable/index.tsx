@@ -10,6 +10,7 @@ import type { PlaylistSearchQuery } from "src/services/PlaylistService";
 import { PlaylistItemStatus } from "src/services/PlaylistService";
 import { PlaylistService } from "src/services/PlaylistService";
 import { UserPermission } from "src/services/UserService";
+import { queryKeys } from "src/services/queryKeys";
 import { useUser } from "src/stores/user";
 import { formatDate } from "src/utils/string";
 
@@ -94,7 +95,7 @@ const PlaylistTable = ({
   return (
     <DataTable
       className={styles.table}
-      queryName="playlists"
+      queryKey={queryKeys.playlists.lists}
       columns={columns}
       itemKey={itemKey}
       searchQuery={searchQuery}

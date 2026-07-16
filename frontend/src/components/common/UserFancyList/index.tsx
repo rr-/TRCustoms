@@ -7,6 +7,7 @@ import { UserLink } from "src/components/links/UserLink";
 import type { UserListing } from "src/services/UserService";
 import type { UserSearchQuery } from "src/services/UserService";
 import { UserService } from "src/services/UserService";
+import { queryKeys } from "src/services/queryKeys";
 import { formatDate } from "src/utils/string";
 
 interface UserFancyListItemSettings {
@@ -59,7 +60,7 @@ const UserFancyList = ({
   return (
     <DataList
       className={styles.wrapper}
-      queryName="users"
+      queryKey={queryKeys.users.lists}
       itemKey={itemKey}
       pageView={pageView}
       itemView={itemView}

@@ -16,6 +16,7 @@ import type { AuditLogListing } from "src/services/AuditLogService";
 import { AuditLogObjectType } from "src/services/AuditLogService";
 import type { AuditLogSearchResult } from "src/services/AuditLogService";
 import type { AuditLogSearchQuery } from "src/services/AuditLogService";
+import { queryKeys } from "src/services/queryKeys";
 import { formatDateTime } from "src/utils/string";
 import { EMPTY_INPUT_PLACEHOLDER } from "src/utils/string";
 
@@ -228,7 +229,7 @@ const AuditLogTable = ({
   return (
     <DataTable
       className={styles.table}
-      queryName="auditLogs"
+      queryKey={queryKeys.auditLogs.lists}
       columns={columns}
       itemKey={itemKey}
       searchQuery={searchQuery}

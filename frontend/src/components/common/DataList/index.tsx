@@ -7,6 +7,7 @@ import { useEffect } from "react";
 import { Loader } from "src/components/common/Loader";
 import { Pager } from "src/components/common/Pager";
 import { DISABLE_PAGING } from "src/constants";
+import type { Key } from "src/services/queryKeys";
 import { useSettings } from "src/stores/settings";
 import type { GenericSearchResult } from "src/types";
 import type { GenericSearchQuery } from "src/types";
@@ -16,7 +17,7 @@ const DefaultNoItemsElement = <p>There are no results to show.</p>;
 
 interface DataListProps<TItem, TQuery> {
   className?: string | undefined;
-  queryName: string;
+  queryKey: Key;
   itemKey: (item: TItem) => string;
   itemView: (item: TItem) => React.ReactNode;
   pageView?: (children: React.ReactNode) => React.ReactNode;
@@ -45,11 +46,11 @@ const PagedDataList = <TItem extends {}, TQuery extends GenericSearchQuery>({
   itemKey,
   itemView,
   pageView,
-  queryName,
+  queryKey,
   noItemsElement,
 }: ConcreteDataListProps<TItem, TQuery>) => {
   const result = useQuery<GenericSearchResult<TQuery, TItem>, Error>({
-    queryKey: [queryName, searchFunc, searchQuery],
+    queryKey: [...queryKey, searchQuery],
     queryFn: async () => searchFunc(searchQuery),
   });
 
@@ -103,11 +104,11 @@ const InfiniteDataList = <TItem extends {}, TQuery extends GenericSearchQuery>({
   itemKey,
   itemView,
   pageView,
-  queryName,
+  queryKey,
   noItemsElement,
 }: ConcreteDataListProps<TItem, TQuery>) => {
   const result = useInfiniteQuery<GenericSearchResult<TQuery, TItem>, Error>({
-    queryKey: [queryName, searchQuery],
+    queryKey: [...queryKey, searchQuery],
     queryFn: async ({ pageParam }) => {
       return searchFunc({
         ...searchQuery,

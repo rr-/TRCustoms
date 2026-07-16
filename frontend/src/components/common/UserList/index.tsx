@@ -5,6 +5,7 @@ import { UserLink } from "src/components/links/UserLink";
 import type { UserListing } from "src/services/UserService";
 import type { UserSearchQuery } from "src/services/UserService";
 import { UserService } from "src/services/UserService";
+import { queryKeys } from "src/services/queryKeys";
 import { formatDate } from "src/utils/string";
 import { EMPTY_INPUT_PLACEHOLDER } from "src/utils/string";
 
@@ -71,7 +72,7 @@ const UserList = ({ searchQuery, onSearchQueryChange }: UserListProps) => {
   return (
     <DataTable
       className={styles.table}
-      queryName="users"
+      queryKey={queryKeys.users.lists}
       columns={columns}
       itemKey={itemKey}
       searchQuery={searchQuery}

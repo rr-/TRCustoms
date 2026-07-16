@@ -9,6 +9,7 @@ import { Loader } from "src/components/common/Loader";
 import { Pager } from "src/components/common/Pager";
 import { SortLink } from "src/components/common/SortLink";
 import { DISABLE_PAGING } from "src/constants";
+import type { Key } from "src/services/queryKeys";
 import { useSettings } from "src/stores/settings";
 import type { GenericSearchResult } from "src/types";
 import type { GenericSearchQuery } from "src/types";
@@ -37,7 +38,7 @@ interface DataTableColumn<TItem> {
 
 interface DataTableProps<TItem, TQuery> {
   className?: string;
-  queryName: string;
+  queryKey: Key;
   itemKey: (item: TItem) => string;
   columns: DataTableColumn<TItem>[];
 
@@ -183,7 +184,7 @@ const PagedDataTable = <TItem extends {}, TQuery extends GenericSearchQuery>(
 ) => {
   const {
     className,
-    queryName,
+    queryKey,
     searchQuery,
     onSearchQueryChange,
     searchFunc,
@@ -191,7 +192,7 @@ const PagedDataTable = <TItem extends {}, TQuery extends GenericSearchQuery>(
   } = props;
 
   const result = useQuery<GenericSearchResult<TQuery, TItem> | null, Error>({
-    queryKey: [queryName, searchFunc, searchQuery],
+    queryKey: [...queryKey, searchQuery],
     queryFn: async () => searchFunc(searchQuery),
   });
 
@@ -224,10 +225,10 @@ const PagedDataTable = <TItem extends {}, TQuery extends GenericSearchQuery>(
 const InfiniteDataTable = <TItem extends {}, TQuery extends GenericSearchQuery>(
   props: DataTableProps<TItem, TQuery>,
 ) => {
-  const { className, queryName, searchQuery, searchFunc } = props;
+  const { className, queryKey, searchQuery, searchFunc } = props;
 
   const result = useInfiniteQuery({
-    queryKey: [queryName, searchQuery],
+    queryKey: [...queryKey, searchQuery],
     queryFn: async ({ pageParam }: { pageParam: number }) => {
       return searchFunc({
         ...searchQuery,

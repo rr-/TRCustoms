@@ -13,6 +13,7 @@ import type { RatingListing } from "src/services/RatingService";
 import type { RatingSearchQuery } from "src/services/RatingService";
 import { RatingService } from "src/services/RatingService";
 import { UserPermission } from "src/services/UserService";
+import { queryKeys } from "src/services/queryKeys";
 import { formatDate } from "src/utils/string";
 
 interface RatingsTableProps {
@@ -116,7 +117,7 @@ const RatingsTable = ({
 
   return (
     <DataTable
-      queryName="ratings"
+      queryKey={queryKeys.ratings.lists}
       columns={columns}
       itemKey={itemKey}
       searchQuery={searchQuery}
