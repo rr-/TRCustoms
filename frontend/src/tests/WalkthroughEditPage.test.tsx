@@ -11,7 +11,9 @@ import { expect } from "vitest";
 import { test } from "vitest";
 import { vi } from "vitest";
 
-const level = { id: 3814, name: "Test Level" } as any;
+const level = { id: 3814, name: "Test Level" } as unknown as Awaited<
+  ReturnType<typeof LevelService.getLevelById>
+>;
 const editUser = {
   id: 1,
   permissions: [
@@ -52,7 +54,9 @@ describe("WalkthroughEditPage", () => {
       author: { id: 1 },
       text: "Existing walkthrough",
       status: WalkthroughStatus.Draft,
-    } as any);
+    } as unknown as Awaited<
+      ReturnType<typeof WalkthroughService.getWalkthroughById>
+    >);
 
     renderRoute(<WalkthroughEditPage />, {
       path: "/levels/:levelId/walkthrough/:walkthroughId/edit",

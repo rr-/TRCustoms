@@ -7,6 +7,7 @@ import userEvent from "@testing-library/user-event";
 import type { ReactNode } from "react";
 import { MemoryRouter } from "react-router-dom";
 import { ReviewForm } from "src/components/forms/ReviewForm";
+import type { LevelNested } from "src/services/LevelService";
 import { ReviewService } from "src/services/ReviewService";
 import { beforeEach } from "vitest";
 import { describe } from "vitest";
@@ -14,8 +15,10 @@ import { expect } from "vitest";
 import { test } from "vitest";
 import { vi } from "vitest";
 
-const level = { id: 99, name: "Test Level" } as any;
-const createdReview = { id: 12, level } as any;
+const level = { id: 99, name: "Test Level" } as unknown as LevelNested;
+const createdReview = { id: 12, level } as unknown as Awaited<
+  ReturnType<typeof ReviewService.create>
+>;
 
 const wrapper = ({ children }: { children: ReactNode }) => {
   const queryClient = new QueryClient({

@@ -7,14 +7,17 @@ import userEvent from "@testing-library/user-event";
 import type { ReactNode } from "react";
 import { MemoryRouter } from "react-router-dom";
 import { RatingForm } from "src/components/forms/RatingForm";
+import type { Config } from "src/services/ConfigService";
+import type { LevelNested } from "src/services/LevelService";
 import { RatingService } from "src/services/RatingService";
+import type { RatingDetails } from "src/services/RatingService";
 import { beforeEach } from "vitest";
 import { describe } from "vitest";
 import { expect } from "vitest";
 import { test } from "vitest";
 import { vi } from "vitest";
 
-const level = { id: 99, name: "Test Level" } as any;
+const level = { id: 99, name: "Test Level" } as unknown as LevelNested;
 
 const question = (id: number, category: string, text: string) => ({
   id,
@@ -29,14 +32,14 @@ const question = (id: number, category: string, text: string) => ({
 
 const singleStepConfig = {
   rating_questions: [question(1, "gameplay", "Was it fun?")],
-} as any;
+} as unknown as Config;
 
 const twoStepConfig = {
   rating_questions: [
     question(1, "gameplay", "Was it fun?"),
     question(2, "atmosphere", "Was it pretty?"),
   ],
-} as any;
+} as unknown as Config;
 
 const wrapper = ({ children }: { children: ReactNode }) => {
   const queryClient = new QueryClient({
@@ -49,7 +52,7 @@ const wrapper = ({ children }: { children: ReactNode }) => {
   );
 };
 
-const renderForm = (config = singleStepConfig, rating?: any) =>
+const renderForm = (config = singleStepConfig, rating?: RatingDetails) =>
   render(<RatingForm config={config} level={level} rating={rating} />, {
     wrapper,
   });
@@ -82,7 +85,9 @@ describe("RatingForm", () => {
   test("submits the selected answer ids with the level id", async () => {
     const create = vi
       .spyOn(RatingService, "create")
-      .mockResolvedValue({ id: 5, level } as any);
+      .mockResolvedValue({ id: 5, level } as unknown as Awaited<
+        ReturnType<typeof RatingService.create>
+      >);
     renderForm();
 
     await userEvent.click(screen.getByLabelText("Yes"));

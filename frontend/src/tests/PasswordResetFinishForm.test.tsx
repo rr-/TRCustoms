@@ -38,7 +38,7 @@ describe("PasswordResetFinishForm", () => {
   test("completes the reset with the token and shows a login link", async () => {
     const complete = vi
       .spyOn(UserService, "completePasswordReset")
-      .mockResolvedValue(undefined as any);
+      .mockResolvedValue();
     render(<PasswordResetFinishForm token="reset-token" />, { wrapper });
 
     await userEvent.type(screen.getByLabelText(/^Password\*/), "password123");

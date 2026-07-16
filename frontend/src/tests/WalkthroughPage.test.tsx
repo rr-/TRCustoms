@@ -19,7 +19,9 @@ const walkthrough = {
   status: WalkthroughStatus.Approved,
   created: "2024-01-01T00:00:00Z",
   last_updated: "2024-01-01T00:00:00Z",
-} as any;
+} as unknown as Awaited<
+  ReturnType<typeof WalkthroughService.getWalkthroughById>
+>;
 
 describe("WalkthroughPage", () => {
   beforeEach(() => {

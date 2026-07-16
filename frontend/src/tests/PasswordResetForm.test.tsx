@@ -30,7 +30,7 @@ describe("PasswordResetForm", () => {
   test("requests the reset and shows the confirmation", async () => {
     const request = vi
       .spyOn(UserService, "requestPasswordReset")
-      .mockResolvedValue(undefined as any);
+      .mockResolvedValue();
     render(<PasswordResetForm />);
 
     await userEvent.type(screen.getByLabelText(/E-mail/), "me@example.com");

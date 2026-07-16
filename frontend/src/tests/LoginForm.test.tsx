@@ -35,12 +35,10 @@ describe("LoginForm", () => {
   });
 
   test("logs in, stores the user, and calls onLogin", async () => {
-    const login = vi
-      .spyOn(AuthService, "login")
-      .mockResolvedValue(undefined as any);
+    const login = vi.spyOn(AuthService, "login").mockResolvedValue();
     vi.spyOn(UserService, "getCurrentUser").mockResolvedValue({
       id: 1,
-    } as any);
+    } as Awaited<ReturnType<typeof UserService.getCurrentUser>>);
     const onLogin = vi.fn();
     render(<LoginForm onLogin={onLogin} />, { wrapper });
 

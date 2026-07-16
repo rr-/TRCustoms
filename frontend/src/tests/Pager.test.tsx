@@ -3,6 +3,7 @@ import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { MemoryRouter } from "react-router-dom";
 import { Pager } from "src/components/common/Pager";
+import type { PagedResponse } from "src/types";
 import { describe } from "vitest";
 import { expect } from "vitest";
 import { test } from "vitest";
@@ -13,7 +14,9 @@ const renderPager = (onPageChange = vi.fn()) => {
     <MemoryRouter>
       <Pager
         onPageChange={onPageChange}
-        pagedResponse={{ current_page: 3, last_page: 10 } as any}
+        pagedResponse={
+          { current_page: 3, last_page: 10 } as unknown as PagedResponse<never>
+        }
       />
     </MemoryRouter>,
   );

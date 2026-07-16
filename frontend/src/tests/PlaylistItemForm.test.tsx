@@ -7,6 +7,7 @@ import userEvent from "@testing-library/user-event";
 import type { ReactNode } from "react";
 import { MemoryRouter } from "react-router-dom";
 import { PlaylistItemForm } from "src/components/forms/PlaylistItemForm";
+import type { LevelNested } from "src/services/LevelService";
 import { PlaylistItemStatus } from "src/services/PlaylistService";
 import { PlaylistService } from "src/services/PlaylistService";
 import { beforeEach } from "vitest";
@@ -15,7 +16,7 @@ import { expect } from "vitest";
 import { test } from "vitest";
 import { vi } from "vitest";
 
-const level = { id: 50, name: "Catacombs" } as any;
+const level = { id: 50, name: "Catacombs" } as unknown as LevelNested;
 
 const wrapper = ({ children }: { children: ReactNode }) => {
   const queryClient = new QueryClient({
@@ -59,7 +60,9 @@ describe("PlaylistItemForm", () => {
   test("submits the selected status", async () => {
     const create = vi
       .spyOn(PlaylistService, "create")
-      .mockResolvedValue({} as any);
+      .mockResolvedValue(
+        {} as Awaited<ReturnType<typeof PlaylistService.create>>,
+      );
     renderForm();
 
     const save = await screen.findByRole("button", { name: "Save" });

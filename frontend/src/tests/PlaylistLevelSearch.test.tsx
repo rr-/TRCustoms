@@ -21,13 +21,15 @@ describe("PlaylistLevelSearch", () => {
     vi.restoreAllMocks();
     vi.spyOn(LevelService, "searchLevels").mockResolvedValue({
       results: [{ id: 5, name: "Temple" }],
-    } as any);
+    } as Awaited<ReturnType<typeof LevelService.searchLevels>>);
   });
 
   test("adds the selected level to the playlist", async () => {
     const create = vi
       .spyOn(PlaylistService, "create")
-      .mockResolvedValue({} as any);
+      .mockResolvedValue(
+        {} as Awaited<ReturnType<typeof PlaylistService.create>>,
+      );
     const onAdd = vi.fn();
     render(<PlaylistLevelSearch userId={7} onAdd={onAdd} />);
 

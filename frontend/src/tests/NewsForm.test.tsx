@@ -14,7 +14,9 @@ import { expect } from "vitest";
 import { test } from "vitest";
 import { vi } from "vitest";
 
-const createdNews = { id: 3, subject: "Big news" } as any;
+const createdNews = { id: 3, subject: "Big news" } as Awaited<
+  ReturnType<typeof NewsService.create>
+>;
 
 const wrapper = ({ children }: { children: ReactNode }) => {
   const queryClient = new QueryClient({

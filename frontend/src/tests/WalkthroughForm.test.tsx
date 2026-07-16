@@ -7,6 +7,7 @@ import userEvent from "@testing-library/user-event";
 import type { ReactNode } from "react";
 import { MemoryRouter } from "react-router-dom";
 import { WalkthroughForm } from "src/components/forms/WalkthroughForm";
+import type { LevelNested } from "src/services/LevelService";
 import { WalkthroughService } from "src/services/WalkthroughService";
 import { beforeEach } from "vitest";
 import { describe } from "vitest";
@@ -14,11 +15,14 @@ import { expect } from "vitest";
 import { test } from "vitest";
 import { vi } from "vitest";
 
-const fakeLevel = { id: 42, name: "The Great Pyramid" } as any;
+const fakeLevel = {
+  id: 42,
+  name: "The Great Pyramid",
+} as unknown as LevelNested;
 const createdWalkthrough = {
   id: 7,
   level: { id: 42, name: "The Great Pyramid" },
-} as any;
+} as unknown as Awaited<ReturnType<typeof WalkthroughService.create>>;
 
 const wrapper = ({ children }: { children: ReactNode }) => {
   const queryClient = new QueryClient({

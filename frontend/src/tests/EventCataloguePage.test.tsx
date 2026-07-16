@@ -21,7 +21,7 @@ const emptyResult = {
   next: null,
   previous: null,
   results: [],
-} as any;
+} as unknown as Awaited<ReturnType<typeof EventService.searchEvents>>;
 
 const wrapper = ({ children }: { children: ReactNode }) => {
   const queryClient = new QueryClient({

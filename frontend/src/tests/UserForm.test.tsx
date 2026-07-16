@@ -67,7 +67,9 @@ describe("UserForm (registration)", () => {
   test("registers with the entered values", async () => {
     const register = vi
       .spyOn(UserService, "register")
-      .mockResolvedValue({ id: 1 } as any);
+      .mockResolvedValue({ id: 1 } as Awaited<
+        ReturnType<typeof UserService.register>
+      >);
     const onSubmit = vi.fn();
     renderForm(onSubmit);
 
