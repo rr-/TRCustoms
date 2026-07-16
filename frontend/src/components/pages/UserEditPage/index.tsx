@@ -6,7 +6,7 @@ import { useParams } from "react-router-dom";
 import { Loader } from "src/components/common/Loader";
 import { PageGuard } from "src/components/common/PermissionGuard";
 import { SmartWrap } from "src/components/common/SmartWrap";
-import { UserForm } from "src/components/common/UserForm";
+import { UserForm } from "src/components/forms/UserForm";
 import { PlainLayout } from "src/components/layouts/PlainLayout";
 import { usePageMetadata } from "src/contexts/PageMetadataContext";
 import { UserContext } from "src/contexts/UserContext";

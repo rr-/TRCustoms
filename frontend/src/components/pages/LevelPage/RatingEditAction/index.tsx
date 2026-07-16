@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import { Loader } from "src/components/common/Loader";
 import { PageGuard } from "src/components/common/PermissionGuard";
-import { RatingForm } from "src/components/common/RatingForm";
+import { RatingForm } from "src/components/forms/RatingForm";
 import type { PlaylistAddModalHandle } from "src/components/modals/PlaylistAddModal";
 import { PlaylistAddModal } from "src/components/modals/PlaylistAddModal";
 import { ConfigContext } from "src/contexts/ConfigContext";

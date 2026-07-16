@@ -2,10 +2,10 @@ import styles from "./index.module.css";
 import { useEffect } from "react";
 import { useRef } from "react";
 import { useForm } from "react-hook-form";
-import { SubmitButton } from "src/components/formfields/SubmitButton";
 import { Form } from "src/components/forms/Form";
-import { TextAreaField } from "src/components/forms/TextAreaField";
-import { TextField } from "src/components/forms/TextField";
+import { SubmitButton } from "src/components/forms/SubmitButton";
+import { TextAreaField } from "src/components/forms/fields/TextAreaField";
+import { TextField } from "src/components/forms/fields/TextField";
 import { BaseModal } from "src/components/modals/BaseModal";
 
 interface PromptModalProps {

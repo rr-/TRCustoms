@@ -4,7 +4,7 @@ import { waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import type { ReactNode } from "react";
 import { MemoryRouter } from "react-router-dom";
-import { UserForm } from "src/components/common/UserForm";
+import { UserForm } from "src/components/forms/UserForm";
 import { UserContext } from "src/contexts/UserContext";
 import { UserService } from "src/services/UserService";
 import { beforeEach } from "vitest";

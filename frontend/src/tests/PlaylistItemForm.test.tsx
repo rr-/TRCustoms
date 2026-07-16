@@ -6,7 +6,7 @@ import { waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import type { ReactNode } from "react";
 import { MemoryRouter } from "react-router-dom";
-import { PlaylistItemForm } from "src/components/common/PlaylistItemForm";
+import { PlaylistItemForm } from "src/components/forms/PlaylistItemForm";
 import { PlaylistItemStatus } from "src/services/PlaylistService";
 import { PlaylistService } from "src/services/PlaylistService";
 import { beforeEach } from "vitest";

@@ -5,7 +5,7 @@ import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import type { ReactNode } from "react";
 import { MemoryRouter } from "react-router-dom";
-import { LevelForm } from "src/components/common/LevelForm";
+import { LevelForm } from "src/components/forms/LevelForm";
 import { UserContext } from "src/contexts/UserContext";
 import { LevelService } from "src/services/LevelService";
 import { beforeEach } from "vitest";

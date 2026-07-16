@@ -4,7 +4,7 @@ import { waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import type { ReactNode } from "react";
 import { MemoryRouter } from "react-router-dom";
-import { PasswordResetFinishForm } from "src/components/common/PasswordResetFinishForm";
+import { PasswordResetFinishForm } from "src/components/forms/PasswordResetFinishForm";
 import { UserService } from "src/services/UserService";
 import { beforeEach } from "vitest";
 import { describe } from "vitest";

@@ -5,10 +5,10 @@ import { Checkbox } from "src/components/common/Checkbox";
 import { Collapsible } from "src/components/common/Collapsible";
 import { Link } from "src/components/common/Link";
 import { SectionHeader } from "src/components/common/Section";
-import { SubmitButton } from "src/components/formfields/SubmitButton";
-import { CheckboxField } from "src/components/forms/CheckboxField";
 import { Form } from "src/components/forms/Form";
-import { TextField } from "src/components/forms/TextField";
+import { SubmitButton } from "src/components/forms/SubmitButton";
+import { CheckboxField } from "src/components/forms/fields/CheckboxField";
+import { TextField } from "src/components/forms/fields/TextField";
 import { IconSearch } from "src/components/icons";
 import type { AuditLogSearchQuery } from "src/services/AuditLogService";
 

@@ -5,7 +5,7 @@ import { useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { Loader } from "src/components/common/Loader";
 import { PageGuard } from "src/components/common/PermissionGuard";
-import { ReviewForm } from "src/components/common/ReviewForm";
+import { ReviewForm } from "src/components/forms/ReviewForm";
 import type { PlaylistAddModalHandle } from "src/components/modals/PlaylistAddModal";
 import { PlaylistAddModal } from "src/components/modals/PlaylistAddModal";
 import { UserContext } from "src/contexts/UserContext";

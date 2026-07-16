@@ -6,7 +6,7 @@ import { waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import type { ReactNode } from "react";
 import { MemoryRouter } from "react-router-dom";
-import { RatingForm } from "src/components/common/RatingForm";
+import { RatingForm } from "src/components/forms/RatingForm";
 import { RatingService } from "src/services/RatingService";
 import { beforeEach } from "vitest";
 import { describe } from "vitest";

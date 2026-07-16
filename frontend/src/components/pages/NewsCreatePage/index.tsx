@@ -1,7 +1,7 @@
 import { useCallback } from "react";
 import { useNavigate } from "react-router-dom";
-import { NewsForm } from "src/components/common/NewsForm";
 import { PageGuard } from "src/components/common/PermissionGuard";
+import { NewsForm } from "src/components/forms/NewsForm";
 import { PlainLayout } from "src/components/layouts/PlainLayout";
 import { usePageMetadata } from "src/contexts/PageMetadataContext";
 import { UserPermission } from "src/services/UserService";

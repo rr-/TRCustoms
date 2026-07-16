@@ -4,11 +4,11 @@ import { Button } from "src/components/common/Button";
 import { FormGrid } from "src/components/common/FormGrid";
 import { FormGridFieldSet } from "src/components/common/FormGrid";
 import { FormGridType } from "src/components/common/FormGrid";
-import { SubmitButton } from "src/components/formfields/SubmitButton";
-import { CheckboxField } from "src/components/forms/CheckboxField";
 import { Form } from "src/components/forms/Form";
 import { FormButtons } from "src/components/forms/FormButtons";
-import { TextField } from "src/components/forms/TextField";
+import { SubmitButton } from "src/components/forms/SubmitButton";
+import { CheckboxField } from "src/components/forms/fields/CheckboxField";
+import { TextField } from "src/components/forms/fields/TextField";
 import { IconSearch } from "src/components/icons";
 import type { UserSearchQuery } from "src/services/UserService";
 

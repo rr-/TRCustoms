@@ -6,7 +6,7 @@ import { waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import type { ReactNode } from "react";
 import { MemoryRouter } from "react-router-dom";
-import { ReviewForm } from "src/components/common/ReviewForm";
+import { ReviewForm } from "src/components/forms/ReviewForm";
 import { ReviewService } from "src/services/ReviewService";
 import { beforeEach } from "vitest";
 import { describe } from "vitest";

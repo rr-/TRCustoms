@@ -1,4 +1,4 @@
-import { PlaylistItemForm } from "src/components/common/PlaylistItemForm";
+import { PlaylistItemForm } from "src/components/forms/PlaylistItemForm";
 import { BaseModal } from "src/components/modals/BaseModal";
 import type { LevelNested } from "src/services/LevelService";
 

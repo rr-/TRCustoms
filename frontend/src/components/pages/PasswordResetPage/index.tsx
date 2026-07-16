@@ -1,4 +1,4 @@
-import { PasswordResetForm } from "src/components/common/PasswordResetForm";
+import { PasswordResetForm } from "src/components/forms/PasswordResetForm";
 import { PlainLayout } from "src/components/layouts/PlainLayout";
 import { usePageMetadata } from "src/contexts/PageMetadataContext";
 

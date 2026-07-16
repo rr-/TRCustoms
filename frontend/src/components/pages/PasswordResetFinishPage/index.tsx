@@ -1,5 +1,5 @@
 import { useParams } from "react-router-dom";
-import { PasswordResetFinishForm } from "src/components/common/PasswordResetFinishForm";
+import { PasswordResetFinishForm } from "src/components/forms/PasswordResetFinishForm";
 import { PlainLayout } from "src/components/layouts/PlainLayout";
 import { usePageMetadata } from "src/contexts/PageMetadataContext";
 

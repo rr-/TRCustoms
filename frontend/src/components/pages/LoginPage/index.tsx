@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { LoginForm } from "src/components/common/LoginForm";
+import { LoginForm } from "src/components/forms/LoginForm";
 import { PlainLayout } from "src/components/layouts/PlainLayout";
 import { usePageMetadata } from "src/contexts/PageMetadataContext";
 

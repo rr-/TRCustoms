@@ -4,7 +4,7 @@ import { useParams } from "react-router-dom";
 import { Loader } from "src/components/common/Loader";
 import { PageGuard } from "src/components/common/PermissionGuard";
 import { SmartWrap } from "src/components/common/SmartWrap";
-import { WalkthroughForm } from "src/components/common/WalkthroughForm";
+import { WalkthroughForm } from "src/components/forms/WalkthroughForm";
 import { PlainLayout } from "src/components/layouts/PlainLayout";
 import { LevelLink } from "src/components/links/LevelLink";
 import { usePageMetadata } from "src/contexts/PageMetadataContext";

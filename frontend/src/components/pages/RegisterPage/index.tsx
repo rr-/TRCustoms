@@ -4,7 +4,7 @@ import { useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { InfoMessageType } from "src/components/common/InfoMessage";
 import { InfoMessage } from "src/components/common/InfoMessage";
-import { UserForm } from "src/components/common/UserForm";
+import { UserForm } from "src/components/forms/UserForm";
 import { PlainLayout } from "src/components/layouts/PlainLayout";
 import { usePageMetadata } from "src/contexts/PageMetadataContext";
 import { UserContext } from "src/contexts/UserContext";

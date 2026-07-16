@@ -2,7 +2,7 @@ import { render } from "@testing-library/react";
 import { screen } from "@testing-library/react";
 import { waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { PasswordResetForm } from "src/components/common/PasswordResetForm";
+import { PasswordResetForm } from "src/components/forms/PasswordResetForm";
 import { UserService } from "src/services/UserService";
 import { beforeEach } from "vitest";
 import { describe } from "vitest";

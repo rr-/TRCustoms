@@ -4,9 +4,9 @@ import styles from "src/components/common/LevelSearchSidebar/index.module.css";
 import { Link } from "src/components/common/Link";
 import { SidebarBox } from "src/components/common/SidebarBox";
 import { SidebarBoxHeader } from "src/components/common/SidebarBox";
-import { SubmitButton } from "src/components/formfields/SubmitButton";
 import { Form } from "src/components/forms/Form";
-import { TextField } from "src/components/forms/TextField";
+import { SubmitButton } from "src/components/forms/SubmitButton";
+import { TextField } from "src/components/forms/fields/TextField";
 import { IconSearch } from "src/components/icons";
 import type { TagSearchQuery } from "src/services/TagService";
 

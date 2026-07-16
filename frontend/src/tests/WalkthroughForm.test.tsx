@@ -6,7 +6,7 @@ import { waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import type { ReactNode } from "react";
 import { MemoryRouter } from "react-router-dom";
-import { WalkthroughForm } from "src/components/common/WalkthroughForm";
+import { WalkthroughForm } from "src/components/forms/WalkthroughForm";
 import { WalkthroughService } from "src/services/WalkthroughService";
 import { beforeEach } from "vitest";
 import { describe } from "vitest";

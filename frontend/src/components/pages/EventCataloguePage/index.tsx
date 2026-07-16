@@ -15,10 +15,10 @@ import {
 import { Link } from "src/components/common/Link";
 import { Section } from "src/components/common/Section";
 import { SectionHeader } from "src/components/common/Section";
-import { SubmitButton } from "src/components/formfields/SubmitButton";
-import { DropDownField } from "src/components/forms/DropDownField";
 import { Form } from "src/components/forms/Form";
-import { TextField } from "src/components/forms/TextField";
+import { SubmitButton } from "src/components/forms/SubmitButton";
+import { DropDownField } from "src/components/forms/fields/DropDownField";
+import { TextField } from "src/components/forms/fields/TextField";
 import { SidebarLayout } from "src/components/layouts/SidebarLayout";
 import { usePageMetadata } from "src/contexts/PageMetadataContext";
 import {

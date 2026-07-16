@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { useCallback } from "react";
 import { Link } from "react-router-dom";
-import { LevelForm } from "src/components/common/LevelForm";
 import { PageGuard } from "src/components/common/PermissionGuard";
+import { LevelForm } from "src/components/forms/LevelForm";
 import { PlainLayout } from "src/components/layouts/PlainLayout";
 import { usePageMetadata } from "src/contexts/PageMetadataContext";
 import type { LevelDetails } from "src/services/LevelService";
