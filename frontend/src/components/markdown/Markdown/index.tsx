@@ -242,7 +242,7 @@ const Markdown = ({
         </ReactMarkdown>
       </div>
     );
-  }, [children, allowColors]);
+  }, [children, allowColors, allowEmbeds, allowLines]);
 
   return rendered;
 };

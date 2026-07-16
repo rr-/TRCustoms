@@ -20,7 +20,21 @@ const usePageMetadataStore = create<PageMetadataStore>((set, get) => ({
   },
 
   update: (metadata: PageMetadata): void => {
-    set((state) => ({ ...state, metadata }));
+    set((state) => {
+      // Pages call this from an effect that runs every render (they read query
+      // data that loads asynchronously). Skip the state change when nothing
+      // actually changed, so subscribers only re-render on real updates.
+      const prev = state.metadata;
+      if (
+        prev.ready === metadata.ready &&
+        prev.title === metadata.title &&
+        prev.description === metadata.description &&
+        prev.image === metadata.image
+      ) {
+        return state;
+      }
+      return { ...state, metadata };
+    });
   },
 }));
 

@@ -134,10 +134,12 @@ const InfiniteDataList = <TItem extends {}, TQuery extends GenericSearchQuery>({
     refetchOnWindowFocus: false,
   });
 
-  const infiniteScrollRef = useRef(null);
+  const infiniteScrollRef = useRef<HTMLSpanElement>(null);
+  // Re-observe when pagination state changes (new page loaded / exhausted),
+  // not on every render — result is a fresh object each render.
   useInfiniteScroll(
     { element: infiniteScrollRef, fetch: () => result.fetchNextPage() },
-    [result],
+    [result.hasNextPage, result.data?.pages?.length],
   );
 
   useEffect(() => {
