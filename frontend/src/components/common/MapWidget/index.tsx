@@ -14,11 +14,10 @@ interface MapWidgetProps {
 
 export const MapWidget = ({ country, onChange }: MapWidgetProps) => {
   const { config } = useConfig();
-  const geoFeatures = useMemo(
-    () =>
-      feature(worldData as any, (worldData as any).objects.countries).features,
-    [],
-  );
+  const geoFeatures = useMemo(() => {
+    const world = worldData as { objects: { countries: unknown } };
+    return feature(world, world.objects.countries).features;
+  }, []);
 
   const handleClick = (selCountry: CountryListing | undefined) => {
     if (!selCountry) {
@@ -47,8 +46,8 @@ export const MapWidget = ({ country, onChange }: MapWidgetProps) => {
       }}
     >
       <Geographies geography={geoFeatures}>
-        {({ geographies }: any) =>
-          geographies.map((geo: any) => {
+        {({ geographies }) =>
+          geographies.map((geo) => {
             const geoCountry = config.countries.filter(
               (geoCountry) => geoCountry.iso_3166_1_numeric === geo.id,
             )[0];
@@ -70,8 +69,8 @@ export const MapWidget = ({ country, onChange }: MapWidgetProps) => {
       </Geographies>
 
       <Geographies geography={geoFeatures}>
-        {({ geographies }: any) =>
-          geographies.map((geo: any) => {
+        {({ geographies }) =>
+          geographies.map((geo) => {
             return (
               <Geography
                 key={geo.rsmKey}
