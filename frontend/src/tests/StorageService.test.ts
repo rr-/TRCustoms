@@ -1,7 +1,7 @@
 import { getPrefixedKey, StorageService } from "../services/StorageService";
 import { resolveStoredTheme } from "../utils/themeStorage";
 import assert from "node:assert/strict";
-import { test } from "vitest";
+import { afterEach, test } from "vitest";
 
 interface MockWindow extends Window {
   localStorage: Storage;
@@ -42,6 +42,16 @@ const createStorage = (
   };
 };
 
+// Stash the environment globals so we can restore them after each test. With
+// test-file isolation off, leaving these stubbed would poison document.body for
+// every render-based test that shares this worker.
+const REPLACED_GLOBALS = [
+  "window",
+  "localStorage",
+  "sessionStorage",
+  "document",
+] as const;
+
 const setupDom = (windowObject: MockWindow): void => {
   Object.defineProperty(globalThis, "window", {
     configurable: true,
@@ -63,6 +73,24 @@ const setupDom = (windowObject: MockWindow): void => {
     },
   });
 };
+
+const ORIGINAL_GLOBALS = new Map(
+  REPLACED_GLOBALS.map((name) => [
+    name,
+    Object.getOwnPropertyDescriptor(globalThis, name),
+  ]),
+);
+
+afterEach(() => {
+  for (const name of REPLACED_GLOBALS) {
+    const descriptor = ORIGINAL_GLOBALS.get(name);
+    if (descriptor) {
+      Object.defineProperty(globalThis, name, descriptor);
+    } else {
+      delete (globalThis as Record<string, unknown>)[name];
+    }
+  }
+});
 
 test("StorageService reads namespaced theme from localStorage when available", () => {
   setupDom({
