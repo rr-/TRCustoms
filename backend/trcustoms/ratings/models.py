@@ -8,6 +8,7 @@ from trcustoms.common.models import (
     UserContentDatesInfo,
 )
 from trcustoms.levels.models import Level
+from trcustoms.ownership import register_owner
 from trcustoms.ratings.consts import RatingType
 from trcustoms.users.models import User
 
@@ -54,6 +55,7 @@ class RatingTemplateAnswer(DatesInfo):
         "level_name": instance.level.name,
     },
 )
+@register_owner(lambda obj, user: obj.author == user)
 class Rating(UserContentDatesInfo, DatesInfo):
     position = models.IntegerField(default=0)
 

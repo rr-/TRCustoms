@@ -8,6 +8,7 @@ from trcustoms.common.models import (
     UserContentDatesInfo,
 )
 from trcustoms.levels.models import Level
+from trcustoms.ownership import register_owner
 from trcustoms.reviews.consts import ReviewType, ReviewVoteType
 from trcustoms.users.models import User
 
@@ -54,6 +55,7 @@ class ReviewTemplateAnswer(DatesInfo):
     },
     url_getter=lambda object_id: f"/reviews/{object_id}",
 )
+@register_owner(lambda obj, user: obj.author == user)
 class Review(UserContentDatesInfo, DatesInfo):
     position = models.IntegerField(default=0)
     is_hidden = models.BooleanField(default=False)

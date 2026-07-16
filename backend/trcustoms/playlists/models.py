@@ -3,6 +3,7 @@ from django.db.models import UniqueConstraint
 
 from trcustoms.common.models import DatesInfo
 from trcustoms.levels.models import Level
+from trcustoms.ownership import register_owner
 from trcustoms.playlists.consts import PlaylistStatus
 from trcustoms.users.models import User
 
@@ -22,6 +23,7 @@ class PlaylistItemQuerySet(models.QuerySet):
         )
 
 
+@register_owner(lambda obj, user: obj.user == user)
 class PlaylistItem(DatesInfo):
     objects = PlaylistItemQuerySet.as_manager()
 

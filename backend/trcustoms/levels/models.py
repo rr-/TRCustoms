@@ -11,6 +11,7 @@ from trcustoms.common.models import (
 from trcustoms.engines.models import Engine
 from trcustoms.genres.models import Genre
 from trcustoms.levels.consts import FeatureType, LevelLinkType
+from trcustoms.ownership import register_owner
 from trcustoms.tags.models import Tag
 from trcustoms.uploads.models import UploadedFile
 from trcustoms.users.models import User
@@ -101,6 +102,10 @@ class LevelQuerySet(models.QuerySet):
 @registry.register_model(
     name_getter=lambda instance: instance.name,
     url_getter=lambda object_id: f"/levels/{object_id}",
+)
+@register_owner(
+    lambda obj, user: obj.uploader == user
+    or obj.authors.filter(id=user.id).exists()
 )
 class Level(UserContentDatesInfo, DatesInfo):
     objects = LevelQuerySet.as_manager()

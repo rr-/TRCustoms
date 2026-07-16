@@ -4,12 +4,8 @@ from rest_framework.permissions import (
     IsAuthenticated,
 )
 
-from trcustoms.levels.models import Level
-from trcustoms.playlists.models import PlaylistItem
-from trcustoms.ratings.models import Rating
-from trcustoms.reviews.models import Review
+from trcustoms.ownership import is_owner
 from trcustoms.users.models import User, UserPermission
-from trcustoms.walkthroughs.models import Walkthrough
 
 
 class AllowNone(BasePermission):
@@ -48,24 +44,7 @@ class IsAccessingOwnResource(IsAuthenticated):
     def has_object_permission(self, request, view, obj) -> bool:
         if not request.user:
             return False
-        result = False
-        match obj:
-            case User():
-                result = obj == request.user
-            case Level():
-                result = (
-                    obj.uploader == request.user
-                    or obj.authors.filter(id=request.user.id).exists()
-                )
-            case Review():
-                result = obj.author == request.user
-            case Rating():
-                result = obj.author == request.user
-            case Walkthrough():
-                result = obj.author == request.user
-            case PlaylistItem():
-                result = obj.user == request.user
-        return result
+        return is_owner(obj, request.user)
 
 
 def get_permissions(user: User) -> set[UserPermission]:

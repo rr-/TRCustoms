@@ -8,6 +8,7 @@ from django.db.models.functions import Lower
 
 from trcustoms.audit_logs import registry
 from trcustoms.common.models import Country
+from trcustoms.ownership import register_owner
 from trcustoms.uploads.models import UploadedFile
 from trcustoms.users.consts import UserSource
 from trcustoms.walkthroughs.consts import WalkthroughStatus
@@ -56,6 +57,7 @@ class UserManager(BaseUserManager):
     name_getter=lambda instance: instance.username,
     url_getter=lambda object_id: f"/users/{object_id}",
 )
+@register_owner(lambda obj, user: obj == user)
 class User(AbstractUser):
     objects = UserManager()
 

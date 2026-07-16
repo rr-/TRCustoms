@@ -3,6 +3,7 @@ from django.db import models
 from trcustoms.audit_logs import registry
 from trcustoms.common.models import DatesInfo, UserContentDatesInfo
 from trcustoms.levels.models import Level
+from trcustoms.ownership import register_owner
 from trcustoms.users.models import User
 from trcustoms.walkthroughs.consts import WalkthroughStatus, WalkthroughType
 
@@ -15,6 +16,7 @@ from trcustoms.walkthroughs.consts import WalkthroughStatus, WalkthroughType
     },
     url_getter=lambda object_id: f"/walkthroughs/{object_id}",
 )
+@register_owner(lambda obj, user: obj.author == user)
 class Walkthrough(UserContentDatesInfo, DatesInfo):
     level = models.ForeignKey(
         Level, on_delete=models.CASCADE, related_name="walkthroughs"
