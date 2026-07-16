@@ -2,6 +2,7 @@ import { PromptButton } from "src/components/buttons/PromptButton";
 import { useEntityAction } from "src/components/buttons/useEntityAction";
 import type { TagListing } from "src/services/TagService";
 import { TagService } from "src/services/TagService";
+import { queryKeys } from "src/services/queryKeys";
 
 interface TagMergeButtonProps {
   tag: TagListing;
@@ -13,7 +14,7 @@ const TagMergeButton = ({ tag }: TagMergeButtonProps) => {
       const targetTag = await TagService.getByName(newTagName);
       await TagService.merge(tag.id, targetTag.id);
     },
-    ["tags", "auditLogs"],
+    [queryKeys.tags.all, queryKeys.auditLogs.all],
   );
 
   return (

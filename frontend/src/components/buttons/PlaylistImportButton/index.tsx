@@ -4,6 +4,7 @@ import { Button } from "src/components/common/Button";
 import { ConfirmModal } from "src/components/modals/ConfirmModal";
 import { PlaylistService } from "src/services/PlaylistService";
 import type { PlaylistImportResult } from "src/services/PlaylistService";
+import { queryKeys } from "src/services/queryKeys";
 import { resetQueries } from "src/utils/misc";
 
 interface PlaylistImportButtonProps {
@@ -23,7 +24,7 @@ const PlaylistImportButton = ({ userId }: PlaylistImportButtonProps) => {
 
   const handleConfirm = async () => {
     setResult(await PlaylistService.import(userId));
-    resetQueries(queryClient, ["playlists"]);
+    resetQueries(queryClient, [queryKeys.playlists.all]);
   };
 
   return (

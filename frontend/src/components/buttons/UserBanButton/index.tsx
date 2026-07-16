@@ -3,6 +3,7 @@ import { useEntityAction } from "src/components/buttons/useEntityAction";
 import { IconBan } from "src/components/icons";
 import { UserService } from "src/services/UserService";
 import type { UserBasic } from "src/services/UserService";
+import { queryKeys } from "src/services/queryKeys";
 
 interface UserBanButtonProps {
   user: UserBasic;
@@ -13,7 +14,7 @@ const UserBanButton = ({ user }: UserBanButtonProps) => {
     async (result: string) => {
       await UserService.ban(user.id, result);
     },
-    ["user", "users", "auditLogs"],
+    [queryKeys.users.all, queryKeys.auditLogs.all],
   );
 
   return (

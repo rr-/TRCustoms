@@ -3,6 +3,7 @@ import { useEntityAction } from "src/components/buttons/useEntityAction";
 import { IconTrash } from "src/components/icons";
 import type { WalkthroughDetails } from "src/services/WalkthroughService";
 import { WalkthroughService } from "src/services/WalkthroughService";
+import { queryKeys } from "src/services/queryKeys";
 
 interface WalkthroughDeleteButtonProps {
   walkthrough: WalkthroughDetails;
@@ -16,7 +17,7 @@ const WalkthroughDeleteButton = ({
   const handleConfirm = useEntityAction(async () => {
     await WalkthroughService.delete(walkthrough.id);
     onComplete?.();
-  }, ["walkthrough", "walkthroughs", "auditLogs"]);
+  }, [queryKeys.walkthroughs.all, queryKeys.auditLogs.all]);
 
   return (
     <ConfirmButton

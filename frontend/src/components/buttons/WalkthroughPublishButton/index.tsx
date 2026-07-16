@@ -6,6 +6,7 @@ import { WalkthroughLink } from "src/components/links/WalkthroughLink";
 import { BaseModal } from "src/components/modals/BaseModal";
 import type { WalkthroughDetails } from "src/services/WalkthroughService";
 import { WalkthroughService } from "src/services/WalkthroughService";
+import { queryKeys } from "src/services/queryKeys";
 
 interface WalkthroughPublishButtonProps {
   walkthrough: WalkthroughDetails;
@@ -21,7 +22,7 @@ const WalkthroughPublishButton = ({
   const handleConfirm = useEntityAction(async () => {
     await WalkthroughService.publish(walkthrough.id);
     onComplete?.();
-  }, ["walkthrough", "walkthroughs", "auditLogs"]);
+  }, [queryKeys.walkthroughs.all, queryKeys.auditLogs.all]);
 
   return (
     <>

@@ -1,4 +1,5 @@
 import { useQueryClient } from "@tanstack/react-query";
+import type { Key } from "src/services/queryKeys";
 import { resetQueries } from "src/utils/misc";
 
 // The shared body of every entity action button (approve/reject/delete/...):
@@ -7,12 +8,12 @@ import { resetQueries } from "src/utils/misc";
 // ConfirmButton (no args) or PromptButton (the prompt result).
 const useEntityAction = <A extends unknown[]>(
   action: (...args: A) => Promise<void>,
-  queryKeyPrefixes: string[],
+  keys: readonly Key[],
 ) => {
   const queryClient = useQueryClient();
   return async (...args: A): Promise<void> => {
     await action(...args);
-    await resetQueries(queryClient, queryKeyPrefixes);
+    await resetQueries(queryClient, keys);
   };
 };
 

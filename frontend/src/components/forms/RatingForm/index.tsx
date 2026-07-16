@@ -16,6 +16,7 @@ import type { RatingTemplateQuestion } from "src/services/ConfigService";
 import type { LevelNested } from "src/services/LevelService";
 import type { RatingDetails } from "src/services/RatingService";
 import { RatingService } from "src/services/RatingService";
+import { queryKeys } from "src/services/queryKeys";
 import { resetQueries } from "src/utils/misc";
 import { titleCase } from "src/utils/string";
 import { z } from "zod";
@@ -71,8 +72,12 @@ const RatingForm = ({ config, level, rating, onSubmit }: RatingFormProps) => {
     const payload = { levelId: level.id, answerIds: Object.values(values) };
     if (rating?.id) {
       const outRating = await RatingService.update(rating.id, payload);
-      resetQueries(queryClient, ["levels", "ratings"], true);
-      resetQueries(queryClient, ["auditLogs"]);
+      resetQueries(
+        queryClient,
+        [queryKeys.levels.all, queryKeys.ratings.all],
+        true,
+      );
+      resetQueries(queryClient, [queryKeys.auditLogs.all]);
       onSubmit?.(outRating);
       return {
         final: true,
@@ -88,7 +93,11 @@ const RatingForm = ({ config, level, rating, onSubmit }: RatingFormProps) => {
       };
     }
     const outRating = await RatingService.create(payload);
-    resetQueries(queryClient, ["levels", "ratings", "auditLogs"]);
+    resetQueries(queryClient, [
+      queryKeys.levels.all,
+      queryKeys.ratings.all,
+      queryKeys.auditLogs.all,
+    ]);
     onSubmit?.(outRating);
     return {
       final: true,

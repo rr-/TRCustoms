@@ -3,6 +3,7 @@ import { useEntityAction } from "src/components/buttons/useEntityAction";
 import { IconCheck } from "src/components/icons";
 import { UserService } from "src/services/UserService";
 import type { UserBasic } from "src/services/UserService";
+import { queryKeys } from "src/services/queryKeys";
 
 interface UserUnbanButtonProps {
   user: UserBasic;
@@ -11,7 +12,7 @@ interface UserUnbanButtonProps {
 const UserUnbanButton = ({ user }: UserUnbanButtonProps) => {
   const handleConfirm = useEntityAction(
     () => UserService.unban(user.id),
-    ["user", "users", "auditLogs"],
+    [queryKeys.users.all, queryKeys.auditLogs.all],
   );
 
   return (

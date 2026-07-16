@@ -4,6 +4,7 @@ import { Link } from "src/components/common/Link";
 import { ConfirmModal } from "src/components/modals/ConfirmModal";
 import { PlaylistService } from "src/services/PlaylistService";
 import type { PlaylistItemListing } from "src/services/PlaylistService";
+import { queryKeys } from "src/services/queryKeys";
 import { showAlertOnError } from "src/utils/misc";
 import { resetQueries } from "src/utils/misc";
 
@@ -24,7 +25,7 @@ const RemovePlaylistItemButton = ({ item }: RemovePlaylistItemButtonProps) => {
       if (item.user) {
         await PlaylistService.delete(item.user.id, item.id);
       }
-      resetQueries(queryClient, ["playlists"]);
+      resetQueries(queryClient, [queryKeys.playlists.all]);
     });
   };
 

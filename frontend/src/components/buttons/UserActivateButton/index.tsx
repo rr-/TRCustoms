@@ -3,6 +3,7 @@ import { useEntityAction } from "src/components/buttons/useEntityAction";
 import { IconCheck } from "src/components/icons";
 import { UserService } from "src/services/UserService";
 import type { UserBasic } from "src/services/UserService";
+import { queryKeys } from "src/services/queryKeys";
 
 interface UserActivateButtonProps {
   user: UserBasic;
@@ -11,7 +12,7 @@ interface UserActivateButtonProps {
 const UserActivateButton = ({ user }: UserActivateButtonProps) => {
   const handleConfirm = useEntityAction(
     () => UserService.activate(user.id),
-    ["user", "users", "auditLogs"],
+    [queryKeys.users.all, queryKeys.auditLogs.all],
   );
 
   return (

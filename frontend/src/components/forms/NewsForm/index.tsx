@@ -13,6 +13,7 @@ import { useFormSubmit } from "src/components/forms/useFormSubmit";
 import { NewsLink } from "src/components/links/NewsLink";
 import type { NewsDetails } from "src/services/NewsService";
 import { NewsService } from "src/services/NewsService";
+import { queryKeys } from "src/services/queryKeys";
 import { resetQueries } from "src/utils/misc";
 import { z } from "zod";
 
@@ -46,7 +47,7 @@ const NewsForm = ({ news, onGoBack, onSubmit }: NewsFormProps) => {
     const outNews = news?.id
       ? await NewsService.update(news.id, values)
       : await NewsService.create(values);
-    resetQueries(queryClient, ["news"]);
+    resetQueries(queryClient, [queryKeys.news.all]);
     onSubmit?.(outNews);
     return {
       final: true,

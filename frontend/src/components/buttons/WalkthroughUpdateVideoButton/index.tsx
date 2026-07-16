@@ -3,6 +3,7 @@ import { useEntityAction } from "src/components/buttons/useEntityAction";
 import { IconPencil } from "src/components/icons";
 import type { WalkthroughListing } from "src/services/WalkthroughService";
 import { WalkthroughService } from "src/services/WalkthroughService";
+import { queryKeys } from "src/services/queryKeys";
 
 interface WalkthroughUpdateVideoButtonProps {
   walkthrough: WalkthroughListing;
@@ -15,7 +16,7 @@ const WalkthroughUpdateVideoButton = ({
     async (result: string) => {
       await WalkthroughService.update(walkthrough.id, { text: result });
     },
-    ["walkthrough", "walkthroughs", "auditLogs"],
+    [queryKeys.walkthroughs.all, queryKeys.auditLogs.all],
   );
 
   return (

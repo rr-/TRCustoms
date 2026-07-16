@@ -10,6 +10,7 @@ import type { PlaylistSearchQuery } from "src/services/PlaylistService";
 import { getPlaylistSearchQuery } from "src/services/PlaylistService";
 import { UserPermission } from "src/services/UserService";
 import type { UserDetails } from "src/services/UserService";
+import { queryKeys } from "src/services/queryKeys";
 import { resetQueries } from "src/utils/misc";
 
 interface PlaylistTabProps {
@@ -26,7 +27,7 @@ const PlaylistTab = ({ user }: PlaylistTabProps) => {
   }, [user.id]);
 
   const handleAdd = () => {
-    resetQueries(queryClient, ["playlists"]);
+    resetQueries(queryClient, [queryKeys.playlists.all]);
   };
 
   return (

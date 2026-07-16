@@ -3,6 +3,7 @@ import type { QueryFilters } from "@tanstack/react-query";
 import { isString } from "lodash";
 import { isArray } from "lodash";
 import { DISABLE_PAGING } from "src/constants";
+import type { Key } from "src/services/queryKeys";
 import type { GenericSearchQuery } from "src/types";
 
 const getGenericSearchQuery = (
@@ -153,14 +154,15 @@ const showAlertOnError = async (func: () => Promise<void>): Promise<void> => {
 
 const resetQueries = async (
   queryClient: QueryClient,
-  queryKeyPrefixes: string[],
+  keys: readonly Key[],
   soft?: boolean | undefined,
 ): Promise<void> => {
   await Promise.all(
-    queryKeyPrefixes.map((prefix) => {
-      // React Query v5 takes a filters object rather than a bare key; a string
-      // prefix maps to a partial queryKey match.
-      const filters: QueryFilters = { queryKey: [prefix] };
+    keys.map((queryKey) => {
+      // A partial key matches every query whose key starts with it, so
+      // invalidating an entity's root (e.g. queryKeys.levels.all) refreshes
+      // its lists and details together.
+      const filters: QueryFilters = { queryKey };
       if (!soft) {
         queryClient
           .getQueryCache()

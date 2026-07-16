@@ -2,6 +2,7 @@ import { ConfirmButton } from "src/components/buttons/ConfirmButton";
 import { useEntityAction } from "src/components/buttons/useEntityAction";
 import type { TagListing } from "src/services/TagService";
 import { TagService } from "src/services/TagService";
+import { queryKeys } from "src/services/queryKeys";
 
 interface TagDeleteButtonProps {
   tag: TagListing;
@@ -10,7 +11,7 @@ interface TagDeleteButtonProps {
 const TagDeleteButton = ({ tag }: TagDeleteButtonProps) => {
   const handleConfirm = useEntityAction(
     () => TagService.delete(tag.id),
-    ["tags", "auditLogs"],
+    [queryKeys.tags.all, queryKeys.auditLogs.all],
   );
 
   return (

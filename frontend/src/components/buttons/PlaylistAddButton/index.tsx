@@ -5,6 +5,7 @@ import { ButtonVariant } from "src/components/common/Button";
 import { IconBookmark } from "src/components/icons";
 import { PlaylistItemModal } from "src/components/modals/PlaylistItemModal";
 import type { LevelNested } from "src/services/LevelService";
+import { queryKeys } from "src/services/queryKeys";
 import { resetQueries } from "src/utils/misc";
 
 interface PlaylistAddButtonProps {
@@ -33,7 +34,7 @@ const PlaylistAddButton = ({
   const handleIsModalActiveChange = (value: boolean) => {
     setIsModalActive(value);
     if (isChanged) {
-      resetQueries(queryClient, ["playlists"]);
+      resetQueries(queryClient, [queryKeys.playlists.all]);
     }
   };
 

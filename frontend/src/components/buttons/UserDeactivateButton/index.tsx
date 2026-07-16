@@ -3,6 +3,7 @@ import { useEntityAction } from "src/components/buttons/useEntityAction";
 import { IconBan } from "src/components/icons";
 import { UserService } from "src/services/UserService";
 import type { UserBasic } from "src/services/UserService";
+import { queryKeys } from "src/services/queryKeys";
 
 interface UserDeactivateButtonProps {
   user: UserBasic;
@@ -20,7 +21,7 @@ const UserDeactivateButton = ({
       await UserService.deactivate(user.id, reason);
       onComplete?.();
     },
-    ["user", "users", "auditLogs"],
+    [queryKeys.users.all, queryKeys.auditLogs.all],
   );
 
   return (

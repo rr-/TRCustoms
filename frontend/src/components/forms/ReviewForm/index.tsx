@@ -15,6 +15,7 @@ import { LevelLink } from "src/components/links/LevelLink";
 import type { LevelNested } from "src/services/LevelService";
 import type { ReviewDetails } from "src/services/ReviewService";
 import { ReviewService } from "src/services/ReviewService";
+import { queryKeys } from "src/services/queryKeys";
 import { resetQueries } from "src/utils/misc";
 import { z } from "zod";
 
@@ -47,8 +48,12 @@ const ReviewForm = ({ level, review, onGoBack, onSubmit }: ReviewFormProps) => {
     const payload = { levelId: level.id, text: values.text };
     if (review?.id) {
       const outReview = await ReviewService.update(review.id, payload);
-      resetQueries(queryClient, ["levels", "reviews"], true);
-      resetQueries(queryClient, ["auditLogs"]);
+      resetQueries(
+        queryClient,
+        [queryKeys.levels.all, queryKeys.reviews.all],
+        true,
+      );
+      resetQueries(queryClient, [queryKeys.auditLogs.all]);
       onSubmit?.(outReview);
       return {
         final: true,
@@ -64,7 +69,11 @@ const ReviewForm = ({ level, review, onGoBack, onSubmit }: ReviewFormProps) => {
       };
     }
     const outReview = await ReviewService.create(payload);
-    resetQueries(queryClient, ["levels", "reviews", "auditLogs"]);
+    resetQueries(queryClient, [
+      queryKeys.levels.all,
+      queryKeys.reviews.all,
+      queryKeys.auditLogs.all,
+    ]);
     onSubmit?.(outReview);
     return {
       final: true,

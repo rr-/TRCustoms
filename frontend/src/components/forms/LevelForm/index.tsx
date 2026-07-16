@@ -33,6 +33,7 @@ import type { LevelDetails } from "src/services/LevelService";
 import { LevelService } from "src/services/LevelService";
 import { TagNested } from "src/services/TagService";
 import type { UserNested } from "src/services/UserService";
+import { queryKeys } from "src/services/queryKeys";
 import { useConfig } from "src/stores/config";
 import { useUser } from "src/stores/user";
 import { DisplayMode } from "src/types";
@@ -316,7 +317,10 @@ const LevelForm = ({ level, onGoBack, onSubmit }: LevelFormProps) => {
 
       if (level?.id) {
         const outLevel = await LevelService.update(level.id, payload);
-        resetQueries(queryClient, ["levels", "auditLogs"]);
+        resetQueries(queryClient, [
+          queryKeys.levels.all,
+          queryKeys.auditLogs.all,
+        ]);
         onSubmit?.(outLevel);
         return {
           success: (
@@ -329,7 +333,10 @@ const LevelForm = ({ level, onGoBack, onSubmit }: LevelFormProps) => {
         };
       }
       const outLevel = await LevelService.create(payload);
-      resetQueries(queryClient, ["levels", "auditLogs"]);
+      resetQueries(queryClient, [
+        queryKeys.levels.all,
+        queryKeys.auditLogs.all,
+      ]);
       onSubmit?.(outLevel);
     },
     applyLevelServerErrors,

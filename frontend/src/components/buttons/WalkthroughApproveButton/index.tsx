@@ -3,6 +3,7 @@ import { useEntityAction } from "src/components/buttons/useEntityAction";
 import { IconBadgeCheck } from "src/components/icons";
 import type { WalkthroughDetails } from "src/services/WalkthroughService";
 import { WalkthroughService } from "src/services/WalkthroughService";
+import { queryKeys } from "src/services/queryKeys";
 
 interface WalkthroughApproveButtonProps {
   walkthrough: WalkthroughDetails;
@@ -13,7 +14,7 @@ const WalkthroughApproveButton = ({
 }: WalkthroughApproveButtonProps) => {
   const handleConfirm = useEntityAction(
     () => WalkthroughService.approve(walkthrough.id),
-    ["walkthrough", "walkthroughs", "auditLogs"],
+    [queryKeys.walkthroughs.all, queryKeys.auditLogs.all],
   );
 
   return (

@@ -3,6 +3,7 @@ import { useEntityAction } from "src/components/buttons/useEntityAction";
 import { IconXCircle } from "src/components/icons";
 import { ReviewService } from "src/services/ReviewService";
 import type { ReviewListing } from "src/services/ReviewService";
+import { queryKeys } from "src/services/queryKeys";
 
 interface ReviewHideButtonProps {
   review: ReviewListing;
@@ -15,7 +16,7 @@ const ReviewHideButton = ({ review, onComplete }: ReviewHideButtonProps) => {
       await ReviewService.hide(review.id, { reason });
       onComplete?.();
     },
-    ["reviews", "levels", "auditLogs"],
+    [queryKeys.reviews.all, queryKeys.levels.all, queryKeys.auditLogs.all],
   );
 
   return (

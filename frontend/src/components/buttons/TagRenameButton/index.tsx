@@ -2,6 +2,7 @@ import { PromptButton } from "src/components/buttons/PromptButton";
 import { useEntityAction } from "src/components/buttons/useEntityAction";
 import type { TagListing } from "src/services/TagService";
 import { TagService } from "src/services/TagService";
+import { queryKeys } from "src/services/queryKeys";
 
 interface TagRenameButtonProps {
   tag: TagListing;
@@ -12,7 +13,7 @@ const TagRenameButton = ({ tag }: TagRenameButtonProps) => {
     async (newTagName: string) => {
       await TagService.update(tag.id, { name: newTagName });
     },
-    ["tags", "auditLogs"],
+    [queryKeys.tags.all, queryKeys.auditLogs.all],
   );
 
   return (

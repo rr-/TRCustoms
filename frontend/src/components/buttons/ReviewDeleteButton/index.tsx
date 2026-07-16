@@ -3,6 +3,7 @@ import { useEntityAction } from "src/components/buttons/useEntityAction";
 import { IconTrash } from "src/components/icons";
 import { ReviewService } from "src/services/ReviewService";
 import type { ReviewListing } from "src/services/ReviewService";
+import { queryKeys } from "src/services/queryKeys";
 
 interface ReviewDeleteButtonProps {
   review: ReviewListing;
@@ -16,7 +17,7 @@ const ReviewDeleteButton = ({
   const handleConfirm = useEntityAction(async () => {
     await ReviewService.delete(review.id);
     onComplete?.();
-  }, ["reviews", "levels", "auditLogs"]);
+  }, [queryKeys.reviews.all, queryKeys.levels.all, queryKeys.auditLogs.all]);
 
   return (
     <ConfirmButton

@@ -4,6 +4,7 @@ import { Link } from "src/components/common/Link";
 import { PlaylistItemModal } from "src/components/modals/PlaylistItemModal";
 import type { LevelNested } from "src/services/LevelService";
 import type { PlaylistItemListing } from "src/services/PlaylistService";
+import { queryKeys } from "src/services/queryKeys";
 import { resetQueries } from "src/utils/misc";
 
 interface EditPlaylistItemButtonProps {
@@ -31,13 +32,13 @@ const EditPlaylistItemButton = ({
   };
 
   const handleNavigateToMyPlaylist = () => {
-    resetQueries(queryClient, ["playlists"], false);
+    resetQueries(queryClient, [queryKeys.playlists.all], false);
   };
 
   const handleIsModalActiveChange = (value: boolean) => {
     setIsModalActive(value);
     if (isChanged) {
-      resetQueries(queryClient, ["playlists"], false);
+      resetQueries(queryClient, [queryKeys.playlists.all], false);
     }
   };
 

@@ -3,6 +3,7 @@ import { useEntityAction } from "src/components/buttons/useEntityAction";
 import { IconXCircle } from "src/components/icons";
 import type { WalkthroughDetails } from "src/services/WalkthroughService";
 import { WalkthroughService } from "src/services/WalkthroughService";
+import { queryKeys } from "src/services/queryKeys";
 
 interface WalkthroughRejectButtonProps {
   walkthrough: WalkthroughDetails;
@@ -15,7 +16,7 @@ const WalkthroughRejectButton = ({
     async (result: string) => {
       await WalkthroughService.reject(walkthrough.id, result);
     },
-    ["walkthrough", "walkthroughs", "auditLogs"],
+    [queryKeys.walkthroughs.all, queryKeys.auditLogs.all],
   );
 
   return (

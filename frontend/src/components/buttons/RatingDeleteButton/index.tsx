@@ -3,6 +3,7 @@ import { useEntityAction } from "src/components/buttons/useEntityAction";
 import { IconTrash } from "src/components/icons";
 import { RatingService } from "src/services/RatingService";
 import type { RatingListing } from "src/services/RatingService";
+import { queryKeys } from "src/services/queryKeys";
 
 interface RatingDeleteButtonProps {
   rating: RatingListing;
@@ -16,7 +17,7 @@ const RatingDeleteButton = ({
   const handleConfirm = useEntityAction(async () => {
     await RatingService.delete(rating.id);
     onComplete?.();
-  }, ["ratings"]);
+  }, [queryKeys.ratings.all]);
 
   return (
     <ConfirmButton
