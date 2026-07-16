@@ -72,8 +72,17 @@ const getNewAccessToken = async (): Promise<string> => {
 };
 
 const logout = () => {
+  const refreshToken = getRefreshToken();
   StorageService.removeItem("accessToken");
   StorageService.removeItem("refreshToken");
+  if (refreshToken) {
+    // Best-effort server-side revocation so the long-lived refresh token
+    // can't be reused after logout. Fire and forget: local state is already
+    // cleared, and the token may legitimately be invalid/expired.
+    void postJson("/auth/token/logout/", { refresh: refreshToken }).catch(
+      () => undefined,
+    );
+  }
 };
 
 const AuthService = {

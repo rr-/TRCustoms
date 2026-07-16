@@ -9,6 +9,7 @@ from drf_spectacular.views import (
 )
 from rest_framework.routers import DefaultRouter
 from rest_framework_simplejwt.views import (
+    TokenBlacklistView,
     TokenObtainPairView,
     TokenRefreshView,
 )
@@ -58,6 +59,7 @@ router.register(r"events", EventViewSet)
 urlpatterns = [
     path("api/auth/token/", TokenObtainPairView.as_view()),
     path("api/auth/token/refresh/", TokenRefreshView.as_view()),
+    path("api/auth/token/logout/", TokenBlacklistView.as_view()),
     path(settings.ADMIN_DIR + "/", admin.site.urls),
     path("api/", include(router.urls)),
     path("api/level_genres/", GenreListView.as_view()),
