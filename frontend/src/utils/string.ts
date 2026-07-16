@@ -3,7 +3,7 @@ import { round } from "lodash";
 const EMPTY_INPUT_PLACEHOLDER = "-";
 
 const reprBigNumber = (num: number, decimalPlaces = 1): string => {
-  const suffixes = ["", "k", "m"];
+  const suffixes = ["", "k", "m", "b"];
   let suffix = suffixes.shift();
   while (suffixes.length && num >= 1000) {
     num /= 1000;

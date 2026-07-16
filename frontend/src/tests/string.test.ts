@@ -14,9 +14,10 @@ describe("reprBigNumber", () => {
     expect(reprBigNumber(999)).toBe("999");
   });
 
-  test("abbreviates thousands and millions", () => {
+  test("abbreviates thousands, millions and billions", () => {
     expect(reprBigNumber(1500)).toBe("1.5k");
     expect(reprBigNumber(1_500_000)).toBe("1.5m");
+    expect(reprBigNumber(1_500_000_000)).toBe("1.5b");
   });
 });
 
