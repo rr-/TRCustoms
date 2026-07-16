@@ -1,5 +1,5 @@
-import { resolveStoredTheme } from "../contexts/themeStorage";
 import { getPrefixedKey, StorageService } from "../services/StorageService";
+import { resolveStoredTheme } from "../utils/themeStorage";
 import assert from "node:assert/strict";
 import { test } from "vitest";
 

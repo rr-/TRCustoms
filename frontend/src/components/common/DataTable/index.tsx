@@ -9,10 +9,10 @@ import { Loader } from "src/components/common/Loader";
 import { Pager } from "src/components/common/Pager";
 import { SortLink } from "src/components/common/SortLink";
 import { DISABLE_PAGING } from "src/constants";
-import { useInfiniteScroll } from "src/contexts/InfiniteScroll";
 import { useSettings } from "src/contexts/SettingsContext";
 import type { GenericSearchResult } from "src/types";
 import type { GenericSearchQuery } from "src/types";
+import { useInfiniteScroll } from "src/utils/useInfiniteScroll";
 
 const DefaultNoItemsElement = (
   <p className={styles.noResults}>There are no results to show.</p>

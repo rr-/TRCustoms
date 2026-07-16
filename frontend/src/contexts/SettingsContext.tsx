@@ -1,6 +1,6 @@
-import { resolveStoredTheme, themes } from "src/contexts/themeStorage";
-import type { Theme } from "src/contexts/themeStorage";
 import { StorageService } from "src/services/StorageService";
+import { resolveStoredTheme, themes } from "src/utils/themeStorage";
+import type { Theme } from "src/utils/themeStorage";
 import { create } from "zustand";
 
 enum AutoPlaylistChoice {
