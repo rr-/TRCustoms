@@ -1,4 +1,6 @@
+import { useCallback } from "react";
 import { useEffect } from "react";
+import { useMemo } from "react";
 import { createContext } from "react";
 import { useState } from "react";
 import type { Config } from "src/services/ConfigService";
@@ -61,18 +63,27 @@ const ConfigContext = createContext<{
 const ConfigContextProvider = ({ children }: ConfigContextProviderProps) => {
   const [config, setConfig] = useState<Config>(defaultConfig);
 
-  const refetchConfig = async () => {
-    setConfig(await ConfigService.getConfig());
-  };
+  const refetchConfig = useCallback(async () => {
+    try {
+      setConfig(await ConfigService.getConfig());
+    } catch (error) {
+      // Keep the last-known (or default) config rather than letting an
+      // unhandled rejection escape; the app degrades to empty tags/genres.
+      console.error("Failed to load site config", error);
+    }
+  }, []);
 
   useEffect(() => {
     refetchConfig();
-  }, []);
+  }, [refetchConfig]);
+
+  const value = useMemo(
+    () => ({ config, refetchConfig }),
+    [config, refetchConfig],
+  );
 
   return (
-    <ConfigContext.Provider value={{ config, refetchConfig }}>
-      {children}
-    </ConfigContext.Provider>
+    <ConfigContext.Provider value={value}>{children}</ConfigContext.Provider>
   );
 };
 
