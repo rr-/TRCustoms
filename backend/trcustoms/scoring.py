@@ -2,6 +2,8 @@ from functools import cache
 from statistics import mean
 
 from django.db.models import Model, QuerySet
+from django.db.models.signals import post_delete, post_save
+from django.dispatch import receiver
 
 from trcustoms.common.consts import RatingClassSubject
 from trcustoms.common.models import RatingClass
@@ -19,7 +21,14 @@ def get_rating_classes(target: RatingClassSubject) -> QuerySet:
     )
 
 
-@cache
+@receiver(post_save, sender=RatingClass)
+@receiver(post_delete, sender=RatingClass)
+def clear_rating_classes_cache(sender, **kwargs) -> None:
+    # RatingClass rows are editable config; drop the memoized queryset so
+    # edits take effect without a worker restart.
+    get_rating_classes.cache_clear()
+
+
 def get_rating_class(
     target: RatingClassSubject, average: float, count: int
 ) -> RatingClass:

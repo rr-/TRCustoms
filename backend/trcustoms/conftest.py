@@ -15,7 +15,7 @@ from trcustoms.common.consts import RatingClassSubject
 from trcustoms.common.models import RatingClass
 from trcustoms.common.tests.factories import RatingClassFactory
 from trcustoms.ratings.logic import get_max_rating_score
-from trcustoms.scoring import get_rating_class, get_rating_classes
+from trcustoms.scoring import get_rating_classes
 from trcustoms.users.models import User
 from trcustoms.users.tests.factories import UserFactory
 
@@ -131,7 +131,6 @@ def fixture_rating_rating_classes() -> QuerySet:
 def fixture_clear_caches() -> None:
     get_max_rating_score.cache_clear()
     get_rating_classes.cache_clear()
-    get_rating_class.cache_clear()
 
 
 @pytest.fixture(name="use_tmp_media_dir", autouse=True, scope="session")
