@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import type { LegaleseEntry } from "src/components/common/NestedLegalese";
 import { NestedLegalese } from "src/components/common/NestedLegalese";
 import { PlainLayout } from "src/components/layouts/PlainLayout";
-import { usePageMetadata } from "src/contexts/PageMetadataContext";
+import { usePageMetadata } from "src/stores/pageMetadata";
 
 const buildVersion = import.meta.env.VITE_BUILD_VERSION;
 const buildDate = import.meta.env.VITE_BUILD_DATE;

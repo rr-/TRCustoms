@@ -2,7 +2,7 @@ import styles from "./index.module.css";
 import { Box } from "src/components/common/Box";
 import { PlainLayout } from "src/components/layouts/PlainLayout";
 import { Markdown } from "src/components/markdown/Markdown";
-import { usePageMetadata } from "src/contexts/PageMetadataContext";
+import { usePageMetadata } from "src/stores/pageMetadata";
 
 const sections = [
   {

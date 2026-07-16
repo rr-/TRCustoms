@@ -10,9 +10,9 @@ import { SmartWrap } from "src/components/common/SmartWrap";
 import { SidebarLayout } from "src/components/layouts/SidebarLayout";
 import { SidebarLayoutVariant } from "src/components/layouts/SidebarLayout";
 import { Markdown } from "src/components/markdown/Markdown";
-import { usePageMetadata } from "src/contexts/PageMetadataContext";
 import type { EventDetails } from "src/services/EventService";
 import { EventService } from "src/services/EventService";
+import { usePageMetadata } from "src/stores/pageMetadata";
 
 const EventPage = () => {
   const { eventId = "" } = useParams();

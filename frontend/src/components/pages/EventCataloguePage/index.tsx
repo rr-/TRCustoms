@@ -20,12 +20,12 @@ import { SubmitButton } from "src/components/forms/SubmitButton";
 import { DropDownField } from "src/components/forms/fields/DropDownField";
 import { TextField } from "src/components/forms/fields/TextField";
 import { SidebarLayout } from "src/components/layouts/SidebarLayout";
-import { usePageMetadata } from "src/contexts/PageMetadataContext";
 import {
   EventService,
   type EventSearchQuery,
   type EventListing,
 } from "src/services/EventService";
+import { usePageMetadata } from "src/stores/pageMetadata";
 
 interface EventViewProps {
   event: EventListing;

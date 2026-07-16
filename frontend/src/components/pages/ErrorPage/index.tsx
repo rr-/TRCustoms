@@ -1,7 +1,7 @@
 import styles from "./index.module.css";
 import { CenterLayout } from "src/components/layouts/CenterLayout";
 import { PlainLayout } from "src/components/layouts/PlainLayout";
-import { usePageMetadata } from "src/contexts/PageMetadataContext";
+import { usePageMetadata } from "src/stores/pageMetadata";
 import { extractErrorMessage } from "src/utils/misc";
 
 const Error403Page = () => {

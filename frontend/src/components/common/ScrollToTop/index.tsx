@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useRef } from "react";
 import { useLocation } from "react-router-dom";
-import { useScrollStore } from "src/contexts/ScrollContext";
+import { useScrollStore } from "src/stores/scroll";
 
 const ScrollToTop = () => {
   const location = useLocation();

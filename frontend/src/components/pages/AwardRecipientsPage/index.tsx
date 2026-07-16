@@ -9,13 +9,13 @@ import { ExtrasSidebar } from "src/components/common/ExtrasSidebar";
 import { Section, SectionHeader } from "src/components/common/Section";
 import { SidebarLayout } from "src/components/layouts/SidebarLayout";
 import { UserPicLink } from "src/components/links/UserPicLink";
-import { usePageMetadata } from "src/contexts/PageMetadataContext";
 import type {
   AwardRecipient,
   AwardRecipientsSearchQuery,
   AwardSpec,
 } from "src/services/AwardService";
 import { AwardService } from "src/services/AwardService";
+import { usePageMetadata } from "src/stores/pageMetadata";
 import { makeSentence } from "src/utils/string";
 import { formatDate } from "src/utils/string";
 

@@ -1,9 +1,9 @@
 import { useEffect } from "react";
 import { useContext } from "react";
 import { useNavigate } from "react-router-dom";
-import { usePageMetadata } from "src/contexts/PageMetadataContext";
 import { UserContext } from "src/contexts/UserContext";
 import { AuthService } from "src/services/AuthService";
+import { usePageMetadata } from "src/stores/pageMetadata";
 
 const LogoutPage = () => {
   const navigate = useNavigate();

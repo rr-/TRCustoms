@@ -10,8 +10,8 @@ import {
   ConfigContextProvider,
   ConfigContext,
 } from "src/contexts/ConfigContext";
-import { useSettings } from "src/contexts/SettingsContext";
 import { UserContextProvider } from "src/contexts/UserContext";
+import { useSettings } from "src/stores/settings";
 
 // Each page is code-split into its own chunk so the initial bundle no longer
 // ships every route. The pages use named exports, so unwrap the chosen name

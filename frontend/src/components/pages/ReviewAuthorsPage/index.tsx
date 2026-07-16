@@ -9,8 +9,8 @@ import { SectionHeader } from "src/components/common/Section";
 import { UserFancyList } from "src/components/common/UserFancyList";
 import { UserSearch } from "src/components/common/UserSearch";
 import { SidebarLayout } from "src/components/layouts/SidebarLayout";
-import { usePageMetadata } from "src/contexts/PageMetadataContext";
 import type { UserSearchQuery } from "src/services/UserService";
+import { usePageMetadata } from "src/stores/pageMetadata";
 import { filterFalsyObjectValues } from "src/utils/misc";
 import { getCurrentSearchParams } from "src/utils/misc";
 

@@ -10,12 +10,12 @@ import type { BaseFieldProps } from "src/components/forms/fields/BaseField";
 import { MarkdownComposer } from "src/components/markdown-composer/MarkdownComposer";
 import { Markdown } from "src/components/markdown/Markdown";
 import { ConfigContext } from "src/contexts/ConfigContext";
-import { useSettings } from "src/contexts/SettingsContext";
-import { MarkdownPreviewMode } from "src/contexts/SettingsContext";
 import type { MarkdownLimitKey } from "src/services/MarkdownLimitService";
 import { getMarkdownLimit } from "src/services/MarkdownLimitService";
 import { getMarkdownLimitState } from "src/services/MarkdownLimitService";
 import type { MarkdownLimitState } from "src/services/MarkdownLimitService";
+import { useSettings } from "src/stores/settings";
+import { MarkdownPreviewMode } from "src/stores/settings";
 
 interface TextAreaFieldProps extends Omit<BaseFieldProps, "children"> {
   readonly?: boolean | undefined;

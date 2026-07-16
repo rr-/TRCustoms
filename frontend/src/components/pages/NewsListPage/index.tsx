@@ -10,10 +10,10 @@ import { SidebarLayout } from "src/components/layouts/SidebarLayout";
 import { SidebarLayoutVariant } from "src/components/layouts/SidebarLayout";
 import { NewsLink } from "src/components/links/NewsLink";
 import { DISABLE_PAGING } from "src/constants";
-import { usePageMetadata } from "src/contexts/PageMetadataContext";
 import type { NewsSearchQuery } from "src/services/NewsService";
 import type { NewsSearchResult } from "src/services/NewsService";
 import { NewsService } from "src/services/NewsService";
+import { usePageMetadata } from "src/stores/pageMetadata";
 import { formatDate } from "src/utils/string";
 
 const NewsListPage = () => {

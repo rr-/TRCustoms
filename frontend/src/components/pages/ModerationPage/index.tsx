@@ -13,9 +13,9 @@ import { SectionHeader } from "src/components/common/Section";
 import { SidebarBox } from "src/components/common/SidebarBox";
 import { VerticalList } from "src/components/common/VerticalList";
 import { SidebarLayout } from "src/components/layouts/SidebarLayout";
-import { usePageMetadata } from "src/contexts/PageMetadataContext";
 import type { AuditLogSearchQuery } from "src/services/AuditLogService";
 import { UserPermission } from "src/services/UserService";
+import { usePageMetadata } from "src/stores/pageMetadata";
 import { filterFalsyObjectValues } from "src/utils/misc";
 import { getCurrentSearchParams } from "src/utils/misc";
 

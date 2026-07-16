@@ -10,10 +10,10 @@ import { Section, SectionHeader } from "src/components/common/Section";
 import { UserFancyList } from "src/components/common/UserFancyList";
 import { SidebarLayout } from "src/components/layouts/SidebarLayout";
 import { ConfigContext } from "src/contexts/ConfigContext";
-import { usePageMetadata } from "src/contexts/PageMetadataContext";
 import type { CountryListing } from "src/services/ConfigService";
 import type { UserListing, UserSearchQuery } from "src/services/UserService";
 import { UserService } from "src/services/UserService";
+import { usePageMetadata } from "src/stores/pageMetadata";
 
 interface LocationUserTableProps {
   selectedCountry: CountryListing | null;

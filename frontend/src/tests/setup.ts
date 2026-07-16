@@ -1,8 +1,8 @@
 import "@testing-library/jest-dom/vitest";
 import { cleanup } from "@testing-library/react";
-import { usePageMetadataStore } from "src/contexts/PageMetadataContext";
-import { useScrollStore } from "src/contexts/ScrollContext";
-import { useSettings } from "src/contexts/SettingsContext";
+import { usePageMetadataStore } from "src/stores/pageMetadata";
+import { useScrollStore } from "src/stores/scroll";
+import { useSettings } from "src/stores/settings";
 import { afterEach, vi } from "vitest";
 
 // The zustand stores are module-level singletons created once per worker.

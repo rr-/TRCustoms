@@ -4,11 +4,11 @@ import { forwardRef } from "react";
 import { useImperativeHandle } from "react";
 import { Checkbox } from "src/components/common/Checkbox";
 import { ConfirmModal } from "src/components/modals/ConfirmModal";
-import { AutoPlaylistChoice } from "src/contexts/SettingsContext";
-import { useSettings } from "src/contexts/SettingsContext";
 import { PlaylistItemStatus } from "src/services/PlaylistService";
 import { PlaylistService } from "src/services/PlaylistService";
 import type { PlaylistItemDetails } from "src/services/PlaylistService";
+import { AutoPlaylistChoice } from "src/stores/settings";
+import { useSettings } from "src/stores/settings";
 import { showAlertOnError } from "src/utils/misc";
 
 interface PlaylistAddModalProps {

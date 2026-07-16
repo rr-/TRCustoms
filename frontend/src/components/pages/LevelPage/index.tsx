@@ -18,10 +18,10 @@ import { RatingAddAction } from "src/components/pages/LevelPage/RatingAddAction"
 import { RatingEditAction } from "src/components/pages/LevelPage/RatingEditAction";
 import { ReviewAddAction } from "src/components/pages/LevelPage/ReviewAddAction";
 import { ReviewEditAction } from "src/components/pages/LevelPage/ReviewEditAction";
-import { usePageMetadata } from "src/contexts/PageMetadataContext";
-import { useScrollStore } from "src/contexts/ScrollContext";
 import { LevelService } from "src/services/LevelService";
 import type { LevelDetails } from "src/services/LevelService";
+import { usePageMetadata } from "src/stores/pageMetadata";
+import { useScrollStore } from "src/stores/scroll";
 
 interface LevelPageProps {
   action?: string;

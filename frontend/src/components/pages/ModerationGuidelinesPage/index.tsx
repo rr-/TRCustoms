@@ -3,8 +3,8 @@ import { SectionHeader } from "src/components/common/Section";
 import { IconCheck } from "src/components/icons";
 import { IconReject } from "src/components/icons";
 import { PlainLayout } from "src/components/layouts/PlainLayout";
-import { usePageMetadata } from "src/contexts/PageMetadataContext";
 import { UserPermission } from "src/services/UserService";
+import { usePageMetadata } from "src/stores/pageMetadata";
 
 const ModerationGuidelinesPageView = () => {
   usePageMetadata(() => ({ ready: true, title: "Moderating Guidelines" }), []);

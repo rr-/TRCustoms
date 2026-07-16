@@ -3,8 +3,8 @@ import { useNavigate } from "react-router-dom";
 import { PageGuard } from "src/components/common/PermissionGuard";
 import { NewsForm } from "src/components/forms/NewsForm";
 import { PlainLayout } from "src/components/layouts/PlainLayout";
-import { usePageMetadata } from "src/contexts/PageMetadataContext";
 import { UserPermission } from "src/services/UserService";
+import { usePageMetadata } from "src/stores/pageMetadata";
 
 const NewsCreatePageView = () => {
   const navigate = useNavigate();

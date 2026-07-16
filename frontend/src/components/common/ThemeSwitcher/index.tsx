@@ -1,6 +1,6 @@
 import styles from "./index.module.css";
 import { ThemePreview } from "src/components/common/ThemePreview";
-import { useSettings } from "src/contexts/SettingsContext";
+import { useSettings } from "src/stores/settings";
 
 const ThemeSwitcher = () => {
   const { getAllThemes, setTheme } = useSettings();

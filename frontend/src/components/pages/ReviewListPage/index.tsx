@@ -9,8 +9,8 @@ import { Section } from "src/components/common/Section";
 import { SectionHeader } from "src/components/common/Section";
 import { SidebarLayout } from "src/components/layouts/SidebarLayout";
 import { DISABLE_PAGING } from "src/constants";
-import { usePageMetadata } from "src/contexts/PageMetadataContext";
 import type { ReviewSearchQuery } from "src/services/ReviewService";
+import { usePageMetadata } from "src/stores/pageMetadata";
 import { getCurrentSearchParams } from "src/utils/misc";
 
 const defaultSearchQuery: ReviewSearchQuery = {

@@ -3,15 +3,12 @@ import { Checkbox } from "src/components/common/Checkbox";
 import { Radioboxes } from "src/components/common/Radioboxes";
 import { ThemeSwitcher } from "src/components/common/ThemeSwitcher";
 import { PlainLayout } from "src/components/layouts/PlainLayout";
-import { usePageMetadata } from "src/contexts/PageMetadataContext";
-import { useSettings } from "src/contexts/SettingsContext";
-import {
-  AutoPlaylistChoice,
-  MarkdownPreviewMode,
-} from "src/contexts/SettingsContext";
 import { UserContext } from "src/contexts/UserContext";
 import type { UserDetails } from "src/services/UserService";
 import { UserService } from "src/services/UserService";
+import { usePageMetadata } from "src/stores/pageMetadata";
+import { useSettings } from "src/stores/settings";
+import { AutoPlaylistChoice, MarkdownPreviewMode } from "src/stores/settings";
 
 // Email notification settings configuration
 const emailSettingsConfig = [

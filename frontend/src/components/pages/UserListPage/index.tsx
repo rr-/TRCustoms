@@ -7,9 +7,9 @@ import { serializeGenericSearchQuery } from "src/components/common/QueryPersiste
 import { UserList } from "src/components/common/UserList";
 import { UserSearch } from "src/components/common/UserSearch";
 import { PlainLayout } from "src/components/layouts/PlainLayout";
-import { usePageMetadata } from "src/contexts/PageMetadataContext";
 import type { UserSearchQuery } from "src/services/UserService";
 import { UserPermission } from "src/services/UserService";
+import { usePageMetadata } from "src/stores/pageMetadata";
 import { getCurrentSearchParams } from "src/utils/misc";
 
 const defaultSearchQuery: UserSearchQuery = {

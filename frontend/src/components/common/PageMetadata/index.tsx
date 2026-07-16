@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { Helmet, HelmetProvider } from "react-helmet-async";
-import { usePageMetadataStore } from "src/contexts/PageMetadataContext";
+import { usePageMetadataStore } from "src/stores/pageMetadata";
 
 const BASE_TITLE = "TRCustoms";
 const BASE_DESCRIPTION =

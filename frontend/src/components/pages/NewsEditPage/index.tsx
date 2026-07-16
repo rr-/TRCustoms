@@ -7,10 +7,10 @@ import { PageGuard } from "src/components/common/PermissionGuard";
 import { SmartWrap } from "src/components/common/SmartWrap";
 import { NewsForm } from "src/components/forms/NewsForm";
 import { PlainLayout } from "src/components/layouts/PlainLayout";
-import { usePageMetadata } from "src/contexts/PageMetadataContext";
 import type { NewsDetails } from "src/services/NewsService";
 import { NewsService } from "src/services/NewsService";
 import { UserPermission } from "src/services/UserService";
+import { usePageMetadata } from "src/stores/pageMetadata";
 
 interface NewsEditPageViewProps {
   newsId: string;

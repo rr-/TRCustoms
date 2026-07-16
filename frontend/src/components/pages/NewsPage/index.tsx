@@ -10,10 +10,10 @@ import { SectionHeader } from "src/components/common/Section";
 import { SidebarLayout } from "src/components/layouts/SidebarLayout";
 import { SidebarLayoutVariant } from "src/components/layouts/SidebarLayout";
 import { Markdown } from "src/components/markdown/Markdown";
-import { usePageMetadata } from "src/contexts/PageMetadataContext";
 import type { NewsDetails } from "src/services/NewsService";
 import { NewsService } from "src/services/NewsService";
 import { UserPermission } from "src/services/UserService";
+import { usePageMetadata } from "src/stores/pageMetadata";
 import { formatDate } from "src/utils/string";
 
 const NewsPage = () => {

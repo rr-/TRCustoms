@@ -7,12 +7,12 @@ import { SmartWrap } from "src/components/common/SmartWrap";
 import { WalkthroughForm } from "src/components/forms/WalkthroughForm";
 import { PlainLayout } from "src/components/layouts/PlainLayout";
 import { LevelLink } from "src/components/links/LevelLink";
-import { usePageMetadata } from "src/contexts/PageMetadataContext";
 import type { LevelDetails } from "src/services/LevelService";
 import { LevelService } from "src/services/LevelService";
 import { UserPermission } from "src/services/UserService";
 import type { WalkthroughDetails } from "src/services/WalkthroughService";
 import { WalkthroughService } from "src/services/WalkthroughService";
+import { usePageMetadata } from "src/stores/pageMetadata";
 
 const WalkthroughEditPage = () => {
   const { levelId = "", walkthroughId = "" } = useParams();

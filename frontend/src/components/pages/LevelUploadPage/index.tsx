@@ -4,9 +4,9 @@ import { Link } from "react-router-dom";
 import { PageGuard } from "src/components/common/PermissionGuard";
 import { LevelForm } from "src/components/forms/LevelForm";
 import { PlainLayout } from "src/components/layouts/PlainLayout";
-import { usePageMetadata } from "src/contexts/PageMetadataContext";
 import type { LevelDetails } from "src/services/LevelService";
 import { UserPermission } from "src/services/UserService";
+import { usePageMetadata } from "src/stores/pageMetadata";
 
 const LevelUploadPageView = () => {
   const [isComplete, setIsComplete] = useState(false);

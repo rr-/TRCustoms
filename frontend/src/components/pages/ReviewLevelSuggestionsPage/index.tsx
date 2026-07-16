@@ -10,8 +10,8 @@ import { ReviewSearchSidebar } from "src/components/common/ReviewSearchSidebar";
 import { Section } from "src/components/common/Section";
 import { SectionHeader } from "src/components/common/Section";
 import { SidebarLayout } from "src/components/layouts/SidebarLayout";
-import { usePageMetadata } from "src/contexts/PageMetadataContext";
 import type { LevelSearchQuery } from "src/services/LevelService";
+import { usePageMetadata } from "src/stores/pageMetadata";
 import { getCurrentSearchParams } from "src/utils/misc";
 
 const defaultSearchQuery: LevelSearchQuery = {

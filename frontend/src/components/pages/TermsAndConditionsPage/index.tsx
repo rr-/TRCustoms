@@ -1,7 +1,7 @@
 import type { LegaleseEntry } from "src/components/common/NestedLegalese";
 import { NestedLegalese } from "src/components/common/NestedLegalese";
 import { PlainLayout } from "src/components/layouts/PlainLayout";
-import { usePageMetadata } from "src/contexts/PageMetadataContext";
+import { usePageMetadata } from "src/stores/pageMetadata";
 
 const TOS: LegaleseEntry = {
   children: [

@@ -9,10 +9,10 @@ import { SidebarLayoutVariant } from "src/components/layouts/SidebarLayout";
 import { MarkdownTOC } from "src/components/markdown/MarkdownTOC";
 import { ResponseErrorPage } from "src/components/pages/ErrorPage";
 import { WalkthroughHeader } from "src/components/pages/WalkthroughPage/WalkthroughHeader";
-import { usePageMetadata } from "src/contexts/PageMetadataContext";
 import { WalkthroughType } from "src/services/WalkthroughService";
 import type { WalkthroughDetails } from "src/services/WalkthroughService";
 import { WalkthroughService } from "src/services/WalkthroughService";
+import { usePageMetadata } from "src/stores/pageMetadata";
 
 const WalkthroughPage = () => {
   const { walkthroughId = "" } = useParams();

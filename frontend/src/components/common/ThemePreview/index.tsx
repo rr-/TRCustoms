@@ -1,5 +1,5 @@
 import styles from "./index.module.css";
-import type { Theme } from "src/contexts/SettingsContext";
+import type { Theme } from "src/stores/settings";
 
 interface PaletteBoxProps {
   color: string;

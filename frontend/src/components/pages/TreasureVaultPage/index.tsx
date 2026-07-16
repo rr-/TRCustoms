@@ -10,8 +10,8 @@ import linkStyles from "src/components/common/Link/index.module.css";
 import { Section } from "src/components/common/Section";
 import { SectionHeader } from "src/components/common/Section";
 import { SidebarLayout } from "src/components/layouts/SidebarLayout";
-import { usePageMetadata } from "src/contexts/PageMetadataContext";
 import { AwardService, AwardSpec } from "src/services/AwardService";
+import { usePageMetadata } from "src/stores/pageMetadata";
 
 // Mapping of tier numbers to human-readable names
 const tierNames: { [tier: number]: string } = {

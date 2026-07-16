@@ -8,11 +8,11 @@ import { PageGuard } from "src/components/common/PermissionGuard";
 import { SmartWrap } from "src/components/common/SmartWrap";
 import { UserForm } from "src/components/forms/UserForm";
 import { PlainLayout } from "src/components/layouts/PlainLayout";
-import { usePageMetadata } from "src/contexts/PageMetadataContext";
 import { UserContext } from "src/contexts/UserContext";
 import { UserService } from "src/services/UserService";
 import type { UserDetails } from "src/services/UserService";
 import { UserPermission } from "src/services/UserService";
+import { usePageMetadata } from "src/stores/pageMetadata";
 
 interface UserEditViewProps {
   userId: string;

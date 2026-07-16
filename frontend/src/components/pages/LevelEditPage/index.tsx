@@ -7,11 +7,11 @@ import { PageGuard } from "src/components/common/PermissionGuard";
 import { SmartWrap } from "src/components/common/SmartWrap";
 import { LevelForm } from "src/components/forms/LevelForm";
 import { PlainLayout } from "src/components/layouts/PlainLayout";
-import { usePageMetadata } from "src/contexts/PageMetadataContext";
 import type { LevelDetails } from "src/services/LevelService";
 import { LevelService } from "src/services/LevelService";
 import { getLevelOwningUserIds } from "src/services/LevelService";
 import { UserPermission } from "src/services/UserService";
+import { usePageMetadata } from "src/stores/pageMetadata";
 
 const LevelEditPage = () => {
   const { levelId = "" } = useParams();

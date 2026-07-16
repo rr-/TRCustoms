@@ -16,12 +16,12 @@ import { ReviewsTab } from "src/components/pages/UserPage/ReviewsTab";
 import { UserHeader } from "src/components/pages/UserPage/UserHeader";
 import { UserSidebar } from "src/components/pages/UserPage/UserSidebar";
 import { WalkthroughsTab } from "src/components/pages/UserPage/WalkthroughsTab";
-import { usePageMetadata } from "src/contexts/PageMetadataContext";
-import { useScrollStore } from "src/contexts/ScrollContext";
 import { UserContext } from "src/contexts/UserContext";
 import type { UserDetails } from "src/services/UserService";
 import { UserPermission } from "src/services/UserService";
 import { UserService } from "src/services/UserService";
+import { usePageMetadata } from "src/stores/pageMetadata";
+import { useScrollStore } from "src/stores/scroll";
 
 interface UserPageProps {
   tabName?: string;

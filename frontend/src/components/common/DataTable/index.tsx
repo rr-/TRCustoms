@@ -9,7 +9,7 @@ import { Loader } from "src/components/common/Loader";
 import { Pager } from "src/components/common/Pager";
 import { SortLink } from "src/components/common/SortLink";
 import { DISABLE_PAGING } from "src/constants";
-import { useSettings } from "src/contexts/SettingsContext";
+import { useSettings } from "src/stores/settings";
 import type { GenericSearchResult } from "src/types";
 import type { GenericSearchQuery } from "src/types";
 import { useInfiniteScroll } from "src/utils/useInfiniteScroll";

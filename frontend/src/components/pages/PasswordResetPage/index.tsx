@@ -1,6 +1,6 @@
 import { PasswordResetForm } from "src/components/forms/PasswordResetForm";
 import { PlainLayout } from "src/components/layouts/PlainLayout";
-import { usePageMetadata } from "src/contexts/PageMetadataContext";
+import { usePageMetadata } from "src/stores/pageMetadata";
 
 const PasswordResetPage = () => {
   usePageMetadata(
