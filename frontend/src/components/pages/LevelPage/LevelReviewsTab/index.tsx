@@ -42,7 +42,8 @@ const defaultReviewSort = reviewSortOptions[0].value;
 
 const getSavedReviewSort = (): string => {
   const savedSort = StorageService.getItem(LEVEL_REVIEWS_SORT_STORAGE_KEY);
-  return reviewSortOptions.some((option) => option.value === savedSort)
+  return savedSort !== null &&
+    reviewSortOptions.some((option) => option.value === savedSort)
     ? savedSort
     : defaultReviewSort;
 };

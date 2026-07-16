@@ -109,13 +109,17 @@ const Error404Page = () => {
 };
 
 interface ResponseErrorPageProps {
-  error: any;
+  error: unknown;
 }
 
 const ResponseErrorPage = ({ error }: ResponseErrorPageProps) => {
-  if (error.response?.status === 404) {
+  const status =
+    typeof error === "object" && error !== null && "response" in error
+      ? (error as { response?: { status?: number } }).response?.status
+      : undefined;
+  if (status === 404) {
     return <Error404Page />;
-  } else if (error.response?.status === 403) {
+  } else if (status === 403) {
     return <Error403Page />;
   } else {
     return (

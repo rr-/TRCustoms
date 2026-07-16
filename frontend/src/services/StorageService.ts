@@ -1,7 +1,7 @@
 interface StorageLike {
-  setItem: (key: string, value: any) => void;
+  setItem: (key: string, value: string) => void;
   removeItem: (key: string) => void;
-  getItem: (key: string) => any;
+  getItem: (key: string) => string | null;
   readonly isAvailable: boolean;
 }
 
@@ -28,13 +28,13 @@ const isStorageAvailable = (
 };
 
 class MyStorage implements StorageLike {
-  data: { [key: string]: any };
+  data: { [key: string]: string };
 
   constructor() {
     this.data = {};
   }
 
-  setItem(key: string, value: any): void {
+  setItem(key: string, value: string): void {
     this.data[key] = value;
   }
 
@@ -42,8 +42,8 @@ class MyStorage implements StorageLike {
     delete this.data[key];
   }
 
-  getItem(key: string): any {
-    return this.data[key];
+  getItem(key: string): string | null {
+    return this.data[key] ?? null;
   }
 
   get isAvailable() {
@@ -52,7 +52,7 @@ class MyStorage implements StorageLike {
 }
 
 class LocalStorage implements StorageLike {
-  setItem(key: string, value: any): void {
+  setItem(key: string, value: string): void {
     localStorage.setItem(key, value);
   }
 
@@ -60,7 +60,7 @@ class LocalStorage implements StorageLike {
     localStorage.removeItem(key);
   }
 
-  getItem(key: string): any {
+  getItem(key: string): string | null {
     return localStorage.getItem(key);
   }
 
@@ -70,7 +70,7 @@ class LocalStorage implements StorageLike {
 }
 
 class SessionStorage implements StorageLike {
-  setItem(key: string, value: any): void {
+  setItem(key: string, value: string): void {
     sessionStorage.setItem(key, value);
   }
 
@@ -78,7 +78,7 @@ class SessionStorage implements StorageLike {
     sessionStorage.removeItem(key);
   }
 
-  getItem(key: string): any {
+  getItem(key: string): string | null {
     return sessionStorage.getItem(key);
   }
 
@@ -93,7 +93,7 @@ const storages: StorageLike[] = [
   new MyStorage(),
 ];
 
-const getItem = (key: string): any | null => {
+const getItem = (key: string): string | null => {
   const prefixedKey = getPrefixedKey(key);
   for (const storage of storages) {
     if (storage.isAvailable) {
@@ -107,7 +107,7 @@ const getItem = (key: string): any | null => {
   return null;
 };
 
-const setItem = (key: string, value: any): void => {
+const setItem = (key: string, value: string): void => {
   const prefixedKey = getPrefixedKey(key);
   for (const storage of storages) {
     if (storage.isAvailable) {

@@ -15,7 +15,7 @@ class AuthError extends Error {}
 // These calls use the raw fetch rather than the generated client on purpose:
 // login carries no token, and the token refresh must not pass through the
 // client's auth middleware (which would try to refresh again on failure).
-const postJson = async (path: string, body: unknown): Promise<any> => {
+const postJson = async <T>(path: string, body: unknown): Promise<T> => {
   const response = await fetch(`${API_URL}${path}`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -28,7 +28,7 @@ const postJson = async (path: string, body: unknown): Promise<any> => {
 };
 
 const login = async (username: string, password: string): Promise<void> => {
-  const data: AccessTokenResponse = await postJson("/auth/token/", {
+  const data = await postJson<AccessTokenResponse>("/auth/token/", {
     username,
     password,
   });
@@ -58,7 +58,7 @@ const getNewAccessToken = async (): Promise<string> => {
     if (!refreshToken) {
       throw new AuthError("refresh token not available");
     }
-    const data: RefreshTokenResponse = await postJson("/auth/token/refresh/", {
+    const data = await postJson<RefreshTokenResponse>("/auth/token/refresh/", {
       refresh: refreshToken,
     });
     StorageService.setItem("accessToken", data.access);

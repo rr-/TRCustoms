@@ -24,7 +24,7 @@ const EmailConfirmationPage = () => {
       try {
         setUser(await UserService.confirmEmail(token));
       } catch (err) {
-        setError(extractErrorMessage(err));
+        setError(extractErrorMessage(err) ?? undefined);
       }
     };
     run();

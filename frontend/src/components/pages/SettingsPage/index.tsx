@@ -10,6 +10,7 @@ import {
   MarkdownPreviewMode,
 } from "src/contexts/SettingsContext";
 import { UserContext } from "src/contexts/UserContext";
+import type { UserDetails } from "src/services/UserService";
 import { UserService } from "src/services/UserService";
 
 // Email notification settings configuration
@@ -58,8 +59,8 @@ const EmailCheckbox = ({
   setUserSettings: React.Dispatch<
     React.SetStateAction<Record<EmailSettingKey, boolean>>
   >;
-  user: any;
-  setUser: (usr: any) => void;
+  user: UserDetails | null;
+  setUser: React.Dispatch<React.SetStateAction<UserDetails | null>>;
 }) => (
   <Checkbox
     label={label}

@@ -33,12 +33,12 @@ const getURLRegexp = () => {
 
 const URLRegex = getURLRegexp();
 
-const validateRequired = (value: any): string | null => {
+const validateRequired = (value: unknown): string | null => {
   if (
     value === "" ||
     value === undefined ||
     value === null ||
-    value?.length === 0
+    (Array.isArray(value) && value.length === 0)
   ) {
     return "This field is required";
   }
@@ -46,7 +46,7 @@ const validateRequired = (value: any): string | null => {
 };
 
 const validateMaxLength = (maxLength: number) => {
-  const validateFunc = (value: any): string | null => {
+  const validateFunc = (value: unknown): string | null => {
     if (isString(value) && value.length > maxLength) {
       return `This field must be at most ${maxLength} characters long`;
     }

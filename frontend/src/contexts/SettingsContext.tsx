@@ -51,7 +51,7 @@ const useSettings = create<SettingsState>((set, get) => ({
   infiniteScroll: StorageService.getItem("infiniteScroll") === "true" || false,
   setInfiniteScroll: (infiniteScroll: boolean): void => {
     set((state) => ({ ...state, infiniteScroll }));
-    StorageService.setItem("infiniteScroll", infiniteScroll);
+    StorageService.setItem("infiniteScroll", String(infiniteScroll));
   },
 
   markdownPreviewMode:

@@ -38,7 +38,10 @@ const usePageMetadataStore = create<PageMetadataStore>((set, get) => ({
   },
 }));
 
-const usePageMetadata = (callback: () => PageMetadata, deps: any[]) => {
+const usePageMetadata = (
+  callback: () => PageMetadata,
+  deps: React.DependencyList,
+) => {
   const update = usePageMetadataStore((state) => state.update);
   /* eslint-disable react-hooks/exhaustive-deps*/
   useEffect(() => update(callback()), [callback, update, ...deps]);

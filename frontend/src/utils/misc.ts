@@ -1,3 +1,5 @@
+import type { QueryClient } from "@tanstack/react-query";
+import type { QueryFilters } from "@tanstack/react-query";
 import { isString } from "lodash";
 import { isArray } from "lodash";
 import { DISABLE_PAGING } from "src/constants";
@@ -42,21 +44,21 @@ const searchStringToBool = (
   return value === "1" ? true : value === "0" ? false : null;
 };
 
-const extractNestedErrorText = (source: any): string[] => {
+const extractNestedErrorText = (source: unknown): string[] => {
   if (source === null || source === undefined) {
     return [];
   }
   if (isArray(source)) {
-    return source.reduce(
-      (acc: string[], item: any) => [...acc, ...extractNestedErrorText(item)],
+    return source.reduce<string[]>(
+      (acc, item) => [...acc, ...extractNestedErrorText(item)],
       [],
     );
   }
   if (isString(source)) {
     return [source];
   }
-  return Object.values(source).reduce(
-    (acc: string[], item: any) => [...acc, ...extractNestedErrorText(item)],
+  return Object.values(source as Record<string, unknown>).reduce<string[]>(
+    (acc, item) => [...acc, ...extractNestedErrorText(item)],
     [],
   );
 };
@@ -99,9 +101,9 @@ const parseYoutubeLink = (urlStr: string): YoutubeLink | null => {
 
 // The generated API client rejects with the parsed response body on HTTP
 // errors (an object or string), or with a network Error otherwise.
-const getResponseError = (error: unknown): any => {
+const getResponseError = (error: unknown): Record<string, unknown> | null => {
   if (error && typeof error === "object" && !(error instanceof Error)) {
-    return error;
+    return error as Record<string, unknown>;
   }
   return null;
 };
@@ -120,7 +122,7 @@ const extractErrorMessage = (error: unknown) => {
   if (isString(data)) {
     return data;
   }
-  if (data.detail) {
+  if (isString(data.detail)) {
     return data.detail;
   }
   const values = Object.values(data);
@@ -149,27 +151,25 @@ const showAlertOnError = async (func: () => Promise<void>): Promise<void> => {
   }
 };
 
-const resetQueries = (
-  queryClient: any,
-  queryFilters: any,
+const resetQueries = async (
+  queryClient: QueryClient,
+  queryKeyPrefixes: string[],
   soft?: boolean | undefined,
-) => {
-  for (const queryFilter of queryFilters) {
-    // React Query v5 takes a filters object rather than a bare key; the callers
-    // pass a string prefix, which maps to a partial queryKey match.
-    const filters = Array.isArray(queryFilter)
-      ? { queryKey: queryFilter }
-      : typeof queryFilter === "string"
-        ? { queryKey: [queryFilter] }
-        : queryFilter;
-    if (!soft) {
-      queryClient
-        .getQueryCache()
-        .findAll(filters)
-        .forEach((query: any) => query.setData(undefined));
-    }
-    queryClient.invalidateQueries(filters);
-  }
+): Promise<void> => {
+  await Promise.all(
+    queryKeyPrefixes.map((prefix) => {
+      // React Query v5 takes a filters object rather than a bare key; a string
+      // prefix maps to a partial queryKey match.
+      const filters: QueryFilters = { queryKey: [prefix] };
+      if (!soft) {
+        queryClient
+          .getQueryCache()
+          .findAll(filters)
+          .forEach((query) => query.setData(undefined));
+      }
+      return queryClient.invalidateQueries(filters);
+    }),
+  );
 };
 
 export {

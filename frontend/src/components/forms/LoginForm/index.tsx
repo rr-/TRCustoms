@@ -53,13 +53,13 @@ const LoginForm = ({ onLogin }: LoginFormProps) => {
             setResult({
               error: (
                 <>
-                  {makeSentence(data.detail)}
+                  {makeSentence(String(data.detail))}
                   <br />
                   <UserResendActivationEmailButton username={values.username} />
                 </>
               ),
             });
-          } else if (data.detail) {
+          } else if (typeof data.detail === "string") {
             setResult({ error: <>{makeSentence(data.detail)}</> });
           } else if (!applyServerErrors(form, data)) {
             console.error(error);
