@@ -48,8 +48,12 @@ def update_level_update_date_on_files_change(sender, instance, **kwargs):
 
 @receiver(m2m_changed, sender=Level.authors.through)
 def update_level_author_info_on_authors_change(
-    sender, instance, pk_set, **kwargs
+    sender, instance, action, pk_set, **kwargs
 ):
+    # Only the post_* actions reflect the committed author set; the pre_*
+    # passes would recount against stale rows and be immediately superseded.
+    if action not in ("post_add", "post_remove", "post_clear"):
+        return
     if not pk_set:
         return
     for author in User.objects.filter(id__in=pk_set).iterator():

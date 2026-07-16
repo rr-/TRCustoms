@@ -37,14 +37,27 @@ def handle_rating_pre_save(sender, instance, **kwargs):
 
 @receiver(post_save, sender=Rating)
 @receiver(m2m_changed, sender=Rating.answers.through)
-def handle_rating_creation_and_updates(sender, instance, **kwargs):
+def handle_rating_creation_and_updates(
+    sender, instance, action=None, **kwargs
+):
+    # m2m_changed fires for pre_* and post_* actions alike; only the post_*
+    # ones see the final answer set. Recomputing on the pre_* passes (and on
+    # add/remove/clear individually) repeats the same N+1 rating aggregation
+    # several times per save against intermediate, wrong state. post_save
+    # passes no action, so it always runs.
+    if action is not None and action not in (
+        "post_add",
+        "post_remove",
+        "post_clear",
+    ):
+        return
     with disable_signals():
         instance.rating_class = get_object_rating_class(instance)
         instance.save(update_fields=["rating_class", "position"])
         level = instance.level
         level.rating_class = get_object_rating_class(level)
-        level.update_rating_count()
-        level.save(update_fields=["rating_class"])
+        level.update_rating_count(save=False)
+        level.save(update_fields=["rating_class", "rating_count"])
         if old_level := getattr(instance, "_old_level", None):
             old_level.update_rating_count()
         author = instance.author
