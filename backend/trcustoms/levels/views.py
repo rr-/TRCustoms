@@ -3,7 +3,6 @@ from pathlib import Path
 import boto3
 from botocore.config import Config
 from django.conf import settings
-from django.db import models
 from django.db.models import Q
 from django.http import HttpResponseRedirect
 from drf_spectacular.types import OpenApiTypes
@@ -199,7 +198,6 @@ class LevelFileViewSet(viewsets.GenericViewSet):
     queryset = LevelFile.objects.all()
     serializer_class = EmptySerializer
     pagination_class = None
-    download_count = models.IntegerField(default=0)
 
     @extend_schema(responses={200: OpenApiTypes.BINARY})
     @action(detail=True)
