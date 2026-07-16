@@ -1,6 +1,4 @@
-import { api } from "src/api";
 import { auditlogsList } from "src/client";
-import { API_URL } from "src/constants";
 import type { UserNested } from "src/services/UserService";
 import type { PagedResponse } from "src/types";
 import type { GenericSearchQuery } from "src/types";
@@ -69,15 +67,8 @@ const searchAuditLogs = async (
   return { ...data, searchQuery } as unknown as AuditLogSearchResult;
 };
 
-// The audit log approve action is not part of the generated schema, so it
-// stays on axios for now.
-const approve = async (auditLogId: number): Promise<void> => {
-  await api.post(`${API_URL}/auditlogs/${auditLogId}/approve/`);
-};
-
 const AuditLogService = {
   searchAuditLogs,
-  approve,
 };
 
 export type {

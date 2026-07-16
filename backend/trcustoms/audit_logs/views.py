@@ -90,7 +90,6 @@ class AuditLogViewSet(
     permission_classes = [AllowNone]
     permission_classes_by_action = {
         "list": [HasPermission(UserPermission.REVIEW_AUDIT_LOGS)],
-        "approve": [HasPermission(UserPermission.REVIEW_AUDIT_LOGS)],
     }
 
     def get_queryset(self):
