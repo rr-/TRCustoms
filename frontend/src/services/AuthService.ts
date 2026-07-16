@@ -1,5 +1,3 @@
-import { AxiosResponse } from "axios";
-import { api } from "src/api";
 import { API_URL } from "src/constants";
 import { StorageService } from "src/services/StorageService";
 
@@ -14,17 +12,28 @@ interface RefreshTokenResponse {
 
 class AuthError extends Error {}
 
-const login = async (username: string, password: string) => {
-  const data = {
-    username: username,
-    password: password,
-  };
-  const response = (await api.post(
-    `${API_URL}/auth/token/`,
-    data,
-  )) as AxiosResponse<AccessTokenResponse>;
-  StorageService.setItem("accessToken", response.data.access);
-  StorageService.setItem("refreshToken", response.data.refresh);
+// These calls use the raw fetch rather than the generated client on purpose:
+// login carries no token, and the token refresh must not pass through the
+// client's auth middleware (which would try to refresh again on failure).
+const postJson = async (path: string, body: unknown): Promise<any> => {
+  const response = await fetch(`${API_URL}${path}`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(body),
+  });
+  if (!response.ok) {
+    throw await response.json().catch(() => response.statusText);
+  }
+  return response.json();
+};
+
+const login = async (username: string, password: string): Promise<void> => {
+  const data: AccessTokenResponse = await postJson("/auth/token/", {
+    username,
+    password,
+  });
+  StorageService.setItem("accessToken", data.access);
+  StorageService.setItem("refreshToken", data.refresh);
 };
 
 const getAccessToken = (): string | null => {
@@ -40,13 +49,11 @@ const getNewAccessToken = async (): Promise<string> => {
   if (!refreshToken) {
     throw new AuthError("refresh token not available");
   }
-  const data = { refresh: refreshToken };
-  const response = (await api.post(
-    `${API_URL}/auth/token/refresh/`,
-    data,
-  )) as AxiosResponse<RefreshTokenResponse>;
-  StorageService.setItem("accessToken", response.data.access);
-  return response.data.access;
+  const data: RefreshTokenResponse = await postJson("/auth/token/refresh/", {
+    refresh: refreshToken,
+  });
+  StorageService.setItem("accessToken", data.access);
+  return data.access;
 };
 
 const logout = () => {

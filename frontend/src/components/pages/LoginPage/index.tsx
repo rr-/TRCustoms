@@ -1,5 +1,3 @@
-import { AxiosError } from "axios";
-import axios from "axios";
 import type { FormikHelpers } from "formik";
 import { Formik } from "formik";
 import { Form } from "formik";
@@ -19,6 +17,7 @@ import { UserContext } from "src/contexts/UserContext";
 import { AuthService } from "src/services/AuthService";
 import { UserService } from "src/services/UserService";
 import { filterFalsyObjectValues } from "src/utils/misc";
+import { getResponseError } from "src/utils/misc";
 import { makeSentence } from "src/utils/string";
 
 interface LoginFormValues {
@@ -44,41 +43,32 @@ const LoginPage = () => {
         navigate("/");
       } catch (error) {
         setSubmitting(false);
-        if (axios.isAxiosError(error)) {
-          const axiosError = error as AxiosError;
-          const data = axiosError.response?.data;
-          if (axiosError.response?.status === 401) {
-            if (data.code === "email_not_confirmed") {
-              setStatus({
-                error: (
-                  <>
-                    {makeSentence(data.detail)}
-                    <br />
-                    <UserResendActivationEmailButton
-                      username={values.username}
-                    />
-                  </>
-                ),
-              });
-            } else if (data.detail) {
-              setStatus({ error: <>{makeSentence(data.detail)}</> });
-            } else {
-              setStatus({ error: <>Unknown error.</> });
-            }
-          } else {
-            const errors = {
-              username: data?.username,
-              password: data?.password,
-            };
-            if (Object.keys(filterFalsyObjectValues(errors)).length) {
-              setErrors(errors);
-            } else {
-              console.error(error);
-              setStatus({ error: <>Unknown error.</> });
-            }
-          }
-        } else {
+        const data = getResponseError(error);
+        if (!data) {
           setStatus({ error: <>Unknown error.</> });
+        } else if (data.code === "email_not_confirmed") {
+          setStatus({
+            error: (
+              <>
+                {makeSentence(data.detail)}
+                <br />
+                <UserResendActivationEmailButton username={values.username} />
+              </>
+            ),
+          });
+        } else if (data.detail) {
+          setStatus({ error: <>{makeSentence(data.detail)}</> });
+        } else {
+          const errors = {
+            username: data?.username,
+            password: data?.password,
+          };
+          if (Object.keys(filterFalsyObjectValues(errors)).length) {
+            setErrors(errors);
+          } else {
+            console.error(error);
+            setStatus({ error: <>Unknown error.</> });
+          }
         }
       }
     },

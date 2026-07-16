@@ -1,8 +1,7 @@
-import { AxiosResponse } from "axios";
-import { api } from "src/api";
 import { uploadsRetrieve } from "src/client";
 import type { UploadedFileNested as UploadedFile } from "src/client";
 import { API_URL } from "src/constants";
+import { AuthService } from "src/services/AuthService";
 
 enum UploadType {
   UserPicture = "up",
@@ -20,20 +19,41 @@ const getFileById = async (fileId: number): Promise<UploadedFile> => {
   return data;
 };
 
-// Uploads stay on axios because they report upload progress, which the
+// Uploads use XMLHttpRequest so they can report upload progress, which the
 // fetch-based generated client cannot do.
-const uploadFile = async (
+const uploadFile = (
   file: File,
   type: UploadType,
   onUploadProgress?: (progressEvent: ProgressEvent) => void,
 ): Promise<UploadedFile> => {
-  const formData = new FormData();
-  formData.append("content", file);
-  formData.append("upload_type", type);
-  const response = (await api.post(`${API_URL}/uploads/`, formData, {
-    onUploadProgress,
-  })) as AxiosResponse<UploadedFile>;
-  return response.data;
+  return new Promise<UploadedFile>((resolve, reject) => {
+    const formData = new FormData();
+    formData.append("content", file);
+    formData.append("upload_type", type);
+
+    const xhr = new XMLHttpRequest();
+    xhr.open("POST", `${API_URL}/uploads/`);
+    const token = AuthService.getAccessToken();
+    if (token) {
+      xhr.setRequestHeader("X-Access-Token", `Bearer ${token}`);
+    }
+    if (onUploadProgress) {
+      xhr.upload.onprogress = onUploadProgress;
+    }
+    xhr.onload = () => {
+      if (xhr.status >= 200 && xhr.status < 300) {
+        resolve(JSON.parse(xhr.responseText));
+      } else {
+        try {
+          reject(JSON.parse(xhr.responseText));
+        } catch {
+          reject(xhr.responseText);
+        }
+      }
+    };
+    xhr.onerror = () => reject(new Error("Network error during upload"));
+    xhr.send(formData);
+  });
 };
 
 const FileService = {

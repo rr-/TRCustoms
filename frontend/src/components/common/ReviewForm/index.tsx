@@ -1,5 +1,3 @@
-import { AxiosError } from "axios";
-import axios from "axios";
 import type { FormikHelpers } from "formik";
 import { Formik } from "formik";
 import { Form } from "formik";
@@ -21,6 +19,7 @@ import type { ReviewDetails } from "src/services/ReviewService";
 import { ReviewService } from "src/services/ReviewService";
 import { filterFalsyObjectValues } from "src/utils/misc";
 import { resetQueries } from "src/utils/misc";
+import { getResponseError } from "src/utils/misc";
 import { makeSentence } from "src/utils/string";
 import { validateRequired } from "src/utils/validation";
 
@@ -48,9 +47,8 @@ const ReviewForm = ({ level, review, onGoBack, onSubmit }: ReviewFormProps) => {
       { setSubmitting, setStatus, setErrors }: FormikHelpers<ReviewFormValues>,
     ) => {
       setSubmitting(false);
-      if (axios.isAxiosError(error)) {
-        const axiosError = error as AxiosError;
-        const data = axiosError.response?.data;
+      const data = getResponseError(error);
+      if (data) {
         if (data.detail) {
           setStatus({ error: <>{makeSentence(data.detail)}</> });
         }

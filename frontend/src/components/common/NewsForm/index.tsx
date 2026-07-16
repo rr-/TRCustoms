@@ -1,5 +1,3 @@
-import { AxiosError } from "axios";
-import axios from "axios";
 import type { FormikHelpers } from "formik";
 import { Formik } from "formik";
 import { Form } from "formik";
@@ -19,6 +17,7 @@ import type { NewsDetails } from "src/services/NewsService";
 import { NewsService } from "src/services/NewsService";
 import { filterFalsyObjectValues } from "src/utils/misc";
 import { resetQueries } from "src/utils/misc";
+import { getResponseError } from "src/utils/misc";
 import { makeSentence } from "src/utils/string";
 import { validateRequired } from "src/utils/validation";
 
@@ -47,9 +46,8 @@ const NewsForm = ({ news, onGoBack, onSubmit }: NewsFormProps) => {
       { setSubmitting, setStatus, setErrors }: FormikHelpers<NewsFormValues>,
     ) => {
       setSubmitting(false);
-      if (axios.isAxiosError(error)) {
-        const axiosError = error as AxiosError;
-        const data = axiosError.response?.data;
+      const data = getResponseError(error);
+      if (data) {
         if (data.detail) {
           setStatus({ error: <>{makeSentence(data.detail)}</> });
         }

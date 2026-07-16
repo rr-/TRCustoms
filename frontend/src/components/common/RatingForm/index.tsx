@@ -1,6 +1,4 @@
 import styles from "./index.module.css";
-import { AxiosError } from "axios";
-import axios from "axios";
 import { groupBy } from "lodash";
 import { last } from "lodash";
 import { useState } from "react";
@@ -19,6 +17,7 @@ import type { RatingDetails } from "src/services/RatingService";
 import { RatingService } from "src/services/RatingService";
 import { extractNestedErrorText } from "src/utils/misc";
 import { resetQueries } from "src/utils/misc";
+import { getResponseError } from "src/utils/misc";
 import { titleCase } from "src/utils/string";
 import { makeSentence } from "src/utils/string";
 
@@ -70,9 +69,8 @@ const RatingForm = ({
 
   const handleSubmitError = (error: any) => {
     setIsSubmitting(false);
-    if (axios.isAxiosError(error)) {
-      const axiosError = error as AxiosError;
-      const data = axiosError.response?.data;
+    const data = getResponseError(error);
+    if (data) {
       if (data.detail) {
         setStatus({ error: <>{makeSentence(data.detail)}</> });
       }

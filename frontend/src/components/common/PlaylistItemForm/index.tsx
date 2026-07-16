@@ -1,5 +1,3 @@
-import { AxiosError } from "axios";
-import axios from "axios";
 import type { FormikHelpers } from "formik";
 import { Formik } from "formik";
 import { Form } from "formik";
@@ -17,6 +15,7 @@ import type { PlaylistItemDetails } from "src/services/PlaylistService";
 import { PlaylistService } from "src/services/PlaylistService";
 import { PlaylistItemStatus } from "src/services/PlaylistService";
 import { filterFalsyObjectValues } from "src/utils/misc";
+import { getResponseError } from "src/utils/misc";
 import { makeSentence } from "src/utils/string";
 import { validateRequired } from "src/utils/validation";
 
@@ -59,9 +58,8 @@ const PlaylistItemFormView = ({
       }: FormikHelpers<PlaylistItemFormValues>,
     ) => {
       setSubmitting(false);
-      if (axios.isAxiosError(error)) {
-        const axiosError = error as AxiosError;
-        const data = axiosError.response?.data;
+      const data = getResponseError(error);
+      if (data) {
         if (data.detail) {
           setStatus({ error: <>{makeSentence(data.detail)}</> });
         }

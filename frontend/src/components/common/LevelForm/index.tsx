@@ -1,5 +1,3 @@
-import { AxiosError } from "axios";
-import axios from "axios";
 import type { FormikHelpers } from "formik";
 import { Formik } from "formik";
 import { Form } from "formik";
@@ -40,6 +38,7 @@ import { DisplayMode } from "src/types";
 import { filterFalsyObjectValues } from "src/utils/misc";
 import { extractNestedErrorText } from "src/utils/misc";
 import { resetQueries } from "src/utils/misc";
+import { getResponseError } from "src/utils/misc";
 import { makeSentence } from "src/utils/string";
 import { pluralize } from "src/utils/string";
 import { validateRequired } from "src/utils/validation";
@@ -177,9 +176,8 @@ const LevelForm = ({ level, onGoBack, onSubmit }: LevelFormProps) => {
       { setSubmitting, setStatus, setErrors }: FormikHelpers<LevelFormValues>,
     ) => {
       setSubmitting(false);
-      if (axios.isAxiosError(error)) {
-        const axiosError = error as AxiosError;
-        const data = axiosError.response?.data;
+      const data = getResponseError(error);
+      if (data) {
         if (data.detail) {
           setStatus({ error: <>{makeSentence(data.detail)}</> });
         }

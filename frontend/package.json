@@ -4,7 +4,6 @@
   "private": true,
   "dependencies": {
     "@tanstack/react-query": "^5.101.2",
-    "axios": "^0.24.0",
     "d3-geo-projection": "^4.0.0",
     "formik": "^2.4.2",
     "github-slugger": "^2.0.0",

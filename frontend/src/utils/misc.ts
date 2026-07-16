@@ -1,5 +1,3 @@
-import axios from "axios";
-import { AxiosError } from "axios";
 import { isString } from "lodash";
 import { isArray } from "lodash";
 import { DISABLE_PAGING } from "src/constants";
@@ -99,21 +97,33 @@ const parseYoutubeLink = (urlStr: string): YoutubeLink | null => {
   return { fullUrl: urlStr, videoID, playlistID };
 };
 
+// The generated API client rejects with the parsed response body on HTTP
+// errors (an object or string), or with a network Error otherwise.
+const getResponseError = (error: unknown): any => {
+  if (error && typeof error === "object" && !(error instanceof Error)) {
+    return error;
+  }
+  return null;
+};
+
 const extractErrorMessage = (error: unknown) => {
   if (!error) {
     return null;
   }
-  if (!axios.isAxiosError(error)) {
+  if (isString(error)) {
     return error;
   }
-  const axiosError = error as AxiosError;
-  if (isString(axiosError.response?.data)) {
-    return axiosError.response?.data;
+  const data = getResponseError(error);
+  if (data === null) {
+    return error instanceof Error ? error.message : "Unknown error";
   }
-  if (axiosError.response?.data.detail) {
-    return axiosError.response?.data.detail;
+  if (isString(data)) {
+    return data;
   }
-  const values = Object.values(axiosError.response?.data);
+  if (data.detail) {
+    return data.detail;
+  }
+  const values = Object.values(data);
   if (values.length === 1 && isString(values[0])) {
     return values[0];
   }
@@ -163,6 +173,7 @@ export {
   getCurrentSearchParams,
   extractNestedErrorText,
   extractErrorMessage,
+  getResponseError,
   parseYoutubeLink,
   showAlertOnError,
   resetQueries,

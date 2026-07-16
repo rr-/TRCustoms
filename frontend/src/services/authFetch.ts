@@ -1,5 +1,5 @@
 // A fetch wrapper that attaches the access token and transparently refreshes
-// it on expiry, mirroring the behaviour of the legacy axios interceptor. It is
+// it on expiry, mirroring the behaviour of the previous request interceptor. It is
 // installed on the generated API client via `client.setConfig({ fetch })`.
 //
 // The logic lives in a factory that takes its dependencies as arguments so it

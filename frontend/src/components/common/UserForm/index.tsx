@@ -1,5 +1,3 @@
-import { AxiosError } from "axios";
-import axios from "axios";
 import type { FormikHelpers } from "formik";
 import { Formik } from "formik";
 import { Form } from "formik";
@@ -27,6 +25,7 @@ import type { UserDetails } from "src/services/UserService";
 import { UserService } from "src/services/UserService";
 import { DisplayMode } from "src/types";
 import { filterFalsyObjectValues } from "src/utils/misc";
+import { getResponseError } from "src/utils/misc";
 import { makeSentence } from "src/utils/string";
 import { validateUserName } from "src/utils/validation";
 import { validateRequired } from "src/utils/validation";
@@ -95,9 +94,8 @@ const UserForm = ({ user, onGoBack, onSubmit }: UserFormProps) => {
       { setSubmitting, setStatus, setErrors }: FormikHelpers<UserFormValues>,
     ) => {
       setSubmitting(false);
-      if (axios.isAxiosError(error)) {
-        const axiosError = error as AxiosError;
-        const data = axiosError.response?.data;
+      const data = getResponseError(error);
+      if (data) {
         if (data.detail) {
           setStatus({ error: <>{makeSentence(data.detail)}</> });
         }
