@@ -78,7 +78,7 @@ def get_object_rating_class(instance: Level | Rating) -> RatingClass:
             target = scorer.target
             break
     else:
-        assert False, "Invalid instance"
+        raise TypeError(f"Invalid instance: {type(instance).__name__}")
 
     if not ratings:
         return None

@@ -39,4 +39,4 @@ def get_rating_score(rating: Rating) -> float:
             or 0
         ) / max_score
 
-    assert False, "Invalid rating type"
+    raise ValueError(f"Invalid rating type: {rating.rating_type}")
