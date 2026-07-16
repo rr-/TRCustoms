@@ -16,6 +16,14 @@ interface FormSuccess {
   final?: boolean;
 }
 
+// Map a server error body onto the form's fields. Defaults to the generic
+// field-name match; forms whose server field names differ from their form
+// field names (e.g. genre_ids -> genres) can pass their own.
+type ServerErrorMapper<T extends FieldValues> = (
+  form: UseFormReturn<T>,
+  body: Record<string, unknown>,
+) => boolean;
+
 // The submit scaffold shared by every form: run the handler, and on failure
 // push field errors onto their inputs (see applyServerErrors) while surfacing
 // any remaining message as a banner. The handler returns the success state to
@@ -24,6 +32,7 @@ interface FormSuccess {
 const useFormSubmit = <T extends FieldValues>(
   form: UseFormReturn<T>,
   handler: (values: T) => Promise<FormSuccess | void>,
+  applyErrors: ServerErrorMapper<T> = applyServerErrors,
 ) => {
   const [result, setResult] = useState<FormResult | null>(null);
 
@@ -37,7 +46,7 @@ const useFormSubmit = <T extends FieldValues>(
       const body = getResponseError(error);
       const appliedField =
         body && typeof body === "object" && !Array.isArray(body)
-          ? applyServerErrors(form, body as Record<string, unknown>)
+          ? applyErrors(form, body as Record<string, unknown>)
           : false;
       setResult(appliedField ? {} : { error: extractErrorMessage(error) });
     }
@@ -46,5 +55,5 @@ const useFormSubmit = <T extends FieldValues>(
   return { submit, result };
 };
 
-export type { FormResult, FormSuccess };
+export type { FormResult, FormSuccess, ServerErrorMapper };
 export { useFormSubmit };
