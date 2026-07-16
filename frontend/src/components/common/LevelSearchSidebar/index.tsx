@@ -1,10 +1,8 @@
 import styles from "./index.module.css";
-import { Formik } from "formik";
-import { Form } from "formik";
 import { useContext } from "react";
 import { useEffect } from "react";
 import { useCallback } from "react";
-import { useState } from "react";
+import { useForm } from "react-hook-form";
 import { Collapsible } from "src/components/common/Collapsible";
 import { DatePicker } from "src/components/common/DatePicker";
 import { DifficultiesCheckboxes } from "src/components/common/DifficultiesCheckboxes";
@@ -19,9 +17,10 @@ import { RatingsCheckboxes } from "src/components/common/RatingsCheckboxes";
 import { SidebarBoxHeader } from "src/components/common/SidebarBox";
 import { SidebarBox } from "src/components/common/SidebarBox";
 import { TagsCheckboxes } from "src/components/common/TagsCheckboxes";
-import { DropDownFormField } from "src/components/formfields/DropDownFormField";
 import { SubmitButton } from "src/components/formfields/SubmitButton";
-import { TextFormField } from "src/components/formfields/TextFormField";
+import { DropDownField } from "src/components/forms/DropDownField";
+import { Form } from "src/components/forms/Form";
+import { TextField } from "src/components/forms/TextField";
 import { IconSearch } from "src/components/icons";
 import { UserContext } from "src/contexts/UserContext";
 import { LevelPlaylistDroppedLevelFilter } from "src/services/LevelService";
@@ -62,24 +61,13 @@ const playlistDroppedLevelOptions: RadioOption<LevelPlaylistDroppedLevelFilter>[
     { id: LevelPlaylistDroppedLevelFilter.Hide, name: "Hide" },
   ];
 
-const convertSearchQueryToFormikValues = (
+const toFormValues = (
   searchQuery: LevelSearchQuery,
   defaultSearchQuery: LevelSearchQuery,
-) => {
-  return {
-    sort: searchQuery.sort || defaultSearchQuery.sort,
-    search: searchQuery.search || "",
-    tags: searchQuery.tags,
-    genres: searchQuery.genres,
-    engines: searchQuery.engines,
-    difficulties: searchQuery.difficulties,
-    durations: searchQuery.durations,
-    isApproved: searchQuery.isApproved,
-    videoWalkthroughs: searchQuery.videoWalkthroughs,
-    textWalkthroughs: searchQuery.textWalkthroughs,
-    date: searchQuery.date,
-  };
-};
+) => ({
+  sort: searchQuery.sort || defaultSearchQuery.sort || "",
+  search: searchQuery.search || "",
+});
 
 interface LevelSearchProps {
   defaultSearchQuery: LevelSearchQuery;
@@ -93,28 +81,28 @@ const LevelSearchSidebar = ({
   onSearchQueryChange,
 }: LevelSearchProps) => {
   const loggedInUser = useContext(UserContext).user;
-  const [formikValues, setFormikValues] = useState<any>(
-    convertSearchQueryToFormikValues(searchQuery, defaultSearchQuery),
+  const form = useForm({
+    defaultValues: toFormValues(searchQuery, defaultSearchQuery),
+  });
+
+  // Keep the form in sync when the query changes externally (URL, reset, or the
+  // standalone filter widgets below).
+  const { reset } = form;
+  useEffect(
+    () => reset(toFormValues(searchQuery, defaultSearchQuery)),
+    [searchQuery, defaultSearchQuery, reset],
   );
 
-  const handleSubmit = useCallback(
-    // push changes to query on Formik submit
-    (values: any) => {
-      onSearchQueryChange({
-        ...searchQuery,
-        page: null,
-        sort: values.sort,
-        search: values.search,
-        tags: values.tags,
-        genres: values.genres,
-        engines: values.engines,
-        isApproved: values.isApproved,
-        videoWalkthroughs: values.videoWalkthroughs,
-        textWalkthroughs: values.textWalkthroughs,
-      });
-    },
-    [searchQuery, onSearchQueryChange],
-  );
+  // Only sort and search are form fields; every other filter is a standalone
+  // widget that edits the query directly.
+  const submit = form.handleSubmit((values) => {
+    onSearchQueryChange({
+      ...searchQuery,
+      page: null,
+      sort: values.sort,
+      search: values.search,
+    });
+  });
 
   const handleIsApprovedChange = useCallback(
     (value: boolean | null) => {
@@ -125,66 +113,42 @@ const LevelSearchSidebar = ({
 
   const handleEnginesChange = useCallback(
     (values: number[]) => {
-      onSearchQueryChange({
-        ...searchQuery,
-        page: null,
-        engines: values,
-      });
+      onSearchQueryChange({ ...searchQuery, page: null, engines: values });
     },
     [searchQuery, onSearchQueryChange],
   );
 
   const handleGenresChange = useCallback(
     (values: number[]) => {
-      onSearchQueryChange({
-        ...searchQuery,
-        page: null,
-        genres: values,
-      });
+      onSearchQueryChange({ ...searchQuery, page: null, genres: values });
     },
     [searchQuery, onSearchQueryChange],
   );
 
   const handleDateChange = useCallback(
     (value: string) => {
-      onSearchQueryChange({
-        ...searchQuery,
-        page: null,
-        date: value,
-      });
+      onSearchQueryChange({ ...searchQuery, page: null, date: value });
     },
     [searchQuery, onSearchQueryChange],
   );
 
   const handleTagsChange = useCallback(
     (values: number[]) => {
-      onSearchQueryChange({
-        ...searchQuery,
-        page: null,
-        tags: values,
-      });
+      onSearchQueryChange({ ...searchQuery, page: null, tags: values });
     },
     [searchQuery, onSearchQueryChange],
   );
 
   const handleDurationsChange = useCallback(
     (values: number[]) => {
-      onSearchQueryChange({
-        ...searchQuery,
-        page: null,
-        durations: values,
-      });
+      onSearchQueryChange({ ...searchQuery, page: null, durations: values });
     },
     [searchQuery, onSearchQueryChange],
   );
 
   const handleDifficultiesChange = useCallback(
     (values: number[]) => {
-      onSearchQueryChange({
-        ...searchQuery,
-        page: null,
-        difficulties: values,
-      });
+      onSearchQueryChange({ ...searchQuery, page: null, difficulties: values });
     },
     [searchQuery, onSearchQueryChange],
   );
@@ -225,192 +189,166 @@ const LevelSearchSidebar = ({
 
   const handleRatingsChange = useCallback(
     (values: number[]) => {
-      onSearchQueryChange({
-        ...searchQuery,
-        page: null,
-        ratings: values,
-      });
+      onSearchQueryChange({ ...searchQuery, page: null, ratings: values });
     },
     [searchQuery, onSearchQueryChange],
   );
 
-  const handleClear = useCallback(
-    () => onSearchQueryChange(defaultSearchQuery),
-    [onSearchQueryChange, defaultSearchQuery],
-  );
-
-  useEffect(
-    () =>
-      setFormikValues(
-        convertSearchQueryToFormikValues(searchQuery, defaultSearchQuery),
-      ),
-    [searchQuery, defaultSearchQuery],
-  );
-
   return (
     <SidebarBox>
-      <Formik
-        enableReinitialize={true}
-        initialValues={formikValues}
-        onSubmit={handleSubmit}
+      <Form
+        form={form}
+        onSubmit={submit}
+        className={`${styles.wrapper} ChildMarginClear`}
       >
-        {({ submitForm, resetForm }) => (
-          <Form className={`${styles.wrapper} ChildMarginClear`}>
-            <SidebarBoxHeader alignToTabSwitch={true}>
-              <span className={styles.header}>
-                Search filter
-                <Link className={styles.resetButton} onClick={handleClear}>
-                  (reset)
-                </Link>
-              </span>
-            </SidebarBoxHeader>
+        <SidebarBoxHeader alignToTabSwitch={true}>
+          <span className={styles.header}>
+            Search filter
+            <Link
+              className={styles.resetButton}
+              onClick={() => onSearchQueryChange(defaultSearchQuery)}
+            >
+              (reset)
+            </Link>
+          </span>
+        </SidebarBoxHeader>
 
-            <PermissionGuard require={UserPermission.viewPendingLevels}>
-              <div className={styles.section}>
-                <Radioboxes
-                  header="Approval status"
-                  options={[
-                    { id: null, name: "Show all" },
-                    { id: true, name: "Approved only" },
-                    { id: false, name: "Unapproved only" },
-                  ]}
-                  value={searchQuery.isApproved}
-                  onChange={handleIsApprovedChange}
-                  getOptionId={(option) => option.id}
-                  getOptionName={(option) => option.name}
-                />
-              </div>
-            </PermissionGuard>
+        <PermissionGuard require={UserPermission.viewPendingLevels}>
+          <div className={styles.section}>
+            <Radioboxes
+              header="Approval status"
+              options={[
+                { id: null, name: "Show all" },
+                { id: true, name: "Approved only" },
+                { id: false, name: "Unapproved only" },
+              ]}
+              value={searchQuery.isApproved}
+              onChange={handleIsApprovedChange}
+              getOptionId={(option) => option.id}
+              getOptionName={(option) => option.name}
+            />
+          </div>
+        </PermissionGuard>
 
-            <div className={styles.section}>
-              <DropDownFormField
-                onChange={() => {
-                  submitForm();
-                }}
-                label="Sort"
-                name="sort"
-                options={sortOptions}
+        <div className={styles.section}>
+          <DropDownField
+            onChange={() => submit()}
+            label="Sort"
+            name="sort"
+            options={sortOptions}
+          />
+        </div>
+
+        <div className={`${styles.section} ${styles.searchBar}`}>
+          <TextField label="Search" name="search" />
+          <div className="FormField">
+            <SubmitButton icon={<IconSearch />} />
+          </div>
+        </div>
+
+        <div className={styles.section}>
+          <Collapsible storageKey="levelSearchGenres" title="Genre">
+            <GenresCheckboxes
+              value={searchQuery.genres || []}
+              onChange={handleGenresChange}
+            />
+          </Collapsible>
+        </div>
+
+        <div className={styles.section}>
+          <Collapsible storageKey="levelSearchTags" title="Tags">
+            <TagsCheckboxes
+              value={searchQuery.tags || []}
+              onChange={handleTagsChange}
+            />
+          </Collapsible>
+        </div>
+
+        <div className={styles.section}>
+          <Collapsible storageKey="levelSearchEngines" title="Engine">
+            <EnginesCheckboxes
+              value={searchQuery.engines || []}
+              onChange={handleEnginesChange}
+            />
+          </Collapsible>
+        </div>
+
+        <div className={styles.section}>
+          <Collapsible storageKey="levelDate" title="Date">
+            <DatePicker value={searchQuery.date} onChange={handleDateChange} />
+          </Collapsible>
+        </div>
+
+        <div className={styles.section}>
+          <Collapsible storageKey="levelSearchRatings" title="Rating">
+            <RatingsCheckboxes
+              value={searchQuery.ratings || []}
+              onChange={handleRatingsChange}
+            />
+          </Collapsible>
+        </div>
+
+        <div className={styles.section}>
+          <Collapsible storageKey="levelSearchDurations" title="Duration">
+            <DurationsCheckboxes
+              value={searchQuery.durations || []}
+              onChange={handleDurationsChange}
+            />
+          </Collapsible>
+        </div>
+
+        <div className={styles.section}>
+          <Collapsible storageKey="levelSearchDifficulties" title="Difficulty">
+            <DifficultiesCheckboxes
+              value={searchQuery.difficulties || []}
+              onChange={handleDifficultiesChange}
+            />
+          </Collapsible>
+        </div>
+
+        <div className={styles.section}>
+          <Collapsible storageKey="levelWalkthroughs" title="Walkthroughs">
+            <WalkthroughRadioboxes
+              videoWalkthroughs={searchQuery.videoWalkthroughs}
+              textWalkthroughs={searchQuery.textWalkthroughs}
+              onChange={handleWalkthroughsChange}
+            />
+          </Collapsible>
+        </div>
+
+        {loggedInUser && (
+          <div className={styles.section}>
+            <Collapsible
+              storageKey="levelPlaylistStatus"
+              title="Playlist status"
+            >
+              <p>Finished levels:</p>
+              <Radioboxes
+                options={playlistFinishedLevelOptions}
+                value={
+                  searchQuery.playlistFinishedLevels ||
+                  LevelPlaylistFinishedLevelFilter.ShowAll
+                }
+                onChange={handlePlaylistFinishedLevelsChange}
+                getOptionId={(option) => option.id}
+                getOptionName={(option) => option.name}
               />
-            </div>
 
-            <div className={`${styles.section} ${styles.searchBar}`}>
-              <TextFormField label="Search" name="search" />
-              <div className="FormField">
-                <SubmitButton onClick={submitForm} icon={<IconSearch />} />
-              </div>
-            </div>
-
-            <div className={styles.section}>
-              <Collapsible storageKey="levelSearchGenres" title="Genre">
-                <GenresCheckboxes
-                  value={searchQuery.genres || []}
-                  onChange={handleGenresChange}
-                />
-              </Collapsible>
-            </div>
-
-            <div className={styles.section}>
-              <Collapsible storageKey="levelSearchTags" title="Tags">
-                <TagsCheckboxes
-                  value={searchQuery.tags || []}
-                  onChange={handleTagsChange}
-                />
-              </Collapsible>
-            </div>
-
-            <div className={styles.section}>
-              <Collapsible storageKey="levelSearchEngines" title="Engine">
-                <EnginesCheckboxes
-                  value={searchQuery.engines || []}
-                  onChange={handleEnginesChange}
-                />
-              </Collapsible>
-            </div>
-
-            <div className={styles.section}>
-              <Collapsible storageKey="levelDate" title="Date">
-                <DatePicker
-                  value={searchQuery.date}
-                  onChange={handleDateChange}
-                />
-              </Collapsible>
-            </div>
-
-            <div className={styles.section}>
-              <Collapsible storageKey="levelSearchRatings" title="Rating">
-                <RatingsCheckboxes
-                  value={searchQuery.ratings || []}
-                  onChange={handleRatingsChange}
-                />
-              </Collapsible>
-            </div>
-
-            <div className={styles.section}>
-              <Collapsible storageKey="levelSearchDurations" title="Duration">
-                <DurationsCheckboxes
-                  value={searchQuery.durations || []}
-                  onChange={handleDurationsChange}
-                />
-              </Collapsible>
-            </div>
-
-            <div className={styles.section}>
-              <Collapsible
-                storageKey="levelSearchDifficulties"
-                title="Difficulty"
-              >
-                <DifficultiesCheckboxes
-                  value={searchQuery.difficulties || []}
-                  onChange={handleDifficultiesChange}
-                />
-              </Collapsible>
-            </div>
-
-            <div className={styles.section}>
-              <Collapsible storageKey="levelWalkthroughs" title="Walkthroughs">
-                <WalkthroughRadioboxes
-                  videoWalkthroughs={searchQuery.videoWalkthroughs}
-                  textWalkthroughs={searchQuery.textWalkthroughs}
-                  onChange={handleWalkthroughsChange}
-                />
-              </Collapsible>
-            </div>
-
-            {loggedInUser && (
-              <div className={styles.section}>
-                <Collapsible
-                  storageKey="levelPlaylistStatus"
-                  title="Playlist status"
-                >
-                  <p>Finished levels:</p>
-                  <Radioboxes
-                    options={playlistFinishedLevelOptions}
-                    value={
-                      searchQuery.playlistFinishedLevels ||
-                      LevelPlaylistFinishedLevelFilter.ShowAll
-                    }
-                    onChange={handlePlaylistFinishedLevelsChange}
-                    getOptionId={(option) => option.id}
-                    getOptionName={(option) => option.name}
-                  />
-
-                  <p>Dropped levels:</p>
-                  <Radioboxes
-                    options={playlistDroppedLevelOptions}
-                    value={
-                      searchQuery.playlistDroppedLevels ||
-                      LevelPlaylistDroppedLevelFilter.ShowAll
-                    }
-                    onChange={handlePlaylistDroppedLevelsChange}
-                    getOptionId={(option) => option.id}
-                    getOptionName={(option) => option.name}
-                  />
-                </Collapsible>
-              </div>
-            )}
-          </Form>
+              <p>Dropped levels:</p>
+              <Radioboxes
+                options={playlistDroppedLevelOptions}
+                value={
+                  searchQuery.playlistDroppedLevels ||
+                  LevelPlaylistDroppedLevelFilter.ShowAll
+                }
+                onChange={handlePlaylistDroppedLevelsChange}
+                getOptionId={(option) => option.id}
+                getOptionName={(option) => option.name}
+              />
+            </Collapsible>
+          </div>
         )}
-      </Formik>
+      </Form>
     </SidebarBox>
   );
 };
