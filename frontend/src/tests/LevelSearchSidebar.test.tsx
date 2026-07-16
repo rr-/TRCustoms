@@ -5,17 +5,18 @@ import userEvent from "@testing-library/user-event";
 import type { ReactNode } from "react";
 import { MemoryRouter } from "react-router-dom";
 import { LevelSearchSidebar } from "src/components/common/LevelSearchSidebar";
+import type { LevelSearchQuery } from "src/services/LevelService";
 import { beforeEach } from "vitest";
 import { describe } from "vitest";
 import { expect } from "vitest";
 import { test } from "vitest";
 import { vi } from "vitest";
 
-const defaultSearchQuery = {
+const defaultSearchQuery: LevelSearchQuery = {
   page: null,
   sort: "-created",
   search: null,
-} as any;
+};
 
 const wrapper = ({ children }: { children: ReactNode }) => (
   <MemoryRouter>{children}</MemoryRouter>
@@ -33,7 +34,9 @@ describe("LevelSearchSidebar", () => {
       <LevelSearchSidebar
         defaultSearchQuery={defaultSearchQuery}
         searchQuery={defaultSearchQuery}
-        onSearchQueryChange={onSearchQueryChange as any}
+        onSearchQueryChange={
+          onSearchQueryChange as (searchQuery: LevelSearchQuery) => void
+        }
       />,
       { wrapper },
     );

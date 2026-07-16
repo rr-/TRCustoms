@@ -4,18 +4,19 @@ import { waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { MemoryRouter } from "react-router-dom";
 import { UserSearch } from "src/components/common/UserSearch";
+import type { UserSearchQuery } from "src/services/UserService";
 import { beforeEach } from "vitest";
 import { describe } from "vitest";
 import { expect } from "vitest";
 import { test } from "vitest";
 import { vi } from "vitest";
 
-const defaultSearchQuery = {
+const defaultSearchQuery: UserSearchQuery = {
   page: null,
   sort: null,
   search: null,
   hideInactiveReviewers: false,
-} as any;
+};
 
 describe("UserSearch", () => {
   let onSearchQueryChange: ReturnType<typeof vi.fn>;
@@ -30,7 +31,9 @@ describe("UserSearch", () => {
         <UserSearch
           defaultSearchQuery={defaultSearchQuery}
           searchQuery={defaultSearchQuery}
-          onSearchQueryChange={onSearchQueryChange as any}
+          onSearchQueryChange={
+            onSearchQueryChange as (searchQuery: UserSearchQuery) => void
+          }
           showInactiveReviewersCheckbox={showCheckbox}
         />
       </MemoryRouter>,

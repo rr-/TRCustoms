@@ -4,20 +4,21 @@ import { waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { MemoryRouter } from "react-router-dom";
 import { AuditLogSearch } from "src/components/common/AuditLogSearch";
+import type { AuditLogSearchQuery } from "src/services/AuditLogService";
 import { beforeEach } from "vitest";
 import { describe } from "vitest";
 import { expect } from "vitest";
 import { test } from "vitest";
 import { vi } from "vitest";
 
-const defaultSearchQuery = {
+const defaultSearchQuery: AuditLogSearchQuery = {
   page: null,
   sort: null,
   search: null,
-  userSearch: null,
-  objectSearch: null,
+  userSearch: undefined,
+  objectSearch: undefined,
   isActionRequired: null,
-} as any;
+};
 
 describe("AuditLogSearch", () => {
   let onSearchQueryChange: ReturnType<typeof vi.fn>;
@@ -32,7 +33,9 @@ describe("AuditLogSearch", () => {
         <AuditLogSearch
           defaultSearchQuery={defaultSearchQuery}
           searchQuery={defaultSearchQuery}
-          onSearchQueryChange={onSearchQueryChange as any}
+          onSearchQueryChange={
+            onSearchQueryChange as (searchQuery: AuditLogSearchQuery) => void
+          }
         />
       </MemoryRouter>,
     );

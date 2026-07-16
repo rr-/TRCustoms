@@ -4,13 +4,18 @@ import { waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { MemoryRouter } from "react-router-dom";
 import { GenreSearchSidebar } from "src/components/common/GenreSearchSidebar";
+import type { GenreSearchQuery } from "src/services/GenreService";
 import { beforeEach } from "vitest";
 import { describe } from "vitest";
 import { expect } from "vitest";
 import { test } from "vitest";
 import { vi } from "vitest";
 
-const defaultSearchQuery = { page: null, sort: null, search: null } as any;
+const defaultSearchQuery: GenreSearchQuery = {
+  page: null,
+  sort: null,
+  search: null,
+};
 
 describe("GenreSearchSidebar", () => {
   let onSearchQueryChange: ReturnType<typeof vi.fn>;
@@ -25,7 +30,9 @@ describe("GenreSearchSidebar", () => {
         <GenreSearchSidebar
           defaultSearchQuery={defaultSearchQuery}
           searchQuery={defaultSearchQuery}
-          onSearchQueryChange={onSearchQueryChange as any}
+          onSearchQueryChange={
+            onSearchQueryChange as (searchQuery: GenreSearchQuery) => void
+          }
         />
       </MemoryRouter>,
     );
