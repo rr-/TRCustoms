@@ -1,25 +1,20 @@
+import { zodResolver } from "@hookform/resolvers/zod";
 import { useQueryClient } from "@tanstack/react-query";
-import type { FormikHelpers } from "formik";
-import { Formik } from "formik";
-import { Form } from "formik";
-import { useContext } from "react";
-import { useCallback } from "react";
+import { useEffect } from "react";
+import { useForm } from "react-hook-form";
 import { FormGrid } from "src/components/common/FormGrid";
 import { FormGridFieldSet } from "src/components/common/FormGrid";
 import { FormGridType } from "src/components/common/FormGrid";
-import { FormGridButtons } from "src/components/common/FormGrid";
-import { Loader } from "src/components/common/Loader";
-import { TextAreaFormField } from "src/components/formfields/TextAreaFormField";
-import { TextFormField } from "src/components/formfields/TextFormField";
+import { Form } from "src/components/forms/Form";
+import { FormButtons } from "src/components/forms/FormButtons";
+import { TextAreaField } from "src/components/forms/TextAreaField";
+import { TextField } from "src/components/forms/TextField";
+import { useFormSubmit } from "src/components/forms/useFormSubmit";
 import { NewsLink } from "src/components/links/NewsLink";
-import { ConfigContext } from "src/contexts/ConfigContext";
 import type { NewsDetails } from "src/services/NewsService";
 import { NewsService } from "src/services/NewsService";
-import { filterFalsyObjectValues } from "src/utils/misc";
 import { resetQueries } from "src/utils/misc";
-import { getResponseError } from "src/utils/misc";
-import { makeSentence } from "src/utils/string";
-import { validateRequired } from "src/utils/validation";
+import { z } from "zod";
 
 interface NewsFormProps {
   news?: NewsDetails | null | undefined;
@@ -27,136 +22,74 @@ interface NewsFormProps {
   onSubmit?: ((news: NewsDetails) => void) | undefined;
 }
 
-interface NewsFormValues {
-  subject: string;
-  text: string;
-}
+const schema = z.object({
+  subject: z.string().min(1, "Subject is required"),
+  text: z.string().min(1, "News text is required"),
+});
+type NewsFormValues = z.infer<typeof schema>;
 
 const NewsForm = ({ news, onGoBack, onSubmit }: NewsFormProps) => {
-  const { config } = useContext(ConfigContext);
   const queryClient = useQueryClient();
-  const initialValues: NewsFormValues = {
-    subject: news?.subject || "",
-    text: news?.text || "",
-  };
+  const form = useForm<NewsFormValues>({
+    resolver: zodResolver(schema),
+    defaultValues: { subject: news?.subject || "", text: news?.text || "" },
+  });
 
-  const handleSubmitError = useCallback(
-    (
-      error: unknown,
-      { setSubmitting, setStatus, setErrors }: FormikHelpers<NewsFormValues>,
-    ) => {
-      setSubmitting(false);
-      const data = getResponseError(error);
-      if (data) {
-        if (data.detail) {
-          setStatus({ error: <>{makeSentence(data.detail)}</> });
-        }
-        const errors = {
-          subject: data?.subject,
-          text: data?.text,
-        };
-        if (Object.keys(filterFalsyObjectValues(errors)).length) {
-          setErrors(errors);
-        } else {
-          console.error(error);
-          setStatus({ error: <>Unknown error.</> });
-        }
-      } else {
-        console.error(error);
-        setStatus({ error: <>Unknown error.</> });
-      }
-    },
-    [],
-  );
+  // Mirror Formik's enableReinitialize: when a different news item loads,
+  // refill the form. Keyed on the id so it does not clobber the user's edits.
+  const { reset } = form;
+  useEffect(() => {
+    reset({ subject: news?.subject || "", text: news?.text || "" });
+  }, [news?.id, news?.subject, news?.text, reset]);
 
-  const handleSubmit = useCallback(
-    async (values: NewsFormValues, helpers: FormikHelpers<NewsFormValues>) => {
-      const { setStatus } = helpers;
-      setStatus({});
-      try {
-        const payload = {
-          subject: values.subject,
-          text: values.text,
-        };
+  const { submit, result } = useFormSubmit(form, async (values) => {
+    const outNews = news?.id
+      ? await NewsService.update(news.id, values)
+      : await NewsService.create(values);
+    resetQueries(queryClient, ["newsList"]);
+    onSubmit?.(outNews);
+    return {
+      final: true,
+      success: (
+        <>
+          News {news?.id ? "updated" : "posted"}.{" "}
+          <NewsLink news={outNews}>Click here</NewsLink> to see the changes.
+        </>
+      ),
+    };
+  });
 
-        if (news?.id) {
-          let outNews = await NewsService.update(news.id, payload);
-          resetQueries(queryClient, ["newsList"]);
-          onSubmit?.(outNews);
-
-          setStatus({
-            success: (
-              <>
-                News updated. <NewsLink news={outNews}>Click here</NewsLink> to
-                see the changes.
-              </>
-            ),
-          });
-        } else {
-          let outNews = await NewsService.create(payload);
-          resetQueries(queryClient, ["newsList"]);
-          onSubmit?.(outNews);
-
-          setStatus({
-            success: (
-              <>
-                News posted. <NewsLink news={outNews}>Click here</NewsLink> to
-                see the changes.
-              </>
-            ),
-          });
-        }
-      } catch (error) {
-        handleSubmitError(error, helpers);
-      }
-    },
-    [news, onSubmit, handleSubmitError, queryClient],
-  );
-
-  if (!config) {
-    return <Loader />;
+  if (result?.final && result.success) {
+    return <div className="FormFieldSuccess">{result.success}</div>;
   }
 
   return (
-    <Formik
-      initialValues={initialValues}
-      enableReinitialize={true}
-      onSubmit={handleSubmit}
-    >
-      {({ isSubmitting, values, setFieldValue, status }) =>
-        status?.success ? (
-          <div className="FormFieldSuccess">{status.success}</div>
-        ) : (
-          <Form>
-            <FormGrid gridType={FormGridType.Grid}>
-              <FormGridFieldSet>
-                <TextFormField required={true} label="Subject" name="subject" />
+    <Form form={form} onSubmit={submit}>
+      <FormGrid gridType={FormGridType.Grid}>
+        <FormGridFieldSet>
+          <TextField required={true} label="Subject" name="subject" />
 
-                <TextAreaFormField
-                  validate={validateRequired}
-                  rich={true}
-                  required={true}
-                  label="News text"
-                  markdownLimitKey="news_text"
-                  name="text"
-                />
-              </FormGridFieldSet>
+          <TextAreaField
+            rich={true}
+            required={true}
+            label="News text"
+            markdownLimitKey="news_text"
+            name="text"
+          />
+        </FormGridFieldSet>
 
-              <FormGridButtons status={status}>
-                <button type="submit" disabled={isSubmitting}>
-                  {news ? "Update news" : "Submit news"}
-                </button>
-                {onGoBack && (
-                  <button type="button" onClick={onGoBack}>
-                    Go back
-                  </button>
-                )}
-              </FormGridButtons>
-            </FormGrid>
-          </Form>
-        )
-      }
-    </Formik>
+        <FormButtons result={result}>
+          <button type="submit" disabled={form.formState.isSubmitting}>
+            {news ? "Update news" : "Submit news"}
+          </button>
+          {onGoBack && (
+            <button type="button" onClick={onGoBack}>
+              Go back
+            </button>
+          )}
+        </FormButtons>
+      </FormGrid>
+    </Form>
   );
 };
 

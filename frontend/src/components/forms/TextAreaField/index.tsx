@@ -72,7 +72,7 @@ const RichTextAreaField = ({
 
   const composer = (showLimitInToolbar: boolean) => (
     <MarkdownComposer
-      field={{ ...fieldProps, readOnly: readonly } as any}
+      field={{ ...fieldProps, id: name, readOnly: readonly } as any}
       form={undefined as any}
       allowColors={allowColors}
       allowAttachments={allowAttachments}
@@ -149,6 +149,7 @@ const PlainTextAreaField = ({
     <BaseField name={name} {...baseProps}>
       <div className={`${styles.wrapper} ${styles.plain}`}>
         <textarea
+          id={name}
           {...register(name)}
           readOnly={readonly}
           className="TextArea--input Input"
