@@ -6,8 +6,9 @@ import {
   reviewsPartialUpdate,
   reviewsRetrieve,
   reviewsVoteCreate,
+  reviewsVotersList,
 } from "src/client";
-import type { ReviewDetails, ReviewListing } from "src/client";
+import type { ReviewDetails, ReviewListing, ReviewVoter } from "src/client";
 import type { GenericSearchQuery, GenericSearchResult } from "src/types";
 import { getGenericSearchQuery } from "src/utils/misc";
 
@@ -118,6 +119,14 @@ const vote = async (
   return data;
 };
 
+const getVoters = async (reviewId: number): Promise<ReviewVoter[]> => {
+  const { data } = await reviewsVotersList({
+    path: { id: reviewId },
+    throwOnError: true,
+  });
+  return data;
+};
+
 const ReviewService = {
   searchReviews,
   getReviewById,
@@ -127,11 +136,13 @@ const ReviewService = {
   delete: deleteReview,
   hide,
   vote,
+  getVoters,
 };
 
 export type {
   ReviewDetails,
   ReviewListing,
+  ReviewVoter,
   ReviewSearchQuery,
   ReviewSearchResult,
 };

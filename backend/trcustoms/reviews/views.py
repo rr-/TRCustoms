@@ -30,6 +30,7 @@ from trcustoms.reviews.serializers import (
     ReviewDetailsSerializer,
     ReviewHideSerializer,
     ReviewListingSerializer,
+    ReviewVoterSerializer,
     ReviewVoteSerializer,
 )
 from trcustoms.users.models import UserPermission
@@ -80,6 +81,7 @@ class ReviewViewSet(
     permission_classes_by_action = {
         "retrieve": [AllowAny],
         "list": [AllowAny],
+        "voters": [AllowAny],
         "create": [IsAuthenticated],
         "vote": [IsAuthenticated],
         "destroy": [HasPermission(UserPermission.DELETE_REVIEWS)],
@@ -100,6 +102,7 @@ class ReviewViewSet(
         "create": ReviewDetailsSerializer,
         "hide": ReviewHideSerializer,
         "vote": ReviewVoteSerializer,
+        "voters": ReviewVoterSerializer,
     }
 
     def get_object(self):
@@ -198,6 +201,20 @@ class ReviewViewSet(
             context=self.get_serializer_context(),
         )
         return Response(response_serializer.data)
+
+    @extend_schema(responses=ReviewVoterSerializer(many=True))
+    @action(detail=True, methods=["get"], pagination_class=None)
+    def voters(self, request, pk: int) -> Response:
+        review = self.get_object()
+        votes = review.votes.select_related("user", "user__picture").order_by(
+            "created"
+        )
+        serializer = ReviewVoterSerializer(
+            votes,
+            many=True,
+            context=self.get_serializer_context(),
+        )
+        return Response(serializer.data)
 
     @action(detail=True, methods=["post"])
     def hide(self, request, pk: int) -> Response:

@@ -1,4 +1,5 @@
 import styles from "./index.module.css";
+import { useQueryClient } from "@tanstack/react-query";
 import { useEffect } from "react";
 import { useState } from "react";
 import { ReviewDeleteButton } from "src/components/buttons/ReviewDeleteButton";
@@ -15,6 +16,7 @@ import { Markdown } from "src/components/markdown/Markdown";
 import type { ReviewListing } from "src/services/ReviewService";
 import { ReviewService } from "src/services/ReviewService";
 import { UserPermission } from "src/services/UserService";
+import { queryKeys } from "src/services/queryKeys";
 import { useUser } from "src/stores/user";
 import { extractErrorMessage } from "src/utils/misc";
 import { formatDate } from "src/utils/string";
@@ -33,6 +35,7 @@ const ReviewsListItem = ({
   showExcerpts,
 }: ReviewsListItemProps) => {
   const { user } = useUser();
+  const queryClient = useQueryClient();
   const [isExcerptExpanded, setIsExcerptExpanded] = useState(false);
   const [isVotePending, setIsVotePending] = useState(false);
   const [voteState, setVoteState] = useState({
@@ -96,6 +99,9 @@ const ReviewsListItem = ({
         downvoteCount: updatedReview.downvote_count ?? 0,
         currentUserVote: updatedReview.current_user_vote,
         canVote: updatedReview.can_vote,
+      });
+      queryClient.invalidateQueries({
+        queryKey: queryKeys.reviews.voters(review.id),
       });
     } catch (error) {
       setVoteState(previousState);

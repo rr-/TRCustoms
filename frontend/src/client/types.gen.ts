@@ -741,8 +741,26 @@ export type ReviewListing = {
 };
 
 export type ReviewVote = {
-    vote: VoteEnum;
+    vote: ReviewVoteVoteEnum;
 };
+
+/**
+ * * `-1` - -1
+ * * `1` - 1
+ */
+export type ReviewVoteVoteEnum = -1 | 1;
+
+export type ReviewVoter = {
+    user: UserNested;
+    vote: ReviewVoterVoteEnum;
+    readonly created: string | null;
+};
+
+/**
+ * * `-1` - Downvote
+ * * `1` - Upvote
+ */
+export type ReviewVoterVoteEnum = -1 | 1;
 
 /**
  * * `dra` - Draft
@@ -948,12 +966,6 @@ export type UserSettings = {
 export type Username = {
     username: string;
 };
-
-/**
- * * `-1` - -1
- * * `1` - 1
- */
-export type VoteEnum = -1 | 1;
 
 export type WalkthroughAuthor = {
     readonly id: number;
@@ -1453,6 +1465,10 @@ export type ReviewListingWritable = {
     rejection_reason?: string | null;
     upvote_count?: number;
     downvote_count?: number;
+};
+
+export type ReviewVoterWritable = {
+    vote: ReviewVoterVoteEnum;
 };
 
 export type TagDetailsWritable = {
@@ -2573,6 +2589,33 @@ export type ReviewsVoteCreateResponses = {
 };
 
 export type ReviewsVoteCreateResponse = ReviewsVoteCreateResponses[keyof ReviewsVoteCreateResponses];
+
+export type ReviewsVotersListData = {
+    body?: never;
+    path: {
+        /**
+         * A unique integer value identifying this review.
+         */
+        id: number;
+    };
+    query?: {
+        /**
+         * A search term.
+         */
+        search?: string;
+        /**
+         * Which field to use when ordering the results.
+         */
+        sort?: string;
+    };
+    url: '/api/reviews/{id}/voters/';
+};
+
+export type ReviewsVotersListResponses = {
+    200: Array<ReviewVoter>;
+};
+
+export type ReviewsVotersListResponse = ReviewsVotersListResponses[keyof ReviewsVotersListResponses];
 
 export type SchemaRetrieveData = {
     body?: never;

@@ -27,6 +27,7 @@ const queryKeys = {
   },
   reviews: {
     ...entity("reviews"),
+    voters: (id: unknown): Key => ["reviews", "voters", id],
     byAuthorAndLevel: (levelId: unknown, userId: unknown): Key => [
       "reviews",
       "byAuthorAndLevel",

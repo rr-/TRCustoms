@@ -149,6 +149,18 @@ class ReviewDetailsSerializer(ReviewListingSerializer):
         return review
 
 
+class ReviewVoterSerializer(serializers.ModelSerializer):
+    user = UserNestedSerializer(read_only=True)
+
+    class Meta:
+        model = ReviewVote
+        fields = [
+            "user",
+            "vote",
+            "created",
+        ]
+
+
 class ReviewHideSerializer(serializers.Serializer):
     reason = CustomCharField(collapse_whitespace=False, max_length=500)
 

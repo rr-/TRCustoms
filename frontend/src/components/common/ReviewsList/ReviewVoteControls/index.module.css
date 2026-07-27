@@ -1,11 +1,19 @@
 .wrapper {
+  display: inline-flex;
+  align-items: center;
+}
+
+/* anchors the voters popup, so its caret can point at this vote's count */
+.vote {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
 }
 
 .voteButton {
   display: inline-flex;
   align-items: center;
-  gap: 0.35rem;
-  padding: 0.25rem 0.5rem;
+  padding: 0.25rem 0.15rem 0.25rem 0.5rem;
 
   &.active {
     color: var(--link-hover-color);
@@ -14,6 +22,28 @@
   :global(.Icon) {
     width: 1.2rem;
     height: 1.2rem;
+  }
+}
+
+.countButton {
+  min-width: 1.5rem;
+  padding: 0.15rem 0.35rem;
+  border: none;
+  background: none;
+  color: inherit;
+  font: inherit;
+  line-height: 1.4;
+  cursor: pointer;
+  transition: background var(--transition-speed);
+
+  &:hover:not(:disabled),
+  &[aria-expanded="true"] {
+    background: var(--v2-bg-color-4);
+    color: var(--link-hover-color);
+  }
+
+  &:disabled {
+    cursor: default;
   }
 }
 

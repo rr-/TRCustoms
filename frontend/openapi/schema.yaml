@@ -1406,6 +1406,41 @@ paths:
               schema:
                 $ref: '#/components/schemas/ReviewListing'
           description: ''
+  /api/reviews/{id}/voters/:
+    get:
+      operationId: reviews_voters_list
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this review.
+        required: true
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      - name: sort
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      tags:
+      - reviews
+      security:
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ReviewVoter'
+          description: ''
   /api/schema/:
     get:
       operationId: schema_retrieve
@@ -4932,9 +4967,46 @@ components:
       type: object
       properties:
         vote:
-          $ref: '#/components/schemas/VoteEnum'
+          $ref: '#/components/schemas/ReviewVoteVoteEnum'
       required:
       - vote
+    ReviewVoteVoteEnum:
+      enum:
+      - -1
+      - 1
+      type: integer
+      description: |-
+        * `-1` - -1
+        * `1` - 1
+    ReviewVoter:
+      type: object
+      properties:
+        user:
+          allOf:
+          - $ref: '#/components/schemas/UserNested'
+          readOnly: true
+        vote:
+          allOf:
+          - $ref: '#/components/schemas/ReviewVoterVoteEnum'
+          minimum: -2147483648
+          maximum: 2147483647
+        created:
+          type: string
+          format: date-time
+          readOnly: true
+          nullable: true
+      required:
+      - created
+      - user
+      - vote
+    ReviewVoterVoteEnum:
+      enum:
+      - -1
+      - 1
+      type: integer
+      description: |-
+        * `-1` - Downvote
+        * `1` - Upvote
     StatusAa3Enum:
       enum:
       - dra
@@ -5565,14 +5637,6 @@ components:
           maxLength: 200
       required:
       - username
-    VoteEnum:
-      enum:
-      - -1
-      - 1
-      type: integer
-      description: |-
-        * `-1` - -1
-        * `1` - 1
     WalkthroughAuthor:
       type: object
       properties:

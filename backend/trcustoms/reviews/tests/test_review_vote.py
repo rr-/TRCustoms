@@ -185,3 +185,42 @@ def test_review_list_can_be_sorted_by_score_descending(
         high_score_review.id,
         low_score_review.id,
     ]
+
+
+@pytest.mark.django_db
+def test_review_voters_lists_who_voted(api_client: APIClient) -> None:
+    review = ReviewFactory()
+    upvoter = UserFactory(username="voters_upvoter")
+    downvoter = UserFactory(username="voters_downvoter")
+    ReviewVoteFactory(review=review, user=upvoter, vote=1)
+    ReviewVoteFactory(review=review, user=downvoter, vote=-1)
+
+    response = api_client.get(f"/api/reviews/{review.id}/voters/")
+
+    assert response.status_code == status.HTTP_200_OK, response.content
+    assert [
+        (item["user"]["username"], item["vote"]) for item in response.json()
+    ] == [
+        (upvoter.username, 1),
+        (downvoter.username, -1),
+    ]
+
+
+@pytest.mark.django_db
+def test_review_voters_is_empty_without_votes(api_client: APIClient) -> None:
+    review = ReviewFactory()
+
+    response = api_client.get(f"/api/reviews/{review.id}/voters/")
+
+    assert response.status_code == status.HTTP_200_OK, response.content
+    assert response.json() == []
+
+
+@pytest.mark.django_db
+def test_review_voters_hides_hidden_reviews(api_client: APIClient) -> None:
+    review = ReviewFactory(is_hidden=True)
+    ReviewVoteFactory(review=review, user=UserFactory(username="hidden_voter"))
+
+    response = api_client.get(f"/api/reviews/{review.id}/voters/")
+
+    assert response.status_code == status.HTTP_404_NOT_FOUND

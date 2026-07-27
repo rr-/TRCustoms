@@ -1,0 +1,97 @@
+/* Borrows its colors from widgets that already exist in every theme (see
+ * issue #486): the box follows an .Input (the select fields), the title bar
+ * and the caret follow a button, as does the hovered row. */
+.popup {
+  position: absolute;
+  top: calc(100% + 0.4rem);
+  right: 0;
+  z-index: 3;
+  box-sizing: border-box;
+  width: max-content;
+  min-width: 11rem;
+  max-width: 15rem;
+  border: 2px solid var(--input-border-color);
+  background: var(--input-bg-color);
+  color: var(--input-fg-color);
+  text-align: left;
+  white-space: normal;
+  animation: appear 0.12s ease-out;
+}
+
+/* the caret, centred on the count button this popup belongs to; filled like
+ * the title bar it grows out of */
+.popup::before {
+  content: "";
+  position: absolute;
+  top: -0.3rem;
+  /* half the count button's width (1.5rem min + 0.7rem padding), less half
+   * the caret's, so it sits centred under the count that opened it */
+  right: 0.8rem;
+  width: 0.5rem;
+  height: 0.5rem;
+  transform: rotate(45deg);
+  background: var(--button-soft-bg-color);
+}
+
+@keyframes appear {
+  from {
+    opacity: 0;
+    transform: translateY(-0.25rem);
+  }
+}
+
+/* same colors as a button (e.g. the burger menu), so it reads as a solid bar
+ * capping the box */
+.title {
+  padding: 0.15rem 0.5rem;
+  background: var(--button-soft-bg-color);
+  color: var(--button-fg-color);
+  font-size: 0.75rem;
+  font-weight: bold;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.message {
+  display: block;
+  padding: 0.4rem 0.5rem;
+  font-size: 0.85rem;
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  max-height: 13rem;
+  overflow-y: auto;
+  margin: 0;
+  padding: 0.25rem 0;
+  list-style: none;
+}
+
+.listItem {
+  margin: 0;
+}
+
+.userLink {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.25rem 0.5rem;
+  color: var(--input-fg-color);
+
+  &:hover {
+    background: var(--button-hovered-bg-color);
+    color: var(--button-hovered-fg-color);
+  }
+
+  :global(img) {
+    --user-pic-size: 1.5rem;
+  }
+}
+
+.username {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 0.9rem;
+}
