@@ -35,6 +35,21 @@ def collect_user_links() -> Iterable[str]:
         yield from collect_links(walkthrough["text"])
 
 
+def delete_if_unreferenced(uploaded_file: UploadedFile, dry_run: bool) -> None:
+    # The queries above list the relations we know about; anything else still
+    # pointing at the file means this task has fallen behind a new model, so
+    # skip the file rather than delete something that is in use.
+    if check_model_references(uploaded_file):
+        logger.warning(
+            "%s: file looks unused, but is still referenced - skipping",
+            uploaded_file.md5sum,
+        )
+        return
+    logger.info("%s: deleting unused file", uploaded_file.md5sum)
+    if not dry_run:
+        uploaded_file.delete()
+
+
 @app.task
 def delete_unreferenced_files(dry_run: bool = False) -> None:
     for uploaded_file in UploadedFile.objects.filter(
@@ -42,12 +57,10 @@ def delete_unreferenced_files(dry_run: bool = False) -> None:
         levelfile__isnull=True,
         levelscreenshot__isnull=True,
         user__isnull=True,
+        event__isnull=True,
         created__lte=(timezone.now() - timedelta(hours=24)),
     ).exclude(upload_type=UploadType.ATTACHMENT):
-        logger.info("%s: deleting unused file", uploaded_file.md5sum)
-        assert not check_model_references(uploaded_file)
-        if not dry_run:
-            uploaded_file.delete()
+        delete_if_unreferenced(uploaded_file, dry_run)
 
     links = set(collect_user_links())
 
@@ -61,7 +74,4 @@ def delete_unreferenced_files(dry_run: bool = False) -> None:
         if any(name in link for link in links):
             continue
 
-        logger.info("%s: deleting unused file", uploaded_file.md5sum)
-        assert not check_model_references(uploaded_file)
-        if not dry_run:
-            uploaded_file.delete()
+        delete_if_unreferenced(uploaded_file, dry_run)
