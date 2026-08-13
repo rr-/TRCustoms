@@ -3,7 +3,7 @@ from pathlib import Path
 import boto3
 from botocore.config import Config
 from django.conf import settings
-from django.db.models import Q
+from django.db.models import Exists, OuterRef, Q
 from django.http import HttpResponseRedirect
 from drf_spectacular.types import OpenApiTypes
 from drf_spectacular.utils import extend_schema, extend_schema_view
@@ -102,7 +102,7 @@ class LevelViewSet(
         "external_links",
         "cover",
         "rating_class",
-    ).distinct()
+    )
 
     serializer_class = LevelListingSerializer
     serializer_class_by_action = {
@@ -147,14 +147,19 @@ class LevelViewSet(
             auth_user,
         )
         if not has_permission(auth_user, UserPermission.VIEW_PENDING_LEVELS):
-            queryset = queryset.filter(
-                Q(is_approved=True)
-                | (
-                    Q(authors__pk=auth_user.pk)
-                    if (auth_user and not auth_user.is_anonymous)
-                    else Q()
+            if auth_user and not auth_user.is_anonymous:
+                is_author = Exists(
+                    Level.authors.through.objects.filter(
+                        level_id=OuterRef("pk"), user_id=auth_user.pk
+                    )
                 )
-            )
+                queryset = queryset.annotate(
+                    is_authored_by_auth_user=is_author
+                ).filter(
+                    Q(is_approved=True) | Q(is_authored_by_auth_user=True)
+                )
+            else:
+                queryset = queryset.filter(is_approved=True)
         return queryset
 
     @action(detail=True, methods=["post"])

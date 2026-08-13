@@ -11,6 +11,7 @@ from trcustoms.reviews.models import Review
 from trcustoms.users.models import User
 from trcustoms.utils import parse_bool, parse_date_range, parse_int, parse_ints
 from trcustoms.walkthroughs.consts import WalkthroughStatus, WalkthroughType
+from trcustoms.walkthroughs.models import Walkthrough
 
 MAX_FILTER_IDS = 100
 
@@ -126,32 +127,21 @@ class ApprovalLevelFilter(LevelFilter):
 
 class WalkthroughsLevelFilter(LevelFilter):
     def run(self, qs: QuerySet[Level]) -> QuerySet[Level]:
-        if (value := parse_bool(self.qp.get("text_walkthroughs"))) is not None:
-            if value:
-                qs = qs.filter(
-                    walkthroughs__walkthrough_type=WalkthroughType.TEXT,
-                    walkthroughs__status=WalkthroughStatus.APPROVED,
+        type_map = {
+            "text_walkthroughs": WalkthroughType.TEXT,
+            "video_walkthroughs": WalkthroughType.LINK,
+        }
+        for query_param, walkthrough_type in type_map.items():
+            if (value := parse_bool(self.qp.get(query_param))) is None:
+                continue
+            has_walkthrough = Exists(
+                Walkthrough.objects.filter(
+                    level_id=OuterRef("pk"),
+                    walkthrough_type=walkthrough_type,
+                    status=WalkthroughStatus.APPROVED,
                 )
-            else:
-                qs = qs.exclude(
-                    walkthroughs__walkthrough_type=WalkthroughType.TEXT,
-                    walkthroughs__status=WalkthroughStatus.APPROVED,
-                )
-
-        if (
-            value := parse_bool(self.qp.get("video_walkthroughs"))
-        ) is not None:
-            if value:
-                qs = qs.filter(
-                    walkthroughs__walkthrough_type=WalkthroughType.LINK,
-                    walkthroughs__status=WalkthroughStatus.APPROVED,
-                )
-            else:
-                qs = qs.exclude(
-                    walkthroughs__walkthrough_type=WalkthroughType.LINK,
-                    walkthroughs__status=WalkthroughStatus.APPROVED,
-                )
-
+            )
+            qs = qs.filter(has_walkthrough if value else ~has_walkthrough)
         return qs
 
 
