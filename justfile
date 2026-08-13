@@ -22,10 +22,10 @@ kill:
     docker-compose kill
 
 up *args:
-    docker-compose up {{args}}
+    docker-compose up --remove-orphans {{args}}
 
 down *args:
-    docker-compose down {{args}}
+    docker-compose down --remove-orphans {{args}}
 
 lint-frontend *args:
     #!/bin/sh
