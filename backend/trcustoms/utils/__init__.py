@@ -38,13 +38,16 @@ def parse_int(source: str | None) -> int | None:
         return None
 
 
-def parse_ints(source: str | None) -> list[int]:
+def parse_ints(source: str | None, limit: int | None = None) -> list[int]:
     if not source:
         return []
     try:
-        return [int(item) for item in source.split(",")]
+        ret = [int(item) for item in source.split(",")]
     except ValueError:
         return []
+    if limit is not None:
+        del ret[limit:]
+    return ret
 
 
 def parse_bool(source: str | None) -> bool | None:

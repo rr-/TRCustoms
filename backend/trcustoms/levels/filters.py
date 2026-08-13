@@ -1,7 +1,7 @@
 from typing import Any
 
 from django.contrib.auth.models import AnonymousUser
-from django.db.models import Exists, F, OuterRef, QuerySet
+from django.db.models import Count, Exists, F, OuterRef, QuerySet
 
 from trcustoms.levels.models import Level
 from trcustoms.playlists.consts import PlaylistStatus
@@ -11,6 +11,8 @@ from trcustoms.reviews.models import Review
 from trcustoms.users.models import User
 from trcustoms.utils import parse_bool, parse_date_range, parse_int, parse_ints
 from trcustoms.walkthroughs.consts import WalkthroughStatus, WalkthroughType
+
+MAX_FILTER_IDS = 100
 
 
 class LevelFilter:
@@ -71,14 +73,22 @@ class SortLevelFilter(LevelFilter):
 class AdditiveLevelFilter(LevelFilter):
     def run(self, qs: QuerySet[Level]) -> QuerySet[Level]:
         and_map = {
-            "authors": "authors__pk",
-            "tags": "tags__pk",
-            "genres": "genres__pk",
+            "authors": "authors",
+            "tags": "tags",
+            "genres": "genres",
         }
-        for query_param, qs_key in and_map.items():
-            if pks := parse_ints(self.qp.get(query_param)):
-                for pk in pks:
-                    qs = qs.filter(**{qs_key: pk})
+        for query_param, field in and_map.items():
+            pks = set(
+                parse_ints(self.qp.get(query_param), limit=MAX_FILTER_IDS)
+            )
+            if not pks:
+                continue
+            alias = f"matched_{field}_count"
+            qs = (
+                qs.filter(**{f"{field}__pk__in": pks})
+                .annotate(**{alias: Count(field, distinct=True)})
+                .filter(**{alias: len(pks)})
+            )
         return qs
 
 
