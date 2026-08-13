@@ -150,6 +150,7 @@ DATABASES = {
         "PASSWORD": get_setting("POSTGRES_PASSWORD"),
         "HOST": "trcustoms-db",
         "PORT": 5432,
+        "CONN_MAX_AGE": 60,
         "OPTIONS": {
             "options": f"-c statement_timeout={DB_STATEMENT_TIMEOUT}",
         },
