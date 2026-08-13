@@ -7,6 +7,8 @@ import { PlaylistItemStatus } from "src/services/PlaylistService";
 import { PlaylistService } from "src/services/PlaylistService";
 import { getResponseError } from "src/utils/misc";
 
+const MIN_SEARCH_LENGTH = 3;
+
 interface PlaylistLevelSearchProps {
   userId: number;
   onAdd?: () => void;
@@ -16,7 +18,7 @@ const PlaylistLevelSearch = ({ userId, onAdd }: PlaylistLevelSearchProps) => {
   const [suggestions, setSuggestions] = useState<LevelNested[]>([]);
 
   const handleSearchTrigger = useCallback(async (userInput: string) => {
-    if (!userInput) {
+    if (userInput.trim().length < MIN_SEARCH_LENGTH) {
       setSuggestions([]);
       return;
     }

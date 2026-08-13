@@ -9,6 +9,8 @@ import { KEY_RETURN } from "src/constants";
 import { KEY_UP } from "src/constants";
 import { KEY_DOWN } from "src/constants";
 
+const SEARCH_DEBOUNCE_MS = 300;
+
 interface AutoCompleteProps<TItem> {
   maxLength?: number | undefined;
   suggestions: TItem[];
@@ -49,7 +51,11 @@ const AutoComplete = <TItem extends object>({
   }, [suggestions, activeResultIdx, setActiveResultIdx, setShowResults]);
 
   useEffect(() => {
-    onSearchTrigger(textInput);
+    const timeout = setTimeout(
+      () => onSearchTrigger(textInput),
+      SEARCH_DEBOUNCE_MS,
+    );
+    return () => clearTimeout(timeout);
   }, [textInput, onSearchTrigger]);
 
   const applyResult = useCallback(() => {
