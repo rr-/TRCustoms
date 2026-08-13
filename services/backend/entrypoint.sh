@@ -49,7 +49,7 @@ case "$action" in
         python3 "$@"
     ;;
     celery)
-        celery -A trcustoms worker -l INFO
+        celery -A trcustoms worker -l INFO --concurrency="${CELERY_CONCURRENCY:-2}"
     ;;
     celery-beat)
         celery -A trcustoms beat -l INFO
