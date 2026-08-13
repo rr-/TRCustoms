@@ -1,6 +1,7 @@
 from typing import Any
 
 from django.conf import settings
+from django.core.cache import cache
 from django.db.models import Count, Sum
 from drf_spectacular.utils import extend_schema
 from rest_framework import generics, status
@@ -23,6 +24,9 @@ from trcustoms.tasks.update_featured_levels import get_featured_level
 from trcustoms.users.models import User
 from trcustoms.walkthroughs.consts import WalkthroughStatus
 from trcustoms.walkthroughs.models import Walkthrough
+
+CONFIG_CACHE_KEY = "config_data"
+CONFIG_CACHE_TIMEOUT = 60
 
 
 def get_model_field_limit(model: type, field_name: str) -> int | None:
@@ -121,6 +125,17 @@ def get_config_data():
     return ConfigSerializer(instance=context).data
 
 
+def get_cached_config_data():
+    if (data := cache.get(CONFIG_CACHE_KEY)) is None:
+        data = get_config_data()
+        cache.set(CONFIG_CACHE_KEY, data, CONFIG_CACHE_TIMEOUT)
+    return data
+
+
+def clear_config_cache() -> None:
+    cache.delete(CONFIG_CACHE_KEY)
+
+
 class ConfigView(APIView):
     # A plain APIView (not a ViewSet list action) so the schema describes a
     # single Config object rather than a list of them.
@@ -129,7 +144,7 @@ class ConfigView(APIView):
     @extend_schema(responses=ConfigSerializer)
     def get(self, request) -> Response:
         return Response(
-            get_config_data(),
+            get_cached_config_data(),
             status.HTTP_200_OK,
         )
 

@@ -5,6 +5,7 @@ from typing import Any
 
 import dateutil.parser
 import pytest
+from django.core.cache import cache
 from django.db.models import QuerySet
 from django.test import override_settings
 from mimesis import Generic
@@ -14,6 +15,7 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from trcustoms.common.consts import RatingClassSubject
 from trcustoms.common.models import RatingClass
 from trcustoms.common.tests.factories import RatingClassFactory
+from trcustoms.config.views import CONFIG_CACHE_KEY
 from trcustoms.ratings.logic import get_max_rating_score
 from trcustoms.scoring import get_rating_classes
 from trcustoms.users.models import User
@@ -131,6 +133,7 @@ def fixture_rating_rating_classes() -> QuerySet:
 def fixture_clear_caches() -> None:
     get_max_rating_score.cache_clear()
     get_rating_classes.cache_clear()
+    cache.delete(CONFIG_CACHE_KEY)
 
 
 @pytest.fixture(name="use_tmp_media_dir", autouse=True, scope="session")

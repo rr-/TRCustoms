@@ -320,6 +320,9 @@ DISCORD_WEBHOOK_USERNAME = "Winston"
 DISCORD_WEBHOOK_AVATAR = "https://winston.wind.garden/static/avatar.jpg"
 
 if TESTING:
+    CACHES["default"]["KEY_PREFIX"] = os.environ.get(
+        "PYTEST_XDIST_WORKER", "gw"
+    )
     del REST_FRAMEWORK["DEFAULT_THROTTLE_CLASSES"]
     del REST_FRAMEWORK["DEFAULT_THROTTLE_RATES"]
     CELERY_TASK_ALWAYS_EAGER = True
