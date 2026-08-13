@@ -140,6 +140,8 @@ CACHES = {
 
 WSGI_APPLICATION = "trcustoms.wsgi.application"
 
+DB_STATEMENT_TIMEOUT = os.environ.get("DB_STATEMENT_TIMEOUT", "15000")
+
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql_psycopg2",
@@ -148,6 +150,9 @@ DATABASES = {
         "PASSWORD": get_setting("POSTGRES_PASSWORD"),
         "HOST": "trcustoms-db",
         "PORT": 5432,
+        "OPTIONS": {
+            "options": f"-c statement_timeout={DB_STATEMENT_TIMEOUT}",
+        },
     }
 }
 
