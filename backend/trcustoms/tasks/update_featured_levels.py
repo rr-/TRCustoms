@@ -56,7 +56,7 @@ def filter_only_most_downloaded(
     levels: QuerySet[Level], fraction: float
 ) -> QuerySet[Level]:
     total = Level.objects.all().count()
-    chosen = Level.objects.order_by("download_count")[: int(total * fraction)]
+    chosen = Level.objects.order_by("-download_count")[: int(total * fraction)]
     return levels.filter(id__in=chosen.values("id"))
 
 
