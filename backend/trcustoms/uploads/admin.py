@@ -1,11 +1,13 @@
 from django.contrib import admin
 
+from trcustoms.uploads.forms import UploadedFileForm
 from trcustoms.uploads.models import UploadedFile
 
 
 @admin.register(UploadedFile)
 class UploadedFileAdmin(admin.ModelAdmin):
-    list_filter = ["upload_type"]
+    form = UploadedFileForm
+    list_filter = ["upload_type", "status"]
     list_display = [
         "id",
         "uploader",
@@ -21,4 +23,4 @@ class UploadedFileAdmin(admin.ModelAdmin):
         "uploader__first_name",
         "uploader__last_name",
     ]
-    readonly_fields = ["md5sum", "size", "created", "last_updated"]
+    readonly_fields = ["md5sum", "size", "status", "created", "last_updated"]
