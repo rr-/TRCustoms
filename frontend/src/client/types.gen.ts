@@ -812,6 +812,28 @@ export type TokenRefresh = {
 };
 
 /**
+ * Input for reserving a key and handing the client a presigned PUT.
+ */
+export type UploadPresignRequest = {
+    upload_type: UploadTypeEnum;
+    content_type: string;
+    size: number;
+};
+
+/**
+ * The reserved upload, and how the client should send the bytes.
+ */
+export type UploadPresignResponse = {
+    id: number;
+    url: string;
+    method: string;
+    headers: {
+        [key: string]: string;
+    };
+    expires_in: number;
+};
+
+/**
  * * `up` - User picture
  * * `lb` - Level cover image
  * * `ls` - Level screenshot
@@ -2663,6 +2685,21 @@ export type UploadsRetrieveResponses = {
 
 export type UploadsRetrieveResponse = UploadsRetrieveResponses[keyof UploadsRetrieveResponses];
 
+export type UploadsConfirmCreateData = {
+    body?: never;
+    path: {
+        id: string;
+    };
+    query?: never;
+    url: '/api/uploads/{id}/confirm/';
+};
+
+export type UploadsConfirmCreateResponses = {
+    200: UploadedFileDetails;
+};
+
+export type UploadsConfirmCreateResponse = UploadsConfirmCreateResponses[keyof UploadsConfirmCreateResponses];
+
 export type UploadsFileRetrieveData = {
     body?: never;
     path: {
@@ -2678,6 +2715,26 @@ export type UploadsFileRetrieveResponses = {
      */
     200: unknown;
 };
+
+export type UploadsPresignCreateData = {
+    body: UploadPresignRequest;
+    path?: never;
+    query?: never;
+    url: '/api/uploads/presign/';
+};
+
+export type UploadsPresignCreateErrors = {
+    /**
+     * No response body
+     */
+    409: unknown;
+};
+
+export type UploadsPresignCreateResponses = {
+    200: UploadPresignResponse;
+};
+
+export type UploadsPresignCreateResponse = UploadsPresignCreateResponses[keyof UploadsPresignCreateResponses];
 
 export type UsersListData = {
     body?: never;

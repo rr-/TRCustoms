@@ -17,8 +17,11 @@ def get_setting(name: str, allow_null: bool = False) -> str:
     return ret
 
 
-def get_bool_setting(name: str, **kwargs) -> bool:
-    return get_setting(name, **kwargs).lower() in {"true", "yes", "y", "1"}
+def get_bool_setting(name: str, default: bool = False, **kwargs) -> bool:
+    value = get_setting(name, **kwargs)
+    if not value:
+        return default
+    return value.lower() in {"true", "yes", "y", "1"}
 
 
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -284,6 +287,10 @@ AWS_S3_CUSTOM_DOMAIN = get_setting("AWS_S3_CUSTOM_DOMAIN", allow_null=True)
 AWS_S3_OBJECT_PARAMETERS = {"CacheControl": "max-age=86400"}
 AWS_MEDIA_LOCATION = "media"
 USE_AWS_STORAGE = get_bool_setting("USE_AWS_STORAGE")
+
+USE_PRESIGNED_UPLOADS = get_bool_setting(
+    "USE_PRESIGNED_UPLOADS", default=True, allow_null=True
+)
 
 CSRF_TRUSTED_ORIGINS = [
     "http://localhost:8000",

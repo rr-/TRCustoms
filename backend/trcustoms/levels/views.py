@@ -1,7 +1,5 @@
 from pathlib import Path
 
-import boto3
-from botocore.config import Config
 from django.conf import settings
 from django.db.models import Exists, OuterRef, Q
 from django.http import HttpResponseRedirect
@@ -42,6 +40,7 @@ from trcustoms.permissions import (
     has_permission,
 )
 from trcustoms.ratings.consts import RatingType
+from trcustoms.uploads.storage import get_s3_client
 from trcustoms.users.models import UserPermission
 from trcustoms.utils import slugify, stream_file_field
 
@@ -232,19 +231,7 @@ class LevelFileViewSet(viewsets.GenericViewSet):
             "ResponseContentDisposition": (f"attachment; filename={filename}"),
         }
 
-        # url = file_field.storage.url(file_field.name, parameters=parameters)
-
-        client = boto3.client(
-            "s3",
-            aws_access_key_id=settings.AWS_ACCESS_KEY_ID,
-            aws_secret_access_key=settings.AWS_SECRET_ACCESS_KEY,
-            endpoint_url=settings.AWS_S3_ENDPOINT_URL,
-            config=Config(
-                s3={"addressing_style": "path"},
-                signature_version="s3v4",
-                retries=dict(max_attempts=3),
-            ),
-        )
+        client = get_s3_client()
 
         url = client.generate_presigned_url(
             ClientMethod="get_object",

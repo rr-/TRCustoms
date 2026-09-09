@@ -69,6 +69,28 @@ After that, a reverse proxy to localhost:8000 needs to be created in the target
 environment. HTTPS certificates need to be handled manually. Currently we are
 not using any horizontal scaling.
 
+#### Uploads
+
+Where `USE_AWS_STORAGE` is on, clients upload files straight to the bucket with
+a presigned URL rather than posting them through the backend, so a level file
+no longer occupies a worker for the length of its transfer. This requires a
+CORS policy on the bucket allowing `PUT` from the site's origin, along the
+lines of:
+
+```json
+[
+  {
+    "AllowedOrigins": ["https://trcustoms.org"],
+    "AllowedMethods": ["PUT"],
+    "AllowedHeaders": ["content-type"],
+    "MaxAgeSeconds": 3600
+  }
+]
+```
+
+Setting `USE_PRESIGNED_UPLOADS=0` turns this off: clients fall back to posting
+files to the backend, which needs no frontend deploy and no bucket changes.
+
 ## Development guidelines
 
 This project also uses [pre-commit](https://pre-commit.com/). Before making

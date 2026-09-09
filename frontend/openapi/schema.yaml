@@ -1595,6 +1595,9 @@ paths:
           multipart/form-data:
             schema:
               $ref: '#/components/schemas/UploadedFileDetails'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UploadedFileDetails'
         required: true
       responses:
         '201':
@@ -1623,6 +1626,25 @@ paths:
               schema:
                 $ref: '#/components/schemas/UploadedFileDetails'
           description: ''
+  /api/uploads/{id}/confirm/:
+    post:
+      operationId: uploads_confirm_create
+      description: Validate a presigned upload and attach it to its row.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - uploads
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UploadedFileDetails'
+          description: ''
   /api/uploads/{id}/file/:
     get:
       operationId: uploads_file_retrieve
@@ -1638,6 +1660,35 @@ paths:
       - {}
       responses:
         '200':
+          description: No response body
+  /api/uploads/presign/:
+    post:
+      operationId: uploads_presign_create
+      description: |-
+        Reserve a key and hand back a URL to PUT the file to directly.
+
+        Answers 409 where uploads are stored on the local filesystem and no
+        bucket exists to upload to, which tells the client to fall back to
+        posting the file to this endpoint instead.
+      tags:
+      - uploads
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/UploadPresignRequest'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UploadPresignRequest'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UploadPresignResponse'
+          description: ''
+        '409':
           description: No response body
   /api/users/:
     get:
@@ -5134,6 +5185,44 @@ components:
       required:
       - access
       - refresh
+    UploadPresignRequest:
+      type: object
+      description: Input for reserving a key and handing the client a presigned PUT.
+      properties:
+        upload_type:
+          $ref: '#/components/schemas/UploadTypeEnum'
+        content_type:
+          type: string
+          maxLength: 255
+        size:
+          type: integer
+          minimum: 1
+      required:
+      - content_type
+      - size
+      - upload_type
+    UploadPresignResponse:
+      type: object
+      description: The reserved upload, and how the client should send the bytes.
+      properties:
+        id:
+          type: integer
+        url:
+          type: string
+        method:
+          type: string
+        headers:
+          type: object
+          additionalProperties:
+            type: string
+        expires_in:
+          type: integer
+      required:
+      - expires_in
+      - headers
+      - id
+      - method
+      - url
     UploadTypeEnum:
       enum:
       - up

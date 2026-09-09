@@ -4,7 +4,7 @@ from pathlib import Path
 from django.db import models
 
 from trcustoms.common.models import DatesInfo
-from trcustoms.uploads.consts import UploadType
+from trcustoms.uploads.consts import UploadStatus, UploadType
 from trcustoms.uploads.storage import get_user_upload_storage
 
 user_upload_storage = get_user_upload_storage()
@@ -53,6 +53,15 @@ class UploadedFile(DatesInfo):
     )
     md5sum = models.CharField(max_length=36, blank=True, null=True)
     size = models.IntegerField()
+    status = models.CharField(
+        choices=UploadStatus.choices,
+        max_length=2,
+        default=UploadStatus.COMPLETE,
+    )
+
+    pending_key = models.CharField(max_length=255, blank=True, null=True)
+
+    skip_checksum_recompute = False
 
     def __str__(self) -> str:
         return f"Uploaded file (id={self.pk}, upload_type={self.upload_type})"

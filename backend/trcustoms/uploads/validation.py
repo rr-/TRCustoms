@@ -1,4 +1,10 @@
-"""Upload limits and content type rules."""
+"""Upload limits and content type rules.
+
+Shared by the direct multipart endpoint and the presigned upload flow so both
+enforce the same allow-list and the same size limits. The presigned flow checks
+these twice: once against the client's declared type before handing out a URL,
+and once against the type sniffed from the stored bytes afterwards.
+"""
 
 import re
 
@@ -59,6 +65,10 @@ CONTENT_TYPE_MAP = {
     UploadType.EVENT_COVER: ["image/jpeg", "image/png"],
 }
 
+CANONICAL_CONTENT_TYPES = {
+    "application/zip-compressed": "application/zip",
+    "application/x-zip-compressed": "application/zip",
+}
 
 MAGIC_PREFIX_SIZE = 2048
 
@@ -67,6 +77,11 @@ ZIP_SIGNATURES = (
     b"PK\x05\x06",
     b"PK\x07\x08",
 )
+
+
+def canonicalize_content_type(content_type: str) -> str:
+    """Collapse equivalent spellings of a content type onto one name."""
+    return CANONICAL_CONTENT_TYPES.get(content_type, content_type)
 
 
 def sniff_content_type(head: bytes) -> str:

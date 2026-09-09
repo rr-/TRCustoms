@@ -1,5 +1,6 @@
 from rest_framework import serializers
 
+from trcustoms.uploads.consts import UploadType
 from trcustoms.uploads.models import UploadedFile
 from trcustoms.uploads.validation import (
     EXTENSION_MAP,
@@ -73,3 +74,21 @@ class UploadedFileDetailsSerializer(serializers.ModelSerializer):
         if not instance.content:
             return None
         return instance.md5sum
+
+
+class UploadPresignRequestSerializer(serializers.Serializer):
+    """Input for reserving a key and handing the client a presigned PUT."""
+
+    upload_type = serializers.ChoiceField(choices=UploadType.choices)
+    content_type = serializers.CharField(max_length=255)
+    size = serializers.IntegerField(min_value=1)
+
+
+class UploadPresignResponseSerializer(serializers.Serializer):
+    """The reserved upload, and how the client should send the bytes."""
+
+    id = serializers.IntegerField()
+    url = serializers.CharField()
+    method = serializers.CharField()
+    headers = serializers.DictField(child=serializers.CharField())
+    expires_in = serializers.IntegerField()

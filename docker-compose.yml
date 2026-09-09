@@ -13,6 +13,7 @@ x-backend-environment: &base-backend-environment
   - AWS_S3_ENDPOINT_URL
   - AWS_S3_CUSTOM_DOMAIN
   - USE_AWS_STORAGE
+  - USE_PRESIGNED_UPLOADS
   - EMAIL_HOST
   - EMAIL_PORT
   - EMAIL_HOST_USER
