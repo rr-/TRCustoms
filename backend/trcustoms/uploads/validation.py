@@ -62,6 +62,19 @@ CONTENT_TYPE_MAP = {
 
 MAGIC_PREFIX_SIZE = 2048
 
+ZIP_SIGNATURES = (
+    b"PK\x03\x04",
+    b"PK\x05\x06",
+    b"PK\x07\x08",
+)
+
+
+def sniff_content_type(head: bytes) -> str:
+    """Identify a file from its leading bytes."""
+    if head.startswith(ZIP_SIGNATURES):
+        return "application/zip"
+    return magic.from_buffer(head, mime=True)
+
 
 def detect_content_type(file) -> str:
     """Sniff the real MIME type from the file's magic bytes.
@@ -73,7 +86,7 @@ def detect_content_type(file) -> str:
     """
     head = file.read(MAGIC_PREFIX_SIZE)
     file.seek(0)
-    return magic.from_buffer(head, mime=True)
+    return sniff_content_type(head)
 
 
 def get_rules(upload_type: str) -> tuple[list, list]:
