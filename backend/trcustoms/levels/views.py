@@ -9,7 +9,7 @@ from drf_spectacular.types import OpenApiTypes
 from drf_spectacular.utils import extend_schema, extend_schema_view
 from rest_framework import mixins, status, viewsets
 from rest_framework.decorators import action
-from rest_framework.exceptions import PermissionDenied
+from rest_framework.exceptions import NotFound, PermissionDenied
 from rest_framework.generics import get_object_or_404
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
@@ -208,6 +208,9 @@ class LevelFileViewSet(viewsets.GenericViewSet):
     @action(detail=True)
     def download(self, request, pk: int) -> Response:
         file = get_object_or_404(LevelFile, pk=pk)
+        if not file.file:
+            raise NotFound("This file is no longer available.")
+
         parts = [f"{pk}", file.level.name]
         if file.version > 1:
             parts.append(f"V{file.version}")

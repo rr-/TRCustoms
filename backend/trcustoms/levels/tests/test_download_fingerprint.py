@@ -59,3 +59,18 @@ def test_download_fingerprint_prevents_multiple_increments(
     ttl = cache._cache.get_client(key=key).ttl(key)
     assert ttl > 0
     assert ttl <= int(settings.DOWNLOAD_FINGERPRINT_EXPIRATION.total_seconds())
+
+
+@pytest.mark.django_db
+@override_settings(USE_AWS_STORAGE=False)
+def test_download_of_a_file_with_no_upload_is_not_found(
+    api_client: APIClient,
+) -> None:
+    """A LevelFile whose upload was deleted used to raise a 500."""
+    level_file = LevelFileFactory(
+        level=LevelFactory(is_approved=True), file=None
+    )
+
+    response = api_client.get(f"/api/level_files/{level_file.pk}/download/")
+
+    assert response.status_code == 404
