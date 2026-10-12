@@ -147,6 +147,12 @@ const StateSearches: StateSearchSection[] = [
     ],
   },
   {
+    title: "Message States",
+    storageKey: `auditLogMessageStatus`,
+    searchModel: "message",
+    searchList: [{ title: "Sent", searchState: "sent" }],
+  },
+  {
     title: "Walkthrough States",
     storageKey: `auditLogWalkthroughStatus`,
     searchModel: "walkthrough",

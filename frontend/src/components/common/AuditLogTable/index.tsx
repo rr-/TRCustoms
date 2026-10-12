@@ -143,6 +143,9 @@ const AuditLogTableObjectLink = ({
         </NewsLink>
       );
 
+    case AuditLogObjectType.Message:
+      return <>Message {auditLog.object_name}</>;
+
     case AuditLogObjectType.Walkthrough:
       return (
         <WalkthroughLink
