@@ -15,7 +15,6 @@
   background: var(--button-bg-color);
   color: var(--button-fg-color);
   padding: 0.25rem 0.5rem;
-  border-radius: 0.25rem;
 }
 
 .removeLink {
