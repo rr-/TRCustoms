@@ -25,12 +25,14 @@ from trcustoms.walkthroughs.consts import WalkthroughStatus
 from trcustoms.walkthroughs.logic import (
     approve_walkthrough,
     publish_walkthrough,
+    reassign_walkthrough,
     reject_walkthrough,
 )
 from trcustoms.walkthroughs.models import Walkthrough
 from trcustoms.walkthroughs.serializers import (
     WalkthroughDetailsSerializer,
     WalkthroughListingSerializer,
+    WalkthroughReassignSerializer,
     WalkthroughRejectionSerializer,
 )
 
@@ -89,6 +91,10 @@ class WalkthroughViewSet(
         "approve": [HasPermission(UserPermission.EDIT_WALKTHROUGHS)],
         "reject": [HasPermission(UserPermission.EDIT_WALKTHROUGHS)],
         "publish": [
+            HasPermission(UserPermission.EDIT_WALKTHROUGHS)
+            | IsAccessingOwnResource
+        ],
+        "reassign": [
             HasPermission(UserPermission.EDIT_WALKTHROUGHS)
             | IsAccessingOwnResource
         ],
@@ -178,4 +184,17 @@ class WalkthroughViewSet(
         walkthrough = self.get_object()
         reason = serializer.data["reason"]
         reject_walkthrough(walkthrough, request, reason)
+        return Response({})
+
+    @extend_schema(request=WalkthroughReassignSerializer)
+    @action(detail=True, methods=["post"])
+    def reassign(self, request, pk: int) -> Response:
+        walkthrough = self.get_object()
+        serializer = WalkthroughReassignSerializer(
+            data=request.data, context={"walkthrough": walkthrough}
+        )
+        serializer.is_valid(raise_exception=True)
+        reassign_walkthrough(
+            walkthrough, request, serializer.validated_data["user_id"]
+        )
         return Response({})

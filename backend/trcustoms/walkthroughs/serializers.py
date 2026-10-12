@@ -7,6 +7,7 @@ from trcustoms.levels.models import Level
 from trcustoms.levels.serializers import LevelNestedSerializer
 from trcustoms.mails import send_walkthrough_update_mail
 from trcustoms.tasks import update_awards
+from trcustoms.users.models import User
 from trcustoms.users.serializers import UserNestedSerializer
 from trcustoms.walkthroughs.consts import WalkthroughStatus, WalkthroughType
 from trcustoms.walkthroughs.models import Walkthrough
@@ -138,3 +139,23 @@ class WalkthroughDetailsSerializer(WalkthroughListingSerializer):
 
 class WalkthroughRejectionSerializer(serializers.Serializer):
     reason = CustomCharField(collapse_whitespace=False, max_length=500)
+
+
+class WalkthroughReassignSerializer(serializers.Serializer):
+    user_id = serializers.PrimaryKeyRelatedField(queryset=User.objects.all())
+
+    def validate_user_id(self, user: User) -> User:
+        walkthrough = self.context["walkthrough"]
+        if user == walkthrough.author:
+            raise serializers.ValidationError(
+                "The walkthrough already belongs to this user."
+            )
+        if Walkthrough.objects.filter(
+            level=walkthrough.level,
+            walkthrough_type=walkthrough.walkthrough_type,
+            author=user,
+        ).exists():
+            raise serializers.ValidationError(
+                "User already has this type of walkthrough."
+            )
+        return user

@@ -1033,6 +1033,10 @@ export type WalkthroughListing = {
     readonly last_user_content_updated: string | null;
 };
 
+export type WalkthroughReassign = {
+    user_id: number;
+};
+
 export type WalkthroughRejection = {
     reason: string;
 };
@@ -3283,6 +3287,24 @@ export type WalkthroughsPublishCreateResponses = {
 };
 
 export type WalkthroughsPublishCreateResponse = WalkthroughsPublishCreateResponses[keyof WalkthroughsPublishCreateResponses];
+
+export type WalkthroughsReassignCreateData = {
+    body: WalkthroughReassign;
+    path: {
+        /**
+         * A unique integer value identifying this walkthrough.
+         */
+        id: number;
+    };
+    query?: never;
+    url: '/api/walkthroughs/{id}/reassign/';
+};
+
+export type WalkthroughsReassignCreateResponses = {
+    200: WalkthroughListing;
+};
+
+export type WalkthroughsReassignCreateResponse = WalkthroughsReassignCreateResponses[keyof WalkthroughsReassignCreateResponses];
 
 export type WalkthroughsRejectCreateData = {
     body: WalkthroughRejection;

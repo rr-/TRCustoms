@@ -5,6 +5,7 @@ import {
   walkthroughsList,
   walkthroughsPartialUpdate,
   walkthroughsPublishCreate,
+  walkthroughsReassignCreate,
   walkthroughsRejectCreate,
   walkthroughsRetrieve,
 } from "src/client";
@@ -144,6 +145,17 @@ const publish = async (walkthroughId: number): Promise<void> => {
   });
 };
 
+const reassign = async (
+  walkthroughId: number,
+  userId: number,
+): Promise<void> => {
+  await walkthroughsReassignCreate({
+    path: { id: walkthroughId },
+    body: { user_id: userId },
+    throwOnError: true,
+  });
+};
+
 const WalkthroughService = {
   searchWalkthroughs,
   getWalkthroughById,
@@ -153,6 +165,7 @@ const WalkthroughService = {
   reject,
   delete: deleteWalkthrough,
   publish,
+  reassign,
 };
 
 export type {
