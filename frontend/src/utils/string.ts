@@ -33,11 +33,13 @@ const formatDate = (input: string | null): string => {
   if (!input) {
     return EMPTY_INPUT_PLACEHOLDER;
   }
+  const isDateOnly = /^\d{4}-\d{2}-\d{2}$/.test(input);
   const date = new Date(input);
   return date.toLocaleString("en-GB", {
     day: "numeric",
     year: "numeric",
     month: "short",
+    ...(isDateOnly ? { timeZone: "UTC" } : {}),
   });
 };
 

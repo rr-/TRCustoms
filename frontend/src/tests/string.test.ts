@@ -73,4 +73,8 @@ describe("formatDate", () => {
   test("returns the placeholder for null", () => {
     expect(formatDate(null)).toBe("-");
   });
+
+  test("keeps date-only values on their calendar day", () => {
+    expect(formatDate("2026-10-15")).toBe("15 Oct 2026");
+  });
 });

@@ -191,6 +191,12 @@ const getLevelOwningUserIds = (level: LevelListing): number[] => {
   return ret;
 };
 
+const getLevelReleaseDate = (level: LevelListing): string | null =>
+  level.release_date ?? level.created;
+
+const isLevelScheduled = (level: LevelListing, serverDate: string): boolean =>
+  !!level.release_date && level.release_date > serverDate;
+
 export type {
   ExternalLink,
   LevelDetails,
@@ -212,4 +218,6 @@ export {
   LevelService,
   formatLinkType,
   getLevelOwningUserIds,
+  getLevelReleaseDate,
+  isLevelScheduled,
 };

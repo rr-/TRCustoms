@@ -11,7 +11,10 @@ import { LevelLink } from "src/components/links/LevelLink";
 import type { LevelListing } from "src/services/LevelService";
 import type { LevelSearchQuery } from "src/services/LevelService";
 import { LevelService } from "src/services/LevelService";
+import { getLevelReleaseDate } from "src/services/LevelService";
+import { isLevelScheduled } from "src/services/LevelService";
 import { queryKeys } from "src/services/queryKeys";
+import { useConfig } from "src/stores/config";
 import { useUser } from "src/stores/user";
 import { formatDate } from "src/utils/string";
 import { formatFileSize } from "src/utils/string";
@@ -24,6 +27,8 @@ interface LevelViewProps {
 
 const LevelView = ({ level }: LevelViewProps) => {
   const loggedInUser = useUser().user;
+  const { config } = useConfig();
+  const isScheduled = isLevelScheduled(level, config.server_date);
 
   const author = (
     <span>
@@ -35,9 +40,15 @@ const LevelView = ({ level }: LevelViewProps) => {
   );
 
   const status = level.is_approved ? (
-    <span className={`${styles.status} ${styles.approved}`}>
-      <IconBadgeCheck /> Approved!
-    </span>
+    isScheduled ? (
+      <span className={`${styles.status} ${styles.pending}`}>
+        <IconClock /> Scheduled for {formatDate(level.release_date ?? null)}
+      </span>
+    ) : (
+      <span className={`${styles.status} ${styles.approved}`}>
+        <IconBadgeCheck /> Approved!
+      </span>
+    )
   ) : level.rejection_reason ? (
     <span className={`${styles.status} ${styles.rejected}`}>
       <IconXCircle /> Rejected
@@ -62,7 +73,7 @@ const LevelView = ({ level }: LevelViewProps) => {
       Engine: {level.engine.name}
       <br />
       <span className={styles.publishedDate}>
-        Published: {formatDate(level.created)}
+        Published: {formatDate(getLevelReleaseDate(level))}
       </span>
       {level.last_user_content_updated ? (
         <span className={styles.updatedDate}>
@@ -113,6 +124,7 @@ const LevelView = ({ level }: LevelViewProps) => {
         <header className={styles.header}>
           {author}
           {!level.is_approved ||
+          isScheduled ||
           (loggedInUser != null &&
             level.authors.some((author) => author.id === loggedInUser.id))
             ? status

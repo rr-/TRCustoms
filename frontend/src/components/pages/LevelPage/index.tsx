@@ -20,9 +20,12 @@ import { ReviewAddAction } from "src/components/pages/LevelPage/ReviewAddAction"
 import { ReviewEditAction } from "src/components/pages/LevelPage/ReviewEditAction";
 import { LevelService } from "src/services/LevelService";
 import type { LevelDetails } from "src/services/LevelService";
+import { isLevelScheduled } from "src/services/LevelService";
 import { queryKeys } from "src/services/queryKeys";
+import { useConfig } from "src/stores/config";
 import { usePageMetadata } from "src/stores/pageMetadata";
 import { useScrollStore } from "src/stores/scroll";
+import { formatDate } from "src/utils/string";
 
 interface LevelPageProps {
   action?: string;
@@ -32,6 +35,7 @@ interface LevelPageProps {
 const LevelPage = ({ tabName, action }: LevelPageProps) => {
   const navigate = useNavigate();
   const { levelId = "" } = useParams();
+  const { config } = useConfig();
   const { setShouldScroll } = useScrollStore((state) => state);
 
   const result = useQuery<LevelDetails, Error>({
@@ -114,12 +118,25 @@ const LevelPage = ({ tabName, action }: LevelPageProps) => {
 
   tabName ??= "overview";
 
-  const status = level.is_approved ? null : (
+  const scheduledNote = isLevelScheduled(level, config.server_date) ? (
+    <>
+      {" "}
+      It is scheduled for release on {formatDate(level.release_date ?? null)}.
+    </>
+  ) : null;
+
+  const status = level.is_approved ? (
+    scheduledNote && (
+      <InfoMessage type={InfoMessageType.Info}>
+        This level is approved.{scheduledNote}
+      </InfoMessage>
+    )
+  ) : (
     <InfoMessage type={InfoMessageType.Warning}>
       {level.rejection_reason ? (
         <>This level was rejected by staff. Reason: {level.rejection_reason}</>
       ) : (
-        <>This level is currently pending approval.</>
+        <>This level is currently pending approval.{scheduledNote}</>
       )}
     </InfoMessage>
   );

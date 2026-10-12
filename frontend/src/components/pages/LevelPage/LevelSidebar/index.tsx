@@ -19,6 +19,7 @@ import { TagLink } from "src/components/links/TagLink";
 import { UserLink } from "src/components/links/UserLink";
 import { ExternalLinkType } from "src/services/LevelService";
 import type { LevelDetails } from "src/services/LevelService";
+import { getLevelReleaseDate } from "src/services/LevelService";
 import { useUser } from "src/stores/user";
 import { DisplayMode } from "src/types";
 import { formatFileSize } from "src/utils/string";
@@ -31,6 +32,7 @@ interface LevelSidebarProps {
 
 const LevelSidebar = ({ level }: LevelSidebarProps) => {
   const { user } = useUser();
+  const releaseDate = getLevelReleaseDate(level);
 
   const showFileGoneAlert = () =>
     alert("This file is no longer available on our website.");
@@ -114,7 +116,7 @@ const LevelSidebar = ({ level }: LevelSidebarProps) => {
 
       <DefinitionItemGroup>
         <DefinitionItem term="Release date">
-          {level.created ? formatDate(level.created) : "unknown"}
+          {releaseDate ? formatDate(releaseDate) : "unknown"}
         </DefinitionItem>
 
         {level.last_user_content_updated ? (
