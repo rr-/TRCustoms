@@ -49,6 +49,11 @@ class SortLevelFilter(LevelFilter):
             ):
                 qs = qs.order_by(value)
 
+            case "release_date":
+                qs = qs.order_by("release_date", "created")
+            case "-release_date":
+                qs = qs.order_by("-release_date", "-created")
+
             case "engine":
                 qs = qs.order_by("engine__name")
             case "-engine":

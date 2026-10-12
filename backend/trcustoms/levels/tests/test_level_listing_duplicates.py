@@ -1,8 +1,12 @@
+from datetime import timedelta
+
 import pytest
+from django.utils import timezone
 from rest_framework import status
 from rest_framework.test import APIClient
 
 from trcustoms.engines.tests.factories import EngineFactory
+from trcustoms.levels.models import Level
 from trcustoms.levels.tests.factories import LevelFactory
 from trcustoms.users.tests.factories import UserFactory
 from trcustoms.walkthroughs.consts import WalkthroughStatus, WalkthroughType
@@ -133,3 +137,25 @@ def test_level_list_total_count_matches_result_count(
     result = resp.json()
     assert result["total_count"] == 1
     assert len(result["results"]) == 1
+
+
+@pytest.mark.django_db
+def test_level_list_sorts_by_release_date(api_client: APIClient) -> None:
+    today = timezone.localdate()
+    older = LevelFactory(release_date=today - timedelta(days=2))
+    newer_upload = LevelFactory(release_date=today - timedelta(days=1))
+    later_release = LevelFactory(release_date=today)
+    Level.objects.filter(pk=later_release.pk).update(
+        created=older.created - timedelta(days=1)
+    )
+
+    assert get_level_ids(api_client, {"sort": "-release_date"}) == [
+        later_release.pk,
+        newer_upload.pk,
+        older.pk,
+    ]
+    assert get_level_ids(api_client, {"sort": "release_date"}) == [
+        older.pk,
+        newer_upload.pk,
+        later_release.pk,
+    ]

@@ -9,7 +9,7 @@ const getLevelSearchQuery = (
   isLoggedIn: boolean,
 ): LevelSearchQuery => ({
   page: null,
-  sort: "-created",
+  sort: "-release_date",
   authors: [userId],
   isApproved: isLoggedIn ? null : true,
 });

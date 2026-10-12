@@ -201,13 +201,17 @@ def get_new_release() -> FeaturedLevel | None:
         recent_levels = (
             Level.objects.downloadable()
             .filter(
-                created__gte=timezone.now() - timedelta(days=7),
+                release_date__gte=timezone.localdate() - timedelta(days=7),
             )
             .all()
         )
         if recent_levels:
             return random.choice(recent_levels)
-        return Level.objects.downloadable().order_by("-created").first()
+        return (
+            Level.objects.downloadable()
+            .order_by("-release_date", "-created")
+            .first()
+        )
 
     recent_level = get_recent_level()
     if recent_level:

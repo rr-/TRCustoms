@@ -2,8 +2,8 @@ import { LevelPlaylistDroppedLevelFilter } from "src/services/LevelService";
 import { LevelPlaylistFinishedLevelFilter } from "src/services/LevelService";
 
 const sortOptions = [
-  { label: "Most recent", value: "-created" },
-  { label: "Least recent", value: "created" },
+  { label: "Most recent", value: "-release_date" },
+  { label: "Least recent", value: "release_date" },
   { label: "Best rated", value: "-rating" },
   { label: "Worst rated", value: "rating" },
   { label: "Most downloaded", value: "-download_count" },

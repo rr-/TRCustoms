@@ -27,7 +27,7 @@ import { boolToSearchString } from "src/utils/misc";
 
 const defaultSearchQuery: LevelSearchQuery = {
   page: null,
-  sort: "-created",
+  sort: "-release_date",
   search: null,
   isApproved: true,
   playlistFinishedLevels: LevelPlaylistFinishedLevelFilter.ShowAll,
