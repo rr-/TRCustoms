@@ -53,6 +53,7 @@ INSTALLED_APPS = [
     "trcustoms.awards",
     "trcustoms.common",
     "trcustoms.config",
+    "trcustoms.direct_messages",
     "trcustoms.engines",
     "trcustoms.genres",
     "trcustoms.levels",
@@ -266,6 +267,9 @@ MAX_SHOWCASE_LINKS = 2
 MIN_AUTHORS = 1
 MAX_AUTHORS = 25
 MAX_RELEASE_DELAY_DAYS = 7
+MESSAGES_ADMINISTRATOR_USERNAME = "Administrator"
+MESSAGES_BASE_DAILY_LIMIT = 5
+MESSAGES_DAILY_LIMIT_BONUS = 5
 MAX_TAG_LENGTH = 20
 
 # Fingerprint expiration for download counter (in timedelta hours)

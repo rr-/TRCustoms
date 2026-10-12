@@ -11,6 +11,7 @@ from trcustoms.awards.models import UserAward
 from trcustoms.common.fields import CustomCharField
 from trcustoms.common.models import Country
 from trcustoms.common.serializers import CountryNestedSerializer
+from trcustoms.direct_messages.logic import can_message
 from trcustoms.mails import send_email_confirmation_mail
 from trcustoms.permissions import get_permissions
 from trcustoms.uploads.consts import UploadType
@@ -171,6 +172,8 @@ class UserDetailsSerializer(UserListingSerializer):
     email = CustomEmailField()
     awards = UserAwardSerializer(read_only=True, many=True)
     settings = UserSettingsSerializer(required=False)
+    can_message = serializers.SerializerMethodField()
+    has_unread_messages = serializers.SerializerMethodField()
 
     picture_id = serializers.PrimaryKeyRelatedField(
         write_only=True,
@@ -190,6 +193,18 @@ class UserDetailsSerializer(UserListingSerializer):
         slug_field="iso_3166_1_alpha2",
         queryset=Country.objects.all(),
     )
+
+    def get_can_message(self, instance: User) -> bool:
+        request = self.context.get("request")
+        return bool(request) and can_message(request.user, instance)
+
+    def get_has_unread_messages(self, instance: User) -> bool:
+        request = self.context.get("request")
+        return bool(
+            request
+            and request.user == instance
+            and instance.received_messages.filter(is_read=False).exists()
+        )
 
     def validate_username(self, value):
         user = User.objects.filter(username__iexact=value).first()
@@ -331,6 +346,8 @@ class UserDetailsSerializer(UserListingSerializer):
             "is_superuser",
             "settings",
             "awards",
+            "can_message",
+            "has_unread_messages",
         ]
 
 

@@ -2,6 +2,7 @@ import pytest
 from rest_framework import status
 from rest_framework.test import APIClient
 
+from trcustoms.direct_messages.models import Message
 from trcustoms.levels.models import Level
 from trcustoms.news.models import News
 from trcustoms.reviews.models import Review
@@ -21,4 +22,5 @@ def test_config_exposes_markdown_field_limits(api_client: APIClient) -> None:
         "user_bio": User._meta.get_field("bio").max_length,
         "news_text": News._meta.get_field("text").max_length,
         "walkthrough_text": Walkthrough._meta.get_field("text").max_length,
+        "message_text": Message._meta.get_field("text").max_length,
     }

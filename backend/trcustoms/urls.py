@@ -18,6 +18,7 @@ from trcustoms.audit_logs.views import AuditLogViewSet
 from trcustoms.awards.views import AwardRecipientListView, AwardSpecListView
 from trcustoms.community_events.views import EventViewSet
 from trcustoms.config.views import ConfigView, FeaturedLevelsView
+from trcustoms.direct_messages.views import MessageViewSet, ThreadViewSet
 from trcustoms.engines.views import EngineViewSet
 from trcustoms.genres.views import (
     GenreDetailView,
@@ -54,6 +55,8 @@ router.register(r"reviews", ReviewViewSet)
 router.register(r"ratings", RatingViewSet)
 router.register(r"walkthroughs", WalkthroughViewSet)
 router.register(r"events", EventViewSet)
+router.register(r"messages/threads", ThreadViewSet)
+router.register(r"messages", MessageViewSet, basename="messages")
 
 urlpatterns = [
     path("api/auth/token/", TokenObtainPairView.as_view()),

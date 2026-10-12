@@ -44,6 +44,7 @@ class UserPermission(Enum):
     EDIT_NEWS = "edit_news"
     EDIT_TAGS = "edit_tags"
     REVIEW_AUDIT_LOGS = "review_audit_logs"
+    MESSAGE_AS_ADMINISTRATOR = "message_as_administrator"
 
 
 class UserManager(BaseUserManager):
@@ -94,6 +95,10 @@ class User(AbstractUser):
             (
                 UserPermission.VIEW_PENDING_LEVELS.value,
                 "Can view pending levels",
+            ),
+            (
+                UserPermission.MESSAGE_AS_ADMINISTRATOR.value,
+                "Can send and read messages as Administrator",
             ),
         ]
 
@@ -197,3 +202,5 @@ class UserSettings(models.Model):
     email_review_updated = models.BooleanField(default=False)
     email_rating_updated = models.BooleanField(default=False)
     email_walkthrough_updated = models.BooleanField(default=False)
+    allow_messages = models.BooleanField(default=True)
+    blocked_users = models.ManyToManyField(User, blank=True, related_name="+")

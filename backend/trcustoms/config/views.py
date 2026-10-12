@@ -12,6 +12,7 @@ from rest_framework.views import APIView
 
 from trcustoms.common.models import Country
 from trcustoms.config.serializers import ConfigSerializer
+from trcustoms.direct_messages.models import Message
 from trcustoms.engines.models import Engine
 from trcustoms.genres.models import Genre
 from trcustoms.levels.consts import FeatureType
@@ -41,6 +42,7 @@ def get_markdown_field_limits() -> dict[str, int | None]:
         "user_bio": get_model_field_limit(User, "bio"),
         "news_text": get_model_field_limit(News, "text"),
         "walkthrough_text": get_model_field_limit(Walkthrough, "text"),
+        "message_text": get_model_field_limit(Message, "text"),
     }
 
 

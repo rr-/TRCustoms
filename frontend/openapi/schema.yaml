@@ -878,6 +878,189 @@ paths:
       responses:
         '200':
           description: No response body
+  /api/messages/:
+    get:
+      operationId: messages_list
+      parameters:
+      - in: query
+        name: as_administrator
+        schema:
+          type: boolean
+      - in: query
+        name: box
+        schema:
+          type: string
+          enum:
+          - inbox
+          - outbox
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: page_size
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      - name: sort
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      tags:
+      - messages
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedMessageListingList'
+          description: ''
+  /api/messages/{id}/mark_unread/:
+    post:
+      operationId: messages_mark_unread_create
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this message.
+        required: true
+      tags:
+      - messages
+      responses:
+        '200':
+          description: No response body
+  /api/messages/quota/:
+    get:
+      operationId: messages_quota_retrieve
+      tags:
+      - messages
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MessageQuota'
+          description: ''
+  /api/messages/settings/:
+    get:
+      operationId: messages_settings_retrieve
+      tags:
+      - messages
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MessageSettings'
+          description: ''
+    put:
+      operationId: messages_settings_update
+      tags:
+      - messages
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MessageSettings'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/MessageSettings'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/MessageSettings'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MessageSettings'
+          description: ''
+  /api/messages/threads/:
+    post:
+      operationId: messages_threads_create
+      tags:
+      - messages
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ThreadCreate'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ThreadCreate'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ThreadCreate'
+        required: true
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ThreadDetails'
+          description: ''
+  /api/messages/threads/{id}/:
+    get:
+      operationId: messages_threads_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this thread.
+        required: true
+      tags:
+      - messages
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ThreadDetails'
+          description: ''
+  /api/messages/threads/{id}/reply/:
+    post:
+      operationId: messages_threads_reply_create
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this thread.
+        required: true
+      tags:
+      - messages
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ThreadReply'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ThreadReply'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ThreadReply'
+        required: true
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Message'
+          description: ''
   /api/news/:
     get:
       operationId: news_list
@@ -3579,6 +3762,109 @@ components:
       description: |-
         * `sh` - Showcase
         * `ma` - Main
+    Message:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        sender:
+          allOf:
+          - $ref: '#/components/schemas/UserNested'
+          readOnly: true
+        receiver:
+          allOf:
+          - $ref: '#/components/schemas/UserNested'
+          readOnly: true
+        text:
+          type: string
+          maxLength: 1000
+        created:
+          type: string
+          format: date-time
+          readOnly: true
+          nullable: true
+        is_read:
+          type: boolean
+      required:
+      - created
+      - id
+      - receiver
+      - sender
+      - text
+    MessageListing:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        sender:
+          allOf:
+          - $ref: '#/components/schemas/UserNested'
+          readOnly: true
+        receiver:
+          allOf:
+          - $ref: '#/components/schemas/UserNested'
+          readOnly: true
+        text:
+          type: string
+          maxLength: 1000
+        created:
+          type: string
+          format: date-time
+          readOnly: true
+          nullable: true
+        is_read:
+          type: boolean
+        thread_id:
+          type: integer
+          readOnly: true
+        subject:
+          type: string
+          readOnly: true
+        is_replied:
+          type: boolean
+          readOnly: true
+      required:
+      - created
+      - id
+      - is_replied
+      - receiver
+      - sender
+      - subject
+      - text
+      - thread_id
+    MessageQuota:
+      type: object
+      properties:
+        limit:
+          type: integer
+        used:
+          type: integer
+        remaining:
+          type: integer
+      required:
+      - limit
+      - remaining
+      - used
+    MessageSettings:
+      type: object
+      properties:
+        allow_messages:
+          type: boolean
+        blocked_users:
+          type: array
+          items:
+            $ref: '#/components/schemas/UserNested'
+          readOnly: true
+        blocked_user_ids:
+          type: array
+          items:
+            type: integer
+            writeOnly: true
+          writeOnly: true
+      required:
+      - blocked_users
     NewsDetails:
       type: object
       properties:
@@ -3835,6 +4121,40 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/LevelListing'
+        disable_paging:
+          type: boolean
+    PaginatedMessageListingList:
+      type: object
+      required:
+      - current_page
+      - last_page
+      - total_count
+      - items_on_page
+      - next
+      - previous
+      - results
+      - disable_paging
+      properties:
+        current_page:
+          type: integer
+        last_page:
+          type: integer
+        total_count:
+          type: integer
+        items_on_page:
+          type: integer
+        next:
+          type: string
+          format: uri
+          nullable: true
+        previous:
+          type: string
+          format: uri
+          nullable: true
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/MessageListing'
         disable_paging:
           type: boolean
     PaginatedNewsListingList:
@@ -4568,6 +4888,12 @@ components:
           items:
             $ref: '#/components/schemas/UserAward'
           readOnly: true
+        can_message:
+          type: boolean
+          readOnly: true
+        has_unread_messages:
+          type: boolean
+          readOnly: true
     PatchedWalkthroughDetails:
       type: object
       properties:
@@ -5192,6 +5518,64 @@ components:
       required:
       - id
       - name
+    ThreadCreate:
+      type: object
+      properties:
+        receiver_id:
+          type: integer
+        subject:
+          type: string
+          maxLength: 100
+        text:
+          type: string
+          maxLength: 1000
+        send_as_administrator:
+          type: boolean
+          default: false
+      required:
+      - receiver_id
+      - subject
+      - text
+    ThreadDetails:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        subject:
+          type: string
+          maxLength: 100
+        other_user:
+          allOf:
+          - $ref: '#/components/schemas/UserNested'
+          nullable: true
+          readOnly: true
+        messages:
+          type: array
+          items:
+            $ref: '#/components/schemas/Message'
+          readOnly: true
+        can_reply:
+          type: boolean
+          readOnly: true
+        replies_as_administrator:
+          type: boolean
+          readOnly: true
+      required:
+      - can_reply
+      - id
+      - messages
+      - other_user
+      - replies_as_administrator
+      - subject
+    ThreadReply:
+      type: object
+      properties:
+        text:
+          type: string
+          maxLength: 1000
+      required:
+      - text
     TokenBlacklist:
       type: object
       properties:
@@ -5573,15 +5957,23 @@ components:
           items:
             $ref: '#/components/schemas/UserAward'
           readOnly: true
+        can_message:
+          type: boolean
+          readOnly: true
+        has_unread_messages:
+          type: boolean
+          readOnly: true
       required:
       - authored_level_count_all
       - authored_level_count_approved
       - authored_walkthrough_count_all
       - authored_walkthrough_count_approved
       - awards
+      - can_message
       - country
       - date_joined
       - email
+      - has_unread_messages
       - id
       - is_active
       - is_banned

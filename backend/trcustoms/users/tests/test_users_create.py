@@ -130,6 +130,8 @@ def test_user_creation(
             "email_walkthrough_updated": False,
         },
         "awards": [],
+        "can_message": False,
+        "has_unread_messages": False,
     }
 
     user = User.objects.get(id=data["id"])
@@ -343,6 +345,8 @@ def test_user_creation_acquiring_trle_account(
             "email_walkthrough_updated": False,
         },
         "awards": [],
+        "can_message": False,
+        "has_unread_messages": False,
     }
 
     user.refresh_from_db()

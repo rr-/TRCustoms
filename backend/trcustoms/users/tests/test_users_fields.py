@@ -14,8 +14,8 @@ def test_user_listing_does_not_show_emails(
     response = auth_api_client.get("/api/users/")
     data = response.json()
     assert response.status_code == status.HTTP_200_OK, data
-    assert len(data["results"]) == 1
-    assert "email" not in data["results"][0]
+    assert user.id in [result["id"] for result in data["results"]]
+    assert all("email" not in result for result in data["results"])
     assert user.email not in response.content.decode()
 
 

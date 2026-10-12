@@ -306,6 +306,38 @@ export type LevelScreenshot = {
  */
 export type LinkTypeEnum = 'sh' | 'ma';
 
+export type Message = {
+    readonly id: number;
+    sender: UserNested;
+    receiver: UserNested;
+    text: string;
+    readonly created: string | null;
+    is_read?: boolean;
+};
+
+export type MessageListing = {
+    readonly id: number;
+    sender: UserNested;
+    receiver: UserNested;
+    text: string;
+    readonly created: string | null;
+    is_read?: boolean;
+    readonly thread_id: number;
+    readonly subject: string;
+    readonly is_replied: boolean;
+};
+
+export type MessageQuota = {
+    limit: number;
+    used: number;
+    remaining: number;
+};
+
+export type MessageSettings = {
+    allow_messages?: boolean;
+    readonly blocked_users: Array<UserNested>;
+};
+
 export type NewsDetails = {
     readonly id: number;
     subject?: string | null;
@@ -385,6 +417,17 @@ export type PaginatedLevelListingList = {
     next: string | null;
     previous: string | null;
     results: Array<LevelListing>;
+    disable_paging: boolean;
+};
+
+export type PaginatedMessageListingList = {
+    current_page: number;
+    last_page: number;
+    total_count: number;
+    items_on_page: number;
+    next: string | null;
+    previous: string | null;
+    results: Array<MessageListing>;
     disable_paging: boolean;
 };
 
@@ -593,6 +636,8 @@ export type PatchedUserDetails = {
     readonly is_superuser?: boolean;
     settings?: UserSettings;
     readonly awards?: Array<UserAward>;
+    readonly can_message?: boolean;
+    readonly has_unread_messages?: boolean;
 };
 
 export type PatchedWalkthroughDetails = {
@@ -800,6 +845,26 @@ export type TagNested = {
     name: string;
 };
 
+export type ThreadCreate = {
+    receiver_id: number;
+    subject: string;
+    text: string;
+    send_as_administrator?: boolean;
+};
+
+export type ThreadDetails = {
+    readonly id: number;
+    subject: string;
+    other_user: UserNested | null;
+    readonly messages: Array<Message>;
+    readonly can_reply: boolean;
+    readonly replies_as_administrator: boolean;
+};
+
+export type ThreadReply = {
+    text: string;
+};
+
 export type TokenBlacklist = {
     refresh: string;
 };
@@ -935,6 +1000,8 @@ export type UserDetails = {
     readonly is_superuser: boolean;
     settings?: UserSettings;
     readonly awards: Array<UserAward>;
+    readonly can_message: boolean;
+    readonly has_unread_messages: boolean;
 };
 
 export type UserListing = {
@@ -1211,6 +1278,21 @@ export type LevelScreenshotWritable = {
     position?: number;
 };
 
+export type MessageWritable = {
+    text: string;
+    is_read?: boolean;
+};
+
+export type MessageListingWritable = {
+    text: string;
+    is_read?: boolean;
+};
+
+export type MessageSettingsWritable = {
+    allow_messages?: boolean;
+    blocked_user_ids?: Array<number>;
+};
+
 export type NewsDetailsWritable = {
     subject?: string | null;
     text?: string | null;
@@ -1284,6 +1366,17 @@ export type PaginatedLevelListingListWritable = {
     next: string | null;
     previous: string | null;
     results: Array<LevelListingWritable>;
+    disable_paging: boolean;
+};
+
+export type PaginatedMessageListingListWritable = {
+    current_page: number;
+    last_page: number;
+    total_count: number;
+    items_on_page: number;
+    next: string | null;
+    previous: string | null;
+    results: Array<MessageListingWritable>;
     disable_paging: boolean;
 };
 
@@ -1516,6 +1609,10 @@ export type TagListingWritable = {
 
 export type TagNestedWritable = {
     name: string;
+};
+
+export type ThreadDetailsWritable = {
+    subject: string;
 };
 
 export type UploadedFileDetailsWritable = {
@@ -2234,6 +2331,145 @@ export type LevelsRejectCreateResponses = {
      */
     200: unknown;
 };
+
+export type MessagesListData = {
+    body?: never;
+    path?: never;
+    query?: {
+        as_administrator?: boolean;
+        box?: 'inbox' | 'outbox';
+        /**
+         * A page number within the paginated result set.
+         */
+        page?: number;
+        /**
+         * Number of results to return per page.
+         */
+        page_size?: number;
+        /**
+         * A search term.
+         */
+        search?: string;
+        /**
+         * Which field to use when ordering the results.
+         */
+        sort?: string;
+    };
+    url: '/api/messages/';
+};
+
+export type MessagesListResponses = {
+    200: PaginatedMessageListingList;
+};
+
+export type MessagesListResponse = MessagesListResponses[keyof MessagesListResponses];
+
+export type MessagesMarkUnreadCreateData = {
+    body?: never;
+    path: {
+        /**
+         * A unique integer value identifying this message.
+         */
+        id: number;
+    };
+    query?: never;
+    url: '/api/messages/{id}/mark_unread/';
+};
+
+export type MessagesMarkUnreadCreateResponses = {
+    /**
+     * No response body
+     */
+    200: unknown;
+};
+
+export type MessagesQuotaRetrieveData = {
+    body?: never;
+    path?: never;
+    query?: never;
+    url: '/api/messages/quota/';
+};
+
+export type MessagesQuotaRetrieveResponses = {
+    200: MessageQuota;
+};
+
+export type MessagesQuotaRetrieveResponse = MessagesQuotaRetrieveResponses[keyof MessagesQuotaRetrieveResponses];
+
+export type MessagesSettingsRetrieveData = {
+    body?: never;
+    path?: never;
+    query?: never;
+    url: '/api/messages/settings/';
+};
+
+export type MessagesSettingsRetrieveResponses = {
+    200: MessageSettings;
+};
+
+export type MessagesSettingsRetrieveResponse = MessagesSettingsRetrieveResponses[keyof MessagesSettingsRetrieveResponses];
+
+export type MessagesSettingsUpdateData = {
+    body?: MessageSettingsWritable;
+    path?: never;
+    query?: never;
+    url: '/api/messages/settings/';
+};
+
+export type MessagesSettingsUpdateResponses = {
+    200: MessageSettings;
+};
+
+export type MessagesSettingsUpdateResponse = MessagesSettingsUpdateResponses[keyof MessagesSettingsUpdateResponses];
+
+export type MessagesThreadsCreateData = {
+    body: ThreadCreate;
+    path?: never;
+    query?: never;
+    url: '/api/messages/threads/';
+};
+
+export type MessagesThreadsCreateResponses = {
+    201: ThreadDetails;
+};
+
+export type MessagesThreadsCreateResponse = MessagesThreadsCreateResponses[keyof MessagesThreadsCreateResponses];
+
+export type MessagesThreadsRetrieveData = {
+    body?: never;
+    path: {
+        /**
+         * A unique integer value identifying this thread.
+         */
+        id: number;
+    };
+    query?: never;
+    url: '/api/messages/threads/{id}/';
+};
+
+export type MessagesThreadsRetrieveResponses = {
+    200: ThreadDetails;
+};
+
+export type MessagesThreadsRetrieveResponse = MessagesThreadsRetrieveResponses[keyof MessagesThreadsRetrieveResponses];
+
+export type MessagesThreadsReplyCreateData = {
+    body: ThreadReply;
+    path: {
+        /**
+         * A unique integer value identifying this thread.
+         */
+        id: number;
+    };
+    query?: never;
+    url: '/api/messages/threads/{id}/reply/';
+};
+
+export type MessagesThreadsReplyCreateResponses = {
+    201: Message;
+};
+
+export type MessagesThreadsReplyCreateResponse = MessagesThreadsReplyCreateResponses[keyof MessagesThreadsReplyCreateResponses];
 
 export type NewsListData = {
     body?: never;

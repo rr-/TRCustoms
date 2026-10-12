@@ -37,6 +37,8 @@ def filter_queryset_state(qs, states: str | None):
             case "banned":
                 q_obj |= Q(changes__regex=r"\yBanned\y")
                 q_obj |= Q(changes__regex=r"\yUnbanned\y")
+            case "sent":
+                q_obj |= Q(changes__regex=r"\ySent from\y")
             case "confirmed_email":
                 q_obj |= Q(changes__iregex=r"\yConfirmed email\y")
             case _:
