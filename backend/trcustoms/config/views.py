@@ -12,6 +12,7 @@ from rest_framework.views import APIView
 
 from trcustoms.common.models import Country
 from trcustoms.config.serializers import ConfigSerializer
+from trcustoms.direct_messages.logic import get_administrator
 from trcustoms.direct_messages.models import Message
 from trcustoms.engines.models import Engine
 from trcustoms.genres.models import Genre
@@ -126,6 +127,7 @@ def get_config_data():
         ),
         global_message=global_message,
         server_date=timezone.localdate(),
+        administrator=get_administrator(),
     )
     return ConfigSerializer(instance=context).data
 

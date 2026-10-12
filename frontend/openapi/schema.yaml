@@ -2831,7 +2831,12 @@ components:
         server_date:
           type: string
           format: date
+        administrator:
+          allOf:
+          - $ref: '#/components/schemas/UserNested'
+          nullable: true
       required:
+      - administrator
       - countries
       - difficulties
       - durations

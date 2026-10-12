@@ -53,6 +53,7 @@ const config: Config = {
   },
   global_message: null,
   server_date: "2024-01-01",
+  administrator: null,
 };
 
 test("getMarkdownLimit returns the configured value for a capped field", () => {

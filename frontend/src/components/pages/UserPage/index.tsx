@@ -1,5 +1,6 @@
 import styles from "./index.module.css";
 import { useQuery } from "@tanstack/react-query";
+import { Navigate } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import { Loader } from "src/components/common/Loader";
@@ -19,6 +20,7 @@ import type { UserDetails } from "src/services/UserService";
 import { UserPermission } from "src/services/UserService";
 import { UserService } from "src/services/UserService";
 import { queryKeys } from "src/services/queryKeys";
+import { useConfig } from "src/stores/config";
 import { usePageMetadata } from "src/stores/pageMetadata";
 import { useScrollStore } from "src/stores/scroll";
 import { useUser } from "src/stores/user";
@@ -31,6 +33,7 @@ const UserPage = ({ tabName }: UserPageProps) => {
   const navigate = useNavigate();
   const { userId = "" } = useParams();
   const loggedInUser = useUser().user;
+  const { config } = useConfig();
   const isLoggedIn = +userId === loggedInUser?.id;
   const { setShouldScroll } = useScrollStore((state) => state);
 
@@ -50,6 +53,10 @@ const UserPage = ({ tabName }: UserPageProps) => {
     }),
     [userResult],
   );
+
+  if (config.administrator && +userId === config.administrator.id) {
+    return <Navigate to="/administration" replace />;
+  }
 
   if (userResult.error) {
     return <p>{userResult.error.message}</p>;

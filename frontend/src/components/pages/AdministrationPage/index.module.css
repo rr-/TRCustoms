@@ -1,0 +1,7 @@
+.logo {
+  display: flex;
+  justify-content: center;
+  height: 14rem;
+  padding: 1rem 0;
+  color: var(--fg-color);
+}

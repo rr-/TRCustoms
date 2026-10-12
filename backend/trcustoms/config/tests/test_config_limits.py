@@ -7,6 +7,7 @@ from trcustoms.levels.models import Level
 from trcustoms.news.models import News
 from trcustoms.reviews.models import Review
 from trcustoms.users.models import User
+from trcustoms.users.tests.factories import UserFactory
 from trcustoms.walkthroughs.models import Walkthrough
 
 
@@ -24,3 +25,13 @@ def test_config_exposes_markdown_field_limits(api_client: APIClient) -> None:
         "walkthrough_text": Walkthrough._meta.get_field("text").max_length,
         "message_text": Message._meta.get_field("text").max_length,
     }
+
+
+@pytest.mark.django_db
+def test_config_exposes_administrator(api_client: APIClient) -> None:
+    administrator = UserFactory(username="Administration")
+
+    data = api_client.get("/api/config/").json()
+
+    assert data["administrator"]["id"] == administrator.id
+    assert data["administrator"]["username"] == "Administration"

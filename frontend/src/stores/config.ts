@@ -48,6 +48,7 @@ const defaultConfig: Config = {
   },
   global_message: null,
   server_date: new Date().toISOString().slice(0, 10),
+  administrator: null,
 };
 
 interface ConfigState {

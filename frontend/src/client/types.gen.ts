@@ -54,6 +54,7 @@ export type Config = {
     stats: GlobalStats;
     global_message?: string | null;
     server_date: string;
+    administrator: UserNested | null;
 };
 
 export type CountryListing = {
@@ -1159,6 +1160,7 @@ export type ConfigWritable = {
     stats: GlobalStatsWritable;
     global_message?: string | null;
     server_date: string;
+    administrator: UserNestedWritable | null;
 };
 
 export type EngineListingWritable = {

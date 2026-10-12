@@ -12,6 +12,7 @@ from trcustoms.levels.serializers import (
 )
 from trcustoms.ratings.serializers import RatingTemplateQuestionSerializer
 from trcustoms.tags.serializers import TagListingSerializer
+from trcustoms.users.serializers import UserNestedSerializer
 
 
 class GlobalLimitsSerializer(serializers.Serializer):
@@ -66,3 +67,4 @@ class ConfigSerializer(serializers.Serializer):
     stats = GlobalStatsSerializer()
     global_message = serializers.CharField(allow_null=True, required=False)
     server_date = serializers.DateField()
+    administrator = UserNestedSerializer(allow_null=True)

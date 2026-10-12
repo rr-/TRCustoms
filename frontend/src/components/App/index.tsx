@@ -96,6 +96,10 @@ const NewsEditPage = lazyPage(
   () => import("src/components/pages/NewsEditPage"),
   "NewsEditPage",
 );
+const AdministrationPage = lazyPage(
+  () => import("src/components/pages/AdministrationPage"),
+  "AdministrationPage",
+);
 const MessagesPage = lazyPage(
   () => import("src/components/pages/MessagesPage"),
   "MessagesPage",
@@ -276,6 +280,7 @@ const AppRoutes = () => {
           element={<PasswordResetFinishPage />}
         />
         <Route path="/settings" element={<SettingsPage />} />
+        <Route path="/administration" element={<AdministrationPage />} />
         <Route path="/messages" element={<MessagesPage />} />
         <Route path="/messages/:tabName" element={<MessagesPage />} />
         <Route path="/messages/threads/:threadId" element={<ThreadPage />} />
