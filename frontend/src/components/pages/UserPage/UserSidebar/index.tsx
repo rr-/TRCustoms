@@ -1,9 +1,11 @@
 import styles from "./index.module.css";
 import { AwardList } from "src/components/common/AwardList";
 import { Button } from "src/components/common/Button";
+import { ButtonVariant } from "src/components/common/Button";
 import { DefinitionItemGroup } from "src/components/common/DefinitionList";
 import { DefinitionItem } from "src/components/common/DefinitionList";
 import { DefinitionList } from "src/components/common/DefinitionList";
+import { hasPermission } from "src/components/common/PermissionGuard";
 import { SectionHeader } from "src/components/common/Section";
 import { SidebarBox } from "src/components/common/SidebarBox";
 import { UserPictureMode } from "src/components/common/UserPicture";
@@ -11,7 +13,10 @@ import { UserPicture } from "src/components/common/UserPicture";
 import { VerticalList } from "src/components/common/VerticalList";
 import { IconGlobe } from "src/components/icons";
 import { IconHeart } from "src/components/icons";
+import { IconMail } from "src/components/icons";
 import type { UserDetails } from "src/services/UserService";
+import { UserPermission } from "src/services/UserService";
+import { useUser } from "src/stores/user";
 import { formatDate } from "src/utils/string";
 
 interface UserSidebarProps {
@@ -19,10 +24,27 @@ interface UserSidebarProps {
 }
 
 const UserSidebar = ({ user }: UserSidebarProps) => {
+  const { user: loggedInUser } = useUser();
+  const isOtherUser = !!loggedInUser && loggedInUser.id !== user.id;
+  const canMessage =
+    user.can_message ||
+    (isOtherUser &&
+      hasPermission(loggedInUser, UserPermission.messageAsAdministrator));
+
   const header = (
     <VerticalList gap="big">
       <VerticalList>
         <UserPicture user={user} mode={UserPictureMode.Full} />
+
+        {user.is_active && canMessage && (
+          <Button
+            variant={ButtonVariant.Important}
+            to={`/users/${user.id}/message`}
+            icon={<IconMail />}
+          >
+            Send message
+          </Button>
+        )}
 
         {user.website_url && (
           <Button to={user.website_url} icon={<IconGlobe />}>

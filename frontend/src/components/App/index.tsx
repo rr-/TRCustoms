@@ -96,6 +96,10 @@ const NewsEditPage = lazyPage(
   () => import("src/components/pages/NewsEditPage"),
   "NewsEditPage",
 );
+const MessageSendPage = lazyPage(
+  () => import("src/components/pages/MessageSendPage"),
+  "MessageSendPage",
+);
 const NewsListPage = lazyPage(
   () => import("src/components/pages/NewsListPage"),
   "NewsListPage",
@@ -286,6 +290,7 @@ const AppRoutes = () => {
           element={<UserPage tabName="walkthroughs" />}
         />
         <Route path="/users/:userId/edit" element={<UserEditPage />} />
+        <Route path="/users/:userId/message" element={<MessageSendPage />} />
         <Route
           path="/email-confirmation/:token"
           element={<EmailConfirmationPage />}

@@ -54,6 +54,12 @@ const queryKeys = {
     ],
   },
   users: entity("users"),
+  messages: {
+    ...entity("messages"),
+    thread: (id: unknown): Key => ["messages", "thread", id],
+    quota: (): Key => ["messages", "quota"],
+    settings: (): Key => ["messages", "settings"],
+  },
   news: entity("news"),
   events: entity("events"),
   tags: {

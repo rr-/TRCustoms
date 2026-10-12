@@ -16,6 +16,7 @@ const limits: Config["limits"] = {
     user_bio: null,
     news_text: null,
     walkthrough_text: null,
+    message_text: null,
   },
   min_tags: 0,
   max_tags: 10,

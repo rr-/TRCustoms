@@ -22,6 +22,7 @@ const config: Config = {
       user_bio: 5000,
       news_text: null,
       walkthrough_text: null,
+      message_text: null,
     },
     min_tags: 0,
     max_tags: 0,

@@ -48,6 +48,7 @@ enum UserPermission {
   deleteWalkthroughs = "delete_walkthroughs",
   editPlaylists = "edit_playlists",
   viewPendingLevels = "view_pending_levels",
+  messageAsAdministrator = "message_as_administrator",
 }
 
 interface UserBasic {
