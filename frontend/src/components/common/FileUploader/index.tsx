@@ -12,6 +12,7 @@ interface FileUploaderProps {
   uploadType: UploadType;
   allowMultiple?: boolean | undefined;
   disableProgressbar?: boolean | undefined;
+  showCompleted?: boolean | undefined;
   onUploadFinish?: ((uploadedFiles: UploadedFile[]) => void) | undefined;
   onUploadError?: ((error: unknown) => void) | undefined;
   onUploadPercentChange?: ((percent: number | null) => void) | undefined;
@@ -22,6 +23,7 @@ const FileUploader = ({
   uploadType,
   allowMultiple,
   disableProgressbar,
+  showCompleted,
   label,
   onUploadFinish,
   onUploadError,
@@ -53,7 +55,11 @@ const FileUploader = ({
               const fraction = fileSize ? progressEvent.loaded / fileSize : 0;
               const clampedFraction = Math.min(1, fraction);
               setPercentCompleted(
-                ((uploadedFiles.length + clampedFraction) * 100) / files.length,
+                Math.min(
+                  99,
+                  ((uploadedFiles.length + clampedFraction) * 100) /
+                    files.length,
+                ),
               );
             };
 
@@ -169,6 +175,12 @@ const FileUploader = ({
               percentCompleted={percentCompleted}
             />
           </>
+        ) : showCompleted && !disableProgressbar ? (
+          <ProgressBar
+            title="Upload is completed."
+            percentCompleted={100}
+            complete={true}
+          />
         ) : label ? (
           label
         ) : allowMultiple ? (

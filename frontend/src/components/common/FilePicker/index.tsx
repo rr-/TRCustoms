@@ -40,10 +40,12 @@ const FilePicker = ({
     number | null
   >(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [isUploadCompleted, setIsUploadCompleted] = useState(false);
 
   const clearFile = useCallback(
     (fileId: number) => {
       setErrorMessage(null);
+      setIsUploadCompleted(false);
       const newFileIds = [...currentFileIds.filter((id) => id !== fileId)];
       setCurrentFileIds(newFileIds);
       onChange?.(newFileIds);
@@ -66,6 +68,7 @@ const FilePicker = ({
   const handleUploadError = useCallback(
     (error: unknown) => {
       setErrorMessage(extractErrorMessage(error));
+      setIsUploadCompleted(false);
     },
     [setErrorMessage],
   );
@@ -77,6 +80,7 @@ const FilePicker = ({
         ...uploadedFiles.map((uploadedFile) => uploadedFile.id),
       ];
       setCurrentFileIds(newFileIds);
+      setIsUploadCompleted(true);
       onChange?.(newFileIds);
     },
     [allowMultiple, onChange, currentFileIds],
@@ -87,6 +91,7 @@ const FilePicker = ({
       <FileUploader
         uploadType={uploadType}
         allowMultiple={allowMultiple}
+        showCompleted={isUploadCompleted}
         onUploadFinish={handleUploadFinish}
         onUploadError={handleUploadError}
         label={label}
