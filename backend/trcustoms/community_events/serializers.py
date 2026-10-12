@@ -33,12 +33,12 @@ class EventListingSerializer(serializers.ModelSerializer):
         ]
 
     def get_level_count(self, instance: Event) -> int:
-        # Use annotated count of approved levels if present,
-        # otherwise count related approved levels
+        # Use annotated count of public levels if present,
+        # otherwise count related public levels
         return getattr(
             instance,
             "level_count",
-            instance.levels.filter(is_approved=True).count(),
+            instance.levels.public().count(),
         )
 
 
@@ -58,6 +58,6 @@ class EventDetailsSerializer(EventListingSerializer):
 
     @extend_schema_field(LevelListingSerializer(many=True))
     def get_levels(self, instance: Event) -> list[dict]:
-        """Only include levels that have been approved (exclude pending)."""
-        qs = instance.levels.filter(is_approved=True)
+        """Only include public levels (exclude pending and scheduled)."""
+        qs = instance.levels.public()
         return LevelListingSerializer(qs, many=True, context=self.context).data

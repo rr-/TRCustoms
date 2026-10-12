@@ -1,5 +1,8 @@
+from datetime import timedelta
+
 import pytest
 from django.urls import reverse
+from django.utils import timezone
 
 from trcustoms.community_events.tests.factories import (
     EventFactory,
@@ -65,3 +68,16 @@ class TestEventViews:
         ids = [lvl.get("id") for lvl in data.get("levels", [])]
         assert lvl1.id in ids
         assert lvl2.id not in ids
+
+    def test_detail_excludes_scheduled_levels(self, api_client):
+        released = LevelFactory()
+        scheduled = LevelFactory(
+            release_date=timezone.localdate() + timedelta(days=1)
+        )
+        event = EventFactory(levels=[released, scheduled])
+        url = reverse("event-detail", kwargs={"pk": event.id})
+        response = api_client.get(url)
+        assert response.status_code == 200
+        data = response.json()
+        assert [lvl["id"] for lvl in data["levels"]] == [released.id]
+        assert data["level_count"] == 1

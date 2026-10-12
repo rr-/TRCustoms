@@ -1,5 +1,6 @@
 from django.db import models
 from django.db.models import Count, Q
+from django.utils import timezone
 
 from trcustoms.audit_logs import registry
 from trcustoms.common.models import DatesInfo
@@ -10,9 +11,15 @@ from trcustoms.users.models import User
 
 class EventManager(models.Manager):
     def with_counts(self):
-        # Annotate with count of approved levels only
+        # Annotate with count of public levels only
         return self.annotate(
-            level_count=Count("levels", filter=Q(levels__is_approved=True))
+            level_count=Count(
+                "levels",
+                filter=Q(
+                    levels__is_approved=True,
+                    levels__release_date__lte=timezone.localdate(),
+                ),
+            )
         )
 
 
