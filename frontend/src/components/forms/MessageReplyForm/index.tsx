@@ -54,7 +54,7 @@ const MessageReplyForm = ({
             allowColors={false}
             required={true}
             label={`Reply to ${thread.other_user?.username ?? "a deleted user"}${
-              thread.replies_as_administrator ? ' as "Administrator"' : ""
+              thread.replies_as_administrator ? ' as "Administration"' : ""
             }`}
             name="text"
             markdownLimitKey="message_text"

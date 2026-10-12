@@ -98,7 +98,7 @@ class User(AbstractUser):
             ),
             (
                 UserPermission.MESSAGE_AS_ADMINISTRATOR.value,
-                "Can send and read messages as Administrator",
+                "Can send and read messages as Administration",
             ),
         ]
 

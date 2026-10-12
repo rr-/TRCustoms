@@ -70,13 +70,13 @@ const MessagesPage = () => {
   if (hasPermission(user, UserPermission.messageAsAdministrator)) {
     tabs.push(
       {
-        name: "administrator-inbox",
-        label: "Administrator inbox",
+        name: "administration-inbox",
+        label: "Administration inbox",
         content: <MessageList box={MessageBox.Inbox} asAdministrator={true} />,
       },
       {
-        name: "administrator-outbox",
-        label: "Administrator outbox",
+        name: "administration-outbox",
+        label: "Administration outbox",
         content: <MessageList box={MessageBox.Outbox} asAdministrator={true} />,
       },
     );

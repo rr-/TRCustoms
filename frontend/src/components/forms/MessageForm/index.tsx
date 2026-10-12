@@ -112,7 +112,7 @@ const MessageForm = ({ receiver, onGoBack, onSubmit }: MessageFormProps) => {
           {canSendAsAdministrator && (
             <CheckboxField
               readonly={mustSendAsAdministrator}
-              label='Send as "Administrator" user'
+              label='Send as "Administration"'
               name="sendAsAdministrator"
             />
           )}

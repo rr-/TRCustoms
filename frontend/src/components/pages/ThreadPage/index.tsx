@@ -109,7 +109,7 @@ const ThreadPage = () => {
   const handleMarkUnread = async () => {
     navigate(
       thread.replies_as_administrator
-        ? "/messages/administrator-inbox"
+        ? "/messages/administration-inbox"
         : "/messages",
     );
     await MessageService.markUnread(focus.id);
@@ -129,7 +129,7 @@ const ThreadPage = () => {
           ) : (
             "a deleted user"
           )}
-          {thread.replies_as_administrator && <> (as Administrator)</>}
+          {thread.replies_as_administrator && <> (as Administration)</>}
         </>
       }
     >

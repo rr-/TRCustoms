@@ -46,7 +46,7 @@ def list_messages(api_client: APIClient, **params) -> list[dict]:
 
 
 def administrator() -> User:
-    return UserFactory(username="Administrator")
+    return UserFactory(username="Administration")
 
 
 @pytest.mark.django_db
@@ -254,7 +254,7 @@ def test_start_thread_as_administrator(staff_api_client: APIClient) -> None:
     assert resp.json()["replies_as_administrator"] is True
     assert AuditLog.objects.filter(
         change_author=staff_api_client.user,
-        changes=["Sent from Administrator: hello"],
+        changes=["Sent from Administration: hello"],
     ).exists()
 
 

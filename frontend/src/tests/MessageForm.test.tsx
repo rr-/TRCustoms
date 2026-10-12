@@ -77,7 +77,7 @@ describe("MessageForm", () => {
     expect(
       await screen.findByText("New conversations today: 4/5 remaining"),
     ).toBeInTheDocument();
-    expect(screen.queryByLabelText(/Administrator/)).not.toBeInTheDocument();
+    expect(screen.queryByLabelText(/Administration/)).not.toBeInTheDocument();
 
     await userEvent.type(screen.getByLabelText(/Subject/), "Crash");
     await userEvent.type(screen.getByLabelText(/Message/), "hello there");
@@ -92,12 +92,12 @@ describe("MessageForm", () => {
     expect(onSubmit).toHaveBeenCalledWith(thread);
   });
 
-  test("lets moderators send as Administrator", async () => {
+  test("lets moderators send as Administration", async () => {
     setUser(["message_as_administrator"]);
     render(<MessageForm receiver={receiver} />, { wrapper });
 
     expect(
-      screen.getByLabelText('Send as "Administrator" user'),
+      screen.getByLabelText('Send as "Administration"'),
     ).toBeInTheDocument();
   });
 

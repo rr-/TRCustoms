@@ -89,7 +89,7 @@ class ThreadCreateSerializer(serializers.Serializer):
                 raise serializers.ValidationError(
                     {
                         "send_as_administrator": (
-                            "You cannot send messages as Administrator."
+                            "You cannot send messages as Administration."
                         )
                     }
                 )
@@ -98,13 +98,13 @@ class ThreadCreateSerializer(serializers.Serializer):
                 raise serializers.ValidationError(
                     {
                         "send_as_administrator": (
-                            "The Administrator account does not exist."
+                            "The Administration account does not exist."
                         )
                     }
                 )
             if receiver == administrator:
                 raise serializers.ValidationError(
-                    {"receiver_id": "Administrator cannot message itself."}
+                    {"receiver_id": "Administration cannot message itself."}
                 )
             data["sender"] = administrator
             return data

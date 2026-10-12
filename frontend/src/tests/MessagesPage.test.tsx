@@ -57,7 +57,7 @@ describe("MessagesPage", () => {
     expect(search).toHaveBeenCalledWith(
       expect.objectContaining({ box: "inbox", asAdministrator: false }),
     );
-    expect(screen.queryByText("Administrator inbox")).not.toBeInTheDocument();
+    expect(screen.queryByText("Administration inbox")).not.toBeInTheDocument();
   });
 
   test("shows the receiver in the outbox", async () => {
@@ -75,12 +75,12 @@ describe("MessagesPage", () => {
     );
   });
 
-  test("shows the Administrator mailbox to moderators", async () => {
+  test("shows the Administration mailbox to moderators", async () => {
     const search = mockMessages();
 
     renderRoute(<MessagesPage />, {
       path: "/messages/:tabName",
-      entry: "/messages/administrator-inbox",
+      entry: "/messages/administration-inbox",
       user: {
         id: 1,
         username: "tester",
