@@ -42,9 +42,12 @@ x-base-trcustoms-backend: &base-trcustoms-backend
   networks:
     - trcustoms
   depends_on:
-    - trcustoms-redis
-    - trcustoms-db
-    - trcustoms-mailhog
+    trcustoms-redis:
+      condition: service_started
+    trcustoms-db:
+      condition: service_healthy
+    trcustoms-mailhog:
+      condition: service_started
 
 services:
   trcustoms:
@@ -93,6 +96,13 @@ services:
       - ./backend/volumes/pgdata:/var/lib/postgresql/data
     networks:
       - trcustoms
+    healthcheck:
+      test:
+        - CMD-SHELL
+        - pg_isready -h 127.0.0.1 -U "$$POSTGRES_USER" -d "$$POSTGRES_DB"
+      interval: 2s
+      timeout: 5s
+      retries: 30
 
   trcustoms-redis:
     <<: *base-trcustoms
