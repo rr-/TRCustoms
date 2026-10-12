@@ -20,6 +20,7 @@ import { DurationField } from "src/components/forms/fields/DurationField";
 import { EngineField } from "src/components/forms/fields/EngineField";
 import { ExternalLinksField } from "src/components/forms/fields/ExternalLinksField";
 import { GenresField } from "src/components/forms/fields/GenresField";
+import { ReleaseDateField } from "src/components/forms/fields/ReleaseDateField";
 import { TagsField } from "src/components/forms/fields/TagsField";
 import { TextAreaField } from "src/components/forms/fields/TextAreaField";
 import { TextField } from "src/components/forms/fields/TextField";
@@ -57,6 +58,10 @@ const LevelForm = ({ level, onGoBack, onSubmit }: LevelFormProps) => {
   const queryClient = useQueryClient();
   const { config } = useConfig();
 
+  const isReleased =
+    !!level &&
+    (!level.release_date || level.release_date <= config.server_date);
+
   const initialValues: LevelFormValues = {
     name: level?.name || "",
     description: level?.description || "",
@@ -74,6 +79,9 @@ const LevelForm = ({ level, onGoBack, onSubmit }: LevelFormProps) => {
           .map((screenshot) => (screenshot.file as UploadedFile).id)
       : [],
     file_id: undefined,
+    release_date: isReleased
+      ? undefined
+      : (level?.release_date ?? config.server_date),
   };
 
   const form = useForm<LevelFormValues>({
@@ -163,6 +171,14 @@ const LevelForm = ({ level, onGoBack, onSubmit }: LevelFormProps) => {
             name="difficulty_id"
           />
           <DurationField required={true} label="Duration" name="duration_id" />
+          {!isReleased && (
+            <ReleaseDateField
+              required={true}
+              label="Release date"
+              name="release_date"
+              extraInformation="The level stays hidden from the public until both this date comes and a moderator approves it."
+            />
+          )}
         </FormGridFieldSet>
 
         <FormGridFieldSet title="Synopsis">

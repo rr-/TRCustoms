@@ -23,6 +23,7 @@ interface LevelFormValues {
   cover_id?: number;
   screenshot_ids: number[];
   file_id?: number;
+  release_date?: string;
 }
 
 const validateRange = <T>(
@@ -63,6 +64,7 @@ const buildSchema = (limits: Config["limits"], isEdit: boolean) =>
       cover_id: z.number().optional(),
       screenshot_ids: z.array(z.number()),
       file_id: z.number().optional(),
+      release_date: z.string().optional(),
     })
     .superRefine((values, ctx) => {
       // One error per field, first rule wins, mirroring the old resolver.
@@ -179,6 +181,7 @@ const buildLevelPayload = (values: LevelFormValues) => ({
   cover_id: values.cover_id,
   screenshot_ids: values.screenshot_ids,
   file_id: values.file_id,
+  release_date: values.release_date,
 });
 
 export type { LevelFormValues };

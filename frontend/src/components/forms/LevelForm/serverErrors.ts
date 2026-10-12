@@ -24,6 +24,7 @@ const applyLevelServerErrors = (
     cover_id: data.cover_id,
     screenshot_ids: data.screenshot_ids,
     file_id: data.file_id,
+    release_date: data.release_date,
   };
   let applied = false;
   for (const [field, value] of Object.entries(fieldErrors)) {
