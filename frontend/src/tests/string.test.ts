@@ -1,6 +1,7 @@
 import { formatDate } from "src/utils/string";
 import { formatFileSize } from "src/utils/string";
 import { makeSentence } from "src/utils/string";
+import { markdownToPlainText } from "src/utils/string";
 import { pluralize } from "src/utils/string";
 import { reprBigNumber } from "src/utils/string";
 import { reprPercentage } from "src/utils/string";
@@ -76,5 +77,15 @@ describe("formatDate", () => {
 
   test("keeps date-only values on their calendar day", () => {
     expect(formatDate("2026-10-15")).toBe("15 Oct 2026");
+  });
+});
+
+describe("markdownToPlainText", () => {
+  test("flattens markdown into a single line", () => {
+    expect(
+      markdownToPlainText(
+        "Hi **there**!\n\n- see [the save](https://example.com/s.zip)\n- ![pic](x.png) `code`",
+      ),
+    ).toBe("Hi there! see the save pic code");
   });
 });

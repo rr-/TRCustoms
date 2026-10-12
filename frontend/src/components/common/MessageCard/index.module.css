@@ -1,0 +1,29 @@
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 1rem;
+  background: var(--box-content-bg-color);
+}
+
+.header {
+  background: var(--box-header-bg-color);
+  padding: 0.5rem 1rem;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+}
+
+.text {
+  padding: 1rem;
+  overflow-wrap: anywhere;
+}
+
+.footer {
+  padding: 0 1rem 0.5rem 1rem;
+}
+
+.trail {
+  padding: 0 1rem 0.5rem 1rem;
+}

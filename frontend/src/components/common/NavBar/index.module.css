@@ -105,3 +105,12 @@
 .userPic {
   width: 2rem;
 }
+
+.unreadDot {
+  display: inline-block;
+  width: 0.5em;
+  height: 0.5em;
+  margin-left: 0.35em;
+  vertical-align: middle;
+  background: var(--failure-fg-color);
+}

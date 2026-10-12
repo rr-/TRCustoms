@@ -40,6 +40,7 @@ export * from "src/components/icons/IconMySubmissions";
 export * from "src/components/icons/IconPencil";
 export * from "src/components/icons/IconPlay";
 export * from "src/components/icons/IconReject";
+export * from "src/components/icons/IconReply";
 export * from "src/components/icons/IconSearch";
 export * from "src/components/icons/IconSortAscending";
 export * from "src/components/icons/IconSortDescending";

@@ -1,4 +1,5 @@
 import styles from "./index.module.css";
+import { useEffect } from "react";
 import type { LinkProps, NavLinkProps } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { NavLink } from "react-router-dom";
@@ -49,8 +50,19 @@ const LevelsNavLink = ({ children, to, ...rest }: LinkProps) => {
   );
 };
 
+const UNREAD_POLL_INTERVAL = 5 * 60 * 1000;
+
 const NavBar = () => {
-  const { user } = useUser();
+  const { user, fetchUser } = useUser();
+  const isLoggedIn = !!user;
+
+  useEffect(() => {
+    if (!isLoggedIn) {
+      return;
+    }
+    const interval = setInterval(fetchUser, UNREAD_POLL_INTERVAL);
+    return () => clearInterval(interval);
+  }, [isLoggedIn, fetchUser]);
 
   return (
     <div className={appStyles.mainContainer}>
@@ -72,6 +84,18 @@ const NavBar = () => {
                     <UserPicture user={user} />
                     {user.username}
                   </Link>
+                </li>
+                <li className={styles.listItem}>
+                  <MyNavLink to={"/messages"}>
+                    Messages
+                    {user.has_unread_messages && (
+                      <span
+                        className={styles.unreadDot}
+                        role="status"
+                        aria-label="New messages"
+                      />
+                    )}
+                  </MyNavLink>
                 </li>
                 <li className={styles.listItem}>
                   <Link to={"/logout"}>Log out</Link>

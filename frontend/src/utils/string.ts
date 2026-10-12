@@ -81,6 +81,14 @@ const pluralize = (noun: string, count: number) => {
   return count === 1 ? noun : `${noun}s`;
 };
 
+const markdownToPlainText = (input: string): string =>
+  input
+    .replace(/!?\[([^\]]*)\]\([^)]*\)/g, "$1")
+    .replace(/[*_`~#>|]/g, "")
+    .replace(/^\s*([-+]|\d+\.)\s+/gm, "")
+    .replace(/\s+/g, " ")
+    .trim();
+
 export {
   EMPTY_INPUT_PLACEHOLDER,
   pluralize,
@@ -89,6 +97,7 @@ export {
   formatDate,
   formatDateTime,
   formatFileSize,
+  markdownToPlainText,
   reprBigNumber,
   reprPercentage,
 };
