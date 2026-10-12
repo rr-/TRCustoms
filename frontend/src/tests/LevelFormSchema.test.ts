@@ -28,6 +28,7 @@ const limits: Config["limits"] = {
   min_authors: 1,
   max_authors: 25,
   max_tag_length: 20,
+  max_release_delay_days: 7,
 };
 
 const validValues = {

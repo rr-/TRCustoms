@@ -29,6 +29,7 @@ const defaultConfig: Config = {
     min_authors: 0,
     max_authors: 0,
     max_tag_length: 0,
+    max_release_delay_days: 0,
   },
   stats: {
     total_levels: 0,
@@ -45,6 +46,7 @@ const defaultConfig: Config = {
     },
   },
   global_message: null,
+  server_date: new Date().toISOString().slice(0, 10),
 };
 
 interface ConfigState {

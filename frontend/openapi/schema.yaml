@@ -2614,6 +2614,9 @@ components:
         global_message:
           type: string
           nullable: true
+        server_date:
+          type: string
+          format: date
       required:
       - countries
       - difficulties
@@ -2622,6 +2625,7 @@ components:
       - genres
       - limits
       - rating_questions
+      - server_date
       - stats
       - tags
     CountryListing:
@@ -2925,6 +2929,8 @@ components:
           type: integer
         max_tag_length:
           type: integer
+        max_release_delay_days:
+          type: integer
         markdown_fields:
           type: object
           additionalProperties:
@@ -2934,6 +2940,7 @@ components:
       - markdown_fields
       - max_authors
       - max_genres
+      - max_release_delay_days
       - max_screenshots
       - max_showcase_links
       - max_tag_length
@@ -3061,6 +3068,9 @@ components:
           format: date-time
           readOnly: true
           nullable: true
+        release_date:
+          type: string
+          format: date
         cover:
           allOf:
           - $ref: '#/components/schemas/UploadedFileNested'
@@ -3383,6 +3393,9 @@ components:
           format: date-time
           readOnly: true
           nullable: true
+        release_date:
+          type: string
+          format: date
         cover:
           allOf:
           - $ref: '#/components/schemas/UploadedFileNested'
@@ -4106,6 +4119,9 @@ components:
           format: date-time
           readOnly: true
           nullable: true
+        release_date:
+          type: string
+          format: date
         cover:
           allOf:
           - $ref: '#/components/schemas/UploadedFileNested'

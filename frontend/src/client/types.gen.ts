@@ -53,6 +53,7 @@ export type Config = {
     limits: GlobalLimits;
     stats: GlobalStats;
     global_message?: string | null;
+    server_date: string;
 };
 
 export type CountryListing = {
@@ -155,6 +156,7 @@ export type GlobalLimits = {
     min_authors: number;
     max_authors: number;
     max_tag_length: number;
+    max_release_delay_days: number;
     markdown_fields: {
         [key: string]: number | null;
     };
@@ -189,6 +191,7 @@ export type LevelDetails = {
     readonly authors: Array<UserNested>;
     uploader: UserNested;
     readonly created: string | null;
+    release_date?: string;
     cover: UploadedFileNested;
     readonly screenshots: Array<LevelScreenshot>;
     external_links?: Array<LevelExternalLink>;
@@ -259,6 +262,7 @@ export type LevelListing = {
     readonly authors: Array<UserNested>;
     uploader: UserNested;
     readonly created: string | null;
+    release_date?: string;
     cover: UploadedFileNested;
     readonly screenshots: Array<LevelScreenshot>;
     external_links?: Array<LevelExternalLink>;
@@ -473,6 +477,7 @@ export type PatchedLevelDetails = {
     readonly authors?: Array<UserNested>;
     uploader?: UserNested;
     readonly created?: string | null;
+    release_date?: string;
     cover?: UploadedFileNested;
     readonly screenshots?: Array<LevelScreenshot>;
     external_links?: Array<LevelExternalLink>;
@@ -1082,6 +1087,7 @@ export type ConfigWritable = {
     limits: GlobalLimits;
     stats: GlobalStatsWritable;
     global_message?: string | null;
+    server_date: string;
 };
 
 export type EngineListingWritable = {
@@ -1144,6 +1150,7 @@ export type LevelDetailsWritable = {
     genre_ids: Array<number>;
     tag_ids: Array<number>;
     author_ids: Array<number>;
+    release_date?: string;
     external_links?: Array<LevelExternalLinkWritable>;
     cover_id: number;
     screenshot_ids: Array<number>;
@@ -1188,6 +1195,7 @@ export type LevelListingWritable = {
     genre_ids: Array<number>;
     tag_ids: Array<number>;
     author_ids: Array<number>;
+    release_date?: string;
     external_links?: Array<LevelExternalLinkWritable>;
 };
 
@@ -1361,6 +1369,7 @@ export type PatchedLevelDetailsWritable = {
     genre_ids?: Array<number>;
     tag_ids?: Array<number>;
     author_ids?: Array<number>;
+    release_date?: string;
     external_links?: Array<LevelExternalLinkWritable>;
     cover_id?: number;
     screenshot_ids?: Array<number>;

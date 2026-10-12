@@ -265,6 +265,7 @@ MIN_SHOWCASE_LINKS = 0
 MAX_SHOWCASE_LINKS = 2
 MIN_AUTHORS = 1
 MAX_AUTHORS = 25
+MAX_RELEASE_DELAY_DAYS = 7
 MAX_TAG_LENGTH = 20
 
 # Fingerprint expiration for download counter (in timedelta hours)

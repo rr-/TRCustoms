@@ -34,6 +34,7 @@ const config: Config = {
     min_authors: 0,
     max_authors: 0,
     max_tag_length: 0,
+    max_release_delay_days: 0,
   },
   stats: {
     total_levels: 0,
@@ -50,6 +51,7 @@ const config: Config = {
     },
   },
   global_message: null,
+  server_date: "2024-01-01",
 };
 
 test("getMarkdownLimit returns the configured value for a capped field", () => {

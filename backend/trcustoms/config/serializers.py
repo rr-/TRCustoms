@@ -26,6 +26,7 @@ class GlobalLimitsSerializer(serializers.Serializer):
     min_authors = serializers.IntegerField()
     max_authors = serializers.IntegerField()
     max_tag_length = serializers.IntegerField()
+    max_release_delay_days = serializers.IntegerField()
     markdown_fields = serializers.DictField(
         child=serializers.IntegerField(allow_null=True)
     )
@@ -64,3 +65,4 @@ class ConfigSerializer(serializers.Serializer):
     limits = GlobalLimitsSerializer()
     stats = GlobalStatsSerializer()
     global_message = serializers.CharField(allow_null=True, required=False)
+    server_date = serializers.DateField()

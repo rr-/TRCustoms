@@ -1,5 +1,6 @@
 import pytest
 from django.core import mail
+from django.utils import timezone
 from rest_framework import status
 from rest_framework.test import APIClient
 
@@ -115,6 +116,7 @@ def test_level_creation_success(auth_api_client: APIClient) -> None:
     assert mail.outbox[0].subject == "[TRCustoms] Level submitted"
     assert level.uploader == auth_api_client.user
     assert level.last_user_content_updated is None
+    assert level.release_date == timezone.localdate()
 
 
 @pytest.mark.django_db

@@ -3,6 +3,7 @@ from typing import Any
 from django.conf import settings
 from django.core.cache import cache
 from django.db.models import Count, Sum
+from django.utils import timezone
 from drf_spectacular.utils import extend_schema
 from rest_framework import generics, status
 from rest_framework.permissions import AllowAny
@@ -103,6 +104,7 @@ def get_config_data():
             min_authors=settings.MIN_AUTHORS,
             max_authors=settings.MAX_AUTHORS,
             max_tag_length=settings.MAX_TAG_LENGTH,
+            max_release_delay_days=settings.MAX_RELEASE_DELAY_DAYS,
         ),
         stats=dict(
             total_levels=Level.objects.public().count(),
@@ -121,6 +123,7 @@ def get_config_data():
             ratings=get_rating_stats(),
         ),
         global_message=global_message,
+        server_date=timezone.localdate(),
     )
     return ConfigSerializer(instance=context).data
 
@@ -144,7 +147,10 @@ class ConfigView(APIView):
     @extend_schema(responses=ConfigSerializer)
     def get(self, request) -> Response:
         return Response(
-            get_cached_config_data(),
+            {
+                **get_cached_config_data(),
+                "server_date": timezone.localdate().isoformat(),
+            },
             status.HTTP_200_OK,
         )
 

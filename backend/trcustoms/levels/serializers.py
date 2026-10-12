@@ -1,7 +1,9 @@
+from datetime import timedelta
 from typing import Any
 
 from django.conf import settings
 from django.core.validators import MaxLengthValidator
+from django.utils import timezone
 from drf_spectacular.utils import extend_schema_field
 from rest_framework import serializers
 
@@ -193,6 +195,7 @@ class LevelListingSerializer(serializers.ModelSerializer):
             "author_ids",
             "uploader",
             "created",
+            "release_date",
             "cover",
             "screenshots",
             "external_links",
@@ -251,6 +254,22 @@ class LevelDetailsSerializer(LevelListingSerializer):
             instance=files, many=True, context=self.context
         )
         return serializer.data
+
+    def validate_release_date(self, value):
+        if self.instance and self.instance.is_released:
+            if value != self.instance.release_date:
+                raise serializers.ValidationError(
+                    "The release date cannot be changed after release."
+                )
+            return value
+
+        today = timezone.localdate()
+        max_delay = settings.MAX_RELEASE_DELAY_DAYS
+        if value > today + timedelta(days=max_delay):
+            raise serializers.ValidationError(
+                f"The release date can be at most {max_delay} days ahead."
+            )
+        return max(value, today)
 
     def validate(self, data):
         validated_data = super().validate(data)
