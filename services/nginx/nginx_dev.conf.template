@@ -32,27 +32,29 @@ http {
     proxy_set_header Upgrade $http_upgrade;
     proxy_set_header Connection "upgrade";
 
+    # Resolve upstreams at request time via Docker's embedded DNS instead of
+    # at startup, so nginx neither aborts when a container is not yet
+    # registered nor keeps proxying to the old address after it restarts.
+    resolver 127.0.0.11 valid=10s ipv6=off;
+    set $backend_upstream trcustoms:8000;
+    set $frontend_upstream trcustoms-frontend:3000;
+
     location / {
       error_page 418 = @social_preview;
       if ($social_preview_ua = 1) {
         return 418;
       }
 
-      # Resolve the frontend dev server at request time via Docker's embedded
-      # DNS instead of at startup, so nginx does not abort when the frontend
-      # container is not yet registered.
-      resolver 127.0.0.11 valid=10s ipv6=off;
-      set $frontend_upstream trcustoms-frontend:3000;
       proxy_pass http://$frontend_upstream;
     }
 
     location @social_preview {
       proxy_set_header X-Social-Preview 1;
-      proxy_pass http://trcustoms:8000;
+      proxy_pass http://$backend_upstream;
     }
 
     location ~ ^/(${ADMIN_DIR}|api|uploads|django_static)(/.*)?$ {
-      proxy_pass http://trcustoms:8000;
+      proxy_pass http://$backend_upstream;
     }
   }
 }
