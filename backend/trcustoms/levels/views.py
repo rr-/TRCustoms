@@ -3,6 +3,7 @@ from pathlib import Path
 from django.conf import settings
 from django.db.models import Exists, OuterRef, Q
 from django.http import HttpResponseRedirect
+from django.utils import timezone
 from drf_spectacular.types import OpenApiTypes
 from drf_spectacular.utils import extend_schema, extend_schema_view
 from rest_framework import mixins, status, viewsets
@@ -130,7 +131,7 @@ class LevelViewSet(
         is_author = auth_user and obj.authors.filter(pk=auth_user.pk).exists()
         if (
             not has_permission(auth_user, UserPermission.VIEW_PENDING_LEVELS)
-            and not obj.is_approved
+            and not obj.is_public
             and (not is_author)
         ):
             raise PermissionDenied
@@ -155,10 +156,14 @@ class LevelViewSet(
                 queryset = queryset.annotate(
                     is_authored_by_auth_user=is_author
                 ).filter(
-                    Q(is_approved=True) | Q(is_authored_by_auth_user=True)
+                    Q(
+                        is_approved=True,
+                        release_date__lte=timezone.localdate(),
+                    )
+                    | Q(is_authored_by_auth_user=True)
                 )
             else:
-                queryset = queryset.filter(is_approved=True)
+                queryset = queryset.public()
         return queryset
 
     @action(detail=True, methods=["post"])

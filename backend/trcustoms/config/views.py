@@ -44,7 +44,7 @@ def get_markdown_field_limits() -> dict[str, int | None]:
 
 
 def get_walkthrough_stats() -> dict[str, int]:
-    qs = Level.objects.filter(is_approved=True)
+    qs = Level.objects.public()
     return dict(
         video_and_text=qs.with_both_walkthroughs().distinct().count(),
         video=qs.with_video_only_walkthroughs().distinct().count(),
@@ -105,12 +105,12 @@ def get_config_data():
             max_tag_length=settings.MAX_TAG_LENGTH,
         ),
         stats=dict(
-            total_levels=Level.objects.filter(is_approved=True).count(),
+            total_levels=Level.objects.public().count(),
             total_ratings=Rating.objects.all().count(),
             total_reviews=Review.objects.all().count(),
             total_walkthroughs=Walkthrough.objects.filter(
                 status=WalkthroughStatus.APPROVED,
-                level__is_approved=True,
+                level__in=Level.objects.public(),
             ).count(),
             total_downloads=(
                 Level.objects.all()

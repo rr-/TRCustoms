@@ -87,7 +87,8 @@ def render_social_preview_html(metadata: SocialPreviewMetadata) -> str:
 
 def level_metadata(path: str, level_id: str) -> SocialPreviewMetadata:
     level = (
-        Level.objects.filter(pk=level_id, is_approved=True)
+        Level.objects.public()
+        .filter(pk=level_id)
         .prefetch_related("authors")
         .select_related("cover")
         .first()
