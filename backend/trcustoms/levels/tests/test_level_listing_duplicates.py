@@ -2,6 +2,7 @@ import pytest
 from rest_framework import status
 from rest_framework.test import APIClient
 
+from trcustoms.engines.tests.factories import EngineFactory
 from trcustoms.levels.tests.factories import LevelFactory
 from trcustoms.users.tests.factories import UserFactory
 from trcustoms.walkthroughs.consts import WalkthroughStatus, WalkthroughType
@@ -16,6 +17,32 @@ def get_level_ids(api_client: APIClient, params: dict[str, str]) -> list[int]:
 
     assert resp.status_code == status.HTTP_200_OK, resp.content
     return [item["id"] for item in resp.json()["results"]]
+
+
+@pytest.mark.django_db
+@pytest.mark.parametrize("sort", ["rating", "-rating", "engine", "-engine"])
+def test_level_list_paging_with_tied_sort_values_is_stable(
+    api_client: APIClient,
+    sort: str,
+) -> None:
+    engine = EngineFactory()
+    levels = LevelFactory.create_batch(6, engine=engine)
+
+    level_ids = []
+    for page in range(1, 4):
+        resp = api_client.get(
+            "/api/levels/",
+            data={
+                "engines": str(engine.pk),
+                "sort": sort,
+                "page": str(page),
+                "page_size": "2",
+            },
+        )
+        assert resp.status_code == status.HTTP_200_OK, resp.content
+        level_ids.extend(item["id"] for item in resp.json()["results"])
+
+    assert level_ids == sorted((level.pk for level in levels), reverse=True)
 
 
 @pytest.mark.django_db

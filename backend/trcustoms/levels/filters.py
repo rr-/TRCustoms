@@ -68,7 +68,12 @@ class SortLevelFilter(LevelFilter):
                     F("last_file__file__size").desc(nulls_last=True)
                 )
 
-        return qs
+            case _:
+                return qs
+
+        # Break ties so that paging through equal values (e.g. levels sharing
+        # a rating class) neither repeats nor skips levels.
+        return qs.order_by(*qs.query.order_by, "-pk")
 
 
 class AdditiveLevelFilter(LevelFilter):
