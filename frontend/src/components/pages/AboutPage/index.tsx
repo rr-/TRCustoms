@@ -91,8 +91,7 @@ const About: LegaleseEntry = {
       description: (
         <>
           If you have any questions or inquiries, please do not hesitate to
-          contact the site administrator at{" "}
-          <a href="mailto:admin@trcustoms.org">admin@trcustoms.org</a>.
+          contact the <Link to="/administration">site administration</Link>.
         </>
       ),
     },
