@@ -105,10 +105,11 @@ const LevelForm = ({ level, onGoBack, onSubmit }: LevelFormProps) => {
 
       if (level?.id) {
         const outLevel = await LevelService.update(level.id, payload);
-        resetQueries(queryClient, [
-          queryKeys.levels.all,
-          queryKeys.auditLogs.all,
-        ]);
+        resetQueries(
+          queryClient,
+          [queryKeys.levels.all, queryKeys.auditLogs.all],
+          true,
+        );
         onSubmit?.(outLevel);
         return {
           success: (
