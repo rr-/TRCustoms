@@ -6,6 +6,7 @@ import { BaseModal } from "src/components/modals/BaseModal";
 
 interface ConfirmModalProps {
   title?: string;
+  confirmLabel?: string;
   isActive: boolean;
   onIsActiveChange: (isActive: boolean) => void;
   onConfirm: () => void;
@@ -16,6 +17,7 @@ interface ConfirmModalProps {
 
 const ConfirmModal = ({
   title,
+  confirmLabel = "Yes",
   isActive,
   onIsActiveChange,
   onConfirm,
@@ -58,7 +60,7 @@ const ConfirmModal = ({
           <>
             <Button disableTimeout={true} onClick={handleConfirmClick}>
               <IconCheck />
-              Yes
+              {confirmLabel}
             </Button>
 
             <Button disableTimeout={true} onClick={handleCancelClick}>

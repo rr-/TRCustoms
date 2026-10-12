@@ -1,6 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { useParams } from "react-router-dom";
 import { Loader } from "src/components/common/Loader";
+import { PermissionGuard } from "src/components/common/PermissionGuard";
 import { SidebarBox } from "src/components/common/SidebarBox";
 import { WalkthroughContent } from "src/components/common/WalkthroughContent";
 import { WalkthroughStatusBox } from "src/components/common/WalkthroughStatusBox";
@@ -9,6 +10,9 @@ import { SidebarLayoutVariant } from "src/components/layouts/SidebarLayout";
 import { MarkdownTOC } from "src/components/markdown/MarkdownTOC";
 import { ResponseErrorPage } from "src/components/pages/ErrorPage";
 import { WalkthroughHeader } from "src/components/pages/WalkthroughPage/WalkthroughHeader";
+import { WalkthroughReassign } from "src/components/pages/WalkthroughPage/WalkthroughReassign";
+import { UserPermission } from "src/services/UserService";
+import { WalkthroughStatus } from "src/services/WalkthroughService";
 import { WalkthroughType } from "src/services/WalkthroughService";
 import type { WalkthroughDetails } from "src/services/WalkthroughService";
 import { WalkthroughService } from "src/services/WalkthroughService";
@@ -61,6 +65,14 @@ const WalkthroughPage = () => {
     <>
       <WalkthroughStatusBox walkthrough={walkthrough} showSubmitCta={true} />
       <WalkthroughContent walkthrough={walkthrough} showExcerpts={false} />
+      {walkthrough.status !== WalkthroughStatus.Draft && (
+        <PermissionGuard
+          require={UserPermission.editWalkthroughs}
+          owningUsers={walkthrough.author ? [walkthrough.author] : []}
+        >
+          <WalkthroughReassign walkthrough={walkthrough} />
+        </PermissionGuard>
+      )}
     </>
   );
 
