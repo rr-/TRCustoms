@@ -1,4 +1,4 @@
-from datetime import datetime, timezone
+from datetime import date, datetime, timezone
 from unittest.mock import patch
 
 import pytest
@@ -27,7 +27,7 @@ def test_rating_update_success(
     builder = UserFactory(username="example")
     builder.settings.email_rating_updated = True
     builder.settings.save()
-    level = LevelFactory(authors=[builder])
+    level = LevelFactory(authors=[builder], release_date=date(2023, 12, 1))
     rating = RatingFactory(level=level, author=auth_api_client.user)
     rating.created = datetime(2023, 12, 29, tzinfo=timezone.utc)
     rating.save(update_fields=["created"])

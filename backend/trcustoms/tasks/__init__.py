@@ -10,6 +10,7 @@ from trcustoms.tasks.delete_unreferenced_files import delete_unreferenced_files
 from trcustoms.tasks.delete_unreferenced_tags import delete_unreferenced_tags
 from trcustoms.tasks.merge_duplicate_files import merge_duplicate_files
 from trcustoms.tasks.prune_unused_accounts import prune_unused_accounts
+from trcustoms.tasks.release_scheduled_levels import release_scheduled_levels
 from trcustoms.tasks.update_awards import update_awards
 from trcustoms.tasks.update_featured_levels import update_featured_levels
 
@@ -34,12 +35,14 @@ def setup_periodic_tasks(sender, **kwargs: Any) -> None:
         crontab(hour=3, minute=0), update_featured_levels.s()
     )
     sender.add_periodic_task(crontab(minute=0), prune_unused_accounts.s())
+    sender.add_periodic_task(crontab(minute=5), release_scheduled_levels.s())
 
 
 __all__ = [
     "delete_unreferenced_files",
     "delete_unreferenced_tags",
     "merge_duplicate_files",
+    "release_scheduled_levels",
     "update_awards",
     "update_featured_levels",
 ]

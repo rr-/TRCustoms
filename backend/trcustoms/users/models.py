@@ -5,6 +5,7 @@ from django.contrib.auth.models import UserManager as BaseUserManager
 from django.db import models
 from django.db.models import UniqueConstraint
 from django.db.models.functions import Lower
+from django.utils import timezone
 
 from trcustoms.audit_logs import registry
 from trcustoms.common.models import Country
@@ -135,7 +136,8 @@ class User(AbstractUser):
 
     def update_rated_level_count(self, save: bool = True) -> None:
         self.rated_level_count = self.rated_levels.filter(
-            level__is_approved=True
+            level__is_approved=True,
+            level__release_date__lte=timezone.localdate(),
         ).count()
         if save:
             self.save(update_fields=["rated_level_count"])
@@ -143,6 +145,7 @@ class User(AbstractUser):
     def update_reviewed_level_count(self, save: bool = True) -> None:
         self.reviewed_level_count = self.reviewed_levels.filter(
             level__is_approved=True,
+            level__release_date__lte=timezone.localdate(),
             is_hidden=False,
         ).count()
         if save:
@@ -155,9 +158,9 @@ class User(AbstractUser):
 
     def update_authored_level_count(self, save: bool = True) -> None:
         self.authored_level_count_all = self.authored_levels.count()
-        self.authored_level_count_approved = self.authored_levels.filter(
-            is_approved=True
-        ).count()
+        self.authored_level_count_approved = (
+            self.authored_levels.public().count()
+        )
         if save:
             self.save(
                 update_fields=[

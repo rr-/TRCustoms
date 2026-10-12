@@ -4,6 +4,7 @@ from datetime import date, datetime, timedelta
 from django.db.models import Count, F
 
 from trcustoms.awards.requirements.base import BaseAwardRequirement
+from trcustoms.levels.models import Level
 from trcustoms.playlists.models import PlaylistItem
 from trcustoms.users.models import User
 from trcustoms.walkthroughs.consts import WalkthroughStatus, WalkthroughType
@@ -14,10 +15,7 @@ class AuthoredLevelsAwardRequirement(BaseAwardRequirement):
         self.min_levels = min_levels
 
     def check_eligible(self, user: User) -> bool:
-        return (
-            user.authored_levels.filter(is_approved=True).count()
-            >= self.min_levels
-        )
+        return user.authored_levels.public().count() >= self.min_levels
 
 
 class AuthoredLevelsRatingCountRequirement(BaseAwardRequirement):
@@ -33,9 +31,9 @@ class AuthoredLevelsRatingCountRequirement(BaseAwardRequirement):
 
     def check_eligible(self, user: User) -> bool:
         authored_level_rating_counts = defaultdict(int)
-        for rating_class_position in user.authored_levels.filter(
-            is_approved=True
-        ).values_list("rating_class__position", flat=True):
+        for rating_class_position in user.authored_levels.public().values_list(
+            "rating_class__position", flat=True
+        ):
             if rating_class_position is None:
                 rating_class_position = -1
             if self.extrapolate_ratings:
@@ -54,7 +52,7 @@ class AuthoredLevelPlayersAwardRequirement(BaseAwardRequirement):
     def check_eligible(self, user: User) -> bool:
         players = (
             PlaylistItem.objects.filter(
-                level__is_approved=True,
+                level__in=Level.objects.public(),
                 level__authors__pk=user.pk,
             )
             .order_by("user_id")
@@ -71,11 +69,9 @@ class AuthoredLevelsTagCountRequirement(BaseAwardRequirement):
 
     def check_eligible(self, user: User) -> bool:
         return (
-            user.authored_levels.annotate(tag_count=Count("tags"))
-            .filter(
-                is_approved=True,
-                tag_count__gte=self.min_tags,
-            )
+            user.authored_levels.public()
+            .annotate(tag_count=Count("tags"))
+            .filter(tag_count__gte=self.min_tags)
             .count()
             >= self.min_levels
         )
@@ -94,10 +90,9 @@ class AuthoredLevelsSustainableQualityRequirement(BaseAwardRequirement):
         # User has released two approved levels that are less than
         # max_time_apart and achieved min_rating_class (at any time)
         good_level_creation_times = sorted(
-            user.authored_levels.filter(
-                is_approved=True,
-                rating_class__position__gte=self.min_rating_class,
-            ).values_list("created", flat=True)
+            user.authored_levels.public()
+            .filter(rating_class__position__gte=self.min_rating_class)
+            .values_list("created", flat=True)
         )
         return any(
             time2 - time1 <= self.max_time_apart
@@ -115,9 +110,7 @@ class AuthoredLevelsFarApartRequirement(BaseAwardRequirement):
         # User has released two approved levels that are more than
         # min_time_apart
         good_level_creation_times = sorted(
-            user.authored_levels.filter(
-                is_approved=True,
-            ).values_list("created", flat=True)
+            user.authored_levels.public().values_list("created", flat=True)
         )
         return any(
             time2 - time1 >= self.min_time_apart

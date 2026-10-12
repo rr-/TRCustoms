@@ -5,6 +5,7 @@ from urllib.parse import urljoin
 from django.conf import settings
 from django.core.cache import cache
 from django.db.models import F, Max, Min, Sum, Value
+from django.utils import timezone
 from rest_framework.request import Request
 
 from trcustoms.audit_logs.utils import (
@@ -16,7 +17,7 @@ from trcustoms.levels.models import Level, LevelFile
 from trcustoms.mails import send_level_approved_mail, send_level_rejected_mail
 from trcustoms.ratings.consts import RatingType
 from trcustoms.ratings.models import RatingTemplateQuestion
-from trcustoms.tasks import update_awards
+from trcustoms.tasks.update_awards import update_awards
 
 
 def send_level_submission_discord_notification(level: Level) -> None:
@@ -43,6 +44,43 @@ def send_level_submission_discord_notification(level: Level) -> None:
     )
 
 
+def announce_level(level: Level) -> None:
+    """Post a public level to Discord, at most once."""
+    if not level.is_public or level.announced_at is not None:
+        return
+    level.announced_at = timezone.now()
+    claimed = Level.objects.filter(pk=level.pk, announced_at=None).update(
+        announced_at=level.announced_at
+    )
+    if claimed:
+        send_level_submission_discord_notification(level)
+
+
+def release_level(level: Level) -> None:
+    """Credit everyone involved with a level that has just gone public."""
+    users = {
+        *level.authors.all(),
+        *(rating.author for rating in level.ratings.all()),
+        *(review.author for review in level.reviews.all()),
+    }
+    for user in users:
+        if user is None:
+            continue
+        user.update_authored_level_count(save=False)
+        user.update_rated_level_count(save=False)
+        user.update_reviewed_level_count(save=False)
+        user.save(
+            update_fields=[
+                "authored_level_count_all",
+                "authored_level_count_approved",
+                "rated_level_count",
+                "reviewed_level_count",
+            ]
+        )
+        update_awards.delay(user.pk)
+    announce_level(level)
+
+
 def approve_level(level: Level, request: Request | None) -> None:
     with track_model_update(
         obj=level, request=request, changes=["Approved"], notify=True
@@ -52,12 +90,12 @@ def approve_level(level: Level, request: Request | None) -> None:
         level.is_approved = True
         if send_mail:
             send_level_approved_mail(level)
-            send_level_submission_discord_notification(level)
 
         level.rejection_reason = None
         level.save()
         for author in level.authors.iterator():
             update_awards.delay(author.pk)
+        announce_level(level)
     clear_audit_log_action_flags(obj=level)
 
 
