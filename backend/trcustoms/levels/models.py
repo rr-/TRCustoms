@@ -1,6 +1,7 @@
 from django.db import models
 from django.db.models import F, UniqueConstraint, Value
 from django.db.models.functions import Coalesce, Lower
+from django.utils import timezone
 
 from trcustoms.audit_logs import registry
 from trcustoms.common.models import (
@@ -52,8 +53,13 @@ class LevelDifficulty(DatesInfo):
 
 
 class LevelQuerySet(models.QuerySet):
+    def public(self) -> models.QuerySet:
+        return self.filter(
+            is_approved=True, release_date__lte=timezone.localdate()
+        )
+
     def downloadable(self) -> models.QuerySet:
-        return self.filter(is_approved=True).exclude(files__isnull=True)
+        return self.public().exclude(files__isnull=True)
 
     def with_rating_values(self) -> models.QuerySet:
         return self.annotate(
@@ -138,6 +144,8 @@ class Level(UserContentDatesInfo, DatesInfo):
     is_pending_approval = models.BooleanField(default=True)
     is_approved = models.BooleanField(default=False)
     rejection_reason = models.CharField(max_length=500, null=True, blank=True)
+    release_date = models.DateField(default=timezone.localdate, db_index=True)
+    announced_at = models.DateTimeField(null=True, blank=True)
 
     rating_class = models.ForeignKey(
         RatingClass, blank=True, null=True, on_delete=models.SET_NULL
@@ -162,6 +170,14 @@ class Level(UserContentDatesInfo, DatesInfo):
 
     def __str__(self) -> str:
         return f"{self.name} (id={self.pk})"
+
+    @property
+    def is_released(self) -> bool:
+        return self.release_date <= timezone.localdate()
+
+    @property
+    def is_public(self) -> bool:
+        return self.is_approved and self.is_released
 
     def update_rating_count(self, save: bool = True) -> None:
         rating_count = self.ratings.count()

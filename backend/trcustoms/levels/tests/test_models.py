@@ -1,9 +1,33 @@
+from datetime import timedelta
+
 import pytest
+from django.utils import timezone
 
 from trcustoms.levels.models import Level
 from trcustoms.levels.tests.factories import LevelFactory
 from trcustoms.walkthroughs.models import WalkthroughStatus, WalkthroughType
 from trcustoms.walkthroughs.tests.factories import WalkthroughFactory
+
+
+@pytest.mark.django_db
+class TestPublicQueryset:
+    def test_released_approved(self) -> None:
+        level = LevelFactory(release_date=timezone.localdate())
+        assert list(Level.objects.public()) == [level]
+        assert level.is_public
+
+    def test_unapproved(self) -> None:
+        level = LevelFactory(is_approved=False)
+        assert not Level.objects.public().exists()
+        assert not level.is_public
+
+    def test_scheduled(self) -> None:
+        level = LevelFactory(
+            release_date=timezone.localdate() + timedelta(days=1)
+        )
+        assert not Level.objects.public().exists()
+        assert not level.is_released
+        assert not level.is_public
 
 
 @pytest.mark.django_db
