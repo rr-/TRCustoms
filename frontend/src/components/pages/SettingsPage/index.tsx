@@ -1,14 +1,21 @@
+import { useQuery } from "@tanstack/react-query";
+import { useQueryClient } from "@tanstack/react-query";
 import { useState, useEffect } from "react";
 import { Checkbox } from "src/components/common/Checkbox";
+import { Pills } from "src/components/common/Pills";
 import { Radioboxes } from "src/components/common/Radioboxes";
 import { ThemeSwitcher } from "src/components/common/ThemeSwitcher";
 import { PlainLayout } from "src/components/layouts/PlainLayout";
+import type { MessageSettings as MessageSettingsData } from "src/services/MessageService";
+import { MessageService } from "src/services/MessageService";
 import type { UserDetails } from "src/services/UserService";
 import { UserService } from "src/services/UserService";
+import { queryKeys } from "src/services/queryKeys";
 import { usePageMetadata } from "src/stores/pageMetadata";
 import { useSettings } from "src/stores/settings";
 import { AutoPlaylistChoice, MarkdownPreviewMode } from "src/stores/settings";
 import { useUser } from "src/stores/user";
+import { resetQueries } from "src/utils/misc";
 
 // Email notification settings configuration
 const emailSettingsConfig = [
@@ -110,6 +117,68 @@ const EmailSettings = () => {
   );
 };
 
+const MessageSettings = () => {
+  const { user } = useUser();
+  const queryClient = useQueryClient();
+  const result = useQuery<MessageSettingsData, Error>({
+    queryKey: queryKeys.messages.settings(),
+    queryFn: MessageService.getSettings,
+    enabled: !!user,
+  });
+
+  if (!user || !result.data) {
+    return null;
+  }
+
+  const settings = result.data;
+  const allowMessages = settings.allow_messages ?? true;
+  const blockedUserIds = settings.blocked_users.map((blocked) => blocked.id);
+
+  const save = async (allowMessages: boolean, userIds: number[]) => {
+    await MessageService.updateSettings(allowMessages, userIds);
+    await resetQueries(
+      queryClient,
+      [queryKeys.messages.settings(), queryKeys.users.all],
+      true,
+    );
+  };
+
+  return (
+    <>
+      <h2>Messages</h2>
+      <Checkbox
+        label='Disable messages (hides the "Send message" button from your profile)'
+        checked={!allowMessages}
+        onChange={(e) => {
+          save(!e.target.checked, blockedUserIds);
+        }}
+      />
+
+      {settings.blocked_users.length ? (
+        <>
+          <p>Blocked users:</p>
+          <Pills
+            source={settings.blocked_users}
+            getKey={(blocked) => blocked.id}
+            getText={(blocked) => blocked.username}
+            onRemove={(blocked) => {
+              save(
+                allowMessages,
+                blockedUserIds.filter((id) => id !== blocked.id),
+              );
+            }}
+          />
+        </>
+      ) : (
+        <p>
+          Blocked users: nobody. Use the Block button on a user's profile to
+          stop them from messaging you.
+        </p>
+      )}
+    </>
+  );
+};
+
 const OtherSettings = () => {
   const {
     infiniteScroll,
@@ -173,6 +242,7 @@ const SettingsPage = () => {
     <PlainLayout>
       <ThemeSettings />
       <EmailSettings />
+      <MessageSettings />
       <OtherSettings />
     </PlainLayout>
   );

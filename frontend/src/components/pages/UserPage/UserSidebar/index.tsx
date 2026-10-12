@@ -1,4 +1,5 @@
 import styles from "./index.module.css";
+import { UserBlockButton } from "src/components/buttons/UserBlockButton";
 import { AwardList } from "src/components/common/AwardList";
 import { Button } from "src/components/common/Button";
 import { ButtonVariant } from "src/components/common/Button";
@@ -56,6 +57,7 @@ const UserSidebar = ({ user }: UserSidebarProps) => {
             Donate
           </Button>
         )}
+        {user.is_active && isOtherUser && <UserBlockButton user={user} />}
       </VerticalList>
     </VerticalList>
   );
