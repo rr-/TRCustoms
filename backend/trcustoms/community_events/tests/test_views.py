@@ -1,4 +1,5 @@
 from datetime import timedelta
+from unittest.mock import patch
 
 import pytest
 from django.urls import reverse
@@ -81,3 +82,16 @@ class TestEventViews:
         data = response.json()
         assert [lvl["id"] for lvl in data["levels"]] == [released.id]
         assert data["level_count"] == 1
+
+    def test_level_count_follows_the_current_date(self, api_client):
+        tomorrow = timezone.localdate() + timedelta(days=1)
+        event = EventFactory(levels=[LevelFactory(release_date=tomorrow)])
+        url = reverse("event-detail", kwargs={"pk": event.id})
+
+        assert api_client.get(url).json()["level_count"] == 0
+
+        with patch(
+            "django.utils.timezone.now",
+            return_value=timezone.now() + timedelta(days=1),
+        ):
+            assert api_client.get(url).json()["level_count"] == 1

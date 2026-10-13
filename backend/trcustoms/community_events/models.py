@@ -9,7 +9,7 @@ from trcustoms.uploads.models import UploadedFile
 from trcustoms.users.models import User
 
 
-class EventManager(models.Manager):
+class EventQuerySet(models.QuerySet):
     def with_counts(self):
         # Annotate with count of public levels only
         return self.annotate(
@@ -38,7 +38,7 @@ class Event(DatesInfo):
     )
     levels = models.ManyToManyField(Level, blank=True, related_name="events")
 
-    objects = EventManager()
+    objects = EventQuerySet.as_manager()
 
     class Meta:
         ordering = ["-collection_release"]

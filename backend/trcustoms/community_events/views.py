@@ -17,11 +17,9 @@ class EventViewSet(
     viewsets.GenericViewSet,
 ):
     ordering = ["-pk"]
-    queryset = (
-        Event.objects.with_counts()
-        .select_related("cover_image", "host__picture")
-        .prefetch_related("levels__cover", "winners__user__picture")
-    )
+    queryset = Event.objects.select_related(
+        "cover_image", "host__picture"
+    ).prefetch_related("levels__cover", "winners__user__picture")
     search_fields = ["name", "subtitle"]
     ordering_fields = ["collection_release"]
     permission_classes = [AllowAny]
@@ -30,7 +28,7 @@ class EventViewSet(
     serializer_class_by_action = {"retrieve": EventDetailsSerializer}
 
     def get_queryset(self):
-        qs = super().get_queryset()
+        qs = super().get_queryset().with_counts()
         year = self.request.query_params.get("year")
         if year is not None:
             qs = qs.filter(year=year)
