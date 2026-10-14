@@ -15,6 +15,10 @@ from trcustoms.tags.serializers import TagListingSerializer
 from trcustoms.users.serializers import UserNestedSerializer
 
 
+class FeaturesSerializer(serializers.Serializer):
+    messages = serializers.BooleanField()
+
+
 class GlobalLimitsSerializer(serializers.Serializer):
     min_genres = serializers.IntegerField()
     max_genres = serializers.IntegerField()
@@ -68,3 +72,4 @@ class ConfigSerializer(serializers.Serializer):
     global_message = serializers.CharField(allow_null=True, required=False)
     server_date = serializers.DateField()
     administrator = UserNestedSerializer(allow_null=True)
+    features = FeaturesSerializer()

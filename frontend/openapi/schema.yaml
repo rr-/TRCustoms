@@ -2835,12 +2835,15 @@ components:
           allOf:
           - $ref: '#/components/schemas/UserNested'
           nullable: true
+        features:
+          $ref: '#/components/schemas/Features'
       required:
       - administrator
       - countries
       - difficulties
       - durations
       - engines
+      - features
       - genres
       - limits
       - rating_questions
@@ -3079,6 +3082,13 @@ components:
       - level_of_the_day
       - monthly_hidden_gem
       - new_release
+    Features:
+      type: object
+      properties:
+        messages:
+          type: boolean
+      required:
+      - messages
     GenreListing:
       type: object
       properties:

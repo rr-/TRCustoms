@@ -11,6 +11,8 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from trcustoms.common.models import Country
+from trcustoms.config.consts import FeatureFlagName
+from trcustoms.config.models import FeatureFlag
 from trcustoms.config.serializers import ConfigSerializer
 from trcustoms.direct_messages.logic import get_administrator
 from trcustoms.direct_messages.models import Message
@@ -83,6 +85,12 @@ def get_rating_stats() -> list[dict[str, Any]]:
     ]
 
 
+def get_features() -> dict[str, bool]:
+    return {name: False for name in FeatureFlagName} | dict(
+        FeatureFlag.objects.values_list("name", "is_enabled")
+    )
+
+
 def get_config_data():
     message_obj = GlobalMessage.objects.first()
     global_message = message_obj.message if message_obj else None
@@ -128,6 +136,7 @@ def get_config_data():
         global_message=global_message,
         server_date=timezone.localdate(),
         administrator=get_administrator(),
+        features=get_features(),
     )
     return ConfigSerializer(instance=context).data
 
