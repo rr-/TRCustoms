@@ -17,6 +17,7 @@ import { IconHeart } from "src/components/icons";
 import { IconMail } from "src/components/icons";
 import type { UserDetails } from "src/services/UserService";
 import { UserPermission } from "src/services/UserService";
+import { useConfig } from "src/stores/config";
 import { useUser } from "src/stores/user";
 import { formatDate } from "src/utils/string";
 
@@ -26,6 +27,8 @@ interface UserSidebarProps {
 
 const UserSidebar = ({ user }: UserSidebarProps) => {
   const { user: loggedInUser } = useUser();
+  const { config } = useConfig();
+  const isMessagingEnabled = config.features.messages;
   const isOtherUser = !!loggedInUser && loggedInUser.id !== user.id;
   const canMessage =
     user.can_message ||
@@ -37,7 +40,7 @@ const UserSidebar = ({ user }: UserSidebarProps) => {
       <VerticalList>
         <UserPicture user={user} mode={UserPictureMode.Full} />
 
-        {user.is_active && canMessage && (
+        {isMessagingEnabled && user.is_active && canMessage && (
           <Button
             variant={ButtonVariant.Important}
             to={`/users/${user.id}/message`}
@@ -57,7 +60,9 @@ const UserSidebar = ({ user }: UserSidebarProps) => {
             Donate
           </Button>
         )}
-        {user.is_active && isOtherUser && <UserBlockButton user={user} />}
+        {isMessagingEnabled && user.is_active && isOtherUser && (
+          <UserBlockButton user={user} />
+        )}
       </VerticalList>
     </VerticalList>
   );

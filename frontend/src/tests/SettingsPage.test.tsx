@@ -2,6 +2,8 @@ import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { SettingsPage } from "src/components/pages/SettingsPage";
 import { MessageService } from "src/services/MessageService";
+import { defaultConfig } from "src/stores/config";
+import { useConfig } from "src/stores/config";
 import { renderRoute } from "src/tests/renderRoute";
 import { beforeEach } from "vitest";
 import { describe } from "vitest";
@@ -11,9 +13,27 @@ import { vi } from "vitest";
 
 const user = { id: 1, username: "tester", permissions: [] };
 
+const enableMessages = () =>
+  useConfig.setState({
+    config: { ...defaultConfig, features: { messages: true } },
+  });
+
 describe("SettingsPage messages section", () => {
   beforeEach(() => {
     vi.restoreAllMocks();
+    enableMessages();
+  });
+
+  test("hides the section while messages are disabled", () => {
+    useConfig.setState({ config: defaultConfig });
+
+    renderRoute(<SettingsPage />, {
+      path: "/settings",
+      entry: "/settings",
+      user,
+    });
+
+    expect(screen.queryByText("Messages")).not.toBeInTheDocument();
   });
 
   test("disables messages", async () => {

@@ -3,6 +3,7 @@ import { lazy, Suspense, useEffect } from "react";
 import { Routes } from "react-router-dom";
 import { Route } from "react-router-dom";
 import { EnvironmentWatermark } from "src/components/common/EnvironmentWatermark";
+import { FeaturePageGuard } from "src/components/common/FeatureGuard";
 import { Loader } from "src/components/common/Loader";
 import { NavBar } from "src/components/common/NavBar";
 import { PageMetadata } from "src/components/common/PageMetadata";
@@ -280,13 +281,45 @@ const AppRoutes = () => {
           element={<PasswordResetFinishPage />}
         />
         <Route path="/settings" element={<SettingsPage />} />
-        <Route path="/administration" element={<AdministrationPage />} />
-        <Route path="/messages" element={<MessagesPage />} />
-        <Route path="/messages/:tabName" element={<MessagesPage />} />
-        <Route path="/messages/threads/:threadId" element={<ThreadPage />} />
+        <Route
+          path="/administration"
+          element={
+            <FeaturePageGuard feature="messages">
+              <AdministrationPage />
+            </FeaturePageGuard>
+          }
+        />
+        <Route
+          path="/messages"
+          element={
+            <FeaturePageGuard feature="messages">
+              <MessagesPage />
+            </FeaturePageGuard>
+          }
+        />
+        <Route
+          path="/messages/:tabName"
+          element={
+            <FeaturePageGuard feature="messages">
+              <MessagesPage />
+            </FeaturePageGuard>
+          }
+        />
+        <Route
+          path="/messages/threads/:threadId"
+          element={
+            <FeaturePageGuard feature="messages">
+              <ThreadPage />
+            </FeaturePageGuard>
+          }
+        />
         <Route
           path="/messages/threads/:threadId/:messageId"
-          element={<ThreadPage />}
+          element={
+            <FeaturePageGuard feature="messages">
+              <ThreadPage />
+            </FeaturePageGuard>
+          }
         />
         <Route path="/users/:userId" element={<UserPage />} />
         <Route
@@ -310,7 +343,14 @@ const AppRoutes = () => {
           element={<UserPage tabName="walkthroughs" />}
         />
         <Route path="/users/:userId/edit" element={<UserEditPage />} />
-        <Route path="/users/:userId/message" element={<MessageSendPage />} />
+        <Route
+          path="/users/:userId/message"
+          element={
+            <FeaturePageGuard feature="messages">
+              <MessageSendPage />
+            </FeaturePageGuard>
+          }
+        />
         <Route
           path="/email-confirmation/:token"
           element={<EmailConfirmationPage />}

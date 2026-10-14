@@ -4,6 +4,7 @@ import type {
   CountryListing,
   FeaturedLevelListing as FeaturedLevel,
   FeaturedLevels,
+  Features,
   LevelDifficultyListing as DifficultyListing,
   LevelDurationListing as DurationListing,
   RatingTemplateAnswer,
@@ -33,6 +34,7 @@ const ConfigService = {
 };
 
 export type {
+  Features,
   FeaturedLevel,
   CountryListing,
   FeaturedLevels,

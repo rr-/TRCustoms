@@ -49,23 +49,29 @@ const defaultConfig: Config = {
   global_message: null,
   server_date: new Date().toISOString().slice(0, 10),
   administrator: null,
+  features: {
+    messages: false,
+  },
 };
 
 interface ConfigState {
   config: Config;
+  isLoaded: boolean;
   refetchConfig: () => Promise<void>;
 }
 
 const useConfig = create<ConfigState>((set) => ({
   config: defaultConfig,
+  isLoaded: false,
 
   refetchConfig: async (): Promise<void> => {
     try {
-      set({ config: await ConfigService.getConfig() });
+      set({ config: await ConfigService.getConfig(), isLoaded: true });
     } catch (error) {
       // Keep the last-known (or default) config rather than letting an
       // unhandled rejection escape; the app degrades to empty tags/genres.
       console.error("Failed to load site config", error);
+      set({ isLoaded: true });
     }
   },
 }));

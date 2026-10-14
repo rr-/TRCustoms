@@ -2,6 +2,8 @@ import { screen } from "@testing-library/react";
 import { NavBar } from "src/components/common/NavBar";
 import { MessagesPage } from "src/components/pages/MessagesPage";
 import { MessageService } from "src/services/MessageService";
+import { defaultConfig } from "src/stores/config";
+import { useConfig } from "src/stores/config";
 import { renderRoute } from "src/tests/renderRoute";
 import { beforeEach } from "vitest";
 import { describe } from "vitest";
@@ -107,6 +109,9 @@ describe("MessagesPage", () => {
   });
 
   test("flags unread messages in the navigation bar", () => {
+    useConfig.setState({
+      config: { ...defaultConfig, features: { messages: true } },
+    });
     renderRoute(<NavBar />, {
       path: "/",
       entry: "/",
@@ -119,6 +124,21 @@ describe("MessagesPage", () => {
     });
 
     expect(screen.getByLabelText("New messages")).toBeInTheDocument();
+  });
+
+  test("hides messages from the navigation bar while disabled", () => {
+    renderRoute(<NavBar />, {
+      path: "/",
+      entry: "/",
+      user: {
+        id: 1,
+        username: "tester",
+        permissions: [],
+        has_unread_messages: true,
+      },
+    });
+
+    expect(screen.queryByText("Messages")).not.toBeInTheDocument();
   });
 
   test("marks replied messages in the inbox", async () => {

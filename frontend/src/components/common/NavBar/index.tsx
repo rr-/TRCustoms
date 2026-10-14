@@ -10,6 +10,7 @@ import { Logo } from "src/components/common/Logo";
 import { PermissionGuard } from "src/components/common/PermissionGuard";
 import { UserPicture } from "src/components/common/UserPicture";
 import { UserPermission } from "src/services/UserService";
+import { useConfig } from "src/stores/config";
 import { useUser } from "src/stores/user";
 
 const MyNavLink = ({ children, ...args }: Omit<NavLinkProps, "className">) => {
@@ -54,15 +55,17 @@ const UNREAD_POLL_INTERVAL = 5 * 60 * 1000;
 
 const NavBar = () => {
   const { user, fetchUser } = useUser();
+  const { config } = useConfig();
   const isLoggedIn = !!user;
+  const isMessagingEnabled = config.features.messages;
 
   useEffect(() => {
-    if (!isLoggedIn) {
+    if (!isLoggedIn || !isMessagingEnabled) {
       return;
     }
     const interval = setInterval(fetchUser, UNREAD_POLL_INTERVAL);
     return () => clearInterval(interval);
-  }, [isLoggedIn, fetchUser]);
+  }, [isLoggedIn, isMessagingEnabled, fetchUser]);
 
   return (
     <div className={appStyles.mainContainer}>
@@ -85,18 +88,20 @@ const NavBar = () => {
                     {user.username}
                   </Link>
                 </li>
-                <li className={styles.listItem}>
-                  <MyNavLink to={"/messages"}>
-                    Messages
-                    {user.has_unread_messages && (
-                      <span
-                        className={styles.unreadDot}
-                        role="status"
-                        aria-label="New messages"
-                      />
-                    )}
-                  </MyNavLink>
-                </li>
+                {isMessagingEnabled && (
+                  <li className={styles.listItem}>
+                    <MyNavLink to={"/messages"}>
+                      Messages
+                      {user.has_unread_messages && (
+                        <span
+                          className={styles.unreadDot}
+                          role="status"
+                          aria-label="New messages"
+                        />
+                      )}
+                    </MyNavLink>
+                  </li>
+                )}
                 <li className={styles.listItem}>
                   <Link to={"/logout"}>Log out</Link>
                 </li>

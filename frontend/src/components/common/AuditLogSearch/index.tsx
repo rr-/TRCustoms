@@ -11,6 +11,8 @@ import { CheckboxField } from "src/components/forms/fields/CheckboxField";
 import { TextField } from "src/components/forms/fields/TextField";
 import { IconSearch } from "src/components/icons";
 import type { AuditLogSearchQuery } from "src/services/AuditLogService";
+import type { Features } from "src/services/ConfigService";
+import { useConfig } from "src/stores/config";
 
 interface StateSearchSectionItem {
   title: string;
@@ -22,6 +24,7 @@ interface StateSearchSection {
   storageKey: string;
   searchModel: string;
   searchList: StateSearchSectionItem[];
+  feature?: keyof Features;
 }
 
 const splitTerms = (searchQuery: string | null | undefined): string[] => {
@@ -151,6 +154,7 @@ const StateSearches: StateSearchSection[] = [
     storageKey: `auditLogMessageStatus`,
     searchModel: "message",
     searchList: [{ title: "Sent", searchState: "sent" }],
+    feature: "messages",
   },
   {
     title: "Walkthrough States",
@@ -184,6 +188,7 @@ const AuditLogSearch = ({
   searchQuery,
   onSearchQueryChange,
 }: AuditLogSearchProps) => {
+  const { config } = useConfig();
   const form = useForm({ defaultValues: toFormValues(searchQuery) });
 
   // Keep the form in sync when the query changes externally (URL, reset).
@@ -260,7 +265,9 @@ const AuditLogSearch = ({
         </div>
       </div>
 
-      {StateSearches.map((section, sectionNum) => (
+      {StateSearches.filter(
+        (section) => !section.feature || config.features[section.feature],
+      ).map((section, sectionNum) => (
         <div className={styles.section} key={sectionNum}>
           <Collapsible
             key={section.storageKey}

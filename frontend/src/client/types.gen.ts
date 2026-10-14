@@ -55,6 +55,7 @@ export type Config = {
     global_message?: string | null;
     server_date: string;
     administrator: UserNested | null;
+    features: Features;
 };
 
 export type CountryListing = {
@@ -129,6 +130,10 @@ export type FeaturedLevels = {
     monthly_hidden_gem: FeaturedLevelListing;
     level_of_the_day: FeaturedLevelListing;
     best_in_genre: FeaturedLevelListing;
+};
+
+export type Features = {
+    messages: boolean;
 };
 
 export type GenreListing = {
@@ -1161,6 +1166,7 @@ export type ConfigWritable = {
     global_message?: string | null;
     server_date: string;
     administrator: UserNestedWritable | null;
+    features: Features;
 };
 
 export type EngineListingWritable = {

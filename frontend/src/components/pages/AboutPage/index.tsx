@@ -2,10 +2,25 @@ import { Link } from "react-router-dom";
 import type { LegaleseEntry } from "src/components/common/NestedLegalese";
 import { NestedLegalese } from "src/components/common/NestedLegalese";
 import { PlainLayout } from "src/components/layouts/PlainLayout";
+import { useConfig } from "src/stores/config";
 import { usePageMetadata } from "src/stores/pageMetadata";
 
 const buildVersion = import.meta.env.VITE_BUILD_VERSION;
 const buildDate = import.meta.env.VITE_BUILD_DATE;
+
+const ContactLink = () => {
+  const { config } = useConfig();
+  return config.features.messages ? (
+    <>
+      the <Link to="/administration">site administration</Link>
+    </>
+  ) : (
+    <>
+      the site administrator at{" "}
+      <a href="mailto:admin@trcustoms.org">admin@trcustoms.org</a>
+    </>
+  );
+};
 
 const About: LegaleseEntry = {
   children: [
@@ -91,7 +106,7 @@ const About: LegaleseEntry = {
       description: (
         <>
           If you have any questions or inquiries, please do not hesitate to
-          contact the <Link to="/administration">site administration</Link>.
+          contact <ContactLink />.
         </>
       ),
     },

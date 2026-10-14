@@ -11,6 +11,7 @@ import { MessageService } from "src/services/MessageService";
 import type { UserDetails } from "src/services/UserService";
 import { UserService } from "src/services/UserService";
 import { queryKeys } from "src/services/queryKeys";
+import { useConfig } from "src/stores/config";
 import { usePageMetadata } from "src/stores/pageMetadata";
 import { useSettings } from "src/stores/settings";
 import { AutoPlaylistChoice, MarkdownPreviewMode } from "src/stores/settings";
@@ -229,6 +230,7 @@ const OtherSettings = () => {
 };
 
 const SettingsPage = () => {
+  const { config } = useConfig();
   usePageMetadata(
     () => ({
       ready: true,
@@ -242,7 +244,7 @@ const SettingsPage = () => {
     <PlainLayout>
       <ThemeSettings />
       <EmailSettings />
-      <MessageSettings />
+      {config.features.messages && <MessageSettings />}
       <OtherSettings />
     </PlainLayout>
   );
