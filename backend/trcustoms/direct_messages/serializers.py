@@ -4,6 +4,7 @@ from rest_framework import serializers
 from trcustoms.common.fields import CustomCharField
 from trcustoms.direct_messages.logic import (
     can_message,
+    can_reply,
     get_administrator,
     get_daily_limit,
     get_sent_today,
@@ -23,43 +24,54 @@ class MessageSerializer(serializers.ModelSerializer):
         fields = ["id", "sender", "receiver", "text", "created", "is_read"]
 
 
-class MessageListingSerializer(MessageSerializer):
-    thread_id = serializers.IntegerField(read_only=True)
-    subject = serializers.CharField(source="thread.subject", read_only=True)
-    is_replied = serializers.BooleanField(read_only=True)
-
-    class Meta(MessageSerializer.Meta):
-        fields = MessageSerializer.Meta.fields + [
-            "thread_id",
-            "subject",
-            "is_replied",
-        ]
-
-
-class ThreadDetailsSerializer(serializers.ModelSerializer):
+class OtherUserMixin(serializers.Serializer):
     other_user = serializers.SerializerMethodField()
-    messages = MessageSerializer(many=True, read_only=True)
-    can_reply = serializers.SerializerMethodField()
-    replies_as_administrator = serializers.SerializerMethodField()
-
-    class Meta:
-        model = Thread
-        fields = [
-            "id",
-            "subject",
-            "other_user",
-            "messages",
-            "can_reply",
-            "replies_as_administrator",
-        ]
 
     @extend_schema_field(UserNestedSerializer(allow_null=True))
     def get_other_user(self, instance: Thread) -> dict | None:
         other = instance.get_other_participant(self.context["mailbox_owner"])
         return UserNestedSerializer(other).data if other else None
 
+
+class ThreadListingSerializer(OtherUserMixin, serializers.ModelSerializer):
+    last_message_text = serializers.CharField(read_only=True)
+    last_message_is_own = serializers.BooleanField(read_only=True)
+    has_unread = serializers.BooleanField(read_only=True)
+
+    class Meta:
+        model = Thread
+        fields = [
+            "id",
+            "other_user",
+            "last_message_text",
+            "last_message_at",
+            "last_message_is_own",
+            "has_unread",
+        ]
+
+
+class ThreadDetailsSerializer(OtherUserMixin, serializers.ModelSerializer):
+    can_reply = serializers.SerializerMethodField()
+    can_mark_unread = serializers.SerializerMethodField()
+    replies_as_administrator = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Thread
+        fields = [
+            "id",
+            "other_user",
+            "can_reply",
+            "can_mark_unread",
+            "replies_as_administrator",
+        ]
+
     def get_can_reply(self, instance: Thread) -> bool:
         return self.context["can_reply"]
+
+    def get_can_mark_unread(self, instance: Thread) -> bool:
+        return instance.messages.filter(
+            receiver=self.context["mailbox_owner"]
+        ).exists()
 
     def get_replies_as_administrator(self, instance: Thread) -> bool:
         return self.context["mailbox_owner"] != self.context["request"].user
@@ -68,9 +80,6 @@ class ThreadDetailsSerializer(serializers.ModelSerializer):
 class ThreadCreateSerializer(serializers.Serializer):
     receiver_id = serializers.PrimaryKeyRelatedField(
         queryset=User.objects.all()
-    )
-    subject = CustomCharField(
-        max_length=Thread._meta.get_field("subject").max_length
     )
     text = CustomCharField(
         collapse_whitespace=False,
@@ -107,6 +116,18 @@ class ThreadCreateSerializer(serializers.Serializer):
                     {"receiver_id": "Administration cannot message itself."}
                 )
             data["sender"] = administrator
+            data["thread"] = Thread.objects.between(
+                administrator, receiver
+            ).first()
+            return data
+
+        data["sender"] = user
+        data["thread"] = Thread.objects.between(user, receiver).first()
+        if data["thread"] is not None:
+            if not can_reply(user, data["thread"]):
+                raise serializers.ValidationError(
+                    {"receiver_id": "This user cannot be messaged."}
+                )
             return data
 
         if not can_message(user, receiver):
@@ -117,7 +138,6 @@ class ThreadCreateSerializer(serializers.Serializer):
             raise serializers.ValidationError(
                 "You have reached your daily limit of new conversations."
             )
-        data["sender"] = user
         return data
 
 

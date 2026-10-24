@@ -1,5 +1,6 @@
 from django.db import models
 from django.db.models import Q
+from django.db.models.functions import Greatest, Least
 
 from trcustoms.audit_logs import registry
 from trcustoms.common.models import DatesInfo
@@ -10,11 +11,15 @@ class ThreadQuerySet(models.QuerySet):
     def for_participant(self, user: User) -> models.QuerySet:
         return self.filter(Q(starter=user) | Q(recipient=user))
 
+    def between(self, user: User, other: User) -> models.QuerySet:
+        return self.filter(
+            Q(starter=user, recipient=other) | Q(starter=other, recipient=user)
+        )
+
 
 class Thread(DatesInfo):
     objects = ThreadQuerySet.as_manager()
 
-    subject = models.CharField(max_length=100)
     starter = models.ForeignKey(
         User,
         null=True,
@@ -32,9 +37,17 @@ class Thread(DatesInfo):
     class Meta:
         ordering = ["-last_message_at", "-pk"]
         default_permissions = []
+        constraints = [
+            models.UniqueConstraint(
+                Least("starter", "recipient"),
+                Greatest("starter", "recipient"),
+                condition=Q(starter__isnull=False, recipient__isnull=False),
+                name="unique_thread_participants",
+            )
+        ]
 
     def __str__(self) -> str:
-        return f"{self.subject} (id={self.pk})"
+        return f"Thread #{self.pk}"
 
     def get_other_participant(self, user: User) -> User | None:
         return self.recipient if user == self.starter else self.starter
@@ -73,7 +86,7 @@ class Message(DatesInfo):
     is_read = models.BooleanField(default=False)
 
     class Meta:
-        ordering = ["-created", "-pk"]
+        ordering = ["created", "pk"]
         default_permissions = []
 
     def __str__(self) -> str:

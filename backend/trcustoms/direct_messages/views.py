@@ -1,29 +1,44 @@
-from django.db.models import Exists, OuterRef, QuerySet
+from django.db.models import (
+    BooleanField,
+    Case,
+    Exists,
+    OuterRef,
+    Q,
+    QuerySet,
+    Subquery,
+    Value,
+    When,
+)
 from django.shortcuts import get_object_or_404
 from drf_spectacular.types import OpenApiTypes
 from drf_spectacular.utils import OpenApiParameter, extend_schema
 from rest_framework import mixins, status, viewsets
 from rest_framework.decorators import action
-from rest_framework.exceptions import NotFound, PermissionDenied
+from rest_framework.exceptions import (
+    NotFound,
+    PermissionDenied,
+    ValidationError,
+)
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
+from trcustoms.common.pagination import CustomPagination
 from trcustoms.common.serializers import EmptySerializer
 from trcustoms.direct_messages.logic import (
     can_reply,
     get_administrator,
     mark_thread_read,
     post_message,
-    start_thread,
+    send_message,
 )
 from trcustoms.direct_messages.models import Message, Thread
 from trcustoms.direct_messages.serializers import (
-    MessageListingSerializer,
     MessageQuotaSerializer,
     MessageSerializer,
     MessageSettingsSerializer,
     ThreadCreateSerializer,
     ThreadDetailsSerializer,
+    ThreadListingSerializer,
     ThreadReplySerializer,
 )
 from trcustoms.mixins import MultiSerializerMixin
@@ -36,8 +51,16 @@ def can_act_as_administrator(user: User) -> bool:
     return has_permission(user, UserPermission.MESSAGE_AS_ADMINISTRATOR)
 
 
+class ConversationPagination(CustomPagination):
+    def get_page_number(self, request, paginator):
+        if self.page_query_param not in request.query_params:
+            return paginator.num_pages
+        return super().get_page_number(request, paginator)
+
+
 class ThreadViewSet(
     MultiSerializerMixin,
+    mixins.ListModelMixin,
     mixins.RetrieveModelMixin,
     mixins.CreateModelMixin,
     viewsets.GenericViewSet,
@@ -49,9 +72,68 @@ class ThreadViewSet(
 
     serializer_class = ThreadDetailsSerializer
     serializer_class_by_action = {
+        "list": ThreadListingSerializer,
         "create": ThreadCreateSerializer,
         "reply": ThreadReplySerializer,
     }
+
+    def get_mailbox_owner(self) -> User:
+        if parse_bool(self.request.query_params.get("as_administrator")):
+            if not can_act_as_administrator(self.request.user):
+                raise PermissionDenied
+            if (administrator := get_administrator()) is None:
+                raise NotFound
+            return administrator
+        return self.request.user
+
+    def get_queryset(self) -> QuerySet[Thread]:
+        queryset = super().get_queryset()
+        if self.action != "list":
+            return queryset
+        owner = self.get_mailbox_owner()
+        messages = Message.objects.filter(thread=OuterRef("pk"))
+        last_message = messages.order_by("-created", "-pk")
+        queryset = (
+            queryset.for_participant(owner)
+            .annotate(
+                last_message_text=Subquery(last_message.values("text")[:1]),
+                last_message_sender=Subquery(
+                    last_message.values("sender")[:1]
+                ),
+                has_unread=Exists(
+                    messages.filter(receiver=owner, is_read=False)
+                ),
+            )
+            .annotate(
+                last_message_is_own=Case(
+                    When(last_message_sender=owner.pk, then=Value(True)),
+                    default=Value(False),
+                    output_field=BooleanField(),
+                )
+            )
+        )
+        if search := self.request.query_params.get("search"):
+            queryset = queryset.filter(
+                Q(starter=owner, recipient__username__icontains=search)
+                | Q(recipient=owner, starter__username__icontains=search)
+                | Exists(messages.filter(text__icontains=search))
+            )
+        return queryset
+
+    def get_serializer_context(self) -> dict:
+        context = super().get_serializer_context()
+        if self.action == "list":
+            context["mailbox_owner"] = self.get_mailbox_owner()
+        return context
+
+    @extend_schema(
+        parameters=[
+            OpenApiParameter("search", OpenApiTypes.STR),
+            OpenApiParameter("as_administrator", OpenApiTypes.BOOL),
+        ]
+    )
+    def list(self, request, *args, **kwargs):
+        return super().list(request, *args, **kwargs)
 
     def get_thread_mailbox_owner(self, thread: Thread) -> User:
         user = self.request.user
@@ -92,16 +174,47 @@ class ThreadViewSet(
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         sender = serializer.validated_data["sender"]
-        thread = start_thread(
+        thread = send_message(
             request,
             sender=sender,
             receiver=serializer.validated_data["receiver_id"],
-            subject=serializer.validated_data["subject"],
             text=serializer.validated_data["text"],
+            thread=serializer.validated_data["thread"],
         )
         return self.details_response(
             thread, sender, status_code=status.HTTP_201_CREATED
         )
+
+    @extend_schema(responses=MessageSerializer(many=True))
+    @action(
+        detail=True,
+        methods=["get"],
+        url_path="messages",
+        pagination_class=ConversationPagination,
+    )
+    def thread_messages(self, request, pk: int) -> Response:
+        thread = get_object_or_404(self.get_queryset(), pk=pk)
+        self.get_thread_mailbox_owner(thread)
+        page = self.paginate_queryset(
+            thread.messages.select_related(
+                "sender", "sender__picture", "receiver", "receiver__picture"
+            )
+        )
+        return self.get_paginated_response(
+            MessageSerializer(page, many=True).data
+        )
+
+    @extend_schema(request=EmptySerializer, responses=EmptySerializer)
+    @action(detail=True, methods=["post"])
+    def mark_unread(self, request, pk: int) -> Response:
+        thread = get_object_or_404(self.get_queryset(), pk=pk)
+        owner = self.get_thread_mailbox_owner(thread)
+        message = thread.messages.filter(receiver=owner).last()
+        if message is None:
+            raise ValidationError("There are no received messages to mark.")
+        message.is_read = False
+        message.save(update_fields=["is_read"])
+        return Response({})
 
     @extend_schema(responses={201: MessageSerializer})
     @action(detail=True, methods=["post"])
@@ -120,65 +233,10 @@ class ThreadViewSet(
         )
 
 
-class MessageViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
-    queryset = Message.objects.all().select_related(
-        "thread", "sender", "sender__picture", "receiver", "receiver__picture"
-    )
+class MessageViewSet(viewsets.GenericViewSet):
+    queryset = Message.objects.all()
     permission_classes = [IsAuthenticated]
-    serializer_class = MessageListingSerializer
-
-    def get_mailbox_owner(self) -> User:
-        if parse_bool(self.request.query_params.get("as_administrator")):
-            if not can_act_as_administrator(self.request.user):
-                raise PermissionDenied
-            if (administrator := get_administrator()) is None:
-                raise NotFound
-            return administrator
-        return self.request.user
-
-    def get_queryset(self) -> QuerySet[Message]:
-        queryset = super().get_queryset()
-        if self.action != "list":
-            return queryset
-        owner = self.get_mailbox_owner()
-        queryset = queryset.annotate(
-            is_replied=Exists(
-                Message.objects.filter(
-                    thread=OuterRef("thread"),
-                    sender=OuterRef("receiver"),
-                    created__gt=OuterRef("created"),
-                )
-            )
-        )
-        if self.request.query_params.get("box") == "outbox":
-            return queryset.filter(sender=owner)
-        return queryset.filter(receiver=owner)
-
-    @extend_schema(
-        parameters=[
-            OpenApiParameter(
-                "box", OpenApiTypes.STR, enum=["inbox", "outbox"]
-            ),
-            OpenApiParameter("as_administrator", OpenApiTypes.BOOL),
-        ]
-    )
-    def list(self, request, *args, **kwargs):
-        return super().list(request, *args, **kwargs)
-
-    @extend_schema(request=EmptySerializer, responses=EmptySerializer)
-    @action(detail=True, methods=["post"])
-    def mark_unread(self, request, pk: int) -> Response:
-        message = get_object_or_404(Message, pk=pk)
-        receiver = message.receiver
-        if receiver != request.user and not (
-            receiver is not None
-            and receiver == get_administrator()
-            and can_act_as_administrator(request.user)
-        ):
-            raise NotFound
-        message.is_read = False
-        message.save(update_fields=["is_read"])
-        return Response({})
+    serializer_class = EmptySerializer
 
     @extend_schema(responses=MessageQuotaSerializer)
     @action(detail=False)

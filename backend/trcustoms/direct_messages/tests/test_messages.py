@@ -22,12 +22,7 @@ def start(api_client: APIClient, receiver, text="hello", **kwargs):
     return api_client.post(
         "/api/messages/threads/",
         format="json",
-        data={
-            "receiver_id": receiver.id,
-            "subject": "Crash on level 2",
-            "text": text,
-            **kwargs,
-        },
+        data={"receiver_id": receiver.id, "text": text, **kwargs},
     )
 
 
@@ -39,10 +34,18 @@ def reply(api_client: APIClient, thread_id: int, text="thanks"):
     )
 
 
-def list_messages(api_client: APIClient, **params) -> list[dict]:
-    resp = api_client.get("/api/messages/", data=params)
+def list_threads(api_client: APIClient, **params) -> list[dict]:
+    resp = api_client.get("/api/messages/threads/", data=params)
     assert resp.status_code == status.HTTP_200_OK, resp.content
     return resp.json()["results"]
+
+
+def thread_texts(api_client: APIClient, thread_id: int, **params) -> list:
+    resp = api_client.get(
+        f"/api/messages/threads/{thread_id}/messages/", data=params
+    )
+    assert resp.status_code == status.HTTP_200_OK, resp.content
+    return [message["text"] for message in resp.json()["results"]]
 
 
 def administrator() -> User:
@@ -63,9 +66,8 @@ def test_start_thread(auth_api_client: APIClient) -> None:
 
     assert resp.status_code == status.HTTP_201_CREATED, resp.content
     data = resp.json()
-    assert data["subject"] == "Crash on level 2"
     assert data["other_user"]["id"] == receiver.id
-    assert [m["text"] for m in data["messages"]] == ["hi there"]
+    assert thread_texts(auth_api_client, data["id"]) == ["hi there"]
     thread = Thread.objects.get()
     assert thread.starter == auth_api_client.user
     assert thread.recipient == receiver
@@ -92,10 +94,52 @@ def test_start_thread_rejects_long_text(auth_api_client: APIClient) -> None:
 
 
 @pytest.mark.django_db
-def test_start_thread_requires_subject(auth_api_client: APIClient) -> None:
-    resp = start(auth_api_client, UserFactory(username="receiver"), subject="")
+def test_messaging_a_contact_again_reuses_the_conversation() -> None:
+    alice = UserFactory(username="alice")
+    bob = UserFactory(username="bob")
+    alice_client = client_for(alice)
+    thread_id = start(alice_client, bob, "first").json()["id"]
+    reply(client_for(bob), thread_id, "second")
+
+    resp = start(alice_client, bob, "third")
+
+    assert resp.status_code == status.HTTP_201_CREATED, resp.content
+    assert resp.json()["id"] == thread_id
+    assert thread_texts(alice_client, thread_id) == [
+        "first",
+        "second",
+        "third",
+    ]
+    assert Thread.objects.count() == 1
+    quota = alice_client.get("/api/messages/quota/").json()
+    assert quota["used"] == 1
+
+
+@pytest.mark.django_db
+def test_messaging_back_reuses_the_conversation() -> None:
+    alice = UserFactory(username="alice")
+    bob = UserFactory(username="bob")
+    thread_id = start(client_for(alice), bob).json()["id"]
+
+    resp = start(client_for(bob), alice, "hi back")
+
+    assert resp.json()["id"] == thread_id
+    assert Thread.objects.count() == 1
+
+
+@pytest.mark.django_db
+def test_messaging_a_contact_again_respects_blocking() -> None:
+    alice = UserFactory(username="alice")
+    bob = UserFactory(username="bob")
+    alice_client = client_for(alice)
+    start(alice_client, bob)
+    bob_settings, _ = UserSettings.objects.get_or_create(user=bob)
+    bob_settings.blocked_users.add(alice)
+
+    resp = start(alice_client, bob)
+
     assert resp.status_code == status.HTTP_400_BAD_REQUEST
-    assert "subject" in resp.json()
+    assert resp.json() == {"receiver_id": ["This user cannot be messaged."]}
 
 
 @pytest.mark.django_db
@@ -119,12 +163,14 @@ def test_daily_limit_counts_new_threads_only() -> None:
     bob = UserFactory(username="bob")
     alice_client = client_for(alice)
     thread_id = start(alice_client, bob).json()["id"]
-    for _ in range(4):
-        assert start(alice_client, bob).status_code == 201
+    for i in range(4):
+        receiver = UserFactory(username=f"receiver{i}")
+        assert start(alice_client, receiver).status_code == 201
     for _ in range(3):
         assert reply(alice_client, thread_id).status_code == 201
+    assert start(alice_client, bob).status_code == 201
 
-    resp = start(alice_client, bob)
+    resp = start(alice_client, UserFactory(username="carol"))
 
     assert resp.status_code == status.HTTP_400_BAD_REQUEST
     assert resp.json() == {
@@ -152,7 +198,7 @@ def test_daily_limit_grows_with_contributions(
 
 
 @pytest.mark.django_db
-def test_reply_inbox_and_outbox() -> None:
+def test_reply_and_conversation_list() -> None:
     alice = UserFactory(username="alice")
     bob = UserFactory(username="bob")
     alice_client = client_for(alice)
@@ -162,23 +208,99 @@ def test_reply_inbox_and_outbox() -> None:
     resp = reply(bob_client, thread_id, "second")
 
     assert resp.status_code == status.HTTP_201_CREATED, resp.content
-    inbox = list_messages(alice_client)
-    assert [(m["text"], m["thread_id"]) for m in inbox] == [
-        ("second", thread_id)
-    ]
-    assert inbox[0]["subject"] == "Crash on level 2"
-    assert inbox[0]["is_read"] is False
-    assert [m["text"] for m in list_messages(alice_client, box="outbox")] == [
-        "first"
-    ]
-    assert [m["text"] for m in list_messages(bob_client)] == ["first"]
+    [listed] = list_threads(alice_client)
+    assert listed["id"] == thread_id
+    assert listed["other_user"]["id"] == bob.id
+    assert listed["last_message_text"] == "second"
+    assert listed["last_message_is_own"] is False
+    assert listed["has_unread"] is True
+    [listed] = list_threads(bob_client)
+    assert listed["other_user"]["id"] == alice.id
+    assert listed["last_message_is_own"] is True
+    assert listed["has_unread"] is True
 
     details = alice_client.get(f"/api/messages/threads/{thread_id}/").json()
-    assert [m["text"] for m in details["messages"]] == ["second", "first"]
+    assert thread_texts(alice_client, thread_id) == ["first", "second"]
     assert details["other_user"]["id"] == bob.id
     assert details["can_reply"] is True
-    assert list_messages(alice_client)[0]["is_read"] is True
-    assert list_messages(bob_client)[0]["is_read"] is False
+    assert list_threads(alice_client)[0]["has_unread"] is False
+    assert list_threads(bob_client)[0]["has_unread"] is True
+
+
+@pytest.mark.django_db
+def test_conversation_opens_on_the_latest_page() -> None:
+    alice = UserFactory(username="alice")
+    alice_client = client_for(alice)
+    thread_id = start(alice_client, UserFactory(username="bob"), "0").json()[
+        "id"
+    ]
+    for i in range(1, 25):
+        reply(alice_client, thread_id, str(i))
+
+    resp = alice_client.get(f"/api/messages/threads/{thread_id}/messages/")
+
+    assert resp.json()["current_page"] == 2
+    assert resp.json()["last_page"] == 2
+    assert thread_texts(alice_client, thread_id) == [
+        str(i) for i in range(20, 25)
+    ]
+    assert thread_texts(alice_client, thread_id, page=1) == [
+        str(i) for i in range(20)
+    ]
+
+
+@pytest.mark.django_db
+def test_outsiders_cannot_read_conversation_messages() -> None:
+    thread_id = start(
+        client_for(UserFactory(username="alice")),
+        UserFactory(username="bob"),
+    ).json()["id"]
+
+    resp = client_for(UserFactory(username="eve")).get(
+        f"/api/messages/threads/{thread_id}/messages/"
+    )
+
+    assert resp.status_code == status.HTTP_404_NOT_FOUND
+
+
+@pytest.mark.django_db
+def test_conversation_list_orders_by_latest_message() -> None:
+    alice = UserFactory(username="alice")
+    alice_client = client_for(alice)
+    bob_thread = start(alice_client, UserFactory(username="bob")).json()["id"]
+    carol_thread = start(alice_client, UserFactory(username="carol")).json()[
+        "id"
+    ]
+    assert [t["id"] for t in list_threads(alice_client)] == [
+        carol_thread,
+        bob_thread,
+    ]
+
+    reply(alice_client, bob_thread)
+
+    assert [t["id"] for t in list_threads(alice_client)] == [
+        bob_thread,
+        carol_thread,
+    ]
+
+
+@pytest.mark.django_db
+def test_conversation_list_search() -> None:
+    alice = UserFactory(username="alice")
+    alice_client = client_for(alice)
+    bob_thread = start(alice_client, UserFactory(username="bob"), "TR4 crash")
+    carol_thread = start(alice_client, UserFactory(username="carol"), "hi")
+    bob_thread, carol_thread = (
+        bob_thread.json()["id"],
+        carol_thread.json()["id"],
+    )
+
+    def search(text: str) -> list[int]:
+        return [t["id"] for t in list_threads(alice_client, search=text)]
+
+    assert search("caro") == [carol_thread]
+    assert search("crash") == [bob_thread]
+    assert search("alice") == []
 
 
 @pytest.mark.django_db
@@ -188,7 +310,7 @@ def test_outsiders_cannot_see_or_reply_to_thread() -> None:
     eve_client = client_for(UserFactory(username="eve"))
     thread_id = start(client_for(alice), bob).json()["id"]
 
-    assert list_messages(eve_client) == []
+    assert list_threads(eve_client) == []
     resp = eve_client.get(f"/api/messages/threads/{thread_id}/")
     assert resp.status_code == status.HTTP_404_NOT_FOUND
     assert reply(eve_client, thread_id).status_code == 404
@@ -266,10 +388,11 @@ def test_moderators_share_the_administrator_mailbox(
     user_client = client_for(user)
     thread_id = start(user_client, administrator()).json()["id"]
 
-    [listed] = list_messages(staff_api_client, as_administrator="1")
-    assert listed["thread_id"] == thread_id
-    assert listed["sender"]["id"] == user.id
-    assert list_messages(staff_api_client) == []
+    [listed] = list_threads(staff_api_client, as_administrator="1")
+    assert listed["id"] == thread_id
+    assert listed["other_user"]["id"] == user.id
+    assert listed["has_unread"] is True
+    assert list_threads(staff_api_client) == []
 
     resp = reply(staff_api_client, thread_id, "we're on it")
     assert resp.status_code == status.HTTP_201_CREATED, resp.content
@@ -278,7 +401,7 @@ def test_moderators_share_the_administrator_mailbox(
     assert message.origin_sender == staff_api_client.user
     assert message.receiver == user
 
-    resp = user_client.get("/api/messages/", {"as_administrator": "1"})
+    resp = user_client.get("/api/messages/threads/", {"as_administrator": "1"})
     assert resp.status_code == status.HTTP_403_FORBIDDEN
 
 
@@ -319,7 +442,7 @@ def test_user_details_report_messaging_state() -> None:
     bob_as_seen_by_bob = bob_client.get(f"/api/users/{bob.id}/").json()
     assert bob_as_seen_by_bob["has_unread_messages"] is False
 
-    bob_client.post(f"/api/messages/{Message.objects.get().id}/mark_unread/")
+    bob_client.post(f"/api/messages/threads/{thread_id}/mark_unread/")
     bob_as_seen_by_bob = bob_client.get(f"/api/users/{bob.id}/").json()
     assert bob_as_seen_by_bob["has_unread_messages"] is True
 
@@ -340,34 +463,53 @@ def test_audit_log_filters_sent_messages(staff_api_client: APIClient) -> None:
 
 
 @pytest.mark.django_db
-def test_mark_unread() -> None:
+def test_mark_unread_marks_the_latest_received_message() -> None:
     alice = UserFactory(username="alice")
     bob = UserFactory(username="bob")
     alice_client = client_for(alice)
     bob_client = client_for(bob)
-    thread_id = start(alice_client, bob, "hi").json()["id"]
-    bob_client.get(f"/api/messages/threads/{thread_id}/")
-    message = Message.objects.get()
-    assert Message.objects.get().is_read
+    thread_id = start(alice_client, bob, "first").json()["id"]
+    reply(alice_client, thread_id, "second")
+    reply(bob_client, thread_id, "answer")
+    details = bob_client.get(f"/api/messages/threads/{thread_id}/").json()
+    assert details["can_mark_unread"] is True
+    assert list_threads(bob_client)[0]["has_unread"] is False
 
-    resp = bob_client.post(f"/api/messages/{message.id}/mark_unread/")
+    resp = bob_client.post(f"/api/messages/threads/{thread_id}/mark_unread/")
 
     assert resp.status_code == status.HTTP_200_OK, resp.content
-    assert not Message.objects.get().is_read
-    assert list_messages(bob_client)[0]["is_read"] is False
+    assert list(
+        Message.objects.filter(receiver=bob, is_read=False).values_list(
+            "text", flat=True
+        )
+    ) == ["second"]
+    assert list_threads(bob_client)[0]["has_unread"] is True
 
 
 @pytest.mark.django_db
-def test_only_the_receiver_can_mark_unread() -> None:
-    alice = UserFactory(username="alice")
-    bob = UserFactory(username="bob")
-    alice_client = client_for(alice)
-    start(alice_client, bob, "hi")
-    message = Message.objects.get()
+def test_mark_unread_needs_a_received_message() -> None:
+    alice_client = client_for(UserFactory(username="alice"))
+    thread_id = start(alice_client, UserFactory(username="bob")).json()["id"]
+    details = alice_client.get(f"/api/messages/threads/{thread_id}/").json()
+    assert details["can_mark_unread"] is False
 
-    for client in (alice_client, client_for(UserFactory(username="eve"))):
-        resp = client.post(f"/api/messages/{message.id}/mark_unread/")
-        assert resp.status_code == status.HTTP_404_NOT_FOUND
+    resp = alice_client.post(f"/api/messages/threads/{thread_id}/mark_unread/")
+
+    assert resp.status_code == status.HTTP_400_BAD_REQUEST
+
+
+@pytest.mark.django_db
+def test_outsiders_cannot_mark_unread() -> None:
+    thread_id = start(
+        client_for(UserFactory(username="alice")),
+        UserFactory(username="bob"),
+    ).json()["id"]
+
+    resp = client_for(UserFactory(username="eve")).post(
+        f"/api/messages/threads/{thread_id}/mark_unread/"
+    )
+
+    assert resp.status_code == status.HTTP_404_NOT_FOUND
 
 
 @pytest.mark.django_db
@@ -375,20 +517,19 @@ def test_moderators_mark_administrator_messages_unread(
     staff_api_client: APIClient,
 ) -> None:
     user_client = client_for(UserFactory(username="user"))
-    start(user_client, administrator(), "help")
-    message = Message.objects.get()
-    message.is_read = True
-    message.save()
+    thread_id = start(user_client, administrator(), "help").json()["id"]
+    Message.objects.update(is_read=True)
 
-    resp = staff_api_client.post(f"/api/messages/{message.id}/mark_unread/")
+    resp = staff_api_client.post(
+        f"/api/messages/threads/{thread_id}/mark_unread/"
+    )
 
     assert resp.status_code == status.HTTP_200_OK, resp.content
-    message.refresh_from_db()
-    assert not message.is_read
+    assert not Message.objects.get().is_read
 
 
 @pytest.mark.django_db
-def test_inbox_marks_replied_messages() -> None:
+def test_conversation_list_flags_own_last_message() -> None:
     alice = UserFactory(username="alice")
     bob = UserFactory(username="bob")
     alice_client = client_for(alice)
@@ -396,15 +537,10 @@ def test_inbox_marks_replied_messages() -> None:
     thread_id = start(alice_client, bob, "first").json()["id"]
     reply(alice_client, thread_id, "second")
 
-    assert [m["is_replied"] for m in list_messages(bob_client)] == [
-        False,
-        False,
-    ]
+    assert list_threads(bob_client)[0]["last_message_is_own"] is False
+    assert list_threads(alice_client)[0]["last_message_is_own"] is True
 
     reply(bob_client, thread_id, "answer")
 
-    assert [m["is_replied"] for m in list_messages(bob_client)] == [
-        True,
-        True,
-    ]
-    assert [m["is_replied"] for m in list_messages(alice_client)] == [False]
+    assert list_threads(bob_client)[0]["last_message_is_own"] is True
+    assert list_threads(alice_client)[0]["last_message_is_own"] is False

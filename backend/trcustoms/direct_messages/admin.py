@@ -12,8 +12,8 @@ class MessageInline(admin.TabularInline):
 
 @admin.register(Thread)
 class ThreadAdmin(admin.ModelAdmin):
-    list_display = ["id", "subject", "starter", "recipient", "last_message_at"]
-    search_fields = ["subject", "starter__username", "recipient__username"]
+    list_display = ["id", "starter", "recipient", "last_message_at"]
+    search_fields = ["starter__username", "recipient__username"]
     raw_id_fields = ["starter", "recipient"]
     readonly_fields = ["created", "last_updated"]
     inlines = [MessageInline]

@@ -81,15 +81,19 @@ def post_message(
     return message
 
 
-def start_thread(
-    request: Request, sender: User, receiver: User, subject: str, text: str
+def send_message(
+    request: Request,
+    sender: User,
+    receiver: User,
+    text: str,
+    thread: Thread | None = None,
 ) -> Thread:
-    thread = Thread.objects.create(
-        subject=subject,
-        starter=sender,
-        recipient=receiver,
-        last_message_at=timezone.now(),
-    )
+    if thread is None:
+        thread = Thread.objects.create(
+            starter=sender,
+            recipient=receiver,
+            last_message_at=timezone.now(),
+        )
     post_message(request, thread, sender, text)
     return thread
 
