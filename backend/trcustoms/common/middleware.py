@@ -18,6 +18,10 @@ class TimezoneMiddleware:
 
     def __call__(self, request):
         """Run the middleware."""
-        if request.path.startswith(reverse("admin:index")):
-            timezone.activate(ZoneInfo("Europe/Warsaw"))
-        return self.get_response(request)
+        if not request.path.startswith(reverse("admin:index")):
+            return self.get_response(request)
+        timezone.activate(ZoneInfo("Europe/Warsaw"))
+        try:
+            return self.get_response(request)
+        finally:
+            timezone.deactivate()
