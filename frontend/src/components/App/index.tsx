@@ -298,23 +298,7 @@ const AppRoutes = () => {
           }
         />
         <Route
-          path="/messages/:tabName"
-          element={
-            <FeaturePageGuard feature="messages">
-              <MessagesPage />
-            </FeaturePageGuard>
-          }
-        />
-        <Route
           path="/messages/threads/:threadId"
-          element={
-            <FeaturePageGuard feature="messages">
-              <ThreadPage />
-            </FeaturePageGuard>
-          }
-        />
-        <Route
-          path="/messages/threads/:threadId/:messageId"
           element={
             <FeaturePageGuard feature="messages">
               <ThreadPage />

@@ -1,50 +1,50 @@
 import {
-  messagesList,
-  messagesMarkUnreadCreate,
   messagesQuotaRetrieve,
   messagesSettingsRetrieve,
   messagesSettingsUpdate,
   messagesThreadsCreate,
+  messagesThreadsList,
+  messagesThreadsMarkUnreadCreate,
+  messagesThreadsMessagesList,
   messagesThreadsReplyCreate,
   messagesThreadsRetrieve,
 } from "src/client";
 import type {
   Message,
-  MessageListing,
   MessageQuota,
   MessageSettings,
   ThreadDetails,
+  ThreadListing,
 } from "src/client";
 import type { GenericSearchQuery, GenericSearchResult } from "src/types";
 import { getGenericSearchQuery } from "src/utils/misc";
 
-enum MessageBox {
-  Inbox = "inbox",
-  Outbox = "outbox",
-}
-
-interface MessageSearchQuery extends GenericSearchQuery {
-  box: MessageBox;
+interface ThreadSearchQuery extends GenericSearchQuery {
   asAdministrator?: boolean | undefined;
 }
 
-interface MessageSearchResult
-  extends GenericSearchResult<MessageSearchQuery, MessageListing> {}
+interface ThreadSearchResult
+  extends GenericSearchResult<ThreadSearchQuery, ThreadListing> {}
 
-interface ThreadStartPayload {
+interface ThreadMessagesSearchQuery extends GenericSearchQuery {
+  threadId: number;
+}
+
+interface ThreadMessagesSearchResult
+  extends GenericSearchResult<ThreadMessagesSearchQuery, Message> {}
+
+interface MessageSendPayload {
   receiverId: number;
-  subject: string;
   text: string;
   sendAsAdministrator: boolean;
 }
 
-const searchMessages = async (
-  searchQuery: MessageSearchQuery,
-): Promise<MessageSearchResult> => {
-  const { data } = await messagesList({
+const searchThreads = async (
+  searchQuery: ThreadSearchQuery,
+): Promise<ThreadSearchResult> => {
+  const { data } = await messagesThreadsList({
     query: {
       ...getGenericSearchQuery(searchQuery),
-      box: searchQuery.box,
       as_administrator: searchQuery.asAdministrator || undefined,
     },
     throwOnError: true,
@@ -60,13 +60,21 @@ const getThread = async (threadId: number): Promise<ThreadDetails> => {
   return data;
 };
 
-const startThread = async (
-  payload: ThreadStartPayload,
-): Promise<ThreadDetails> => {
+const getThreadMessages = async (
+  searchQuery: ThreadMessagesSearchQuery,
+): Promise<ThreadMessagesSearchResult> => {
+  const { data } = await messagesThreadsMessagesList({
+    path: { id: searchQuery.threadId },
+    query: getGenericSearchQuery(searchQuery),
+    throwOnError: true,
+  });
+  return { ...data, searchQuery };
+};
+
+const send = async (payload: MessageSendPayload): Promise<ThreadDetails> => {
   const { data } = await messagesThreadsCreate({
     body: {
       receiver_id: payload.receiverId,
-      subject: payload.subject,
       text: payload.text,
       send_as_administrator: payload.sendAsAdministrator,
     },
@@ -89,9 +97,9 @@ const getQuota = async (): Promise<MessageQuota> => {
   return data;
 };
 
-const markUnread = async (messageId: number): Promise<void> => {
-  await messagesMarkUnreadCreate({
-    path: { id: messageId },
+const markUnread = async (threadId: number): Promise<void> => {
+  await messagesThreadsMarkUnreadCreate({
+    path: { id: threadId },
     throwOnError: true,
   });
 };
@@ -127,9 +135,10 @@ const setBlocked = async (userId: number, blocked: boolean): Promise<void> => {
 };
 
 const MessageService = {
-  searchMessages,
+  searchThreads,
   getThread,
-  startThread,
+  getThreadMessages,
+  send,
   reply,
   getQuota,
   markUnread,
@@ -140,11 +149,13 @@ const MessageService = {
 
 export type {
   Message,
-  MessageListing,
   MessageQuota,
   MessageSettings,
-  MessageSearchQuery,
-  MessageSearchResult,
   ThreadDetails,
+  ThreadListing,
+  ThreadMessagesSearchQuery,
+  ThreadMessagesSearchResult,
+  ThreadSearchQuery,
+  ThreadSearchResult,
 };
-export { MessageBox, MessageService };
+export { MessageService };

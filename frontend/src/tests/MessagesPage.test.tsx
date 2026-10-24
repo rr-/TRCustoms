@@ -1,4 +1,6 @@
 import { screen } from "@testing-library/react";
+import { waitFor } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 import { NavBar } from "src/components/common/NavBar";
 import { MessagesPage } from "src/components/pages/MessagesPage";
 import { MessageService } from "src/services/MessageService";
@@ -11,40 +13,42 @@ import { expect } from "vitest";
 import { test } from "vitest";
 import { vi } from "vitest";
 
-const message = {
-  id: 3,
-  thread_id: 1,
-  subject: "Crash after second save crystal",
-  sender: { id: 2, username: "alice", picture: null },
-  receiver: { id: 1, username: "tester", picture: null },
-  text: "It crashes on the **second** floor.",
-  created: "2026-10-12T10:00:00Z",
-  is_read: false,
-  is_replied: false,
+const thread = {
+  id: 1,
+  other_user: { id: 2, username: "alice", picture: null },
+  last_message_text: "It crashes on the **second** floor.",
+  last_message_at: "2026-10-12T10:00:00Z",
+  last_message_is_own: false,
+  has_unread: true,
 };
 
-const mockMessages = (overrides: Record<string, unknown> = {}) =>
-  vi.spyOn(MessageService, "searchMessages").mockImplementation(
+const mockThreads = (overrides: Record<string, unknown> = {}) =>
+  vi.spyOn(MessageService, "searchThreads").mockImplementation(
     async (searchQuery) =>
       ({
-        results: [{ ...message, ...overrides }],
+        results: [{ ...thread, ...overrides }],
         current_page: 1,
         last_page: 1,
         total_count: 1,
         items_on_page: 1,
         searchQuery,
-      }) as unknown as Awaited<
-        ReturnType<typeof MessageService.searchMessages>
-      >,
+      }) as unknown as Awaited<ReturnType<typeof MessageService.searchThreads>>,
   );
+
+const mockSettings = () =>
+  vi.spyOn(MessageService, "getSettings").mockResolvedValue({
+    allow_messages: true,
+    blocked_users: [],
+  });
 
 describe("MessagesPage", () => {
   beforeEach(() => {
     vi.restoreAllMocks();
   });
 
-  test("lists the inbox one message per row", async () => {
-    const search = mockMessages();
+  test("lists one row per contact", async () => {
+    const search = mockThreads();
+    mockSettings();
 
     renderRoute(<MessagesPage />, {
       path: "/messages",
@@ -52,37 +56,47 @@ describe("MessagesPage", () => {
       user: { id: 1, username: "tester", permissions: [] },
     });
 
-    const row = await screen.findByRole("link", { name: /Crash after/ });
-    expect(row).toHaveAttribute("href", "/messages/threads/1/3");
-    expect(row).toHaveTextContent("alice");
-    expect(row).toHaveTextContent("It crashes on the second floor.");
-    expect(search).toHaveBeenCalledWith(
-      expect.objectContaining({ box: "inbox", asAdministrator: false }),
+    expect(await screen.findByRole("link", { name: /alice/ })).toHaveAttribute(
+      "href",
+      "/messages/threads/1",
     );
-    expect(screen.queryByText("Administration inbox")).not.toBeInTheDocument();
+    expect(
+      screen.getByRole("link", { name: "It crashes on the second floor." }),
+    ).toHaveAttribute("href", "/messages/threads/1");
+    expect(screen.getByLabelText("Unread")).toBeInTheDocument();
+    expect(search).toHaveBeenCalledWith(
+      expect.objectContaining({ asAdministrator: false }),
+    );
+    expect(screen.queryByText("Administration")).not.toBeInTheDocument();
   });
 
-  test("shows the receiver in the outbox", async () => {
-    const search = mockMessages();
+  test("searches conversations", async () => {
+    const search = mockThreads();
+    mockSettings();
 
     renderRoute(<MessagesPage />, {
-      path: "/messages/:tabName",
-      entry: "/messages/outbox",
+      path: "/messages",
+      entry: "/messages",
       user: { id: 1, username: "tester", permissions: [] },
     });
 
-    expect(await screen.findByText("To: tester")).toBeInTheDocument();
-    expect(search).toHaveBeenCalledWith(
-      expect.objectContaining({ box: "outbox" }),
+    await userEvent.type(await screen.findByLabelText(/Search/), "crash");
+    await userEvent.keyboard("{Enter}");
+
+    await waitFor(() =>
+      expect(search).toHaveBeenLastCalledWith(
+        expect.objectContaining({ search: "crash" }),
+      ),
     );
   });
 
-  test("shows the Administration mailbox to moderators", async () => {
-    const search = mockMessages();
+  test("switches moderators to the Administration mailbox", async () => {
+    const search = mockThreads();
+    mockSettings();
 
     renderRoute(<MessagesPage />, {
-      path: "/messages/:tabName",
-      entry: "/messages/administration-inbox",
+      path: "/messages",
+      entry: "/messages",
       user: {
         id: 1,
         username: "tester",
@@ -90,11 +104,12 @@ describe("MessagesPage", () => {
       },
     });
 
-    expect(
-      await screen.findByRole("link", { name: /Crash after/ }),
-    ).toBeInTheDocument();
-    expect(search).toHaveBeenCalledWith(
-      expect.objectContaining({ box: "inbox", asAdministrator: true }),
+    await userEvent.click(await screen.findByLabelText("Administration"));
+
+    await waitFor(() =>
+      expect(search).toHaveBeenLastCalledWith(
+        expect.objectContaining({ asAdministrator: true }),
+      ),
     );
   });
 
@@ -105,7 +120,7 @@ describe("MessagesPage", () => {
       user: null,
     });
 
-    expect(screen.queryByText("Inbox")).not.toBeInTheDocument();
+    expect(screen.queryByText("Filter messages")).not.toBeInTheDocument();
   });
 
   test("flags unread messages in the navigation bar", () => {
@@ -141,8 +156,9 @@ describe("MessagesPage", () => {
     expect(screen.queryByText("Messages")).not.toBeInTheDocument();
   });
 
-  test("marks replied messages in the inbox", async () => {
-    mockMessages({ is_read: true, is_replied: true });
+  test("marks conversations where the last message is own", async () => {
+    mockThreads({ has_unread: false, last_message_is_own: true });
+    mockSettings();
 
     renderRoute(<MessagesPage />, {
       path: "/messages",
@@ -150,7 +166,7 @@ describe("MessagesPage", () => {
       user: { id: 1, username: "tester", permissions: [] },
     });
 
-    expect((await screen.findAllByTitle("Replied")).length).toBeGreaterThan(0);
+    expect(await screen.findByTitle("Replied")).toBeInTheDocument();
     expect(screen.queryByLabelText("Unread")).not.toBeInTheDocument();
   });
 });

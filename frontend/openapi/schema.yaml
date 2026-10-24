@@ -878,69 +878,6 @@ paths:
       responses:
         '200':
           description: No response body
-  /api/messages/:
-    get:
-      operationId: messages_list
-      parameters:
-      - in: query
-        name: as_administrator
-        schema:
-          type: boolean
-      - in: query
-        name: box
-        schema:
-          type: string
-          enum:
-          - inbox
-          - outbox
-      - name: page
-        required: false
-        in: query
-        description: A page number within the paginated result set.
-        schema:
-          type: integer
-      - name: page_size
-        required: false
-        in: query
-        description: Number of results to return per page.
-        schema:
-          type: integer
-      - name: search
-        required: false
-        in: query
-        description: A search term.
-        schema:
-          type: string
-      - name: sort
-        required: false
-        in: query
-        description: Which field to use when ordering the results.
-        schema:
-          type: string
-      tags:
-      - messages
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/PaginatedMessageListingList'
-          description: ''
-  /api/messages/{id}/mark_unread/:
-    post:
-      operationId: messages_mark_unread_create
-      parameters:
-      - in: path
-        name: id
-        schema:
-          type: integer
-        description: A unique integer value identifying this message.
-        required: true
-      tags:
-      - messages
-      responses:
-        '200':
-          description: No response body
   /api/messages/quota/:
     get:
       operationId: messages_quota_retrieve
@@ -988,6 +925,44 @@ paths:
                 $ref: '#/components/schemas/MessageSettings'
           description: ''
   /api/messages/threads/:
+    get:
+      operationId: messages_threads_list
+      parameters:
+      - in: query
+        name: as_administrator
+        schema:
+          type: boolean
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: page_size
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      - in: query
+        name: search
+        schema:
+          type: string
+      - name: sort
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      tags:
+      - messages
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedThreadListingList'
+          description: ''
     post:
       operationId: messages_threads_create
       tags:
@@ -1029,6 +1004,64 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ThreadDetails'
+          description: ''
+  /api/messages/threads/{id}/mark_unread/:
+    post:
+      operationId: messages_threads_mark_unread_create
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this thread.
+        required: true
+      tags:
+      - messages
+      responses:
+        '200':
+          description: No response body
+  /api/messages/threads/{id}/messages/:
+    get:
+      operationId: messages_threads_messages_list
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this thread.
+        required: true
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: page_size
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      - name: sort
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      tags:
+      - messages
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedMessageList'
           description: ''
   /api/messages/threads/{id}/reply/:
     post:
@@ -3807,48 +3840,6 @@ components:
       - receiver
       - sender
       - text
-    MessageListing:
-      type: object
-      properties:
-        id:
-          type: integer
-          readOnly: true
-        sender:
-          allOf:
-          - $ref: '#/components/schemas/UserNested'
-          readOnly: true
-        receiver:
-          allOf:
-          - $ref: '#/components/schemas/UserNested'
-          readOnly: true
-        text:
-          type: string
-          maxLength: 1000
-        created:
-          type: string
-          format: date-time
-          readOnly: true
-          nullable: true
-        is_read:
-          type: boolean
-        thread_id:
-          type: integer
-          readOnly: true
-        subject:
-          type: string
-          readOnly: true
-        is_replied:
-          type: boolean
-          readOnly: true
-      required:
-      - created
-      - id
-      - is_replied
-      - receiver
-      - sender
-      - subject
-      - text
-      - thread_id
     MessageQuota:
       type: object
       properties:
@@ -4138,7 +4129,7 @@ components:
             $ref: '#/components/schemas/LevelListing'
         disable_paging:
           type: boolean
-    PaginatedMessageListingList:
+    PaginatedMessageList:
       type: object
       required:
       - current_page
@@ -4169,7 +4160,7 @@ components:
         results:
           type: array
           items:
-            $ref: '#/components/schemas/MessageListing'
+            $ref: '#/components/schemas/Message'
         disable_paging:
           type: boolean
     PaginatedNewsListingList:
@@ -4340,6 +4331,40 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/TagListing'
+        disable_paging:
+          type: boolean
+    PaginatedThreadListingList:
+      type: object
+      required:
+      - current_page
+      - last_page
+      - total_count
+      - items_on_page
+      - next
+      - previous
+      - results
+      - disable_paging
+      properties:
+        current_page:
+          type: integer
+        last_page:
+          type: integer
+        total_count:
+          type: integer
+        items_on_page:
+          type: integer
+        next:
+          type: string
+          format: uri
+          nullable: true
+        previous:
+          type: string
+          format: uri
+          nullable: true
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/ThreadListing'
         disable_paging:
           type: boolean
     PaginatedUserListingList:
@@ -5538,9 +5563,6 @@ components:
       properties:
         receiver_id:
           type: integer
-        subject:
-          type: string
-          maxLength: 100
         text:
           type: string
           maxLength: 1000
@@ -5549,7 +5571,6 @@ components:
           default: false
       required:
       - receiver_id
-      - subject
       - text
     ThreadDetails:
       type: object
@@ -5557,32 +5578,56 @@ components:
         id:
           type: integer
           readOnly: true
-        subject:
-          type: string
-          maxLength: 100
         other_user:
           allOf:
           - $ref: '#/components/schemas/UserNested'
           nullable: true
           readOnly: true
-        messages:
-          type: array
-          items:
-            $ref: '#/components/schemas/Message'
-          readOnly: true
         can_reply:
+          type: boolean
+          readOnly: true
+        can_mark_unread:
           type: boolean
           readOnly: true
         replies_as_administrator:
           type: boolean
           readOnly: true
       required:
+      - can_mark_unread
       - can_reply
       - id
-      - messages
       - other_user
       - replies_as_administrator
-      - subject
+    ThreadListing:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        other_user:
+          allOf:
+          - $ref: '#/components/schemas/UserNested'
+          nullable: true
+          readOnly: true
+        last_message_text:
+          type: string
+          readOnly: true
+        last_message_at:
+          type: string
+          format: date-time
+        last_message_is_own:
+          type: boolean
+          readOnly: true
+        has_unread:
+          type: boolean
+          readOnly: true
+      required:
+      - has_unread
+      - id
+      - last_message_at
+      - last_message_is_own
+      - last_message_text
+      - other_user
     ThreadReply:
       type: object
       properties:

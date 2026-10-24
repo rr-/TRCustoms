@@ -14,7 +14,6 @@ import { FormButtons } from "src/components/forms/FormButtons";
 import { buildMessageTextSchema } from "src/components/forms/MessageForm/schema";
 import { CheckboxField } from "src/components/forms/fields/CheckboxField";
 import { TextAreaField } from "src/components/forms/fields/TextAreaField";
-import { TextField } from "src/components/forms/fields/TextField";
 import { useFormSubmit } from "src/components/forms/useFormSubmit";
 import { getMarkdownLimit } from "src/services/MarkdownLimitService";
 import { MessageService } from "src/services/MessageService";
@@ -30,7 +29,6 @@ import { z } from "zod";
 
 const buildSchema = (maxLength: number | null) =>
   z.object({
-    subject: z.string().trim().min(1, "This field is required."),
     text: buildMessageTextSchema(maxLength),
     sendAsAdministrator: z.boolean(),
   });
@@ -56,7 +54,6 @@ const MessageForm = ({ receiver, onGoBack, onSubmit }: MessageFormProps) => {
   const form = useForm<MessageFormValues>({
     resolver: zodResolver(buildSchema(maxLength)),
     defaultValues: {
-      subject: "",
       text: "",
       sendAsAdministrator: mustSendAsAdministrator,
     },
@@ -72,9 +69,8 @@ const MessageForm = ({ receiver, onGoBack, onSubmit }: MessageFormProps) => {
   });
 
   const { submit, result } = useFormSubmit(form, async (values) => {
-    const thread = await MessageService.startThread({
+    const thread = await MessageService.send({
       receiverId: receiver.id,
-      subject: values.subject,
       text: values.text,
       sendAsAdministrator: values.sendAsAdministrator,
     });
@@ -97,8 +93,6 @@ const MessageForm = ({ receiver, onGoBack, onSubmit }: MessageFormProps) => {
           <InfoMessage type={InfoMessageType.Info}>
             Messages are not private and are monitored by mods for abuse.
           </InfoMessage>
-
-          <TextField required={true} label="Subject" name="subject" />
 
           <TextAreaField
             rich={true}

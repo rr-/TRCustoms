@@ -28,68 +28,103 @@ const makeMessage = (id: number, text: string) => ({
 const makeThread = (overrides: Record<string, unknown> = {}) =>
   ({
     id: 1,
-    subject: "Crash after second save crystal",
     other_user: alice,
     messages: [
-      makeMessage(4, "Here it is."),
-      makeMessage(3, "Send the savegame?"),
-      makeMessage(2, "TR4."),
       makeMessage(1, "Which engine?"),
+      makeMessage(2, "TR4."),
+      makeMessage(3, "Send the savegame?"),
+      makeMessage(4, "Here it is."),
     ],
     can_reply: true,
+    can_mark_unread: true,
     replies_as_administrator: false,
     ...overrides,
   }) as unknown as ThreadDetails;
 
-const renderThread = (entry = "/messages/threads/1") =>
+const mockThread = (
+  overrides: Record<string, unknown> = {},
+  paging: Record<string, unknown> = {},
+) => {
+  const { messages, ...thread } = makeThread(overrides) as ThreadDetails & {
+    messages: unknown[];
+  };
+  vi.spyOn(MessageService, "getThread").mockResolvedValue(thread);
+  return vi.spyOn(MessageService, "getThreadMessages").mockImplementation(
+    async (searchQuery) =>
+      ({
+        results: messages,
+        current_page: 1,
+        last_page: 1,
+        total_count: messages.length,
+        items_on_page: 20,
+        disable_paging: false,
+        searchQuery,
+        ...paging,
+      }) as unknown as Awaited<
+        ReturnType<typeof MessageService.getThreadMessages>
+      >,
+  );
+};
+
+const renderThread = () =>
   renderRoute(<ThreadPage />, {
-    path:
-      entry.split("/").length > 4
-        ? "/messages/threads/:threadId/:messageId"
-        : "/messages/threads/:threadId",
-    entry,
+    path: "/messages/threads/:threadId",
+    entry: "/messages/threads/1",
     user: { id: 1, username: "tester", permissions: [] },
   });
 
 describe("ThreadPage", () => {
   beforeEach(() => {
     vi.restoreAllMocks();
+    vi.spyOn(MessageService, "getSettings").mockResolvedValue({
+      allow_messages: true,
+      blocked_users: [],
+    });
   });
 
-  test("shows the latest message and folds the history", async () => {
-    vi.spyOn(MessageService, "getThread").mockResolvedValue(makeThread());
+  test("shows the whole conversation oldest first", async () => {
+    mockThread();
+
+    renderThread();
+
+    expect(await screen.findByText(/Conversation with/)).toHaveTextContent(
+      "Conversation with alice",
+    );
+    const texts = (await screen.findAllByRole("article")).map(
+      (article) => article.textContent,
+    );
+    expect(texts).toEqual([
+      expect.stringContaining("Which engine?"),
+      expect.stringContaining("TR4."),
+      expect.stringContaining("Send the savegame?"),
+      expect.stringContaining("Here it is."),
+    ]);
+    expect(
+      screen.getAllByRole("link", { name: "Mark as unread" }),
+    ).toHaveLength(1);
+  });
+
+  test("pages back through a long conversation", async () => {
+    const getMessages = mockThread({}, { current_page: 2, last_page: 2 });
 
     renderThread();
 
     expect(await screen.findByText("Here it is.")).toBeInTheDocument();
-    expect(screen.queryByText("Which engine?")).not.toBeInTheDocument();
-
-    await userEvent.click(
-      screen.getByRole("button", { name: "Show earlier messages" }),
+    expect(getMessages).toHaveBeenLastCalledWith(
+      expect.objectContaining({ threadId: 1, page: null }),
     );
 
-    expect(screen.getByText("Send the savegame?")).toBeInTheDocument();
-    expect(screen.getByText("Which engine?")).toBeInTheDocument();
-    expect(screen.getAllByRole("link", { name: /alice|tester/ })).toHaveLength(
-      5,
+    await userEvent.click(screen.getByRole("link", { name: "Previous page" }));
+
+    await waitFor(() =>
+      expect(getMessages).toHaveBeenLastCalledWith(
+        expect.objectContaining({ threadId: 1, page: 1 }),
+      ),
     );
-  });
-
-  test("opens an older message with a pointer to newer ones", async () => {
-    vi.spyOn(MessageService, "getThread").mockResolvedValue(makeThread());
-
-    renderThread("/messages/threads/1/2");
-
-    expect(await screen.findByText("TR4.")).toBeInTheDocument();
-    expect(screen.queryByText("Here it is.")).not.toBeInTheDocument();
-    expect(screen.getByText(/There are 2 newer messages/)).toBeInTheDocument();
-    expect(
-      screen.getByRole("link", { name: "Show the latest" }),
-    ).toHaveAttribute("href", "/messages/threads/1");
   });
 
   test("sends a reply", async () => {
-    vi.spyOn(MessageService, "getThread").mockResolvedValue(makeThread());
+    mockThread();
     const reply = vi
       .spyOn(MessageService, "reply")
       .mockResolvedValue(
@@ -100,34 +135,28 @@ describe("ThreadPage", () => {
 
     renderThread();
 
-    await userEvent.click(await screen.findByRole("link", { name: "Reply" }));
-    await userEvent.type(screen.getByLabelText(/Reply to alice/), "On it.");
+    await userEvent.type(
+      await screen.findByLabelText(/Reply to alice/),
+      "On it.",
+    );
     await userEvent.click(screen.getByRole("button", { name: "Send reply" }));
 
     expect(reply).toHaveBeenCalledWith(1, "On it.");
   });
 
   test("explains when replying is no longer possible", async () => {
-    vi.spyOn(MessageService, "getThread").mockResolvedValue(
-      makeThread({ can_reply: false }),
-    );
+    mockThread({ can_reply: false });
 
     renderThread();
 
     expect(
       await screen.findByText("You can no longer reply to this conversation."),
     ).toBeInTheDocument();
-    expect(
-      screen.queryByRole("link", { name: "Reply" }),
-    ).not.toBeInTheDocument();
+    expect(screen.queryByLabelText(/Reply to alice/)).not.toBeInTheDocument();
   });
 
-  test("marks a received message unread and returns to the inbox", async () => {
-    vi.spyOn(MessageService, "getThread").mockResolvedValue(
-      makeThread({
-        messages: [makeMessage(3, "Send the savegame?")],
-      }),
-    );
+  test("marks the conversation unread", async () => {
+    mockThread({ can_mark_unread: true });
     const markUnread = vi
       .spyOn(MessageService, "markUnread")
       .mockResolvedValue(undefined);
@@ -138,13 +167,11 @@ describe("ThreadPage", () => {
       await screen.findByRole("link", { name: "Mark as unread" }),
     );
 
-    expect(markUnread).toHaveBeenCalledWith(3);
+    expect(markUnread).toHaveBeenCalledWith(1);
   });
 
-  test("does not offer marking own messages unread", async () => {
-    vi.spyOn(MessageService, "getThread").mockResolvedValue(
-      makeThread({ messages: [makeMessage(4, "Here it is.")] }),
-    );
+  test("does not offer marking unread without received messages", async () => {
+    mockThread({ can_mark_unread: false });
 
     renderThread();
 
@@ -155,7 +182,7 @@ describe("ThreadPage", () => {
   });
 
   test("refreshes the unread indicator once the thread is read", async () => {
-    vi.spyOn(MessageService, "getThread").mockResolvedValue(makeThread());
+    mockThread();
     const getCurrentUser = vi
       .spyOn(UserService, "getCurrentUser")
       .mockResolvedValue({ id: 1 } as UserDetails);

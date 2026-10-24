@@ -1,0 +1,78 @@
+.table :global(thead) th {
+  padding-top: 0.75rem;
+  padding-bottom: 0.75rem;
+  text-align: left;
+}
+
+.table :global(thead) th,
+.table :global(tbody) td {
+  border-bottom: 1px solid var(--box-header-bg-color);
+}
+
+.table :global(tbody) td {
+  padding-top: 0.6rem;
+  padding-bottom: 0.6rem;
+}
+
+.table .marker {
+  width: 1rem;
+  text-align: center;
+}
+
+.table .contact {
+  width: 12rem;
+  white-space: nowrap;
+}
+
+.table .lastMessage {
+  max-width: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.table .date {
+  width: 1%;
+  white-space: nowrap;
+  text-align: right;
+}
+
+.contact a {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--fg-color);
+}
+
+.table .contact img {
+  width: 2.5rem;
+  height: 2.5rem;
+  max-width: none;
+  max-height: none;
+}
+
+.lastMessage a {
+  color: var(--fg-color);
+  opacity: 0.7;
+}
+
+.unread a {
+  font-weight: bold;
+}
+
+.dot {
+  display: inline-block;
+  width: 0.5rem;
+  height: 0.5rem;
+  background: var(--failure-fg-color);
+}
+
+.replied {
+  display: inline-flex;
+  opacity: 0.7;
+}
+
+.replied :global(.Icon) {
+  width: 1rem;
+  height: 1rem;
+}

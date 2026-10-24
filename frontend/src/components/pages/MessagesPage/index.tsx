@@ -1,53 +1,86 @@
-import { useState } from "react";
+import styles from "./index.module.css";
 import { useNavigate } from "react-router-dom";
-import { useParams } from "react-router-dom";
-import { DataList } from "src/components/common/DataList";
-import { hasPermission } from "src/components/common/PermissionGuard";
-import { LightTabSwitch } from "src/components/common/TabSwitch";
-import type { TabPage } from "src/components/common/TabSwitch";
-import { PlainLayout } from "src/components/layouts/PlainLayout";
+import { useSearchParams } from "react-router-dom";
+import type { DataTableColumn } from "src/components/common/DataTable";
+import { DataTable } from "src/components/common/DataTable";
+import { Link } from "src/components/common/Link";
+import { MessagesSidebar } from "src/components/common/MessagesSidebar";
+import { deserializeThreadSearchQuery } from "src/components/common/MessagesSidebar";
+import { threadSearchUrl } from "src/components/common/MessagesSidebar";
+import { UserPicture } from "src/components/common/UserPicture";
+import { IconReply } from "src/components/icons";
+import { SidebarLayout } from "src/components/layouts/SidebarLayout";
 import { Error403Page } from "src/components/pages/ErrorPage";
-import { MessageRow } from "src/components/pages/MessagesPage/MessageRow";
-import type { MessageListing } from "src/services/MessageService";
-import type { MessageSearchQuery } from "src/services/MessageService";
-import { MessageBox } from "src/services/MessageService";
+import type { ThreadListing } from "src/services/MessageService";
+import type { ThreadSearchQuery } from "src/services/MessageService";
 import { MessageService } from "src/services/MessageService";
-import { UserPermission } from "src/services/UserService";
 import { queryKeys } from "src/services/queryKeys";
 import { usePageMetadata } from "src/stores/pageMetadata";
 import { useUser } from "src/stores/user";
+import { formatDateTime } from "src/utils/string";
+import { markdownToPlainText } from "src/utils/string";
 
-interface MessageListProps {
-  box: MessageBox;
-  asAdministrator: boolean;
-}
+const unreadClassName = (thread: ThreadListing) =>
+  thread.has_unread ? styles.unread : undefined;
 
-const MessageList = ({ box, asAdministrator }: MessageListProps) => {
-  const [searchQuery, setSearchQuery] = useState<MessageSearchQuery>({
-    page: null,
-    box,
-    asAdministrator,
-  });
-
-  return (
-    <DataList
-      queryKey={queryKeys.messages.lists}
-      searchQuery={searchQuery}
-      onSearchQueryChange={setSearchQuery}
-      searchFunc={MessageService.searchMessages}
-      itemKey={(message: MessageListing) => message.id.toString()}
-      itemView={(message: MessageListing) => (
-        <MessageRow message={message} box={box} />
-      )}
-      noItemsElement={<p>There are no messages here.</p>}
-    />
-  );
-};
+const columns: DataTableColumn<ThreadListing>[] = [
+  {
+    name: "marker",
+    label: "",
+    className: styles.marker,
+    itemElement: ({ item }) =>
+      item.has_unread ? (
+        <span className={styles.dot} aria-label="Unread" />
+      ) : (
+        item.last_message_is_own && (
+          <span className={styles.replied} title="Replied">
+            <IconReply />
+          </span>
+        )
+      ),
+  },
+  {
+    name: "contact",
+    label: "Contact",
+    className: styles.contact,
+    itemElement: ({ item }) => (
+      <span className={unreadClassName(item)}>
+        <Link to={`/messages/threads/${item.id}`}>
+          {item.other_user && <UserPicture user={item.other_user} />}
+          {item.other_user?.username ?? "a deleted user"}
+        </Link>
+      </span>
+    ),
+  },
+  {
+    name: "lastMessage",
+    label: "Last message",
+    className: styles.lastMessage,
+    itemElement: ({ item }) => (
+      <span className={unreadClassName(item)}>
+        <Link to={`/messages/threads/${item.id}`}>
+          {markdownToPlainText(item.last_message_text)}
+        </Link>
+      </span>
+    ),
+  },
+  {
+    name: "date",
+    label: "Last message date",
+    className: styles.date,
+    itemElement: ({ item }) => formatDateTime(item.last_message_at),
+  },
+];
 
 const MessagesPage = () => {
-  const { tabName = "inbox" } = useParams();
-  const navigate = useNavigate();
   const { user } = useUser();
+  const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const searchQuery = deserializeThreadSearchQuery(
+    Object.fromEntries(searchParams),
+  );
+  const setSearchQuery = (query: ThreadSearchQuery) =>
+    navigate(threadSearchUrl(query));
 
   usePageMetadata(() => ({ ready: true, title: "Messages" }), []);
 
@@ -55,45 +88,26 @@ const MessagesPage = () => {
     return <Error403Page />;
   }
 
-  const tabs: TabPage[] = [
-    {
-      name: "inbox",
-      label: "Inbox",
-      content: <MessageList box={MessageBox.Inbox} asAdministrator={false} />,
-    },
-    {
-      name: "outbox",
-      label: "Outbox",
-      content: <MessageList box={MessageBox.Outbox} asAdministrator={false} />,
-    },
-  ];
-  if (hasPermission(user, UserPermission.messageAsAdministrator)) {
-    tabs.push(
-      {
-        name: "administration-inbox",
-        label: "Administration inbox",
-        content: <MessageList box={MessageBox.Inbox} asAdministrator={true} />,
-      },
-      {
-        name: "administration-outbox",
-        label: "Administration outbox",
-        content: <MessageList box={MessageBox.Outbox} asAdministrator={true} />,
-      },
-    );
-  }
-
-  const handleTabChange = (tab: TabPage) => {
-    navigate(tab.name === "inbox" ? "/messages" : `/messages/${tab.name}`);
-  };
-
   return (
-    <PlainLayout header="Messages">
-      <LightTabSwitch
-        tabs={tabs}
-        tabName={tabs.some((tab) => tab.name === tabName) ? tabName : "inbox"}
-        onTabChange={handleTabChange}
+    <SidebarLayout
+      sidebar={
+        <MessagesSidebar
+          searchQuery={searchQuery}
+          onSearchQueryChange={setSearchQuery}
+        />
+      }
+    >
+      <DataTable
+        className={styles.table}
+        queryKey={queryKeys.messages.lists}
+        columns={columns}
+        itemKey={(thread) => `${thread.id}`}
+        searchQuery={searchQuery}
+        searchFunc={MessageService.searchThreads}
+        onSearchQueryChange={setSearchQuery}
+        noItemsElement={<p>There are no messages here.</p>}
       />
-    </PlainLayout>
+    </SidebarLayout>
   );
 };
 

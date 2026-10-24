@@ -63,12 +63,8 @@ describe("MessageForm", () => {
 
   test("starts a conversation and shows the daily limit", async () => {
     setUser([]);
-    const thread = { id: 9 } as Awaited<
-      ReturnType<typeof MessageService.startThread>
-    >;
-    const startThread = vi
-      .spyOn(MessageService, "startThread")
-      .mockResolvedValue(thread);
+    const thread = { id: 9 } as Awaited<ReturnType<typeof MessageService.send>>;
+    const send = vi.spyOn(MessageService, "send").mockResolvedValue(thread);
     const onSubmit = vi.fn();
     render(<MessageForm receiver={receiver} onSubmit={onSubmit} />, {
       wrapper,
@@ -79,13 +75,11 @@ describe("MessageForm", () => {
     ).toBeInTheDocument();
     expect(screen.queryByLabelText(/Administration/)).not.toBeInTheDocument();
 
-    await userEvent.type(screen.getByLabelText(/Subject/), "Crash");
     await userEvent.type(screen.getByLabelText(/Message/), "hello there");
     await userEvent.click(screen.getByRole("button", { name: "Send" }));
 
-    expect(startThread).toHaveBeenCalledWith({
+    expect(send).toHaveBeenCalledWith({
       receiverId: 2,
-      subject: "Crash",
       text: "hello there",
       sendAsAdministrator: false,
     });
@@ -103,10 +97,9 @@ describe("MessageForm", () => {
 
   test("rejects messages over the length limit", async () => {
     setUser([]);
-    const send = vi.spyOn(MessageService, "startThread");
+    const send = vi.spyOn(MessageService, "send");
     render(<MessageForm receiver={receiver} />, { wrapper });
 
-    await userEvent.type(screen.getByLabelText(/Subject/), "Crash");
     await userEvent.click(screen.getByLabelText(/Message/));
     await userEvent.paste("x".repeat(1001));
     await userEvent.click(screen.getByRole("button", { name: "Send" }));

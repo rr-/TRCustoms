@@ -321,18 +321,6 @@ export type Message = {
     is_read?: boolean;
 };
 
-export type MessageListing = {
-    readonly id: number;
-    sender: UserNested;
-    receiver: UserNested;
-    text: string;
-    readonly created: string | null;
-    is_read?: boolean;
-    readonly thread_id: number;
-    readonly subject: string;
-    readonly is_replied: boolean;
-};
-
 export type MessageQuota = {
     limit: number;
     used: number;
@@ -426,14 +414,14 @@ export type PaginatedLevelListingList = {
     disable_paging: boolean;
 };
 
-export type PaginatedMessageListingList = {
+export type PaginatedMessageList = {
     current_page: number;
     last_page: number;
     total_count: number;
     items_on_page: number;
     next: string | null;
     previous: string | null;
-    results: Array<MessageListing>;
+    results: Array<Message>;
     disable_paging: boolean;
 };
 
@@ -489,6 +477,17 @@ export type PaginatedTagListingList = {
     next: string | null;
     previous: string | null;
     results: Array<TagListing>;
+    disable_paging: boolean;
+};
+
+export type PaginatedThreadListingList = {
+    current_page: number;
+    last_page: number;
+    total_count: number;
+    items_on_page: number;
+    next: string | null;
+    previous: string | null;
+    results: Array<ThreadListing>;
     disable_paging: boolean;
 };
 
@@ -853,18 +852,25 @@ export type TagNested = {
 
 export type ThreadCreate = {
     receiver_id: number;
-    subject: string;
     text: string;
     send_as_administrator?: boolean;
 };
 
 export type ThreadDetails = {
     readonly id: number;
-    subject: string;
     other_user: UserNested | null;
-    readonly messages: Array<Message>;
     readonly can_reply: boolean;
+    readonly can_mark_unread: boolean;
     readonly replies_as_administrator: boolean;
+};
+
+export type ThreadListing = {
+    readonly id: number;
+    other_user: UserNested | null;
+    readonly last_message_text: string;
+    last_message_at: string;
+    readonly last_message_is_own: boolean;
+    readonly has_unread: boolean;
 };
 
 export type ThreadReply = {
@@ -1291,11 +1297,6 @@ export type MessageWritable = {
     is_read?: boolean;
 };
 
-export type MessageListingWritable = {
-    text: string;
-    is_read?: boolean;
-};
-
 export type MessageSettingsWritable = {
     allow_messages?: boolean;
     blocked_user_ids?: Array<number>;
@@ -1377,14 +1378,14 @@ export type PaginatedLevelListingListWritable = {
     disable_paging: boolean;
 };
 
-export type PaginatedMessageListingListWritable = {
+export type PaginatedMessageListWritable = {
     current_page: number;
     last_page: number;
     total_count: number;
     items_on_page: number;
     next: string | null;
     previous: string | null;
-    results: Array<MessageListingWritable>;
+    results: Array<MessageWritable>;
     disable_paging: boolean;
 };
 
@@ -1440,6 +1441,17 @@ export type PaginatedTagListingListWritable = {
     next: string | null;
     previous: string | null;
     results: Array<TagListingWritable>;
+    disable_paging: boolean;
+};
+
+export type PaginatedThreadListingListWritable = {
+    current_page: number;
+    last_page: number;
+    total_count: number;
+    items_on_page: number;
+    next: string | null;
+    previous: string | null;
+    results: Array<ThreadListingWritable>;
     disable_paging: boolean;
 };
 
@@ -1620,7 +1632,11 @@ export type TagNestedWritable = {
 };
 
 export type ThreadDetailsWritable = {
-    subject: string;
+    [key: string]: unknown;
+};
+
+export type ThreadListingWritable = {
+    last_message_at: string;
 };
 
 export type UploadedFileDetailsWritable = {
@@ -2340,57 +2356,6 @@ export type LevelsRejectCreateResponses = {
     200: unknown;
 };
 
-export type MessagesListData = {
-    body?: never;
-    path?: never;
-    query?: {
-        as_administrator?: boolean;
-        box?: 'inbox' | 'outbox';
-        /**
-         * A page number within the paginated result set.
-         */
-        page?: number;
-        /**
-         * Number of results to return per page.
-         */
-        page_size?: number;
-        /**
-         * A search term.
-         */
-        search?: string;
-        /**
-         * Which field to use when ordering the results.
-         */
-        sort?: string;
-    };
-    url: '/api/messages/';
-};
-
-export type MessagesListResponses = {
-    200: PaginatedMessageListingList;
-};
-
-export type MessagesListResponse = MessagesListResponses[keyof MessagesListResponses];
-
-export type MessagesMarkUnreadCreateData = {
-    body?: never;
-    path: {
-        /**
-         * A unique integer value identifying this message.
-         */
-        id: number;
-    };
-    query?: never;
-    url: '/api/messages/{id}/mark_unread/';
-};
-
-export type MessagesMarkUnreadCreateResponses = {
-    /**
-     * No response body
-     */
-    200: unknown;
-};
-
 export type MessagesQuotaRetrieveData = {
     body?: never;
     path?: never;
@@ -2430,6 +2395,34 @@ export type MessagesSettingsUpdateResponses = {
 
 export type MessagesSettingsUpdateResponse = MessagesSettingsUpdateResponses[keyof MessagesSettingsUpdateResponses];
 
+export type MessagesThreadsListData = {
+    body?: never;
+    path?: never;
+    query?: {
+        as_administrator?: boolean;
+        /**
+         * A page number within the paginated result set.
+         */
+        page?: number;
+        /**
+         * Number of results to return per page.
+         */
+        page_size?: number;
+        search?: string;
+        /**
+         * Which field to use when ordering the results.
+         */
+        sort?: string;
+    };
+    url: '/api/messages/threads/';
+};
+
+export type MessagesThreadsListResponses = {
+    200: PaginatedThreadListingList;
+};
+
+export type MessagesThreadsListResponse = MessagesThreadsListResponses[keyof MessagesThreadsListResponses];
+
 export type MessagesThreadsCreateData = {
     body: ThreadCreate;
     path?: never;
@@ -2460,6 +2453,60 @@ export type MessagesThreadsRetrieveResponses = {
 };
 
 export type MessagesThreadsRetrieveResponse = MessagesThreadsRetrieveResponses[keyof MessagesThreadsRetrieveResponses];
+
+export type MessagesThreadsMarkUnreadCreateData = {
+    body?: never;
+    path: {
+        /**
+         * A unique integer value identifying this thread.
+         */
+        id: number;
+    };
+    query?: never;
+    url: '/api/messages/threads/{id}/mark_unread/';
+};
+
+export type MessagesThreadsMarkUnreadCreateResponses = {
+    /**
+     * No response body
+     */
+    200: unknown;
+};
+
+export type MessagesThreadsMessagesListData = {
+    body?: never;
+    path: {
+        /**
+         * A unique integer value identifying this thread.
+         */
+        id: number;
+    };
+    query?: {
+        /**
+         * A page number within the paginated result set.
+         */
+        page?: number;
+        /**
+         * Number of results to return per page.
+         */
+        page_size?: number;
+        /**
+         * A search term.
+         */
+        search?: string;
+        /**
+         * Which field to use when ordering the results.
+         */
+        sort?: string;
+    };
+    url: '/api/messages/threads/{id}/messages/';
+};
+
+export type MessagesThreadsMessagesListResponses = {
+    200: PaginatedMessageList;
+};
+
+export type MessagesThreadsMessagesListResponse = MessagesThreadsMessagesListResponses[keyof MessagesThreadsMessagesListResponses];
 
 export type MessagesThreadsReplyCreateData = {
     body: ThreadReply;

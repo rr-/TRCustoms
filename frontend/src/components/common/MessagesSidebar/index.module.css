@@ -1,0 +1,28 @@
+.wrapper {
+  min-width: 16rem;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+}
+
+.resetButton {
+  font-size: 1rem;
+  font-weight: normal;
+}
+
+.section {
+  margin-bottom: 0.5rem;
+}
+
+.section :global .TextFormField--input,
+.section :global .TextInput--input {
+  width: 100%;
+}
+
+.searchBar {
+  display: grid;
+  grid-template-columns: 1fr min-content;
+  align-items: flex-end;
+}
