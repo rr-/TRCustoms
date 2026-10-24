@@ -439,7 +439,7 @@ class TRLEScraper:
     def get_size(self, url) -> int | None:
         response = self._head(url)
         match header := response.headers["Content-Length"]:
-            case str(size):
+            case str() as size:
                 return int(size)
             case None:
                 return None
