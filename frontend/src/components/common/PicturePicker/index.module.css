@@ -2,9 +2,40 @@
   width: 15rem;
   aspect-ratio: calc(4 / 3);
 }
-.wrapper.cover {
-  object-fit: cover;
-}
 .wrapper.contain {
   object-fit: contain;
+}
+
+.crop {
+  text-align: left;
+}
+
+.cropCaption {
+  margin: 0 0 0.25rem 0;
+}
+
+.cropImage {
+  position: relative;
+  width: 20rem;
+}
+
+.cropImage img {
+  display: block;
+  width: 100%;
+}
+
+.cropMask {
+  position: absolute;
+  background:
+    repeating-linear-gradient(
+      -45deg,
+      transparent 0 0.5rem,
+      var(--button-bg-color) 0.5rem 0.65rem
+    ),
+    color-mix(in srgb, var(--bg-color) 33%, transparent);
+}
+
+.cropBox {
+  position: absolute;
+  border: 2px dashed var(--button-bg-color);
 }
