@@ -1,12 +1,14 @@
 from drf_spectacular.utils import extend_schema, extend_schema_view
 from rest_framework import status, viewsets
 from rest_framework.decorators import action
+from rest_framework.exceptions import NotFound
 from rest_framework.generics import get_object_or_404
 from rest_framework.parsers import JSONParser, MultiPartParser
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 
 from trcustoms.common.serializers import EmptySerializer
+from trcustoms.levels.models import Level
 from trcustoms.mixins import PermissionsMixin
 from trcustoms.tasks.convert_images import RECOMMENDED_SIZE, convert_image
 from trcustoms.uploads import presign
@@ -31,6 +33,24 @@ def schedule_image_conversion_if_needed(uploaded_file: UploadedFile) -> None:
         return
 
     convert_image.apply_async((uploaded_file.id,), countdown=30)
+
+
+def get_accessible_upload(request, pk) -> UploadedFile:
+    uploaded_file = get_object_or_404(
+        UploadedFile, pk=pk, status=UploadStatus.COMPLETE
+    )
+    if uploaded_file.upload_type != UploadType.LEVEL_FILE:
+        return uploaded_file
+    user = request.user
+    if user.is_authenticated and uploaded_file.uploader_id == user.pk:
+        return uploaded_file
+    if (
+        Level.objects.visible_to(user)
+        .filter(files__file=uploaded_file)
+        .exists()
+    ):
+        return uploaded_file
+    raise NotFound
 
 
 @extend_schema_view(
@@ -61,9 +81,7 @@ class UploadViewSet(PermissionsMixin, viewsets.GenericViewSet):
         return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
 
     def retrieve(self, request, pk) -> Response:
-        uploaded_file = get_object_or_404(
-            UploadedFile, pk=pk, status=UploadStatus.COMPLETE
-        )
+        uploaded_file = get_accessible_upload(request, pk)
         return Response(
             UploadedFileDetailsSerializer(uploaded_file).data,
             status.HTTP_200_OK,
@@ -132,9 +150,7 @@ class UploadViewSet(PermissionsMixin, viewsets.GenericViewSet):
 
     @action(detail=True)
     def file(self, request, pk) -> Response:
-        uploaded_file = get_object_or_404(
-            UploadedFile, pk=pk, status=UploadStatus.COMPLETE
-        )
+        uploaded_file = get_accessible_upload(request, pk)
         return stream_file_field(
             uploaded_file.content, ["upload"], as_attachment=False
         )

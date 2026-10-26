@@ -1,6 +1,7 @@
 from django.db import models
-from django.db.models import Count, UniqueConstraint
+from django.db.models import Count, Q, UniqueConstraint
 from django.db.models.functions import Lower
+from django.utils import timezone
 
 from trcustoms.audit_logs import registry
 from trcustoms.common.models import DatesInfo
@@ -8,7 +9,15 @@ from trcustoms.common.models import DatesInfo
 
 class GenreManager(models.Manager):
     def with_counts(self):
-        return self.annotate(level_count=Count("level"))
+        return self.annotate(
+            level_count=Count(
+                "level",
+                filter=Q(
+                    level__is_approved=True,
+                    level__release_date__lte=timezone.localdate(),
+                ),
+            )
+        )
 
 
 @registry.register_model(name_getter=lambda instance: instance.name)

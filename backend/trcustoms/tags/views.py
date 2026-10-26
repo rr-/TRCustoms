@@ -103,7 +103,8 @@ class TagStatsView(generics.ListAPIView):
             Tag.objects.exclude(pk=pk)
             .annotate(
                 level_count=Subquery(
-                    Level.objects.filter(tags__pk=pk)
+                    Level.objects.public()
+                    .filter(tags__pk=pk)
                     .filter(
                         tags=OuterRef("pk"),
                     )

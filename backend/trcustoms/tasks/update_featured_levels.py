@@ -230,7 +230,9 @@ def get_featured_level(
     if feature_type == FeatureType.NEW_RELEASE:
         return get_new_release()
     return (
-        FeaturedLevel.objects.filter(feature_type=feature_type)
+        FeaturedLevel.objects.filter(
+            feature_type=feature_type, level__in=Level.objects.public()
+        )
         .order_by("-created")
         .first()
     )

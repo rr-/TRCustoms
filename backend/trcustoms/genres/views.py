@@ -32,7 +32,8 @@ class GenreStatsView(generics.ListAPIView):
             Genre.objects.exclude(pk=pk)
             .annotate(
                 level_count=Subquery(
-                    Level.objects.filter(genres__pk=pk)
+                    Level.objects.public()
+                    .filter(genres__pk=pk)
                     .filter(
                         genres=OuterRef("pk"),
                     )
