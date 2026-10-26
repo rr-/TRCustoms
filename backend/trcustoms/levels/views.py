@@ -1,9 +1,7 @@
 from pathlib import Path
 
 from django.conf import settings
-from django.db.models import Exists, OuterRef, Q
 from django.http import HttpResponseRedirect
-from django.utils import timezone
 from drf_spectacular.types import OpenApiTypes
 from drf_spectacular.utils import extend_schema, extend_schema_view
 from rest_framework import mixins, status, viewsets
@@ -146,25 +144,7 @@ class LevelViewSet(
             self.request.query_params,
             auth_user,
         )
-        if not has_permission(auth_user, UserPermission.VIEW_PENDING_LEVELS):
-            if auth_user and not auth_user.is_anonymous:
-                is_author = Exists(
-                    Level.authors.through.objects.filter(
-                        level_id=OuterRef("pk"), user_id=auth_user.pk
-                    )
-                )
-                queryset = queryset.annotate(
-                    is_authored_by_auth_user=is_author
-                ).filter(
-                    Q(
-                        is_approved=True,
-                        release_date__lte=timezone.localdate(),
-                    )
-                    | Q(is_authored_by_auth_user=True)
-                )
-            else:
-                queryset = queryset.public()
-        return queryset
+        return queryset.visible_to(auth_user)
 
     @action(detail=True, methods=["post"])
     def approve(self, request, pk: int) -> Response:
@@ -211,7 +191,11 @@ class LevelFileViewSet(viewsets.GenericViewSet):
     @extend_schema(responses={200: OpenApiTypes.BINARY})
     @action(detail=True)
     def download(self, request, pk: int) -> Response:
-        file = get_object_or_404(LevelFile, pk=pk)
+        file = get_object_or_404(
+            LevelFile,
+            pk=pk,
+            level__in=Level.objects.visible_to(request.user),
+        )
         if not file.file:
             raise NotFound("This file is no longer available.")
 

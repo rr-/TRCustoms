@@ -6,6 +6,7 @@ from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 
 from trcustoms.common.serializers import EmptySerializer
+from trcustoms.levels.models import Level
 from trcustoms.mixins import PermissionsMixin
 from trcustoms.permissions import (
     AllowNone,
@@ -78,7 +79,10 @@ class PlaylistItemViewSet(
 
     def get_queryset(self):
         user_id = self.kwargs["user_id"]
-        return self.queryset.filter(user_id=user_id)
+        return self.queryset.filter(
+            user_id=user_id,
+            level__in=Level.objects.visible_to(self.request.user),
+        )
 
     def get_serializer_context(self) -> dict:
         return {
@@ -88,9 +92,7 @@ class PlaylistItemViewSet(
 
     @action(detail=False)
     def by_level_id(self, request, user_id: int, level_id: str):
-        item = get_object_or_404(
-            self.queryset, user_id=user_id, level_id=level_id
-        )
+        item = get_object_or_404(self.get_queryset(), level_id=level_id)
         serializer = self.get_serializer(item)
         return Response(serializer.data, status=status.HTTP_200_OK)
 

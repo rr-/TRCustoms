@@ -3,7 +3,7 @@ from django.core.validators import MinLengthValidator, URLValidator
 from rest_framework import serializers
 
 from trcustoms.common.fields import CustomCharField
-from trcustoms.levels.models import Level
+from trcustoms.levels.fields import VisibleLevelField
 from trcustoms.levels.serializers import LevelNestedSerializer
 from trcustoms.mails import send_walkthrough_update_mail
 from trcustoms.tasks import update_awards
@@ -51,9 +51,7 @@ class WalkthroughListingSerializer(serializers.ModelSerializer):
 
 
 class WalkthroughDetailsSerializer(WalkthroughListingSerializer):
-    level_id = serializers.PrimaryKeyRelatedField(
-        write_only=True, source="level", queryset=Level.objects.all()
-    )
+    level_id = VisibleLevelField(write_only=True, source="level")
     text = CustomCharField(
         validators=[MinLengthValidator(0)], collapse_whitespace=False
     )

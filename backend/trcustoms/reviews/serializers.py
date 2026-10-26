@@ -1,7 +1,7 @@
 from rest_framework import serializers
 
 from trcustoms.common.fields import CustomCharField
-from trcustoms.levels.models import Level
+from trcustoms.levels.fields import VisibleLevelField
 from trcustoms.levels.serializers import LevelNestedSerializer
 from trcustoms.mails import (
     send_review_removal_mail,
@@ -81,9 +81,7 @@ class ReviewListingSerializer(serializers.ModelSerializer):
 
 
 class ReviewDetailsSerializer(ReviewListingSerializer):
-    level_id = serializers.PrimaryKeyRelatedField(
-        write_only=True, source="level", queryset=Level.objects.all()
-    )
+    level_id = VisibleLevelField(write_only=True, source="level")
 
     class Meta:
         model = Review

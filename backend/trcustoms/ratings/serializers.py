@@ -1,7 +1,7 @@
 from rest_framework import serializers
 
 from trcustoms.common.serializers import RatingClassNestedSerializer
-from trcustoms.levels.models import Level
+from trcustoms.levels.fields import VisibleLevelField
 from trcustoms.levels.serializers import LevelNestedSerializer
 from trcustoms.mails import (
     send_rating_submission_mail,
@@ -54,9 +54,7 @@ class RatingListingSerializer(serializers.ModelSerializer):
 
 
 class RatingDetailsSerializer(RatingListingSerializer):
-    level_id = serializers.PrimaryKeyRelatedField(
-        write_only=True, source="level", queryset=Level.objects.all()
-    )
+    level_id = VisibleLevelField(write_only=True, source="level")
     answers = serializers.PrimaryKeyRelatedField(read_only=True, many=True)
     answer_ids = serializers.PrimaryKeyRelatedField(
         queryset=RatingTemplateAnswer.objects.all(), write_only=True, many=True

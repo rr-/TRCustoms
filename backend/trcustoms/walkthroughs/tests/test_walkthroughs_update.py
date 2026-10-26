@@ -1,4 +1,4 @@
-from datetime import datetime, timezone
+from datetime import date, datetime, timezone
 from unittest.mock import Mock, patch
 
 import pytest
@@ -155,7 +155,7 @@ def test_walkthrough_update_success(
     builder = UserFactory(username="example")
     builder.settings.email_walkthrough_updated = True
     builder.settings.save()
-    level = LevelFactory(authors=[builder])
+    level = LevelFactory(authors=[builder], release_date=date(2023, 1, 1))
     walkthrough = WalkthroughFactory(
         level=level,
         author=auth_api_client.user,

@@ -8,6 +8,7 @@ from rest_framework.generics import get_object_or_404
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 
+from trcustoms.levels.models import Level
 from trcustoms.mixins import (
     AuditLogModelWatcherMixin,
     MultiSerializerMixin,
@@ -120,8 +121,12 @@ class ReviewViewSet(
         return obj
 
     def get_queryset(self):
-        queryset = super().get_queryset()
         auth_user = self.request.user
+        queryset = (
+            super()
+            .get_queryset()
+            .filter(level__in=Level.objects.visible_to(auth_user))
+        )
 
         if author_ids := parse_ints(self.request.query_params.get("authors")):
             for author_id in author_ids:

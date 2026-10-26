@@ -1,5 +1,5 @@
 from django.db import models
-from django.db.models import F, UniqueConstraint, Value
+from django.db.models import Exists, F, OuterRef, Q, UniqueConstraint, Value
 from django.db.models.functions import Coalesce, Lower
 from django.utils import timezone
 
@@ -13,9 +13,10 @@ from trcustoms.engines.models import Engine
 from trcustoms.genres.models import Genre
 from trcustoms.levels.consts import FeatureType, LevelLinkType
 from trcustoms.ownership import register_owner
+from trcustoms.permissions import has_permission
 from trcustoms.tags.models import Tag
 from trcustoms.uploads.models import UploadedFile
-from trcustoms.users.models import User
+from trcustoms.users.models import User, UserPermission
 from trcustoms.walkthroughs.consts import WalkthroughStatus, WalkthroughType
 
 
@@ -56,6 +57,21 @@ class LevelQuerySet(models.QuerySet):
     def public(self) -> models.QuerySet:
         return self.filter(
             is_approved=True, release_date__lte=timezone.localdate()
+        )
+
+    def visible_to(self, user: User | None) -> models.QuerySet:
+        if user is None or user.is_anonymous:
+            return self.public()
+        if has_permission(user, UserPermission.VIEW_PENDING_LEVELS):
+            return self
+        is_author = Exists(
+            Level.authors.through.objects.filter(
+                level_id=OuterRef("pk"), user_id=user.pk
+            )
+        )
+        return self.filter(
+            Q(is_approved=True, release_date__lte=timezone.localdate())
+            | is_author
         )
 
     def downloadable(self) -> models.QuerySet:

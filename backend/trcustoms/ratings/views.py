@@ -2,6 +2,7 @@ from rest_framework import mixins, viewsets
 from rest_framework.generics import get_object_or_404
 from rest_framework.permissions import AllowAny, IsAuthenticated
 
+from trcustoms.levels.models import Level
 from trcustoms.mixins import (
     AuditLogModelWatcherMixin,
     MultiSerializerMixin,
@@ -92,7 +93,11 @@ class RatingViewSet(
         return obj
 
     def get_queryset(self):
-        queryset = super().get_queryset()
+        queryset = (
+            super()
+            .get_queryset()
+            .filter(level__in=Level.objects.visible_to(self.request.user))
+        )
 
         if author_ids := parse_ints(self.request.query_params.get("authors")):
             for author_id in author_ids:

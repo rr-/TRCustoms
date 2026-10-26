@@ -8,6 +8,7 @@ from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 
 from trcustoms.common.serializers import EmptySerializer
+from trcustoms.levels.models import Level
 from trcustoms.mixins import (
     AuditLogModelWatcherMixin,
     MultiSerializerMixin,
@@ -109,7 +110,11 @@ class WalkthroughViewSet(
 
     def get_queryset(self):
         auth_user = self.request.user
-        queryset = super().get_queryset()
+        queryset = (
+            super()
+            .get_queryset()
+            .filter(level__in=Level.objects.visible_to(auth_user))
+        )
 
         if walkthrough_type := self.request.query_params.get(
             "walkthrough_type"
@@ -148,7 +153,12 @@ class WalkthroughViewSet(
 
     def get_object(self):
         auth_user = self.request.user
-        obj = get_object_or_404(self.queryset, pk=self.kwargs["pk"])
+        obj = get_object_or_404(
+            self.queryset.filter(
+                level__in=Level.objects.visible_to(auth_user)
+            ),
+            pk=self.kwargs["pk"],
+        )
         self.check_object_permissions(self.request, obj)
 
         is_author = auth_user and obj.author == auth_user

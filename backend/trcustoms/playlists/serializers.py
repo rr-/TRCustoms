@@ -1,7 +1,7 @@
 from rest_framework import serializers
 
 from trcustoms.common.errors import CustomAPIException
-from trcustoms.levels.models import Level
+from trcustoms.levels.fields import VisibleLevelField
 from trcustoms.levels.serializers import LevelNestedSerializer
 from trcustoms.permissions import UserPermission, has_permission
 from trcustoms.playlists.models import PlaylistItem
@@ -12,11 +12,7 @@ from trcustoms.users.serializers import UserNestedSerializer
 class PlaylistItemSerializer(serializers.ModelSerializer):
     user = UserNestedSerializer(read_only=True)
     level = LevelNestedSerializer(read_only=True)
-    level_id = serializers.PrimaryKeyRelatedField(
-        write_only=True,
-        source="level",
-        queryset=Level.objects.all(),
-    )
+    level_id = VisibleLevelField(write_only=True, source="level")
 
     def get_user(self):
         auth_user = self.context["request"].user
