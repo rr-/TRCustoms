@@ -51,7 +51,7 @@ const useInfiniteSearch = <TItem, TQuery extends GenericSearchQuery>(
   onResultCountChange?: ((count: number) => void) | undefined,
 ) => {
   const result = useInfiniteQuery<GenericSearchResult<TQuery, TItem>, Error>({
-    queryKey: [...queryKey, searchQuery],
+    queryKey: [...queryKey, "infinite", searchQuery],
     queryFn: async ({ pageParam }) =>
       searchFunc({
         ...searchQuery,
