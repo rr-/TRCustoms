@@ -1,5 +1,6 @@
 from datetime import timedelta
 from typing import Any
+from urllib.parse import urlencode
 
 from django.conf import settings
 from django.core.validators import MaxLengthValidator
@@ -13,6 +14,7 @@ from trcustoms.engines.models import Engine
 from trcustoms.engines.serializers import EngineNestedSerializer
 from trcustoms.genres.models import Genre
 from trcustoms.genres.serializers import GenreNestedSerializer
+from trcustoms.levels.downloads import sign_level_file_download
 from trcustoms.levels.models import (
     FeaturedLevel,
     Level,
@@ -85,11 +87,14 @@ class LevelFileSerializer(serializers.ModelSerializer):
         return None
 
     def get_url(self, instance) -> str | None:
-        if instance.file and instance.file.content:
-            return (
-                settings.HOST_SITE + f"/api/level_files/{instance.id}/download"
-            )
-        return None
+        if not instance.file or not instance.file.content:
+            return None
+        url = settings.HOST_SITE + f"/api/level_files/{instance.id}/download"
+        level = self.context.get("level") or instance.level
+        if not level.is_public:
+            token = sign_level_file_download(instance.id)
+            url += "?" + urlencode({"token": token})
+        return url
 
 
 class LevelNestedSerializer(serializers.ModelSerializer):
@@ -172,7 +177,9 @@ class LevelListingSerializer(serializers.ModelSerializer):
     def get_last_file(self, instance: Level) -> dict[str, Any] | None:
         """Get last file ID from the LevelViewSet's annotated queryset."""
         if instance.last_file:
-            return LevelFileSerializer(instance=instance.last_file).data
+            return LevelFileSerializer(
+                instance=instance.last_file, context={"level": instance}
+            ).data
         return None
 
     class Meta:
@@ -251,7 +258,9 @@ class LevelDetailsSerializer(LevelListingSerializer):
     def get_files(self, instance) -> dict | None:
         files = instance.files.active()
         serializer = LevelFileSerializer(
-            instance=files, many=True, context=self.context
+            instance=files,
+            many=True,
+            context={**self.context, "level": instance},
         )
         return serializer.data
 

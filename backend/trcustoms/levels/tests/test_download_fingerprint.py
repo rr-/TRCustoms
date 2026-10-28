@@ -73,4 +73,5 @@ def test_download_of_a_file_with_no_upload_is_not_found(
 
     response = api_client.get(f"/api/level_files/{level_file.pk}/download/")
 
-    assert response.status_code == 404
+    assert response.status_code == 302
+    assert response.url == settings.HOST_SITE + "/404"

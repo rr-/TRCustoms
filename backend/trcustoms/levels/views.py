@@ -6,13 +6,14 @@ from drf_spectacular.types import OpenApiTypes
 from drf_spectacular.utils import extend_schema, extend_schema_view
 from rest_framework import mixins, status, viewsets
 from rest_framework.decorators import action
-from rest_framework.exceptions import NotFound, PermissionDenied
+from rest_framework.exceptions import PermissionDenied
 from rest_framework.generics import get_object_or_404
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from storages.utils import clean_name
 
 from trcustoms.common.serializers import EmptySerializer
+from trcustoms.levels.downloads import is_level_file_download_token_valid
 from trcustoms.levels.filters import filter_levels_queryset
 from trcustoms.levels.logic import (
     approve_level,
@@ -191,13 +192,23 @@ class LevelFileViewSet(viewsets.GenericViewSet):
     @extend_schema(responses={200: OpenApiTypes.BINARY})
     @action(detail=True)
     def download(self, request, pk: int) -> Response:
-        file = get_object_or_404(
-            LevelFile,
-            pk=pk,
-            level__in=Level.objects.visible_to(request.user),
-        )
-        if not file.file:
-            raise NotFound("This file is no longer available.")
+        file = LevelFile.objects.filter(pk=pk).select_related("level").first()
+        if (
+            file is None
+            or not file.file
+            or not (
+                file.level.is_public
+                or is_level_file_download_token_valid(
+                    file.pk, request.query_params.get("token", "")
+                )
+                or Level.objects.visible_to(request.user)
+                .filter(pk=file.level_id)
+                .exists()
+            )
+        ):
+            return HttpResponseRedirect(
+                redirect_to=settings.HOST_SITE + "/404"
+            )
 
         parts = [f"{pk}", file.level.name]
         if file.version > 1:
