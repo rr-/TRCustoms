@@ -31,10 +31,7 @@ class LevelFilter:
 
 class SortLevelFilter(LevelFilter):
     def run(self, qs: QuerySet[Level]) -> QuerySet[Level]:
-        if not (value := self.qp.get("sort")):
-            return qs
-
-        match value:
+        match self.qp.get("sort"):
             case (
                 "name"
                 | "-name"
@@ -46,7 +43,7 @@ class SortLevelFilter(LevelFilter):
                 | "-review_count"
                 | "download_count"
                 | "-download_count"
-            ):
+            ) as value:
                 qs = qs.order_by(value)
 
             case "release_date":
@@ -74,7 +71,7 @@ class SortLevelFilter(LevelFilter):
                 )
 
             case _:
-                return qs
+                qs = qs.order_by("-created")
 
         # Break ties so that paging through equal values (e.g. levels sharing
         # a rating class) neither repeats nor skips levels.

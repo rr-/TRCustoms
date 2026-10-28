@@ -88,6 +88,7 @@ class AuditLogViewSet(
 ):
     queryset = AuditLog.objects.all()
     serializer_class = AuditLogListingSerializer
+    ordering = ["-created", "-pk"]
 
     permission_classes = [AllowNone]
     permission_classes_by_action = {
