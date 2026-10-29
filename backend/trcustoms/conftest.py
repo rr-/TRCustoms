@@ -10,6 +10,7 @@ from django.db.models import QuerySet
 from django.test import override_settings
 from mimesis import Generic
 from rest_framework.test import APIClient
+from rest_framework_simplejwt.state import token_backend
 from rest_framework_simplejwt.tokens import RefreshToken
 
 from trcustoms.common.consts import RatingClassSubject
@@ -20,6 +21,11 @@ from trcustoms.ratings.logic import get_max_rating_score
 from trcustoms.scoring import get_rating_classes
 from trcustoms.users.models import User
 from trcustoms.users.tests.factories import UserFactory
+
+
+@pytest.fixture(autouse=True)
+def fixture_long_jwt_signing_key(monkeypatch) -> None:
+    monkeypatch.setattr(token_backend, "signing_key", "test-" + "k" * 32)
 
 
 @pytest.fixture(name="fake", scope="session")
