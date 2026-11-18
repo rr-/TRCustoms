@@ -24,7 +24,7 @@ x-backend-environment: &base-backend-environment
   - DISCORD_WEBHOOK_LEVEL_URL
 
 x-base-trcustoms: &base-trcustoms
-  restart: unless-stopped
+  restart: "no"
 
 x-base-trcustoms-backend: &base-trcustoms-backend
   <<: *base-trcustoms
@@ -64,7 +64,6 @@ services:
 
   trcustoms-frontend:
     <<: *base-trcustoms
-    restart: unless-stopped
     build:
       context: .
       dockerfile: ./services/frontend/Dockerfile
