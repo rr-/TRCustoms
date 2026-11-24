@@ -63,7 +63,9 @@ def reject_user(user: User, request: Request | None, reason: str) -> None:
     if (
         user.authored_levels.exists()
         or user.reviewed_levels.exists()
+        or user.rated_levels.exists()
         or user.uploaded_levels.exists()
+        or user.authored_walkthroughs.exists()
     ):
         wipe_user(user)
     else:
