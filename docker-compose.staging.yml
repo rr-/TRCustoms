@@ -43,7 +43,7 @@ services:
     networks:
       - trcustoms
     ports:
-      - "8025:8025"
+      - "127.0.0.1:8025:8025"
 
 networks:
   trcustoms:

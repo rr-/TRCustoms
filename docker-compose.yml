@@ -83,7 +83,7 @@ services:
       - trcustoms
     command: dev
     ports:
-      - "3000:3000"
+      - "127.0.0.1:3000:3000"
 
   trcustoms-db:
     <<: *base-trcustoms
@@ -125,6 +125,7 @@ services:
     ports:
       - mode: host
         protocol: tcp
+        host_ip: 127.0.0.1
         published: ${TRCUSTOMS_PORT}
         target: 8000
     depends_on:
@@ -139,7 +140,7 @@ services:
     networks:
       - trcustoms
     ports:
-      - "8025:8025"
+      - "127.0.0.1:8025:8025"
 
 networks:
   trcustoms:

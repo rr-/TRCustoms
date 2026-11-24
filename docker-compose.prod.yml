@@ -95,6 +95,7 @@ services:
     ports:
       - mode: host
         protocol: tcp
+        host_ip: 127.0.0.1
         published: ${TRCUSTOMS_PORT}
         target: 8000
     depends_on:
