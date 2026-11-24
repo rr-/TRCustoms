@@ -13,6 +13,6 @@ jobs:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USERNAME }}
           key: ${{ secrets.DEPLOY_KEY }}
-          fingerprint: SHA256:oCk3z1GHiEbJhBeEdm4k1yQw0EqNdHGdSaecYPYMeC8
+          fingerprint: SHA256:ABGkkJjpsIAGz3TEXhuSAPiDfE1SX8GJiX68dKFiLxw
           port: ${{ secrets.PORT }}
           script: just update-prod
