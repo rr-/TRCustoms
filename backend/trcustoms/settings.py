@@ -25,7 +25,9 @@ def get_bool_setting(name: str, default: bool = False, **kwargs) -> bool:
 
 
 BASE_DIR = Path(__file__).resolve().parent.parent
-CACHE_DIR = BASE_DIR / "cache"
+DATA_DIR = Path(os.environ.get("DATA_DIR", BASE_DIR))
+CACHE_DIR = DATA_DIR / "cache"
+REDIS_URL = os.environ.get("REDIS_URL", "redis://trcustoms-redis:6379")
 
 SECRET_KEY = get_setting("SECRET_KEY")
 DEBUG = get_bool_setting("DEBUG")
@@ -138,7 +140,7 @@ LOGGING = {
 CACHES = {
     "default": {
         "BACKEND": "django.core.cache.backends.redis.RedisCache",
-        "LOCATION": "redis://trcustoms-redis:6379",
+        "LOCATION": REDIS_URL,
     }
 }
 
@@ -151,9 +153,9 @@ DATABASES = {
         "ENGINE": "django.db.backends.postgresql_psycopg2",
         "NAME": get_setting("POSTGRES_DB"),
         "USER": get_setting("POSTGRES_USER"),
-        "PASSWORD": get_setting("POSTGRES_PASSWORD"),
-        "HOST": "trcustoms-db",
-        "PORT": 5432,
+        "PASSWORD": os.environ.get("POSTGRES_PASSWORD", ""),
+        "HOST": os.environ.get("POSTGRES_HOST", "trcustoms-db"),
+        "PORT": int(os.environ.get("POSTGRES_PORT", "5432")),
         "CONN_MAX_AGE": 60,
         "OPTIONS": {
             "options": f"-c statement_timeout={DB_STATEMENT_TIMEOUT}",
@@ -238,14 +240,14 @@ STATIC_URL = "/django_static/"
 STATICFILES_DIRS = [
     BASE_DIR / "trcustoms" / "static",
 ]
-STATIC_ROOT = BASE_DIR / "django_static"
+STATIC_ROOT = DATA_DIR / "django_static"
 
 ADMIN_DIR = get_setting("ADMIN_DIR")
 MEDIA_URL = "/uploads/"
-MEDIA_ROOT = BASE_DIR / "uploads"
+MEDIA_ROOT = DATA_DIR / "uploads"
 
-CELERY_BROKER_URL = "redis://trcustoms-redis:6379"
-CELERY_RESULT_BACKEND = "redis://trcustoms-redis:6379"
+CELERY_BROKER_URL = os.environ.get("CELERY_BROKER_URL", REDIS_URL)
+CELERY_RESULT_BACKEND = CELERY_BROKER_URL
 CELERY_TASK_TRACK_STARTED = True
 CELERY_TASK_TIME_LIMIT = 30 * 60
 CELERY_IMPORTS = ("trcustoms.tasks",)
