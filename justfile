@@ -24,6 +24,8 @@ kill:
 up *args:
     docker-compose up --remove-orphans {{args}}
 
+dev *args: (up args)
+
 down *args:
     docker-compose down --remove-orphans {{args}}
 
