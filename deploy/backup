@@ -6,6 +6,6 @@ cd "$HOME/app"
 dir="$HOME/data/backups"
 mkdir -p "$dir"
 out="$dir/$(id -un | sed 's/^svc-//')-$(date +%Y%m%d-%H%M%S).dump"
-dotenv-rust sh -c 'pg_dump -Fc -h "$POSTGRES_HOST" -d "$POSTGRES_DB" -f "$1.tmp"' sh "$out"
+dotenv-rust sh -c 'pg_dump -Fc -h "$POSTGRES_HOST" -U "$POSTGRES_USER" -d "$POSTGRES_DB" -f "$1.tmp"' sh "$out"
 mv "$out.tmp" "$out"
 find "$dir" -name '*.dump' -mtime +14 -delete
