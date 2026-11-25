@@ -1,0 +1,61 @@
+name: Deploy
+
+# Builds the frontend of the pushed commit and hands it to the server, whose
+# deploy key runs /srv/<name>/update there (deploy/update): that checks out
+# the same commit for the backend. Each GitHub environment has the variables
+# DEPLOY_HOST, DEPLOY_USER and HOST_SITE and the secrets DEPLOY_SSH_KEY and
+# DEPLOY_KNOWN_HOSTS.
+on:
+  workflow_call:
+    inputs:
+      environment:
+        required: true
+        type: string
+      vite-environment:
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+jobs:
+  deploy:
+    name: Deploy ${{ inputs.environment }}
+    runs-on: ubuntu-latest
+    environment: ${{ inputs.environment }}
+    concurrency:
+      group: deploy-${{ inputs.environment }}
+      cancel-in-progress: false
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+      - name: Build the frontend
+        working-directory: frontend
+        env:
+          VITE_ENVIRONMENT: ${{ inputs.vite-environment }}
+          VITE_HOST_SITE: ${{ vars.HOST_SITE }}
+        run: |
+          export VITE_BUILD_VERSION="$(git describe --always --abbrev=7 --tags)"
+          export VITE_BUILD_DATE="$(date -I)"
+          npm ci
+          npm run build
+          tar -czf ../frontend.tar.gz -C dist .
+      - name: Deploy
+        env:
+          DEPLOY_HOST: ${{ vars.DEPLOY_HOST }}
+          DEPLOY_USER: ${{ vars.DEPLOY_USER }}
+          DEPLOY_SSH_KEY: ${{ secrets.DEPLOY_SSH_KEY }}
+          DEPLOY_KNOWN_HOSTS: ${{ secrets.DEPLOY_KNOWN_HOSTS }}
+        run: |
+          umask 077
+          trap 'rm -f key known_hosts' EXIT
+          printf '%s\n' "$DEPLOY_SSH_KEY" > key
+          printf '%s\n' "$DEPLOY_KNOWN_HOSTS" > known_hosts
+          ssh -i key -o IdentitiesOnly=yes -o UserKnownHostsFile=known_hosts \
+            "$DEPLOY_USER@$DEPLOY_HOST" "$GITHUB_SHA" < frontend.tar.gz

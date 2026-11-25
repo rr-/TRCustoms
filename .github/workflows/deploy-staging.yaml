@@ -4,15 +4,9 @@ on:
     branches:
       - develop
 jobs:
-  build:
-    name: Build staging
-    runs-on: ubuntu-latest
-    steps:
-      - uses: appleboy/ssh-action@0ff4204d59e8e51228ff73bce53f80d53301dee2 # v1.2.5
-        with:
-          host: ${{ secrets.HOST }}
-          username: ${{ secrets.USERNAME }}
-          key: ${{ secrets.DEPLOY_KEY }}
-          fingerprint: SHA256:ABGkkJjpsIAGz3TEXhuSAPiDfE1SX8GJiX68dKFiLxw
-          port: ${{ secrets.PORT }}
-          script: just update-staging
+  deploy:
+    uses: ./.github/workflows/deploy.yaml
+    with:
+      environment: staging
+      vite-environment: staging
+    secrets: inherit
