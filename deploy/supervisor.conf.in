@@ -1,0 +1,52 @@
+; /etc/supervisor/conf.d/@NAME@.conf on the server; see deploy/README.md.
+[group:@NAME@]
+programs=@NAME@-redis,@NAME@-web,@NAME@-celery,@NAME@-beat
+
+[program:@NAME@-redis]
+command=/usr/bin/redis-server /srv/@NAME@/redis.conf
+directory=/srv/@NAME@
+user=svc-@NAME@
+priority=10
+autostart=true
+autorestart=true
+stdout_logfile=/var/log/@NAME@/redis.log
+redirect_stderr=true
+
+[program:@NAME@-web]
+command=/usr/bin/dotenv-rust /srv/@NAME@/app/.venv/bin/uwsgi --ini /srv/@NAME@/uwsgi.ini
+directory=/srv/@NAME@/app
+user=svc-@NAME@
+environment=HOME="/srv/@NAME@",USER="svc-@NAME@"
+priority=20
+autostart=true
+autorestart=true
+stopasgroup=true
+killasgroup=true
+stdout_logfile=/var/log/@NAME@/web.log
+redirect_stderr=true
+
+[program:@NAME@-celery]
+command=/usr/bin/dotenv-rust /srv/@NAME@/app/.venv/bin/celery --workdir backend -A trcustoms worker -l INFO --concurrency=2
+directory=/srv/@NAME@/app
+user=svc-@NAME@
+environment=HOME="/srv/@NAME@",USER="svc-@NAME@"
+priority=30
+autostart=true
+autorestart=true
+stopasgroup=true
+killasgroup=true
+stdout_logfile=/var/log/@NAME@/celery.log
+redirect_stderr=true
+
+[program:@NAME@-beat]
+command=/usr/bin/dotenv-rust /srv/@NAME@/app/.venv/bin/celery --workdir backend -A trcustoms beat -l INFO --schedule /srv/@NAME@/data/celerybeat-schedule
+directory=/srv/@NAME@/app
+user=svc-@NAME@
+environment=HOME="/srv/@NAME@",USER="svc-@NAME@"
+priority=40
+autostart=true
+autorestart=true
+stopasgroup=true
+killasgroup=true
+stdout_logfile=/var/log/@NAME@/beat.log
+redirect_stderr=true

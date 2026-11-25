@@ -1,0 +1,11 @@
+#!/bin/sh
+# Dump the database of this deployment into ~/data/backups and keep the
+# dumps of the last 14 days; /etc/cron.d/trcustoms runs it every night.
+set -eu
+cd "$HOME/app"
+dir="$HOME/data/backups"
+mkdir -p "$dir"
+out="$dir/$(id -un | sed 's/^svc-//')-$(date +%Y%m%d-%H%M%S).dump"
+dotenv-rust sh -c 'pg_dump -Fc -h "$POSTGRES_HOST" -d "$POSTGRES_DB" -f "$1.tmp"' sh "$out"
+mv "$out.tmp" "$out"
+find "$dir" -name '*.dump' -mtime +14 -delete

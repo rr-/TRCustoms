@@ -1,0 +1,12 @@
+#!/bin/sh
+# Recount what the site derives from its data; /etc/cron.d/trcustoms runs
+# it every night.
+set -eu
+cd "$HOME/app"
+manage() {
+    dotenv-rust .venv/bin/python backend/manage.py "$@"
+}
+manage fix_denormalized_data -a
+manage ratings_stats
+manage update_awards
+manage update_awards_rarity

@@ -1,0 +1,9 @@
+# /srv/@NAME@/redis.conf on the server, owned by root; see deploy/README.md.
+# The cache and the celery broker, private to the deployment and kept in
+# memory only.
+port 0
+unixsocket /srv/@NAME@/run/redis.sock
+unixsocketperm 700
+save ""
+appendonly no
+dir /srv/@NAME@/data

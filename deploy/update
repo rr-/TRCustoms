@@ -1,0 +1,60 @@
+#!/bin/sh
+# /srv/<name>/update on the server, owned by root. It is the forced command
+# of the deploy key in ~/.ssh/authorized_keys, so CI runs it as
+#
+#   ssh svc-<name>@tomb <commit> < frontend.tar.gz
+#
+# It checks out <commit>, which has to be on the branch of this deployment,
+# unpacks the frontend that CI built from it into www/<commit>, updates the
+# backend and points www/current at the new frontend.
+set -eu
+
+case "$(id -un)" in
+    svc-trcustoms) branch=main ;;
+    svc-trcustoms-staging) branch=develop ;;
+    *) echo "no deployment for $(id -un)" >&2; exit 1 ;;
+esac
+
+commit=${SSH_ORIGINAL_COMMAND:-}
+if ! printf '%s' "$commit" | grep -Eqx '[0-9a-f]{40}'; then
+    echo "usage: ssh $(id -un)@<host> <commit> < frontend.tar.gz" >&2
+    exit 2
+fi
+
+cd "$HOME/app"
+git fetch --quiet origin "$branch"
+if ! git merge-base --is-ancestor "$commit" "origin/$branch"; then
+    echo "$commit is not on $branch" >&2
+    exit 1
+fi
+git reset --hard --quiet "$commit"
+
+new=$(mktemp -d "$HOME/www/.new.XXXXXX")
+trap 'rm -rf "$new"' EXIT
+tar -xzf - -C "$new" --no-same-owner --no-same-permissions
+if [ ! -f "$new/index.html" ]; then
+    echo "the frontend has no index.html" >&2
+    exit 1
+fi
+chmod -R u=rwX,g=rX,o= "$new"
+rm -rf "$HOME/www/$commit"
+mv "$new" "$HOME/www/$commit"
+trap - EXIT
+
+/usr/local/bin/uv sync --frozen --no-dev --quiet
+manage() {
+    dotenv-rust .venv/bin/python backend/manage.py "$@"
+}
+manage collectstatic --noinput -v 0
+manage migrate --noinput -v 0
+manage initial_data
+
+ln -sfn "$commit" "$HOME/www/current.new"
+mv -T "$HOME/www/current.new" "$HOME/www/current"
+kill -HUP "$(cat "$HOME/run/uwsgi.pid")"
+pkill -TERM -u "$(id -un)" -f "$HOME/app/.venv/bin/celery" || true
+
+find "$HOME/www" -mindepth 1 -maxdepth 1 -type d \
+    -regextype posix-extended -regex '.*/[0-9a-f]{40}' -printf '%T@ %p\n' |
+    sort -rn | tail -n +4 | cut -d' ' -f2- | xargs -r rm -rf
+echo "deployed $(git log --oneline -1)"

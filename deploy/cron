@@ -1,0 +1,5 @@
+# /etc/cron.d/trcustoms on the server: the nightly jobs of prod, which
+# report to status.bad.pink with the tokens in
+# /srv/trcustoms/.config/statuspage.
+0 3 * * * svc-trcustoms /srv/trcustoms/app/deploy/daily && /usr/local/bin/statuspage-push trcustoms-update-data
+0 3 * * * svc-trcustoms /srv/trcustoms/app/deploy/backup && /usr/local/bin/statuspage-push trcustoms-backup

@@ -1,0 +1,55 @@
+# /etc/nginx/sites-available/trcustoms on the server, with @ADMIN_DIR@ the
+# ADMIN_DIR of /srv/trcustoms/env; see deploy/README.md. Needs
+# trcustoms-proxy.conf, acme.conf and the social preview map
+# (services/nginx/nginx_social_preview_map.conf, copied to
+# /etc/nginx/conf.d/trcustoms-social-preview.conf).
+server {
+    listen 80;
+    server_name trcustoms.org;
+    include snippets/acme.conf;
+    location / {
+        return 301 https://trcustoms.org$request_uri;
+    }
+}
+
+server {
+    server_name trcustoms.org;
+    listen 443 ssl http2;
+    ssl_certificate /etc/letsencrypt/live/trcustoms.org/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/trcustoms.org/privkey.pem;
+    include snippets/acme.conf;
+    client_max_body_size 0;
+
+    root /srv/trcustoms/www/current;
+
+    # crawlers of link previews get the page from the app, which fills in
+    # its title, description and image
+    location / {
+        error_page 418 = @social_preview;
+        if ($social_preview_ua = 1) {
+            return 418;
+        }
+        try_files $uri $uri/ /index.html;
+    }
+
+    location @social_preview {
+        include snippets/trcustoms-proxy.conf;
+        proxy_set_header X-Social-Preview 1;
+        proxy_pass http://unix:/srv/trcustoms/run/web.sock;
+    }
+
+    location ~ ^/(@ADMIN_DIR@|api)(/.*)?$ {
+        include snippets/trcustoms-proxy.conf;
+        proxy_pass http://unix:/srv/trcustoms/run/web.sock;
+    }
+
+    location /uploads/ {
+        add_header X-Content-Type-Options "nosniff" always;
+        alias /srv/trcustoms/data/uploads/;
+    }
+
+    location /django_static/ {
+        add_header X-Content-Type-Options "nosniff" always;
+        alias /srv/trcustoms/data/django_static/;
+    }
+}

@@ -1,0 +1,15 @@
+# /srv/@NAME@/uwsgi.ini on the server, owned by root; see deploy/README.md.
+[uwsgi]
+chdir=/srv/@NAME@/app/backend
+module=trcustoms.wsgi:application
+master=True
+processes=4
+pidfile=/srv/@NAME@/run/uwsgi.pid
+vacuum=True
+max-requests=5000
+harakiri=30
+http-socket=/srv/@NAME@/run/web.sock
+chmod-socket=660
+mime-file=/srv/@NAME@/app/services/uwsgi/mime.types
+die-on-term=True
+need-app=True
