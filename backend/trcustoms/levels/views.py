@@ -186,6 +186,7 @@ class LevelViewSet(
 class LevelFileViewSet(viewsets.GenericViewSet):
     permission_classes = [AllowAny]
     queryset = LevelFile.objects.all()
+    lookup_value_regex = r"\d+"
     serializer_class = EmptySerializer
     pagination_class = None
 

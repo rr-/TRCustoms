@@ -75,3 +75,13 @@ def test_download_of_a_file_with_no_upload_is_not_found(
 
     assert response.status_code == 302
     assert response.url == settings.HOST_SITE + "/404"
+
+
+@pytest.mark.django_db
+def test_download_with_a_non_numeric_id_is_not_found(
+    api_client: APIClient,
+) -> None:
+    """A path template requested verbatim used to raise a 500."""
+    response = api_client.get("/api/level_files/%7Bfile_id%7D/download/")
+
+    assert response.status_code == 404
